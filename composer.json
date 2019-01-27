@@ -1,0 +1,17 @@
+{
+    "name": "distantnative/retour",
+    "description": "Redirect management for Kirby 3",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "version": "0.1.0",
+    "autoload": {
+        "files": [
+          "src/models/Retour.php",
+          "src/models/Log.php",
+          "src/models/Redirects.php",
+          "src/models/Stats.php",
+          "src/models/System.php",
+          "config.php"
+        ]
+    }
+}

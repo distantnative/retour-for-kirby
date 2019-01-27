@@ -1,0 +1,68 @@
+/* line 85, stdin */
+.retour-header {
+  display: flex; }
+  /* line 88, stdin */
+  .retour-header > .k-icon {
+    padding-right: .5em; }
+
+/* line 94, stdin */
+.k-retour-view [aria-current]:not([aria-current="false"]) {
+  color: #4271ae; }
+/* line 48, stdin */
+.k-retour-hits-field-preview > abbr {
+  position: relative;
+  display: flex; }
+  /* line 52, stdin */
+  .k-retour-hits-field-preview > abbr[title] {
+    text-decoration: none; }
+  /* line 56, stdin */
+  .k-retour-hits-field-preview > abbr > aside {
+    width: 1.2em; }
+  /* line 60, stdin */
+  .k-retour-hits-field-preview > abbr .k-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(66, 113, 174, var(--factor)); }
+  /* line 67, stdin */
+  .k-retour-hits-field-preview > abbr .back {
+    position: absolute;
+    color: #efefef; }
+  /* line 72, stdin */
+  .k-retour-hits-field-preview > abbr > div {
+    margin-left: .5em;
+    line-height: 1.2; }
+  /* line 77, stdin */
+  .k-retour-hits-field-preview > abbr span {
+    font-size: .9em; }
+  /* line 81, stdin */
+  .k-retour-hits-field-preview > abbr small {
+    display: block;
+    font-size: .65em; }
+/* line 22, stdin */
+.k-retour-status-field-preview > span {
+  display: flex; }
+
+/* line 26, stdin */
+.k-retour-status-field-preview code {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  font-size: .875em;
+  line-height: inherit;
+  display: inline-block;
+  padding: .05em .5em;
+  margin-left: .5em; }
+
+/* line 39, stdin */
+.k-retour-status-field-preview .k-icon {
+  color: #7ea328; }
+  /* line 42, stdin */
+  .k-retour-status-field-preview .k-icon[data-disabled] {
+    color: #c82829; }
+/* line 157, stdin */
+.k-retour-view .k-field-name-from .k-text-input,
+.k-retour-view .k-field-name-to .k-text-input {
+  padding-left: 2px; }

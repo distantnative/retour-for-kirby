@@ -1,0 +1,65 @@
+<?php
+
+return [
+    'routes' => [
+        [
+            'pattern' => 'retour/samples',
+            'method'  => 'POST',
+            'action'  => function () use ($retour) {
+                require 'samples.php';
+                return true;
+            }
+        ],
+        [
+            'pattern' => 'retour/redirects',
+            'method'  => 'GET',
+            'action'  => function () use ($retour) {
+                return $retour->redirects()->data()->toArray();
+            }
+        ],
+        [
+            'pattern' => 'retour/redirects',
+            'method'  => 'PATCH',
+            'action'  => function () use ($retour) {
+                $retour->redirects()->data($this->requestBody());
+                return true;
+            }
+        ],
+        [
+            'pattern' => 'retour/redirects',
+            'method'  => 'POST',
+            'action'  => function () use ($retour) {
+                $data   = $retour->redirects()->data()->toArray();
+                $data[] = $this->requestBody();
+                $retour->redirects()->data($data);
+                return true;
+            }
+        ],
+        [
+            'pattern' => 'retour/stats/(:any)/(:num?)',
+            'method'  => 'GET',
+            'action'  => function ($by, $offset = 0) use ($retour) {
+                return $retour->stats()->get($by, $offset);
+            }
+        ],
+        [
+            'pattern' => 'retour/fails/(:any)',
+            'method'  => 'GET',
+            'action'  => function ($sort) use ($retour) {
+                return $retour->log()->fails($sort);
+            }
+        ],
+        [
+            'pattern' => 'retour/system',
+            'method'  => 'GET',
+            'action'  => function () use ($retour) {
+                return $retour->system()->toArray();
+            }
+        ],
+        [
+            'pattern' => 'retour/validate',
+            'method'  => 'POST',
+            'action'  => function () { return true; }
+        ],
+    ]
+];
