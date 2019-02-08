@@ -22,7 +22,7 @@
           class="retour-loader"
           @click="fetch"
         >
-          {{ $t('retour.refresh') }}
+          {{ $t(loading ? 'loading' : 'retour.refresh') }}
         </k-button>
       </k-button-group>
     </k-header>
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     fetch() {
-      return this.readTmp().then(() => {
+      return this.loadTemporaries().then(() => {
         const system    = this.fetchSystem();
         const fails     = this.fetchFails();
         const redirects = this.fetchRedirects();
@@ -145,7 +145,7 @@ export default {
         this.options = response;
       });
     },
-    readTmp() {
+    loadTemporaries() {
       return this.$api.get("retour/load")
     }
   }

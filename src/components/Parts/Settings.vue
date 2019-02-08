@@ -123,21 +123,13 @@ export default {
       return window.panel.debug;
     },
     failed() {
-      return this.fails.reduce((a, b) => {
-        return {
-          fails: a.fails + b.fails
-        };
-      }, { fails: 0 }).fails;
+      return this.fails.reduce((a, b) => a += b.fails, 0);
     },
     outdated() {
       return this.latest != "..." && this.options.version !== this.latest;
     },
     redirected() {
-      return this.fails.reduce((a, b) => {
-        return {
-          redirects: a.redirects + b.redirects
-        };
-      }, { redirects: 0 }).redirects;
+      return this.fails.reduce((a, b) => a += b.redirects, 0);
     },
     routes() {
       return this.redirects.length;
@@ -154,7 +146,7 @@ export default {
       });
     },
     flush() {
-      this.$api.patch("retour/clear").then(() => {
+      this.$api.patch("retour/flush").then(() => {
         this.$emit("reload");
       });
     },

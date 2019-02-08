@@ -5,10 +5,11 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 
-# nmp
+# nmp & composer
 bili.config.js
 package.json export-ignore
 yarn.lock export-ignore
+composer.lock
 
 # Tests
 .coveralls.yml export-ignore

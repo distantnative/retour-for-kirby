@@ -19,7 +19,7 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/clear',
+            'pattern' => 'retour/flush',
             'method'  => 'PATCH',
             'action'  => function () use ($retour) {
                 $retour->flush();
@@ -37,8 +37,7 @@ return [
             'pattern' => 'retour/redirects',
             'method'  => 'PATCH',
             'action'  => function () use ($retour) {
-                $retour->redirects()->write($this->requestBody());
-                return true;
+                return $retour->redirects()->write($this->requestBody());
             }
         ],
         [
@@ -47,8 +46,7 @@ return [
             'action'  => function () use ($retour) {
                 $data   = $retour->redirects()->data();
                 $data[] = $this->requestBody();
-                $retour->redirects()->write($data);
-                return true;
+                return $retour->redirects()->write($data);
             }
         ],
         [

@@ -2,7 +2,7 @@
     "name": "distantnative/retour-for-kirby",
     "description": "Redirect management for Kirby 3",
     "type": "kirby-plugin",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Nico Hoffmann",
@@ -11,5 +11,8 @@
     ],
     "require": {
         "getkirby/composer-installer": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
     }
 }

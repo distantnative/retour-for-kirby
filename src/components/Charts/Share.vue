@@ -43,8 +43,8 @@ export default {
   },
   watch: {
     data(data) {
-      this.redirects = data.redirects.reduce((sum, x) => sum + x, 0);
-      this.fails     = data.fails.reduce((sum, x) => sum + x, 0);
+      this.redirects = data.redirects.reduce((a, b) => a += b, 0);
+      this.fails     = data.fails.reduce((a, b) => a += b, 0);
       this.chart     = { series: [this.redirects, this.fails] };
       this.createChart();
     }
