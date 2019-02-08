@@ -102,14 +102,12 @@ export default {
   },
   methods: {
     update(input) {
-      this.$store.dispatch("isLoading", true);
       this.$api.patch("retour/redirects", input.map(item => {
         delete(item["stats"]);
         delete(item["id"]);
         return item;
       })).then(() => {
         this.redirects = input;
-        this.$store.dispatch("isLoading", false);
       });
     }
   }

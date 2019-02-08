@@ -37,7 +37,8 @@ return [
             'pattern' => 'retour/redirects',
             'method'  => 'PATCH',
             'action'  => function () use ($retour) {
-                return $retour->redirects()->write($this->requestBody());
+                $retour->redirects()->write($this->requestBody());
+                return true;
             }
         ],
         [
@@ -46,7 +47,8 @@ return [
             'action'  => function () use ($retour) {
                 $data   = $retour->redirects()->data();
                 $data[] = $this->requestBody();
-                return $retour->redirects()->write($data);
+                $retour->redirects()->write($data);
+                return true;
             }
         ],
         [
