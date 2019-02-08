@@ -11,14 +11,14 @@
           :current="sort === 'fails'"
           @click="sortBy('fails')"
         >
-          By hits
+          {{ $t('retour.fails.sort.count') }}
         </k-button>
         <k-button
           icon="funnel"
           :current="sort === 'last'"
           @click="sortBy('last')"
         >
-          By date
+          {{ $t('retour.fails.sort.date') }}
         </k-button>
       </k-button-group>
     </header>
@@ -30,13 +30,13 @@
             #
           </th>
           <th data-width="1/3" class="k-structure-table-column">
-            Path
+            {{ $t('retour.fails.path') }}
           </th>
           <th data-width="1/3" class="k-structure-table-column">
-            Referrer
+            {{ $t('retour.fails.referrer') }}
           </th>
           <th data-width="1/6" class="k-structure-table-column">
-            Hits (Redirected)
+            {{ $t('retour.fails.count') }}
           </th>
           <th />
         </tr>
@@ -49,13 +49,13 @@
             </span>
           </td>
           <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.path" :column="{}" />
+            <k-url-field-preview :value="item.path" />
           </td>
           <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.referrer" :column="{}" />
+            <k-url-field-preview :value="item.referrer" />
           </td>
           <td class="k-structure-table-column" data-width="">
-            <k-retour-hits-field-preview
+            <k-retour-count-field-preview
               :value="{
                 hits: `${item.fails + item.redirects} (${item.redirects})`,
                 last: item.last
@@ -96,7 +96,7 @@ export default {
       };
     },
     paginatedItems() {
-      const index = this.page - 1;
+      const index  = this.page - 1;
       const offset = index * this.options.limit;
       return this.items.slice(offset, offset + this.options.limit);
     }
@@ -106,11 +106,11 @@ export default {
   },
   methods: {
     fetch() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.get("retour/fails/" + this.sort).then(response => {
         this.items = response;
         this.page  = 1;
-        this.$events.$emit("retour-loaded");
+        this.$store.dispatch("isLoading", false);
       });
     },
     paginateItems(pagination) {

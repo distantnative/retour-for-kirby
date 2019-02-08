@@ -11,10 +11,8 @@
         <li>
           <dl>
             <dt>
-              Installed plugin version
-              <span style="opacity: 0;">
-                🔜
-              </span>
+              {{ $t('retour.settings.installed') }}
+              <span class="hide">📍</span>
             </dt>
             <dd :data-negative="outdated">
               {{ options.version }}
@@ -24,25 +22,23 @@
         <li>
           <dl>
             <dt>
-              Latest plugin version
-              <span style="opacity: 0;">
-                ⚡️
-              </span>
+              {{ $t('retour.settings.latest') }}
+              <span class="hide">🕒</span>
             </dt>
             <dd>{{ latest }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>Support development 💛</dt>
+            <dt>{{ $t('retour.settings.support') }} 💛</dt>
             <dd>
               <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">
-                Buy a juice
+                {{ $t('retour.settings.support.juice') }}
               </k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">
-                Donate
+                {{ $t('retour.settings.support.donate') }}
               </k-button> &middot;
               <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">
-                Buy a Kirby license
+                {{ $t('retour.settings.support.affiliate') }}
               </k-button>
             </dd>
           </dl>
@@ -51,9 +47,7 @@
 
       <footer v-if="outdated" class="k-field-footer">
         <div data-theme="help" class="k-text k-field-help">
-          Download <a href="https://github.com/distantnative/retour-for-kirby/archive/master.zip">
-            latest version
-          </a>.
+          Download <a href="https://github.com/distantnative/retour-for-kirby/archive/master.zip">latest version</a>.
         </div>
       </footer>
     </section>
@@ -63,7 +57,7 @@
     <section class="k-system-info">
       <header class="k-field-header">
         <label class="k-field-label">
-          Overview
+          {{ $t('retour.settings.overview') }}
         </label>
 
         <k-button-group>
@@ -71,7 +65,7 @@
             Load sample data
           </k-button>
           <k-button icon="trash" theme="negative" @click="flush">
-            Clear log
+            {{ $t('retour.settings.log.clear') }}
           </k-button>
         </k-button-group>
       </header>
@@ -79,19 +73,19 @@
       <ul class="k-system-info-box">
         <li>
           <dl>
-            <dt>Redirect routes</dt>
+            <dt>{{ $t('retour.settings.routes') }}</dt>
             <dd>{{ routes }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>Logged {{ $t('retour.fails') }}</dt>
+            <dt>{{ $t('retour.settings.fails') }}</dt>
             <dd>{{ fails }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>Successfully redirected</dt>
+            <dt>{{ $t('retour.settings.redirects') }}</dt>
             <dd>{{ redirects }}</dd>
           </dl>
         </li>
@@ -99,33 +93,26 @@
       <ul class="k-system-info-box">
         <li>
           <dl>
-            <dt>Default view</dt>
+            <dt>{{ $t('retour.settings.options.view') }}</dt>
             <dd>
-              dashboard
+              {{ options.view }}
             </dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>List # items per page</dt>
+            <dt>{{ $t('retour.settings.options.limit') }}</dt>
             <dd>{{ options.limit }}</dd>
           </dl>
         </li>
         <li>
-          <dl v-if="false">
-            <dt>Keep log for</dt>
-            <dd>
-              6 months
-            </dd>
-          </dl>
+
         </li>
       </ul>
 
       <footer class="k-field-footer">
         <div data-theme="help" class="k-text k-field-help">
-          Learn more about options <a href="https://github.com/distantnative/retour-for-kirby">
-            in the docs
-          </a>.
+          Learn more about options <a href="https://github.com/distantnative/retour-for-kirby">in the docs</a>.
         </div>
       </footer>
     </section>
@@ -167,7 +154,7 @@ export default {
       }
     },
     fetch() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.get("retour/redirects").then(response => {
         this.routes = response.length;
 
@@ -176,19 +163,19 @@ export default {
 
           fetch("https://api.github.com/repos/distantnative/retour-for-kirby/releases", { method: "GET" }).then(response => response.json()).then(response => {
             this.latest = response[0].name;
-            this.$events.$emit("retour-loaded");
+            this.$store.dispatch("isLoading", false);
           });
         });
       });
     },
     flush() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.patch("retour/clear").then(() => {
         this.fetch();
       });
     },
     samples() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.post("retour/samples").then(() => {
         this.fetch();
       });
@@ -197,11 +184,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.k-retour-view {
-  [data-negative] {
-    color: #c82829;
-  }
+<style>
+.k-retour-view .hide {
+  opacity: 0;
+}
+
+.k-retour-view [data-negative] {
+  color: #c82829;
 }
 </style>
 

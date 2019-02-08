@@ -4,7 +4,7 @@ import "chartist/dist/chartist.min.css";
 
 import Overview from "./components/Overview.vue";
 import StatsField from "./components/Fields/StatsField.vue";
-import HitsPreview from "./components/Fields/Previews/HitsPreview.vue";
+import CountPreview from "./components/Fields/Previews/CountPreview.vue";
 import StatusPreview from "./components/Fields/Previews/StatusPreview.vue";
 
 panel.plugin("distantnative/retour", {
@@ -18,7 +18,7 @@ panel.plugin("distantnative/retour", {
     "retour-stats": StatsField
   },
   components: {
-    "k-retour-hits-field-preview": HitsPreview,
+    "k-retour-count-field-preview": CountPreview,
     "k-retour-status-field-preview": StatusPreview
   }
 });

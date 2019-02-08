@@ -14,26 +14,10 @@
         @next="next"
       />
     </k-column>
-
-    <k-column v-if="false" width="1/1">
-      <footer class="k-field-footer">
-        <div data-theme="help" class="k-text k-field-help">
-          <p>
-            <b>{{ $t('retour.redirects') }}</b><br>
-            {{ $t('retour.redirects.description') }}
-          </p>
-          <p>
-            <b>{{ $t('retour.fails') }}</b><br>
-            {{ $t('retour.fails.description') }}
-          </p>
-        </div>
-      </footer>
-    </k-column>
   </k-grid>
 </template>
 
 <script>
-
 import Timeline from "./../Charts/Timeline.vue";
 import Share  from "./../Charts/Share.vue";
 
@@ -44,8 +28,8 @@ export default {
   },
   data () {
     return {
-      view:     "month",
-      offset:   0,
+      view: "month",
+      offset: 0,
       response: null
     }
   },
@@ -58,25 +42,29 @@ export default {
     this.fetch();
   },
   methods: {
-    fetch() {
-      this.$events.$emit("retour-load");
+    fetch(before = () => {}) {
+      this.$store.dispatch("isLoading", true);
+      before();
       this.$api.get(this.api).then(response => {
         this.response = response;
-        this.$events.$emit("retour-loaded");
+        this.$store.dispatch("isLoading", false);
       });
     },
     prev() {
-      this.offset -= 1;
-      this.fetch();
+      this.fetch(() => {
+        this.offset -= 1;
+      });
     },
     next() {
-      this.offset += 1;
-      this.fetch();
+      this.fetch(() => {
+        this.offset += 1;
+      });
     },
     show(view) {
-      this.view   = view;
-      this.offset = 0;
-      this.fetch();
+      this.fetch(() => {
+        this.offset = 0;
+        this.view = view;
+      });
     }
   }
 }

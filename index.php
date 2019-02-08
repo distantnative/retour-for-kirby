@@ -19,5 +19,8 @@ Kirby::plugin('distantnative/retour', [
     'hooks'        => require 'config/hooks.php',
     'options'      => require 'config/options.php',
     'routes'       => $retour->redirects()->routes(),
-    'translations' => require 'config/translations.php',
+    'translations' => [
+        'en' => require 'config/translations/en.php',
+        'de' => require 'config/translations/de.php'
+    ]
 ]);

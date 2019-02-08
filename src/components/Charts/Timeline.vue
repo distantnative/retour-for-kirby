@@ -12,21 +12,21 @@
           :current="view === 'month'"
           @click="$emit('show', 'month')"
         >
-          {{ $t('retour.dashboard.timeline.month') }}
+          {{ $t('retour.dashboard.month') }}
         </k-button>
         <k-button
           icon="menu"
           :current="view === 'week'"
           @click="$emit('show', 'week')"
         >
-          {{ $t('retour.dashboard.timeline.week') }}
+          {{ $t('retour.dashboard.week') }}
         </k-button>
         <k-button
           icon="clock"
           :current="view === 'day'"
           @click="$emit('show', 'day')"
         >
-          {{ $t('retour.dashboard.timeline.day') }}
+          {{ $t('retour.dashboard.day') }}
         </k-button>
         <k-button
           icon="angle-right"
@@ -39,20 +39,13 @@
     <div class="k-card k-card-content">
       <div class="ct-timeline" />
     </div>
-
-    <gradients />
   </div>
 </template>
 
 <script>
-
 import Chartist from "chartist";
-import Gradients from "./Gradients.vue";
 
 export default {
-  components: {
-    gradients: Gradients
-  },
   props: {
     response: Object,
     view: String,
@@ -98,8 +91,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
+<style>
 .ct-timeline {
   margin-left: -.75rem;
 }
@@ -111,12 +103,12 @@ export default {
 }
 
 .ct-timeline .ct-series-a .ct-area {
-  fill: url(#gradient-fails) #ccc;
-  fill-opacity: .65;
+  fill: #ccc;
+  fill-opacity: .5;
 }
 
 .ct-timeline .ct-series-b .ct-area {
-  fill: url(#gradient-redirects) #4271ae;
-  fill-opacity: .75;
+  fill: #4271ae;
+  fill-opacity: .65;
 }
 </style>

@@ -50,13 +50,15 @@ export default {
     return {
       current: null,
       options: {
-        site   : null,
-        view   : null
-      },
-      loading: false
+        site: null,
+        view: null
+      }
     }
   },
   computed: {
+    loading() {
+      return this.$store.state.isLoading;
+    },
     views() {
       return [
         {
@@ -79,23 +81,17 @@ export default {
     }
   },
   created() {
-    this.$events.$on("retour-load", this.load);
-    this.$events.$on("retour-loaded", this.loaded);
     this.fetch();
-  },
-  destroyed() {
-    this.$events.$off("retour-load", this.load);
-    this.$events.$off("retour-loaded", this.loaded);
   },
   methods: {
     fetch() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.get("retour/system").then(response => {
         this.options = response;
 
         this.tmp().then(() => {
           this.current = this.options.view;
-          this.$events.$emit("retour-loaded");
+          this.$store.dispatch("isLoading", false);
         });
       });
     },
@@ -103,53 +99,38 @@ export default {
       return this.$api.get("retour/load")
     },
     go(view) {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.tmp().then(() => {
         this.current = view;
-        this.$events.$emit("retour-loaded");
+        this.$store.dispatch("isLoading", false);
       });
-    },
-    load() {
-      this.loading = true;
-    },
-    loaded() {
-      this.loading = false;
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style>
+.k-retour-view .k-header .k-headline {
+  display: flex;
+}
+.k-retour-view .k-header .k-headline > .k-icon {
+  padding-right: .5em;
+}
 
-
-.k-retour-view {
-
-  .k-header .k-headline {
-    display: flex;
-
-    > .k-icon {
-      padding-right: .5em;
-    }
-  }
-
-  [aria-current]:not([aria-current="false"]) {
-    color: #4271ae;
-  }
+.k-retour-view [aria-current]:not([aria-current="false"]) {
+  color: #4271ae;
 }
 
 .retour-loader {
   display: block;
   padding: 0 .75rem;
-
-  > svg {
+}
+.retour-loader > svg {
     transform: rotate(-180deg);
     animation: spin 1.5s linear infinite;
-
-    @keyframes spin {
-      100% { transform: rotate(180deg); }
-    }
-  }
 }
-
+@keyframes spin {
+  100% { transform: rotate(180deg); }
+}
 </style>
 

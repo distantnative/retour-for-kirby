@@ -25,6 +25,39 @@ export default {
     }
   },
   computed: {
+    codes() {
+      let codes = Object.keys(this.options.headers).map((code) => ({
+        text:  code.substr(1) + " - " + this.options.headers[code],
+        value: code.substr(1)
+      }));
+
+      codes.unshift({text: "-- disabled --", value: "disabled"});
+
+      return codes;
+    },
+    columns() {
+      return {
+        from: {
+          label: this.$t("retour.redirects.from"),
+          width: "1/4",
+          type: "url"
+        },
+        to: {
+          label: this.$t("retour.redirects.to"),
+          width: "1/4",
+          type: "url"
+        },
+        status: {
+          label: this.$t("retour.redirects.status"),
+          width: "1/6",
+          type: "retour-status"
+        },
+        stats: {
+          label: this.$t("retour.redirects.hits"),
+          type: "retour-count"
+        }
+      }
+    },
     endpoints() {
       return {
         field: "retour",
@@ -61,98 +94,46 @@ export default {
         },
       }
     },
-    codes() {
-      let codes = Object.keys(this.options.headers).map((code) => {
-        return {
-          text: code.substr(1) + " - " + this.options.headers[code],
-          value: code.substr(1)
-        }
-      });
-
-      codes.unshift({
-        text: "-- disabled --",
-        value: "disabled"
-      });
-
-      return codes;
-    },
-    columns() {
-      return {
-        from: {
-          label: this.$t("retour.redirects.from"),
-          width: "1/4",
-          type: "url"
-        },
-        to: {
-          label: this.$t("retour.redirects.to"),
-          width: "1/4",
-          type: "url"
-        },
-        status: {
-          label: this.$t("retour.redirects.status"),
-          width: "1/6",
-          type: "retour-status"
-        },
-        stats: {
-          label: this.$t("retour.redirects.hits"),
-          type: "retour-hits"
-        }
-      }
-    },
     values() {
-      return this.redirects.map(value => {
-        return Object.assign(value, {
-          stats: {
-            hits: value.hits,
-            last: value.last
-          }
-        });
-      });
+      return this.redirects.map(value => ({
+        ...value,
+        stats: {
+          hits: value.hits,
+          last: value.last
+        }
+      }));
     }
   },
   created() {
     this.fetch();
   },
   methods: {
-    add(error) {
-      this.$api.post("retour/redirects", {
-        from  : error.path,
-        to    : null,
-        status: "disabled"
-      }).then(() => {
-        this.fetch();
-      });
-    },
     fetch() {
-      this.$events.$emit("retour-load");
+      this.$store.dispatch("isLoading", true);
       this.$api.get("retour/redirects").then(response => {
         this.redirects = response;
-        this.$events.$emit("retour-loaded");
+        this.$store.dispatch("isLoading", false);
       });
     },
     update(input) {
-      this.redirects = input;
-
+      this.$store.dispatch("isLoading", true);
       this.$api.patch("retour/redirects", input.map(item => {
         delete(item["stats"]);
         delete(item["id"]);
         return item;
-      }));
+      })).then(() => {
+        this.redirects = input;
+        this.$store.dispatch("isLoading", false);
+      });
     }
   }
 }
 </script>
 
-<style lang="scss">
-
-  .k-retour-view {
-    .k-field-name-from,
-    .k-field-name-to {
-       .k-text-input {
-         padding-left: 2px;
-       }
-     }
-  }
-
+<style>
+.k-retour-view .k-field-name-from .k-text-input,
+.k-retour-view .k-field-name-to   .k-text-input {
+  padding-left: 2px;
+}
 </style>
 

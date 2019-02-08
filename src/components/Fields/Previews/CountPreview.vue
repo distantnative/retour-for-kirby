@@ -17,9 +17,6 @@
 </template>
 
 <script>
-
-import dayjs from "dayjs";
-
 export default {
   props: {
     value: String,
@@ -29,17 +26,22 @@ export default {
   computed: {
     factor() {
       if (this.value.last) {
-        let date   = dayjs(this.value.last);
-        let today  = dayjs();
-        let days   = today.diff(date, "day");
-        let factor = 1 - (days/30);
+        const date   = new Date(this.value.last);
+        const today  = new Date();
+        const diff   = Math.abs(today.getTime() - date.getTime());
+        const days   = Math.ceil(diff / (1000 * 3600 * 24));
+        const factor = 1 - (days/30);
         return factor > 0 ? factor : 0;
       }
 
       return 0;
     },
     short() {
-      return dayjs(this.value.last).format("DD/MM/YY");
+      let date  = new Date(this.value.last);
+      let day   = date.getDate().toString().padStart(2, "0");
+      let month = (date.getMonth() + 1).toString().padStart(2, "0");
+      let year  = date.getFullYear().toString().substr(-2);
+      return `${day}/${month}/${year}`;
     }
   }
 }
@@ -52,7 +54,7 @@ export default {
     display: flex;
 
     &[title] {
-        text-decoration: none;
+      text-decoration: none;
     }
 
     > aside {
@@ -86,5 +88,4 @@ export default {
     }
   }
 }
-
 </style>

@@ -14,20 +14,13 @@
     <div class="k-card k-card-content">
       <div class="ct-share" />
     </div>
-
-    <gradients />
   </div>
 </template>
 
 <script>
-
 import Chartist from "chartist";
-import Gradients from "./Gradients.vue";
 
 export default {
-  components: {
-    gradients: Gradients
-  },
   props: {
     response: Object
   },
@@ -64,34 +57,26 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  .k-button.retour-redirects {
-    pointer-events: none;
+<style>
+.k-button.retour-redirects,
+.k-button.retour-fails {
+  pointer-events: none;
+}
 
-    .k-icon {
-      color: #4271ae;
-    }
-  }
+.k-button.retour-redirects .k-icon,
+.ct-share .ct-series-a .ct-slice-pie {
+  color: #4271ae;
+  fill:#4271ae;
+}
 
-  .k-button.retour-fails {
-    pointer-events: none;
+.k-button.retour-fails .k-icon,
+.ct-share .ct-series-b .ct-slice-pie {
+  color: #aaa;
+  fill: #ccc;
+}
 
-    .k-icon {
-      color: #aaa;
-    }
-  }
-
-  .ct-share {
-    height: 150px;
-  }
-
-  .ct-share .ct-series-a .ct-slice-pie {
-    fill: url(#gradient-redirects) #4271ae;
-  }
-
-  .ct-share .ct-series-b .ct-slice-pie {
-    fill: url(#gradient-fails) #ccc;
-  }
-
+.ct-share {
+  height: 150px;
+}
 </style>
 
