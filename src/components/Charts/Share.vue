@@ -11,7 +11,7 @@
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content">
+    <div v-show="chart" class="k-card k-card-content">
       <div class="ct-share" />
     </div>
   </div>
