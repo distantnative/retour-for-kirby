@@ -6,32 +6,35 @@
       </label>
 
       <k-button-group>
-        <k-button icon="angle-left" @click="$emit('prev')" />
+        <k-button
+          icon="angle-left"
+          @click="$emit('stats', [stats.frame, stats.offset - 1])"
+        />
         <k-button
           icon="calendar"
-          :current="view === 'month'"
-          @click="$emit('show', 'month')"
+          :current="stats.frame === 'month'"
+          @click="$emit('stats', ['month', stats.offset])"
         >
           {{ $t('retour.dashboard.month') }}
         </k-button>
         <k-button
           icon="menu"
-          :current="view === 'week'"
-          @click="$emit('show', 'week')"
+          :current="stats.frame === 'week'"
+          @click="$emit('stats', ['week', stats.offset])"
         >
           {{ $t('retour.dashboard.week') }}
         </k-button>
         <k-button
           icon="clock"
-          :current="view === 'day'"
-          @click="$emit('show', 'day')"
+          :current="stats.frame === 'day'"
+          @click="$emit('stats', ['day', stats.offset])"
         >
           {{ $t('retour.dashboard.day') }}
         </k-button>
         <k-button
           icon="angle-right"
           :disabled="offset >= 0"
-          @click="$emit('next')"
+          @click="$emit('stats', [stats.frame, stats.offset + 1])"
         />
       </k-button-group>
     </header>
@@ -47,14 +50,12 @@ import Chartist from "chartist";
 
 export default {
   props: {
-    response: Object,
-    view: String,
-    offset: Number
+    stats: Object
   },
   data () {
     return {
       headline: "...",
-      data: null
+      chart: null
     }
   },
   computed: {
@@ -71,13 +72,13 @@ export default {
     }
   },
   watch: {
-    response(response) {
-      this.headline = response.headline;
-      this.data = {
-        labels: response.labels,
+    stats(stats) {
+      this.headline = stats.data.headline;
+      this.chart = {
+        labels: stats.data.labels,
         series: [
-          response.fails.map((x, i) => x + response.redirects[i]),
-          response.redirects,
+          stats.data.fails.map((x, i) => x + stats.data.redirects[i]),
+          stats.data.redirects,
         ]
       };
       this.createChart();
@@ -85,7 +86,7 @@ export default {
   },
   methods: {
     createChart() {
-      new Chartist.Line(".ct-timeline", this.data, this.options);
+      new Chartist.Line(".ct-timeline", this.chart, this.options);
     }
   }
 }

@@ -17,12 +17,8 @@
 <script>
 export default {
   props: {
+    redirects: Array,
     options: Object
-  },
-  data() {
-    return {
-      redirects: []
-    }
   },
   computed: {
     codes() {
@@ -104,17 +100,7 @@ export default {
       }));
     }
   },
-  created() {
-    this.fetch();
-  },
   methods: {
-    fetch() {
-      this.$store.dispatch("isLoading", true);
-      this.$api.get("retour/redirects").then(response => {
-        this.redirects = response;
-        this.$store.dispatch("isLoading", false);
-      });
-    },
     update(input) {
       this.$store.dispatch("isLoading", true);
       this.$api.patch("retour/redirects", input.map(item => {

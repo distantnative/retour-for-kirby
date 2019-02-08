@@ -2,7 +2,7 @@
 // import './assets/icons'
 import "chartist/dist/chartist.min.css";
 
-import Overview from "./components/Overview.vue";
+import View from "./components/View.vue";
 import StatsField from "./components/Fields/StatsField.vue";
 import CountPreview from "./components/Fields/Previews/CountPreview.vue";
 import StatusPreview from "./components/Fields/Previews/StatusPreview.vue";
@@ -10,7 +10,7 @@ import StatusPreview from "./components/Fields/Previews/StatusPreview.vue";
 panel.plugin("distantnative/retour", {
   views: {
     retour: {
-      component: Overview,
+      component: View,
       icon: "undo"
     }
   },

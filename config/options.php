@@ -2,6 +2,6 @@
 
 return [
     'api'   => true,
-    'view'  => 'dashboard',
+    'entry' => 'dashboard',
     'limit' => 10
 ];

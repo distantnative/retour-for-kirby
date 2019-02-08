@@ -80,23 +80,13 @@
         <li>
           <dl>
             <dt>{{ $t('retour.settings.fails') }}</dt>
-            <dd>{{ fails }}</dd>
+            <dd>{{ failed }}</dd>
           </dl>
         </li>
         <li>
           <dl>
             <dt>{{ $t('retour.settings.redirects') }}</dt>
-            <dd>{{ redirects }}</dd>
-          </dl>
-        </li>
-      </ul>
-      <ul class="k-system-info-box">
-        <li>
-          <dl>
-            <dt>{{ $t('retour.settings.options.view') }}</dt>
-            <dd>
-              {{ options.view }}
-            </dd>
+            <dd>{{ redirected }}</dd>
           </dl>
         </li>
         <li>
@@ -104,9 +94,6 @@
             <dt>{{ $t('retour.settings.options.limit') }}</dt>
             <dd>{{ options.limit }}</dd>
           </dl>
-        </li>
-        <li>
-
         </li>
       </ul>
 
@@ -122,13 +109,12 @@
 <script>
 export default {
   props: {
+    fails: Array,
+    redirects: Array,
     options: Object
   },
   data() {
     return {
-      routes: "...",
-      fails: "...",
-      redirects: "...",
       latest: "..."
     }
   },
@@ -136,48 +122,45 @@ export default {
     debug() {
       return window.panel.debug;
     },
+    failed() {
+      return this.fails.reduce((a, b) => {
+        return {
+          fails: a.fails + b.fails
+        };
+      }, { fails: 0 }).fails;
+    },
     outdated() {
       return this.latest != "..." && this.options.version !== this.latest;
+    },
+    redirected() {
+      return this.fails.reduce((a, b) => {
+        return {
+          redirects: a.redirects + b.redirects
+        };
+      }, { redirects: 0 }).redirects;
+    },
+    routes() {
+      return this.redirects.length;
     }
   },
   mounted() {
     this.fetch();
   },
   methods: {
-    count(response) {
-      if (response.length > 0) {
-        this.fails = response.reduce((a, b) => ({fails: a.fails + b.fails})).fails;
-        this.redirects = response.reduce((a, b) => ({redirects: a.redirects + b.redirects})).redirects;
-      } else {
-        this.fails = 0;
-        this.redirects = 0;
-      }
-    },
     fetch() {
-      this.$store.dispatch("isLoading", true);
-      this.$api.get("retour/redirects").then(response => {
-        this.routes = response.length;
-
-        this.$api.get("retour/fails/fails").then(response => {
-          this.count(response);
-
-          fetch("https://api.github.com/repos/distantnative/retour-for-kirby/releases", { method: "GET" }).then(response => response.json()).then(response => {
-            this.latest = response[0].name;
-            this.$store.dispatch("isLoading", false);
-          });
-        });
+      const api = "https://api.github.com/repos/distantnative/retour-for-kirby/releases";
+      fetch(api, { method: "GET" }).then(x => x.json()).then(response => {
+        this.latest = response[0].name;
       });
     },
     flush() {
-      this.$store.dispatch("isLoading", true);
       this.$api.patch("retour/clear").then(() => {
-        this.fetch();
+        this.$emit("reload");
       });
     },
     samples() {
-      this.$store.dispatch("isLoading", true);
       this.$api.post("retour/samples").then(() => {
-        this.fetch();
+        this.$emit("reload");
       });
     }
   }

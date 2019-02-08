@@ -22,11 +22,11 @@ import Chartist from "chartist";
 
 export default {
   props: {
-    response: Object
+    data: Object
   },
   data () {
     return {
-      data: null,
+      chart: null,
       redirects: "–",
       fails: "-"
     }
@@ -42,16 +42,16 @@ export default {
     }
   },
   watch: {
-    response(response) {
-      this.redirects = response.redirects.reduce((sum, x) => sum + x);
-      this.fails     = response.fails.reduce((sum, x) => sum + x);
-      this.data      = { series: [this.redirects, this.fails] };
+    data(data) {
+      this.redirects = data.redirects.reduce((sum, x) => sum + x, 0);
+      this.fails     = data.fails.reduce((sum, x) => sum + x, 0);
+      this.chart     = { series: [this.redirects, this.fails] };
       this.createChart();
     }
   },
   methods: {
     createChart() {
-      new Chartist.Pie(".ct-share", this.data, this.options);
+      new Chartist.Pie(".ct-share", this.chart, this.options);
     }
   }
 }

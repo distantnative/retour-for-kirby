@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'view.retour' => 'Retour',
+    'view.retour'    => 'Retour',
+    'retour.refresh' => 'Refresh',
 
     'retour.dashboard'       => 'Dashboard',
     'retour.dashboard.month' => 'Month',
@@ -17,8 +18,8 @@ return [
     'retour.redirects.hit.last' => 'Last',
 
     'retour.fails'            => 'Fails',
-    'retour.fails.sort.count' => 'By hits',
-    'retour.fails.sort.date'  => 'By date',
+    'retour.fails.sort.fails' => 'By hits',
+    'retour.fails.sort.last'  => 'By date',
     'retour.fails.path'       => 'Path',
     'retour.fails.referrer'   => 'Referrer',
     'retour.fails.count'      => 'Hits (Redirected)',
@@ -35,7 +36,6 @@ return [
     'retour.settings.routes'            => 'Redirect routes',
     'retour.settings.fails'             => 'Logged fails',
     'retour.settings.redirects'         => 'Successfully redirected',
-    'retour.settings.options.view'      => 'Default view',
     'retour.settings.options.limit'     => 'List # items per page',
 
 ];

@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
-Plugin for [Kirby 3](https://getkirby.com) offering redirect management with pattern placeholders, support for most common HTTP status codes as well as 404 logging. Make sure to take your visitors where they are heading.
+Plugin for [Kirby 3](https://getkirby.com) which adds a Panel view where you can manage redirects for your website. Redirects feature pattern placeholders, support for most common HTTP status codes as well as 404 tracking. Make sure to take your visitors where they are heading.
 
 ![Screenshots](screenshots.jpeg)
 
@@ -53,20 +53,18 @@ If you use routing patterns, the mathed parts can be used via numbered variables
 ### Status
 Status codes in the 3xx range will actually redirect the request to the new location (URL changes). All other HTTP status codes have the option to return a specified page with the selected HTTP status code (while the URL stays the same) or let the browser request fail with the selected HTTP status code (if you leave the `Redirect to` field empty).
 
-**HTTP status codes**
-https://httpstatuses.com
+**HTTP status codes:** https://httpstatuses.com
 
 ## Options
 
-| Option | Default | Description |
-|-|-|-|
-| `distantnative.retour.view`| `dashboard` | Which view to open first |
-| `distantnative.retour.limit` | `10` | How many entries to show per page | 
-
+```php
+return [
+  'distantnative.retour.limit' => 10 // # of entries to show per page
+];
 
 ## Disclaimer
 
-This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you find any issues, please [create a new issue](https://github.com/distantnative/retour-for-kirby/issues/new).
+This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you encounter any problem, please [create an issue](https://github.com/distantnative/retour-for-kirby/issues/new).
 
 ## License
 

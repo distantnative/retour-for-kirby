@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'view.retour' => 'Retour',
+    'view.retour'    => 'Retour',
+    'retour.refresh' => 'Aktualisieren',
 
     'retour.dashboard'       => 'Statistik',
     'retour.dashboard.month' => 'Monat',
@@ -17,8 +18,8 @@ return [
     'retour.redirects.hit.last' => 'Zuletzt',
 
     'retour.fails'            => 'Fehler',
-    'retour.fails.sort.count' => 'Nach Treffer',
-    'retour.fails.sort.date'  => 'Nach Datum',
+    'retour.fails.sort.fails' => 'Nach Treffer',
+    'retour.fails.sort.last'  => 'Nach Datum',
     'retour.fails.path'       => 'Pfad',
     'retour.fails.referrer'   => 'Ursprung',
     'retour.fails.count'      => 'Treffer (Umgeleitet)',
@@ -35,7 +36,6 @@ return [
     'retour.settings.routes'            => 'Umleitungsrouten',
     'retour.settings.fails'             => 'Aufgezeichnete Fehler',
     'retour.settings.redirects'         => 'Erfolgreich umgeleitet',
-    'retour.settings.options.view'      => 'Standardansicht',
     'retour.settings.options.limit'     => 'Zeige # Einträge pro Seite',
 
 ];

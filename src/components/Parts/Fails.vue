@@ -7,18 +7,12 @@
 
       <k-button-group>
         <k-button
+          v-for="by in ['fails', 'last']"
+          :key="by"
           icon="funnel"
-          :current="sort === 'fails'"
-          @click="sortBy('fails')"
+          @click="$emit('fails', by)"
         >
-          {{ $t('retour.fails.sort.count') }}
-        </k-button>
-        <k-button
-          icon="funnel"
-          :current="sort === 'last'"
-          @click="sortBy('last')"
-        >
-          {{ $t('retour.fails.sort.date') }}
+          {{ $t('retour.fails.sort.' + by) }}
         </k-button>
       </k-button-group>
     </header>
@@ -76,13 +70,12 @@
 <script>
 export default {
   props: {
+    fails: Array,
     options: Object
   },
   data() {
     return {
-      items: [],
-      sort:  "fails",
-      page:  1
+      page: 1
     }
   },
   computed: {
@@ -90,7 +83,7 @@ export default {
       return {
         page: this.page,
         limit: this.options.limit,
-        total: this.items.length,
+        total: this.fails.length,
         align: "center",
         details: true
       };
@@ -98,27 +91,12 @@ export default {
     paginatedItems() {
       const index  = this.page - 1;
       const offset = index * this.options.limit;
-      return this.items.slice(offset, offset + this.options.limit);
+      return this.fails.slice(offset, offset + this.options.limit);
     }
   },
-  created() {
-    this.fetch();
-  },
   methods: {
-    fetch() {
-      this.$store.dispatch("isLoading", true);
-      this.$api.get("retour/fails/" + this.sort).then(response => {
-        this.items = response;
-        this.page  = 1;
-        this.$store.dispatch("isLoading", false);
-      });
-    },
     paginateItems(pagination) {
       this.page = pagination.page;
-    },
-    sortBy(sort) {
-      this.sort = sort;
-      this.fetch();
     }
   }
 }
