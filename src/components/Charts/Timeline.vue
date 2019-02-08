@@ -13,27 +13,27 @@
         <k-button
           icon="calendar"
           :current="stats.frame === 'month'"
-          @click="$emit('stats', ['month', stats.offset])"
+          @click="$emit('stats', ['month', 0])"
         >
           {{ $t('retour.dashboard.month') }}
         </k-button>
         <k-button
           icon="menu"
           :current="stats.frame === 'week'"
-          @click="$emit('stats', ['week', stats.offset])"
+          @click="$emit('stats', ['week', 0])"
         >
           {{ $t('retour.dashboard.week') }}
         </k-button>
         <k-button
           icon="clock"
           :current="stats.frame === 'day'"
-          @click="$emit('stats', ['day', stats.offset])"
+          @click="$emit('stats', ['day', 0])"
         >
           {{ $t('retour.dashboard.day') }}
         </k-button>
         <k-button
           icon="angle-right"
-          :disabled="offset >= 0"
+          :disabled="stats.offset >= 0"
           @click="$emit('stats', [stats.frame, stats.offset + 1])"
         />
       </k-button-group>
