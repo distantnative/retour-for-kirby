@@ -8,7 +8,6 @@ use Kirby\Toolkit\Collection;
 
 class Redirects extends Store
 {
-
     protected $retour;
 
     public function hit(array $tmp): void
@@ -35,7 +34,7 @@ class Redirects extends Store
             return $redirect['status'] !== 'disabled';
         });
 
-        return array_map(function($redirect) {
+        return array_map(function ($redirect) {
             return [
                 'name'    => $redirect['from'],
                 'pattern' => $redirect['from'],
@@ -68,5 +67,4 @@ class Redirects extends Store
     {
         site()->update(['retour' => $data]);
     }
-
 }

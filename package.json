@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "bili --watch",
     "build": "bili",
-    "lint": "eslint src/** --ext .js,.vue"
+    "lint": "eslint src/** --ext .js,.vue",
+    "cs": "php-cs-fixer fix ./ --rules=@PSR2"
   },
   "devDependencies": {
     "bili": "^4.2.5",

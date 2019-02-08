@@ -8,7 +8,6 @@ use Kirby\Toolkit\F;
 
 class Retour
 {
-
     protected $log;
     protected $redirects;
     protected $stats;
@@ -25,13 +24,12 @@ class Retour
 
         $tmp = [];
 
-        foreach(glob($files) as $file) {
+        foreach (glob($files) as $file) {
             $tmp[] = Data::read($file, 'yaml');
             F::remove($file);
         }
 
         if (empty($tmp) === false) {
-
             $this->log()->add($tmp);
             $this->stats()->count($tmp);
 
@@ -40,7 +38,6 @@ class Retour
             });
 
             $this->redirects()->hit($redirects);
-
         }
     }
 
@@ -92,5 +89,4 @@ class Retour
             'date'     => date('Y-m-d H:i')
         ], 'yaml');
     }
-
 }

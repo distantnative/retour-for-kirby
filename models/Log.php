@@ -4,7 +4,6 @@ namespace distantnative\Retour;
 
 class Log extends Store
 {
-
     public function __construct()
     {
         $this->file = kirby()->root('site') . '/logs/retour/404.log';
@@ -48,5 +47,4 @@ class Log extends Store
 
         return $data;
     }
-
 }

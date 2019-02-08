@@ -53,7 +53,6 @@ $stati    = ['redirect', 'fail', 'fail', 'fail'];
 $monthday = [31,28,31,30,31,30,31,31,30,31,30,31];
 
 for ($year=2016; $year <= 2019; $year++) {
-
     for ($month=1; $month <= 12; $month++) {
         $stats = [
             'day'   => [],
@@ -88,9 +87,7 @@ for ($year=2016; $year <= 2019; $year++) {
 
         $retour->stats()->write(
             $stats,
-            $year.'-'.str_pad($month,2,'0',STR_PAD_LEFT)
+            $year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT)
         );
     }
 }
-
-

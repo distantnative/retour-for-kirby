@@ -4,8 +4,8 @@ namespace distantnative\Retour;
 
 use Kirby\Http\Header;
 
-class System {
-
+class System
+{
     public function toArray(): array
     {
         $kirby  = kirby();
@@ -20,5 +20,4 @@ class System {
             'headers'     => Header::$codes
         ];
     }
-
 }

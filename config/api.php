@@ -75,7 +75,9 @@ return [
         [
             'pattern' => 'retour/validate',
             'method'  => 'POST',
-            'action'  => function () { return true; }
+            'action'  => function () {
+                return true;
+            }
         ],
     ]
 ];

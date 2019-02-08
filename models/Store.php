@@ -5,8 +5,8 @@ namespace distantnative\Retour;
 use Kirby\Data\Data;
 use Kirby\Toolkit\F;
 
-class Store {
-
+class Store
+{
     protected $data;
     protected $file;
 
@@ -55,5 +55,4 @@ class Store {
 
         return $this->data = $data;
     }
-
 }

@@ -4,7 +4,6 @@ namespace distantnative\Retour;
 
 class Stats extends Store
 {
-
     public function __construct()
     {
         $this->file = kirby()->root('site') . '/logs/retour/{x}.stats';
@@ -138,10 +137,9 @@ class Stats extends Store
 
         // detailed date
         if (date('Y', $start) === date('Y', $end)) {
-           return date('j F', $start) . ' - ' . date('j F Y', $end);
+            return date('j F', $start) . ' - ' . date('j F Y', $end);
         }
 
         return date('j F Y', $start) . ' - ' . date('j F Y', $end);
     }
 }
-
