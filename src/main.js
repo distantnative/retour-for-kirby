@@ -1,5 +1,6 @@
 
 import './assets/icons'
+import 'chartist/dist/chartist.min.css';
 
 import Overview from "./components/Overview.vue";
 import StatsField from "./components/Fields/StatsField.vue";

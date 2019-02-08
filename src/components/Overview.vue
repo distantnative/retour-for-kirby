@@ -94,7 +94,7 @@ export default {
       this.$api.get('retour/system').then(response => {
         this.options = response;
 
-        this.tmp().then(response => {
+        this.tmp().then(() => {
           this.current = this.options.view;
           this.$events.$emit('retour-loaded');
         });
@@ -105,7 +105,7 @@ export default {
     },
     go(view) {
       this.$events.$emit('retour-load');
-      this.tmp().then(response => {
+      this.tmp().then(() => {
         this.current = view;
         this.$events.$emit('retour-loaded');
       });

@@ -75,7 +75,7 @@ class Stats extends Store
                 $end   = strtotime(date('Y-m-d 23:59') . $offset . ' day');
                 $group = 'Y-m-d';
                 $key   = 'Y-m-d H:';
-                $label = 'G:00';
+                $label = 'G';
                 break;
 
             case 'week':
@@ -84,7 +84,7 @@ class Stats extends Store
                 $end     = strtotime(date('Y-m-d ', strtotime('Sunday this week')) . $offset . ' week');
                 $group   = 'Y-m';
                 $key     = 'Y-m-d';
-                $label   = 'l';
+                $label   = 'D';
                 $by      = 'month';
                 break;
 

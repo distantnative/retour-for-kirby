@@ -12,19 +12,21 @@
     </header>
 
     <div class="k-card k-card-content">
-      <pie :height="350" :chart-data="data" :options="options" />
+      <div class="ct-share"></div>
     </div>
+
+    <gradients />
   </div>
 </template>
 
 <script>
 
-import getGradients from './../../assets/gradients.js';
-import Pie  from './Pie.vue';
+import Chartist from "chartist";
+import Gradients from "./Gradients.vue";
 
 export default {
   components: {
-    pie: Pie
+    gradients: Gradients
   },
   props: {
     response: Object
@@ -39,32 +41,24 @@ export default {
   computed: {
     options() {
       return {
-        legend: false,
-        rotation: 1 * Math.PI,
-        circumference: Math.PI
+        height: 250,
+        startAngle: 270,
+        total: (this.redirects + this.fails)*2,
+        showLabel: false
       };
     }
   },
   watch: {
     response(response) {
-      let gradients  = getGradients(document, 'pie-chart');
       this.redirects = response.redirects.reduce((sum, x) => sum + x);
       this.fails     = response.fails.reduce((sum, x) => sum + x);
-
-      this.data = {
-        labels: [this.$t('retour.redirects'), this.$t('retour.fails')],
-        datasets: [
-          {
-            data: [
-              this.redirects,
-              this.fails
-            ],
-            backgroundColor: [gradients.blue, gradients.grey],
-            hoverBackgroundColor: ['#4271ae', '#ccc'],
-            borderWidth: [1, 1]
-          }
-        ]
-      }
+      this.data      = { series: [this.redirects, this.fails] };
+      this.createChart();
+    }
+  },
+  methods: {
+    createChart() {
+      new Chartist.Pie('.ct-share', this.data, this.options);
     }
   }
 }
@@ -86,5 +80,18 @@ export default {
       color: #aaa;
     }
   }
+
+  .ct-share {
+    height: 150px;
+  }
+
+  .ct-share .ct-series-a .ct-slice-pie {
+    fill: url(#gradient-redirects) #4271ae;
+  }
+
+  .ct-share .ct-series-b .ct-slice-pie {
+    fill: url(#gradient-fails) #ccc;
+  }
+
 </style>
 

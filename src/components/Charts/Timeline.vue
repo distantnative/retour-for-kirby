@@ -35,24 +35,21 @@
     </header>
 
     <div class="k-card k-card-content">
-      <lines
-        :height="101"
-        :chart-data="data"
-        :options="options"
-      />
+      <div class="ct-timeline"></div>
     </div>
 
+    <gradients />
   </div>
 </template>
 
 <script>
 
-import getGradients from './../../assets/gradients.js';
-import Line from './Line.vue';
+import Chartist from "chartist";
+import Gradients from "./Gradients.vue";
 
 export default {
   components: {
-    lines: Line
+    gradients: Gradients
   },
   props: {
     response: Object,
@@ -68,47 +65,60 @@ export default {
   computed: {
     options() {
       return {
-        legend: false,
-        tooltips: false,
-        scales: {
-          yAxes: [{
-            stacked: true,
-            display: true,
-            ticks: {
-              min: 0,
-              suggestedMax: 5
-            }
-          }]
-        }
+        height: 250,
+        showLabel: false,
+        low: 0,
+        showArea: true,
+        showLine: false,
+        showPoint: false,
+        fullWidth: true,
       };
     }
   },
   watch: {
     response(response) {
-      let gradients = getGradients(document, 'line-chart');
-
       this.headline = response.headline;
       this.data = {
         labels: response.labels,
-        datasets: [
-          {
-            backgroundColor: gradients.blue,
-            borderColor: 'rgba(66, 113, 174, .75)',
-            borderWidth: 1,
-            pointRadius: 0,
-            data: response.redirects,
-          },
-          {
-            backgroundColor: gradients.grey,
-            borderColor: '#ccc',
-            borderWidth: 1,
-            pointRadius: 0,
-            data: response.fails,
-          }
+        series: [
+          response.fails,
+          response.redirects,
         ]
-      }
+      };
+      this.createChart();
+    }
+  },
+  methods: {
+    createChart() {
+      const chart = new Chartist.Line(
+        '.ct-timeline',
+        this.data,
+        this.options
+      );
     }
   }
 }
 </script>
 
+<style lang="scss">
+
+.ct-timeline {
+  margin-left: -.75rem;
+}
+
+.ct-timeline .ct-label.ct-horizontal.ct-end {
+  display: block;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.ct-timeline .ct-series-a .ct-area {
+  fill: url(#gradient-fails) #ccc;
+  fill-opacity: .65;
+}
+
+.ct-timeline .ct-series-b .ct-area {
+  fill: url(#gradient-redirects) #4271ae;
+  fill-opacity: .75;
+}
+</style>

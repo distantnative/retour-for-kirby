@@ -27,10 +27,9 @@
         </li>
         <li>
           <dl>
+            <dt>Support development 💛</dt>
             <dd>
-              <dt>Support development 💛</dt>
-              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">Buy a juice</k-button> &middot;
-              <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">Donate</k-button> &middot;
+              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">Buy a juice</k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">Donate</k-button> &middot;
               <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">Buy a Kirby license</k-button>
             </dd>
           </dl>
