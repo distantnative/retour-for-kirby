@@ -2,14 +2,14 @@
 
 load([
     // lib
-    'distantnative\\retour\\store' => 'models/Store.php',
+    'distantnative\\Retour\\Store' => 'models/Store.php',
 
     // models
-    'distantnative\\retour'            => 'models/Retour.php',
-    'distantnative\\retour\\log'       => 'models/Log.php',
-    'distantnative\\retour\\redirects' => 'models/Redirects.php',
-    'distantnative\\retour\\stats'     => 'models/Stats.php',
-    'distantnative\\retour\\system'    => 'models/System.php'
+    'distantnative\\Retour'            => 'models/Retour.php',
+    'distantnative\\Retour\\Log'       => 'models/Log.php',
+    'distantnative\\Retour\\Redirects' => 'models/Redirects.php',
+    'distantnative\\Retour\\Stats'     => 'models/Stats.php',
+    'distantnative\\Retour\\System'    => 'models/System.php'
 ], __DIR__);
 
 $retour = new distantnative\Retour;
