@@ -83,7 +83,7 @@ export default {
       this.data = {
         labels: response.labels,
         series: [
-          response.fails,
+          response.fails.map((x, i) => x + response.redirects[i]),
           response.redirects,
         ]
       };
