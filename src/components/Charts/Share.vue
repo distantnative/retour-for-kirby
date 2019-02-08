@@ -12,7 +12,7 @@
     </header>
 
     <div class="k-card k-card-content">
-      <div class="ct-share"></div>
+      <div class="ct-share" />
     </div>
 
     <gradients />
@@ -34,8 +34,8 @@ export default {
   data () {
     return {
       data: null,
-      redirects: '–',
-      fails: '-'
+      redirects: "–",
+      fails: "-"
     }
   },
   computed: {
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     createChart() {
-      new Chartist.Pie('.ct-share', this.data, this.options);
+      new Chartist.Pie(".ct-share", this.data, this.options);
     }
   }
 }

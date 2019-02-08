@@ -7,16 +7,59 @@
   "license": "MIT",
   "scripts": {
     "dev": "bili --watch",
-    "build": "bili"
+    "build": "bili",
+    "lint": "eslint src/** --ext .js,.vue"
   },
   "devDependencies": {
     "bili": "^4.2.5",
     "chartist": "^0.11.0",
     "dayjs": "^1.8.0",
+    "eslint": "^5.13.0",
+    "eslint-plugin-vue": "^5.1.0",
     "node-sass": "^4.11.0",
+    "rollup-plugin-eslint": "^5.0.0",
     "rollup-plugin-livereload": "^1.0.0",
-    "rollup-plugin-visualizer": "^0.9.2",
     "rollup-plugin-vue": "^4.7.1",
     "vue-template-compiler": "^2.6.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "plugin:vue/recommended",
+      "eslint:recommended"
+    ],
+    "globals": {
+      "panel": true
+    },
+    "rules": {
+      "vue/require-default-prop": "off",
+      "vue/attributes-order": "error",
+      "vue/require-prop-types": "error",
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          "singleline": 3,
+          "multiline": {
+            "max": 1,
+            "allowFirstLine": false
+          }
+        }
+      ],
+      "vue/html-closing-bracket-newline": [
+        "error",
+        {
+          "singleline": "never",
+          "multiline": "always"
+        }
+      ],
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "indent": [
+        "error",
+        2
+      ]
+    }
   }
 }

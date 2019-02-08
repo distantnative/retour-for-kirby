@@ -1,6 +1,6 @@
 
-import './assets/icons'
-import 'chartist/dist/chartist.min.css';
+// import './assets/icons'
+import "chartist/dist/chartist.min.css";
 
 import Overview from "./components/Overview.vue";
 import StatsField from "./components/Fields/StatsField.vue";
@@ -11,14 +11,14 @@ panel.plugin("distantnative/retour", {
   views: {
     retour: {
       component: Overview,
-      icon: 'undo'
+      icon: "undo"
     }
   },
   fields: {
     "retour-stats": StatsField
   },
   components: {
-    'k-retour-hits-field-preview': HitsPreview,
-    'k-retour-status-field-preview': StatusPreview
+    "k-retour-hits-field-preview": HitsPreview,
+    "k-retour-status-field-preview": StatusPreview
   }
 });

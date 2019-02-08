@@ -11,7 +11,7 @@
           :current="current === view.name"
           @click="go(view.name)"
         >
-          {{ $t('retour.' + view.name)}}
+          {{ $t('retour.' + view.name) }}
         </k-button>
       </k-button-group>
 
@@ -22,23 +22,22 @@
 
     <template v-for="view in views">
       <component
+        :is="view.name"
         v-if="current === view.name"
         :key="view.name"
         :ref="view.name"
-        :is="view.name"
         :options="options"
       />
     </template>
-
   </k-view>
 </template>
 
 <script>
 
-import Dashboard from './Views/Dashboard.vue';
-import Redirects from './Views/Redirects.vue';
-import Fails     from './Views/Fails.vue';
-import Settings  from './Views/Settings.vue';
+import Dashboard from "./Views/Dashboard.vue";
+import Redirects from "./Views/Redirects.vue";
+import Fails     from "./Views/Fails.vue";
+import Settings  from "./Views/Settings.vue";
 
 export default {
   components: {
@@ -61,53 +60,53 @@ export default {
     views() {
       return [
         {
-          name: 'dashboard',
-          icon: 'dashboard'
+          name: "dashboard",
+          icon: "dashboard"
         },
         {
-          name: 'redirects',
-          icon: 'url'
+          name: "redirects",
+          icon: "url"
         },
         {
-          name: 'fails',
-          icon: 'protected'
+          name: "fails",
+          icon: "protected"
         },
         {
-          name: 'settings',
-          icon: 'cog'
+          name: "settings",
+          icon: "cog"
         }
       ];
     }
   },
   created() {
-    this.$events.$on('retour-load', this.load);
-    this.$events.$on('retour-loaded', this.loaded);
+    this.$events.$on("retour-load", this.load);
+    this.$events.$on("retour-loaded", this.loaded);
     this.fetch();
   },
   destroyed() {
-    this.$events.$off('retour-load', this.load);
-    this.$events.$off('retour-loaded', this.loaded);
+    this.$events.$off("retour-load", this.load);
+    this.$events.$off("retour-loaded", this.loaded);
   },
   methods: {
     fetch() {
-      this.$events.$emit('retour-load');
-      this.$api.get('retour/system').then(response => {
+      this.$events.$emit("retour-load");
+      this.$api.get("retour/system").then(response => {
         this.options = response;
 
         this.tmp().then(() => {
           this.current = this.options.view;
-          this.$events.$emit('retour-loaded');
+          this.$events.$emit("retour-loaded");
         });
       });
     },
     tmp() {
-      return this.$api.get('retour/load')
+      return this.$api.get("retour/load")
     },
     go(view) {
-      this.$events.$emit('retour-load');
+      this.$events.$emit("retour-load");
       this.tmp().then(() => {
         this.current = view;
-        this.$events.$emit('retour-loaded');
+        this.$events.$emit("retour-loaded");
       });
     },
     load() {

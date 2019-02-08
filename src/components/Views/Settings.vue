@@ -1,9 +1,10 @@
 <template>
   <div>
-
     <section class="k-system-info">
       <header class="k-field-header">
-        <label class="k-field-label">{{ options.description }}</label>
+        <label class="k-field-label">
+          {{ options.description }}
+        </label>
       </header>
 
       <ul class="k-system-info-box">
@@ -11,26 +12,38 @@
           <dl>
             <dt>
               Installed plugin version
-              <span style="opacity: 0;">🔜</span>
+              <span style="opacity: 0;">
+                🔜
+              </span>
             </dt>
-            <dd :data-negative="outdated">{{ this.options.version }}</dd>
+            <dd :data-negative="outdated">
+              {{ options.version }}
+            </dd>
           </dl>
         </li>
         <li>
           <dl>
             <dt>
               Latest plugin version
-              <span style="opacity: 0;">⚡️</span>
+              <span style="opacity: 0;">
+                ⚡️
+              </span>
             </dt>
-            <dd>{{ this.latest }}</dd>
+            <dd>{{ latest }}</dd>
           </dl>
         </li>
         <li>
           <dl>
             <dt>Support development 💛</dt>
             <dd>
-              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">Buy a juice</k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">Donate</k-button> &middot;
-              <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">Buy a Kirby license</k-button>
+              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">
+                Buy a juice
+              </k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">
+                Donate
+              </k-button> &middot;
+              <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">
+                Buy a Kirby license
+              </k-button>
             </dd>
           </dl>
         </li>
@@ -38,16 +51,20 @@
 
       <footer v-if="outdated" class="k-field-footer">
         <div data-theme="help" class="k-text k-field-help">
-          Download <a href="https://github.com/distantnative/retour-for-kirby/archive/master.zip">latest version</a>.
+          Download <a href="https://github.com/distantnative/retour-for-kirby/archive/master.zip">
+            latest version
+          </a>.
         </div>
       </footer>
     </section>
 
-    <br />
+    <br>
 
     <section class="k-system-info">
       <header class="k-field-header">
-        <label class="k-field-label">Overview</label>
+        <label class="k-field-label">
+          Overview
+        </label>
 
         <k-button-group>
           <k-button v-if="debug" icon="download" @click="samples">
@@ -63,19 +80,19 @@
         <li>
           <dl>
             <dt>Redirect routes</dt>
-            <dd>{{ this.routes }}</dd>
+            <dd>{{ routes }}</dd>
           </dl>
         </li>
         <li>
           <dl>
             <dt>Logged {{ $t('retour.fails') }}</dt>
-            <dd>{{ this.fails }}</dd>
+            <dd>{{ fails }}</dd>
           </dl>
         </li>
         <li>
           <dl>
             <dt>Successfully redirected</dt>
-            <dd>{{ this.redirects }}</dd>
+            <dd>{{ redirects }}</dd>
           </dl>
         </li>
       </ul>
@@ -91,7 +108,7 @@
         <li>
           <dl>
             <dt>List # items per page</dt>
-            <dd>{{ this.options.limit }}</dd>
+            <dd>{{ options.limit }}</dd>
           </dl>
         </li>
         <li>
@@ -106,11 +123,12 @@
 
       <footer class="k-field-footer">
         <div data-theme="help" class="k-text k-field-help">
-          Learn more about options <a href="https://github.com/distantnative/retour-for-kirby">in the docs</a>.
+          Learn more about options <a href="https://github.com/distantnative/retour-for-kirby">
+            in the docs
+          </a>.
         </div>
       </footer>
     </section>
-
   </div>
 </template>
 
@@ -121,10 +139,10 @@ export default {
   },
   data() {
     return {
-      routes: '...',
-      fails: '...',
-      redirects: '...',
-      latest: '...'
+      routes: "...",
+      fails: "...",
+      redirects: "...",
+      latest: "..."
     }
   },
   computed: {
@@ -132,7 +150,7 @@ export default {
       return window.panel.debug;
     },
     outdated() {
-      return this.latest != '...' && this.options.version !== this.latest;
+      return this.latest != "..." && this.options.version !== this.latest;
     }
   },
   mounted() {
@@ -149,29 +167,29 @@ export default {
       }
     },
     fetch() {
-      this.$events.$emit('retour-load');
-      this.$api.get('retour/redirects').then(response => {
+      this.$events.$emit("retour-load");
+      this.$api.get("retour/redirects").then(response => {
         this.routes = response.length;
 
-        this.$api.get('retour/fails/fails').then(response => {
+        this.$api.get("retour/fails/fails").then(response => {
           this.count(response);
 
-          fetch('https://api.github.com/repos/distantnative/retour-for-kirby/releases', { method: "GET" }).then(response => response.json()).then(response => {
+          fetch("https://api.github.com/repos/distantnative/retour-for-kirby/releases", { method: "GET" }).then(response => response.json()).then(response => {
             this.latest = response[0].name;
-            this.$events.$emit('retour-loaded');
+            this.$events.$emit("retour-loaded");
           });
         });
       });
     },
     flush() {
-      this.$events.$emit('retour-load');
-      this.$api.patch('retour/clear').then(() => {
+      this.$events.$emit("retour-load");
+      this.$api.patch("retour/clear").then(() => {
         this.fetch();
       });
     },
     samples() {
-      this.$events.$emit('retour-load');
-      this.$api.post('retour/samples').then(() => {
+      this.$events.$emit("retour-load");
+      this.$api.post("retour/samples").then(() => {
         this.fetch();
       });
     }

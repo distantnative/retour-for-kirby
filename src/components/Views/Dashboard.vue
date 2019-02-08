@@ -1,6 +1,5 @@
 <template>
   <k-grid gutter="medium">
-
     <k-column width="1/4">
       <share :response="response" />
     </k-column>
@@ -16,28 +15,27 @@
       />
     </k-column>
 
-    <k-column width="1/1" v-if="false">
+    <k-column v-if="false" width="1/1">
       <footer class="k-field-footer">
         <div data-theme="help" class="k-text k-field-help">
-        <p>
-          <b>{{ $t('retour.redirects') }}</b><br>
-          {{ $t('retour.redirects.description') }}
-        </p>
-        <p>
-          <b>{{ $t('retour.fails') }}</b><br>
-          {{ $t('retour.fails.description') }}
-        </p>
+          <p>
+            <b>{{ $t('retour.redirects') }}</b><br>
+            {{ $t('retour.redirects.description') }}
+          </p>
+          <p>
+            <b>{{ $t('retour.fails') }}</b><br>
+            {{ $t('retour.fails.description') }}
+          </p>
         </div>
       </footer>
     </k-column>
-
   </k-grid>
 </template>
 
 <script>
 
-import Timeline from './../Charts/Timeline.vue';
-import Share  from './../Charts/Share.vue';
+import Timeline from "./../Charts/Timeline.vue";
+import Share  from "./../Charts/Share.vue";
 
 export default {
   components: {
@@ -46,14 +44,14 @@ export default {
   },
   data () {
     return {
-      view:     'month',
+      view:     "month",
       offset:   0,
       response: null
     }
   },
   computed: {
     api() {
-      return 'retour/stats/' + this.view + '/' + this.offset;
+      return "retour/stats/" + this.view + "/" + this.offset;
     }
   },
   mounted() {
@@ -61,10 +59,10 @@ export default {
   },
   methods: {
     fetch() {
-      this.$events.$emit('retour-load');
+      this.$events.$emit("retour-load");
       this.$api.get(this.api).then(response => {
         this.response = response;
-        this.$events.$emit('retour-loaded');
+        this.$events.$emit("retour-loaded");
       });
     },
     prev() {

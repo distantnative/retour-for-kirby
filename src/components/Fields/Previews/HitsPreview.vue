@@ -9,14 +9,16 @@
         <span>{{ value.hits }}</span>
         <small>{{ $t('retour.redirects.hit.last') }}: {{ short }}</small>
       </div>
-      <div v-else>–</div>
+      <div v-else>
+        –
+      </div>
     </abbr>
   </p>
 </template>
 
 <script>
 
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 export default {
   props: {
@@ -29,7 +31,7 @@ export default {
       if (this.value.last) {
         let date   = dayjs(this.value.last);
         let today  = dayjs();
-        let days   = today.diff(date, 'day');
+        let days   = today.diff(date, "day");
         let factor = 1 - (days/30);
         return factor > 0 ? factor : 0;
       }
@@ -37,7 +39,7 @@ export default {
       return 0;
     },
     short() {
-      return dayjs(this.value.last).format('DD/MM/YY');
+      return dayjs(this.value.last).format("DD/MM/YY");
     }
   }
 }

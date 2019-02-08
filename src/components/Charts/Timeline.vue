@@ -1,7 +1,9 @@
 <template>
   <div>
     <header class="k-field-header">
-      <label class="k-field-label">{{ headline }}</label>
+      <label class="k-field-label">
+        {{ headline }}
+      </label>
 
       <k-button-group>
         <k-button icon="angle-left" @click="$emit('prev')" />
@@ -35,7 +37,7 @@
     </header>
 
     <div class="k-card k-card-content">
-      <div class="ct-timeline"></div>
+      <div class="ct-timeline" />
     </div>
 
     <gradients />
@@ -58,7 +60,7 @@ export default {
   },
   data () {
     return {
-      headline: '...',
+      headline: "...",
       data: null
     }
   },
@@ -90,11 +92,7 @@ export default {
   },
   methods: {
     createChart() {
-      const chart = new Chartist.Line(
-        '.ct-timeline',
-        this.data,
-        this.options
-      );
+      new Chartist.Line(".ct-timeline", this.data, this.options);
     }
   }
 }

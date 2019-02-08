@@ -1,2 +1,2 @@
-document.querySelector('svg defs').innerHTML += `
+document.querySelector("svg defs").innerHTML += `
 `;

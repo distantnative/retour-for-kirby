@@ -1,5 +1,4 @@
 <template>
-
   <k-structure-field
     ref="field"
     name="retour"
@@ -10,10 +9,9 @@
     :sortable="false"
     :value="values"
     :limit="options.limit"
-    sortBy="status asc from asc"
+    sort-by="status asc from asc"
     @input="update"
   />
-
 </template>
 
 <script>
@@ -37,18 +35,18 @@ export default {
     fields() {
       return {
         from: {
-          label: this.$t('retour.redirects.from'),
+          label: this.$t("retour.redirects.from"),
           type: "text",
           before: this.options.site + "/",
           required: true
         },
         to: {
-          label: this.$t('retour.redirects.to'),
+          label: this.$t("retour.redirects.to"),
           type: "text",
-          help: this.$t('retour.redirects.to.help'),
+          help: this.$t("retour.redirects.to.help"),
         },
         status: {
-          label: this.$t('retour.redirects.status'),
+          label: this.$t("retour.redirects.status"),
           type: "select",
           options: this.codes,
           width: "1/3",
@@ -57,7 +55,7 @@ export default {
           default: "disabled"
         },
         stats: {
-          label: this.$t('retour.redirects.hits'),
+          label: this.$t("retour.redirects.hits"),
           type: "retour-stats",
           width: "2/3"
         },
@@ -81,22 +79,22 @@ export default {
     columns() {
       return {
         from: {
-          label: this.$t('retour.redirects.from'),
+          label: this.$t("retour.redirects.from"),
           width: "1/4",
           type: "url"
         },
         to: {
-          label: this.$t('retour.redirects.to'),
+          label: this.$t("retour.redirects.to"),
           width: "1/4",
           type: "url"
         },
         status: {
-          label: this.$t('retour.redirects.status'),
+          label: this.$t("retour.redirects.status"),
           width: "1/6",
           type: "retour-status"
         },
         stats: {
-          label: this.$t('retour.redirects.hits'),
+          label: this.$t("retour.redirects.hits"),
           type: "retour-hits"
         }
       }
@@ -117,27 +115,27 @@ export default {
   },
   methods: {
     add(error) {
-      this.$api.post('retour/redirects', {
+      this.$api.post("retour/redirects", {
         from  : error.path,
         to    : null,
-        status: 'disabled'
+        status: "disabled"
       }).then(() => {
         this.fetch();
       });
     },
     fetch() {
-      this.$events.$emit('retour-load');
-      this.$api.get('retour/redirects').then(response => {
+      this.$events.$emit("retour-load");
+      this.$api.get("retour/redirects").then(response => {
         this.redirects = response;
-        this.$events.$emit('retour-loaded');
+        this.$events.$emit("retour-loaded");
       });
     },
     update(input) {
       this.redirects = input;
 
-      this.$api.patch('retour/redirects', input.map(item => {
-        delete(item['stats']);
-        delete(item['id']);
+      this.$api.patch("retour/redirects", input.map(item => {
+        delete(item["stats"]);
+        delete(item["id"]);
         return item;
       }));
     }
