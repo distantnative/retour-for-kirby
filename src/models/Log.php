@@ -2,97 +2,51 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Data\Data;
-use Kirby\Toolkit\Collection;
-use Kirby\Toolkit\F;
-use Kirby\Toolkit\Str;
+class Log extends Store
+{
 
-class Log {
-
-    protected $retour;
-    protected $data;
-
-    public static $file = 'content/retour.log';
-
-    public function __construct($retour)
+    public function __construct()
     {
-        $this->retour = $retour;
-        $this->data();
+        $this->file = kirby()->root('site') . '/logs/retour/404.log';
     }
 
-    protected function caching(): void
+    public function add(array $tmp): void
     {
-        $this->fails();
-        $this->retour->stats()->get('month');
-        $this->retour->stats()->get('week');
-        $this->retour->stats()->get('day');
-    }
+        $data = $this->data();
 
-    public function data(array $data = null)
-    {
-        $file = kirby()->root('index') . '/' . static::$file;
+        foreach ($tmp as $item) {
+            $id   = $item['path'] . '$' . $item['referrer'];
 
-        if (is_null($data) === false) {
-            Data::write($file, $data, 'yaml');
-            $this->caching();
-        }
-
-        $data = F::exists($file) ? Data::read($file, 'yaml'): [];
-
-        return $this->data = new Collection($data);
-    }
-
-    protected function group(): Collection
-    {
-        $list = new Collection([]);
-
-        foreach ($this->data as $error) {
-            $id   = $error['path'] . '$' . $error['referrer'];
-            $fail = $error['status'] === 'fail';
-
-            if (isset($list->data[$id]) === false) {
-                $error['fails']     = $fail ? 1 : 0;
-                $error['redirects'] = $fail ? 0 : 1;
-                $list->data[$id]    = $error;
-
-            } else {
-                $data = $list->data[$id];
-                $data[$fail ? 'fails' : 'redirects']++;
-
-                if (strtotime($error['date']) > strtotime($data['date'])) {
-                    $data['date'] = $error['date'];
-                }
-
-                $list->data[$id] = $data;
+            if (isset($data[$id]) === false) {
+                $data[$id] = [
+                    'path'      => $item['path'],
+                    'referrer'  => $item['referrer'],
+                    'fails'     => 0,
+                    'redirects' => 0,
+                    'last'      => null
+                ];
             }
+
+            $data[$id][$item['isFail'] ? 'fails' : 'redirects']++;
+            $data[$id]['last'] = $item['date'];
         }
 
-        return $list;
+        $this->write($data);
     }
 
     public function fails(string $sort = 'fails'): array
     {
-        if ($cached = $this->retour->cache()->get('fails')) {
-            return $cached;
-        }
+        // remove redirect-only logs
+        $data = array_filter($this->data(), function ($log) {
+            return ($log['fails'] ?? 0) !== 0;
+        });
 
-        $fails = $this->group()->filterBy('fails', '!=', 0);
-        $fails = $fails->sortBy($sort, 'desc');
-        $fails = array_values($fails->toArray());
+        // sort accordingly
+        usort($data, function ($log1, $log2) use ($sort) {
+            return $log2[$sort] <=> $log1[$sort];
+        });
 
-        $this->retour->cache()->set('fails', $fails);
-
-        return $fails;
-    }
-
-    public function add(string $path, bool $fail = true): void
-    {
-        $this->data($this->data->append([
-            'path'     => $path,
-            'referrer' => $_SERVER['HTTP_REFERER'] ?? null,
-            'status'   => $fail ? 'fail' : 'redirect',
-            'date'     => date('Y-m-d H:i')
-        ])->toArray());
+        return $data;
     }
 
 }

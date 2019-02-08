@@ -1,13 +1,26 @@
-/* line 85, stdin */
-.retour-header {
+/* line 128, stdin */
+.k-retour-view .k-header .k-headline {
   display: flex; }
-  /* line 88, stdin */
-  .retour-header > .k-icon {
+  /* line 131, stdin */
+  .k-retour-view .k-header .k-headline > .k-icon {
     padding-right: .5em; }
 
-/* line 94, stdin */
+/* line 136, stdin */
 .k-retour-view [aria-current]:not([aria-current="false"]) {
   color: #4271ae; }
+
+/* line 141, stdin */
+.retour-loader {
+  display: block;
+  padding: 0 .75rem; }
+  /* line 145, stdin */
+  .retour-loader > svg {
+    transform: rotate(-180deg);
+    animation: spin 1.5s linear infinite; }
+
+@keyframes spin {
+  100% {
+    transform: rotate(180deg); } }
 /* line 48, stdin */
 .k-retour-hits-field-preview > abbr {
   position: relative;
@@ -27,7 +40,7 @@
   /* line 67, stdin */
   .k-retour-hits-field-preview > abbr .back {
     position: absolute;
-    color: #efefef; }
+    color: rgba(0, 0, 0, 0.1); }
   /* line 72, stdin */
   .k-retour-hits-field-preview > abbr > div {
     margin-left: .5em;
@@ -39,11 +52,11 @@
   .k-retour-hits-field-preview > abbr small {
     display: block;
     font-size: .65em; }
-/* line 22, stdin */
+/* line 26, stdin */
 .k-retour-status-field-preview > span {
   display: flex; }
 
-/* line 26, stdin */
+/* line 30, stdin */
 .k-retour-status-field-preview code {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 3px;
@@ -56,13 +69,32 @@
   padding: .05em .5em;
   margin-left: .5em; }
 
-/* line 39, stdin */
+/* line 43, stdin */
 .k-retour-status-field-preview .k-icon {
   color: #7ea328; }
-  /* line 42, stdin */
+  /* line 46, stdin */
+  .k-retour-status-field-preview .k-icon[data-error] {
+    color: #f5871f; }
+  /* line 50, stdin */
   .k-retour-status-field-preview .k-icon[data-disabled] {
     color: #c82829; }
-/* line 157, stdin */
+/* line 153, stdin */
 .k-retour-view .k-field-name-from .k-text-input,
 .k-retour-view .k-field-name-to .k-text-input {
   padding-left: 2px; }
+/* line 185, stdin */
+.k-retour-view [data-negative] {
+  color: #c82829; }
+/* line 74, stdin */
+.k-button.retour-redirects {
+  pointer-events: none; }
+  /* line 77, stdin */
+  .k-button.retour-redirects .k-icon {
+    color: #4271ae; }
+
+/* line 82, stdin */
+.k-button.retour-fails {
+  pointer-events: none; }
+  /* line 85, stdin */
+  .k-button.retour-fails .k-icon {
+    color: #aaa; }

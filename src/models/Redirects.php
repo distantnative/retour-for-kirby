@@ -2,56 +2,71 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Cms\Response;
+use Kirby\Http\Header;
 use Kirby\Toolkit\Collection;
 
-class Redirects
+class Redirects extends Store
 {
 
     protected $retour;
-    protected $data;
 
-    public static $field = 'retour';
-
-    public function __construct($retour)
+    public function hit(array $tmp): void
     {
-        $this->retour = $retour;
-        $this->data();
-    }
+        $data = $this->data();
 
-    public function hit(string $pattern, string $path)
-    {
-        if ($redirect = $this->data->findBy('from', $pattern)) {
-            $data          = $redirect->toArray();
-            $data['hits']  = ($data['hits'] ?? 0) + 1;
-            $data['last']  = date('Y-m-d H:i');
-
-            $this->data->set($redirect->id(), $data);
-            $this->data($this->data->toArray());
-            $this->retour->errors()->log($path, true);
-        }
-    }
-
-    public function data(array $data = null)
-    {
-        if (is_null($data) === false) {
-            site()->update([static::$field => $data]);
+        foreach ($tmp as $item) {
+            $key  = array_search($item['pattern'], array_column($data, 'from'));
+            $data[$key]['hits'] = ($data[$key]['hits'] ?? 0) + 1;
+            $data[$key]['last'] = date('Y-m-d H:i');
         }
 
-        return $this->data = site()->{static::$field}()->toStructure();
+        $this->write($data);
+    }
+
+    public function read(string $suffix = null)
+    {
+        return $this->data = site()->retour()->yaml();
     }
 
     public function routes(): array
     {
-        return $this->data
-                    ->filterBy('status', '!=', 'disabled')
-                    ->toArray(function ($route)  {
-                        return [
-                            'pattern' => $route->from(),
-                            'action'  => function () use ($route) {
-                                go($route->to(), $route->status()->toInt());
-                            }
-                        ];
-                    });
+        $data = array_filter($this->data(), function ($redirect) {
+            return $redirect['status'] !== 'disabled';
+        });
+
+        return array_map(function($redirect) {
+            return [
+                'name'    => $redirect['from'],
+                'pattern' => $redirect['from'],
+                'action'  => function (...$parameters) use ($redirect) {
+                    $to   = $redirect['to'];
+                    $code = (int)$redirect['status'];
+
+                    foreach ($parameters as $i => $parameter) {
+                        $to = str_replace('$' . ($i + 1), $parameter, $to);
+                    }
+
+                    kirby()->response()->code($code);
+
+                    if ($code >= 300 && $code < 400) {
+                        return Response::redirect($to ?? '/', $code);
+                    }
+
+                    if ($to) {
+                        return page($to ?? 'error');
+                    }
+
+                    Header::status($code);
+                    die();
+                }
+            ];
+        }, $data);
+    }
+
+    public function write(array $data = [], string $suffix = null): void
+    {
+        site()->update(['retour' => $data]);
     }
 
 }

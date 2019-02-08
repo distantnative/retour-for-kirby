@@ -1,14 +1,8 @@
-
-# general
+# OS files
 .DS_Store
-.babelrc
-package.json
-package-lock.json
 
-# packages
+# npm modules
 /node_modules
 
-# non-release
-/src/assets
-/src/components
-/src/main.js
+# Composer files
+/vendor

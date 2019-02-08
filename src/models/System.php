@@ -2,25 +2,22 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Http\Header;
+
 class System {
-
-    protected function license(): array
-    {
-        return [];
-    }
-
-    protected function options(): array
-    {
-        return [
-            'view' => option('distantnative.retour.view', 'dashboard'),
-        ];
-    }
 
     public function toArray(): array
     {
+        $kirby  = kirby();
+        $plugin = $kirby->plugin('distantnative/retour');
+
         return [
-            'options' => $this->options(),
-            'license' => $this->license(),
+            'description' => $plugin->description(),
+            'version'     => $plugin->version(),
+            'site'        => $kirby->site()->url(),
+            'view'        => option('distantnative.retour.view'),
+            'limit'       => option('distantnative.retour.limit'),
+            'headers'     => Header::$codes
         ];
     }
 
