@@ -39,7 +39,7 @@ composer require distantnative/retour-for-kirby
 ## Redirects
 
 ### URL pattern
-Path to catch via the plugin and redirect. Can use routing patterns (e.g. `(:any)` or `(:all)`), [learn more](https://getkirby.com/docs/reference/router/patterns). You cannot handle any paths that actually exist in your content structure.
+Path to catch via the plugin and redirect. Can use routing patterns (e.g. `(:any)` or `(:all)`), [learn more](https://getkirby.com/docs/reference/router/patterns).
 
 ### Redirect to
 Four options:
