@@ -13,14 +13,16 @@ class Retour
     protected $stats;
     protected $system;
 
+    public static $logs = '/logs/retour';
+
     public function flush(): void
     {
-        Dir::remove(kirby()->root('site') . '/logs/retour/');
+        Dir::remove(kirby()->root('site') . static::$logs);
     }
 
     public function load()
     {
-        $files = kirby()->root('site') . '/logs/retour/*.tmp';
+        $files = kirby()->root('site') . static::$logs . '/*.tmp';
 
         $tmp = [];
 
@@ -79,7 +81,7 @@ class Retour
 
     public function tmp(string $path, bool $isFail, string $pattern = null)
     {
-        $file = kirby()->root('site') . '/logs/retour/' . md5($path) . '.' . time() . '.tmp';
+        $file = kirby()->root('site') . static::$logs . '/' . md5($path) . '.' . time() . '.tmp';
 
         Data::write($file, [
             'path'     => $path,

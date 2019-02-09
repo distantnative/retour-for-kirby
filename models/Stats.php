@@ -4,10 +4,8 @@ namespace distantnative\Retour;
 
 class Stats extends Store
 {
-    public function __construct()
-    {
-        $this->file = kirby()->root('site') . '/logs/retour/{x}.stats';
-    }
+
+    public static $file = '/logs/retour/{x}.stats';
 
     protected static function defaults(): array
     {

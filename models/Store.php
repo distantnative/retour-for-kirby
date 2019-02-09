@@ -7,26 +7,16 @@ use Kirby\Toolkit\F;
 
 class Store
 {
+    public static $file;
     protected $data;
-    protected $file;
 
-    public function data(string $suffix = null)
+    public function data(string $suffix = 'retour')
     {
-        if ($this->data) {
-            if ($suffix) {
-                if (isset($this->data[$suffix])) {
-                    return $this->data[$suffix];
-                }
-            } else {
-                return $this->data;
-            }
+        if ($this->data && isset($this->data[$suffix]) === true) {
+            return $this->data[$suffix];
         }
 
-        if ($suffix) {
-            return $this->data[$suffix] = $this->read($suffix);
-        }
-
-        return $this->data = $this->read($suffix);
+        return $this->data[$suffix] = $this->read($suffix);
     }
 
     protected static function defaults(): array
@@ -34,9 +24,14 @@ class Store
         return [];
     }
 
-    public function read(string $suffix = null)
+    public function file(): string
     {
-        $file = str_replace('{x}', $suffix, $this->file);
+        return static::$file;
+    }
+
+    public function read(string $suffix = 'retour')
+    {
+        $file = kirby()->root('site') . str_replace('{x}', $suffix, static::$file);
 
         if (F::exists($file) === false) {
             return static::defaults();
@@ -45,14 +40,14 @@ class Store
         return Data::read($file, 'yaml');
     }
 
-    public function write(array $data = [], string $suffix = null)
+    public function write(array $data = [], string $suffix = 'retour')
     {
-        Data::write(str_replace('{x}', $suffix, $this->file), $data, 'yaml');
+        Data::write(kirby()->root('site') . str_replace(
+            '{x}',
+            $suffix,
+            static::$file
+        ), $data, 'yaml');
 
-        if ($suffix) {
-            return $this->data[$suffix] = $data;
-        }
-
-        return $this->data = $data;
+        return $this->data[$suffix] = $data;
     }
 }

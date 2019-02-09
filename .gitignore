@@ -8,6 +8,8 @@
 /vendor
 .php_cs.cache
 .phpunit.result.cache
+/tests/fixtures
+/tests/report
 
 # Stats
 stats.html

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+  bootstrap="tests/bootstrap.php"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  stopOnFailure="true"
+  stderr="true"
+  colors="true"
+  verbose="true">
+
+  <logging>
+    <log type="coverage-html" target="./tests/report" lowUpperBound="35" highLowerBound="70"/>
+  </logging>
+
+  <filter>
+    <whitelist>
+      <directory>./config</directory>
+      <directory>./models</directory>
+    </whitelist>
+  </filter>
+
+  <testsuites>
+    <testsuite name="Models">
+      <directory>./tests/models/</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

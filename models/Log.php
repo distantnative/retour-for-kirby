@@ -4,10 +4,8 @@ namespace distantnative\Retour;
 
 class Log extends Store
 {
-    public function __construct()
-    {
-        $this->file = kirby()->root('site') . '/logs/retour/404.log';
-    }
+
+    public static $file = '/logs/retour/404.log';
 
     public function add(array $tmp): void
     {
