@@ -6,15 +6,19 @@ return [
             'pattern' => 'retour/samples',
             'method'  => 'POST',
             'action'  => function () use ($retour) {
-                require 'samples.php';
+                $retour->flush();
+                Dir::copy(
+                    __DIR__ . '/samples',
+                    kirby()->root('site') . $retour::$root
+                );
                 return true;
             }
         ],
         [
-            'pattern' => 'retour/load',
+            'pattern' => 'retour/process',
             'method'  => 'GET',
             'action'  => function () use ($retour) {
-                $retour->load();
+                $retour->process();
                 return true;
             }
         ],
@@ -55,7 +59,7 @@ return [
             'pattern' => 'retour/fails/(:any)',
             'method'  => 'GET',
             'action'  => function ($sort) use ($retour) {
-                return $retour->log()->fails($sort);
+                return $retour->logs()->fails($sort);
             }
         ],
                 [
