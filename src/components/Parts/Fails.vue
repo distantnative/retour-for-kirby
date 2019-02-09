@@ -57,7 +57,11 @@
             />
           </td>
           <td class="k-structure-table-option">
-            <k-button :disabled="true" :tooltip="$t('add')" @click="$emit('add', item)" />
+            <k-button
+              :tooltip="$t('add')"
+              icon="add"
+              @click="add(item)"
+            />
           </td>
         </tr>
       </tbody>
@@ -95,6 +99,15 @@ export default {
     }
   },
   methods: {
+    add(fail) {
+      this.$api.post("retour/redirects", {
+        from: fail.path,
+        to: null,
+        status: "disabled"
+      }).then(() => {
+        this.$emit("reload", [(view) => { view.go("redirects") }]);
+      });
+    },
     paginateItems(pagination) {
       this.page = pagination.page;
     }

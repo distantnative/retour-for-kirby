@@ -9,7 +9,7 @@
           :key="part.name"
           :icon="part.icon"
           :current="current === part.name"
-          @click="current = part.name"
+          @click="go(part.name)"
         >
           {{ $t('retour.' + part.name) }}
         </k-button>
@@ -33,12 +33,12 @@
         v-show="current === part.name"
         :key="part.name"
         :fails="fails"
+        :options="options"
         :redirects="redirects"
         :stats="stats"
-        :options="options"
         @fails="fetchFails"
+        @reload="fetch(...$event)"
         @stats="fetchStats"
-        @reload="fetch"
       />
     </template>
   </k-view>
@@ -104,7 +104,10 @@ export default {
     this.fetch();
   },
   methods: {
-    fetch() {
+    fetch(before = () => {}, after = () => {}) {
+      this.$store.dispatch("isLoading", true);
+      before(this);
+
       return this.loadTemporaries().then(() => {
         const system    = this.fetchSystem();
         const fails     = this.fetchFails();
@@ -114,7 +117,10 @@ export default {
           this.stats.offset
         ]);
 
-        Promise.all([system, stats, fails, redirects]);
+        Promise.all([system, stats, fails, redirects]).then(() => {
+          this.$store.dispatch("isLoading", false);
+          after(this);
+        });
       });
     },
     fetchFails(sort = "fails") {
@@ -145,8 +151,13 @@ export default {
         this.options = response;
       });
     },
+    go(part) {
+      this.current = part;
+      // Currently not supported by Kirby Panel
+      // window.location.hash = part;
+    },
     loadTemporaries() {
-      return this.$api.get("retour/load")
+      return this.$api.get("retour/load");
     }
   }
 }

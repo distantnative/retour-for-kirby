@@ -140,9 +140,11 @@ export default {
   },
   methods: {
     fetch() {
+      this.$store.dispatch("isLoading", true);
       const api = "https://api.github.com/repos/distantnative/retour-for-kirby/releases";
       fetch(api, { method: "GET" }).then(x => x.json()).then(response => {
         this.latest = response[0].name;
+        this.$store.dispatch("isLoading", false);
       });
     },
     flush() {
