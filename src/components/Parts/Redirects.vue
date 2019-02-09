@@ -117,7 +117,13 @@ export default {
 <style>
 .k-retour-view .k-field-name-from .k-text-input,
 .k-retour-view .k-field-name-to   .k-text-input {
-  padding-left: 2px;
+  padding-left: 1px;
 }
+
+.k-retour-view .k-structure-field .k-field-header .k-button {
+  padding: 1rem 0;
+  line-height: 1rem;
+}
+
 </style>
 

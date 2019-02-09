@@ -163,5 +163,10 @@ export default {
 .k-retour-view [data-negative] {
   color: #c82829;
 }
+
+.k-retour-view .k-system-info .k-field-label {
+  padding: 1rem 0;
+  line-height: 1rem;
+}
 </style>
 

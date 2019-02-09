@@ -84,6 +84,11 @@ export default {
   pointer-events: none;
 }
 
+ .ct-share .ct-series {
+    stroke: #fff;
+    stroke-width: 3px;
+  }
+
 .k-button.retour-redirects .k-icon,
 .ct-share .ct-series-a .ct-slice-pie {
   color: #4271ae;

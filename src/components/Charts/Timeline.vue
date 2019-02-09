@@ -104,9 +104,8 @@ export default {
   fill: #ccc;
   fill-opacity: .5;
 }
-
 .ct-timeline .ct-series-b .ct-area {
   fill: #4271ae;
-  fill-opacity: .65;
+  fill-opacity: .75;
 }
 </style>
