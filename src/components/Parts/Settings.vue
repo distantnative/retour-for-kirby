@@ -129,7 +129,7 @@ export default {
       return this.latest != "..." && this.options.version !== this.latest;
     },
     redirected() {
-      return this.fails.reduce((a, b) => a += b.redirects, 0);
+      return this.redirects.reduce((a, b) => a += b.hits, 0);
     },
     routes() {
       return this.redirects.length;

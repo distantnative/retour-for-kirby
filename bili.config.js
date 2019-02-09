@@ -10,6 +10,6 @@ module.exports = {
   },
   plugins: {
     vue: true,
-    // livereload: true
+    livereload: true
   }
 }

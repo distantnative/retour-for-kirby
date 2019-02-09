@@ -2,7 +2,7 @@
 
 require 'load.php';
 
-$retour = new distantnative\Retour;
+$retour = new distantnative\Retour\Retour;
 
 Kirby::plugin('distantnative/retour', [
     'api'          => require 'config/api.php',

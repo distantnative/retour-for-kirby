@@ -1,6 +1,6 @@
 <?php
 
-namespace distantnative;
+namespace distantnative\Retour;
 
 use Kirby\Data\Data;
 use Kirby\Toolkit\Dir;
@@ -8,80 +8,52 @@ use Kirby\Toolkit\F;
 
 class Retour
 {
-    protected $log;
+    protected $logs;
     protected $redirects;
     protected $stats;
     protected $system;
 
-    public static $logs = '/logs/retour';
+    public static $root = '/logs/retour';
 
     public function flush(): void
     {
-        Dir::remove(kirby()->root('site') . static::$logs);
+        Dir::remove(kirby()->root('site') . static::$root);
     }
 
-    public function load()
+    public function logs(): Logs
     {
-        $files = kirby()->root('site') . static::$logs . '/*.tmp';
+        return $this->log = $this->logs ?? new Logs;
+    }
 
-        $tmp = [];
-
-        foreach (glob($files) as $file) {
-            $tmp[] = Data::read($file, 'yaml');
-            F::remove($file);
-        }
+    public function process()
+    {
+        $tmp = $this->temporaries();
 
         if (empty($tmp) === false) {
-            $this->log()->add($tmp);
-            $this->stats()->count($tmp);
-
-            $redirects = array_filter($tmp, function ($item) {
-                $item['isFail'] === false;
+            $redirects = array_filter($tmp, function ($x) {
+                return $x['isFail'] === false;
             });
 
+            $this->logs()->add($tmp);
+            $this->stats()->count($tmp);
             $this->redirects()->hit($redirects);
         }
     }
 
-    public function log(): Retour\Log
+    public function redirects(): Redirects
     {
-        if ($this->log) {
-            return $this->log;
-        }
-
-        return $this->log = new Retour\Log;
+        return $this->redirects = $this->redirects ?? new Redirects;
     }
 
-    public function redirects(): Retour\Redirects
+    public function stats(): Stats
     {
-        if ($this->redirects) {
-            return $this->redirects;
-        }
-
-        return $this->redirects = new Retour\Redirects;
+        return $this->stats = $this->stats ?? new Stats;
     }
 
-    public function stats(): Retour\Stats
+    public static function store(string $path, bool $isFail, string $pattern = null)
     {
-        if ($this->stats) {
-            return $this->stats;
-        }
-
-        return $this->stats = new Retour\Stats;
-    }
-
-    public function system(): Retour\System
-    {
-        if ($this->system) {
-            return $this->system;
-        }
-
-        return $this->system = new Retour\System;
-    }
-
-    public function tmp(string $path, bool $isFail, string $pattern = null)
-    {
-        $file = kirby()->root('site') . static::$logs . '/' . md5($path) . '.' . time() . '.tmp';
+        $root = kirby()->root('site') . static::$root;
+        $file = $root . '/' . md5($path) . '.' . time() . '.tmp';
 
         Data::write($file, [
             'path'     => $path,
@@ -90,5 +62,23 @@ class Retour
             'pattern'  => $pattern,
             'date'     => date('Y-m-d H:i')
         ], 'yaml');
+    }
+
+    public function system(): System
+    {
+        return $this->system = $this->system ?? new System;
+    }
+
+    protected function temporaries(): array
+    {
+        $files = kirby()->root('site') . static::$root . '/*.tmp';
+        $tmp   = [];
+
+        foreach (glob($files) as $file) {
+            $tmp[] = Data::read($file, 'yaml');
+            F::remove($file);
+        }
+
+        return $tmp;
     }
 }

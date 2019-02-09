@@ -7,12 +7,6 @@ use PHPUnit\Framework\TestCase;
 class SystemTest extends TestCase
 {
 
-    public function testClass(): void
-    {
-        $store = new System;
-        $this->assertInstanceOf('distantnative\Retour\System', $store);
-    }
-
     public function testToArray(): void
     {
         $store = new System;

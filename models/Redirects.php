@@ -4,16 +4,18 @@ namespace distantnative\Retour;
 
 use Kirby\Cms\Response;
 use Kirby\Http\Header;
+use Kirby\Http\Url;
 use Kirby\Toolkit\Collection;
 
-class Redirects extends Store
+class Redirects extends Log
 {
-    protected $retour;
 
     public function hit(array $tmp): void
     {
+        // get existing redirects data
         $data = $this->data();
 
+        // loop through all temporaries and update
         foreach ($tmp as $item) {
             $key  = array_search($item['pattern'], array_column($data, 'from'));
             $data[$key]['hits'] = ($data[$key]['hits'] ?? 0) + 1;
@@ -23,13 +25,14 @@ class Redirects extends Store
         $this->write($data);
     }
 
-    public function read(string $suffix = null)
+    public function read($suffix = null)
     {
-        return $this->data = site()->retour()->yaml();
+        return site()->retour()->yaml();
     }
 
     public function routes(): array
     {
+        // no routes for disabled redirects
         $data = array_filter($this->data(), function ($redirect) {
             return $redirect['status'] !== 'disabled';
         });
@@ -39,23 +42,31 @@ class Redirects extends Store
                 'name'    => $redirect['from'],
                 'pattern' => $redirect['from'],
                 'action'  => function (...$parameters) use ($redirect) {
-                    $to   = $redirect['to'];
                     $code = (int)$redirect['status'];
+                    $to   = $redirect['to'];
 
+                    // Store temporary log file to process later
+                    Retour::store(Url::path(), false, $redirect['from']);
+
+                    // Set the right response code
+                    kirby()->response()->code($code);
+
+                    // Map placeholders/parameters
                     foreach ($parameters as $i => $parameter) {
                         $to = str_replace('$' . ($i + 1), $parameter, $to);
                     }
 
-                    kirby()->response()->code($code);
-
+                    // Redirects
                     if ($code >= 300 && $code < 400) {
                         return Response::redirect($to ?? '/', $code);
                     }
 
+                    // Return page for other codes
                     if ($to) {
                         return page($to ?? 'error');
                     }
 
+                    // Deliver HTTP status code and die
                     Header::status($code);
                     die();
                 }
@@ -63,7 +74,7 @@ class Redirects extends Store
         }, $data);
     }
 
-    public function write(array $data = [], string $suffix = null): void
+    public function write(array $data = [], $suffix = null): void
     {
         site()->update(['retour' => $data]);
     }

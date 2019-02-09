@@ -108,7 +108,7 @@ export default {
       this.$store.dispatch("isLoading", true);
       before(this);
 
-      return this.loadTemporaries().then(() => {
+      return this.process().then(() => {
         const system    = this.fetchSystem();
         const fails     = this.fetchFails();
         const redirects = this.fetchRedirects();
@@ -156,8 +156,8 @@ export default {
       // Currently not supported by Kirby Panel
       // window.location.hash = part;
     },
-    loadTemporaries() {
-      return this.$api.get("retour/load");
+    process() {
+      return this.$api.get("retour/process");
     }
   }
 }

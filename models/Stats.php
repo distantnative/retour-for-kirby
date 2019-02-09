@@ -2,7 +2,7 @@
 
 namespace distantnative\Retour;
 
-class Stats extends Store
+class Stats extends Log
 {
 
     public static $file = '/logs/retour/{x}.stats';

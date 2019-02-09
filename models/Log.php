@@ -2,47 +2,44 @@
 
 namespace distantnative\Retour;
 
-class Log extends Store
+use Kirby\Data\Data;
+use Kirby\Toolkit\F;
+
+class Log
 {
+    public static $file;
 
-    public static $file = '/logs/retour/404.log';
+    protected $data;
 
-    public function add(array $tmp): void
+    public function data(string $suffix = 'retour')
     {
-        $data = $this->data();
-
-        foreach ($tmp as $item) {
-            $id   = $item['path'] . '$' . $item['referrer'];
-
-            if (isset($data[$id]) === false) {
-                $data[$id] = [
-                    'path'      => $item['path'],
-                    'referrer'  => $item['referrer'],
-                    'fails'     => 0,
-                    'redirects' => 0,
-                    'last'      => null
-                ];
-            }
-
-            $data[$id][$item['isFail'] ? 'fails' : 'redirects']++;
-            $data[$id]['last'] = $item['date'];
-        }
-
-        $this->write($data);
+        return $this->data[$suffix] = $this->data[$suffix] ?? $this->read($suffix);
     }
 
-    public function fails(string $sort = 'fails'): array
+    protected static function defaults(): array
     {
-        // remove redirect-only logs
-        $data = array_filter($this->data(), function ($log) {
-            return ($log['fails'] ?? 0) !== 0;
-        });
+        return [];
+    }
 
-        // sort accordingly
-        usort($data, function ($log1, $log2) use ($sort) {
-            return $log2[$sort] <=> $log1[$sort];
-        });
+    public function file($suffix = 'retour'): string
+    {
+        $file = str_replace('{x}', $suffix, static::$file);
+        return kirby()->root('site') . $file;
+    }
 
-        return $data;
+    public function read($suffix = null)
+    {
+        if (F::exists($this->file($suffix)) === false) {
+            return static::defaults();
+        }
+
+        return Data::read($this->file($suffix), 'yaml');
+    }
+
+    public function write(array $data = [], $suffix = null)
+    {
+        Data::write($this->file($suffix), $data, 'yaml');
+
+        return $this->data[$suffix] = $data;
     }
 }
