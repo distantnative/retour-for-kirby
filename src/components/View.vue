@@ -20,7 +20,7 @@
           :disabled="loading"
           :icon="loading ? 'loader' : 'refresh'"
           class="retour-loader"
-          @click="fetch"
+          @click="fetch()"
         >
           {{ $t(loading ? 'loading' : 'retour.refresh') }}
         </k-button>
