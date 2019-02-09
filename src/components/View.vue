@@ -171,5 +171,9 @@ export default {
 @keyframes spin {
   100% { transform: rotate(180deg); }
 }
+
+.k-retour-view .hide {
+  opacity: 0;
+}
 </style>
 

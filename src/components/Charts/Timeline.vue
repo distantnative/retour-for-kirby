@@ -1,9 +1,7 @@
 <template>
   <div>
     <header class="k-field-header">
-      <label class="k-field-label">
-        {{ headline }}
-      </label>
+      <label class="k-field-label" />
 
       <k-button-group>
         <k-button
@@ -52,13 +50,20 @@ export default {
   props: {
     stats: Object
   },
-  data () {
-    return {
-      headline: "...",
-      chart: null
-    }
-  },
   computed: {
+    chart() {
+      if (!this.stats.data) {
+        return;
+      }
+
+      return {
+        labels: this.stats.data.labels,
+        series: [
+          this.stats.data.fails.map((x, i) => x + this.stats.data.redirects[i]),
+          this.stats.data.redirects,
+        ]
+      };
+    },
     options() {
       return {
         height: 250,
@@ -72,15 +77,7 @@ export default {
     }
   },
   watch: {
-    stats(stats) {
-      this.headline = stats.data.headline;
-      this.chart = {
-        labels: stats.data.labels,
-        series: [
-          stats.data.fails.map((x, i) => x + stats.data.redirects[i]),
-          stats.data.redirects,
-        ]
-      };
+    chart() {
       this.createChart();
     }
   },

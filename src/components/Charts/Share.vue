@@ -1,6 +1,20 @@
 <template>
   <div>
     <header class="k-field-header">
+      <label class="k-field-label">
+        {{ data ? data.headline : '...' }}
+      </label>
+
+      <k-button-group>
+        <k-button icon="smile" class="hide" />
+      </k-button-group>
+    </header>
+
+    <div v-show="chart" class="k-card k-card-content">
+      <div class="ct-share" />
+    </div>
+
+    <footer class="k-field-footer">
       <k-button-group>
         <k-button icon="circle" class="retour-redirects">
           {{ redirects }} {{ $t('retour.redirects') }}
@@ -9,11 +23,7 @@
           {{ fails }} {{ $t('retour.fails') }}
         </k-button>
       </k-button-group>
-    </header>
-
-    <div v-show="chart" class="k-card k-card-content">
-      <div class="ct-share" />
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -24,28 +34,39 @@ export default {
   props: {
     data: Object
   },
-  data () {
-    return {
-      chart: null,
-      redirects: "–",
-      fails: "-"
-    }
-  },
   computed: {
+    chart() {
+      if ((this.redirects + this.fails) === 0) {
+        return {};
+      }
+
+      return { series: [this.redirects, this.fails] };
+    },
+    fails() {
+      if (!this.data) {
+        return '-';
+      }
+
+      return this.data.fails.reduce((a, b) => a += b, 0);
+    },
     options() {
       return {
-        height: 250,
+        height: 300,
         startAngle: 270,
         total: (this.redirects + this.fails)*2,
         showLabel: false
       };
+    },
+    redirects() {
+      if (!this.data) {
+        return '-';
+      }
+
+      return this.data.redirects.reduce((a, b) => a += b, 0);
     }
   },
   watch: {
-    data(data) {
-      this.redirects = data.redirects.reduce((a, b) => a += b, 0);
-      this.fails     = data.fails.reduce((a, b) => a += b, 0);
-      this.chart     = { series: [this.redirects, this.fails] };
+    data() {
       this.createChart();
     }
   },
@@ -76,7 +97,7 @@ export default {
 }
 
 .ct-share {
-  height: 150px;
+  height: 180px;
 }
 </style>
 

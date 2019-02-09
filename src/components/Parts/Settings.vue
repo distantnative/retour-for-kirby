@@ -160,10 +160,6 @@ export default {
 </script>
 
 <style>
-.k-retour-view .hide {
-  opacity: 0;
-}
-
 .k-retour-view [data-negative] {
   color: #c82829;
 }
