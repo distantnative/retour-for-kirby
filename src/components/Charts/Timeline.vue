@@ -66,7 +66,7 @@ export default {
     },
     options() {
       return {
-        height: 250,
+        height: 220,
         showLabel: false,
         low: 0,
         showArea: true,

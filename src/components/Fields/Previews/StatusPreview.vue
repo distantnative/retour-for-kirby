@@ -1,22 +1,26 @@
 <template>
   <p class="k-structure-table-text k-retour-status-field-preview">
-    <span>
-      <k-icon
-        type="circle"
-        :data-disabled="value === 'disabled'"
-        :data-error="! (value >= 300 && value < 400)"
-      />
+    <span :data-status="status">
+      <k-icon type="circle" />
       <code>{{ value }}</code>
     </span>
   </p>
 </template>
 
 <script>
+
+import status from "../../../assets/status.js";
+
 export default {
   props: {
     value: String,
     column: Object,
     field: Object
+  },
+  computed: {
+    status() {
+      return status(this.value);
+    }
   }
 }
 </script>
@@ -38,18 +42,6 @@ export default {
     display: inline-block;
     padding: .05em .5em;
     margin-left: .5em;
-  }
-
-  .k-icon {
-    color: #7ea328;
-
-    &[data-error] {
-      color: #f0c674;
-    }
-
-    &[data-disabled] {
-      color: #c82829;
-    }
   }
 }
 </style>

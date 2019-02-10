@@ -12,7 +12,6 @@ return [
     'retour.redirects'          => 'Umleitungen',
     'retour.redirects.from'     => 'Ziel-URL',
     'retour.redirects.to'       => 'Umleiten nach',
-    'retour.redirects.to.help'  => '<b>Interne Umleitung:</b> Benutzen Sie den relativen Pfad zur Seite / <b>Externe Umleitung:</b> Vernwenden Sie die komplette URL',
     'retour.redirects.status'   => 'Status',
     'retour.redirects.hits'     => 'Treffer',
     'retour.redirects.hit.last' => 'Zuletzt',

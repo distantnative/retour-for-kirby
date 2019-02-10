@@ -27,7 +27,7 @@ export default {
         value: code.substr(1)
       }));
 
-      codes.unshift({text: "-- disabled --", value: "disabled"});
+      codes.unshift({text: "––––", value: "disabled"});
 
       return codes;
     },
@@ -67,18 +67,19 @@ export default {
           label: this.$t("retour.redirects.from"),
           type: "text",
           before: this.options.site + "/",
-          required: true
+          required: true,
+          width: "1/2"
         },
         to: {
           label: this.$t("retour.redirects.to"),
           type: "text",
-          help: this.$t("retour.redirects.to.help"),
+          width: "1/2"
         },
         status: {
           label: this.$t("retour.redirects.status"),
-          type: "select",
+          type: "retour-status",
           options: this.codes,
-          width: "1/3",
+          width: "1/2",
           required: true,
           empty: false,
           default: "disabled"
@@ -86,7 +87,7 @@ export default {
         stats: {
           label: this.$t("retour.redirects.hits"),
           type: "retour-stats",
-          width: "2/3"
+          width: "1/2"
         },
       }
     },
@@ -107,7 +108,7 @@ export default {
         delete(item["id"]);
         return item;
       })).then(() => {
-        $this.$emit("update", input);
+        this.$emit("update", input);
       });
     }
   }
@@ -115,9 +116,8 @@ export default {
 </script>
 
 <style>
-.k-retour-view .k-field-name-from .k-text-input,
-.k-retour-view .k-field-name-to   .k-text-input {
-  padding-left: 1px;
+.k-retour-view .k-field-name-from .k-text-input {
+  padding-left: 2px;
 }
 
 .k-retour-view .k-structure-field .k-field-header .k-button {
