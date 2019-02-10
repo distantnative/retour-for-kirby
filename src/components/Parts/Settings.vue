@@ -59,7 +59,7 @@
         </label>
 
         <k-button-group>
-          <k-button v-if="debug" icon="download" @click="samples">
+          <k-button v-if="options.debug" icon="download" @click="samples">
             Load sample data
           </k-button>
           <k-button icon="trash" theme="negative" @click="flush">
@@ -115,9 +115,6 @@ export default {
     }
   },
   computed: {
-    debug() {
-      return window.panel.debug;
-    },
     failed() {
       return this.fails.reduce((a, b) => a += b.fails, 0);
     },

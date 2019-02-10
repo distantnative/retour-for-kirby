@@ -16,7 +16,8 @@ class System
             'description' => $plugin->description(),
             'site'        => $kirby->site()->url(),
             'limit'       => option('distantnative.retour.limit'),
-            'headers'     => Header::$codes
+            'headers'     => Header::$codes,
+            'debug'       => option('distantnative.retour.debug')
         ];
     }
 }
