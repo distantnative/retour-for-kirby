@@ -22,14 +22,15 @@ class Redirects extends Log
         $this->write($data);
     }
 
-    public function hit(array $tmp): void
+    public function hit(array $temporaries): void
     {
         // get existing redirects data
         $data = $this->data();
 
         // loop through all temporaries and update
-        foreach ($tmp as $item) {
-            $key  = array_search($item['pattern'], array_column($data, 'from'));
+        foreach ($temporaries as $item) {
+            $froms = array_column($data, 'from');
+            $key   = array_search($item['pattern'], $froms);
             $data[$key]['hits'] = ($data[$key]['hits'] ?? 0) + 1;
             $data[$key]['last'] = date('Y-m-d H:i');
         }
@@ -58,7 +59,11 @@ class Redirects extends Log
                     $to   = $redirect['to'];
 
                     // Store temporary log file to process later
-                    Retour::store(Url::path(), false, $redirect['from']);
+                    Retour::store(
+                        Url::path(),
+                        'redirected',
+                        $redirect['from']
+                    );
 
                     // Set the right response code
                     kirby()->response()->code($code);

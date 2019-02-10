@@ -59,8 +59,8 @@ export default {
       return {
         labels: this.stats.data.labels,
         series: [
-          this.stats.data.fails.map((x, i) => x + this.stats.data.redirects[i]),
-          this.stats.data.redirects,
+          this.stats.data.failed.map((x, i) => x + this.stats.data.redirected[i]),
+          this.stats.data.redirected,
         ]
       };
     },

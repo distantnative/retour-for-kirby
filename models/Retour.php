@@ -18,7 +18,6 @@ class Retour
     public function flush(): void
     {
         Dir::remove(kirby()->root('site') . static::$root);
-        $this->redirects()->flush();
     }
 
     public function logs(): Logs
@@ -28,16 +27,20 @@ class Retour
 
     public function process()
     {
-        $tmp = $this->temporaries();
+        $tmp   = [];
+        $files = kirby()->root('site') . static::$root . '/.*.tmp';
+
+        foreach (glob($files) as $file) {
+            $tmp[] = Data::read($file, 'yaml');
+            F::remove($file);
+        }
 
         if (empty($tmp) === false) {
-            $redirects = array_filter($tmp, function ($x) {
-                return $x['isFail'] === false;
-            });
-
             $this->logs()->add($tmp);
             $this->stats()->count($tmp);
-            $this->redirects()->hit($redirects);
+            $this->redirects()->hit(array_filter($tmp, function ($x) {
+                return $x['status'] === 'redirected';
+            }));
         }
     }
 
@@ -51,15 +54,15 @@ class Retour
         return $this->stats = $this->stats ?? new Stats;
     }
 
-    public static function store(string $path, bool $isFail, string $pattern = null)
+    public static function store(string $path, bool $status, string $pattern = null)
     {
         $root = kirby()->root('site') . static::$root;
-        $file = $root . '/' . md5($path) . '.' . time() . '.tmp';
+        $file = $root . '/.' . md5($path) . '.' . time() . '.tmp';
 
         Data::write($file, [
             'path'     => $path,
             'referrer' => $_SERVER['HTTP_REFERER'] ?? null,
-            'isFail'   => $isFail,
+            'status'   => $status,
             'pattern'  => $pattern,
             'date'     => date('Y-m-d H:i')
         ], 'yaml');
@@ -68,18 +71,5 @@ class Retour
     public function system(): System
     {
         return $this->system = $this->system ?? new System;
-    }
-
-    protected function temporaries(): array
-    {
-        $files = kirby()->root('site') . static::$root . '/*.tmp';
-        $tmp   = [];
-
-        foreach (glob($files) as $file) {
-            $tmp[] = Data::read($file, 'yaml');
-            F::remove($file);
-        }
-
-        return $tmp;
     }
 }

@@ -41,8 +41,6 @@ class Stats extends Log
                     ]
                 ];
 
-                $type = $item['isFail'] ? 'fails' : 'redirects';
-
                 foreach ($structure as $by => $id) {
                     if (isset($data[$by][$id['group']]) === false) {
                         $data[$by][$id['group']] = [];
@@ -50,12 +48,12 @@ class Stats extends Log
 
                     if (isset($data[$by][$id['group']][$id['key']]) === false) {
                         $data[$by][$id['group']][$id['key']] = [
-                            'fails'     => 0,
-                            'redirects' => 0
+                            'failed'     => 0,
+                            'redirected' => 0
                         ];
                     }
 
-                    $data[$by][$id['group']][$id['key']][$type]++;
+                    $data[$by][$id['group']][$id['key']][$item['status']]++;
                 }
             }
 
@@ -103,10 +101,10 @@ class Stats extends Log
         ];
 
         for ($time = $start; $time <= $end; $time += $step) {
-            $data                  = $this->data(date('Y-m', $time));
-            $result['labels'][]    = date($label, $time);
-            $result['fails'][]     = $data[$by][date($group, $time)][date($key, $time)]['fails'] ?? 0;
-            $result['redirects'][] = $data[$by][date($group, $time)][date($key, $time)]['redirects'] ?? 0;
+            $data                   = $this->data(date('Y-m', $time));
+            $result['labels'][]     = date($label, $time);
+            $result['failed'][]     = $data[$by][date($group, $time)][date($key, $time)]['failed'] ?? 0;
+            $result['redirected'][] = $data[$by][date($group, $time)][date($key, $time)]['redirected'] ?? 0;
         }
 
         return $result;

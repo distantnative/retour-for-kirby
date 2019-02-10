@@ -16,26 +16,26 @@ class Logs extends Log
 
             if (isset($data[$id]) === false) {
                 $data[$id] = [
-                    'path'      => $tmp['path'],
-                    'referrer'  => $tmp['referrer'],
-                    'fails'     => 0,
-                    'redirects' => 0,
-                    'last'      => null
+                    'path'       => $tmp['path'],
+                    'referrer'   => $tmp['referrer'],
+                    'failed'     => 0,
+                    'redirected' => 0,
+                    'last'       => null
                 ];
             }
 
-            $data[$id][$tmp['isFail'] ? 'fails' : 'redirects']++;
+            $data[$id][$tmp['status']]++;
             $data[$id]['last'] = $tmp['date'];
         }
 
         $this->write($data);
     }
 
-    public function fails(string $sort = 'fails'): array
+    public function fails(string $sort = 'failed'): array
     {
         // remove redirect-only logs
         $data = array_filter($this->data(), function ($log) {
-            return ($log['fails'] ?? 0) !== 0;
+            return ($log['failed'] ?? 0) !== 0;
         });
 
         // sort accordingly

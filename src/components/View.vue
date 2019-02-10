@@ -84,7 +84,6 @@ export default {
       },
       options: {
         site:  null,
-        entry: null,
         headers: {}
       }
     }
@@ -137,7 +136,7 @@ export default {
         });
       });
     },
-    fetchFails(sort = "fails") {
+    fetchFails(sort = "failed") {
       const endpoint = "retour/fails/" + sort;
       return this.$api.get(endpoint).then(response => {
         this.fails = response;

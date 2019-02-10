@@ -7,7 +7,7 @@
 
       <k-button-group>
         <k-button
-          v-for="by in ['fails', 'last']"
+          v-for="by in ['failed', 'last']"
           :key="by"
           icon="funnel"
           @click="sort(by)"
@@ -51,7 +51,7 @@
           <td class="k-structure-table-column" data-width="">
             <k-retour-count-field-preview
               :value="{
-                hits: `${item.fails + item.redirects} (${item.redirects})`,
+                hits: `${item.failed + item.redirected} (${item.redirected})`,
                 last: item.last
               }"
             />

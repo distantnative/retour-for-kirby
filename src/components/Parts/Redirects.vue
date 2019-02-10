@@ -9,7 +9,7 @@
     :sortable="false"
     :value="values"
     :limit="options.limit"
-    sort-by="status asc from asc"
+    sort-by="status asc from asc hits desc"
     @input="update"
   />
 </template>

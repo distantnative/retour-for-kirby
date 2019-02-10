@@ -47,7 +47,7 @@ export default {
         return '-';
       }
 
-      return this.data.fails.reduce((a, b) => a += b, 0);
+      return this.data.failed.reduce((a, b) => a += b, 0);
     },
     options() {
       return {
@@ -62,7 +62,7 @@ export default {
         return '-';
       }
 
-      return this.data.redirects.reduce((a, b) => a += b, 0);
+      return this.data.redirected.reduce((a, b) => a += b, 0);
     }
   },
   watch: {
