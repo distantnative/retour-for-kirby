@@ -17,16 +17,17 @@ return [
     'retour.redirects.hits'     => 'Treffer',
     'retour.redirects.hit.last' => 'Zuletzt',
 
-    'retour.fails'            => 'Fehler',
-    'retour.fails.sort.fails' => 'Nach Treffer',
-    'retour.fails.sort.last'  => 'Nach Datum',
-    'retour.fails.path'       => 'Pfad',
-    'retour.fails.referrer'   => 'Ursprung',
-    'retour.fails.count'      => 'Treffer (Umgeleitet)',
+    'retour.fails'             => 'Fehler',
+    'retour.fails.sort.failed' => 'Nach Treffer',
+    'retour.fails.sort.last'   => 'Nach Datum',
+    'retour.fails.path'        => 'Pfad',
+    'retour.fails.referrer'    => 'Ursprung',
+    'retour.fails.count'       => 'Treffer (Umgeleitet)',
 
     'retour.settings'                   => 'Einstellungen',
     'retour.settings.installed'         => 'Installierte Version',
-    'retour.settings.latest'            => 'Aktuelle Version',
+    'retour.settings.latest'            => 'Neueste Version',
+    'retour.settings.download'          => '<a href="{url}">Neueste Version</a> herunterladen.',
     'retour.settings.support'           => 'Unterstütze die Entwicklung',
     'retour.settings.support.juice'     => 'Gib einen aus',
     'retour.settings.support.donate'    => 'Spende',
@@ -37,5 +38,5 @@ return [
     'retour.settings.fails'             => 'Aufgezeichnete Fehler',
     'retour.settings.redirects'         => 'Erfolgreich umgeleitet',
     'retour.settings.options.limit'     => 'Zeige # Einträge pro Seite',
-
+    'retour.settings.docs'              => 'Lernen Sie mehr <a href="{url}">zu den Einstellungen</a>.'
 ];

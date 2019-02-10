@@ -17,16 +17,17 @@ return [
     'retour.redirects.hits'     => 'Hits',
     'retour.redirects.hit.last' => 'Last',
 
-    'retour.fails'            => 'Fails',
-    'retour.fails.sort.fails' => 'By hits',
-    'retour.fails.sort.last'  => 'By date',
-    'retour.fails.path'       => 'Path',
-    'retour.fails.referrer'   => 'Referrer',
-    'retour.fails.count'      => 'Hits (Redirected)',
+    'retour.fails'             => 'Fails',
+    'retour.fails.sort.failed' => 'By hits',
+    'retour.fails.sort.last'   => 'By date',
+    'retour.fails.path'        => 'Path',
+    'retour.fails.referrer'    => 'Referrer',
+    'retour.fails.count'       => 'Hits (Redirected)',
 
     'retour.settings'                   => 'Settings',
     'retour.settings.installed'         => 'Installed version',
     'retour.settings.latest'            => 'Latest version',
+    'retour.settings.download'          => 'Download <a href="{url}">latest version</a>.',
     'retour.settings.support'           => 'Support development',
     'retour.settings.support.juice'     => 'Buy a juice',
     'retour.settings.support.donate'    => 'Donate',
@@ -37,5 +38,6 @@ return [
     'retour.settings.fails'             => 'Logged fails',
     'retour.settings.redirects'         => 'Successfully redirected',
     'retour.settings.options.limit'     => 'List # items per page',
+    'retour.settings.docs'              => 'Learn more about options <a href="{url}">in the docs</a>.'
 
 ];

@@ -46,9 +46,7 @@
       </ul>
 
       <footer v-if="outdated" class="k-field-footer">
-        <div data-theme="help" class="k-text k-field-help">
-          Download <a href="https://github.com/distantnative/retour-for-kirby/archive/master.zip">latest version</a>.
-        </div>
+        <div data-theme="help" class="k-text k-field-help" v-html="$t('retour.settings.download', { url: 'https://github.com/distantnative/retour-for-kirby/archive/master.zip' })" />
       </footer>
     </section>
 
@@ -98,9 +96,7 @@
       </ul>
 
       <footer class="k-field-footer">
-        <div data-theme="help" class="k-text k-field-help">
-          Learn more about options <a href="https://github.com/distantnative/retour-for-kirby">in the docs</a>.
-        </div>
+        <div data-theme="help" class="k-text k-field-help" v-html="$t('retour.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
       </footer>
     </section>
   </div>
