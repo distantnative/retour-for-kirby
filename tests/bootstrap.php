@@ -3,13 +3,14 @@
 namespace distantnative\Retour;
 
 require __DIR__ . '/../../../../kirby/bootstrap.php';
-require __DIR__ . '/../load.php';
 
 load([
-    'distantnative\\Retour\\Retour'    => 'models/Retour.php',
-    'distantnative\\Retour\\Log'       => 'models/Log.php',
-    'distantnative\\Retour\\Logs'      => 'models/Logs.php',
-    'distantnative\\Retour\\Redirects' => 'models/Redirects.php',
-    'distantnative\\Retour\\Stats'     => 'models/Stats.php',
-    'distantnative\\Retour\\System'    => 'models/System.php'
+    'distantnative\\retour\\retour'    => 'models/Retour.php',
+    'distantnative\\retour\\log'       => 'models/Log.php',
+    'distantnative\\retour\\logs'      => 'models/Logs.php',
+    'distantnative\\retour\\redirects' => 'models/Redirects.php',
+    'distantnative\\retour\\stats'     => 'models/Stats.php',
+    'distantnative\\retour\\system'    => 'models/System.php'
 ], dirname(__DIR__));
+
+require __DIR__ . '/TestCase.php';

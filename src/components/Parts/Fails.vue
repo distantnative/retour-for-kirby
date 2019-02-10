@@ -43,10 +43,10 @@
             </span>
           </td>
           <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.path" />
+            <k-url-field-preview :value="item.path" :column="{}" />
           </td>
           <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.referrer" />
+            <k-url-field-preview :value="item.referrer" :column="{}" />
           </td>
           <td class="k-structure-table-column" data-width="">
             <k-retour-count-field-preview
