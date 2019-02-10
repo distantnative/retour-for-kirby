@@ -18,6 +18,7 @@ class Retour
     public function flush(): void
     {
         Dir::remove(kirby()->root('site') . static::$root);
+        $this->redirects()->flush();
     }
 
     public function logs(): Logs
