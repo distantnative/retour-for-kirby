@@ -6,10 +6,10 @@
 .gitignore export-ignore
 
 # nmp & composer
-bili.config.js
+bili.config.js export-ignore
 package.json export-ignore
 yarn.lock export-ignore
-composer.lock
+composer.lock export-ignore
 
 # Tests
 .coveralls.yml export-ignore
@@ -19,3 +19,4 @@ tests/ export-ignore
 
 # Directories
 src/ export-ignore
+config/samples/ export-ignore
