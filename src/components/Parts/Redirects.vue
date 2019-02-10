@@ -107,7 +107,7 @@ export default {
         delete(item["id"]);
         return item;
       })).then(() => {
-        this.redirects = input;
+        $this.$emit("update", input);
       });
     }
   }

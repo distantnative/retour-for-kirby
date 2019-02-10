@@ -27,20 +27,34 @@
       </k-button-group>
     </k-header>
 
-    <template v-for="part in parts">
-      <component
-        :is="part.name"
-        v-show="current === part.name"
-        :key="part.name"
-        :fails="fails"
-        :options="options"
-        :redirects="redirects"
-        :stats="stats"
-        @fails="fetchFails"
-        @reload="fetch(...$event)"
-        @stats="fetchStats"
-      />
-    </template>
+    <dashboard
+      v-show="current === 'dashboard'"
+      :stats="stats"
+      @navigate="fetchStats"
+    />
+
+    <redirects
+      v-show="current === 'redirects'"
+      :options="options"
+      :redirects="redirects"
+      @update="fetchRedirects"
+    />
+
+    <fails
+      v-show="current === 'fails'"
+      :fails="fails"
+      :options="options"
+      @sort="fetchFails"
+      @reload="fetch(...$event)"
+    />
+
+    <settings
+      v-show="current === 'settings'"
+      :fails="fails"
+      :options="options"
+      :redirects="redirects"
+      @reload="fetch(...$event)"
+    />
   </k-view>
 </template>
 
