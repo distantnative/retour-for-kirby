@@ -166,6 +166,8 @@ export default {
     },
     go(part) {
       this.current = part;
+      this.$events.$emit("retour-go", part);
+
       // Currently not supported by Kirby Panel
       // window.location.hash = part;
     },

@@ -10,7 +10,7 @@
       </k-button-group>
     </header>
 
-    <div v-show="chart" class="k-card k-card-content">
+    <div class="k-card k-card-content">
       <div class="ct-share" />
     </div>
 
@@ -69,6 +69,13 @@ export default {
     data() {
       this.createChart();
     }
+  },
+  created() {
+    this.$events.$on("retour-go", (part) => {
+      if (part === "dashboard") {
+        this.createChart();
+      }
+    });
   },
   methods: {
     createChart() {

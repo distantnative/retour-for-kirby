@@ -37,7 +37,7 @@
       </k-button-group>
     </header>
 
-    <div v-show="chart" class="k-card k-card-content">
+    <div class="k-card k-card-content">
       <div class="ct-timeline" />
     </div>
   </div>
@@ -80,6 +80,13 @@ export default {
     chart() {
       this.createChart();
     }
+  },
+  created() {
+    this.$events.$on("retour-go", (part) => {
+      if (part === "dashboard") {
+        this.createChart();
+      }
+    });
   },
   methods: {
     createChart() {
