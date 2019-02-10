@@ -1,2281 +1,2281 @@
 day:
   2019-12-03:
     "2019-12-03 03:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-03 16:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-03 21:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-12-03 19:":
-      fails: 7
-      redirects: 0
+      failed: 7
+      redirected: 0
     "2019-12-03 22:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-03 00:":
-      fails: 8
-      redirects: 2
+      failed: 8
+      redirected: 2
     "2019-12-03 11:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-03 13:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-03 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-03 06:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-03 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-03 05:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-03 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-03 08:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-03 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-03 02:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-03 01:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-03 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-03 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-03 07:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-03 17:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-03 18:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-03 23:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-03 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
   2019-12-23:
     "2019-12-23 07:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-23 09:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-23 16:":
-      fails: 1
-      redirects: 4
+      failed: 1
+      redirected: 4
     "2019-12-23 19:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-23 11:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-23 01:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-23 03:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-23 08:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-23 04:":
-      fails: 6
-      redirects: 3
+      failed: 6
+      redirected: 3
     "2019-12-23 02:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-23 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-23 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-23 20:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-23 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-23 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-23 14:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-23 22:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-23 00:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-23 05:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-23 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-23 17:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-23 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-23 21:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-23 23:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-28:
     "2019-12-28 16:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-28 10:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-28 07:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-28 17:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-28 08:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-28 18:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-12-28 02:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-28 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-28 22:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-28 09:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-28 11:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-28 00:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-28 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-28 14:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-28 23:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-28 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-28 01:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-28 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-28 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-28 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-28 04:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-28 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-28 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-07:
     "2019-12-07 16:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-07 00:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-07 20:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-07 09:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-07 03:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-07 04:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-07 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-07 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-07 08:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-07 02:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-07 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-07 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-07 23:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-07 15:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-12-07 10:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-07 06:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-07 19:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-07 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-07 21:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-07 18:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-07 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-07 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-07 13:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-07 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-30:
     "2019-12-30 08:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-30 01:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-30 19:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-30 23:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-30 10:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-30 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-30 04:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-30 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-30 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-30 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-30 13:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-30 09:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-30 07:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-30 06:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-30 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-30 02:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-30 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-30 14:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-30 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-30 00:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-30 15:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-30 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-30 16:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
   2019-12-14:
     "2019-12-14 08:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-14 19:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-14 03:":
-      fails: 3
-      redirects: 4
+      failed: 3
+      redirected: 4
     "2019-12-14 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-14 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-14 22:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-14 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-14 09:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-14 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-14 18:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-14 07:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-14 16:":
-      fails: 5
-      redirects: 4
+      failed: 5
+      redirected: 4
     "2019-12-14 13:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-14 14:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-14 11:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-14 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-14 20:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-14 01:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-14 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-14 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-14 00:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-14 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-14 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-05:
     "2019-12-05 10:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-05 20:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-05 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-05 23:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-05 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-05 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-05 08:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-05 16:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-05 11:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-05 17:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-05 19:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-05 15:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-05 04:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-05 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-05 00:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-05 03:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-05 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-05 13:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-05 01:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-05 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-05 07:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-05 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-05 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-05 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-26:
     "2019-12-26 02:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-12-26 04:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-26 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-26 07:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-26 10:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-26 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-26 01:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-26 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-26 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-26 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-26 19:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-26 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-26 08:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-26 05:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-26 00:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-26 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-26 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-26 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-26 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-26 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-26 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-26 09:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-26 18:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-24:
     "2019-12-24 13:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-24 05:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-24 01:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-24 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-24 22:":
-      fails: 0
-      redirects: 3
+      failed: 0
+      redirected: 3
     "2019-12-24 17:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-24 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-24 08:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-24 18:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-24 11:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-24 20:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-24 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-24 07:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-24 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-24 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-24 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-24 02:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-24 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-24 10:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-24 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-24 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-24 19:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-24 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-24 04:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-04:
     "2019-12-04 16:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-04 19:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-04 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-04 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-04 00:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-04 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-04 08:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-04 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-04 12:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-04 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-04 22:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-04 18:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-04 07:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-04 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-04 23:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-04 01:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-12-04 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-04 03:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-04 14:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-12-04 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-04 13:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-04 06:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-04 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-04 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-09:
     "2019-12-09 07:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-09 21:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-09 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-09 14:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 15:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-09 02:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-09 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-09 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-09 20:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 10:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-09 17:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-09 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 12:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-09 04:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-09 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-09 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-09 16:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-09 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-09 09:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-09 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-09 08:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-09 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-21:
     "2019-12-21 00:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-12-21 09:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-21 01:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-21 17:":
-      fails: 9
-      redirects: 0
+      failed: 9
+      redirected: 0
     "2019-12-21 16:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-21 11:":
-      fails: 7
-      redirects: 0
+      failed: 7
+      redirected: 0
     "2019-12-21 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-21 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-21 04:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-21 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-21 13:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-21 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-21 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-21 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-21 06:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-21 08:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-12-21 02:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-21 19:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-21 10:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-21 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-21 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-21 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-13:
     "2019-12-13 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-13 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-13 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-13 08:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-12-13 13:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-13 00:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-13 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-13 14:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-13 09:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-13 16:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-13 01:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-13 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-13 06:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-13 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-13 23:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-13 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-13 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-13 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-13 19:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-13 07:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-13 04:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-13 02:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
   2019-12-17:
     "2019-12-17 02:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-17 19:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-17 10:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-17 16:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-17 03:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-12-17 08:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-17 11:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-17 22:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-17 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-17 15:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-17 00:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-17 13:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-17 07:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-17 14:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-17 09:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-17 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-17 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-17 20:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-17 12:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-17 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-17 17:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-17 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-17 18:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-17 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-12-18:
     "2019-12-18 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-18 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-18 14:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-18 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-18 00:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-18 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-18 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-18 23:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-18 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-18 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-18 12:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-18 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-18 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-18 02:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-18 06:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-18 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-18 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-18 07:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-18 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-18 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-18 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-18 16:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-18 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-18 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-12-01:
     "2019-12-01 07:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-01 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-01 12:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-01 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-01 03:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-01 08:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-01 17:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-12-01 22:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-01 04:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-01 15:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-01 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-01 13:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-01 05:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-01 23:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-01 18:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-01 09:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-01 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-01 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-01 11:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-01 00:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-01 01:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-01 02:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-01 16:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-12-25:
     "2019-12-25 23:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-25 01:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-25 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-25 14:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-25 22:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-25 18:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-25 17:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-25 08:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-25 06:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-25 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-25 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-25 07:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-25 03:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-25 10:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-25 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-25 11:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-25 16:":
-      fails: 6
-      redirects: 2
+      failed: 6
+      redirected: 2
     "2019-12-25 05:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-25 02:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-25 15:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-25 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-25 21:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-25 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-25 20:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-20:
     "2019-12-20 00:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-12-20 11:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-20 13:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-20 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-20 17:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-20 19:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-20 02:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-20 05:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-20 09:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-20 04:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-20 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-20 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-20 14:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-20 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-20 03:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-20 07:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-20 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-20 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-20 18:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-20 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-20 20:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-20 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-20 10:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-20 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-15:
     "2019-12-15 21:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-15 03:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-15 02:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-15 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-15 17:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-15 00:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-15 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-15 08:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-15 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-15 15:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-12-15 23:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-15 07:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-15 14:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-15 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-15 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-15 16:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-15 20:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-15 13:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-15 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-15 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-15 19:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-15 22:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-15 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-15 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-12-11:
     "2019-12-11 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-11 10:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-11 15:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-11 00:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-11 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-11 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-11 17:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-11 21:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-11 01:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-11 19:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-11 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-11 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-11 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-11 13:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-11 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-11 09:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-11 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-11 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-11 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-11 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-11 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
   2019-12-08:
     "2019-12-08 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-08 17:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-08 01:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-12-08 18:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-08 21:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-08 00:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-08 19:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-08 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-08 06:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-12-08 23:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-08 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-08 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-08 05:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-08 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-08 07:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-08 04:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-08 03:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-08 16:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-08 20:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-08 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-08 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-08 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-29:
     "2019-12-29 08:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-29 17:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-29 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-29 18:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-29 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-29 02:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-29 16:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-29 10:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-29 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-29 03:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-29 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-29 14:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-12-29 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-29 07:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-29 04:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-29 01:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-29 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-29 23:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-12-29 00:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-29 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-29 13:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-29 12:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-12-29 21:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-29 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
   2019-12-31:
     "2019-12-31 07:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-31 11:":
-      fails: 6
-      redirects: 2
+      failed: 6
+      redirected: 2
     "2019-12-31 00:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-31 06:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-31 22:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-31 05:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-31 13:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-31 20:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-31 19:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-31 17:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-31 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-31 18:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-31 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-31 08:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-31 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-31 15:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-12-31 21:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-31 16:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-31 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-31 23:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-31 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-31 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-12-27:
     "2019-12-27 03:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-27 01:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-27 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-27 18:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-27 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-27 13:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-27 07:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-27 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-27 15:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-27 08:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-27 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-27 16:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-27 00:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-27 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-27 02:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-27 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-27 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-27 21:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-27 11:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-27 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-27 17:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-27 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-12:
     "2019-12-12 04:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-12 21:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-12 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-12 18:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-12 17:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-12 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-12 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-12 13:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-12 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-12 16:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-12 00:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-12 23:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-12 15:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-12 14:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-12 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-12 07:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-12 22:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-12 02:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-12 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-12 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-12 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-12 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-12 01:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
   2019-12-19:
     "2019-12-19 16:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-19 15:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-19 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-19 09:":
-      fails: 0
-      redirects: 3
+      failed: 0
+      redirected: 3
     "2019-12-19 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-19 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-19 12:":
-      fails: 2
-      redirects: 5
+      failed: 2
+      redirected: 5
     "2019-12-19 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-19 13:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-19 04:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-19 14:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-19 02:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-19 22:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-19 00:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-19 05:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-19 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-19 21:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-19 19:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-19 20:":
-      fails: 0
-      redirects: 3
+      failed: 0
+      redirected: 3
     "2019-12-19 23:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-19 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
   2019-12-16:
     "2019-12-16 10:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-16 09:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-16 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-16 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-16 05:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-16 17:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-16 08:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-16 00:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-16 12:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-16 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-16 14:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-16 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-16 11:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-16 07:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-16 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-16 22:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-16 06:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-16 19:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-16 13:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-16 01:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-16 23:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-16 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-16 21:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-12-02:
     "2019-12-02 00:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-02 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-02 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-02 21:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-02 15:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-02 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-02 05:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-02 07:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-02 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-02 16:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-02 11:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-02 01:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-02 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-02 10:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-02 13:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-02 14:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-02 22:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-02 06:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-02 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-02 19:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-02 20:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-02 23:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-02 17:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-02 02:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
   2019-12-06:
     "2019-12-06 09:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-06 05:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-06 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-06 01:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-06 16:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-06 14:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-06 10:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-06 12:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-06 06:":
-      fails: 2
-      redirects: 4
+      failed: 2
+      redirected: 4
     "2019-12-06 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-06 17:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-06 19:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-06 02:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-06 23:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-06 13:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-12-06 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-06 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-06 07:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-06 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-06 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-06 11:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-06 04:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-12-22:
     "2019-12-22 15:":
-      fails: 7
-      redirects: 1
+      failed: 7
+      redirected: 1
     "2019-12-22 04:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-22 03:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-12-22 02:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-22 20:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-22 21:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-22 08:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-12-22 01:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-22 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-22 14:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-12-22 10:":
-      fails: 7
-      redirects: 3
+      failed: 7
+      redirected: 3
     "2019-12-22 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-22 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-22 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-22 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-12-22 06:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-22 18:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-22 17:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-12-22 23:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-12-22 00:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-12-22 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-22 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-22 09:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
   2019-12-10:
     "2019-12-10 08:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-10 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-10 15:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-12-10 07:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-10 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-12-10 20:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-12-10 04:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-10 05:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-10 16:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-12-10 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-10 22:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-10 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-10 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-10 14:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-12-10 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-12-10 09:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-10 18:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-12-10 00:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-12-10 19:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-10 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-12-10 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-10 02:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-12-10 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-12-10 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
 month:
   2019-12:
     2019-12-03:
-      fails: 68
-      redirects: 30
+      failed: 68
+      redirected: 30
     2019-12-23:
-      fails: 68
-      redirects: 26
+      failed: 68
+      redirected: 26
     2019-12-28:
-      fails: 62
-      redirects: 22
+      failed: 62
+      redirected: 22
     2019-12-07:
-      fails: 68
-      redirects: 20
+      failed: 68
+      redirected: 20
     2019-12-30:
-      fails: 57
-      redirects: 23
+      failed: 57
+      redirected: 23
     2019-12-14:
-      fails: 65
-      redirects: 22
+      failed: 65
+      redirected: 22
     2019-12-05:
-      fails: 61
-      redirects: 18
+      failed: 61
+      redirected: 18
     2019-12-26:
-      fails: 51
-      redirects: 23
+      failed: 51
+      redirected: 23
     2019-12-24:
-      fails: 64
-      redirects: 20
+      failed: 64
+      redirected: 20
     2019-12-04:
-      fails: 58
-      redirects: 27
+      failed: 58
+      redirected: 27
     2019-12-09:
-      fails: 58
-      redirects: 14
+      failed: 58
+      redirected: 14
     2019-12-21:
-      fails: 58
-      redirects: 21
+      failed: 58
+      redirected: 21
     2019-12-13:
-      fails: 58
-      redirects: 14
+      failed: 58
+      redirected: 14
     2019-12-17:
-      fails: 54
-      redirects: 22
+      failed: 54
+      redirected: 22
     2019-12-18:
-      fails: 63
-      redirects: 18
+      failed: 63
+      redirected: 18
     2019-12-01:
-      fails: 55
-      redirects: 29
+      failed: 55
+      redirected: 29
     2019-12-25:
-      fails: 54
-      redirects: 19
+      failed: 54
+      redirected: 19
     2019-12-20:
-      fails: 55
-      redirects: 24
+      failed: 55
+      redirected: 24
     2019-12-15:
-      fails: 51
-      redirects: 25
+      failed: 51
+      redirected: 25
     2019-12-11:
-      fails: 46
-      redirects: 15
+      failed: 46
+      redirected: 15
     2019-12-08:
-      fails: 51
-      redirects: 23
+      failed: 51
+      redirected: 23
     2019-12-29:
-      fails: 65
-      redirects: 27
+      failed: 65
+      redirected: 27
     2019-12-31:
-      fails: 59
-      redirects: 27
+      failed: 59
+      redirected: 27
     2019-12-27:
-      fails: 55
-      redirects: 15
+      failed: 55
+      redirected: 15
     2019-12-12:
-      fails: 54
-      redirects: 28
+      failed: 54
+      redirected: 28
     2019-12-19:
-      fails: 45
-      redirects: 28
+      failed: 45
+      redirected: 28
     2019-12-16:
-      fails: 63
-      redirects: 14
+      failed: 63
+      redirected: 14
     2019-12-02:
-      fails: 63
-      redirects: 20
+      failed: 63
+      redirected: 20
     2019-12-06:
-      fails: 59
-      redirects: 22
+      failed: 59
+      redirected: 22
     2019-12-22:
-      fails: 65
-      redirects: 26
+      failed: 65
+      redirected: 26
     2019-12-10:
-      fails: 72
-      redirects: 13
+      failed: 72
+      redirected: 13

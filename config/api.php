@@ -11,6 +11,36 @@ return [
                     __DIR__ . '/samples',
                     kirby()->root('site') . $retour::$root
                 );
+                site()->update(['retour' => [
+                    [
+                        'status' => '301',
+                        'from'   => 'blog/(:any)/(:all)',
+                        'to'     => 'notes/$1/entries/$2',
+                        'hits'   => null,
+                        'last'   => null
+                    ],
+                    [
+                        'status' => '503',
+                        'from'   => 'pocast/this-one-episode',
+                        'to'     => null,
+                        'hits'   => 10,
+                        'last'   => '2019-01-30 20:15'
+                    ],
+                    [
+                        'status' => '301',
+                        'from'   => 'test',
+                        'to'     => 'about',
+                        'hits'   => 200,
+                        'last'   => '2019-02-09 09:30'
+                    ],
+                    [
+                        'status' => 'disabled',
+                        'from'   => 'soon/to/cancel',
+                        'to'     => 'not/yet-ready',
+                        'hits'   => null,
+                        'last'   => null
+                    ]
+                ]]);
                 return true;
             }
         ],
@@ -27,6 +57,7 @@ return [
             'method'  => 'PATCH',
             'action'  => function () use ($retour) {
                 $retour->flush();
+                $retour->redirects()->flush();
                 return true;
             }
         ],

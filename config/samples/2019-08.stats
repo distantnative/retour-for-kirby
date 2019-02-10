@@ -1,2287 +1,2287 @@
 day:
   2019-08-14:
     "2019-08-14 14:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-14 13:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-14 07:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-14 03:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-14 20:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-14 08:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-14 16:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-14 05:":
-      fails: 8
-      redirects: 1
+      failed: 8
+      redirected: 1
     "2019-08-14 21:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-14 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-14 00:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-14 04:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-14 09:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-14 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-14 19:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-14 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-14 18:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-14 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-14 02:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-14 06:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-14 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-14 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-14 23:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-20:
     "2019-08-20 03:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-20 10:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-20 14:":
-      fails: 1
-      redirects: 4
+      failed: 1
+      redirected: 4
     "2019-08-20 21:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-20 23:":
-      fails: 6
-      redirects: 2
+      failed: 6
+      redirected: 2
     "2019-08-20 18:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-20 20:":
-      fails: 2
-      redirects: 5
+      failed: 2
+      redirected: 5
     "2019-08-20 07:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-20 05:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-20 00:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-20 17:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-20 04:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-08-20 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-20 02:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-20 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-20 22:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-20 01:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-20 13:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-20 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-20 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-20 08:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-20 19:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-20 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-20 12:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-08-24:
     "2019-08-24 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-24 07:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-24 01:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-24 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-24 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-24 00:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-24 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-24 08:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-24 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-24 11:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-24 19:":
-      fails: 5
-      redirects: 3
+      failed: 5
+      redirected: 3
     "2019-08-24 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-24 13:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-24 12:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-24 04:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-24 17:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-08-24 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-24 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-24 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-24 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-24 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-24 02:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-24 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-24 20:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
   2019-08-27:
     "2019-08-27 14:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-27 13:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-27 02:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-27 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-27 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-27 22:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-27 01:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-27 20:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-27 19:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-27 05:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-27 04:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-27 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-27 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-27 11:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-27 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-27 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-27 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-27 18:":
-      fails: 5
-      redirects: 3
+      failed: 5
+      redirected: 3
     "2019-08-27 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-27 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-27 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-27 16:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-27 15:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
   2019-08-05:
     "2019-08-05 10:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-05 15:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-05 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-05 02:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-05 20:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-05 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-05 07:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-05 18:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-08-05 04:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-05 11:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-05 17:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-05 13:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-05 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-05 12:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-05 00:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-05 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-05 05:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-05 22:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-05 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-05 06:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-05 23:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-05 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-05 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-05 16:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-08-31:
     "2019-08-31 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-31 19:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-31 08:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-31 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-31 07:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-31 20:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-31 21:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-31 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-31 02:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-31 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-31 17:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-31 05:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-31 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-31 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-31 18:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-31 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-31 10:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-31 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-31 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-31 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-31 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-31 16:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-31 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-17:
     "2019-08-17 00:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-17 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-17 06:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-17 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-17 05:":
-      fails: 5
-      redirects: 4
+      failed: 5
+      redirected: 4
     "2019-08-17 13:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-17 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-17 03:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-17 23:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-17 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-17 07:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-17 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-17 20:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-17 08:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-17 04:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-17 12:":
-      fails: 0
-      redirects: 3
+      failed: 0
+      redirected: 3
     "2019-08-17 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-17 14:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-17 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-17 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-17 21:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-17 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-17 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-17 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-08-12:
     "2019-08-12 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-12 07:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-12 06:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-12 18:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-12 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-12 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-12 20:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-12 11:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-12 17:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-12 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-12 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-12 00:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-12 10:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-12 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-12 13:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-12 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-12 23:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-12 14:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-12 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-12 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-12 21:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-12 04:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-12 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-12 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-04:
     "2019-08-04 02:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-04 22:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-04 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-04 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-04 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-04 23:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-04 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-04 00:":
-      fails: 0
-      redirects: 4
+      failed: 0
+      redirected: 4
     "2019-08-04 01:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-04 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-04 12:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-04 16:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-04 11:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-04 19:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-04 13:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-04 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-04 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-04 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-04 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-04 03:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-04 10:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-04 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-04 15:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-04 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-29:
     "2019-08-29 10:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-29 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-29 07:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-29 11:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-29 15:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-29 20:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-29 16:":
-      fails: 7
-      redirects: 0
+      failed: 7
+      redirected: 0
     "2019-08-29 03:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-29 05:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-29 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-29 19:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-29 23:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-29 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-29 12:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-29 02:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-29 21:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-29 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-29 00:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-29 06:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-29 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-29 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-29 18:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-29 04:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
   2019-08-30:
     "2019-08-30 05:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-30 23:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-30 08:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-30 01:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-30 17:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-30 13:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-30 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-30 22:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-30 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-30 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-30 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-30 14:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-30 06:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-30 20:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-30 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-30 12:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-30 15:":
-      fails: 3
-      redirects: 4
+      failed: 3
+      redirected: 4
     "2019-08-30 00:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-30 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-30 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-30 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-30 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-30 18:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-30 02:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
   2019-08-28:
     "2019-08-28 08:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-28 04:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-28 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-28 01:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-28 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-28 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-28 07:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-28 22:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-28 20:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-28 10:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-28 13:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-28 15:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-28 02:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-28 12:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-28 21:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-28 16:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-28 05:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-28 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-28 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-28 06:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-28 23:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-28 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-28 17:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-08-26:
     "2019-08-26 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-26 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-26 09:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-26 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-26 03:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-26 12:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-26 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-26 06:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-26 22:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-26 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-26 19:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-26 01:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-26 16:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-26 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-26 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-26 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-26 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-26 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-26 08:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-26 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-26 00:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-26 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-26 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-26 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-25:
     "2019-08-25 20:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-25 01:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-25 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-25 14:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-25 12:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-25 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-25 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-25 15:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-25 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-25 04:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-25 08:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-25 19:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-25 03:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-25 02:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-25 18:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-25 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-25 16:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-25 13:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-25 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-25 00:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-25 06:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-25 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-25 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-25 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-03:
     "2019-08-03 02:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-03 07:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-03 03:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-03 05:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-03 10:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-08-03 15:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-03 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-03 19:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-03 11:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-03 21:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-03 08:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-03 01:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-03 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-03 13:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-03 17:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-03 09:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-03 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-03 16:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-03 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-03 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-03 23:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-03 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-07:
     "2019-08-07 16:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-07 13:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-07 05:":
-      fails: 8
-      redirects: 1
+      failed: 8
+      redirected: 1
     "2019-08-07 20:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-07 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-07 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-07 00:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-07 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-07 02:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-07 17:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-07 15:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-07 06:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-07 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-07 23:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-07 10:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-07 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-07 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-07 18:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-07 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-07 04:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-07 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-07 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-18:
     "2019-08-18 08:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-18 05:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-18 06:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-18 10:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-18 22:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-18 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-18 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-18 04:":
-      fails: 4
-      redirects: 4
+      failed: 4
+      redirected: 4
     "2019-08-18 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-18 00:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-18 14:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-18 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-18 07:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-18 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-18 12:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-18 01:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-18 15:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-18 21:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-18 13:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-18 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-18 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-18 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-18 18:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-18 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-08-15:
     "2019-08-15 02:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-15 14:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-15 20:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-15 04:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-15 05:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-15 23:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-15 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-15 19:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-15 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-15 01:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-15 11:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-15 03:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-15 10:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-15 18:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-15 16:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-15 00:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-15 06:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-15 17:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-15 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-15 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-15 12:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-15 13:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-15 21:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-15 07:":
-      fails: 0
-      redirects: 3
+      failed: 0
+      redirected: 3
   2019-08-02:
     "2019-08-02 08:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-02 01:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-02 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-02 09:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-02 10:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-02 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-02 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-02 17:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-02 12:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-02 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-02 04:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-02 11:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-02 07:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-02 15:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-02 22:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-02 18:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-02 20:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-02 02:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-02 14:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-02 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-02 05:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-02 19:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
   2019-08-23:
     "2019-08-23 09:":
-      fails: 2
-      redirects: 4
+      failed: 2
+      redirected: 4
     "2019-08-23 22:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-23 20:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-23 19:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-23 10:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-23 13:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-23 06:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-23 05:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-23 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-23 18:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-23 11:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-23 14:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-23 08:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-23 07:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-23 17:":
-      fails: 8
-      redirects: 2
+      failed: 8
+      redirected: 2
     "2019-08-23 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-23 16:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-23 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-23 04:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-23 02:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-23 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-23 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-23 12:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
   2019-08-16:
     "2019-08-16 02:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-16 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-16 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-16 19:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-16 09:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-16 16:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-16 03:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-16 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-16 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-16 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-16 20:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-16 10:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-16 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-16 13:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-16 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-16 12:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-16 21:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-16 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-16 05:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-16 17:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-16 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-16 06:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-16 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-10:
     "2019-08-10 03:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-10 05:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-10 20:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-10 18:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-10 02:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-10 00:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-10 08:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-10 01:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-10 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-10 13:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-10 07:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-10 14:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-10 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-10 21:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-10 11:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-10 16:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-10 10:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-10 12:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-10 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-10 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-10 06:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-10 19:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-10 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-10 09:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-08-09:
     "2019-08-09 11:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-09 06:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-09 04:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-09 16:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-09 15:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-09 03:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-09 22:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-09 10:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-09 00:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-09 09:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-09 17:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-09 13:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-09 08:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-09 19:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-09 23:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-09 02:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-09 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-09 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-09 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-09 18:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-09 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-09 12:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-09 21:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
   2019-08-01:
     "2019-08-01 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-01 05:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-01 08:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-01 21:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-01 15:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-01 20:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-01 09:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-01 06:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-01 14:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-01 22:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-01 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-01 10:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-01 16:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-01 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-01 00:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-01 04:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-01 17:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-01 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-01 01:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-01 03:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-01 13:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
   2019-08-21:
     "2019-08-21 06:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-21 12:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-21 02:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-21 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-21 20:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-21 18:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 13:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 15:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-21 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-21 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 05:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 08:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-21 22:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 17:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 03:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-21 01:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-21 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-21 07:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-21 14:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-21 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-21 23:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-08:
     "2019-08-08 10:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-08 14:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-08 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-08 02:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-08 16:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-08 19:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-08 11:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-08 07:":
-      fails: 1
-      redirects: 3
+      failed: 1
+      redirected: 3
     "2019-08-08 17:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-08-08 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-08 00:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-08 23:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-08 05:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-08 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-08 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-08 04:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-08 20:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-08 18:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-08 06:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-08 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-08 03:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-08 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-08 08:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-19:
     "2019-08-19 00:":
-      fails: 3
-      redirects: 3
+      failed: 3
+      redirected: 3
     "2019-08-19 06:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-19 17:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-19 16:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-19 19:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-19 07:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-19 13:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-19 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-19 03:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-19 14:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-19 10:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-19 15:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-19 22:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-19 18:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-19 09:":
-      fails: 6
-      redirects: 1
+      failed: 6
+      redirected: 1
     "2019-08-19 02:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-19 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-19 23:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-19 04:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-19 20:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-19 05:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-19 01:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
   2019-08-11:
     "2019-08-11 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-11 01:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-11 16:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-11 13:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-11 20:":
-      fails: 7
-      redirects: 2
+      failed: 7
+      redirected: 2
     "2019-08-11 21:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-11 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-11 18:":
-      fails: 5
-      redirects: 1
+      failed: 5
+      redirected: 1
     "2019-08-11 02:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-11 17:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-11 14:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-11 11:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-11 09:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-11 19:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-11 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-11 22:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-11 15:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-11 23:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-11 03:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-11 00:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-11 07:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-11 06:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-11 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-11 12:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
   2019-08-22:
     "2019-08-22 04:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-22 17:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-22 16:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-22 12:":
-      fails: 2
-      redirects: 3
+      failed: 2
+      redirected: 3
     "2019-08-22 03:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-22 05:":
-      fails: 5
-      redirects: 2
+      failed: 5
+      redirected: 2
     "2019-08-22 10:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-22 07:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-22 02:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-22 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-22 15:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-22 22:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-22 23:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-22 21:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-22 13:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-22 14:":
-      fails: 0
-      redirects: 2
+      failed: 0
+      redirected: 2
     "2019-08-22 08:":
-      fails: 7
-      redirects: 0
+      failed: 7
+      redirected: 0
     "2019-08-22 09:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-22 11:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-22 01:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-22 20:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-22 00:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-22 19:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-06:
     "2019-08-06 00:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-06 18:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-06 16:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-06 05:":
-      fails: 4
-      redirects: 3
+      failed: 4
+      redirected: 3
     "2019-08-06 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-06 15:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-06 13:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-06 11:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-06 21:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-06 02:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-06 01:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-06 08:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-06 10:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-06 12:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-06 04:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-06 03:":
-      fails: 1
-      redirects: 2
+      failed: 1
+      redirected: 2
     "2019-08-06 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-06 09:":
-      fails: 4
-      redirects: 2
+      failed: 4
+      redirected: 2
     "2019-08-06 22:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
     "2019-08-06 23:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-06 06:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-06 20:":
-      fails: 0
-      redirects: 1
+      failed: 0
+      redirected: 1
     "2019-08-06 07:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
   2019-08-13:
     "2019-08-13 08:":
-      fails: 3
-      redirects: 1
+      failed: 3
+      redirected: 1
     "2019-08-13 16:":
-      fails: 4
-      redirects: 0
+      failed: 4
+      redirected: 0
     "2019-08-13 15:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-13 21:":
-      fails: 3
-      redirects: 2
+      failed: 3
+      redirected: 2
     "2019-08-13 14:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-13 04:":
-      fails: 4
-      redirects: 1
+      failed: 4
+      redirected: 1
     "2019-08-13 22:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-13 19:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-13 11:":
-      fails: 6
-      redirects: 0
+      failed: 6
+      redirected: 0
     "2019-08-13 18:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-13 05:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-13 02:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-13 17:":
-      fails: 2
-      redirects: 2
+      failed: 2
+      redirected: 2
     "2019-08-13 01:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-13 13:":
-      fails: 5
-      redirects: 0
+      failed: 5
+      redirected: 0
     "2019-08-13 06:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-13 23:":
-      fails: 1
-      redirects: 1
+      failed: 1
+      redirected: 1
     "2019-08-13 03:":
-      fails: 2
-      redirects: 1
+      failed: 2
+      redirected: 1
     "2019-08-13 09:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-13 20:":
-      fails: 2
-      redirects: 0
+      failed: 2
+      redirected: 0
     "2019-08-13 12:":
-      fails: 3
-      redirects: 0
+      failed: 3
+      redirected: 0
     "2019-08-13 10:":
-      fails: 1
-      redirects: 0
+      failed: 1
+      redirected: 0
 month:
   2019-08:
     2019-08-14:
-      fails: 65
-      redirects: 21
+      failed: 65
+      redirected: 21
     2019-08-20:
-      fails: 67
-      redirects: 35
+      failed: 67
+      redirected: 35
     2019-08-24:
-      fails: 60
-      redirects: 25
+      failed: 60
+      redirected: 25
     2019-08-27:
-      fails: 66
-      redirects: 22
+      failed: 66
+      redirected: 22
     2019-08-05:
-      fails: 68
-      redirects: 32
+      failed: 68
+      redirected: 32
     2019-08-31:
-      fails: 59
-      redirects: 14
+      failed: 59
+      redirected: 14
     2019-08-17:
-      fails: 58
-      redirects: 31
+      failed: 58
+      redirected: 31
     2019-08-12:
-      fails: 54
-      redirects: 19
+      failed: 54
+      redirected: 19
     2019-08-04:
-      fails: 60
-      redirects: 21
+      failed: 60
+      redirected: 21
     2019-08-29:
-      fails: 62
-      redirects: 22
+      failed: 62
+      redirected: 22
     2019-08-30:
-      fails: 65
-      redirects: 26
+      failed: 65
+      redirected: 26
     2019-08-28:
-      fails: 55
-      redirects: 25
+      failed: 55
+      redirected: 25
     2019-08-26:
-      fails: 57
-      redirects: 17
+      failed: 57
+      redirected: 17
     2019-08-25:
-      fails: 56
-      redirects: 21
+      failed: 56
+      redirected: 21
     2019-08-03:
-      fails: 58
-      redirects: 14
+      failed: 58
+      redirected: 14
     2019-08-07:
-      fails: 64
-      redirects: 15
+      failed: 64
+      redirected: 15
     2019-08-18:
-      fails: 70
-      redirects: 15
+      failed: 70
+      redirected: 15
     2019-08-15:
-      fails: 63
-      redirects: 21
+      failed: 63
+      redirected: 21
     2019-08-02:
-      fails: 54
-      redirects: 21
+      failed: 54
+      redirected: 21
     2019-08-23:
-      fails: 70
-      redirects: 24
+      failed: 70
+      redirected: 24
     2019-08-16:
-      fails: 49
-      redirects: 12
+      failed: 49
+      redirected: 12
     2019-08-10:
-      fails: 62
-      redirects: 23
+      failed: 62
+      redirected: 23
     2019-08-09:
-      fails: 56
-      redirects: 21
+      failed: 56
+      redirected: 21
     2019-08-01:
-      fails: 55
-      redirects: 24
+      failed: 55
+      redirected: 24
     2019-08-21:
-      fails: 59
-      redirects: 13
+      failed: 59
+      redirected: 13
     2019-08-08:
-      fails: 48
-      redirects: 21
+      failed: 48
+      redirected: 21
     2019-08-19:
-      fails: 65
-      redirects: 21
+      failed: 65
+      redirected: 21
     2019-08-11:
-      fails: 58
-      redirects: 17
+      failed: 58
+      redirected: 17
     2019-08-22:
-      fails: 55
-      redirects: 24
+      failed: 55
+      redirected: 24
     2019-08-06:
-      fails: 59
-      redirects: 16
+      failed: 59
+      redirected: 16
     2019-08-13:
-      fails: 57
-      redirects: 13
+      failed: 57
+      redirected: 13
