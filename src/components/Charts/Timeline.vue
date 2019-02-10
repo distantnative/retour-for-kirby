@@ -73,6 +73,9 @@ export default {
         showLine: false,
         showPoint: false,
         fullWidth: true,
+        axisY: {
+          onlyInteger: true
+        },
       };
     }
   },

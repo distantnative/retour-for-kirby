@@ -37,7 +37,7 @@ export default {
   computed: {
     chart() {
       if ((this.redirects + this.fails) === 0) {
-        return {};
+        return { series: [0, 0, 100] };
       }
 
       return { series: [this.redirects, this.fails] };
@@ -50,10 +50,16 @@ export default {
       return this.data.failed.reduce((a, b) => a += b, 0);
     },
     options() {
+      let total = (this.redirects + this.fails)*2;
+
+      if (total === 0) {
+        total = 200;
+      }
+
       return {
         height: 300,
         startAngle: 270,
-        total: (this.redirects + this.fails)*2,
+        total: total,
         showLabel: false
       };
     },
@@ -106,6 +112,10 @@ export default {
 .ct-share .ct-series-b .ct-slice-pie {
   color: #aaa;
   fill: #ccc;
+}
+
+.ct-share .ct-series-c .ct-slice-pie {
+  fill: #f3f3f3;
 }
 
 .ct-share {
