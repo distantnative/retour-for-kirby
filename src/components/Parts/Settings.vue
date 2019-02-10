@@ -116,7 +116,7 @@ export default {
   },
   computed: {
     failed() {
-      return this.fails.reduce((a, b) => a += b.fails, 0);
+      return this.fails.reduce((a, b) => a += b.failed, 0);
     },
     outdated() {
       return this.latest != "..." && this.options.version !== this.latest;
