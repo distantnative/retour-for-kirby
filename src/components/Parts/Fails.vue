@@ -10,7 +10,7 @@
           v-for="by in ['fails', 'last']"
           :key="by"
           icon="funnel"
-          @click="$emit('fails', by)"
+          @click="sort(by)"
         >
           {{ $t('retour.fails.sort.' + by) }}
         </k-button>
@@ -110,6 +110,10 @@ export default {
     },
     paginateItems(pagination) {
       this.page = pagination.page;
+    },
+    sort(by) {
+      this.$emit('fails', by);
+      this.page = 1;
     }
   }
 }
