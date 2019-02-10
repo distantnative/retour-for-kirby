@@ -121,16 +121,18 @@ export default {
       this.$store.dispatch("isLoading", true);
       before(this);
 
-      return this.process().then(() => {
-        const system    = this.fetchSystem();
-        const fails     = this.fetchFails();
-        const redirects = this.fetchRedirects();
-        const stats     = this.fetchStats([
+      const process = this.process();
+      const system  = this.fetchSystem();
+
+      return Promise.all([process, system]).then(() => {
+        const stats = this.fetchStats([
           this.stats.frame,
           this.stats.offset
         ]);
+        const redirects = this.fetchRedirects();
+        const fails     = this.fetchFails();
 
-        Promise.all([system, stats, fails, redirects]).then(() => {
+        return Promise.all([stats, redirects, fails]).then(() => {
           this.$store.dispatch("isLoading", false);
           after(this);
         });
