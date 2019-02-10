@@ -55,7 +55,7 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 
 **Color of the status bubbles**
 - ![#7ea328](https://via.placeholder.com/16.png/7ea328?text=+) Redirects (`300`-`399`)
-- ![#f5871f](https://via.placeholder.com/16.png/f5871f?text=+) Other HTTP status codes
+- ![#f0c674](https://via.placeholder.com/16.png/f0c674?text=+) Other HTTP status codes
 - ![#c82829](https://via.placeholder.com/16.png/c82829?text=+) `disabled`
 
 **HTTP status codes**  

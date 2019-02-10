@@ -44,7 +44,7 @@ export default {
     color: #7ea328;
 
     &[data-error] {
-      color: #f5871f;
+      color: #f0c674;
     }
 
     &[data-disabled] {
