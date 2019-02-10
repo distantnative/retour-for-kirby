@@ -54,7 +54,7 @@ class Retour
         return $this->stats = $this->stats ?? new Stats;
     }
 
-    public static function store(string $path, bool $status, string $pattern = null)
+    public static function store(string $path, string $status, string $pattern = null)
     {
         $root = kirby()->root('site') . static::$root;
         $file = $root . '/.' . md5($path) . '.' . time() . '.tmp';
