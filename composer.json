@@ -2,7 +2,8 @@
     "name": "distantnative/retour-for-kirby",
     "description": "Redirect management for Kirby 3",
     "type": "kirby-plugin",
-    "version": "1.0.0",
+    "version": "1.0.0-beta.3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Nico Hoffmann",
