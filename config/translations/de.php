@@ -24,6 +24,7 @@ return [
     'retour.fails.count'       => 'Treffer (Umgeleitet)',
 
     'retour.settings'                   => 'Einstellungen',
+    'retour.settings.headline'          => 'Weiterleitungen für Kirby 3',
     'retour.settings.installed'         => 'Installierte Version',
     'retour.settings.latest'            => 'Neueste Version',
     'retour.settings.download'          => '<a href="{url}">Neueste Version</a> herunterladen.',
@@ -33,6 +34,7 @@ return [
     'retour.settings.support.affiliate' => 'Kaufe eine Kirby-Lizenz',
     'retour.settings.overview'          => 'Überblick',
     'retour.settings.log.clear'         => 'Log leeren',
+    'retour.settings.log.clear.confirm' => 'Wollen Sie wirklich alle Logs löschen?',
     'retour.settings.routes'            => 'Umleitungsrouten',
     'retour.settings.fails'             => 'Aufgezeichnete Fehler',
     'retour.settings.redirects'         => 'Erfolgreich umgeleitet',

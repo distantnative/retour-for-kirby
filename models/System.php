@@ -13,7 +13,6 @@ class System
 
         return [
             'version'     => $plugin->version(),
-            'description' => $plugin->description(),
             'site'        => $kirby->site()->url(),
             'limit'       => option('distantnative.retour.limit'),
             'headers'     => Header::$codes,

@@ -3,7 +3,7 @@
     <section class="k-system-info">
       <header class="k-field-header">
         <label class="k-field-label">
-          {{ options.description }}
+          {{ $t('retour.settings.headline') }}
         </label>
       </header>
 
@@ -76,7 +76,7 @@
           @submit="flush"
         >
           <k-text>
-            Do you really want to clear all logs?
+            {{ $t('retour.settings.log.clear.confirm') }}
           </k-text>
         </k-dialog>
 

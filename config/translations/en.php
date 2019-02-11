@@ -24,6 +24,7 @@ return [
     'retour.fails.count'       => 'Hits (Redirected)',
 
     'retour.settings'                   => 'Settings',
+    'retour.settings.headline'          => 'Redirect management for Kirby 3',
     'retour.settings.installed'         => 'Installed version',
     'retour.settings.latest'            => 'Latest version',
     'retour.settings.download'          => 'Download <a href="{url}">latest version</a>.',
@@ -33,6 +34,7 @@ return [
     'retour.settings.support.affiliate' => 'Buy a Kirby license',
     'retour.settings.overview'          => 'Overview',
     'retour.settings.log.clear'         => 'Clear log',
+    'retour.settings.log.clear.confirm' => 'Do you really want to delete the log?',
     'retour.settings.routes'            => 'Redirect routes',
     'retour.settings.fails'             => 'Logged fails',
     'retour.settings.redirects'         => 'Successfully redirected',
