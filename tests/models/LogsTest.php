@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class LogsTest extends TestCase
 {
-    protected static $fixture = '/retour.log';
 
     public function testAdd(): void
     {

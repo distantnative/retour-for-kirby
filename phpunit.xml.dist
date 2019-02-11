@@ -16,7 +16,6 @@
 
   <filter>
     <whitelist>
-      <directory>./config</directory>
       <directory>./models</directory>
     </whitelist>
   </filter>

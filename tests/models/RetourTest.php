@@ -43,28 +43,55 @@ class RetourTest extends TestCase
         $this->assertInstanceOf('distantnative\Retour\System', $retour->system());
     }
 
-    // public function testTmp(): void
-    // {
-    //     $path   = 'podcast/archive/03';
-    //     $file   = static::$fixture . '/' . md5($path) . '.' . time() . '.tmp';
-    //     $retour = new Retour;
-    //     Retour::$logs = '/plugins/retour/tests/fixtures/logs';
+    public function testStoreFailed(): void
+    {
+        $retour = new Retour;
+        $path   = 'podcast/archive/03';
+        $file   = Retour::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
 
-    //     $retour->tmp(
-    //         $path,
-    //         true,
-    //         $pattern = 'podcast/archive/(:any)'
-    //     );
+        $retour->store($path, 'failed');
 
-    //     $this->assertTrue(F::exists($file));
-    //     $this->assertEquals([
-    //         'path'     => $path,
-    //         'referrer' => null,
-    //         'isFail'   => true,
-    //         'pattern'  => $pattern,
-    //         'date'     => date('Y-m-d H:i')
-    //     ], Data::read($file, 'yaml'));
+        $this->assertTrue(F::exists($file));
+        $this->assertEquals([
+            'path'     => $path,
+            'referrer' => null,
+            'status'   => 'failed',
+            'pattern'  => null,
+            'date'     => date('Y-m-d H:i')
+        ], Data::read($file, 'yaml'));
 
-    //     F::remove($file);
-    // }
+        F::remove($file);
+    }
+
+    public function testStore(): void
+    {
+        $retour = new Retour;
+        $path   = 'podcast/archive/03';
+        $file   = Retour::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
+
+        $retour->store($path, 'redirected', $pattern = 'podcast/archive/(:any)');
+
+        $this->assertTrue(F::exists($file));
+        $this->assertEquals([
+            'path'     => $path,
+            'referrer' => null,
+            'status'   => 'redirected',
+            'pattern'  => $pattern,
+            'date'     => date('Y-m-d H:i')
+        ], Data::read($file, 'yaml'));
+
+        F::remove($file);
+    }
+
+    public function testTemporaries(): void
+    {
+        $retour = new Retour;
+
+        $retour->store('podcast/archive', 'redirected');
+        $retour->store('podcast/not-there', 'failes');
+
+        $tmp = $retour->temporaries();
+
+        $this->assertEquals(2, count($tmp));
+    }
 }

@@ -37,6 +37,9 @@ class Redirects extends Log
         $this->write($data);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function read($suffix = null)
     {
         return site()->retour()->yaml();
@@ -90,6 +93,9 @@ class Redirects extends Log
         }, $data);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function write(array $data = [], $suffix = null): void
     {
         site()->update(['retour' => $data]);

@@ -25,15 +25,12 @@ class Retour
         return $this->log = $this->logs ?? new Logs;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function process()
     {
-        $tmp   = [];
-        $files = static::$dir . '/.*.tmp';
-
-        foreach (glob($files) as $file) {
-            $tmp[] = Data::read($file, 'yaml');
-            F::remove($file);
-        }
+        $tmp = $this->temporaries();
 
         if (empty($tmp) === false) {
             $this->logs()->add($tmp);
@@ -70,5 +67,18 @@ class Retour
     public function system(): System
     {
         return $this->system = $this->system ?? new System;
+    }
+
+    public function temporaries(): array
+    {
+        $tmp   = [];
+        $files = static::$dir . '/.*.tmp';
+
+        foreach (glob($files) as $file) {
+            $tmp[] = Data::read($file, 'yaml');
+            F::remove($file);
+        }
+
+        return $tmp;
     }
 }

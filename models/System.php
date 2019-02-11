@@ -12,7 +12,7 @@ class System
         $plugin = $kirby->plugin('distantnative/retour');
 
         return [
-            'version'     => $plugin->version(),
+            'version'     => $plugin ? $plugin->version() : '-',
             'site'        => $kirby->site()->url(),
             'limit'       => option('distantnative.retour.limit'),
             'headers'     => Header::$codes,

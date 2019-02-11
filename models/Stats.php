@@ -93,10 +93,10 @@ class Stats extends Log
         }
 
         $result = [
-            'headline'  => static::headline($start, $end),
-            'labels'    => [],
-            'fails'     => [],
-            'redirects' => [],
+            'headline'   => static::headline($start, $end),
+            'labels'     => [],
+            'failed'     => [],
+            'redirected' => [],
         ];
 
         for ($time = $start; $time <= $end; $time += $step) {
@@ -109,7 +109,7 @@ class Stats extends Log
         return $result;
     }
 
-    protected function headline($start, $end): string
+    public static function headline($start, $end): string
     {
         // whole day
         if (date('Y-m-d', $start) === date('Y-m-d', $end)) {
@@ -126,7 +126,10 @@ class Stats extends Log
         }
 
         // days, same month
-        if (date('m', $start) === date('m', $end)) {
+        if (
+            date('m', $start) === date('m', $end) &&
+            date('Y', $start) === date('Y', $end)
+        ) {
             return date('j', $start) . '-' . date('j F Y', $end);
         }
 
