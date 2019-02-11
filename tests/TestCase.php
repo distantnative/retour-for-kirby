@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-
     public static function setUpBeforeClass(): void
     {
         $root = __DIR__ . '/fixtures';
@@ -30,5 +29,4 @@ class TestCase extends BaseTestCase
         $file = $dir . '/{x}.stats';
         $this->assertEquals($file, Stats::$file);
     }
-
 }

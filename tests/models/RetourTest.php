@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class RetourTest extends TestCase
 {
-
     public function testFlush(): void
     {
         $file = Retour::$dir . '/a.txt';
@@ -68,5 +67,4 @@ class RetourTest extends TestCase
 
     //     F::remove($file);
     // }
-
 }

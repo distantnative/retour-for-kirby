@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class LogTest extends TestCase
 {
-
     public function testRead(): void
     {
         Data::write(Log::$file, $data = ['homer' => 'simpson'], 'yaml');

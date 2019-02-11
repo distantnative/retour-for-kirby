@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class LogsTest extends TestCase
 {
-
     protected static $fixture = '/retour.log';
 
     public function testAdd(): void
@@ -74,5 +73,4 @@ class LogsTest extends TestCase
 
         F::remove(Logs::$file);
     }
-
 }

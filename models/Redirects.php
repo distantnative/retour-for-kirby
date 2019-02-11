@@ -9,7 +9,6 @@ use Kirby\Toolkit\Collection;
 
 class Redirects extends Log
 {
-
     public function flush(): void
     {
         $data = $this->data();
