@@ -22,7 +22,7 @@ class LogsTest extends TestCase
             [
                 'path'     => $path = 'podcast/archive',
                 'referrer' => $referrer = null,
-                'isFail'   => true,
+                'status'   => 'failed',
                 'date'     => '2019-01-29 23:45'
             ]
         ]);
@@ -54,23 +54,23 @@ class LogsTest extends TestCase
     public function testFails(): void
     {
         $logs = new Logs;
-        $logs->add($add = [
+        $logs->add([
             [
                 'path'     => 'podcast/archive',
                 'referrer' => null,
-                'isFail'   => true,
+                'status'   => 'failed',
                 'date'     => '2019-01-29 23:45'
             ],
             [
                 'path'     => 'podcast/episode',
                 'referrer' => null,
-                'isFail'   => false,
+                'status'   => 'redirected',
                 'date'     => '2019-01-29 23:45'
             ],
             [
                 'path'     => 'podcast/main',
                 'referrer' => null,
-                'isFail'   => true,
+                'status'   => 'failed',
                 'date'     => '2019-01-29 23:45'
             ]
         ]);

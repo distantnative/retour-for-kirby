@@ -27,7 +27,7 @@ class Log
         return kirby()->root('site') . $file;
     }
 
-    public function read($suffix = null)
+    public function read($suffix = 'retour')
     {
         if (F::exists($this->file($suffix)) === false) {
             return static::defaults();
@@ -36,7 +36,7 @@ class Log
         return Data::read($this->file($suffix), 'yaml');
     }
 
-    public function write(array $data = [], $suffix = null)
+    public function write(array $data = [], $suffix = 'retour')
     {
         Data::write($this->file($suffix), $data, 'yaml');
 
