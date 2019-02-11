@@ -16,5 +16,8 @@
     "require-dev": {
         "getkirby/cms": "^3.0",
         "phpunit/phpunit": "^7"
+    },
+    "extra": {
+      "kirby-cms-path": false
     }
 }

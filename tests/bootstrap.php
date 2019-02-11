@@ -2,7 +2,7 @@
 
 namespace distantnative\Retour\Retour;
 
-require dirname(__DIR) . '/kirby/bootstrap.php';
+require dirname(__DIR) . '/vendor/autoload.php';
 
 load([
     'distantnative\\retour\\retour'    => 'models/Retour.php',

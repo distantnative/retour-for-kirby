@@ -6,7 +6,6 @@
 
 # Composer files
 /vendor
-/kirby
 .php_cs.cache
 .phpunit.result.cache
 /tests/fixtures
