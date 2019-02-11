@@ -62,11 +62,23 @@
           <k-button v-if="options.debug" icon="download" @click="samples">
             Load sample data
           </k-button>
-          <k-button icon="trash" theme="negative" @click="flush">
+          <k-button icon="trash" theme="negative" @click="$refs.dialog.open()">
             {{ $t('retour.settings.log.clear') }}
           </k-button>
         </k-button-group>
       </header>
+
+        <k-dialog
+          ref="dialog"
+          :button="$t('retour.settings.log.clear')"
+          theme="negative"
+          icon="trash"
+          @submit="flush"
+        >
+          <k-text>
+            Do you really want to clear all logs?
+          </k-text>
+        </k-dialog>
 
       <ul class="k-system-info-box">
         <li>
@@ -142,6 +154,7 @@ export default {
     },
     flush() {
       this.$api.patch("retour/flush").then(() => {
+        this.$refs.dialog.close();
         this.$emit("reload");
       });
     },
