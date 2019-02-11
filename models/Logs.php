@@ -4,8 +4,7 @@ namespace distantnative\Retour;
 
 class Logs extends Log
 {
-
-    public static $file = '/logs/retour/404.log';
+    public static $file;
 
     public function add(array $temporaries): void
     {

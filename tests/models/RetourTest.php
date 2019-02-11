@@ -8,16 +8,9 @@ use Kirby\Toolkit\F;
 class RetourTest extends TestCase
 {
 
-    protected static $fixture = '/plugins/retour/tests/fixtures/logs';
-
-    public static function setUpBeforeClass(): void
-    {
-        Retour::$root = static::$fixture;
-    }
-
     public function testFlush(): void
     {
-        $file = $this->_file() . '/a.txt';
+        $file = Retour::$dir . '/a.txt';
         F::write($file, 'test');
 
         $retour = new Retour;

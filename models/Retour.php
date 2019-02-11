@@ -13,11 +13,11 @@ class Retour
     protected $stats;
     protected $system;
 
-    public static $root = '/logs/retour';
+    public static $dir;
 
     public function flush(): void
     {
-        Dir::remove(kirby()->root('site') . static::$root);
+        Dir::remove(static::$dir);
     }
 
     public function logs(): Logs
@@ -28,7 +28,7 @@ class Retour
     public function process()
     {
         $tmp   = [];
-        $files = kirby()->root('site') . static::$root . '/.*.tmp';
+        $files = static::$dir . '/.*.tmp';
 
         foreach (glob($files) as $file) {
             $tmp[] = Data::read($file, 'yaml');
@@ -56,8 +56,7 @@ class Retour
 
     public static function store(string $path, string $status, string $pattern = null)
     {
-        $root = kirby()->root('site') . static::$root;
-        $file = $root . '/.' . md5($path) . '.' . time() . '.tmp';
+        $file = static::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
 
         Data::write($file, [
             'path'     => $path,

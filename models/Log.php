@@ -8,7 +8,6 @@ use Kirby\Toolkit\F;
 class Log
 {
     public static $file;
-
     protected $data;
 
     public function data(string $suffix = 'retour')
@@ -23,8 +22,7 @@ class Log
 
     public function file($suffix = 'retour'): string
     {
-        $file = str_replace('{x}', $suffix, static::$file);
-        return kirby()->root('site') . $file;
+        return str_replace('{x}', $suffix, static::$file);
     }
 
     public function read($suffix = 'retour')

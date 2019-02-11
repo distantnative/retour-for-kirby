@@ -7,10 +7,7 @@ return [
             'method'  => 'POST',
             'action'  => function () use ($retour) {
                 $retour->flush();
-                Dir::copy(
-                    __DIR__ . '/samples',
-                    kirby()->root('site') . $retour::$root
-                );
+                Dir::copy(__DIR__ . '/samples', $retour::$dir);
                 site()->update(['retour' => [
                     [
                         'status' => '301',

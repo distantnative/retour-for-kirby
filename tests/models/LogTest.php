@@ -8,27 +8,14 @@ use Kirby\Toolkit\F;
 class LogTest extends TestCase
 {
 
-    protected static $fixture = '/plugins/retour/tests/fixtures/retour.data';
-
-    public static function setUpBeforeClass(): void
-    {
-        Log::$file = static::$fixture;
-    }
-
-    public function testFile(): void
-    {
-        $log = new Log;
-        $this->assertEquals($this->_file(), $log->file());
-    }
-
     public function testRead(): void
     {
-        Data::write($this->_file(), $data = ['homer' => 'simpson'], 'yaml');
+        Data::write(Log::$file, $data = ['homer' => 'simpson'], 'yaml');
 
         $log = new Log;
         $this->assertEquals($data, $log->read());
 
-        F::remove($this->_file());
+        F::remove(Log::$file);
     }
 
     public function testReadDefaults(): void
@@ -44,20 +31,20 @@ class LogTest extends TestCase
         $write = $log->write($data = ['homer' => 'simpson']);
 
         $this->assertEquals($data, $write);
-        $this->assertTrue(F::exists($this->_file()));
-        $this->assertEquals($data, Data::read($this->_file(), 'yaml'));
+        $this->assertTrue(F::exists(Log::$file));
+        $this->assertEquals($data, Data::read(Log::$file, 'yaml'));
 
-        F::remove($this->_file());
+        F::remove(Log::$file);
     }
 
 
     public function testData(): void
     {
-        Data::write($this->_file(), $data = ['homer' => 'simpson'], 'yaml');
+        Data::write(Log::$file, $data = ['homer' => 'simpson'], 'yaml');
 
         $log = new Log;
         $this->assertEquals($data, $log->data());
 
-        F::remove($this->_file());
+        F::remove(Log::$file);
     }
 }

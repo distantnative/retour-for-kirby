@@ -4,8 +4,7 @@ namespace distantnative\Retour;
 
 class Stats extends Log
 {
-
-    public static $file = '/logs/retour/{x}.stats';
+    public static $file;
 
     protected static function defaults(): array
     {

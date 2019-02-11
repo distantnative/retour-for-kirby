@@ -8,12 +8,7 @@ use Kirby\Toolkit\F;
 class LogsTest extends TestCase
 {
 
-    protected static $fixture = '/plugins/retour/tests/fixtures/retour.log';
-
-    public static function setUpBeforeClass(): void
-    {
-        Logs::$file = static::$fixture;
-    }
+    protected static $fixture = '/retour.log';
 
     public function testAdd(): void
     {
@@ -27,14 +22,14 @@ class LogsTest extends TestCase
             ]
         ]);
 
-        $this->assertTrue(F::exists($this->_file()));
+        $this->assertTrue(F::exists(Logs::$file));
 
         $this->assertEquals(
             $add[0]['path'],
-            Data::read($this->_file(), 'yaml')[$path . '$' . $referrer]['path']
+            Data::read(Logs::$file, 'yaml')[$path . '$' . $referrer]['path']
         );
 
-        F::remove($this->_file());
+        F::remove(Logs::$file);
     }
 
     public function testDataEmpty(): void
@@ -48,7 +43,7 @@ class LogsTest extends TestCase
         $logs = new Logs;
         $logs->write($data = ['homer' => 'simpson']);
         $this->assertEquals($data, $logs->data());
-        F::remove($this->_file());
+        F::remove(Logs::$file);
     }
 
     public function testFails(): void
@@ -77,7 +72,7 @@ class LogsTest extends TestCase
 
         $this->assertEquals(2, count($logs->fails()));
 
-        F::remove($this->_file());
+        F::remove(Logs::$file);
     }
 
 }
