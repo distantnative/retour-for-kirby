@@ -44,7 +44,7 @@ export default {
     },
     fails() {
       if (!this.data) {
-        return '-';
+        return "-";
       }
 
       return this.data.failed.reduce((a, b) => a += b, 0);
@@ -65,7 +65,7 @@ export default {
     },
     redirects() {
       if (!this.data) {
-        return '-';
+        return "-";
       }
 
       return this.data.redirected.reduce((a, b) => a += b, 0);

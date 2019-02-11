@@ -2,13 +2,13 @@
 <template>
   <k-field :input="_uid" v-bind="$props" class="k-select-field">
     <k-input
-      ref="input"
       :id="_uid"
+      ref="input"
       v-bind="$props"
       theme="field"
       v-on="$listeners"
     >
-      <div :data-status="status" slot="before">
+      <div slot="before" :data-status="status">
         <k-icon type="circle" />
       </div>
     </k-input>

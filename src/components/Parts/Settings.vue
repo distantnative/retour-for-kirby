@@ -68,17 +68,17 @@
         </k-button-group>
       </header>
 
-        <k-dialog
-          ref="dialog"
-          :button="$t('retour.settings.log.clear')"
-          theme="negative"
-          icon="trash"
-          @submit="flush"
-        >
-          <k-text>
-            {{ $t('retour.settings.log.clear.confirm') }}
-          </k-text>
-        </k-dialog>
+      <k-dialog
+        ref="dialog"
+        :button="$t('retour.settings.log.clear')"
+        theme="negative"
+        icon="trash"
+        @submit="flush"
+      >
+        <k-text>
+          {{ $t('retour.settings.log.clear.confirm') }}
+        </k-text>
+      </k-dialog>
 
       <ul class="k-system-info-box">
         <li>

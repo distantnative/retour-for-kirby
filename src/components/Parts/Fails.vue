@@ -112,7 +112,7 @@ export default {
       this.page = pagination.page;
     },
     sort(by) {
-      this.$emit('sort', by);
+      this.$emit("sort", by);
       this.page = 1;
     }
   }
