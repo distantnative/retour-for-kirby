@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class LogsTest extends TestCase
 {
-
     public function testAdd(): void
     {
         $logs = new Logs;

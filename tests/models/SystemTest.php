@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class SystemTest extends TestCase
 {
-
     public function testToArray(): void
     {
         $store = new System;
@@ -23,5 +22,4 @@ class SystemTest extends TestCase
         $this->assertArrayHasKey('limit', $array);
         $this->assertArrayHasKey('headers', $array);
     }
-
 }

@@ -1,6 +1,6 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-1.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Version](https://img.shields.io/badge/release-1.0.0--beta.3-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
 [![Dependency](https://img.shields.io/badge/kirby-3.0.1-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
@@ -36,6 +36,8 @@ git submodule add https://github.com/distantnative/retour-for-kirby.git site/plu
 composer require distantnative/retour-for-kirby
 ```
 
+During the beta make sure to add `"minimum-stability": "beta",` to the top level of your `composer.json` as well.
+
 ## Redirects
 
 ### URL pattern
@@ -58,7 +60,7 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 - ![#f0c674](https://via.placeholder.com/16.png/f0c674?text=+) Other HTTP status codes
 - ![#c82829](https://via.placeholder.com/16.png/c82829?text=+) `disabled`
 
-**HTTP status codes**  
+**HTTP status codes**
 https://httpstatuses.com
 
 ## Tracking

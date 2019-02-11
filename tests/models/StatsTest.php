@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class StatsTest extends TestCase
 {
-
     protected function tearDown(): void
     {
         F::remove(str_replace('{x}', date('Y-m'), Stats::$file));
@@ -150,6 +149,5 @@ class StatsTest extends TestCase
                 strtotime('2019-01-29 20:15')
             )
         );
-
     }
 }
