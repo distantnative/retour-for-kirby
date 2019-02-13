@@ -75,14 +75,19 @@ class Redirects extends Log
                         $to = str_replace('$' . ($i + 1), $parameter, $to);
                     }
 
+                    // Replace alias for home
+                    if ($to === '/') {
+                        $to = 'home';
+                    }
+
                     // Redirects
                     if ($code >= 300 && $code < 400) {
                         return Response::redirect($to ?? '/', $code);
                     }
 
                     // Return page for other codes
-                    if ($to) {
-                        return page($to ?? 'error');
+                    if ($page = page($to)) {
+                        return page($page);
                     }
 
                     // Deliver HTTP status code and die
