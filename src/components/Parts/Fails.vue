@@ -100,13 +100,18 @@ export default {
   },
   methods: {
     add(fail) {
-      this.$api.post("retour/redirects", {
-        from: fail.path,
-        to: null,
-        status: "disabled"
-      }).then(() => {
-        this.$emit("reload", [(view) => { view.go("redirects") }]);
-      });
+      this.$emit("go", [
+        "redirects",
+        (view) => {
+          const field = view.$refs.redirects.$refs.field;
+          field.currentIndex = "new";
+          field.currentModel = {
+            from: fail.path,
+            status: "disabled"
+          };
+         field.createForm("to");
+        }
+      ]);
     },
     paginateItems(pagination) {
       this.page = pagination.page;

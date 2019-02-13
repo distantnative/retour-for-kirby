@@ -34,6 +34,7 @@
     />
 
     <redirects
+      ref="redirects"
       v-show="current === 'redirects'"
       :options="options"
       :redirects="redirects"
@@ -45,7 +46,7 @@
       :fails="fails"
       :options="options"
       @sort="fetchFails"
-      @reload="fetch(...$event)"
+      @go="go(...$event)"
     />
 
     <settings
@@ -53,7 +54,7 @@
       :fails="fails"
       :options="options"
       :redirects="redirects"
-      @reload="fetch(...$event)"
+      @reload="fetch"
     />
   </k-view>
 </template>
@@ -117,9 +118,8 @@ export default {
     this.fetch();
   },
   methods: {
-    fetch(before = () => {}, after = () => {}) {
+    fetch() {
       this.$store.dispatch("isLoading", true);
-      before(this);
 
       const process = this.process();
       const system  = this.fetchSystem();
@@ -134,7 +134,6 @@ export default {
 
         return Promise.all([stats, redirects, fails]).then(() => {
           this.$store.dispatch("isLoading", false);
-          after(this);
         });
       });
     },
@@ -166,9 +165,10 @@ export default {
         this.options = response;
       });
     },
-    go(part) {
+    go(part, after = () => {}) {
       this.current = part;
       this.$events.$emit("retour-go", part);
+      after(this);
 
       // Currently not supported by Kirby Panel
       // window.location.hash = part;

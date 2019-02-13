@@ -74,16 +74,6 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/redirects',
-            'method'  => 'POST',
-            'action'  => function () use ($retour) {
-                $data   = $retour->redirects()->data();
-                $data[] = $this->requestBody();
-                $retour->redirects()->write($data);
-                return true;
-            }
-        ],
-        [
             'pattern' => 'retour/fails/(:any)',
             'method'  => 'GET',
             'action'  => function ($sort) use ($retour) {
