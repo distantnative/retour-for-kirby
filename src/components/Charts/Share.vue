@@ -47,7 +47,7 @@ export default {
         return "-";
       }
 
-      return this.data.failed.reduce((a, b) => a += b, 0);
+      return this.data.failed.reduce((a, b) => a += b || 0, 0);
     },
     options() {
       let total = (this.redirects + this.fails)*2;
@@ -68,7 +68,7 @@ export default {
         return "-";
       }
 
-      return this.data.redirected.reduce((a, b) => a += b, 0);
+      return this.data.redirected.reduce((a, b) => a += b || 0, 0);
     }
   },
   watch: {

@@ -128,19 +128,19 @@ export default {
   },
   computed: {
     failed() {
-      return this.fails.reduce((a, b) => a += b.failed, 0);
+      return this.fails.reduce((a, b) => a += b.failed || 0, 0);
     },
     outdated() {
       return this.latest != "..." && this.options.version !== this.latest;
     },
     redirected() {
-      return this.redirects.reduce((a, b) => a += b.hits, 0);
+      return this.redirects.reduce((a, b) => a += b.hits || 0, 0);
     },
     routes() {
       return this.redirects.length;
     }
   },
-  mounted() {
+  created() {
     this.fetch();
   },
   methods: {
