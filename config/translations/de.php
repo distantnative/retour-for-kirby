@@ -11,8 +11,12 @@ return [
 
     'retour.redirects'          => 'Umleitungen',
     'retour.redirects.from'     => 'Ziel-URL',
+    'retour.redirects.from.help'   => 'Verwende <a href="{reference}" target="_blank">dynamische Platzhalter</a> und <a href="{readme}" target="_blank">nutze sie</a> in der Weiterleitung.',
+
     'retour.redirects.to'       => 'Umleiten nach',
+    'retour.redirects.to.help'     => 'Relativer Pfad oder absolute URL. Frei lassen, um abzubrechen.',
     'retour.redirects.status'   => 'Status',
+    'retour.redirects.status.help' => 'Lerne die <a href="{url}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
     'retour.redirects.hits'     => 'Treffer',
     'retour.redirects.hit.last' => 'Zuletzt',
 
@@ -34,10 +38,10 @@ return [
     'retour.settings.support.affiliate' => 'Kaufe eine Kirby-Lizenz',
     'retour.settings.overview'          => 'Überblick',
     'retour.settings.log.clear'         => 'Log leeren',
-    'retour.settings.log.clear.confirm' => 'Wollen Sie wirklich alle Logs löschen?',
+    'retour.settings.log.clear.confirm' => 'Willst du wirklich alle Logs löschen?',
     'retour.settings.routes'            => 'Umleitungsrouten',
     'retour.settings.fails'             => 'Aufgezeichnete Fehler',
     'retour.settings.redirects'         => 'Erfolgreich umgeleitet',
     'retour.settings.options.limit'     => 'Zeige # Einträge pro Seite',
-    'retour.settings.docs'              => 'Lernen Sie mehr <a href="{url}">zu den Einstellungen</a>.'
+    'retour.settings.docs'              => 'Erfahre mehr <a href="{url}">zu den Einstellungen</a>.'
 ];

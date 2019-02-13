@@ -70,12 +70,19 @@ export default {
           type: "text",
           before: this.options.site + "/",
           required: true,
-          width: "1/2"
+          width: "1/2",
+          counter: false,
+          help: this.$t("retour.redirects.from.help", {
+            reference: "https://getkirby.com/docs/guide/routing#patterns",
+            readme: "https://github.com/distantnative/retour-for-kirby#redirects",
+          })
         },
         to: {
           label: this.$t("retour.redirects.to"),
           type: "text",
-          width: "1/2"
+          width: "1/2",
+          counter: false,
+          help: this.$t("retour.redirects.to.help")
         },
         status: {
           label: this.$t("retour.redirects.status"),
@@ -84,7 +91,8 @@ export default {
           width: "1/2",
           required: true,
           empty: false,
-          default: "disabled"
+          default: "disabled",
+          help: this.$t("retour.redirects.status.help", { url: "https://httpstatuses.com" })
         },
         stats: {
           label: this.$t("retour.redirects.hits"),
