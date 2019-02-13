@@ -79,6 +79,28 @@ return [
 ];
 ```
 
+## Permissions
+
+### Access
+
+```yaml
+title: Editor
+
+permissions:
+  access:
+    retour: false
+```
+
+### Update
+
+```yaml
+title: Editor
+
+permissions:
+  site:
+    update: false
+```
+
 ## Disclaimer
 
 This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you encounter any problem, please [create an issue](https://github.com/distantnative/retour-for-kirby/issues/new).

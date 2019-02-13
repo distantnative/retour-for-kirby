@@ -3,6 +3,7 @@
     ref="field"
     name="retour"
     :columns="columns"
+    :disabled="!canUpdate"
     :endpoints="endpoints"
     :fields="fields"
     :label="$t('retour.redirects')"
@@ -17,8 +18,9 @@
 <script>
 export default {
   props: {
+    canUpdate: Boolean,
     redirects: Array,
-    options: Object
+    options: Object,
   },
   computed: {
     codes() {

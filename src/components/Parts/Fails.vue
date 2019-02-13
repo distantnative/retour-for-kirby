@@ -58,6 +58,7 @@
           </td>
           <td class="k-structure-table-option">
             <k-button
+              :disabled="!canUpdate"
               :tooltip="$t('add')"
               icon="add"
               @click="add(item)"
@@ -74,8 +75,9 @@
 <script>
 export default {
   props: {
+    canUpdate: Boolean,
     fails: Array,
-    options: Object
+    options: Object,
   },
   data() {
     return {

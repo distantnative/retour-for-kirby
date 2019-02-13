@@ -80,7 +80,7 @@ return [
                 return $retour->logs()->fails($sort);
             }
         ],
-                [
+        [
             'pattern' => 'retour/stats/(:any)/(:num?)',
             'method'  => 'GET',
             'action'  => function ($by, $offset = 0) use ($retour) {

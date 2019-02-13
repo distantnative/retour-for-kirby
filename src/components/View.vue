@@ -36,6 +36,7 @@
     <redirects
       ref="redirects"
       v-show="current === 'redirects'"
+      :canUpdate="canUpdate"
       :options="options"
       :redirects="redirects"
       @update="fetchRedirects"
@@ -43,6 +44,7 @@
 
     <fails
       v-show="current === 'fails'"
+      :canUpdate="canUpdate"
       :fails="fails"
       :options="options"
       @sort="fetchFails"
@@ -51,6 +53,7 @@
 
     <settings
       v-show="current === 'settings'"
+      :canUpdate="canUpdate"
       :fails="fails"
       :options="options"
       :redirects="redirects"
@@ -90,6 +93,11 @@ export default {
     }
   },
   computed: {
+    canUpdate() {
+      return !(this.$permissions.hasOwnProperty("site") &&
+        this.$permissions.site.hasOwnProperty("update") &&
+        this.$permissions.site.update === false);
+    },
     loading() {
       return this.$store.state.isLoading;
     },
@@ -115,6 +123,14 @@ export default {
     }
   },
   created() {
+    if (
+      this.$permissions.hasOwnProperty("access") &&
+      this.$permissions.access.hasOwnProperty("retour") &&
+      this.$permissions.access.retour === false
+    ) {
+      this.$router.push("/");
+    }
+
     this.fetch();
   },
   methods: {

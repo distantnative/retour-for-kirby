@@ -59,10 +59,20 @@
         </label>
 
         <k-button-group>
-          <k-button v-if="options.debug" icon="download" @click="samples">
+          <k-button
+            v-if="options.debug"
+            :disabled="!canUpdate"
+            icon="download"
+            @click="samples"
+          >
             Load sample data
           </k-button>
-          <k-button icon="trash" theme="negative" @click="$refs.dialog.open()">
+          <k-button
+            :disabled="!canUpdate"
+            icon="trash"
+            theme="negative"
+            @click="$refs.dialog.open()"
+          >
             {{ $t('retour.settings.log.clear') }}
           </k-button>
         </k-button-group>
@@ -117,9 +127,10 @@
 <script>
 export default {
   props: {
+    canUpdate: Boolean,
     fails: Array,
     redirects: Array,
-    options: Object
+    options: Object,
   },
   data() {
     return {
