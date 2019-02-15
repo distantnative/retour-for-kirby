@@ -7,12 +7,13 @@
 
       <k-button-group>
         <k-button
-          v-for="by in ['failed', 'last']"
-          :key="by"
+          v-for="btn in ['failed', 'last']"
+          :key="btn"
+          :current="by === btn"
           icon="funnel"
-          @click="sort(by)"
+          @click="sort(btn)"
         >
-          {{ $t('rt.fails.sort.' + by) }}
+          {{ $t('rt.fails.sort.' + btn) }}
         </k-button>
       </k-button-group>
     </header>
@@ -80,7 +81,8 @@ export default {
   },
   data() {
     return {
-      page: 1
+      page: 1,
+      by: "failed"
     }
   },
   computed: {
@@ -120,6 +122,7 @@ export default {
     },
     sort(by) {
       this.$emit("sort", by);
+      this.by = by;
       this.page = 1;
     }
   }
