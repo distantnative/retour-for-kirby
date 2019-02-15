@@ -9,17 +9,12 @@
           @click="$emit('navigate', [frame, offset - 1])"
         />
         <k-button
-          v-for="(by) in [
-            { x:'month', i: 'calendar' },
-            { x:'week', i: 'menu' },
-            { x:'day', i: 'clock' }
-          ]"
-          :key="by.x"
-          :icon="by.i"
-          :current="frame === by.x"
-          @click="$emit('navigate', [by.x, 0])"
+          v-for="by in ['month', 'week', 'day']"
+          :key="by"
+          :current="frame === by"
+          @click="$emit('navigate', [by, 0])"
         >
-          {{ $t('rt.dashboard.' + by.x) }}
+          {{ $t('rt.dashboard.' + by) }}
         </k-button>
         <k-button
           icon="angle-right"
