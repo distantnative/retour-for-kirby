@@ -27,13 +27,13 @@
       </k-button-group>
     </k-header>
 
-    <dashboard
+    <rt-dashboard
       v-show="current === 'dashboard'"
       :stats="stats"
       @navigate="fetchStats"
     />
 
-    <redirects
+    <rt-redirects
       ref="redirects"
       v-show="current === 'redirects'"
       :canUpdate="canUpdate"
@@ -42,7 +42,7 @@
       @update="fetchRedirects"
     />
 
-    <fails
+    <rt-fails
       v-show="current === 'fails'"
       :canUpdate="canUpdate"
       :fails="fails"
@@ -51,7 +51,7 @@
       @go="go(...$event)"
     />
 
-    <settings
+    <rt-settings
       v-show="current === 'settings'"
       :canUpdate="canUpdate"
       :fails="fails"
@@ -71,10 +71,10 @@ import Settings  from "./Parts/Settings.vue";
 
 export default {
   components: {
-    dashboard: Dashboard,
-    redirects: Redirects,
-    fails:     Fails,
-    settings : Settings
+    "rt-dashboard": Dashboard,
+    "rt-redirects": Redirects,
+    "rt-fails":     Fails,
+    "rt-settings" : Settings
   },
   data() {
     return {
@@ -93,6 +93,11 @@ export default {
     }
   },
   computed: {
+    canAccess() {
+      return !(this.$permissions.hasOwnProperty("access") &&
+      this.$permissions.access.hasOwnProperty("retour") &&
+      this.$permissions.access.retour === false);
+    },
     canUpdate() {
       return !(this.$permissions.hasOwnProperty("site") &&
         this.$permissions.site.hasOwnProperty("update") &&
@@ -103,34 +108,17 @@ export default {
     },
     parts() {
       return [
-        {
-          name: "dashboard",
-          icon: "dashboard"
-        },
-        {
-          name: "redirects",
-          icon: "url"
-        },
-        {
-          name: "fails",
-          icon: "protected"
-        },
-        {
-          name: "settings",
-          icon: "cog"
-        }
+        { name: "dashboard", icon: "dashboard" },
+        { name: "redirects", icon: "url"       },
+        { name: "fails",     icon: "protected" },
+        { name: "settings",  icon: "cog"       }
       ];
     }
   },
   created() {
-    if (
-      this.$permissions.hasOwnProperty("access") &&
-      this.$permissions.access.hasOwnProperty("retour") &&
-      this.$permissions.access.retour === false
-    ) {
+    if (!this.canAccess) {
       this.$router.push("/");
     }
-
     this.fetch();
   },
   methods: {
@@ -197,14 +185,7 @@ export default {
 </script>
 
 <style>
-.k-retour-view .k-header .k-headline {
-  display: flex;
-}
-.k-retour-view .k-header .k-headline > .k-icon {
-  padding-right: .5em;
-}
-
-.k-retour-view [aria-current]:not([aria-current="false"]) {
+.k-retour-view [aria-current="true"] {
   color: #4271ae;
 }
 
@@ -212,6 +193,7 @@ export default {
     transform: rotate(-180deg);
     animation: spin 1.5s linear infinite;
 }
+
 @keyframes spin {
   100% { transform: rotate(180deg); }
 }

@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'view.retour'    => 'Retour',
-    'rt.refresh' => 'Aktualisieren',
+    'view.retour' => 'Retour',
+    'rt.refresh'  => 'Neu laden',
 
     'rt.dashboard'       => 'Statistik',
     'rt.dashboard.month' => 'Monat',

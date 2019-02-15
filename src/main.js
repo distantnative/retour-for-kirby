@@ -1,4 +1,5 @@
 import "./assets/chart.css";
+import "./assets/icons.js";
 
 import View from "./components/View.vue";
 import CountField from "./components/Fields/Count.vue";
@@ -10,7 +11,7 @@ panel.plugin("distantnative/retour", {
   views: {
     retour: {
       component: View,
-      icon: "undo"
+      icon: "retour"
     }
   },
   fields: {
