@@ -5,7 +5,12 @@
     </k-column>
 
     <k-column width="3/4">
-      <timeline :stats="stats" v-on="$listeners" />
+      <timeline
+        :frame="stats.frame"
+        :offset="stats.offset"
+        :data="stats.data"
+        v-on="$listeners"
+      />
     </k-column>
   </k-grid>
 </template>

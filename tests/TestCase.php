@@ -6,14 +6,6 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        $root = __DIR__ . '/fixtures';
-        Retour::$dir = $root;
-        Log::$file   = $root . '/retour.data';
-        Logs::$file  = $root . '/404.log';
-        Stats::$file = $root . '/{x}.stats';
-    }
 
     public function testFixtures(): void
     {

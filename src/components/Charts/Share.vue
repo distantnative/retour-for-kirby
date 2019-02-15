@@ -10,17 +10,15 @@
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content">
-      <div class="ct-share" />
-    </div>
+    <div class="k-card k-card-content rt-share" />
 
     <footer class="k-field-footer">
       <k-button-group>
-        <k-button icon="circle" class="retour-redirects">
-          {{ redirects }} {{ $t('retour.redirects') }}
+        <k-button icon="circle" class="rt-lb-redirects">
+          {{ redirects }} {{ $t('rt.redirects') }}
         </k-button>
-        <k-button icon="circle" class="retour-fails">
-          {{ fails }} {{ $t('retour.fails') }}
+        <k-button icon="circle" class="rt-lb-fails">
+          {{ fails }} {{ $t('rt.fails') }}
         </k-button>
       </k-button-group>
     </footer>
@@ -35,13 +33,6 @@ export default {
     data: Object
   },
   computed: {
-    chart() {
-      if ((this.redirects + this.fails) === 0) {
-        return { series: [0, 0, 100] };
-      }
-
-      return { series: [this.redirects, this.fails] };
-    },
     fails() {
       if (!this.data) {
         return "-";
@@ -49,27 +40,16 @@ export default {
 
       return this.data.failed.reduce((a, b) => a += b || 0, 0);
     },
-    options() {
-      let total = (this.redirects + this.fails)*2;
-
-      if (total === 0) {
-        total = 200;
-      }
-
-      return {
-        height: 300,
-        startAngle: 270,
-        total: total,
-        showLabel: false
-      };
-    },
     redirects() {
       if (!this.data) {
         return "-";
       }
 
       return this.data.redirected.reduce((a, b) => a += b || 0, 0);
-    }
+    },
+    total() {
+      return this.redirects + this.fails;
+    },
   },
   watch: {
     data() {
@@ -85,41 +65,46 @@ export default {
   },
   methods: {
     createChart() {
-      new Chartist.Pie(".ct-share", this.chart, this.options);
+      new Chartist.Pie(".rt-share", {
+        series: [this.redirects, this.fails, this.total > 0 ? 0 : 1]
+      }, {
+        height: 300,
+        startAngle: 270,
+        total: (this.total > 0 ? this.total : 1) * 2,
+        showLabel: false
+      });
     }
   }
 }
 </script>
 
 <style>
-.k-button.retour-redirects,
-.k-button.retour-fails {
+.rt-lb-redirects,
+.rt-lb-fails {
   pointer-events: none;
 }
 
- .ct-share .ct-series {
+.rt-share { height: 200px }
+
+.rt-share .ct-series {
     stroke: #fff;
     stroke-width: 3px;
   }
 
-.k-button.retour-redirects .k-icon,
-.ct-share .ct-series-a .ct-slice-pie {
+.rt-lb-redirects .k-icon,
+.rt-share .ct-series-a .ct-slice-pie {
   color: #4271ae;
   fill:#4271ae;
 }
 
-.k-button.retour-fails .k-icon,
-.ct-share .ct-series-b .ct-slice-pie {
+.rt-lb-fails .k-icon,
+.rt-share .ct-series-b .ct-slice-pie {
   color: #aaa;
   fill: #ccc;
 }
 
-.ct-share .ct-series-c .ct-slice-pie {
+.rt-share .ct-series-c .ct-slice-pie {
   fill: #f3f3f3;
-}
-
-.ct-share {
-  height: 180px;
 }
 </style>
 

@@ -2,7 +2,7 @@
   <div>
     <header class="k-field-header">
       <label class="k-field-label">
-        {{ $t('retour.fails') }}
+        {{ $t('rt.fails') }}
       </label>
 
       <k-button-group>
@@ -12,7 +12,7 @@
           icon="funnel"
           @click="sort(by)"
         >
-          {{ $t('retour.fails.sort.' + by) }}
+          {{ $t('rt.fails.sort.' + by) }}
         </k-button>
       </k-button-group>
     </header>
@@ -23,14 +23,13 @@
           <th class="k-structure-table-index">
             #
           </th>
-          <th data-width="1/3" class="k-structure-table-column">
-            {{ $t('retour.fails.path') }}
-          </th>
-          <th data-width="1/3" class="k-structure-table-column">
-            {{ $t('retour.fails.referrer') }}
-          </th>
-          <th data-width="1/6" class="k-structure-table-column">
-            {{ $t('retour.fails.count') }}
+          <th
+            v-for="column in columns"
+            :key="column.name"
+            :data-width="column.width"
+            class="k-structure-table-column"
+          >
+            {{ $t('rt.fails.' + column.name) }}
           </th>
           <th />
         </tr>
@@ -42,14 +41,14 @@
               {{ index + 1 }}
             </span>
           </td>
-          <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.path" :column="{}" />
+          <td class="k-structure-table-column">
+            <k-url-field-preview :value="item.path" />
           </td>
-          <td class="k-structure-table-column" data-width="">
-            <k-url-field-preview :value="item.referrer" :column="{}" />
+          <td class="k-structure-table-column">
+            <k-url-field-preview :value="item.referrer" />
           </td>
-          <td class="k-structure-table-column" data-width="">
-            <k-retour-count-field-preview
+          <td class="k-structure-table-column">
+            <k-rt-count-field-preview
               :value="{
                 hits: `${item.failed + item.redirected} (${item.redirected})`,
                 last: item.last
@@ -85,6 +84,13 @@ export default {
     }
   },
   computed: {
+    columns() {
+      return [
+        { name: "path",     width: "1/3" },
+        { name: "referrer", width: "1/3" },
+        { name: "count",    width: "1/6" }
+      ];
+    },
     pagination() {
       return {
         page: this.page,
@@ -102,18 +108,12 @@ export default {
   },
   methods: {
     add(fail) {
-      this.$emit("go", [
-        "redirects",
-        (view) => {
-          const field = view.$refs.redirects.$refs.field;
-          field.currentIndex = "new";
-          field.currentModel = {
-            from: fail.path,
-            status: "disabled"
-          };
-         field.createForm("to");
-        }
-      ]);
+      this.$emit("go", ["redirects", (view) => {
+        const field = view.$refs.redirects.$refs.field;
+        field.currentIndex = "new";
+        field.currentModel = { from: fail.path, status: "disabled" };
+        field.createForm("to");
+      }]);
     },
     paginateItems(pagination) {
       this.page = pagination.page;
@@ -125,4 +125,3 @@ export default {
   }
 }
 </script>
-

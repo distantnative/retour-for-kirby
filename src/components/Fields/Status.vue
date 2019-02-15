@@ -1,4 +1,3 @@
-
 <template>
   <k-field :input="_uid" v-bind="$props" class="k-select-field">
     <k-input
@@ -15,9 +14,7 @@
   </k-field>
 </template>
 
-
 <script>
-
 import status from "../../assets/status.js";
 
 export default {
@@ -31,13 +28,13 @@ export default {
 </script>
 
 <style>
-.k-retour-view [data-status="disabled"] > .k-icon {
+.k-retour-view [data-status="no"] {
   color: #c82829;
 }
-.k-retour-view [data-status="redirect"] > .k-icon {
+.k-retour-view [data-status="yes"] {
   color: #7ea328;
 }
-.k-retour-view [data-status="notice"] > .k-icon {
+.k-retour-view [data-status="mmm"] {
   color: #f0c674;
 }
 </style>

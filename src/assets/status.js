@@ -1,11 +1,11 @@
 export default function (code) {
   if (code === "disabled") {
-    return "disabled"
+    return "no"
   }
 
   if (parseInt(code) >= 300 && parseInt(code) < 400) {
-    return "redirect";
+    return "yes";
   }
 
-  return "notice";
+  return "mmm";
 }

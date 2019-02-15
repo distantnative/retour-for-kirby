@@ -1,13 +1,10 @@
-
-// import './assets/icons'
-import "chartist/dist/chartist.min.css";
+import "./assets/chart.css";
 
 import View from "./components/View.vue";
-import StatsField from "./components/Fields/StatsField.vue";
-import StatusField from "./components/Fields/StatusField.vue";
-import StatusInput from "./components/Fields/Inputs/StatusInput.vue";
-import CountPreview from "./components/Fields/Previews/CountPreview.vue";
-import StatusPreview from "./components/Fields/Previews/StatusPreview.vue";
+import CountField from "./components/Fields/Count.vue";
+import StatusField from "./components/Fields/Status.vue";
+import CountPreview from "./components/Fields/Previews/Count.vue";
+import StatusPreview from "./components/Fields/Previews/Status.vue";
 
 panel.plugin("distantnative/retour", {
   views: {
@@ -17,12 +14,14 @@ panel.plugin("distantnative/retour", {
     }
   },
   fields: {
-    "retour-stats": StatsField,
-    "retour-status": StatusField
+    "rt-count": CountField,
+    "rt-status": StatusField
   },
   components: {
-    "k-retour-status-input": StatusInput,
-    "k-retour-count-field-preview": CountPreview,
-    "k-retour-status-field-preview": StatusPreview
+    "k-rt-status-input": {
+      extends: "k-select-input",
+    },
+    "k-rt-count-field-preview": CountPreview,
+    "k-rt-status-field-preview": StatusPreview
   }
 });

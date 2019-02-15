@@ -3,59 +3,7 @@
     <section class="k-system-info">
       <header class="k-field-header">
         <label class="k-field-label">
-          {{ $t('retour.settings.headline') }}
-        </label>
-      </header>
-
-      <ul class="k-system-info-box">
-        <li>
-          <dl>
-            <dt>
-              {{ $t('retour.settings.installed') }}
-              <span class="hide">📍</span>
-            </dt>
-            <dd :data-negative="outdated">
-              {{ options.version }}
-            </dd>
-          </dl>
-        </li>
-        <li>
-          <dl>
-            <dt>
-              {{ $t('retour.settings.latest') }}
-              <span class="hide">🕒</span>
-            </dt>
-            <dd>{{ latest }}</dd>
-          </dl>
-        </li>
-        <li>
-          <dl>
-            <dt>{{ $t('retour.settings.support') }} 💛</dt>
-            <dd>
-              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">
-                {{ $t('retour.settings.support.juice') }}
-              </k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">
-                {{ $t('retour.settings.support.donate') }}
-              </k-button> &middot;
-              <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">
-                {{ $t('retour.settings.support.affiliate') }}
-              </k-button>
-            </dd>
-          </dl>
-        </li>
-      </ul>
-
-      <footer v-if="outdated" class="k-field-footer">
-        <div data-theme="help" class="k-text k-field-help" v-html="$t('retour.settings.download', { url: 'https://github.com/distantnative/retour-for-kirby/archive/master.zip' })" />
-      </footer>
-    </section>
-
-    <br>
-
-    <section class="k-system-info">
-      <header class="k-field-header">
-        <label class="k-field-label">
-          {{ $t('retour.settings.overview') }}
+          {{ $t('rt.settings.overview') }}
         </label>
 
         <k-button-group>
@@ -73,52 +21,104 @@
             theme="negative"
             @click="$refs.dialog.open()"
           >
-            {{ $t('retour.settings.log.clear') }}
+            {{ $t('rt.settings.log.clear') }}
           </k-button>
         </k-button-group>
       </header>
 
       <k-dialog
         ref="dialog"
-        :button="$t('retour.settings.log.clear')"
+        :button="$t('rt.settings.log.clear')"
         theme="negative"
         icon="trash"
         @submit="flush"
       >
         <k-text>
-          {{ $t('retour.settings.log.clear.confirm') }}
+          {{ $t('rt.settings.log.clear.confirm') }}
         </k-text>
       </k-dialog>
 
       <ul class="k-system-info-box">
         <li>
           <dl>
-            <dt>{{ $t('retour.settings.routes') }}</dt>
+            <dt>{{ $t('rt.settings.routes') }}</dt>
             <dd>{{ routes }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>{{ $t('retour.settings.fails') }}</dt>
+            <dt>{{ $t('rt.settings.fails') }}</dt>
             <dd>{{ failed }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>{{ $t('retour.settings.redirects') }}</dt>
+            <dt>{{ $t('rt.settings.redirects') }}</dt>
             <dd>{{ redirected }}</dd>
           </dl>
         </li>
         <li>
           <dl>
-            <dt>{{ $t('retour.settings.options.limit') }}</dt>
+            <dt>{{ $t('rt.settings.options.limit') }}</dt>
             <dd>{{ options.limit }}</dd>
           </dl>
         </li>
       </ul>
 
       <footer class="k-field-footer">
-        <div data-theme="help" class="k-text k-field-help" v-html="$t('retour.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
+        <div data-theme="help" class="k-text k-field-help" v-html="$t('rt.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
+      </footer>
+    </section>
+
+    <br><br>
+
+    <section class="k-system-info">
+      <header class="k-field-header">
+        <label class="k-field-label">
+          {{ $t('rt.settings.headline') }}
+        </label>
+      </header>
+
+      <ul class="k-system-info-box">
+        <li>
+          <dl>
+            <dt>
+              {{ $t('rt.settings.installed') }}
+              <span class="hide">📍</span>
+            </dt>
+            <dd :data-outdated="outdated">
+              {{ options.version }}
+            </dd>
+          </dl>
+        </li>
+        <li>
+          <dl>
+            <dt>
+              {{ $t('rt.settings.latest') }}
+              <span class="hide">🕒</span>
+            </dt>
+            <dd>{{ latest }}</dd>
+          </dl>
+        </li>
+        <li>
+          <dl>
+            <dt>{{ $t('rt.settings.support') }} 💛</dt>
+            <dd>
+              <k-button link="https://buymeacoff.ee/distantnative" target="_blank" theme="positive">
+                {{ $t('rt.settings.support.juice') }}
+              </k-button> &middot; <k-button link="https://paypal.me/distantnative" target="_blank" theme="positive">
+                {{ $t('rt.settings.support.donate') }}
+              </k-button> &middot;
+              <k-button link="https://a.paddle.com/v2/click/1129/35921?link=1170" target="_blank" theme="positive">
+                {{ $t('rt.settings.support.affiliate') }}
+              </k-button>
+            </dd>
+          </dl>
+        </li>
+      </ul>
+
+      <footer v-if="outdated" class="k-field-footer">
+        <div data-theme="help" class="k-text k-field-help" v-html="$t('rt.settings.download', { url: 'https://github.com/distantnative/retour-for-kirby/archive/master.zip' })" />
       </footer>
     </section>
   </div>
@@ -130,7 +130,7 @@ export default {
     canUpdate: Boolean,
     fails: Array,
     redirects: Array,
-    options: Object,
+    options: Object
   },
   data() {
     return {
@@ -179,7 +179,7 @@ export default {
 </script>
 
 <style>
-.k-retour-view [data-negative] {
+.k-retour-view [data-outdated] {
   color: #c82829;
 }
 
@@ -188,4 +188,3 @@ export default {
   line-height: 1rem;
 }
 </style>
-

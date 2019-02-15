@@ -11,7 +11,7 @@
           :current="current === part.name"
           @click="go(part.name)"
         >
-          {{ $t('retour.' + part.name) }}
+          {{ $t('rt.' + part.name) }}
         </k-button>
       </k-button-group>
 
@@ -22,7 +22,7 @@
           class="retour-loader"
           @click="fetch()"
         >
-          {{ $t(loading ? 'loading' : 'retour.refresh') }}
+          {{ $t(loading ? 'loading' : 'rt.refresh') }}
         </k-button>
       </k-button-group>
     </k-header>

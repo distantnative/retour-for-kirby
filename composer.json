@@ -14,7 +14,7 @@
         "getkirby/composer-installer": "^1.1"
     },
     "require-dev": {
-        "getkirby/cms": "^3.0",
+        "getkirby/cms": "^3.0.2",
         "phpunit/phpunit": "^7"
     },
     "extra": {

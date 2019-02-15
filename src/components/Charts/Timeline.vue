@@ -6,40 +6,30 @@
       <k-button-group>
         <k-button
           icon="angle-left"
-          @click="$emit('navigate', [stats.frame, stats.offset - 1])"
+          @click="$emit('navigate', [frame, offset - 1])"
         />
         <k-button
-          icon="calendar"
-          :current="stats.frame === 'month'"
-          @click="$emit('navigate', ['month', 0])"
+          v-for="(by) in [
+            { x:'month', i: 'calendar' },
+            { x:'week', i: 'menu' },
+            { x:'day', i: 'clock' }
+          ]"
+          :key="by.x"
+          :icon="by.i"
+          :current="frame === by.x"
+          @click="$emit('navigate', [by.x, 0])"
         >
-          {{ $t('retour.dashboard.month') }}
-        </k-button>
-        <k-button
-          icon="menu"
-          :current="stats.frame === 'week'"
-          @click="$emit('navigate', ['week', 0])"
-        >
-          {{ $t('retour.dashboard.week') }}
-        </k-button>
-        <k-button
-          icon="clock"
-          :current="stats.frame === 'day'"
-          @click="$emit('navigate', ['day', 0])"
-        >
-          {{ $t('retour.dashboard.day') }}
+          {{ $t('rt.dashboard.' + by.x) }}
         </k-button>
         <k-button
           icon="angle-right"
-          :disabled="stats.offset >= 0"
-          @click="$emit('navigate', [stats.frame, stats.offset + 1])"
+          :disabled="offset >= 0"
+          @click="$emit('navigate', [frame, offset + 1])"
         />
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content">
-      <div class="ct-timeline" />
-    </div>
+    <div class="k-card k-card-content rt-timeline" />
   </div>
 </template>
 
@@ -48,39 +38,12 @@ import Chartist from "chartist";
 
 export default {
   props: {
-    stats: Object
-  },
-  computed: {
-    chart() {
-      if (!this.stats.data) {
-        return;
-      }
-
-      return {
-        labels: this.stats.data.labels,
-        series: [
-          this.stats.data.failed.map((x, i) => x + this.stats.data.redirected[i]),
-          this.stats.data.redirected,
-        ]
-      };
-    },
-    options() {
-      return {
-        height: 220,
-        showLabel: false,
-        low: 0,
-        showArea: true,
-        showLine: false,
-        showPoint: false,
-        fullWidth: true,
-        axisY: {
-          onlyInteger: true
-        },
-      };
-    }
+    frame: String,
+    offset: Number,
+    data: Object
   },
   watch: {
-    chart() {
+    data() {
       this.createChart();
     }
   },
@@ -93,28 +56,46 @@ export default {
   },
   methods: {
     createChart() {
-      new Chartist.Line(".ct-timeline", this.chart, this.options);
+      new Chartist.Line(".rt-timeline", {
+        labels: this.data.labels,
+        series: [
+          this.data.failed.map((x, i) => x + this.data.redirected[i]),
+          this.data.redirected,
+        ]
+      }, {
+        height: 220,
+        showLabel: false,
+        low: 0,
+        showArea: true,
+        showLine: false,
+        showPoint: false,
+        fullWidth: true,
+        axisY: {
+          onlyInteger: true
+        }
+      });
     }
   }
 }
 </script>
 
 <style>
-.ct-timeline {
-  margin-left: -.75rem;
+.rt-timeline > svg {
+  margin-top: .75rem;
+  margin-left: -.5rem;
 }
 
-.ct-timeline .ct-label.ct-horizontal.ct-end {
+.rt-timeline .ct-label.ct-horizontal.ct-end {
   display: block;
   transform: translateX(-50%);
   text-align: center;
 }
 
-.ct-timeline .ct-series-a .ct-area {
+.rt-timeline .ct-series-a .ct-area {
   fill: #ccc;
   fill-opacity: .5;
 }
-.ct-timeline .ct-series-b .ct-area {
+.rt-timeline .ct-series-b .ct-area {
   fill: #4271ae;
   fill-opacity: .75;
 }

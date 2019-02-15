@@ -5,11 +5,10 @@ module.exports = {
     dir: './',
     fileName: 'index.js',
     format: 'umd-min',
-    sourceMap: false,
-    minify: 'false'
+    sourceMap: false
   },
   plugins: {
     vue: true,
-    // livereload: true
+    livereload: true
   }
 }

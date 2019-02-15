@@ -6,7 +6,7 @@
     :disabled="!canUpdate"
     :endpoints="endpoints"
     :fields="fields"
-    :label="$t('retour.redirects')"
+    :label="$t('rt.redirects')"
     :sortable="false"
     :value="values"
     :limit="options.limit"
@@ -36,23 +36,23 @@ export default {
     columns() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("rt.redirects.from"),
           width: "1/4",
           type: "url"
         },
         to: {
-          label: this.$t("retour.redirects.to"),
+          label: this.$t("rt.redirects.to"),
           width: "1/4",
           type: "url"
         },
         status: {
-          label: this.$t("retour.redirects.status"),
+          label: this.$t("rt.redirects.status"),
           width: "1/6",
-          type: "retour-status"
+          type: "rt-status"
         },
         stats: {
-          label: this.$t("retour.redirects.hits"),
-          type: "retour-count"
+          label: this.$t("rt.redirects.hits"),
+          type: "rt-count"
         }
       }
     },
@@ -66,37 +66,37 @@ export default {
     fields() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("rt.redirects.from"),
           type: "text",
           before: this.options.site + "/",
-          required: true,
-          width: "1/2",
-          counter: false,
-          help: this.$t("retour.redirects.from.help", {
+          help: this.$t("rt.redirects.from.help", {
             reference: "https://getkirby.com/docs/guide/routing#patterns",
             readme: "https://github.com/distantnative/retour-for-kirby#redirects",
-          })
-        },
-        to: {
-          label: this.$t("retour.redirects.to"),
-          type: "text",
+          }),
           width: "1/2",
           counter: false,
-          help: this.$t("retour.redirects.to.help")
+          required: true,
+        },
+        to: {
+          label: this.$t("rt.redirects.to"),
+          type: "text",
+          help: this.$t("rt.redirects.to.help"),
+          width: "1/2",
+          counter: false,
         },
         status: {
-          label: this.$t("retour.redirects.status"),
-          type: "retour-status",
+          label: this.$t("rt.redirects.status"),
+          type: "rt-status",
           options: this.codes,
-          width: "1/2",
-          required: true,
+          help: this.$t("rt.redirects.status.help", { url: "https://httpstatuses.com" }),
           empty: false,
+          required: true,
           default: "disabled",
-          help: this.$t("retour.redirects.status.help", { url: "https://httpstatuses.com" })
+          width: "1/2",
         },
         stats: {
-          label: this.$t("retour.redirects.hits"),
-          type: "retour-stats",
+          label: this.$t("rt.redirects.hits"),
+          type: "rt-count",
           width: "1/2"
         },
       }
@@ -134,6 +134,4 @@ export default {
   padding: 1rem 0;
   line-height: 1rem;
 }
-
 </style>
-
