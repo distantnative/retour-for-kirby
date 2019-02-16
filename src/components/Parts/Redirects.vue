@@ -1,6 +1,6 @@
 <template>
   <k-tbl
-    :headline="headline"
+    :headline="`${this.$t('rt.redirects')} (${this.redirects.length})`"
     :columns="columns"
     :rows="redirects"
     :options="table"
@@ -26,18 +26,7 @@
 
     <!-- Replace parts of k-tbl for add/edit screen -->
     <template v-if="mode !== null">
-      <div class="rt-form-prevnext" slot="replace-filter">
-        <div v-if="mode !== 'new'" class="k-tbl-navigation">
-          <div :data-disabled="mode === 0" class="btn btn-prev" @click="prev">
-            <span class="chevron"></span>
-            <span>{{ $t('prev') }}</span>
-          </div>
-          <div :data-disabled="mode === redirects.length - 1" class="btn btn-next" @click="next">
-            <span>{{ $t('next') }}</span>
-            <span class="chevron"></span>
-          </div>
-        </div>
-      </div>
+      <div slot="replace-filter" />
 
       <k-form
         ref="form"
@@ -130,10 +119,6 @@ export default {
           responsive: false
         }
       ];
-    },
-    headline() {
-      return `
-        ${this.$t('rt.redirects')} (${(this.mode !== null && this.mode !== "new") ? (this.mode + 1) + ' of ' : ''}${this.redirects.length})`
     },
     fields() {
       return {
@@ -268,24 +253,6 @@ export default {
 
   &-btn {
     color: #16171a;
-  }
-
-  &-prevnext {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: .875rem;
-    padding: .35rem .25rem;
-    margin-bottom: .5rem;
-    color: #777;
-
-    .btn {
-      margin: 0 .5rem;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
   }
 }
 
