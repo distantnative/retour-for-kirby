@@ -74,10 +74,10 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/fails/(:any)',
+            'pattern' => 'retour/logs',
             'method'  => 'GET',
-            'action'  => function ($sort) use ($retour) {
-                return $retour->logs()->fails($sort);
+            'action'  => function () use ($retour) {
+                return array_values($retour->logs()->data());
             }
         ],
         [

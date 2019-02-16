@@ -57,12 +57,6 @@
             <dd>{{ redirected }}</dd>
           </dl>
         </li>
-        <li>
-          <dl>
-            <dt>{{ $t('rt.settings.options.limit') }}</dt>
-            <dd>{{ options.limit }}</dd>
-          </dl>
-        </li>
       </ul>
 
       <footer class="k-field-footer">
@@ -128,7 +122,7 @@
 export default {
   props: {
     canUpdate: Boolean,
-    fails: Array,
+    logs: Array,
     redirects: Array,
     options: Object
   },
@@ -139,7 +133,7 @@ export default {
   },
   computed: {
     failed() {
-      return this.fails.reduce((a, b) => a += b.failed || 0, 0);
+      return this.logs.reduce((a, b) => a += b.failed || 0, 0);
     },
     outdated() {
       return this.latest != "..." && this.options.version !== this.latest;

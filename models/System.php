@@ -14,7 +14,6 @@ class System
         return [
             'version'     => $plugin ? $plugin->version() : '-',
             'site'        => $kirby->site()->url(),
-            'limit'       => option('distantnative.retour.limit'),
             'headers'     => Header::$codes,
             'debug'       => option('distantnative.retour.debug')
         ];

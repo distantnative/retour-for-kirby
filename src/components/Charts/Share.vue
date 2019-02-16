@@ -15,10 +15,10 @@
     <footer class="k-field-footer">
       <k-button-group>
         <k-button icon="circle" class="rt-lb-redirects">
-          {{ redirects }} {{ $t('rt.redirects') }}
+          {{ redirects }} {{ $t('rt.redirects.state') }}
         </k-button>
         <k-button icon="circle" class="rt-lb-fails">
-          {{ fails }} {{ $t('rt.fails') }}
+          {{ fails }} {{ $t('rt.fails.state') }}
         </k-button>
       </k-button-group>
     </footer>

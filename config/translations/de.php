@@ -19,13 +19,13 @@ return [
     'rt.redirects.status.help' => 'Lerne die <a href="{url}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
     'rt.redirects.hits'        => 'Treffer',
     'rt.redirects.hit.last'    => 'Zuletzt',
+    'rt.redirects.state'  => 'Umgeleitet',
 
     'rt.fails'             => 'Fehler',
-    'rt.fails.sort.failed' => 'Nach Treffer',
-    'rt.fails.sort.last'   => 'Nach Datum',
     'rt.fails.path'        => 'Pfad',
     'rt.fails.referrer'    => 'Ursprung',
-    'rt.fails.count'       => 'Treffer (Umgeleitet)',
+    'rt.fails.state'       => 'Gescheitert',
+    'rt.fails.last'        => 'Zuletzt',
 
     'rt.settings'                   => 'Einstellungen',
     'rt.settings.headline'          => 'Weiterleitungen für Kirby 3',
@@ -42,6 +42,5 @@ return [
     'rt.settings.routes'            => 'Umleitungsrouten',
     'rt.settings.fails'             => 'Aufgezeichnete Fehler',
     'rt.settings.redirects'         => 'Erfolgreich umgeleitet',
-    'rt.settings.options.limit'     => 'Zeige # Einträge pro Seite',
     'rt.settings.docs'              => 'Erfahre mehr <a href="{url}">zu den Einstellungen</a>.'
 ];

@@ -1,67 +1,139 @@
 <template>
-  <k-structure-field
-    ref="field"
-    name="retour"
+  <k-tbl
+    :headline="headline"
     :columns="columns"
-    :disabled="!canUpdate"
-    :endpoints="endpoints"
-    :fields="fields"
-    :label="$t('rt.redirects')"
-    :sortable="false"
-    :value="values"
-    :limit="options.limit"
-    sort-by="status asc from asc hits desc"
-    @input="update"
-  />
+    :rows="redirects"
+    :options="table"
+    :actions="actions"
+    :isLoading="this.$store.state.isLoading"
+    @add="action('add')"
+    @action="action(...$event)"
+  >
+    <!-- Custom field cells -->
+    <template slot="field-status" slot-scope="props">
+      <p class="rt-status-preview" :data-status="status(props.value)">
+        <k-icon type="circle" />
+        <code>{{ props.value }}</code>
+      </p>
+    </template>
+
+    <template slot="field-stats" slot-scope="props">
+      <k-rt-count-field-preview :value="{
+          hits: props.row.hits,
+          last: props.row.last
+        }" />
+    </template>
+
+    <!-- Replace parts of k-tbl for add/edit screen -->
+    <template v-if="mode !== null">
+      <div class="rt-form-prevnext" slot="replace-filter">
+        <div v-if="mode !== 'new'" class="k-tbl-navigation">
+          <div :data-disabled="mode === 0" class="btn btn-prev" @click="prev">
+            <span class="chevron"></span>
+            <span>{{ $t('prev') }}</span>
+          </div>
+          <div :data-disabled="mode === redirects.length - 1" class="btn btn-next" @click="next">
+            <span>{{ $t('next') }}</span>
+            <span class="chevron"></span>
+          </div>
+        </div>
+      </div>
+
+      <k-form
+        ref="form"
+        slot="replace-table"
+        :fields="fields"
+        v-model="current"
+        class="rt-form"
+        @submit="submit"
+      />
+
+      <template slot="replace-footer">
+          <k-button
+            icon="cancel"
+            class="rt-form-btn"
+            @click="cancel"
+          >
+            {{ $t('cancel') }}
+          </k-button>
+          <k-button
+            icon="check"
+            class="rt-form-btn"
+            @click="submit"
+          >
+            {{ $t(mode === 'new' ? 'create' : 'change') }}
+          </k-button>
+      </template>
+    </template>
+
+    <!-- Dialogs -->
+    <k-dialog
+      ref="remove"
+      :button="$t('delete')"
+      theme="negative"
+      icon="trash"
+      @cancel="cancel"
+      @submit="remove"
+    >
+      <k-text>
+        {{ $t('field.structure.delete.confirm') }}
+      </k-text>
+    </k-dialog>
+
+  </k-tbl>
 </template>
 
 <script>
+import status from "../../assets/status.js";
+
 export default {
   props: {
     canUpdate: Boolean,
     redirects: Array,
     options: Object,
   },
+  data() {
+    return {
+      mode: null,
+      current: null
+    }
+  },
   computed: {
-    codes() {
-      let codes = Object.keys(this.options.headers).map((code) => ({
-        text:  code.substr(1) + " - " + this.options.headers[code],
-        value: code.substr(1)
-      }));
-
-      codes.unshift({text: "––––", value: "disabled"});
-
-      return codes;
+    actions() {
+      return [
+        { text: this.$t("edit"), icon: "edit", click: "edit" },
+        { text: this.$t("remove"), icon: "remove", click: "remove" }
+      ]
     },
     columns() {
-      return {
-        from: {
+      return [
+        {
           label: this.$t("rt.redirects.from"),
-          width: "1/4",
-          type: "url"
+          type: "url",
+          field: "from"
         },
-        to: {
+        {
           label: this.$t("rt.redirects.to"),
-          width: "1/4",
-          type: "url"
+          type: "url",
+          field: "to",
+          responsive: false
         },
-        status: {
+        {
           label: this.$t("rt.redirects.status"),
           width: "1/6",
-          type: "rt-status"
+          field: "status"
         },
-        stats: {
+        {
           label: this.$t("rt.redirects.hits"),
-          type: "rt-count"
+          field: "stats",
+          search: false,
+          responsive: false
         }
-      }
+      ];
     },
-    endpoints() {
-      return {
-        field: "retour",
-        section: null,
-        model: null
-      };
+    headline() {
+      return `
+        ${this.$t('rt.redirects')} (${(this.mode !== null && this.mode !== "new") ? (this.mode + 1) + ' of ' : ''}${this.redirects.length})`
     },
     fields() {
       return {
@@ -76,7 +148,7 @@ export default {
           icon: "url",
           width: "1/2",
           counter: false,
-          required: true,
+          required: true
         },
         to: {
           label: this.$t("rt.redirects.to"),
@@ -89,51 +161,132 @@ export default {
         status: {
           label: this.$t("rt.redirects.status"),
           type: "rt-status",
-          options: this.codes,
+          options: [
+            { text: "––––", value: "disabled" },
+            ...Object.keys(this.options.headers).map((code) => ({
+              text:  code.substr(1) + " - " + this.options.headers[code],
+              value: code.substr(1)
+            }))
+          ],
           help: this.$t("rt.redirects.status.help", { url: "https://httpstatuses.com" }),
           empty: false,
           required: true,
-          default: "disabled",
-          width: "1/2",
+          width: "1/2"
         },
         stats: {
           label: this.$t("rt.redirects.hits"),
-          type: "rt-count",
+          type: "info",
+          text: `<b>${this.current.hits || 0} ${this.$t("rt.redirects.hits")}</b> (${this.$t("rt.redirects.hit.last")}: ${this.current.last || "–"})`,
           width: "1/2"
         },
       }
     },
-    values() {
-      return this.redirects.map(value => ({
-        ...value,
-        stats: {
-          hits: value.hits,
-          last: value.last
-        }
-      }));
-    }
+    table() {
+      return {
+        add: true,
+        initialSort: "status",
+        rowClick: "edit"
+      };
+    },
   },
   methods: {
+    action(action, row = {}, field) {
+      this.current = row;
+
+      switch (action) {
+        case "add":
+          this.mode = "new";
+          this.current.status = "disabled";
+          this.$nextTick(() => this.$refs.form.focus("from"));
+          break;
+
+        case "edit":
+          this.mode = this.redirects.findIndex(x => x.from === row.from);
+          this.$nextTick(() => this.$refs.form.focus(field || "from"));
+          break;
+
+        case "remove":
+          this.$refs.remove.open();
+          break;
+      }
+    },
+    cancel() {
+      this.mode = null;
+      this.current = null;
+    },
+    prev() {
+      this.mode -= 1;
+      this.current = this.redirects[this.mode];
+    },
+    next() {
+      this.mode += 1;
+      this.current = this.redirects[this.mode];
+    },
+    remove() {
+      this.update(this.redirects.filter(x => x.from !== this.current.from));
+      this.$refs.remove.close();
+      this.current = null;
+    },
+    status: (v) => status(v),
+    submit() {
+      if (this.mode === "new") {
+        this.redirects = [...this.redirects, this.current];
+      } else {
+        this.redirects[this.mode] = this.current;
+      }
+      this.update(this.redirects).then(this.cancel);
+    },
     update(input) {
-      this.$api.patch("retour/redirects", input.map(item => {
-        delete(item["stats"]);
-        delete(item["id"]);
-        return item;
-      })).then(() => {
-        this.$emit("update", input);
+      return this.$api.patch("retour/redirects", input).then(() => {
+        this.$emit("update");
       });
     }
   }
 }
 </script>
 
-<style>
-.k-retour-view .k-field-name-from .k-text-input {
-  padding-left: 2px;
+<style lang="scss">
+.rt-status-preview {
+  display: flex;
+
+  code {
+    background: rgba(0,0,0,.1);
+    color: #16171a;
+    border-radius: 3px;
+    box-decoration-break: clone;
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+    font-size: .875em;
+    padding: .05em .5em;
+    margin-left: .5em;
+  }
 }
 
-.k-retour-view .k-structure-field .k-field-header .k-button {
-  padding: 1rem 0;
-  line-height: 1rem;
+.rt-form {
+  padding: .5rem .75rem;
+  background: #ddd;
+  box-shadow: rgba(#16171a, 0.1) 0 0 0 3px;
+
+  &-btn {
+    color: #16171a;
+  }
+
+  &-prevnext {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .875rem;
+    padding: .35rem .25rem;
+    margin-bottom: .5rem;
+    color: #777;
+
+    .btn {
+      margin: 0 .5rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
+
 </style>

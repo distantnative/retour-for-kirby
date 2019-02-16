@@ -38,10 +38,11 @@ export default {
       return factor > 0 ? factor : 0;
     },
     short() {
-      let day   = this.date.getDate().toString().padStart(2, "0");
-      let month = (this.date.getMonth() + 1).toString().padStart(2, "0");
-      let year  = this.date.getFullYear().toString().substr(-2);
-      return `${day}/${month}/${year}`;
+      return this.date.toLocaleString(this.$user.language, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+      });
     }
   }
 }

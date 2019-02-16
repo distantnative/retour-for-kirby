@@ -11,9 +11,12 @@
     "lint": "eslint src/** --ext .js,.vue",
     "cs": "php-cs-fixer fix ./ --rules=@PSR2"
   },
+  "dependencies": {
+    "chartist": "^0.11.0",
+    "tbl-for-kirby": "distantnative/tbl-for-kirby#master"
+  },
   "devDependencies": {
     "bili": "^4.2.5",
-    "chartist": "^0.11.0",
     "eslint": "^5.13.0",
     "eslint-plugin-vue": "^5.1.0",
     "node-sass": "^4.11.0",

@@ -71,14 +71,6 @@ To maintain privacy and collect the least data necessary, Reroute does not log a
 
 The tracked hits are displayed in the Panel with a blue status bublle, indicating whether a redirect route or `404` path has been visited ![#4271ae](https://via.placeholder.com/14.png/4271ae?text=+) recently or ![#ccc](https://via.placeholder.com/14.png/ccc?text=+) not so recently.
 
-## Options
-
-```php
-return [
-  'distantnative.retour.limit' => 10 // # of entries to show per page
-];
-```
-
 ## Permissions
 
 ### Access

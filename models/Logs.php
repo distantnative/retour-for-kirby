@@ -29,19 +29,4 @@ class Logs extends Log
 
         $this->write($data);
     }
-
-    public function fails(string $sort = 'failed'): array
-    {
-        // remove redirect-only logs
-        $data = array_filter($this->data(), function ($log) {
-            return ($log['failed'] ?? 0) !== 0;
-        });
-
-        // sort accordingly
-        usort($data, function ($log1, $log2) use ($sort) {
-            return $log2[$sort] <=> $log1[$sort];
-        });
-
-        return $data;
-    }
 }

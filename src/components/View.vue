@@ -42,19 +42,18 @@
       @update="fetchRedirects"
     />
 
-    <rt-fails
+    <rt-logs
       v-show="current === 'fails'"
       :canUpdate="canUpdate"
-      :fails="fails"
+      :logs="logs"
       :options="options"
-      @sort="fetchFails"
       @go="go(...$event)"
     />
 
     <rt-settings
       v-show="current === 'settings'"
       :canUpdate="canUpdate"
-      :fails="fails"
+      :logs="logs"
       :options="options"
       :redirects="redirects"
       @reload="fetch"
@@ -66,20 +65,20 @@
 
 import Dashboard from "./Parts/Dashboard.vue";
 import Redirects from "./Parts/Redirects.vue";
-import Fails     from "./Parts/Fails.vue";
+import Logs     from "./Parts/Logs.vue";
 import Settings  from "./Parts/Settings.vue";
 
 export default {
   components: {
     "rt-dashboard": Dashboard,
     "rt-redirects": Redirects,
-    "rt-fails":     Fails,
+    "rt-logs":     Logs,
     "rt-settings" : Settings
   },
   data() {
     return {
-      current: "dashboard",
-      fails: [],
+      current: "fails",
+      logs: [],
       redirects: [],
       stats: {
         data: null,
@@ -134,18 +133,17 @@ export default {
           this.stats.offset
         ]);
         const redirects = this.fetchRedirects();
-        const fails     = this.fetchFails();
+        const logs      = this.fetchLogs();
 
-        return Promise.all([stats, redirects, fails]).then(() => {
+        return Promise.all([stats, redirects, logs]).then(() => {
           this.$store.dispatch("isLoading", false);
         });
       });
     },
-    fetchFails(sort = "failed") {
-      const endpoint = "retour/fails/" + sort;
-      return this.$api.get(endpoint).then(response => {
-        this.fails = response;
-      });
+    async fetchLogs() {
+      const endpoint = "retour/logs";
+      const response = await this.$api.get(endpoint);
+      this.logs = response;
     },
     fetchRedirects() {
       const endpoint = "retour/redirects";
