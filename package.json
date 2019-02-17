@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.3",
   "description": "Redirect management for Kirby 3",
   "main": "index.js",
-  "author": "Nico Hoffmann",
+  "author": "Nico Hoffmann <on-github@nhoffmann.com>",
   "license": "MIT",
   "scripts": {
     "dev": "bili --watch",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "chartist": "^0.11.0",
-    "tbl-for-kirby": "distantnative/tbl-for-kirby#master"
+    "tbl-for-kirby": "next"
   },
   "devDependencies": {
     "bili": "^4.2.5",

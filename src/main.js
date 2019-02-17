@@ -6,9 +6,7 @@ import View from "./components/View.vue";
 import StatusField from "./components/Fields/Status.vue";
 import CountPreview from "./components/Fields/Previews/Count.vue";
 
-// import Tbl from "./components/Tbl.vue";
 import "tbl-for-kirby/index.css";
-import Tbl from "tbl-for-kirby";
 
 panel.plugin("distantnative/retour", {
   views: {
@@ -21,7 +19,6 @@ panel.plugin("distantnative/retour", {
     "rt-status": StatusField
   },
   components: {
-    "k-tbl": Tbl,
     "k-rt-status-input": {
       extends: "k-select-input",
     },

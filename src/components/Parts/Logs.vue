@@ -1,35 +1,30 @@
 <template>
-  <k-tbl
+  <tbl
     :headline="`${$t('rt.fails')} (${logs.length})`"
     :columns="columns"
     :rows="logs"
-    :options="table"
-    :actions="actions"
     :isLoading="this.$store.state.isLoading"
+    v-bind="table"
     @action="action(...$event)"
   >
-    <template slot="field-recency" slot-scope="props">
+    <template slot="column-recency" slot-scope="props">
       <p><recency :value="props.value" /></p>
     </template>
-  </k-tbl>
+  </tbl>
 </template>
 
 <script>
+import Tbl from "tbl-for-kirby";
 import Recency from "../Misc/Recency.vue";
 
 export default {
-  components: { Recency },
+  components: { Tbl, Recency },
   props: {
     canUpdate: Boolean,
     logs: Array,
     options: Object,
   },
   computed: {
-    actions() {
-      return [
-        { text: "Add as redirect", icon: "add", click: "add" }
-      ]
-    },
     columns() {
       return [
         {
@@ -56,8 +51,7 @@ export default {
           type: "number",
           sort: "desc",
           search: false,
-          width: "1/8",
-          align: "right"
+          width: "1/8"
         },
         {
           label: this.$t('rt.redirects.state'),
@@ -66,7 +60,6 @@ export default {
           sort: "desc",
           search: false,
           width: "1/8",
-          align: "right",
           responsive: false
         },
         {
@@ -77,16 +70,22 @@ export default {
           sort: "desc",
           search: false,
           width: "1/6",
-          align: "right",
           responsive: false
         }
       ];
     },
     table() {
       return {
-        inlineActions: true,
-        initialSort: "last",
-      };
+        sort: {
+          initialBy: "last"
+        },
+        actions: {
+          inline: true,
+          items: [
+            { text: "Add as redirect", icon: "add", click: "add" }
+          ]
+        }
+      }
     }
   },
   methods: {
@@ -94,7 +93,7 @@ export default {
       switch (action) {
         case "add":
           this.$emit("go", ["redirects", (view) => {
-            view.$refs.redirects.action("add", { from: row.path });
+            view.$refs.redirects.action("add", { from: row.path }, "to");
           }]);
           break;
       }

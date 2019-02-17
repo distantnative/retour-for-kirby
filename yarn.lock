@@ -4991,9 +4991,9 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-tbl-for-kirby@distantnative/tbl-for-kirby#master:
-  version "1.0.0-alpa.1"
-  resolved "https://codeload.github.com/distantnative/tbl-for-kirby/tar.gz/39e41f681da90c448891053ec2c263e927815cfd"
+tbl-for-kirby@distantnative/tbl-for-kirby#develop:
+  version "1.0.0-alpa.2"
+  resolved "https://codeload.github.com/distantnative/tbl-for-kirby/tar.gz/824faf462a2681eac1da66c4502e80f98b87bce1"
 
 terser@^3.14.1:
   version "3.16.1"

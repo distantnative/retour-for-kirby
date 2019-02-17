@@ -1,23 +1,22 @@
 <template>
-  <k-tbl
+  <tbl
     :headline="`${this.$t('rt.redirects')} (${this.redirects.length})`"
     :columns="columns"
     :rows="redirects"
-    :options="table"
-    :actions="actions"
     :isLoading="this.$store.state.isLoading"
+    v-bind="table"
     @add="action('add')"
     @action="action(...$event)"
   >
     <!-- Custom field cells -->
-    <template slot="field-status" slot-scope="props">
+    <template slot="column-status" slot-scope="props">
       <p class="rt-status-preview" :data-status="status(props.value)">
         <k-icon type="circle" />
         <code>{{ props.value }}</code>
       </p>
     </template>
 
-    <template slot="field-stats" slot-scope="props">
+    <template slot="column-stats" slot-scope="props">
       <k-rt-count-field-preview :value="{
           hits: props.row.hits,
           last: props.row.last
@@ -56,26 +55,30 @@
     </template>
 
     <!-- Dialogs -->
-    <k-dialog
-      ref="remove"
-      :button="$t('delete')"
-      theme="negative"
-      icon="trash"
-      @cancel="cancel"
-      @submit="remove"
-    >
-      <k-text>
-        {{ $t('field.structure.delete.confirm') }}
-      </k-text>
-    </k-dialog>
+    <template slot="dialogs">
+      <k-dialog
+        ref="remove"
+        :button="$t('delete')"
+        theme="negative"
+        icon="trash"
+        @cancel="cancel"
+        @submit="remove"
+      >
+        <k-text>
+          {{ $t('field.structure.delete.confirm') }}
+        </k-text>
+      </k-dialog>
+    </template>
 
-  </k-tbl>
+  </tbl>
 </template>
 
 <script>
+import Tbl from "tbl-for-kirby";
 import status from "../../assets/status.js";
 
 export default {
+  components: { Tbl },
   props: {
     canUpdate: Boolean,
     redirects: Array,
@@ -88,12 +91,6 @@ export default {
     }
   },
   computed: {
-    actions() {
-      return [
-        { text: this.$t("edit"), icon: "edit", click: "edit" },
-        { text: this.$t("remove"), icon: "remove", click: "remove" }
-      ]
-    },
     columns() {
       return [
         {
@@ -115,6 +112,7 @@ export default {
         {
           label: this.$t("rt.redirects.hits"),
           field: "stats",
+          width: "1/6",
           search: false,
           responsive: false
         }
@@ -168,15 +166,25 @@ export default {
     },
     table() {
       return {
-        add: true,
-        initialSort: "status",
-        rowClick: "edit"
-      };
-    },
+        options: {
+          add: true
+        },
+        sort: {
+          initialBy: "status"
+        },
+        actions: {
+          items: [
+            { text: this.$t("edit"), icon: "edit", click: "edit" },
+            { text: this.$t("remove"), icon: "remove", click: "remove" }
+          ],
+          onRow: 'edit'
+        }
+      }
+    }
   },
   methods: {
     action(action, row = {}, field) {
-      this.current = row;
+      this.current = Object.assign({}, row);
 
       switch (action) {
         case "add":

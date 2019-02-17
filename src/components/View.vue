@@ -189,10 +189,10 @@ export default {
 
 .retour-loader[disabled] .k-icon > svg {
     transform: rotate(-180deg);
-    animation: spin 1.5s linear infinite;
+    animation: spin-loader 1.5s linear infinite;
 }
 
-@keyframes spin {
+@keyframes spin-loader {
   100% { transform: rotate(180deg); }
 }
 
