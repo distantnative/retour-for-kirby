@@ -1,8 +1,8 @@
 <template>
   <tbl
-    :headline="`${$t('rt.fails')} (${logs.length})`"
+    :headline="`${$t('rt.fails')} (${fails.length})`"
     :columns="columns"
-    :rows="logs"
+    :rows="fails"
     :isLoading="this.$store.state.isLoading"
     v-bind="table"
     @action="action(...$event)"
@@ -73,6 +73,9 @@ export default {
           responsive: false
         }
       ];
+    },
+    fails() {
+      return this.logs.filter(log => log.failed > 0);
     },
     table() {
       return {

@@ -12,8 +12,9 @@
     <template slot="column-health" slot-scope="props">
       <p class="rt-redirects-health">
         <k-icon
-          :type="health[props.index]"
-          :data-health="health[props.index]"
+          :type="health[props.index].type"
+          :title="health[props.index].tooltip"
+          :data-health="health[props.index].type"
         />
       </p>
     </template>
@@ -85,7 +86,7 @@
         class="k-tbl-reset"
         @click="checkHealth"
       >
-        Check health
+        {{ $t("rt.redirects.health.btn") }}
       </k-button>
     </template>
 
@@ -250,21 +251,24 @@ export default {
           placeholders.push("kirby");
           return "kirby";
         });
-        console.log(placeholders);
-        console.log(from);
 
         return fetch(this.options.site + "/" + from)
           .then(response => {
             if (obj.status === "disabled") {
-              return "protected";
+              return {
+                type: "protected",
+                tooltip: this.$t("rt.redirects.health.disabled")
+              };
             }
 
             if (response.status === parseInt(obj.status)) {
-              return "smile";
+              return {
+                type: "smile",
+                tooltip: this.$t("rt.redirects.health.good")
+              };
             }
 
             if (obj.to) {
-
               let to = obj.to;
               placeholders.forEach((placeholder, index) => {
                 to = to.replace("$" + (index + 1), placeholder);
@@ -272,16 +276,25 @@ export default {
 
               if (to.startsWith("http")) {
                 if (response.url === to && response.ok) {
-                  return "smile";
+                  return {
+                    type: "smile",
+                    tooltip: this.$t("rt.redirects.health.good")
+                  };
                 }
               } else {
                 if (response.url === this.options.site + "/" + to && response.ok) {
-                  return "smile";
+                  return {
+                    type: "smile",
+                    tooltip: this.$t("rt.redirects.health.good")
+                  };
                 }
               }
             }
 
-            return "alert";
+            return {
+              type: "alert",
+              tooltip: this.$t("rt.redirects.health.bad")
+            };
           });
       });
 

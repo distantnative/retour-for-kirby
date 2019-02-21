@@ -4991,10 +4991,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-tbl-for-kirby@^1.0.0-alpa.7:
-  version "1.0.0-alpa.9"
-  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.0.0-alpa.9.tgz#7408804276acae1616d439b5a6d646ed8f24af15"
-  integrity sha512-E5v6LvFSVfN7GciwjF6Iji6q4TMO6FMm8T/lyVX1fr85XqwWYMi/0FwLwIpdZ0cg+Q/rQd/D3bNl5D95Sw5Wmg==
+tbl-for-kirby@^1.0.0-alpa.11:
+  version "1.0.0-alpa.12"
+  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.0.0-alpa.12.tgz#3fbad9e6c956771ae38312eeed7151eb2c78eef3"
+  integrity sha512-O+KPtkvLcL6XOZ8IxACkiSlNo5H2wSNXlpVhdu7OlnFRVM0E3BqfZXtevbqgh4kwCDo2KrYQrKIveb0n/OtoAQ==
 
 terser@^3.14.1:
   version "3.16.1"
