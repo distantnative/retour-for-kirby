@@ -9,8 +9,17 @@
     @action="action(...$event)"
   >
     <!-- Custom field cells -->
+    <template slot="column-health" slot-scope="props">
+      <p class="rt-redirects-health">
+        <k-icon
+          :type="health[props.index]"
+          :data-health="health[props.index]"
+        />
+      </p>
+    </template>
+
     <template slot="column-status" slot-scope="props">
-      <p class="rt-status-preview" :data-status="status(props.value)">
+      <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
         <code>{{ props.value }}</code>
       </p>
@@ -25,18 +34,18 @@
 
     <!-- Replace parts of k-tbl for add/edit screen -->
     <template v-if="mode !== null">
-      <div slot="replace-filter" />
+      <div slot="filter" />
 
       <k-form
         ref="form"
-        slot="replace-table"
+        slot="table"
         :fields="fields"
         v-model="current"
         class="rt-form"
         @submit="submit"
       />
 
-      <template slot="replace-footer">
+      <template slot="footer">
           <k-button
             icon="cancel"
             class="rt-form-btn"
@@ -70,6 +79,16 @@
       </k-dialog>
     </template>
 
+    <template slot="footer-before-perPage">
+      <k-button
+        icon="search"
+        class="k-tbl-reset"
+        @click="checkHealth"
+      >
+        Check health
+      </k-button>
+    </template>
+
   </tbl>
 </template>
 
@@ -87,12 +106,13 @@ export default {
   data() {
     return {
       mode: null,
-      current: null
+      current: null,
+      health: null
     }
   },
   computed: {
     columns() {
-      return [
+      let columns = [
         {
           label: this.$t("rt.redirects.from"),
           type: "url",
@@ -117,6 +137,15 @@ export default {
           responsive: false
         }
       ];
+
+      if (this.health) {
+        columns.unshift({
+          name: "health",
+          width: "1fr"
+        });
+      }
+
+      return columns;
     },
     fields() {
       return {
@@ -207,6 +236,59 @@ export default {
       this.mode = null;
       this.current = null;
     },
+    checkHealth() {
+      this.health = this.redirects.map(x => "loader");
+
+      const promises = this.redirects.map(async obj => {
+        let placeholders = [];
+        const from = obj.from.replace(/\(\:.*?\??\)/g, (match, $1) => {
+          if (match === "(:num)" || match === "(:num?)") {
+            placeholders.push(2019);
+            return 2019;
+          }
+
+          placeholders.push("kirby");
+          return "kirby";
+        });
+        console.log(placeholders);
+        console.log(from);
+
+        return fetch(this.options.site + "/" + from)
+          .then(response => {
+            if (obj.status === "disabled") {
+              return "protected";
+            }
+
+            if (response.status === parseInt(obj.status)) {
+              return "smile";
+            }
+
+            if (obj.to) {
+
+              let to = obj.to;
+              placeholders.forEach((placeholder, index) => {
+                to = to.replace("$" + (index + 1), placeholder);
+              });
+
+              if (to.startsWith("http")) {
+                if (response.url === to && response.ok) {
+                  return "smile";
+                }
+              } else {
+                if (response.url === this.options.site + "/" + to && response.ok) {
+                  return "smile";
+                }
+              }
+            }
+
+            return "alert";
+          });
+      });
+
+      Promise.all(promises).then(completed => {
+        this.health = completed;
+      });
+    },
     prev() {
       this.mode -= 1;
       this.current = this.redirects[this.mode];
@@ -239,7 +321,15 @@ export default {
 </script>
 
 <style lang="scss">
-.rt-status-preview {
+.rt-redirects-health {
+  color: #ddd;
+
+  [data-health="alert"] {
+    color: #c82829;
+  }
+}
+
+.rt-redirects-status {
   display: flex;
 
   code {

@@ -19,9 +19,7 @@ panel.plugin("distantnative/retour", {
     "rt-status": StatusField
   },
   components: {
-    "k-rt-status-input": {
-      extends: "k-select-input",
-    },
+    "k-rt-status-input": { extends: "k-select-input" },
     "k-rt-count-field-preview": CountPreview
   }
 });

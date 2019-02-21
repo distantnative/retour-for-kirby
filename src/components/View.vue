@@ -108,9 +108,9 @@ export default {
     parts() {
       return [
         { name: "dashboard", icon: "dashboard" },
-        { name: "redirects", icon: "url"       },
-        { name: "fails",     icon: "protected" },
-        { name: "settings",  icon: "cog"       }
+        { name: "redirects", icon: "url" },
+        { name: "fails", icon: "protected" },
+        { name: "settings", icon: "cog" }
       ];
     }
   },
@@ -187,7 +187,8 @@ export default {
   color: #4271ae;
 }
 
-.retour-loader[disabled] .k-icon > svg {
+.retour-loader[disabled] .k-icon > svg,
+[data-health="loader"] > svg {
     transform: rotate(-180deg);
     animation: spin-loader 1.5s linear infinite;
 }

@@ -4991,9 +4991,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-tbl-for-kirby@distantnative/tbl-for-kirby#develop:
-  version "1.0.0-alpa.2"
-  resolved "https://codeload.github.com/distantnative/tbl-for-kirby/tar.gz/824faf462a2681eac1da66c4502e80f98b87bce1"
+tbl-for-kirby@^1.0.0-alpa.7:
+  version "1.0.0-alpa.9"
+  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.0.0-alpa.9.tgz#7408804276acae1616d439b5a6d646ed8f24af15"
+  integrity sha512-E5v6LvFSVfN7GciwjF6Iji6q4TMO6FMm8T/lyVX1fr85XqwWYMi/0FwLwIpdZ0cg+Q/rQd/D3bNl5D95Sw5Wmg==
 
 terser@^3.14.1:
   version "3.16.1"
