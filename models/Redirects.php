@@ -45,7 +45,7 @@ class Redirects extends Log
             return [
                 'name'    => $redirect['from'],
                 'pattern' => $redirect['from'],
-                'action'  => function (...$parameters) use ($redirect) {
+                'action'  => function (...$parameters) use ($redirect, $kirby) {
                     $code = (int)$redirect['status'];
                     $to   = $redirect['to'];
 
