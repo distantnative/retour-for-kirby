@@ -86,7 +86,6 @@ export default {
         offset: 0
       },
       options: {
-        site:  null,
         headers: {}
       }
     }
@@ -181,18 +180,13 @@ export default {
   color: #4271ae;
 }
 
-.retour-loader[disabled] .k-icon > svg,
-[data-health="loader"] > svg {
+.retour-loader[disabled] .k-icon > svg {
     transform: rotate(-180deg);
     animation: spin-loader 1.5s linear infinite;
 }
 
-@keyframes spin-loader {
-  100% { transform: rotate(180deg); }
-}
+@keyframes spin-loader { 100% { transform: rotate(180deg); } }
 
-.k-retour-view .hide {
-  opacity: 0;
-}
+.k-retour-view .hide { opacity: 0; }
 </style>
 

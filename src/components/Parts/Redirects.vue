@@ -18,9 +18,16 @@
 
     <template slot="column-stats" slot-scope="props">
       <k-rt-count-field-preview :value="{
-          hits: props.row.hits,
-          last: props.row.last
-        }" />
+        hits: props.row.hits,
+        last: props.row.last
+      }" />
+    </template>
+
+    <template slot="column-$default" slot-scope="props">
+      <p class="k-url-field-preview" v-if="props.column.type === 'url'">
+        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>{{ props.value }}</k-link>
+      </p>
+      <p v-else v-html="props.value" />
     </template>
 
     <!-- Replace parts of k-tbl for add/edit screen -->
@@ -125,7 +132,7 @@ export default {
         from: {
           label: this.$t("rt.redirects.from"),
           type: "text",
-          before: this.options.site + "/",
+          before: window.panel.site + "/",
           help: this.$t("rt.redirects.from.help", {
             reference: "https://getkirby.com/docs/guide/routing#patterns",
             readme: "https://github.com/distantnative/retour-for-kirby#redirects",
@@ -165,6 +172,9 @@ export default {
           width: "1/2"
         },
       }
+    },
+    site() {
+      return window.panel.site;
     },
     table() {
       return {
@@ -241,14 +251,6 @@ export default {
 </script>
 
 <style lang="scss">
-.rt-redirects-health {
-  color: #ddd;
-
-  [data-health="alert"] {
-    color: #c82829;
-  }
-}
-
 .rt-redirects-status {
   display: flex;
 
@@ -273,5 +275,4 @@ export default {
     color: #16171a;
   }
 }
-
 </style>
