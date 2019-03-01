@@ -77,7 +77,7 @@ export default {
   },
   data() {
     return {
-      current: "fails",
+      current: "dashboard",
       logs: [],
       redirects: [],
       stats: {
@@ -141,31 +141,25 @@ export default {
       });
     },
     async fetchLogs() {
-      const endpoint = "retour/logs";
-      const response = await this.$api.get(endpoint);
+      const response = await this.$api.get("retour/logs");
       this.logs = response;
     },
-    fetchRedirects() {
-      const endpoint = "retour/redirects";
-      return this.$api.get(endpoint).then(response => {
-        this.redirects = response;
-      });
+    async fetchRedirects() {
+      const response = await this.$api.get("retour/redirects");
+      this.redirects = response;
     },
-    fetchStats(stats) {
+    async fetchStats(stats) {
       const endpoint = "retour/stats/" + stats[0] + "/" + stats[1];
-      return this.$api.get(endpoint).then(response => {
-        this.stats = {
-          data: response,
-          frame: stats[0],
-          offset: stats[1]
-        };
-      });
+      const response = await this.$api.get(endpoint);
+      this.stats = {
+        data: response,
+        frame: stats[0],
+        offset: stats[1]
+      };
     },
-    fetchSystem() {
-      const endpoint = "retour/system";
-      return this.$api.get(endpoint).then(response => {
-        this.options = response;
-      });
+    async fetchSystem() {
+      const response = await this.$api.get("retour/system");
+      this.options = response;
     },
     go(part, after = () => {}) {
       this.current = part;
@@ -175,8 +169,8 @@ export default {
       // Currently not supported by Kirby Panel
       // window.location.hash = part;
     },
-    process() {
-      return this.$api.post("retour/process");
+    async process() {
+      await this.$api.post("retour/process");
     }
   }
 }

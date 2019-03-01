@@ -9,16 +9,6 @@
     @action="action(...$event)"
   >
     <!-- Custom field cells -->
-    <template slot="column-health" slot-scope="props">
-      <p class="rt-redirects-health">
-        <k-icon
-          :type="health[props.index].type"
-          :title="health[props.index].tooltip"
-          :data-health="health[props.index].type"
-        />
-      </p>
-    </template>
-
     <template slot="column-status" slot-scope="props">
       <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
@@ -80,16 +70,6 @@
       </k-dialog>
     </template>
 
-    <template slot="footer-before-perPage">
-      <k-button
-        icon="search"
-        class="k-tbl-reset"
-        @click="checkHealth"
-      >
-        {{ $t("rt.redirects.health.btn") }}
-      </k-button>
-    </template>
-
   </tbl>
 </template>
 
@@ -107,8 +87,7 @@ export default {
   data() {
     return {
       mode: null,
-      current: null,
-      health: null
+      current: null
     }
   },
   computed: {
@@ -138,13 +117,6 @@ export default {
           responsive: false
         }
       ];
-
-      if (this.health) {
-        columns.unshift({
-          name: "health",
-          width: "1fr"
-        });
-      }
 
       return columns;
     },
@@ -236,71 +208,6 @@ export default {
     cancel() {
       this.mode = null;
       this.current = null;
-    },
-    checkHealth() {
-      this.health = this.redirects.map(x => "loader");
-
-      const promises = this.redirects.map(async obj => {
-        let placeholders = [];
-        const from = obj.from.replace(/\(\:.*?\??\)/g, (match, $1) => {
-          if (match === "(:num)" || match === "(:num?)") {
-            placeholders.push(2019);
-            return 2019;
-          }
-
-          placeholders.push("kirby");
-          return "kirby";
-        });
-
-        return fetch(this.options.site + "/" + from)
-          .then(response => {
-            if (obj.status === "disabled") {
-              return {
-                type: "protected",
-                tooltip: this.$t("rt.redirects.health.disabled")
-              };
-            }
-
-            if (response.status === parseInt(obj.status)) {
-              return {
-                type: "smile",
-                tooltip: this.$t("rt.redirects.health.good")
-              };
-            }
-
-            if (obj.to) {
-              let to = obj.to;
-              placeholders.forEach((placeholder, index) => {
-                to = to.replace("$" + (index + 1), placeholder);
-              });
-
-              if (to.startsWith("http")) {
-                if (response.url === to && response.ok) {
-                  return {
-                    type: "smile",
-                    tooltip: this.$t("rt.redirects.health.good")
-                  };
-                }
-              } else {
-                if (response.url === this.options.site + "/" + to && response.ok) {
-                  return {
-                    type: "smile",
-                    tooltip: this.$t("rt.redirects.health.good")
-                  };
-                }
-              }
-            }
-
-            return {
-              type: "alert",
-              tooltip: this.$t("rt.redirects.health.bad")
-            };
-          });
-      });
-
-      Promise.all(promises).then(completed => {
-        this.health = completed;
-      });
     },
     prev() {
       this.mode -= 1;
