@@ -8,36 +8,35 @@ use Kirby\Toolkit\F;
 class Log
 {
     public static $file;
-    protected $data;
-
-    public function data(string $suffix = 'retour')
-    {
-        return $this->data[$suffix] = $this->data[$suffix] ?? $this->read($suffix);
-    }
 
     protected static function defaults(): array
     {
         return [];
     }
 
-    public function file($suffix = 'retour'): string
+    protected static function file($suffix = 'retour'): string
     {
         return str_replace('{x}', $suffix, static::$file);
     }
 
-    public function read($suffix = 'retour')
+    public static function read($suffix = 'retour'): array
     {
-        if (F::exists($this->file($suffix)) === false) {
+        if (F::exists(static::file($suffix)) === false) {
             return static::defaults();
         }
 
-        return Data::read($this->file($suffix), 'yaml');
+        return Data::read(static::file($suffix), 'yaml');
     }
 
-    public function write(array $data = [], $suffix = 'retour')
+    public static function update(callable $callback)
     {
-        Data::write($this->file($suffix), $data, 'yaml');
+        $data = static::read();
+        $data = array_map($callback, $data);
+        return static::write($data);
+    }
 
-        return $this->data[$suffix] = $data;
+    public static function write(array $data = [], $suffix = 'retour'): bool
+    {
+        return Data::write(static::file($suffix), $data, 'yaml');
     }
 }

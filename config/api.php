@@ -1,97 +1,56 @@
 <?php
 
+namespace distantnative\Retour;
+
 return [
     'routes' => [
         [
-            'pattern' => 'retour/samples',
-            'method'  => 'POST',
-            'action'  => function () use ($retour) {
-                $retour->flush();
-                Dir::copy(__DIR__ . '/samples', $retour::$dir);
-                site()->update(['retour' => [
-                    [
-                        'status' => '301',
-                        'from'   => 'blog/(:any)/(:all)',
-                        'to'     => 'notes/$1/entries/$2',
-                        'hits'   => null,
-                        'last'   => null
-                    ],
-                    [
-                        'status' => '503',
-                        'from'   => 'pocast/this-one-episode',
-                        'to'     => null,
-                        'hits'   => 10,
-                        'last'   => '2019-01-30 20:15'
-                    ],
-                    [
-                        'status' => '301',
-                        'from'   => 'test',
-                        'to'     => 'about',
-                        'hits'   => 200,
-                        'last'   => '2019-02-09 09:30'
-                    ],
-                    [
-                        'status' => 'disabled',
-                        'from'   => 'soon/to/cancel',
-                        'to'     => 'not/yet-ready',
-                        'hits'   => null,
-                        'last'   => null
-                    ]
-                ]]);
-                return true;
-            }
-        ],
-        [
             'pattern' => 'retour/process',
-            'method'  => 'GET',
-            'action'  => function () use ($retour) {
-                $retour->process();
-                return true;
+            'method'  => 'POST',
+            'action'  => function () {
+                return Retour::process();
             }
         ],
         [
             'pattern' => 'retour/flush',
-            'method'  => 'PATCH',
-            'action'  => function () use ($retour) {
-                $retour->flush();
-                $retour->redirects()->flush();
-                return true;
+            'method'  => 'POST',
+            'action'  => function () {
+                return Retour::flush();
             }
         ],
         [
             'pattern' => 'retour/redirects',
             'method'  => 'GET',
-            'action'  => function () use ($retour) {
-                return $retour->redirects()->data();
+            'action'  => function ()  {
+                return Redirects::read();
             }
         ],
         [
             'pattern' => 'retour/redirects',
             'method'  => 'PATCH',
-            'action'  => function () use ($retour) {
-                $retour->redirects()->write($this->requestBody());
-                return true;
+            'action'  => function () {
+                return Redirects::write($this->requestBody());
             }
         ],
         [
             'pattern' => 'retour/logs',
             'method'  => 'GET',
-            'action'  => function () use ($retour) {
-                return array_values($retour->logs()->data());
+            'action'  => function () {
+                return array_values(Log::read());
             }
         ],
         [
             'pattern' => 'retour/stats/(:any)/(:num?)',
             'method'  => 'GET',
-            'action'  => function ($by, $offset = 0) use ($retour) {
-                return $retour->stats()->get($by, $offset);
+            'action'  => function ($by, $offset = 0) {
+                return Stats::get($by, $offset);
             }
         ],
         [
             'pattern' => 'retour/system',
             'method'  => 'GET',
-            'action'  => function () use ($retour) {
-                return $retour->system()->toArray();
+            'action'  => function () {
+                return System::toArray();
             }
         ],
         [

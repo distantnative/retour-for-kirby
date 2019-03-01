@@ -176,7 +176,7 @@ export default {
       // window.location.hash = part;
     },
     process() {
-      return this.$api.get("retour/process");
+      return this.$api.post("retour/process");
     }
   }
 }

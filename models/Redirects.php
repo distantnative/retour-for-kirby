@@ -5,26 +5,23 @@ namespace distantnative\Retour;
 use Kirby\Cms\Response;
 use Kirby\Http\Header;
 use Kirby\Http\Url;
-use Kirby\Toolkit\Collection;
 
 class Redirects extends Log
 {
-    public function flush(): void
+
+    public static function flush(): bool
     {
-        $data = $this->data();
-
-        foreach ($data as $key => $redirect) {
-            $data[$key]['hits'] = null;
-            $data[$key]['last'] = null;
-        }
-
-        $this->write($data);
+        return static::update(function ($redirect) {
+            $redirect['hits'] = null;
+            $redirect['last'] = null;
+            return $redirect;
+        });
     }
 
-    public function hit(array $temporaries): void
+    public static function hit(array $temporaries): bool
     {
         // get existing redirects data
-        $data = $this->data();
+        $data = static::read();
 
         // loop through all temporaries and update
         foreach ($temporaries as $item) {
@@ -34,25 +31,17 @@ class Redirects extends Log
             $data[$key]['last'] = date('Y-m-d H:i');
         }
 
-        $this->write($data);
+        return static::write($data);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    public function read($suffix = null)
-    {
-        return site()->retour()->yaml();
-    }
-
-    public function routes(): array
+    public static function routes(\Kirby\Cms\App $kirby): array
     {
         // no routes for disabled redirects
-        $data = array_filter($this->data(), function ($redirect) {
+        $data = array_filter(static::read(), function ($redirect) {
             return $redirect['status'] !== 'disabled';
         });
 
-        return array_map(function ($redirect) {
+        return array_map(function ($redirect) use ($kirby) {
             return [
                 'name'    => $redirect['from'],
                 'pattern' => $redirect['from'],
@@ -68,7 +57,7 @@ class Redirects extends Log
                     );
 
                     // Set the right response code
-                    kirby()->response()->code($code);
+                    $kirby->response()->code($code);
 
                     // Map placeholders/parameters
                     foreach ($parameters as $i => $parameter) {
@@ -96,13 +85,5 @@ class Redirects extends Log
                 }
             ];
         }, $data);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function write(array $data = [], $suffix = null): void
-    {
-        site()->update(['retour' => $data]);
     }
 }

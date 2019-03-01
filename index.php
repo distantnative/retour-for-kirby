@@ -11,16 +11,18 @@ load([
     'distantnative\\Retour\\System'    => 'models/System.php'
 ], __DIR__);
 
-$retour         = new Retour;
-$root           = kirby()->root('site');
-Retour::$dir    = $root . '/logs/retour';
-Logs::$file     = $root . '/logs/retour/404.log';
-Stats::$file    = $root . '/logs/retour/{x}.stats';
+$root            = dirname(dirname(__DIR__));
+Retour::$dir     = $root . '/logs/retour';
+Logs::$file      = $root . '/logs/retour/404.log';
+Stats::$file     = $root . '/logs/retour/{x}.stats';
+Redirects::$file = $root . '/config/retour.yml';
 
 \Kirby::plugin('distantnative/retour', [
     'api'          => require 'config/api.php',
     'hooks'        => require 'config/hooks.php',
-    'options'      => require 'config/options.php',
-    'routes'       => $retour->redirects()->routes(),
+    'options'      => ['api' => true],
+    'routes'       => function ($kirby) {
+        return Redirects::routes($kirby);
+    },
     'translations' => require 'config/translations.php'
 ]);

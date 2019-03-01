@@ -15,7 +15,7 @@ class Stats extends Log
         ];
     }
 
-    public function count(array $tmp): void
+    public static function count(array $tmp): bool
     {
         $stats = [];
 
@@ -25,7 +25,7 @@ class Stats extends Log
         }
 
         foreach ($stats as $year => $items) {
-            $data = $this->data($year);
+            $data = static::read($year);
 
             foreach ($items as $item) {
                 $time = strtotime($item['date']);
@@ -56,11 +56,11 @@ class Stats extends Log
                 }
             }
 
-            $this->write($data, $year);
+            return static::write($data, $year);
         }
     }
 
-    public function get(string $by, int $offset = 0): array
+    public static function get(string $by, int $offset = 0): array
     {
         switch ($by) {
             case 'day':
@@ -100,7 +100,7 @@ class Stats extends Log
         ];
 
         for ($time = $start; $time <= $end; $time += $step) {
-            $data                   = $this->data(date('Y-m', $time));
+            $data                   = static::read(date('Y-m', $time));
             $result['labels'][]     = date($label, $time);
             $result['failed'][]     = $data[$by][date($group, $time)][date($key, $time)]['failed'] ?? 0;
             $result['redirected'][] = $data[$by][date($group, $time)][date($key, $time)]['redirected'] ?? 0;

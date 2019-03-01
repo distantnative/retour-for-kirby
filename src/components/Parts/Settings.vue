@@ -8,14 +8,6 @@
 
         <k-button-group>
           <k-button
-            v-if="options.debug"
-            :disabled="!canUpdate"
-            icon="download"
-            @click="samples"
-          >
-            Load sample data
-          </k-button>
-          <k-button
             :disabled="!canUpdate"
             icon="trash"
             theme="negative"
@@ -158,13 +150,8 @@ export default {
       });
     },
     flush() {
-      this.$api.patch("retour/flush").then(() => {
+      this.$api.post("retour/flush").then(() => {
         this.$refs.dialog.close();
-        this.$emit("reload");
-      });
-    },
-    samples() {
-      this.$api.post("retour/samples").then(() => {
         this.$emit("reload");
       });
     }

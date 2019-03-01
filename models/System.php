@@ -6,7 +6,8 @@ use Kirby\Http\Header;
 
 class System
 {
-    public function toArray(): array
+
+    public static function toArray(): array
     {
         $kirby  = kirby();
         $plugin = $kirby->plugin('distantnative/retour');
@@ -14,8 +15,7 @@ class System
         return [
             'version'     => $plugin ? $plugin->version() : '-',
             'site'        => $kirby->site()->url(),
-            'headers'     => Header::$codes,
-            'debug'       => option('distantnative.retour.debug')
+            'headers'     => Header::$codes
         ];
     }
 }

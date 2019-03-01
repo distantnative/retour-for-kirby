@@ -6,9 +6,9 @@ class Logs extends Log
 {
     public static $file;
 
-    public function add(array $temporaries): void
+    public static function add(array $temporaries): bool
     {
-        $data = $this->data();
+        $data = static::read();
 
         foreach ($temporaries as $tmp) {
             $id = $tmp['path'] . '$' . $tmp['referrer'];
@@ -27,6 +27,6 @@ class Logs extends Log
             $data[$id]['last'] = $tmp['date'];
         }
 
-        $this->write($data);
+       return static::write($data);
     }
 }

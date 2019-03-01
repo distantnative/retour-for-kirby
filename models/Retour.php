@@ -15,47 +15,36 @@ class Retour
 
     public static $dir;
 
-    public function flush(): void
-    {
-        Dir::remove(static::$dir);
-    }
 
-    public function logs(): Logs
+    public static function flush(): bool
     {
-        return $this->log = $this->logs ?? new Logs;
+        Redirects::flush();
+        return Dir::remove(static::$dir);
     }
 
     /**
      * @codeCoverageIgnore
      */
-    public function process()
+    public static function process(): bool
     {
-        $tmp = $this->temporaries();
+        $tmp = static::temporaries();
 
         if (empty($tmp) === false) {
-            $this->logs()->add($tmp);
-            $this->stats()->count($tmp);
-            $this->redirects()->hit(array_filter($tmp, function ($x) {
+            Logs::add($tmp);
+            Stats::count($tmp);
+            Redirects::hit(array_filter($tmp, function ($x) {
                 return $x['status'] === 'redirected';
             }));
         }
+
+        return true;
     }
 
-    public function redirects(): Redirects
-    {
-        return $this->redirects = $this->redirects ?? new Redirects;
-    }
-
-    public function stats(): Stats
-    {
-        return $this->stats = $this->stats ?? new Stats;
-    }
-
-    public static function store(string $path, string $status, string $pattern = null)
+    public static function store(string $path, string $status, string $pattern = null): bool
     {
         $file = static::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
 
-        Data::write($file, [
+        return Data::write($file, [
             'path'     => $path,
             'referrer' => $_SERVER['HTTP_REFERER'] ?? null,
             'status'   => $status,
@@ -64,12 +53,7 @@ class Retour
         ], 'yaml');
     }
 
-    public function system(): System
-    {
-        return $this->system = $this->system ?? new System;
-    }
-
-    public function temporaries(): array
+    public static function temporaries(): array
     {
         $tmp   = [];
         $files = static::$dir . '/.*.tmp';
