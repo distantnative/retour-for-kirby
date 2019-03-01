@@ -8,13 +8,8 @@ use Kirby\Toolkit\F;
 
 class Retour
 {
-    protected $logs;
-    protected $redirects;
-    protected $stats;
-    protected $system;
-
+    
     public static $dir;
-
 
     public static function flush(): bool
     {

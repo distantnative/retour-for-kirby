@@ -11,11 +11,10 @@ load([
     'distantnative\\Retour\\System'    => 'models/System.php'
 ], __DIR__);
 
-$root            = dirname(dirname(__DIR__));
-Retour::$dir     = $root . '/logs/retour';
-Logs::$file      = $root . '/logs/retour/404.log';
-Stats::$file     = $root . '/logs/retour/{x}.stats';
-Redirects::$file = $root . '/config/retour.yml';
+Retour::$dir     = __DIR__ . '/../../logs/retour';
+Logs::$file      = __DIR__ . '/../../logs/retour/404.log';
+Stats::$file     = __DIR__ . '/../../logs/retour/{x}.stats';
+Redirects::$file = __DIR__ . '/../../config/retour.yml';
 
 \Kirby::plugin('distantnative/retour', [
     'api'          => require 'config/api.php',

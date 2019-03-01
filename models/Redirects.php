@@ -63,7 +63,7 @@ class Redirects extends Log
                     foreach ($parameters as $i => $parameter) {
                         $to = str_replace('$' . ($i + 1), $parameter, $to);
                     }
-
+                    
                     // Replace alias for home
                     if ($to === '/') {
                         $to = 'home';
