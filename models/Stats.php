@@ -92,6 +92,7 @@ class Stats extends Log
                 break;
         }
 
+        $source = null;
         $result = [
             'headline'   => static::headline($start, $end),
             'labels'     => [],
@@ -99,8 +100,15 @@ class Stats extends Log
             'redirected' => [],
         ];
 
+
         for ($time = $start; $time <= $end; $time += $step) {
-            $data                   = static::read(date('Y-m', $time));
+
+            // don't read data twice
+            if ($source !== date('Y-m', $time)) {
+                $source = date('Y-m', $time);
+                $data   = static::read($source);
+            }
+
             $result['labels'][]     = date($label, $time);
             $result['failed'][]     = $data[$by][date($group, $time)][date($key, $time)]['failed'] ?? 0;
             $result['redirected'][] = $data[$by][date($group, $time)][date($key, $time)]['redirected'] ?? 0;

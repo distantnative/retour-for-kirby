@@ -36,7 +36,7 @@ return [
             'pattern' => 'retour/logs',
             'method'  => 'GET',
             'action'  => function () {
-                return array_values(Log::read());
+                return array_values(Logs::read());
             }
         ],
         [

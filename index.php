@@ -26,3 +26,5 @@ Redirects::$file = $root . '/config/retour.yml';
     },
     'translations' => require 'config/translations.php'
 ]);
+
+// include 'samples.php';
