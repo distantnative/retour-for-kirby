@@ -15,6 +15,8 @@ The Retour for Kirby plugin is free and under the MIT license. If you use it in 
 - supporting my trips with [a donation of your choice](https://paypal.me/distantnative) 🌍 or
 - buying a Kirby license using [this affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
 
+## Screenshots
+
 ![Screenshots](screenshots.jpeg)
 
 ## Installation
