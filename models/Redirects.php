@@ -8,7 +8,7 @@ use Kirby\Http\Url;
 
 class Redirects extends Log
 {
-    public static $file;
+    public static $file = __DIR__ . '/../../../config/redirects.yml';
 
     public static function flush(): bool
     {
@@ -44,14 +44,13 @@ class Redirects extends Log
 
         return array_map(function ($redirect) use ($kirby) {
             return [
-                'name'    => $redirect['from'],
                 'pattern' => $redirect['from'],
                 'action'  => function (...$parameters) use ($redirect, $kirby) {
                     $code = (int)$redirect['status'];
                     $to   = $redirect['to'];
 
                     // Store temporary log file to process later
-                    Retour::store(
+                    Logs::store(
                         Url::path(),
                         'redirected',
                         $redirect['from']

@@ -8,14 +8,14 @@ return [
             'pattern' => 'retour/process',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::process();
+                return Logs::process();
             }
         ],
         [
             'pattern' => 'retour/flush',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::flush();
+                return Logs::flush() && Redirects::flush();
             }
         ],
         [

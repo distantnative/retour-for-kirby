@@ -40,4 +40,65 @@ class LogsTest extends TestCase
         $this->assertEquals($data, Logs::read());
         F::remove(Logs::$file);
     }
+
+    public function testFlush(): void
+    {
+        $file = Logs::$dir . '/a.txt';
+        F::write($file, 'test');
+        $this->assertTrue(F::exists($file));
+
+        $flush = Logs::flush();
+        $this->assertTrue($flush);
+        $this->assertFalse(F::exists($file));
+    }
+
+
+
+    public function testStoreFailed(): void
+    {
+        $path = 'podcast/archive/03';
+        $file = Logs::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
+
+        Logs::store($path, 'failed');
+
+        $this->assertTrue(F::exists($file));
+        $this->assertEquals([
+            'path'     => $path,
+            'referrer' => null,
+            'status'   => 'failed',
+            'pattern'  => null,
+            'date'     => date('Y-m-d H:i')
+        ], Data::read($file, 'yaml'));
+
+        F::remove($file);
+    }
+
+    public function testStore(): void
+    {
+        $path   = 'podcast/archive/03';
+        $file   = Logs::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
+
+        Logs::store($path, 'redirected', $pattern = 'podcast/archive/(:any)');
+
+        $this->assertTrue(F::exists($file));
+        $this->assertEquals([
+            'path'     => $path,
+            'referrer' => null,
+            'status'   => 'redirected',
+            'pattern'  => $pattern,
+            'date'     => date('Y-m-d H:i')
+        ], Data::read($file, 'yaml'));
+
+        F::remove($file);
+    }
+
+    public function testTemporaries(): void
+    {
+        Logs::store('podcast/archive', 'redirected');
+        Logs::store('podcast/not-there', 'failes');
+
+        $tmp = Logs::temporaries();
+
+        $this->assertEquals(2, count($tmp));
+    }
 }

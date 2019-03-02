@@ -9,12 +9,12 @@ class TestCase extends BaseTestCase
     public function testFixtures(): void
     {
         $dir = __DIR__ . '/fixtures';
-        $this->assertEquals($dir, Retour::$dir);
 
         $file = $dir . '/retour.data';
         $this->assertEquals($file, Log::$file);
 
         $file = $dir . '/404.log';
+        $this->assertEquals($dir, Logs::$dir);
         $this->assertEquals($file, Logs::$file);
 
         $file = $dir . '/{x}.stats';
