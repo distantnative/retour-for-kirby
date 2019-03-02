@@ -11,45 +11,21 @@ class RetourTest extends TestCase
     {
         $file = Retour::$dir . '/a.txt';
         F::write($file, 'test');
-
-        $retour = new Retour;
         $this->assertTrue(F::exists($file));
 
-        $retour->flush();
+        $flush = Retour::flush();
+        $this->assertTrue($flush);
         $this->assertFalse(F::exists($file));
     }
 
-    public function testLogs(): void
-    {
-        $retour = new Retour;
-        $this->assertInstanceOf('distantnative\Retour\Log', $retour->logs());
-    }
 
-    public function testRedirects(): void
-    {
-        $retour = new Retour;
-        $this->assertInstanceOf('distantnative\Retour\Redirects', $retour->redirects());
-    }
-
-    public function testStats(): void
-    {
-        $retour = new Retour;
-        $this->assertInstanceOf('distantnative\Retour\Stats', $retour->stats());
-    }
-
-    public function testSystem(): void
-    {
-        $retour = new Retour;
-        $this->assertInstanceOf('distantnative\Retour\System', $retour->system());
-    }
 
     public function testStoreFailed(): void
     {
-        $retour = new Retour;
-        $path   = 'podcast/archive/03';
-        $file   = Retour::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
+        $path = 'podcast/archive/03';
+        $file = Retour::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
 
-        $retour->store($path, 'failed');
+        Retour::store($path, 'failed');
 
         $this->assertTrue(F::exists($file));
         $this->assertEquals([
@@ -65,11 +41,10 @@ class RetourTest extends TestCase
 
     public function testStore(): void
     {
-        $retour = new Retour;
         $path   = 'podcast/archive/03';
         $file   = Retour::$dir . '/.' . md5($path) . '.' . time() . '.tmp';
 
-        $retour->store($path, 'redirected', $pattern = 'podcast/archive/(:any)');
+        Retour::store($path, 'redirected', $pattern = 'podcast/archive/(:any)');
 
         $this->assertTrue(F::exists($file));
         $this->assertEquals([
@@ -85,12 +60,10 @@ class RetourTest extends TestCase
 
     public function testTemporaries(): void
     {
-        $retour = new Retour;
+        Retour::store('podcast/archive', 'redirected');
+        Retour::store('podcast/not-there', 'failes');
 
-        $retour->store('podcast/archive', 'redirected');
-        $retour->store('podcast/not-there', 'failes');
-
-        $tmp = $retour->temporaries();
+        $tmp = Retour::temporaries();
 
         $this->assertEquals(2, count($tmp));
     }

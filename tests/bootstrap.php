@@ -2,7 +2,7 @@
 
 namespace distantnative\Retour;
 
-require dirname(__DIR) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 load([
     'distantnative\\Retour\\Retour'    => 'models/Retour.php',
@@ -13,10 +13,10 @@ load([
     'distantnative\\Retour\\System'    => 'models/System.php'
 ], dirname(__DIR__));
 
-$root        = __DIR__ . '/fixtures';
-Retour::$dir = $root;
-Log::$file   = $root . '/retour.data';
-Logs::$file  = $root . '/404.log';
-Stats::$file = $root . '/{x}.stats';
+Retour::$dir     = __DIR__ . '/fixtures';
+Log::$file       = Retour::$dir . '/retour.data';
+Logs::$file      = Retour::$dir . '/404.log';
+Stats::$file     = Retour::$dir . '/{x}.stats';
+Redirects::$file = Retour::$dir . '/redirects.yml';
 
 require __DIR__ . '/TestCase.php';

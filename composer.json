@@ -1,8 +1,8 @@
 {
     "name": "distantnative/retour-for-kirby",
-    "description": "Redirect management for Kirby 3",
+    "description": "Advanced redirect management for Kirby 3",
     "type": "kirby-plugin",
-    "version": "1.0.0-beta.3",
+    "version": "1.0.0-beta.4",
     "license": "MIT",
     "authors": [
         {

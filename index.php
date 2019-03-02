@@ -14,7 +14,7 @@ load([
 Retour::$dir     = __DIR__ . '/../../logs/retour';
 Logs::$file      = __DIR__ . '/../../logs/retour/404.log';
 Stats::$file     = __DIR__ . '/../../logs/retour/{x}.stats';
-Redirects::$file = __DIR__ . '/../../config/retour.yml';
+Redirects::$file = __DIR__ . '/../../config/redirects.yml';
 
 \Kirby::plugin('distantnative/retour', [
     'api'          => require 'config/api.php',
@@ -25,5 +25,3 @@ Redirects::$file = __DIR__ . '/../../config/retour.yml';
     },
     'translations' => require 'config/translations.php'
 ]);
-
-// include 'samples.php';

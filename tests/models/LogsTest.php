@@ -9,8 +9,7 @@ class LogsTest extends TestCase
 {
     public function testAdd(): void
     {
-        $logs = new Logs;
-        $logs->add($add = [
+        $add = Logs::add($data = [
             [
                 'path'     => $path = 'podcast/archive',
                 'referrer' => $referrer = null,
@@ -19,56 +18,26 @@ class LogsTest extends TestCase
             ]
         ]);
 
+        $this->assertTrue($add);
         $this->assertTrue(F::exists(Logs::$file));
 
         $this->assertEquals(
-            $add[0]['path'],
+            $data[0]['path'],
             Data::read(Logs::$file, 'yaml')[$path . '$' . $referrer]['path']
         );
 
         F::remove(Logs::$file);
     }
 
-    public function testDataEmpty(): void
+    public function testReadEmpty(): void
     {
-        $logs = new Logs;
-        $this->assertEquals([], $logs->data());
+        $this->assertEquals([], Logs::read());
     }
 
-    public function testData(): void
+    public function testRead(): void
     {
-        $logs = new Logs;
-        $logs->write($data = ['homer' => 'simpson']);
-        $this->assertEquals($data, $logs->data());
-        F::remove(Logs::$file);
-    }
-
-    public function testFails(): void
-    {
-        $logs = new Logs;
-        $logs->add([
-            [
-                'path'     => 'podcast/archive',
-                'referrer' => null,
-                'status'   => 'failed',
-                'date'     => '2019-01-29 23:45'
-            ],
-            [
-                'path'     => 'podcast/episode',
-                'referrer' => null,
-                'status'   => 'redirected',
-                'date'     => '2019-01-29 23:45'
-            ],
-            [
-                'path'     => 'podcast/main',
-                'referrer' => null,
-                'status'   => 'failed',
-                'date'     => '2019-01-29 23:45'
-            ]
-        ]);
-
-        $this->assertEquals(2, count($logs->fails()));
-
+        Logs::write($data = ['homer' => 'simpson']);
+        $this->assertEquals($data, Logs::read());
         F::remove(Logs::$file);
     }
 }

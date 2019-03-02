@@ -9,6 +9,8 @@ use Kirby\Http\Url;
 class Redirects extends Log
 {
 
+    public static $file;
+
     public static function flush(): bool
     {
         return static::update(function ($redirect) {
@@ -63,7 +65,7 @@ class Redirects extends Log
                     foreach ($parameters as $i => $parameter) {
                         $to = str_replace('$' . ($i + 1), $parameter, $to);
                     }
-                    
+
                     // Replace alias for home
                     if ($to === '/') {
                         $to = 'home';

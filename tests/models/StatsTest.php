@@ -32,23 +32,19 @@ class StatsTest extends TestCase
 
     public function testDefaults(): void
     {
-        $stats = new Stats;
-        $stats->data();
-
         $this->assertEquals([
             'day'   => [],
             'week'  => [],
             'month' => [],
-        ], $stats->data());
+        ], Stats::read());
     }
 
     public function testCount(): void
     {
-        $stats = new Stats;
-        $stats->count($this->_data());
+        $count = Stats::count($this->_data());
+        $this->assertTrue($count);
 
-        $data = $stats->data(date('Y-m'));
-
+        $data = Stats::read(date('Y-m'));
         $this->assertEquals([
             'failed' => 1,
             'redirected' => 2
@@ -62,9 +58,10 @@ class StatsTest extends TestCase
 
     public function testGetDay(): void
     {
-        $stats = new Stats;
-        $stats->count($this->_data());
-        $get   = $stats->get('day');
+        $count = Stats::count($this->_data());
+        $this->assertTrue($count);
+
+        $get = Stats::get('day');
 
         $this->assertEquals(date('j F Y'), $get['headline']);
         $this->assertEquals(24, count($get['labels']));
@@ -78,11 +75,12 @@ class StatsTest extends TestCase
 
     public function testGetWeek(): void
     {
-        $stats = new Stats;
-        $stats->count($this->_data());
-        $get   = $stats->get('week');
+        $count = Stats::count($this->_data());
+        $this->assertTrue($count);
 
-        $this->assertEquals(date('j', strtotime('Monday this week')) . '-' . date('j F Y', strtotime('Sunday this week')), $get['headline']);
+        $get = Stats::get('week');
+
+        $this->assertEquals(Stats::headline(strtotime('Monday this week'), strtotime('Sunday this week')), $get['headline']);
         $this->assertEquals(7, count($get['labels']));
 
         $this->assertEquals(7, count($get['failed']));
@@ -94,9 +92,10 @@ class StatsTest extends TestCase
 
     public function testGetMonth(): void
     {
-        $stats = new Stats;
-        $stats->count($this->_data());
-        $get   = $stats->get('month');
+        $count = Stats::count($this->_data());
+        $this->assertTrue($count);
+
+        $get = Stats::get('month');
 
         $this->assertEquals(date('F Y'), $get['headline']);
         $this->assertEquals(date('t'), count($get['labels']));

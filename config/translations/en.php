@@ -31,7 +31,7 @@ return [
     'rt.fails.last'        => 'Latest',
 
     'rt.settings'                   => 'Settings',
-    'rt.settings.headline'          => 'Redirect management for Kirby 3',
+    'rt.settings.headline'          => 'Advanced redirect management for Kirby 3',
     'rt.settings.installed'         => 'Installed version',
     'rt.settings.latest'            => 'Latest version',
     'rt.settings.download'          => 'Download <a href="{url}"target="_blank">latest version</a>.',
