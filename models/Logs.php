@@ -40,9 +40,9 @@ class Logs extends Log
         return Dir::remove(static::$dir);
     }
 
-     /**
-     * @codeCoverageIgnore
-     */
+    /**
+    * @codeCoverageIgnore
+    */
     public static function process(): bool
     {
         $tmp = static::temporaries();

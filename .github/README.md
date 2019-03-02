@@ -5,9 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
-Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection management based on rules supporting wildcards and HTTP status codes. Comes with a Panel view, so redirects can be managed without writing code. Make sure to take your visitors where they are heading.
-
-![Screenshots](screenshots.jpeg)
+Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection management and error tracking based on rules supporting wildcards and HTTP status codes. Comes with a Panel view, so redirects can be managed without writing code. Make sure to take your visitors where they are heading.
 
 ## Commercial usage and support development 💛
 
@@ -17,6 +15,7 @@ The Retour for Kirby plugin is free and under the MIT license. If you use it in 
 - supporting my trips with [a donation of your choice](https://paypal.me/distantnative) 🌍 or
 - buying a Kirby license using [this affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
 
+![Screenshots](screenshots.jpeg)
 
 ## Installation
 
