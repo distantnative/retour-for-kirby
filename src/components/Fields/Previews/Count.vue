@@ -39,9 +39,9 @@ export default {
     },
     short() {
       return this.date.toLocaleString(this.$user.language, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
+        year: "numeric",
+        month: "numeric",
+        day: "numeric"
       });
     }
   }

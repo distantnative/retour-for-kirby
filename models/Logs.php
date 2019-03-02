@@ -27,6 +27,6 @@ class Logs extends Log
             $data[$id]['last'] = $tmp['date'];
         }
 
-       return static::write($data);
+        return static::write($data);
     }
 }

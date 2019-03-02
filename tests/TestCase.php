@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-
     public function testFixtures(): void
     {
         $dir = __DIR__ . '/fixtures';

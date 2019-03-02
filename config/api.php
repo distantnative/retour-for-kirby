@@ -21,7 +21,7 @@ return [
         [
             'pattern' => 'retour/redirects',
             'method'  => 'GET',
-            'action'  => function ()  {
+            'action'  => function () {
                 return Redirects::read();
             }
         ],

@@ -3,7 +3,7 @@
     :headline="`${this.$t('rt.redirects')} (${this.redirects.length})`"
     :columns="columns"
     :rows="redirects"
-    :isLoading="this.$store.state.isLoading"
+    :is-loading="$store.state.isLoading"
     v-bind="table"
     @add="action('add')"
     @action="action(...$event)"
@@ -17,15 +17,19 @@
     </template>
 
     <template slot="column-stats" slot-scope="props">
-      <k-rt-count-field-preview :value="{
-        hits: props.row.hits,
-        last: props.row.last
-      }" />
+      <k-rt-count-field-preview
+        :value="{
+          hits: props.row.hits,
+          last: props.row.last
+        }"
+      />
     </template>
 
     <template slot="column-$default" slot-scope="props">
-      <p class="k-url-field-preview" v-if="props.column.type === 'url'">
-        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>{{ props.value }}</k-link>
+      <p v-if="props.column.type === 'url'" class="k-url-field-preview">
+        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
+          {{ props.value }}
+        </k-link>
       </p>
       <p v-else v-html="props.value" />
     </template>
@@ -37,27 +41,27 @@
       <k-form
         ref="form"
         slot="table"
-        :fields="fields"
         v-model="current"
+        :fields="fields"
         class="rt-form"
         @submit="submit"
       />
 
       <template slot="footer">
-          <k-button
-            icon="cancel"
-            class="rt-form-btn"
-            @click="cancel"
-          >
-            {{ $t('cancel') }}
-          </k-button>
-          <k-button
-            icon="check"
-            class="rt-form-btn"
-            @click="submit"
-          >
-            {{ $t(mode === 'new' ? 'create' : 'change') }}
-          </k-button>
+        <k-button
+          icon="cancel"
+          class="rt-form-btn"
+          @click="cancel"
+        >
+          {{ $t('cancel') }}
+        </k-button>
+        <k-button
+          icon="check"
+          class="rt-form-btn"
+          @click="submit"
+        >
+          {{ $t(mode === 'new' ? 'create' : 'change') }}
+        </k-button>
       </template>
     </template>
 
@@ -76,7 +80,6 @@
         </k-text>
       </k-dialog>
     </template>
-
   </tbl>
 </template>
 
@@ -189,7 +192,7 @@ export default {
             { text: this.$t("edit"), icon: "edit", click: "edit" },
             { text: this.$t("remove"), icon: "remove", click: "remove" }
           ],
-          onRow: 'edit'
+          onRow: "edit"
         }
       }
     }
@@ -199,20 +202,20 @@ export default {
       this.current = Object.assign({}, row);
 
       switch (action) {
-        case "add":
-          this.mode = "new";
-          this.current.status = "disabled";
-          this.$nextTick(() => this.$refs.form.focus("from"));
-          break;
+      case "add":
+        this.mode = "new";
+        this.current.status = "disabled";
+        this.$nextTick(() => this.$refs.form.focus("from"));
+        break;
 
-        case "edit":
-          this.mode = this.redirects.findIndex(x => x.from === row.from);
-          this.$nextTick(() => this.$refs.form.focus(field || "from"));
-          break;
+      case "edit":
+        this.mode = this.redirects.findIndex(x => x.from === row.from);
+        this.$nextTick(() => this.$refs.form.focus(field || "from"));
+        break;
 
-        case "remove":
-          this.$refs.remove.open();
-          break;
+      case "remove":
+        this.$refs.remove.open();
+        break;
       }
     },
     cancel() {

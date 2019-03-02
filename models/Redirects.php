@@ -8,7 +8,6 @@ use Kirby\Http\Url;
 
 class Redirects extends Log
 {
-
     public static $file;
 
     public static function flush(): bool

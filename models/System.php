@@ -6,7 +6,6 @@ use Kirby\Http\Header;
 
 class System
 {
-
     public static function toArray(): array
     {
         $plugin = kirby()->plugin('distantnative/retour');

@@ -34,9 +34,9 @@
     />
 
     <rt-redirects
-      ref="redirects"
       v-show="current === 'redirects'"
-      :canUpdate="canUpdate"
+      ref="redirects"
+      :can-update="canUpdate"
       :options="options"
       :redirects="redirects"
       @update="fetchRedirects"
@@ -44,7 +44,7 @@
 
     <rt-logs
       v-show="current === 'fails'"
-      :canUpdate="canUpdate"
+      :can-update="canUpdate"
       :logs="logs"
       :options="options"
       @go="go(...$event)"
@@ -52,7 +52,7 @@
 
     <rt-settings
       v-show="current === 'settings'"
-      :canUpdate="canUpdate"
+      :can-update="canUpdate"
       :logs="logs"
       :options="options"
       :redirects="redirects"

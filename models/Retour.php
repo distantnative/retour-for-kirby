@@ -8,7 +8,6 @@ use Kirby\Toolkit\F;
 
 class Retour
 {
-
     public static $dir;
 
     public static function flush(): bool

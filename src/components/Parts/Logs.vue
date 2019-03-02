@@ -3,7 +3,7 @@
     :headline="`${$t('rt.fails')} (${fails.length})`"
     :columns="columns"
     :rows="fails"
-    :isLoading="this.$store.state.isLoading"
+    :is-loading="this.$store.state.isLoading"
     v-bind="table"
     @action="action(...$event)"
   >
@@ -36,17 +36,17 @@ export default {
           responsive: false,
         },
         {
-          label: this.$t('rt.fails.path'),
-          field: 'path',
+          label: this.$t("rt.fails.path"),
+          field: "path",
           type: "url"
         },
         {
-          label: this.$t('rt.fails.referrer'),
-          field: 'referrer',
+          label: this.$t("rt.fails.referrer"),
+          field: "referrer",
           type: "url"
         },
         {
-          label: this.$t('rt.fails.state'),
+          label: this.$t("rt.fails.state"),
           field: "failed",
           type: "number",
           sort: "desc",
@@ -54,7 +54,7 @@ export default {
           width: "1/8"
         },
         {
-          label: this.$t('rt.redirects.state'),
+          label: this.$t("rt.redirects.state"),
           field: "redirected",
           type: "number",
           sort: "desc",
@@ -64,7 +64,7 @@ export default {
         },
         {
           name: "last",
-          label: this.$t('rt.fails.last'),
+          label: this.$t("rt.fails.last"),
           field: "last",
           type: "date",
           sort: "desc",
@@ -94,11 +94,11 @@ export default {
   methods: {
     action(action, row) {
       switch (action) {
-        case "add":
-          this.$emit("go", ["redirects", (view) => {
-            view.$refs.redirects.action("add", { from: row.path }, "to");
-          }]);
-          break;
+      case "add":
+        this.$emit("go", ["redirects", (view) => {
+          view.$refs.redirects.action("add", { from: row.path }, "to");
+        }]);
+        break;
       }
     }
   }
