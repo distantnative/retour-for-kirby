@@ -19,10 +19,6 @@ return [
     'rt.redirects.hits'            => 'Hits',
     'rt.redirects.hit.last'        => 'Last',
     'rt.redirects.state'           => 'Redirected',
-    'rt.redirects.health.btn'      => 'Check health',
-    'rt.redirects.health.good'     => 'All good!',
-    'rt.redirects.health.bad'      => 'Redirect not working',
-    'rt.redirects.health.disabled' => 'Disabled',
 
     'rt.fails'             => 'Fails',
     'rt.fails.path'        => 'Path',
