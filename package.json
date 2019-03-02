@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "chartist": "^0.11.0",
-    "tbl-for-kirby": "^1.0.0-alpa.11"
+    "tbl-for-kirby": "^1.0.0"
   },
   "devDependencies": {
     "bili": "^4.2.5",

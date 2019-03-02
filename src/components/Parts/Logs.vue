@@ -7,7 +7,7 @@
     v-bind="table"
     @action="action(...$event)"
   >
-    <template slot="column-recency" slot-scope="props">
+    <template #column-recency="props">
       <p><recency :value="props.value" /></p>
     </template>
   </tbl>

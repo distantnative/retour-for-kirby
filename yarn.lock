@@ -4992,9 +4992,9 @@ tar@^4:
     yallist "^3.0.2"
 
 tbl-for-kirby@^1.0.0-alpa.11:
-  version "1.0.0-alpa.12"
-  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.0.0-alpa.12.tgz#3fbad9e6c956771ae38312eeed7151eb2c78eef3"
-  integrity sha512-O+KPtkvLcL6XOZ8IxACkiSlNo5H2wSNXlpVhdu7OlnFRVM0E3BqfZXtevbqgh4kwCDo2KrYQrKIveb0n/OtoAQ==
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.0.0.tgz#fb5db93d0ff3c7b865fe283132c88a1b49915711"
+  integrity sha512-F5dhsRJdoBOunXyV8h5j4kfZNtQmx3ZHsYIQC7YoTQIYclKAxOdEuFgZ3uS1japp1wUadzv9zercSv3h/jPtxQ==
 
 terser@^3.14.1:
   version "3.16.1"

@@ -9,14 +9,14 @@
     @action="action(...$event)"
   >
     <!-- Custom field cells -->
-    <template slot="column-status" slot-scope="props">
+    <template #column-status="props">
       <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
         <code>{{ props.value }}</code>
       </p>
     </template>
 
-    <template slot="column-stats" slot-scope="props">
+    <template #column-stats="props">
       <k-rt-count-field-preview
         :value="{
           hits: props.row.hits,
@@ -25,7 +25,7 @@
       />
     </template>
 
-    <template slot="column-$default" slot-scope="props">
+    <template #column-$default="props">
       <p v-if="props.column.type === 'url'" class="k-url-field-preview">
         <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
           {{ props.value }}
@@ -35,9 +35,11 @@
     </template>
 
     <!-- Replace parts of k-tbl for add/edit screen -->
-    <template v-if="mode !== null">
-      <div slot="filter" />
+    <template v-if="mode !== null" #filter>
+      <div />
+    </template>
 
+    <template v-if="mode !== null" #table>
       <k-form
         ref="form"
         slot="table"
@@ -46,27 +48,27 @@
         class="rt-form"
         @submit="submit"
       />
+    </template>
 
-      <template slot="footer">
-        <k-button
-          icon="cancel"
-          class="rt-form-btn"
-          @click="cancel"
-        >
-          {{ $t('cancel') }}
-        </k-button>
-        <k-button
-          icon="check"
-          class="rt-form-btn"
-          @click="submit"
-        >
-          {{ $t(mode === 'new' ? 'create' : 'change') }}
-        </k-button>
-      </template>
+    <template v-if="mode !== null" #footer>
+      <k-button
+        icon="cancel"
+        class="rt-form-btn"
+        @click="cancel"
+      >
+        {{ $t('cancel') }}
+      </k-button>
+      <k-button
+        icon="check"
+        class="rt-form-btn"
+        @click="submit"
+      >
+        {{ $t(mode === 'new' ? 'create' : 'change') }}
+      </k-button>
     </template>
 
     <!-- Dialogs -->
-    <template slot="dialogs">
+    <template #dialogs>
       <k-dialog
         ref="remove"
         :button="$t('delete')"
