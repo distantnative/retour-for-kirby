@@ -4,6 +4,15 @@ return [
     'view.retour' => 'Retour',
     'rt.refresh'  => 'Reload',
 
+    'rt.tbl.all'               => 'All',
+    'rt.tbl.reset'             => 'Reset',
+    'rt.tbl.redirects.filter'  => 'Filter redirects...',
+    'rt.tbl.redirects.perPage' => 'Redirects displayed',
+    'rt.tbl.redirects.empty'   => 'No redirects',
+    'rt.tbl.fails.filter'      => 'Filter fails...',
+    'rt.tbl.fails.perPage'     => 'Fails displayed',
+    'rt.tbl.fails.empty'       => 'No fails yet',
+
     'rt.dashboard'       => 'Dashboard',
     'rt.dashboard.month' => 'Month',
     'rt.dashboard.week'  => 'Week',

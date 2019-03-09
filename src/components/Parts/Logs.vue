@@ -87,6 +87,13 @@ export default {
           items: [
             { text: "Add as redirect", icon: "add", click: "add" }
           ]
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.fails.empty"),
+          perPage: this.$t("rt.tbl.fails.perPage"),
+          reset: this.$t("rt.tbl.reset"),
+          filter: this.$t("rt.tbl.fails.filter")
         }
       }
     }

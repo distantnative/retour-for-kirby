@@ -192,6 +192,13 @@ export default {
             { text: this.$t("remove"), icon: "remove", click: "remove" }
           ],
           onRow: "edit"
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.redirects.empty"),
+          perPage: this.$t("rt.tbl.redirects.perPage"),
+          reset: this.$t("rt.tbl.reset"),
+          filter: this.$t("rt.tbl.redirects.filter")
         }
       }
     }
