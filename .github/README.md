@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/badge/release-1.0.0--beta.5-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
 [![Dependency](https://img.shields.io/badge/kirby-3.0.3-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
+[![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
 
 Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection management and error tracking based on rules supporting wildcards and HTTP status codes. Comes with a Panel view, so redirects can be managed without writing code. Make sure to take your visitors where they are heading.
 
@@ -12,7 +12,7 @@ Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection managemen
 The Retour for Kirby plugin is free and under the MIT license. If you use it in a commercial project or you want to support its development in general, please consider to give back by
 
 - [buying me a juice](https://buymeacoff.ee/distantnative) 🥤 or
-- [a donation of your choice](https://paypal.me/distantnative) 🌍 or
+- [a donation of your choice](https://paypal.me/distantnative/15EUR) 🌍 or
 - buying [a Kirby license](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
 
 ## Screenshots
