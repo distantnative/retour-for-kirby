@@ -51,7 +51,7 @@ Four options:
 - `error` to return your site's error page
 - empty to let the browser request fail (for status codes not in the `3xx` range)
 
-If you use routing patterns, the mathed parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/$1/gallery`
+If you use routing patterns, the matched parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/(:any)/photos` => `project/$1/gallery`.
 
 ### Status
 Status codes in the `3xx` range will actually redirect the request to the new location (URL changes). All other HTTP status codes have the option to return a specified page with the selected HTTP status code (while the URL stays the same) or let the browser request fail with the selected HTTP status code (if you leave the `Redirect to` field empty).
@@ -61,8 +61,7 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 - ![#f0c674](https://via.placeholder.com/16.png/f0c674?text=+) Other HTTP status codes
 - ![#c82829](https://via.placeholder.com/16.png/c82829?text=+) `disabled`
 
-**HTTP status codes**
-https://httpstatuses.com
+**[HTTP status codes](https://httpstatuses.com)**
 
 ## Tracking
 
@@ -102,6 +101,11 @@ If you are using a customf older setup for Kirby, there might be issues with whe
 ## Disclaimer
 
 This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you encounter any problem, please [create an issue](https://github.com/distantnative/retour-for-kirby/issues/new).
+
+## Credits
+
+Thanks to [@sylvainjule](https://github.com/sylvainjule) and [@pedroborges](https://github.com/pedroborges) for their help in translating the plugin.
+
 
 ## License
 
