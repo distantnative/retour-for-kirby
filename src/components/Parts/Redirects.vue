@@ -1,6 +1,6 @@
 <template>
   <tbl
-    :headline="`${this.$t('rt.redirects')} (${this.redirects.length})`"
+    :headline="$t('rt.redirects') + '(' + redirects.length + ')'"
     :columns="columns"
     :rows="redirects"
     :is-loading="$store.state.isLoading"
@@ -9,14 +9,14 @@
     @action="action(...$event)"
   >
     <!-- Custom field cells -->
-    <template #column-status="props">
+    <template slot="column-status" slot-scope="props">
       <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
         <code>{{ props.value }}</code>
       </p>
     </template>
 
-    <template #column-stats="props">
+    <template slot="column-stats" slot-scope="props">
       <k-rt-count-field-preview
         :value="{
           hits: props.row.hits,
@@ -25,7 +25,7 @@
       />
     </template>
 
-    <template #column-$default="props">
+    <template slot="column-$default" slot-scope="props">
       <p v-if="props.column.type === 'url'" class="k-url-field-preview">
         <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
           {{ props.value }}
@@ -35,11 +35,9 @@
     </template>
 
     <!-- Replace parts of k-tbl for add/edit screen -->
-    <template v-if="mode !== null" #filter>
-      <div />
-    </template>
+    <template v-if="mode !== null">
+      <div slot="filter" />
 
-    <template v-if="mode !== null" #table>
       <k-form
         ref="form"
         slot="table"
@@ -48,40 +46,39 @@
         class="rt-form"
         @submit="submit"
       />
-    </template>
 
-    <template v-if="mode !== null" #footer>
-      <k-button
-        icon="cancel"
-        class="rt-form-btn"
-        @click="cancel"
-      >
-        {{ $t('cancel') }}
-      </k-button>
-      <k-button
-        icon="check"
-        class="rt-form-btn"
-        @click="submit"
-      >
-        {{ $t(mode === 'new' ? 'create' : 'change') }}
-      </k-button>
+      <template slot="footer">
+        <k-button
+          icon="cancel"
+          class="rt-form-btn"
+          @click="cancel"
+        >
+          {{ $t('cancel') }}
+        </k-button>
+        <k-button
+          icon="check"
+          class="rt-form-btn"
+          @click="submit"
+        >
+          {{ $t(mode === 'new' ? 'create' : 'change') }}
+        </k-button>
+      </template>
     </template>
 
     <!-- Dialogs -->
-    <template #dialogs>
-      <k-dialog
-        ref="remove"
-        :button="$t('delete')"
-        theme="negative"
-        icon="trash"
-        @cancel="cancel"
-        @submit="remove"
-      >
-        <k-text>
-          {{ $t('field.structure.delete.confirm') }}
-        </k-text>
-      </k-dialog>
-    </template>
+    <k-dialog
+      slot="dialogs"
+      ref="remove"
+      :button="$t('delete')"
+      theme="negative"
+      icon="trash"
+      @cancel="cancel"
+      @submit="remove"
+    >
+      <k-text>
+        {{ $t('field.structure.delete.confirm') }}
+      </k-text>
+    </k-dialog>
   </tbl>
 </template>
 
