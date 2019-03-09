@@ -26,7 +26,10 @@
     </template>
 
     <template slot="column-$default" slot-scope="props">
-      <p v-if="props.column.type === 'url'" class="k-url-field-preview">
+      <p
+        v-if="props.column.type === 'url' && props.value !== '–'"
+        class="k-url-field-preview"
+      >
         <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
           {{ props.value }}
         </k-link>
