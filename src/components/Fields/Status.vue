@@ -4,6 +4,7 @@
       :id="_uid"
       ref="input"
       v-bind="$props"
+      type="select"
       theme="field"
       v-on="$listeners"
     >
@@ -27,7 +28,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .k-retour-view [data-status="no"] {
   color: #c82829;
 }
@@ -38,4 +39,3 @@ export default {
   color: #f0c674;
 }
 </style>
-
