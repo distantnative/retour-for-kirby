@@ -7,8 +7,17 @@
     v-bind="table"
     @action="action(...$event)"
   >
-    <template #column-recency="props">
+    <template slot="column-recency" slot-scope="props">
       <p><recency :value="props.value" /></p>
+    </template>
+
+    <template slot="column-path" slot-scope="props">
+      <p v-if="props.value !== '–'" class="k-url-field-preview">
+        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
+          {{ props.value }}
+        </k-link>
+      </p>
+      <p v-else>{{ props.value }}</p>
     </template>
   </tbl>
 </template>
@@ -76,6 +85,9 @@ export default {
     },
     fails() {
       return this.logs.filter(log => log.failed > 0);
+    },
+    site() {
+      return window.panel.site;
     },
     table() {
       return {
