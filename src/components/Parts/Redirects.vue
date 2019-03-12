@@ -1,6 +1,6 @@
 <template>
   <tbl
-    :headline="$t('rt.redirects') + '(' + redirects.length + ')'"
+    :headline="`${$t('rt.redirects')} (${redirects.length})`"
     :columns="columns"
     :rows="redirects"
     :is-loading="$store.state.isLoading"
