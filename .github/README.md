@@ -1,7 +1,7 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-1.0.0--beta.5-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.1.0-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
+[![Version](https://img.shields.io/badge/release-1.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.1.1-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
 
@@ -36,8 +36,6 @@ git submodule add https://github.com/distantnative/retour-for-kirby.git site/plu
 ```
 composer require distantnative/retour-for-kirby
 ```
-
-During the beta make sure to add `"minimum-stability": "beta",` to the top level of your `composer.json` as well.
 
 ## Redirects
 
@@ -96,7 +94,7 @@ permissions:
 ## Known issues
 
 ### Custom folder setup
-If you are using a customf older setup for Kirby, there might be issues with where the Retour plugin is trying to store its config and log files. To change these path manually, adapt [these lines](blob/master/index.php#L14-L17) in the plugin's `index.php`. If you have questions, please get in touch.
+If you are using a custom folder setup for Kirby, there might be issues with where the Retour plugin is trying to store its config and log files. If you have issues and questions in this regard, please get in touch.
 
 ## Disclaimer
 
@@ -104,7 +102,7 @@ This plugin is provided "as is" with no guarantee. Use it at your own risk and a
 
 ## Credits
 
-Thanks to [@sylvainjule](https://github.com/sylvainjule) and [@pedroborges](https://github.com/pedroborges) for their help in translating the plugin.
+Thanks to [@sylvainjule](https://github.com/sylvainjule) and [@pedroborges](https://github.com/pedroborges) for their help in translating and styling the plugin.
 
 
 ## License
