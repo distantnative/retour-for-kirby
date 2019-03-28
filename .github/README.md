@@ -9,7 +9,7 @@ Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection managemen
 
 ## Commercial usage and support development 💛
 
-The Retour for Kirby plugin is free and under the MIT license. If you use it in a commercial project or you want to support its development in general, please consider to give back by
+Retour is free and under the MIT license. If you use it in a commercial project or you want to support its development in general, please consider to give back by
 
 - [buying me a juice](https://buymeacoff.ee/distantnative) 🥤 or
 - [a donation of your choice](https://paypal.me/distantnative/15EUR) 🌍 or
