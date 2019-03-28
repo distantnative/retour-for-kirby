@@ -30,11 +30,13 @@
         v-if="props.column.type === 'url' && props.value !== '–'"
         class="k-url-field-preview"
       >
-        <k-link :to="props.value.startsWith('http') ? props.value : site + '/' + props.value" target="_blank" @click.native.stop>
+        <k-link :to="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value" target="_blank" @click.native.stop>
           {{ props.value }}
         </k-link>
       </p>
-      <p v-else>{{ props.value }}</p>
+      <p v-else>
+        {{ props.value }}
+      </p>
     </template>
 
     <!-- Replace parts of k-tbl for add/edit screen -->
