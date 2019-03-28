@@ -17,7 +17,6 @@
         "getkirby/cms": "^3.1.1",
         "phpunit/phpunit": "^7"
     },
-    "minimum-stability": "RC",
     "extra": {
       "kirby-cms-path": false
     }
