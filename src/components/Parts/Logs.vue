@@ -17,7 +17,9 @@
           {{ props.value }}
         </k-link>
       </p>
-      <p v-else>{{ props.value }}</p>
+      <p v-else>
+        {{ props.value }}
+      </p>
     </template>
   </tbl>
 </template>
