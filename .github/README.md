@@ -1,9 +1,9 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-1.0.0--beta.5-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.0.3-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
+[![Version](https://img.shields.io/badge/release-1.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.1.1-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
+[![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
 
 Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection management and error tracking based on rules supporting wildcards and HTTP status codes. Comes with a Panel view, so redirects can be managed without writing code. Make sure to take your visitors where they are heading.
 
@@ -11,9 +11,9 @@ Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection managemen
 
 The Retour for Kirby plugin is free and under the MIT license. If you use it in a commercial project or you want to support its development in general, please consider to give back by
 
-- keeping me healthy with [buying me a juice](https://buymeacoff.ee/distantnative) 🥤 or
-- supporting my trips with [a donation of your choice](https://paypal.me/distantnative) 🌍 or
-- buying a Kirby license using [this affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
+- [buying me a juice](https://buymeacoff.ee/distantnative) 🥤 or
+- [a donation of your choice](https://paypal.me/distantnative/15EUR) 🌍 or
+- buying [a Kirby license](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
 
 ## Screenshots
 
@@ -37,8 +37,6 @@ git submodule add https://github.com/distantnative/retour-for-kirby.git site/plu
 composer require distantnative/retour-for-kirby
 ```
 
-During the beta make sure to add `"minimum-stability": "beta",` to the top level of your `composer.json` as well.
-
 ## Redirects
 
 ### URL pattern
@@ -51,7 +49,7 @@ Four options:
 - `error` to return your site's error page
 - empty to let the browser request fail (for status codes not in the `3xx` range)
 
-If you use routing patterns, the mathed parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/$1/gallery`
+If you use routing patterns, the matched parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/(:any)/photos` => `project/$1/gallery`.
 
 ### Status
 Status codes in the `3xx` range will actually redirect the request to the new location (URL changes). All other HTTP status codes have the option to return a specified page with the selected HTTP status code (while the URL stays the same) or let the browser request fail with the selected HTTP status code (if you leave the `Redirect to` field empty).
@@ -61,8 +59,7 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 - ![#f0c674](https://via.placeholder.com/16.png/f0c674?text=+) Other HTTP status codes
 - ![#c82829](https://via.placeholder.com/16.png/c82829?text=+) `disabled`
 
-**HTTP status codes**
-https://httpstatuses.com
+**[HTTP status codes](https://httpstatuses.com)**
 
 ## Tracking
 
@@ -97,11 +94,16 @@ permissions:
 ## Known issues
 
 ### Custom folder setup
-If you are using a customf older setup for Kirby, there might be issues with where the Retour plugin is trying to store its config and log files. To change these path manually, adapt [these lines](blob/master/index.php#L14-L17) in the plugin's `index.php`. If you have questions, please get in touch.
+If you are using a custom folder setup for Kirby, there might be issues with where the Retour plugin is trying to store its config and log files. If you have issues and questions in this regard, please get in touch.
 
 ## Disclaimer
 
 This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you encounter any problem, please [create an issue](https://github.com/distantnative/retour-for-kirby/issues/new).
+
+## Credits
+
+Thanks to [@sylvainjule](https://github.com/sylvainjule) and [@pedroborges](https://github.com/pedroborges) for their help in translating and styling the plugin.
+
 
 ## License
 

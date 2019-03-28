@@ -1,6 +1,6 @@
 <template>
   <tbl
-    :headline="$t('rt.redirects') + '(' + redirects.length + ')'"
+    :headline="`${$t('rt.redirects')} (${redirects.length})`"
     :columns="columns"
     :rows="redirects"
     :is-loading="$store.state.isLoading"
@@ -26,12 +26,17 @@
     </template>
 
     <template slot="column-$default" slot-scope="props">
-      <p v-if="props.column.type === 'url'" class="k-url-field-preview">
-        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
+      <p
+        v-if="props.column.type === 'url' && props.value !== '–'"
+        class="k-url-field-preview"
+      >
+        <k-link :to="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value" target="_blank" @click.native.stop>
           {{ props.value }}
         </k-link>
       </p>
-      <p v-else v-html="props.value" />
+      <p v-else>
+        {{ props.value }}
+      </p>
     </template>
 
     <!-- Replace parts of k-tbl for add/edit screen -->
@@ -192,6 +197,13 @@ export default {
             { text: this.$t("remove"), icon: "remove", click: "remove" }
           ],
           onRow: "edit"
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.redirects.empty"),
+          perPage: this.$t("rt.tbl.redirects.perPage"),
+          reset: this.$t("rt.tbl.reset"),
+          filter: this.$t("rt.tbl.redirects.filter")
         }
       }
     }

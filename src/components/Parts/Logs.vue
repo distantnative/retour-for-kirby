@@ -7,8 +7,19 @@
     v-bind="table"
     @action="action(...$event)"
   >
-    <template #column-recency="props">
+    <template slot="column-recency" slot-scope="props">
       <p><recency :value="props.value" /></p>
+    </template>
+
+    <template slot="column-path" slot-scope="props">
+      <p v-if="props.value !== '–'" class="k-url-field-preview">
+        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
+          {{ props.value }}
+        </k-link>
+      </p>
+      <p v-else>
+        {{ props.value }}
+      </p>
     </template>
   </tbl>
 </template>
@@ -77,6 +88,9 @@ export default {
     fails() {
       return this.logs.filter(log => log.failed > 0);
     },
+    site() {
+      return window.panel.site;
+    },
     table() {
       return {
         sort: {
@@ -87,6 +101,13 @@ export default {
           items: [
             { text: "Add as redirect", icon: "add", click: "add" }
           ]
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.fails.empty"),
+          perPage: this.$t("rt.tbl.fails.perPage"),
+          reset: this.$t("rt.tbl.reset"),
+          filter: this.$t("rt.tbl.fails.filter")
         }
       }
     }

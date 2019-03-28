@@ -18,11 +18,10 @@
       <k-button-group slot="right">
         <k-button
           :disabled="loading"
-          :icon="loading ? 'loader' : 'refresh'"
-          class="retour-loader"
+          icon="refresh"
           @click="fetch()"
         >
-          {{ $t(loading ? 'loading' : 'rt.refresh') }}
+          {{ $t('rt.refresh') }}
         </k-button>
       </k-button-group>
     </k-header>
@@ -179,13 +178,6 @@ export default {
 .k-retour-view [aria-current="true"] {
   color: #4271ae;
 }
-
-.retour-loader[disabled] .k-icon > svg {
-    transform: rotate(-180deg);
-    animation: spin-loader 1.5s linear infinite;
-}
-
-@keyframes spin-loader { 100% { transform: rotate(180deg); } }
 
 .k-retour-view .hide { opacity: 0; }
 </style>

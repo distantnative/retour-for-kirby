@@ -4,6 +4,15 @@ return [
     'view.retour' => 'Retour',
     'rt.refresh'  => 'Neu laden',
 
+    'rt.tbl.all'               => 'Alle',
+    'rt.tbl.reset'             => 'Zurücksetzen',
+    'rt.tbl.redirects.filter'  => 'Umleitungen filtern...',
+    'rt.tbl.redirects.perPage' => 'Angezeigte Umleitungen',
+    'rt.tbl.redirects.empty'   => 'Keine Umleitungen',
+    'rt.tbl.fails.filter'      => 'Fehler filtern...',
+    'rt.tbl.fails.perPage'     => 'Angezeigte Fehler',
+    'rt.tbl.fails.empty'       => 'Keine Fehler bisher',
+
     'rt.dashboard'       => 'Statistik',
     'rt.dashboard.month' => 'Monat',
     'rt.dashboard.week'  => 'Woche',
