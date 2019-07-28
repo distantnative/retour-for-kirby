@@ -1,6 +1,6 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-1.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Version](https://img.shields.io/badge/release-1.0.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
 [![Dependency](https://img.shields.io/badge/kirby-3.1.1-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
