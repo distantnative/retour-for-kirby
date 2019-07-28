@@ -138,26 +138,30 @@ export default {
         });
       });
     },
-    async fetchLogs() {
-      const response = await this.$api.get("retour/logs");
-      this.logs = response;
+    fetchLogs() {
+     return this.$api.get("retour/logs").then(response => {
+        this.logs = response;
+     });
     },
-    async fetchRedirects() {
-      const response = await this.$api.get("retour/redirects");
-      this.redirects = response;
+    fetchRedirects() {
+      return this.$api.get("retour/redirects").then(response => {
+        this.redirects = response;
+      });
     },
-    async fetchStats(stats) {
-      const endpoint = "retour/stats/" + stats[0] + "/" + stats[1];
-      const response = await this.$api.get(endpoint);
-      this.stats = {
-        data: response,
-        frame: stats[0],
-        offset: stats[1]
-      };
+    fetchStats(stats) {
+      return this.$api.get("retour/stats/" + stats[0] + "/" + stats[1]).then(response => {
+        this.stats = {
+          data: response,
+          frame: stats[0],
+          offset: stats[1]
+        };
+      });
+
     },
-    async fetchSystem() {
-      const response = await this.$api.get("retour/system");
-      this.options = response;
+    fetchSystem() {
+      return this.$api.get("retour/system").then(response => {
+        this.options = response;
+      });
     },
     go(part, after = () => {}) {
       this.current = part;
@@ -167,8 +171,8 @@ export default {
       // Currently not supported by Kirby Panel
       // window.location.hash = part;
     },
-    async process() {
-      await this.$api.post("retour/process");
+    process() {
+      return this.$api.post("retour/process");
     }
   }
 }
