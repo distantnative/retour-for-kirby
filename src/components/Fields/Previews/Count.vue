@@ -38,7 +38,7 @@ export default {
       return factor > 0 ? factor : 0;
     },
     short() {
-      return this.date.toLocaleString(this.$user.language, {
+      return this.date.toLocaleString(this.$user.language.replace("_", "-"), {
         year: "numeric",
         month: "numeric",
         day: "numeric"
