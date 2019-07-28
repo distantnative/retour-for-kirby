@@ -11,8 +11,8 @@
 /tests/fixtures
 /tests/report
 
-# Stats
-stats.html
+# Parcel cache folder
+.cache
 
 # Samples
 samples.php
