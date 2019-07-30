@@ -39,7 +39,7 @@ $log = new Log;
 Redirects::write($redirects);
 
 foreach ($redirects as $redirect) {
-    for ($i= rand(200, 1000); $i > 0; $i--) {
+    for ($i= rand(200, 2500); $i > 0; $i--) {
         $log->add([
             'date' => rand_date(date('Y-m-01', strtotime('-4 month')), date('Y-m-t')),
             'path' => $redirect['from'],
@@ -59,9 +59,9 @@ for ($i = 100; $i > 0; $i--) {
     $referers[] = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 15);
 }
 
-for ($i = rand(2500, 5000); $i > 0; $i--) {
+for ($i = rand(2500, 10000); $i > 0; $i--) {
     $log->add([
-        'date' => rand_date(date('Y-m-01', strtotime('-4 month')), date('Y-m-t')),
+        'date' => rand_date(date('Y-m-01', strtotime('-12 month')), date('Y-m-t')),
         'path' => $paths[array_rand($paths)],
         'referrer' => rand(1, 10) > 7 ? $referers[array_rand($referers)] : null
     ]);

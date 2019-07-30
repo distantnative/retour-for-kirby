@@ -50,13 +50,6 @@
       </div>
       <k-button-group>
         <k-button
-          v-if="false"
-          icon="download"
-          @click="loadSamples"
-        >
-          Samples
-        </k-button>
-        <k-button
           :disabled="!canUpdate"
           icon="trash"
           theme="negative"
@@ -107,11 +100,6 @@ export default {
         this.$refs.dialog.close();
         this.$store.dispatch("retour/load");
       });
-    },
-    loadSamples() {
-      this.$api.post("retour/samples").then(() => {
-        this.$store.dispatch("retour/load");
-      })
     }
   }
 }

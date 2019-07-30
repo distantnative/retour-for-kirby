@@ -26,6 +26,9 @@ export default {
     }
 
     this.$store.dispatch("retour/load");
+
+    // Sample data
+    // this.$api.post("retour/samples");
   }
 }
 </script>
