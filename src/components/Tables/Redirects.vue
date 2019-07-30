@@ -213,20 +213,13 @@ export default {
       return window.panel.site;
     },
     table() {
-      return {
+      let config = {
         options: {
-          add: true,
+          add: this.canUpdate,
           reset: false
         },
         sort: {
           initialBy: "status"
-        },
-        actions: {
-          items: [
-            { text: this.$t("edit"), icon: "edit", click: "edit" },
-            { text: this.$t("remove"), icon: "remove", click: "remove" }
-          ],
-          onRow: "edit"
         },
         labels: {
           all: this.$t("rt.tbl.all"),
@@ -234,7 +227,19 @@ export default {
           perPage: this.$t("rt.tbl.perPage"),
           filter: this.$t("rt.tbl.filter")
         }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
+          items: [
+            { text: this.$t("edit"), icon: "edit", click: "edit" },
+            { text: this.$t("remove"), icon: "remove", click: "remove" }
+          ],
+          onRow: "edit"
+        };
       }
+
+      return config;
     }
   },
   methods: {

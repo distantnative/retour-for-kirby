@@ -95,18 +95,12 @@ export default {
       return window.panel.site;
     },
     table() {
-      return {
+      let config = {
         options: {
           reset: false
         },
         sort: {
           initialBy: "last"
-        },
-        actions: {
-          inline: true,
-          items: [
-            { text: "Add as redirect", icon: "add", click: "add" }
-          ]
         },
         labels: {
           all: this.$t("rt.tbl.all"),
@@ -114,7 +108,18 @@ export default {
           perPage: this.$t("rt.tbl.perPage"),
           filter: this.$t("rt.tbl.filter")
         }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
+          inline: true,
+          items: [
+            { text: "Add as redirect", icon: "add", click: "add" }
+          ]
+        };
       }
+
+      return config;
     }
   },
   methods: {
