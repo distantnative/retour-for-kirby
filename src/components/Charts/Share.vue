@@ -6,7 +6,11 @@
       </label>
 
       <k-button-group>
-        <k-button icon="blank" />
+        <k-button
+          icon="refresh"
+          :disabled="$store.state.isLoading"
+          @click="$store.dispatch('retour/load')"
+        />
       </k-button-group>
     </header>
 
