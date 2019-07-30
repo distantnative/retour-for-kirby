@@ -6,17 +6,9 @@
 .gitignore export-ignore
 
 # npm & composer
-bili.config.js export-ignore
 package.json export-ignore
 yarn.lock export-ignore
 composer.lock export-ignore
 
-# Tests
-.coveralls.yml export-ignore
-.travis.yml export-ignore
-phpunit.xml.dist export-ignore
-tests/ export-ignore
-
 # Directories
-src/ export-ignore
-config/samples/ export-ignore
+config/samples.php export-ignore
