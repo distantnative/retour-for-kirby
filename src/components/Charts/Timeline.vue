@@ -11,7 +11,7 @@
         <k-button
           v-for="by in ['year', 'month', 'week', 'day']"
           :key="by"
-          :current="$store.state.retour.view.stats === by"
+          :current="view === by"
           @click="$store.dispatch('retour/stats', by)"
         >
           {{ $t('rt.stats.' + by) }}
@@ -41,6 +41,9 @@ export default {
     },
     labels() {
       return this.data.map(x => x.label);
+    },
+    view() {
+      return this.$store.state.retour.view.stats;
     }
   },
   watch: {
@@ -53,6 +56,21 @@ export default {
   },
   methods: {
     createChart() {
+
+      const responsive = [
+        ['screen', {
+          axisX: {
+            labelInterpolationFnc: function(value, index) {
+              if (this.view === "year") {
+                return index % 2  === 0 ? value : null;
+              }
+
+              return value;
+            }.bind(this)
+          }
+        }]
+      ];
+
       new Chartist.Line(".rt-timeline", {
         labels: this.labels,
         series: [
@@ -71,7 +89,7 @@ export default {
         axisY: {
           onlyInteger: true
         }
-      });
+      }, responsive);
     }
   }
 }
@@ -84,8 +102,7 @@ export default {
 }
 
 .rt-timeline .ct-label.ct-horizontal.ct-end {
-  display: block;
-  transform: translateX(-50%);
+  transform: translateX(-25%);
   text-align: center;
 }
 

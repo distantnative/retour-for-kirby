@@ -21,16 +21,17 @@ class Stats
                 $time = strtotime('today ' . $offset . ' year');
                 $start = date('Y-01-01 00:00:00', $time);
                 $end = date('Y-12-31 23:59:59', $time);
-                $data = $log->forStats($start, $end, 'b');
-                $data = self::fill($data, $start, $end, 'month', 'm');
+                $data = $log->forStats($start, $end, '%W');
+                $data = self::fill($data, $start, $end, 'week', '%W');
                 break;
 
             case 'month':
-                $time = strtotime('today ' . $offset . ' month');
-                $start = date('Y-m-01 00:00:00', $time);
-                $end = date('Y-m-t 23:59:59', $time);
-                $data = $log->forStats($start, $end);
-                $data = self::fill($data, $start, $end);
+                $start = date('Y-m-01 00:00:00 ', time());
+                $start = strtotime($start. $offset . ' month');
+                $start = date('Y-m-01 00:00:00', $start);
+                $end = date('Y-m-t 23:59:59', strtotime($start));
+                $data = $log->forStats($start, $end, '%d');
+                $data = self::fill($data, $start, $end, 'day', '%d');
                 break;
 
             case 'week':
@@ -38,16 +39,16 @@ class Stats
                 $start = date('Y-m-d 00:00:00', $start);
                 $end = strtotime($start . ' +6 day');
                 $end = date('Y-m-d 23:59:59', $end);
-                $data = $log->forStats($start, $end);
-                $data = self::fill($data, $start, $end);
+                $data = $log->forStats($start, $end, '%d');
+                $data = self::fill($data, $start, $end, 'day', '%d');
                 break;
 
             case 'day':
                 $time = strtotime('today ' . $offset . ' day');
                 $start = date('Y-m-d 00:00:00', $time);
                 $end = date('Y-m-d 23:59:59', $time);
-                $data = $log->forStats($start, $end, 'H');
-                $data = self::fill($data, $start, $end, 'hour', 'H');
+                $data = $log->forStats($start, $end, '%H');
+                $data = self::fill($data, $start, $end, 'hour', '%H');
                 break;
         }
 
@@ -67,18 +68,18 @@ class Stats
      * @param string $unit
      * @return array
      */
-    protected static function fill(array $data, string $start, string $end, string $step = 'day', string $unit = 'd'): array
+    protected static function fill(array $data, string $start, string $end, string $step, string $unit): array
     {
         for (
             $i = strtotime($start);
             $i <= strtotime($end);
             $i = strtotime(date('Y-m-d H:i:s', $i) . ' +1 ' . $step)
         ) {
-            $label = date($unit, $i);
+            $label = strftime($unit, $i);
 
             if (in_array($label, array_column($data, 'label')) === false) {
                 array_push($data, [
-                    'label'      => str_pad($label, 2, '0', STR_PAD_LEFT),
+                    'label'      => $label,
                     'time'       => $i,
                     'total'      => 0,
                     'redirected' => 0,

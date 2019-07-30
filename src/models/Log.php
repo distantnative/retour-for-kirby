@@ -30,6 +30,7 @@ class Log
     {
         Db::insert('records', [
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
+            'timezone' => date('Z'),
             'path'     => $props['path'],
             'referrer' => $props['referrer'] ?? null,
             'redirect' => $props['redirect'] ?? null
@@ -109,12 +110,12 @@ class Log
      * @param string $label
      * @return array
      */
-    public function forStats(string $start, string $end, string $label = 'd'): array
+    public function forStats(string $start, string $end, string $label): array
     {
         return Db::query('
             SELECT
-                strftime("%' . $label . '", date) AS label,
-                strftime("%s", date) AS time,
+                strftime("' . $label . '", date) AS label,
+                strftime("%s", MIN(date)) - timezone AS time,
                 COUNT(path) AS total,
                 COUNT(wasResolved) AS resolved,
                 COUNT(redirect) AS redirected
