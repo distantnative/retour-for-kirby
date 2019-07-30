@@ -22,7 +22,7 @@ class Redirects
     {
         try {
             return Data::read(self::$file, 'yaml');
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             return [];
         }
     }
@@ -46,21 +46,21 @@ class Redirects
      * @param App $kirby
      * @return array
      */
-    public static function routes(App $kirby): array
+    public static function routes(Log $log): array
     {
         // no routes for disabled redirects
         $data = array_filter(self::read(), function ($redirect) {
             return $redirect['status'] !== 'disabled';
         });
 
-        return array_map(function ($redirect) use ($kirby) {
+        return array_map(function ($redirect) use ($log) {
             return [
                 'pattern' => $redirect['from'],
-                'action'  => function (...$parameters) use ($redirect, $kirby) {
+                'action'  => function (...$parameters) use ($redirect, $log) {
                     $code = (int)$redirect['status'];
                     $to   = $redirect['to'];
 
-                    $log = new Log;
+                    // Create log record
                     $log->add([
                         'path' => Url::path(),
                         'redirect' => $redirect['from']
@@ -68,7 +68,7 @@ class Redirects
                     $log->close();
 
                     // Set the right response code
-                    $kirby->response()->code($code);
+                    kirby()->response()->code($code);
 
                     // Map placeholders/parameters
                     foreach ($parameters as $i => $parameter) {
