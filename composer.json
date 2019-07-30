@@ -2,7 +2,7 @@
     "name": "distantnative/retour-for-kirby",
     "description": "Advanced redirection management and error tracking for Kirby 3",
     "type": "kirby-plugin",
-    "version": "1.0.0",
+    "version": "2.0.0-alpha.1",
     "license": "MIT",
     "authors": [
         {
@@ -14,8 +14,7 @@
         "getkirby/composer-installer": "^1.1"
     },
     "require-dev": {
-        "getkirby/cms": "^3.2.2",
-        "phpunit/phpunit": "^7"
+        "getkirby/cms": "^3.2.2"
     },
     "extra": {
       "kirby-cms-path": false

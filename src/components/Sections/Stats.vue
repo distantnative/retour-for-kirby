@@ -1,0 +1,44 @@
+<template>
+  <k-view class="rt-stats">
+    <k-grid gutter="medium">
+      <k-column width="1/4">
+        <share />
+      </k-column>
+
+      <k-column width="3/4">
+        <timeline v-on="$listeners" />
+      </k-column>
+    </k-grid>
+  </k-view>
+</template>
+
+<script>
+import Timeline from "./../Charts/Timeline.vue";
+import Share  from "./../Charts/Share.vue";
+
+export default {
+  components: {
+    timeline: Timeline,
+    share: Share
+  }
+}
+</script>
+
+<style lang="scss">
+.rt-stats {
+  background: #2d2f36;
+  color: rgba(#fff, .75);
+  margin-bottom: 1rem;
+  padding-bottom: 2.5rem !important;
+
+  [aria-current] {
+    color: #fff;
+    font-weight: 600;
+
+    .k-button-text {
+      opacity: 1;
+    }
+  }
+}
+</style>
+

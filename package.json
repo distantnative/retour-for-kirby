@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "chartist": "^0.11.0",
-    "tbl-for-kirby": "^1.0.2"
+    "tbl-for-kirby": "^1.0.2",
+    "vue": "^2.6.10",
+    "vue-hot-reload-api": "^2.3.3"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.0",

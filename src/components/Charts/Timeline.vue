@@ -6,20 +6,20 @@
       <k-button-group>
         <k-button
           icon="angle-left"
-          @click="$emit('navigate', [frame, offset - 1])"
+          @click="$store.dispatch('retour/offset', -1)"
         />
         <k-button
-          v-for="by in ['month', 'week', 'day']"
+          v-for="by in ['year', 'month', 'week', 'day']"
           :key="by"
-          :current="frame === by"
-          @click="$emit('navigate', [by, 0])"
+          :current="$store.state.retour.view.stats === by"
+          @click="$store.dispatch('retour/stats', by)"
         >
-          {{ $t('rt.dashboard.' + by) }}
+          {{ $t('rt.stats.' + by) }}
         </k-button>
         <k-button
           icon="angle-right"
-          :disabled="offset >= 0"
-          @click="$emit('navigate', [frame, offset + 1])"
+          :disabled="$store.state.retour.view.offset >= 0"
+          @click="$store.dispatch('retour/offset', 1)"
         />
       </k-button-group>
     </header>
@@ -32,33 +32,36 @@
 import Chartist from "chartist";
 
 export default {
-  props: {
-    frame: String,
-    offset: Number,
-    data: Object
-  },
-  watch: {
+  computed: {
     data() {
-      this.createChart();
+      return this.$store.state.retour.data.stats.sort((a, b) => {
+        return parseInt(a.time) - parseInt(b.time)
+      });
+;
+    },
+    labels() {
+      return this.data.map(x => x.label);
     }
   },
-  created() {
-    this.$events.$on("retour-go", (part) => {
-      if (part === "dashboard") {
+  watch: {
+    data: {
+      handler() {
         this.createChart();
-      }
-    });
+      },
+      deep: true
+    }
   },
   methods: {
     createChart() {
       new Chartist.Line(".rt-timeline", {
-        labels: this.data.labels,
+        labels: this.labels,
         series: [
-          this.data.failed.map((x, i) => x + this.data.redirected[i]),
-          this.data.redirected,
+          this.data.map(x => parseInt(x.total)),
+          this.data.map(x => parseInt(x.resolved) + parseInt(x.redirected)),
+          this.data.map(x => parseInt(x.redirected)),
         ]
       }, {
-        height: 220,
+        height: 240,
         showLabel: false,
         low: 0,
         showArea: true,
@@ -87,11 +90,16 @@ export default {
 }
 
 .rt-timeline .ct-series-a .ct-area {
-  fill: #ccc;
-  fill-opacity: .5;
-}
-.rt-timeline .ct-series-b .ct-area {
-  fill: #4271ae;
+  fill: #c82828;
   fill-opacity: .75;
 }
+.rt-timeline .ct-series-b .ct-area {
+  fill: #ddd;
+  fill-opacity: 1;
+}
+.rt-timeline .ct-series-c .ct-area {
+  fill: #4271ae;
+  fill-opacity: 1;
+}
+
 </style>

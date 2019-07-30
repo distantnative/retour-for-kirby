@@ -2,43 +2,54 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Cms\App;
 use Kirby\Cms\Response;
+use Kirby\Data\Data;
 use Kirby\Http\Header;
 use Kirby\Http\Url;
 
-class Redirects extends Log
+class Redirects
 {
-    public static $file = __DIR__ . '/../../../config/redirects.yml';
 
-    public static function flush(): bool
+    public static $file;
+
+    /**
+     * Get all redirects from file
+     *
+     * @return array
+     */
+    public static function read(): array
     {
-        return static::update(function ($redirect) {
-            $redirect['hits'] = null;
-            $redirect['last'] = null;
-            return $redirect;
-        });
-    }
-
-    public static function hit(array $temporaries): bool
-    {
-        // get existing redirects data
-        $data = static::read();
-
-        // loop through all temporaries and update
-        foreach ($temporaries as $item) {
-            $froms = array_column($data, 'from');
-            $key   = array_search($item['pattern'], $froms);
-            $data[$key]['hits'] = ($data[$key]['hits'] ?? 0) + 1;
-            $data[$key]['last'] = date('Y-m-d H:i');
+        try {
+            return Data::read(self::$file, 'yaml');
+        } catch (\Throwable $th) {
+            return [];
         }
-
-        return static::write($data);
     }
 
-    public static function routes(\Kirby\Cms\App $kirby): array
+    /**
+     * Read all redirects and combine them with records data
+     *
+     * @return array
+     */
+    public static function list(): array
+    {
+        $log = new Log;
+        return array_map(function ($redirect) use ($log) {
+            return $log->forRedirect($redirect);
+        }, self::read());
+    }
+
+    /**
+     * Get routes config for all redirects
+     *
+     * @param App $kirby
+     * @return array
+     */
+    public static function routes(App $kirby): array
     {
         // no routes for disabled redirects
-        $data = array_filter(static::read(), function ($redirect) {
+        $data = array_filter(self::read(), function ($redirect) {
             return $redirect['status'] !== 'disabled';
         });
 
@@ -49,12 +60,12 @@ class Redirects extends Log
                     $code = (int)$redirect['status'];
                     $to   = $redirect['to'];
 
-                    // Store temporary log file to process later
-                    Logs::store(
-                        Url::path(),
-                        'redirected',
-                        $redirect['from']
-                    );
+                    $log = new Log;
+                    $log->add([
+                        'path' => Url::path(),
+                        'redirect' => $redirect['from']
+                    ]);
+                    $log->close();
 
                     // Set the right response code
                     $kirby->response()->code($code);
@@ -85,5 +96,16 @@ class Redirects extends Log
                 }
             ];
         }, $data);
+    }
+
+    /**
+     * Update redirects in file
+     *
+     * @param array $data
+     * @return bool
+     */
+    public static function write(array $data = []): bool
+    {
+        return Data::write(self::$file, $data, 'yaml');
     }
 }

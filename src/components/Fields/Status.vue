@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import status from "../../assets/status.js";
+import status from "../../helpers/status.js";
 
 export default {
   extends: "k-select-field",
