@@ -7,6 +7,7 @@
       type="select"
       theme="field"
       v-on="$listeners"
+      @input="onInput"
     >
       <div slot="before" :data-status="status">
         <k-icon type="circle" />
@@ -23,6 +24,11 @@ export default {
   computed: {
     status() {
       return status(this.value);
+    }
+  },
+  methods: {
+    onInput(value) {
+      this.value = value;
     }
   }
 }
