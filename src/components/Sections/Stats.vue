@@ -1,15 +1,17 @@
 <template>
-  <k-view class="rt-stats">
-    <k-grid gutter="medium">
-      <k-column width="1/4">
-        <share />
-      </k-column>
+  <div class="rt-stats">
+    <k-view>
+      <k-grid gutter="medium">
+        <k-column width="1/4">
+          <share />
+        </k-column>
 
-      <k-column width="3/4">
-        <timeline v-on="$listeners" />
-      </k-column>
-    </k-grid>
-  </k-view>
+        <k-column width="3/4">
+          <timeline v-on="$listeners" />
+        </k-column>
+      </k-grid>
+    </k-view>
+  </div>
 </template>
 
 <script>
@@ -28,8 +30,12 @@ export default {
 .rt-stats {
   background: #2d2f36;
   color: rgba(#fff, .75);
-  margin-bottom: 1rem;
-  padding-bottom: 2.5rem !important;
+
+  .k-view {
+    margin-bottom: 1rem;
+    padding-top: 1.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
 
   [aria-current] {
     color: #fff;
@@ -39,6 +45,11 @@ export default {
       opacity: 1;
     }
   }
+}
+
+.rt-stats-box {
+  background: #3a3c45;
+  padding: .75rem;
 }
 
 .rt-lb-failed .k-icon,

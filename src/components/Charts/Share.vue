@@ -14,7 +14,7 @@
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content">
+    <div class="rt-stats-box">
       <div class="rt-share" />
 
       <footer class="k-field-footer">
@@ -87,12 +87,11 @@ export default {
   margin-top: -1.65rem;
   padding: 0 .5rem 1rem;
   pointer-events: none;
-  color: #000;
 }
 
 .ct-series {
-  stroke: #fff;
-  stroke-width: 2px;
+  stroke: #3a3c45;
+  stroke-width: 3px;
 }
 
 .ct-series-d .ct-slice-pie {

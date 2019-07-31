@@ -24,7 +24,7 @@
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content rt-timeline" />
+    <div class="rt-stats-box rt-timeline" />
   </div>
 </template>
 
@@ -95,6 +95,12 @@ export default {
 .rt-timeline > svg {
   margin-top: .75rem;
   margin-left: -.5rem;
+}
+
+.rt-timeline .ct-grid,
+.rt-timeline .ct-label {
+  color: #74788b;
+  stroke: #74788b;
 }
 
 .ct-label.ct-horizontal.ct-end {
