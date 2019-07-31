@@ -67,11 +67,13 @@ export default {
         }]
       ];
 
-      new Chartist.Line(".rt-timeline", {
+      let chart = new Chartist.Line(".rt-timeline", {
         labels: this.labels,
         series: [
           this.data.map(x => parseInt(x.total)),
           this.data.map(x => parseInt(x.resolved) + parseInt(x.redirected)),
+          this.data.map(x => parseInt(x.resolved) + parseInt(x.redirected)),
+          this.data.map(x => parseInt(x.redirected)),
           this.data.map(x => parseInt(x.redirected)),
         ]
       }, {
@@ -86,6 +88,44 @@ export default {
           onlyInteger: true
         }
       }, responsive);
+
+      chart.on('created', function(ctx) {
+        var mask1 = ctx.svg.elem('defs').elem('mask', {
+          id: 'mask1'
+        });
+
+        mask1.elem('rect', {
+          width: '100%',
+          height: '100%',
+          fill: 'white'
+        });
+
+        mask1.append(ctx.svg.querySelector('.ct-series.ct-series-b')).querySelector('.ct-area').attr({
+          style: 'fill: black; fill-opacity: 1'
+        });
+
+        var mask2 = ctx.svg.elem('defs').elem('mask', {
+          id: 'mask2'
+        });
+
+        mask2.elem('rect', {
+          width: '100%',
+          height: '100%',
+          fill: 'white'
+        });
+
+        mask2.append(ctx.svg.querySelector('.ct-series.ct-series-d')).querySelector('.ct-area').attr({
+          style: 'fill: black; fill-opacity: 1'
+        });
+
+        ctx.svg.querySelector('.ct-series.ct-series-a').attr({
+          mask: 'url(#mask1)'
+        });
+
+        ctx.svg.querySelector('.ct-series.ct-series-c').attr({
+          mask: 'url(#mask2)'
+        });
+      });
     }
   }
 }

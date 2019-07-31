@@ -87,6 +87,7 @@ export default {
   margin-top: -1.65rem;
   padding: 0 .5rem 1rem;
   pointer-events: none;
+  user-select: none;
 }
 
 .ct-series {
