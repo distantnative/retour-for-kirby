@@ -117,7 +117,7 @@ class Log
                 strftime("' . $label . '", date) AS label,
                 strftime("%s", MIN(date)) - timezone AS time,
                 COUNT(path) AS total,
-                COUNT(wasResolved) AS resolved,
+                COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(redirect) AS redirected
             FROM
                 records
@@ -154,7 +154,11 @@ class Log
      */
     public function resolve(string $path): bool
     {
-        return Db::update('records', ['wasResolved' => 1], ['path' => $path]);
+        return Db::update(
+            'records',
+            ['wasResolved' => 1],
+            ['path' => $path]
+        );
     }
 
 }

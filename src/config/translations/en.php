@@ -26,9 +26,10 @@ return [
     'rt.redirects.status'          => 'Status',
     'rt.redirects.status.help'     => 'Learn about <a href="{url}" target="_blank">HTTP status codes</a> and when to use which one.',
 
-    'rt.fails'             => 'Failures',
-    'rt.fails.path'        => 'Path',
-    'rt.fails.referrer'    => 'Referrer',
+    'rt.fails'          => 'Failures',
+    'rt.fails.path'     => 'Path',
+    'rt.fails.referrer' => 'Referrer',
+    'rt.fails.resolve'  => 'Add as redirect',
 
     'rt.hits'      => 'Hits',
     'rt.hits.last' => 'Latest',

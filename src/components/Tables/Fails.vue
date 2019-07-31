@@ -114,7 +114,7 @@ export default {
         config.actions = {
           inline: true,
           items: [
-            { text: "Add as redirect", icon: "add", click: "add" }
+            { text: this.$t("rt.fails.resolve"), icon: "add", click: "add" }
           ]
         };
       }
@@ -129,14 +129,7 @@ export default {
           this.$store.dispatch("retour/table");
           this.$parent.$parent.$refs.redirects.action("add", {
             from: row.path
-          }, "to", () => {
-            this.$api.post("retour/resolve", {
-              path: row.path
-            }).then(() => {
-              this.$store.dispatch("retour/fetchFails");
-              this.$store.dispatch("retour/fetchStats");
-            });
-          });
+          }, "to");
           break;
       }
     }

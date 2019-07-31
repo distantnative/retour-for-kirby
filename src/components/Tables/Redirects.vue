@@ -286,7 +286,15 @@ export default {
       let updated = this.redirects;
 
       if (this.mode === "new") {
+        this.$api.post("retour/resolve", {
+          path: this.current.from
+        }).then(() => {
+          this.$store.dispatch("retour/fetchFails");
+          this.$store.dispatch("retour/fetchStats");
+        });
+
         updated.push(this.current);
+
       } else {
         updated[this.mode] = this.current;
       }

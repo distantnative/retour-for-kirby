@@ -27,9 +27,10 @@ return [
     'rt.redirects.status'          => 'Status',
     'rt.redirects.status.help'     => 'Lerne die <a href="{url}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
 
-    'rt.fails'             => 'Fehler',
-    'rt.fails.path'        => 'Pfad',
-    'rt.fails.referrer'    => 'Ursprung',
+    'rt.fails'          => 'Fehler',
+    'rt.fails.path'     => 'Pfad',
+    'rt.fails.referrer' => 'Ursprung',
+    'rt.fails.resolve'  => 'Weiterleitung anlegen',
 
     'rt.hits'      => 'Treffer',
     'rt.hits.last' => 'Zuletzt',
