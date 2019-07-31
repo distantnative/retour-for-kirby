@@ -12,7 +12,7 @@ load([
 ], __DIR__);
 
 Redirects::$file = dirname(__DIR__, 2) . '/config/redirects.yml';
-Log::$file       = __DIR__ . '/logs/retour.sqlite';
+Log::$file       = dirname(__DIR__, 2). '/logs/retour.sqlite';
 
 \Kirby::plugin('distantnative/retour', [
     'options'      => require 'src/config/options.php',
