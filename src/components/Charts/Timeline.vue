@@ -34,10 +34,7 @@ import Chartist from "chartist";
 export default {
   computed: {
     data() {
-      return this.$store.state.retour.data.stats.sort((a, b) => {
-        return parseInt(a.time) - parseInt(b.time)
-      });
-;
+      return this.$store.state.retour.data.stats.sort((a, b) => parseInt(a.time) - parseInt(b.time));
     },
     labels() {
       return this.data.map(x => x.label);
@@ -56,7 +53,6 @@ export default {
   },
   methods: {
     createChart() {
-
       const responsive = [
         ['screen', {
           axisX: {
@@ -101,22 +97,8 @@ export default {
   margin-left: -.5rem;
 }
 
-.rt-timeline .ct-label.ct-horizontal.ct-end {
+.ct-label.ct-horizontal.ct-end {
   transform: translateX(-25%);
   text-align: center;
 }
-
-.rt-timeline .ct-series-a .ct-area {
-  fill: #c82828;
-  fill-opacity: .75;
-}
-.rt-timeline .ct-series-b .ct-area {
-  fill: #ddd;
-  fill-opacity: 1;
-}
-.rt-timeline .ct-series-c .ct-area {
-  fill: #4271ae;
-  fill-opacity: 1;
-}
-
 </style>

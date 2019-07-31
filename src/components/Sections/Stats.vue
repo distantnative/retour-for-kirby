@@ -40,5 +40,29 @@ export default {
     }
   }
 }
+
+.rt-lb-failed .k-icon,
+.ct-series-a .ct-area,
+.ct-series-c .ct-slice-pie {
+  color: #c82828;
+  fill: #c82828;
+  fill-opacity: .75;
+}
+
+.rt-lb-redirected .k-icon,
+.ct-series-a .ct-slice-pie,
+.rt-timeline .ct-series-c .ct-area {
+  color: #4271ae;
+  fill:#4271ae;
+  fill-opacity: 1;
+}
+
+.ct-series-b .ct-slice-pie,
+.rt-lb-resolved .k-icon,
+.rt-timeline .ct-series-b .ct-area {
+  color: #ddd;
+  fill: #ddd;
+  fill-opacity: 1;
+}
 </style>
 

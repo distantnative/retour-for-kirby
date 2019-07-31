@@ -14,9 +14,10 @@
       </k-button-group>
     </header>
 
-    <div class="k-card k-card-content rt-share" />
+    <div class="k-card k-card-content">
+      <div class="rt-share" />
 
-    <footer class="k-field-footer">
+      <footer class="k-field-footer">
         <k-button icon="circle" class="rt-lb-redirected">
           {{ redirects }} {{ $t('rt.redirected') }}
         </k-button><br>
@@ -26,7 +27,10 @@
         <k-button icon="circle" class="rt-lb-failed">
           {{ fails }} {{ $t('rt.failed') }}
         </k-button>
-    </footer>
+      </footer>
+    </div>
+
+
   </div>
 </template>
 
@@ -75,48 +79,24 @@ export default {
 </script>
 
 <style>
-.rt-lb-redirected,
-.rt-lb-failed,
-.rt-lb-resolved {
-  pointer-events: none;
-}
-
-.rt-share { height: 200px }
-
-.rt-share .ct-series {
-    stroke: #fff;
-    stroke-width: 2px;
-  }
-
-.rt-lb-redirected .k-icon,
-.rt-share .ct-series-a .ct-slice-pie {
-  color: #4271ae;
-  fill:#4271ae;
-}
-
-.rt-lb-resolved .k-icon,
-.rt-share .ct-series-b .ct-slice-pie {
-  color: #aaa;
-  fill: #ccc;
-}
-
-.rt-lb-failed .k-icon,
-.rt-share .ct-series-c .ct-slice-pie {
-  color: #c82828;
-  fill: #c82828;
-}
-
-.rt-share .ct-series-c .ct-slice-pie {
-  fill-opacity: .75;
-}
-
-.rt-share .ct-series-d .ct-slice-pie {
-  fill: #f4f4f4;
+.rt-share {
+  height: 200px
 }
 
 .rt-share + .k-field-footer {
-  padding: .5rem;
+  margin-top: -1.65rem;
+  padding: 0 .5rem 1rem;
+  pointer-events: none;
+  color: #000;
 }
 
+.ct-series {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.ct-series-d .ct-slice-pie {
+  fill: #f5f5f5;
+}
 </style>
 
