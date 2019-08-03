@@ -1,48 +1,35 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-1.0.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.2.2-cca000.svg?style=for-the-badge)](https://getkirby.com/news/releases)
+[![Version](https://img.shields.io/badge/release-2.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.2.2-cca000.svg?style=for-the-badge)](https://getkirby.com/)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
 
-Plugin for [Kirby 3](https://getkirby.com) adding advanced redirection management and error tracking based on rules supporting wildcards and HTTP status codes. Comes with a Panel view, so redirects can be managed without writing code. Make sure to take your visitors where they are heading.
+Add a Panel view where you can manage advanced redirections and error tracking based on rules supporting wildcards and HTTP status codes. Make sure to take your visitors where they are heading.
 
-## Commercial usage and support development 💛
+![Screenshot](screenshot.png)
 
-Retour is free and under the MIT license. If you use it in a commercial project or you want to support its development in general, please consider to give back by
-
-- [buying me a juice](https://buymeacoff.ee/distantnative) 🥤 or
-- [a donation of your choice](https://paypal.me/distantnative/15EUR) 🌍 or
-- buying [a Kirby license](https://a.paddle.com/v2/click/1129/35921?link=1170) ⭐️
-
-## Screenshots
-
-![Screenshots](screenshots.jpeg)
+> This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, please consider making [a donation of your choice](https://paypal.me/distantnative/15EUR) or purchasing your Kirby license(s) through my [affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170).
 
 ## Installation
 
-### Download
-
 [Download](https://github.com/distantnative/retour-for-kirby/archive/master.zip), unzip and copy this repository to `/site/plugins/retour`.
 
-### Git submodule
-
-```
-git submodule add https://github.com/distantnative/retour-for-kirby.git site/plugins/retour
-```
-
-### Composer
-
-```
+Alternatively, you can install it with composer:
+```bash
 composer require distantnative/retour-for-kirby
 ```
 
 ## Redirects
 
-### URL pattern
+Redirects consist of a few settings:
+
+**URL pattern**
 Path to catch via the plugin and redirect. Can use routing patterns, e.g. `(:any)` or `(:all)`, [learn more](https://getkirby.com/docs/reference/router/patterns).
 
-### Redirect to
+Please notice that you can only create redirects for paths where no actual page exists. Existing pages or routes will always overrule redirects set up in Retour.
+
+**Redirect to**
 Four options:
 - Relative path inside your own site (e.g. `blog/2018/a-nice-story`)
 - URL of external website (e.g. `https://getkirby.com`)
@@ -51,7 +38,7 @@ Four options:
 
 If you use routing patterns, the matched parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/(:any)/photos` => `project/$1/gallery`.
 
-### Status
+**Status**
 Status codes in the `3xx` range will actually redirect the request to the new location (URL changes). All other HTTP status codes have the option to return a specified page with the selected HTTP status code (while the URL stays the same) or let the browser request fail with the selected HTTP status code (if you leave the `Redirect to` field empty).
 
 **Color of the status bubbles**
@@ -65,9 +52,13 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 
 Retour tries to track the times it redirects visitors as well as the times visitors try to visit a page on your site that does not exist (typically when they get a `404` error or your site's error page shown).
 
-To maintain privacy and collect the least data necessary, Reroute does not log any personal data of the visitor (no IP etc.). Only the target URL, the referrer and the time are stored in an agregated way.
-
 The tracked hits are displayed in the Panel with a blue status bublle, indicating whether a redirect route or `404` path has been visited ![#4271ae](https://via.placeholder.com/14.png/4271ae?text=+) recently or ![#ccc](https://via.placeholder.com/14.png/ccc?text=+) not so recently.
+
+## Options
+
+| Option | Default | Description |
+|--|--|--|
+| `distantnative.retour.deleteAfter`| `false` | Number of months after which all the tracking log entries should be deleted automatically. Turned off by default |
 
 ## Permissions
 
@@ -91,24 +82,7 @@ permissions:
     update: false
 ```
 
-## Known issues
-
-### Custom folder setup
-If you are using a custom folder setup for Kirby, there might be issues with where the Retour plugin is trying to store its config and log files. If you have issues and questions in this regard, please get in touch.
 
 ## Disclaimer
 
 This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you encounter any problem, please [create an issue](https://github.com/distantnative/retour-for-kirby/issues/new).
-
-## Credits
-
-Thanks to [@sylvainjule](https://github.com/sylvainjule) and [@pedroborges](https://github.com/pedroborges) for their help in translating and styling the plugin.
-
-
-## License
-
-[MIT](https://opensource.org/licenses/MIT)
-
-It is discouraged to use this plugin in any project that promotes racism, sexism, homophobia, animal abuse, violence or any other form of hate speech.
-
-
