@@ -14,7 +14,7 @@
         "getkirby/composer-installer": "^1.1"
     },
     "require-dev": {
-        "getkirby/cms": "^3.2.2"
+        "getkirby/cms": "^3.2.0"
     },
     "extra": {
       "kirby-cms-path": false

@@ -2,9 +2,8 @@
 
 namespace distantnative\Retour;
 
-require 'lib/locale.php';
-
 load([
+    'peterkahl\\locale\\locale'        => 'lib/locale.php',
     'distantnative\\Retour\\Retour'    => 'src/models/Retour.php',
     'distantnative\\Retour\\Log'       => 'src/models/Log.php',
     'distantnative\\Retour\\Redirects' => 'src/models/Redirects.php',
