@@ -96,7 +96,7 @@ export default {
 }
 
 .ct-series-d .ct-slice-pie {
-  fill: #f5f5f5;
+  fill: #2d2f36;
 }
 </style>
 

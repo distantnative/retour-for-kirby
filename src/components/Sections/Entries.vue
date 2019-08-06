@@ -23,3 +23,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.k-retour-view .tbl .k-icon-url {
+  transform: scale(.8);
+  margin-right: .25rem;
+  color: #d6d6d6;
+
+  &:hover {
+    color: #777;
+  }
+}
+</style>
+

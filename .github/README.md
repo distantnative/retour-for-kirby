@@ -20,7 +20,9 @@ Alternatively, you can install it with composer:
 composer require distantnative/retour-for-kirby
 ```
 
-## Redirects
+## What is it about?
+
+### Redirects
 
 Redirects consist of a few settings:
 
@@ -48,7 +50,7 @@ Status codes in the `3xx` range will actually redirect the request to the new lo
 
 **[HTTP status codes](https://httpstatuses.com)**
 
-## Tracking
+### Tracking
 
 Retour tries to track the times it redirects visitors as well as the times visitors try to visit a page on your site that does not exist (typically when they get a `404` error or your site's error page shown).
 

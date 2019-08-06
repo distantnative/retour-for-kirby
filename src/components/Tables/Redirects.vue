@@ -26,15 +26,14 @@
     </template>
 
     <template slot="column-$default" slot-scope="props">
-      <p
-        v-if="props.column.type === 'url' && props.value !== '–'"
-        class="k-url-field-preview"
-      >
-        <k-link :to="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value" target="_blank" @click.native.stop>
-          {{ props.value }}
-        </k-link>
-      </p>
-      <p v-else>
+      <p>
+        <k-button
+          v-if="props.column.type === 'url' && props.value && props.value !== '–'"
+          :link="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value"
+          icon="url"
+          target="_blank"
+          @click.native.stop
+        />
         {{ props.value }}
       </p>
     </template>
