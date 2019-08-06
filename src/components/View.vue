@@ -1,188 +1,42 @@
 <template>
-  <k-view class="k-retour-view">
-    <k-header>
-      {{ $t('view.retour') }}
-
-      <k-button-group slot="left">
-        <k-button
-          v-for="part in parts"
-          :key="part.name"
-          :icon="part.icon"
-          :current="current === part.name"
-          @click="go(part.name)"
-        >
-          {{ $t('rt.' + part.name) }}
-        </k-button>
-      </k-button-group>
-
-      <k-button-group slot="right">
-        <k-button
-          :disabled="loading"
-          icon="refresh"
-          @click="fetch()"
-        >
-          {{ $t('rt.refresh') }}
-        </k-button>
-      </k-button-group>
-    </k-header>
-
-    <rt-dashboard
-      v-show="current === 'dashboard'"
-      :stats="stats"
-      @navigate="fetchStats"
-    />
-
-    <rt-redirects
-      v-show="current === 'redirects'"
-      ref="redirects"
-      :can-update="canUpdate"
-      :options="options"
-      :redirects="redirects"
-      @update="fetchRedirects"
-    />
-
-    <rt-logs
-      v-show="current === 'fails'"
-      :can-update="canUpdate"
-      :logs="logs"
-      :options="options"
-      @go="go(...$event)"
-    />
-
-    <rt-settings
-      v-show="current === 'settings'"
-      :can-update="canUpdate"
-      :logs="logs"
-      :options="options"
-      :redirects="redirects"
-      @reload="fetch"
-    />
-  </k-view>
+  <div class="k-retour-view">
+    <stats />
+    <entries />
+    <settings />
+  </div>
 </template>
 
 <script>
+import permissions from "../mixins/permissions"
 
-import Dashboard from "./Parts/Dashboard.vue";
-import Redirects from "./Parts/Redirects.vue";
-import Logs     from "./Parts/Logs.vue";
-import Settings  from "./Parts/Settings.vue";
+import Entries from "./Sections/Entries.vue";
+import Settings from "./Sections/Settings.vue";
+import Stats from "./Sections/Stats.vue";
 
 export default {
+  mixins: [permissions],
   components: {
-    "rt-dashboard": Dashboard,
-    "rt-redirects": Redirects,
-    "rt-logs":     Logs,
-    "rt-settings" : Settings
+    Entries,
+    Settings,
+    Stats
   },
-  data() {
-    return {
-      current: "dashboard",
-      logs: [],
-      redirects: [],
-      stats: {
-        data: null,
-        frame: "month",
-        offset: 0
-      },
-      options: {
-        headers: {}
-      }
-    }
-  },
-  computed: {
-    canAccess() {
-      return !(this.$permissions.hasOwnProperty("access") &&
-      this.$permissions.access.hasOwnProperty("retour") &&
-      this.$permissions.access.retour === false);
-    },
-    canUpdate() {
-      return !(this.$permissions.hasOwnProperty("site") &&
-        this.$permissions.site.hasOwnProperty("update") &&
-        this.$permissions.site.update === false);
-    },
-    loading() {
-      return this.$store.state.isLoading;
-    },
-    parts() {
-      return [
-        { name: "dashboard", icon: "dashboard" },
-        { name: "redirects", icon: "url" },
-        { name: "fails", icon: "protected" },
-        { name: "settings", icon: "cog" }
-      ];
-    }
-  },
-  created() {
-    if (!this.canAccess) {
+  mounted() {
+    if (this.canAccess === false) {
       this.$router.push("/");
     }
-    this.fetch();
-  },
-  methods: {
-    fetch() {
-      this.$store.dispatch("isLoading", true);
 
-      const process = this.process();
-      const system  = this.fetchSystem();
+    this.$store.dispatch("retour/load");
 
-      return Promise.all([process, system]).then(() => {
-        const stats = this.fetchStats([
-          this.stats.frame,
-          this.stats.offset
-        ]);
-        const redirects = this.fetchRedirects();
-        const logs      = this.fetchLogs();
-
-        return Promise.all([stats, redirects, logs]).then(() => {
-          this.$store.dispatch("isLoading", false);
-        });
-      });
-    },
-    fetchLogs() {
-     return this.$api.get("retour/logs").then(response => {
-        this.logs = response;
-     });
-    },
-    fetchRedirects() {
-      return this.$api.get("retour/redirects").then(response => {
-        this.redirects = response;
-      });
-    },
-    fetchStats(stats) {
-      return this.$api.get("retour/stats/" + stats[0] + "/" + stats[1]).then(response => {
-        this.stats = {
-          data: response,
-          frame: stats[0],
-          offset: stats[1]
-        };
-      });
-
-    },
-    fetchSystem() {
-      return this.$api.get("retour/system").then(response => {
-        this.options = response;
-      });
-    },
-    go(part, after = () => {}) {
-      this.current = part;
-      this.$events.$emit("retour-go", part);
-      after(this);
-
-      // Currently not supported by Kirby Panel
-      // window.location.hash = part;
-    },
-    process() {
-      return this.$api.post("retour/process");
-    }
+    // Sample data
+    // this.$api.post("retour/samples");
   }
 }
 </script>
 
 <style>
-.k-retour-view [aria-current="true"] {
-  color: #4271ae;
+.k-retour-view > .k-view {
+  padding-top:    1.5rem;
+  padding-bottom: 1.5rem;
 }
-
-.k-retour-view .hide { opacity: 0; }
 </style>
 

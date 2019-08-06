@@ -1,23 +1,29 @@
 <template>
   <tbl
-    :headline="`${$t('rt.fails')} (${fails.length})`"
     :columns="columns"
     :rows="fails"
     :is-loading="this.$store.state.isLoading"
     v-bind="table"
     @action="action(...$event)"
   >
+
+    <template slot="headline">
+      <TableSwitch />
+    </template>
+
     <template slot="column-recency" slot-scope="props">
       <p><recency :value="props.value" /></p>
     </template>
 
-    <template slot="column-path" slot-scope="props">
-      <p v-if="props.value !== '–'" class="k-url-field-preview">
-        <k-link :to="site + '/' + props.value" target="_blank" @click.native.stop>
-          {{ props.value }}
-        </k-link>
-      </p>
-      <p v-else>
+    <template slot="column-$default" slot-scope="props">
+      <p>
+        <k-button
+          v-if="props.column.type === 'url' && props.value && props.value !== '–'"
+          :link="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value"
+          icon="url"
+          target="_blank"
+          @click.native.stop
+        />
         {{ props.value }}
       </p>
     </template>
@@ -25,15 +31,19 @@
 </template>
 
 <script>
+import permissions from "../../mixins/permissions"
+import date from "../../helpers/date.js";
+
+import Recency from "../Fields/Recency.vue";
+import TableSwitch from "./Switch.vue";
 import Tbl from "tbl-for-kirby";
-import Recency from "../Misc/Recency.vue";
 
 export default {
-  components: { Tbl, Recency },
-  props: {
-    canUpdate: Boolean,
-    logs: Array,
-    options: Object,
+  mixins: [permissions],
+  components: {
+    Recency,
+    TableSwitch,
+    Tbl,
   },
   computed: {
     columns() {
@@ -57,25 +67,16 @@ export default {
           type: "url"
         },
         {
-          label: this.$t("rt.fails.state"),
-          field: "failed",
+          label: this.$t("rt.hits"),
+          field: "hits",
           type: "number",
           sort: "desc",
           search: false,
           width: "1/8"
         },
         {
-          label: this.$t("rt.redirects.state"),
-          field: "redirected",
-          type: "number",
-          sort: "desc",
-          search: false,
-          width: "1/8",
-          responsive: false
-        },
-        {
           name: "last",
-          label: this.$t("rt.fails.last"),
+          label: this.$t("rt.hits.last"),
           field: "last",
           type: "date",
           sort: "desc",
@@ -86,40 +87,48 @@ export default {
       ];
     },
     fails() {
-      return this.logs.filter(log => log.failed > 0);
+      return date(this.$store.state.retour.data.fails);
     },
     site() {
       return window.panel.site;
     },
     table() {
-      return {
+      let config = {
+        options: {
+          reset: false
+        },
         sort: {
           initialBy: "last"
-        },
-        actions: {
-          inline: true,
-          items: [
-            { text: "Add as redirect", icon: "add", click: "add" }
-          ]
         },
         labels: {
           all: this.$t("rt.tbl.all"),
           empty: this.$t("rt.tbl.fails.empty"),
-          perPage: this.$t("rt.tbl.fails.perPage"),
-          reset: this.$t("rt.tbl.reset"),
-          filter: this.$t("rt.tbl.fails.filter")
+          perPage: this.$t("rt.tbl.perPage"),
+          filter: this.$t("rt.tbl.filter")
         }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
+          inline: true,
+          items: [
+            { text: this.$t("rt.fails.resolve"), icon: "add", click: "add" }
+          ]
+        };
       }
+
+      return config;
     }
   },
   methods: {
     action(action, row) {
       switch (action) {
-      case "add":
-        this.$emit("go", ["redirects", (view) => {
-          view.$refs.redirects.action("add", { from: row.path }, "to");
-        }]);
-        break;
+        case "add":
+          this.$store.dispatch("retour/table");
+          this.$parent.$parent.$refs.redirects.action("add", {
+            from: row.path
+          }, "to");
+          break;
       }
     }
   }

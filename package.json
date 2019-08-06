@@ -1,6 +1,6 @@
 {
   "name": "retour-for-kirby",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Advanced redirection management and error tracking for Kirby 3",
   "main": "index.js",
   "author": "Nico Hoffmann <on-github@nhoffmann.com>",
@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "chartist": "^0.11.0",
-    "tbl-for-kirby": "^1.0.2"
+    "tbl-for-kirby": "^1.0.6",
+    "vue": "^2.6.10",
+    "vue-hot-reload-api": "^2.3.3"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.0",

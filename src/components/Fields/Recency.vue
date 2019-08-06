@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     date() {
-      return new Date(this.value);
+      return new Date(this.value.replace(/-/g, "/"));
     },
     factor() {
       if (!this.value) {

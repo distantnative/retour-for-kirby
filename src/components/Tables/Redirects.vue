@@ -1,6 +1,5 @@
 <template>
   <tbl
-    :headline="`${$t('rt.redirects')} (${redirects.length})`"
     :columns="columns"
     :rows="redirects"
     :is-loading="$store.state.isLoading"
@@ -8,7 +7,17 @@
     @add="action('add')"
     @action="action(...$event)"
   >
+
+    <!-- Custom headline: table switcher -->
+    <template slot="headline">
+      <TableSwitch />
+    </template>
+
     <!-- Custom field cells -->
+    <template slot="column-recency" slot-scope="props">
+      <p><recency :value="props.value" /></p>
+    </template>
+
     <template slot="column-status" slot-scope="props">
       <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
@@ -16,25 +25,15 @@
       </p>
     </template>
 
-    <template slot="column-stats" slot-scope="props">
-      <k-rt-count-field-preview
-        :value="{
-          hits: props.row.hits,
-          last: props.row.last
-        }"
-      />
-    </template>
-
     <template slot="column-$default" slot-scope="props">
-      <p
-        v-if="props.column.type === 'url' && props.value !== '–'"
-        class="k-url-field-preview"
-      >
-        <k-link :to="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value" target="_blank" @click.native.stop>
-          {{ props.value }}
-        </k-link>
-      </p>
-      <p v-else>
+      <p>
+        <k-button
+          v-if="props.column.type === 'url' && props.value && props.value !== '–'"
+          :link="(props.value && props.value.startsWith('http')) ? props.value : site + '/' + props.value"
+          icon="url"
+          target="_blank"
+          @click.native.stop
+        />
         {{ props.value }}
       </p>
     </template>
@@ -49,21 +48,21 @@
         v-model="current"
         :fields="fields"
         class="rt-form"
-        @submit="submit"
+        @submit="onSubmit"
       />
 
       <template slot="footer">
         <k-button
           icon="cancel"
           class="rt-form-btn"
-          @click="cancel"
+          @click="onCancel"
         >
           {{ $t('cancel') }}
         </k-button>
         <k-button
           icon="check"
           class="rt-form-btn"
-          @click="submit"
+          @click="onSubmit"
         >
           {{ $t(mode === 'new' ? 'create' : 'change') }}
         </k-button>
@@ -77,8 +76,8 @@
       :button="$t('delete')"
       theme="negative"
       icon="trash"
-      @cancel="cancel"
-      @submit="remove"
+      @cancel="onCancel"
+      @submit="onRemove"
     >
       <k-text>
         {{ $t('field.structure.delete.confirm') }}
@@ -88,25 +87,39 @@
 </template>
 
 <script>
+import permissions from "../../mixins/permissions"
+import status from "../../helpers/status.js";
+import date from "../../helpers/date.js";
+
+import Recency from "../Fields/Recency.vue";
+import TableSwitch from "./Switch.vue";
 import Tbl from "tbl-for-kirby";
-import status from "../../assets/status.js";
 
 export default {
-  components: { Tbl },
-  props: {
-    canUpdate: Boolean,
-    redirects: Array,
-    options: Object,
+  mixins: [permissions],
+  components: {
+    Recency,
+    TableSwitch,
+    Tbl
   },
   data() {
     return {
       mode: null,
-      current: null
+      current: null,
+      afterSubmit: null
     }
   },
   computed: {
     columns() {
-      let columns = [
+      return [
+        {
+          name: "recency",
+          field: "last",
+          sort: false,
+          search: false,
+          width: "1fr",
+          responsive: false,
+        },
         {
           label: this.$t("rt.redirects.from"),
           type: "url",
@@ -124,15 +137,24 @@ export default {
           field: "status"
         },
         {
-          label: this.$t("rt.redirects.hits"),
-          field: "stats",
-          width: "1/6",
+          label: this.$t("rt.hits"),
+          field: "hits",
+          type: "number",
+          sort: "desc",
           search: false,
+          width: "1/8"
+        },
+        {
+          name: "last",
+          label: this.$t("rt.hits.last"),
+          field: "last",
+          type: "date",
+          sort: "desc",
+          search: false,
+          width: "1/6",
           responsive: false
         }
       ];
-
-      return columns;
     },
     fields() {
       return {
@@ -151,7 +173,7 @@ export default {
         },
         to: {
           label: this.$t("rt.redirects.to"),
-          type: "text",
+          type: "rt-redirect",
           help: this.$t("rt.redirects.to.help"),
           icon: "retour",
           width: "1/2",
@@ -162,8 +184,8 @@ export default {
           type: "rt-status",
           options: [
             { text: "––––", value: "disabled" },
-            ...Object.keys(this.options.headers).map((code) => ({
-              text:  code.substr(1) + " - " + this.options.headers[code],
+            ...Object.keys(this.headers).map((code) => ({
+              text:  code.substr(1) + " - " + this.headers[code],
               value: code.substr(1)
             }))
           ],
@@ -173,91 +195,121 @@ export default {
           width: "1/2"
         },
         stats: {
-          label: this.$t("rt.redirects.hits"),
+          label: this.$t("rt.hits"),
           type: "info",
-          text: `<b>${this.current.hits || 0} ${this.$t("rt.redirects.hits")}</b> (${this.$t("rt.redirects.hit.last")}: ${this.current.last || "–"})`,
+          text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last || "–"})`,
           width: "1/2"
         },
       }
+    },
+    headers() {
+      return this.$store.state.retour.plugin.headers;
+    },
+    redirects() {
+      return date(this.$store.state.retour.data.redirects);
     },
     site() {
       return window.panel.site;
     },
     table() {
-      return {
+      let config = {
         options: {
-          add: true
+          add: this.canUpdate,
+          reset: false
         },
         sort: {
           initialBy: "status"
         },
-        actions: {
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.redirects.empty"),
+          perPage: this.$t("rt.tbl.perPage"),
+          filter: this.$t("rt.tbl.filter")
+        }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
           items: [
             { text: this.$t("edit"), icon: "edit", click: "edit" },
             { text: this.$t("remove"), icon: "remove", click: "remove" }
           ],
           onRow: "edit"
-        },
-        labels: {
-          all: this.$t("rt.tbl.all"),
-          empty: this.$t("rt.tbl.redirects.empty"),
-          perPage: this.$t("rt.tbl.redirects.perPage"),
-          reset: this.$t("rt.tbl.reset"),
-          filter: this.$t("rt.tbl.redirects.filter")
-        }
+        };
       }
+
+      return config;
     }
   },
   methods: {
-    action(action, row = {}, field) {
+    action(action, row = {}, field, callback) {
       this.current = Object.assign({}, row);
 
       switch (action) {
-      case "add":
-        this.mode = "new";
-        this.current.status = "disabled";
-        this.$nextTick(() => this.$refs.form.focus("from"));
-        break;
+        case "add":
+          this.mode = "new";
+          this.current.status = "disabled";
+          this.afterSubmit = callback;
+          this.$nextTick(() => this.$refs.form.focus("from"));
+          break;
 
-      case "edit":
-        this.mode = this.redirects.findIndex(x => x.from === row.from);
-        this.$nextTick(() => this.$refs.form.focus(field || "from"));
-        break;
+        case "edit":
+          this.mode = this.redirects.findIndex(x => x.from === row.from);
+          this.$nextTick(() => this.$refs.form.focus(field || "from"));
+          break;
 
-      case "remove":
-        this.$refs.remove.open();
-        break;
+        case "remove":
+          this.$refs.remove.open();
+          break;
       }
     },
-    cancel() {
+    onCancel() {
       this.mode = null;
       this.current = null;
+      this.afterSubmit = null;
     },
-    prev() {
+    onPrev() {
       this.mode -= 1;
       this.current = this.redirects[this.mode];
     },
-    next() {
+    onNext() {
       this.mode += 1;
       this.current = this.redirects[this.mode];
     },
-    remove() {
+    onRemove() {
       this.update(this.redirects.filter(x => x.from !== this.current.from));
       this.$refs.remove.close();
       this.current = null;
     },
-    status: (v) => status(v),
-    submit() {
+    onSubmit() {
+      let updated = this.redirects;
+
       if (this.mode === "new") {
-        this.redirects = [...this.redirects, this.current];
+        this.$api.post("retour/resolve", {
+          path: this.current.from
+        }).then(() => {
+          this.$store.dispatch("retour/fetchFails");
+          this.$store.dispatch("retour/fetchStats");
+        });
+
+        updated.push(this.current);
+
       } else {
-        this.redirects[this.mode] = this.current;
+        updated[this.mode] = this.current;
       }
-      this.update(this.redirects).then(this.cancel);
+
+      this.update(updated).then(this.onCancel);
     },
+    status: (v) => status(v),
     update(input) {
       return this.$api.patch("retour/redirects", input).then(() => {
-        this.$emit("update");
+
+        if (this.afterSubmit) {
+          this.afterSubmit();
+          this.afterSubmit = null;
+        }
+
+        this.$store.dispatch("retour/fetchRedirects");
       });
     }
   }

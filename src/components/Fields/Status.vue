@@ -7,6 +7,7 @@
       type="select"
       theme="field"
       v-on="$listeners"
+      @input="onInput"
     >
       <div slot="before" :data-status="status">
         <k-icon type="circle" />
@@ -16,13 +17,18 @@
 </template>
 
 <script>
-import status from "../../assets/status.js";
+import status from "../../helpers/status.js";
 
 export default {
   extends: "k-select-field",
   computed: {
     status() {
       return status(this.value);
+    }
+  },
+  methods: {
+    onInput(value) {
+      this.value = value;
     }
   }
 }

@@ -13,7 +13,3 @@
 
 # Parcel cache folder
 .cache
-
-# Samples
-samples.php
-/config/samples
