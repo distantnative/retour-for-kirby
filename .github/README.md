@@ -1,7 +1,7 @@
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-2.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.2.0-cca000.svg?style=for-the-badge)](https://getkirby.com/)
+[![Version](https://img.shields.io/badge/release-2.0.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.2.5-cca000.svg?style=for-the-badge)](https://getkirby.com/)
 [![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/Give-back-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative/15EUR)
 
@@ -51,7 +51,7 @@ If you use routing patterns, the matched parts can be used via numbered variable
 |--|--|--|
 | `distantnative.retour.deleteAfter`| `false` | Number of months after which all the tracking log entries should be deleted automatically. Turned off by default |
 | `distantnative.retour.config`| `site/config/redirects.yml` | Location of config file |
-| `distantnative.retour.database`| `site/logs/retour.sqlite` | Location of config file |
+| `distantnative.retour.database`| `site/logs/retour.sqlite` | Location of database file |
 
 ### Permissions
 
