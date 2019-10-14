@@ -24,12 +24,12 @@ composer require distantnative/retour-for-kirby
 
 ### Redirects
 
-**URL pattern**  
+**URL pattern**
 Path to catch via the plugin and redirect. Can use routing patterns, e.g. `(:any)` or `(:all)`, [learn more](https://getkirby.com/docs/reference/router/patterns).
 
 Please notice that you can only create redirects for paths where no actual page exists. Existing pages or routes will always overrule redirects set up in Retour.
 
-**Redirect to**  
+**Redirect to**
 Four options:
 - Relative path inside your own site (e.g. `blog/2018/a-nice-story`)
 - URL of external website (e.g. `https://getkirby.com`)
@@ -38,7 +38,7 @@ Four options:
 
 If you use routing patterns, the matched parts can be used via numbered variables (`$1`, `$2`...): e.g. `project/(:any)/photos` => `project/$1/gallery`.
 
-**Status**  
+**Status**
 [HTTP status codes](https://httpstatuses.com) in the `3xx` range will actually redirect the request to the new location (URL changes). All other HTTP status codes have the option to return a specified page with the selected HTTP status code (while the URL stays the same) or let the browser request fail with the selected HTTP status code (if you leave the `Redirect to` field empty).
 
 - ![#7ea328](https://via.placeholder.com/16.png/7ea328?text=+) Redirects (`300`-`399`)
@@ -50,6 +50,8 @@ If you use routing patterns, the matched parts can be used via numbered variable
 | Option | Default | Description |
 |--|--|--|
 | `distantnative.retour.deleteAfter`| `false` | Number of months after which all the tracking log entries should be deleted automatically. Turned off by default |
+| `distantnative.retour.config`| `site/config/redirects.yml` | Location of config file |
+| `distantnative.retour.database`| `site/logs/retour.sqlite` | Location of config file |
 
 ### Permissions
 
