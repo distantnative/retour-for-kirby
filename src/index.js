@@ -8,7 +8,6 @@ import store from "./store/retour.js";
 
 import "tbl-for-kirby/index.css";
 import "./assets/chart.css";
-import "./assets/icons.js";
 
 panel.plugin("distantnative/retour", {
   views: {
@@ -16,6 +15,9 @@ panel.plugin("distantnative/retour", {
       component: View,
       icon: "retour"
     }
+  },
+  icons: {
+    retour: '<use xlink:href="#icon-undo" transform="translate(7.5,7.5) rotate(170) translate(-7.5,-7.5)"></use>'
   },
   fields: {
     "rt-redirect": RedirectField,
