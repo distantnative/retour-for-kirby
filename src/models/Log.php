@@ -30,7 +30,7 @@ class Log
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
             'timezone' => date('Z'),
             'path'     => $props['path'],
-            'referrer' => $props['referrer'] ?? null,
+            'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
             'redirect' => $props['redirect'] ?? null
         ]);
     }
