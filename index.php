@@ -2,29 +2,33 @@
 
 namespace distantnative\Retour;
 
-load([
-    'peterkahl\\locale\\locale'        => 'lib/locale.php',
-    'distantnative\\Retour\\Retour'    => 'src/models/Retour.php',
-    'distantnative\\Retour\\Log'       => 'src/models/Log.php',
-    'distantnative\\Retour\\Redirects' => 'src/models/Redirects.php',
-    'distantnative\\Retour\\Stats'     => 'src/models/Stats.php',
-], __DIR__);
+require 'src/helpers/load.php';
 
-// config file location
+// Load main models
+load(['Retour', 'Redirects']);
+
+// Set location for config file
 Redirects::$file = option(
-    'distantnative.retour.config',
+    'retour.config',
     dirname(__DIR__, 2) . '/config/redirects.yml'
 );
 
-// database file location
-Log::$file = option(
-    'distantnative.retour.database',
-    dirname(__DIR__, 2). '/logs/retour.sqlite'
-);
+// If logs are enabled…
+if (option('retour.logging', true) === true) {
+    // …load more models
+    load(['Log', 'Stats']);
 
+    // …set location for database file
+    Log::$file = option(
+        'retour.database',
+        dirname(__DIR__, 2). '/logs/retour.sqlite'
+    );
+}
+
+// Register all plugin components
 \Kirby::plugin('distantnative/retour', [
     'options'      => ['api' => true],
     'api'          => require 'src/config/api.php',
-    'hooks'        => require 'src/config/hooks.php',
+    'hooks'        => require 'src/config/hooks.php' ?? [],
     'translations' => require 'src/config/translations.php'
 ]);

@@ -24,21 +24,13 @@ return [
             'pattern' => 'retour/fails',
             'method'  => 'GET',
             'action'  => function () {
-                $log = new Log;
-                return $log->forFails();
+                return (new Log)->forFails();
             }
         ],
         [
             'pattern' => 'retour/stats/(:any)/(:num?)',
             'method'  => 'GET',
             'action'  => function ($by, $offset = 0) {
-                $locale = $this->requestQuery('locale');
-
-                if (strpos($locale, '_') === false) {
-                    $locale = locale::country2locale($locale);
-                }
-
-                setlocale(LC_TIME, $locale);
                 return Stats::get($by, $offset);
             }
         ],
@@ -53,16 +45,14 @@ return [
             'pattern' => 'retour/resolve',
             'method'  => 'POST',
             'action'  => function () {
-                $log = new Log;
-                return $log->resolve($this->requestBody('path'));
+                return (new Log)->resolve($this->requestBody('path'));
             }
         ],
         [
             'pattern' => 'retour/flush',
             'method'  => 'POST',
             'action'  => function () {
-                $log = new Log;
-                $log->flush();
+                (new Log)->flush();
                 return true;
             }
         ],

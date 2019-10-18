@@ -34,19 +34,25 @@ class Redirects
      */
     public static function list(): array
     {
-        $log = new Log;
-        return array_map(function ($redirect) use ($log) {
-            return $log->forRedirect($redirect);
-        }, self::read());
+        $redirects = self::read();
+
+        if (option('retour.logging', true) === true) {
+            $log = new Log;
+            $redirects = array_map(function ($r) use ($log) {
+                return $log->forRedirect($r);
+            }, $redirects);
+        }
+
+        return $redirects;
     }
 
     /**
      * Get routes config for all redirects
      *
-     * @param App $kirby
+     * @param Log|bool $log
      * @return array
      */
-    public static function routes(Log $log): array
+    public static function routes($log): array
     {
         // no routes for disabled redirects
         $data = array_filter(self::read(), function ($redirect) {
@@ -61,11 +67,13 @@ class Redirects
                     $to   = $redirect['to'];
 
                     // Create log record
-                    $log->add([
-                        'path' => Url::path(),
-                        'redirect' => $redirect['from']
-                    ]);
-                    $log->close();
+                    if ($log !== false) {
+                        $log->add([
+                            'path' => Url::path(),
+                            'redirect' => $redirect['from']
+                        ]);
+                        $log->close();
+                    }
 
                     // Set the right response code
                     kirby()->response()->code($code);

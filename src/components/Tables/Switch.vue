@@ -1,10 +1,10 @@
 <template>
   <k-headline class="rt-table-switch">
     <button
-      v-for="table in ['redirects', 'fails']"
+      v-for="table in tabs"
       :key="table"
       :data-current="current === table"
-      @click="onSwitch"
+      @click="onSwitch(table)"
     >
       {{ $t('rt.' + table) }}
     </button>
@@ -16,11 +16,21 @@ export default {
   computed: {
     current() {
       return this.$store.state.retour.view.table;
+    },
+    hasLogs() {
+      return this.$store.state.retour.plugin.logging;
+    },
+    tabs() {
+      if (this.hasLogs === false) {
+        return ["redirects"];
+      }
+
+      return ["redirects", "fails"];
     }
   },
   methods: {
-    onSwitch() {
-      this.$store.dispatch("retour/table");
+    onSwitch(table) {
+      this.$store.dispatch("retour/table", table);
     }
   }
 }

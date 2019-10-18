@@ -14,7 +14,11 @@
     </template>
 
     <!-- Custom field cells -->
-    <template slot="column-recency" slot-scope="props">
+    <template
+      v-if="hasLogs"
+      slot="column-recency"
+      slot-scope="props"
+    >
       <p><recency :value="props.value" /></p>
     </template>
 
@@ -111,15 +115,7 @@ export default {
   },
   computed: {
     columns() {
-      return [
-        {
-          name: "recency",
-          field: "last",
-          sort: false,
-          search: false,
-          width: "1fr",
-          responsive: false,
-        },
+      let columns = [
         {
           label: this.$t("rt.redirects.from"),
           type: "url",
@@ -135,29 +131,45 @@ export default {
           label: this.$t("rt.redirects.status"),
           width: "1/6",
           field: "status"
-        },
-        {
-          label: this.$t("rt.hits"),
-          field: "hits",
-          type: "number",
-          sort: "desc",
-          search: false,
-          width: "1/8"
-        },
-        {
-          name: "last",
-          label: this.$t("rt.hits.last"),
-          field: "last",
-          type: "date",
-          sort: "desc",
-          search: false,
-          width: "1/6",
-          responsive: false
         }
       ];
+
+      if (this.hasLogs === true) {
+        columns = [
+          {
+            name: "recency",
+            field: "last",
+            sort: false,
+            search: false,
+            width: "1fr",
+            responsive: false,
+          },
+          ...columns,
+          {
+            label: this.$t("rt.hits"),
+            field: "hits",
+            type: "number",
+            sort: "desc",
+            search: false,
+            width: "1/8"
+          },
+          {
+            name: "last",
+            label: this.$t("rt.hits.last"),
+            field: "last",
+            type: "date",
+            sort: "desc",
+            search: false,
+            width: "1/6",
+            responsive: false
+          }
+        ];
+      }
+
+      return columns;
     },
     fields() {
-      return {
+      let fields = {
         from: {
           label: this.$t("rt.redirects.from"),
           type: "text",
@@ -193,14 +205,25 @@ export default {
           empty: false,
           required: true,
           width: "1/2"
-        },
-        stats: {
-          label: this.$t("rt.hits"),
-          type: "info",
-          text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last || "–"})`,
-          width: "1/2"
-        },
+        }
       }
+
+      if (this.hasLogs === true) {
+        fields = {
+          ...fields,
+          stats: {
+            label: this.$t("rt.hits"),
+            type: "info",
+            text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last || "–"})`,
+            width: "1/2"
+          },
+        }
+      }
+
+      return fields;
+    },
+    hasLogs() {
+      return this.$store.state.retour.plugin.logging;
     },
     headers() {
       return this.$store.state.retour.plugin.headers;

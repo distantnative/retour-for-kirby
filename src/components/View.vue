@@ -1,8 +1,8 @@
 <template>
   <div class="k-retour-view">
-    <stats />
+    <stats v-if="hasLogs" />
     <entries />
-    <settings />
+    <settings v-if="hasLogs" />
   </div>
 </template>
 
@@ -26,9 +26,11 @@ export default {
     }
 
     this.$store.dispatch("retour/load");
-
-    // Sample data
-    // this.$api.post("retour/samples");
+  },
+  computed: {
+    hasLogs() {
+      return this.$store.state.retour.plugin.logging;
+    }
   }
 }
 </script>

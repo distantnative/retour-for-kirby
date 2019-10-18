@@ -13,7 +13,7 @@ class Log
     /**
      * Connect to database on initialization
      */
-    public function __construct()
+    public function __construct(): void
     {
         $this->connect();
     }
@@ -24,7 +24,7 @@ class Log
      * @param array $props
      * @return void
      */
-    public function add(array $props)
+    public function add(array $props): void
     {
         Db::insert('records', [
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
@@ -40,7 +40,7 @@ class Log
      *
      * @return void
      */
-    public function close()
+    public function close(): void
     {
         Db::$connection = null;
     }
@@ -50,7 +50,7 @@ class Log
      *
      * @return void
      */
-    protected function connect()
+    protected function connect(): void
     {
         if (file_exists(self::$file) === false) {
             F::copy(dirname(__DIR__) . '/retour.sqlite', self::$file);
@@ -67,7 +67,7 @@ class Log
      *
      * @return void
      */
-    public function flush()
+    public function flush(): void
     {
         Db::query('DELETE FROM records;');
         Db::query('DELETE FROM sqlite_sequence WHERE name="records";');
@@ -144,9 +144,9 @@ class Log
         ')->toArray();
     }
 
-    public function limit()
+    public function limit(): void
     {
-        $limit  = option('distantnative.retour.deleteAfter', false);
+        $limit  = option('retour.deleteAfter', false);
 
         if ($limit) {
             $time   = strtotime('-' . $limit . ' month');

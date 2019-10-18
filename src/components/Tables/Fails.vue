@@ -124,7 +124,7 @@ export default {
     action(action, row) {
       switch (action) {
         case "add":
-          this.$store.dispatch("retour/table");
+          this.$store.dispatch("retour/table", "redirects");
           this.$parent.$parent.$refs.redirects.action("add", {
             from: row.path
           }, "to");
