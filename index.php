@@ -18,7 +18,7 @@ Redirects::$file = option(
 
 // database file location
 Log::$file = option(
-    'distantnative.retour.config',
+    'distantnative.retour.database',
     dirname(__DIR__, 2). '/logs/retour.sqlite'
 );
 
