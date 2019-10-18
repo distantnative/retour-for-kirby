@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import permissions from "../mixins/permissions"
+import permissions from "../helpers/permissions";
 
 import Entries from "./Sections/Entries.vue";
 import Settings from "./Sections/Settings.vue";

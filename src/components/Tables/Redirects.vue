@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import permissions from "../../mixins/permissions"
+import permissions from "../../helpers/permissions";
 import status from "../../helpers/status.js";
 import date from "../../helpers/date.js";
 
