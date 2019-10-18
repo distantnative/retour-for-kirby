@@ -13,8 +13,8 @@ load([
 // config file location
 Redirects::$file = option(
     'distantnative.retour.config',
-    dirname(__DIR__, 2) . '/config/redirects.yml
-');
+    dirname(__DIR__, 2) . '/config/redirects.yml'
+);
 
 // database file location
 Log::$file = option(
