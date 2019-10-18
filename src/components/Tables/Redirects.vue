@@ -255,7 +255,7 @@ export default {
         config.actions = {
           items: [
             { text: this.$t("edit"), icon: "edit", click: "edit" },
-            { text: this.$t("remove"), icon: "remove", click: "remove" }
+            { text: this.$t("remove"), icon: "trash", click: "remove" }
           ],
           onRow: "edit"
         };
