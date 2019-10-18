@@ -14,8 +14,8 @@ export default {
       title: "..."
     },
     plugin: {
-      version: null,
       headers: [],
+      logging: false,
       deleteAfter: null
     }
   },
@@ -66,11 +66,15 @@ export default {
       });
     },
     load(context) {
-      context.dispatch("fetchFails");
-      context.dispatch("fetchRedirects");
-      context.dispatch("fetchStats");
-      context.dispatch("fetchSystem");
-      this._vm.$api.post("retour/limit");
+      context.dispatch("fetchSystem").then(() => {
+        context.dispatch("fetchRedirects");
+
+        if (context.state.plugin.logging === true) {
+          context.dispatch("fetchFails");
+          context.dispatch("fetchStats");
+          this._vm.$api.post("retour/limit");
+        }
+      });
     },
     offset(context, offset) {
       context.commit("SET_OFFSET", offset);
@@ -80,12 +84,8 @@ export default {
       context.commit("SET_STATS", stats);
       context.dispatch("fetchStats");
     },
-    table(context) {
-      if (context.state.view.table === "redirects") {
-        context.commit("SET_TABLE", "fails");
-      } else {
-        context.commit("SET_TABLE", "redirects");
-      }
+    table(context, table) {
+      context.commit("SET_TABLE", table);
     }
   }
 };
