@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import permissions from "../../mixins/permissions"
+import permissions from "../../helpers/permissions";
 import date from "../../helpers/date.js";
 
 import Recency from "../Fields/Recency.vue";
