@@ -37,7 +37,7 @@ class Redirects
     {
         $redirects = self::read();
 
-        if (option('retour.logging', true) === true) {
+        if (option('retour.logs', true) === true) {
             $log = new Log;
             $redirects = array_map(function ($r) use ($log) {
                 return $log->forRedirect($r);

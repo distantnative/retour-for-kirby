@@ -13,9 +13,9 @@ export default {
       offset: 0,
       title: "..."
     },
-    plugin: {
+    options: {
       headers: [],
-      logging: false,
+      logs: false,
       deleteAfter: null
     }
   },
@@ -23,11 +23,11 @@ export default {
     SET_DATA(state, [type, data]) {
       this._vm.$set(state.data, type, data);
     },
-    SET_PLUGIN(state, data) {
-      this._vm.$set(state, "plugin", data);
-    },
     SET_OFFSET(state, offset) {
       state.view.offset = state.view.offset + offset;
+    },
+    SET_OPTIONS(state, data) {
+      this._vm.$set(state, "options", data);
     },
     SET_STATS(state, stats) {
       state.view.stats = stats;
@@ -62,14 +62,14 @@ export default {
     },
     fetchSystem(context) {
       return this._vm.$api.get("retour/system").then(response => {
-        context.commit("SET_PLUGIN", response);
+        context.commit("SET_OPTIONS", response);
       });
     },
     load(context) {
       context.dispatch("fetchSystem").then(() => {
         context.dispatch("fetchRedirects");
 
-        if (context.state.plugin.logging === true) {
+        if (context.state.options.logs === true) {
           context.dispatch("fetchFails");
           context.dispatch("fetchStats");
           this._vm.$api.post("retour/limit");

@@ -18,7 +18,7 @@ export default {
       return this.$store.state.retour.view.table;
     },
     hasLogs() {
-      return this.$store.state.retour.plugin.logging;
+      return this.$store.state.retour.options.logs;
     },
     tabs() {
       if (this.hasLogs === false) {

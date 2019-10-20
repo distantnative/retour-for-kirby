@@ -221,10 +221,10 @@ export default {
       return fields;
     },
     hasLogs() {
-      return this.$store.state.retour.plugin.logging;
+      return this.$store.state.retour.options.logs;
     },
     headers() {
-      return this.$store.state.retour.plugin.headers;
+      return this.$store.state.retour.options.headers;
     },
     redirects() {
       return date(this.$store.state.retour.data.redirects);

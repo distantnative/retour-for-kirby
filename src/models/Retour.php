@@ -10,7 +10,7 @@ class Retour
     {
         return [
             'headers'     => Header::$codes,
-            'logging'     => option('retour.logging', true),
+            'logs'        => option('retour.logs', true),
             'deleteAfter' => option('retour.deleteAfter', false)
         ];
     }

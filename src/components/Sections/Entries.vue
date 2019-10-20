@@ -1,16 +1,7 @@
 <template>
   <k-view>
-
-    <redirects
-      v-show="table === 'redirects'"
-      ref="redirects"
-    />
-    <fails
-      v-if="$store.state.retour.plugin.logging"
-      v-show="table === 'fails'"
-      ref="fails"
-    />
-
+    <redirects v-show="table === 'redirects'" ref="redirects" />
+    <fails v-show="table === 'fails'" ref="fails" />
   </k-view>
 </template>
 
