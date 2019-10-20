@@ -21,7 +21,8 @@ class Redirects
     public static function read(): array
     {
         try {
-            return Data::read(self::$file, 'yaml');
+            $file = Retour::root('redirects');
+            return Data::read($file, 'yaml');
         } catch (\Throwable $e) {
             return [];
         }
@@ -114,6 +115,7 @@ class Redirects
      */
     public static function write(array $data = []): bool
     {
-        return Data::write(self::$file, $data, 'yaml');
+        $file = Retour::root('redirects');
+        return Data::write($file, $data, 'yaml');
     }
 }
