@@ -9,7 +9,7 @@ return [
         if (empty($result) === true) {
 
             // If logging enable, initialiye model
-            if (option('retour.logging', true) === true) {
+            if (option('retour.logs', true) === true) {
                 $log = new Log;
             }
 
@@ -19,7 +19,7 @@ return [
                 return $router->call($path, $method);
 
             } catch (\Throwable $e) {
-                if (option('retour.logging', true) === true) {
+                if (option('retour.logs', true) === true) {
                     $log->add(['path' => $path]);
                     $log->close();
                 }

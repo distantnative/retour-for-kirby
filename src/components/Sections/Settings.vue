@@ -17,7 +17,7 @@
       <li>
         <dl>
           <dt>{{ $t("rt.settings.deleteAfter") }}</dt>
-          <dd>{{ $t("rt.settings.deleteAfter.months", { count: $store.state.retour.plugin.deleteAfter || '–' }) }}</dd>
+          <dd>{{ $t("rt.settings.deleteAfter.months", { count: $store.state.retour.options.deleteAfter || '–' }) }}</dd>
         </dl>
       </li>
       <li>

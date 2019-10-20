@@ -4,7 +4,7 @@ namespace distantnative\Retour;
 
 load(['Retour', 'Redirects', 'Update']);
 
-if (option('retour.logging', true) === true) {
+if (option('retour.logs', true) === true) {
     load(['Log', 'Stats']);
 }
 

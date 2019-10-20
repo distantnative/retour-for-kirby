@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     hasLogs() {
-      return this.$store.state.retour.plugin.logging;
+      return this.$store.state.retour.options.logs;
     }
   }
 }
