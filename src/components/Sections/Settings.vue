@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import permissions from "../../helpers/permissions";
+import {permissions} from "../helpers.js";
 
 export default {
   mixins: [permissions],

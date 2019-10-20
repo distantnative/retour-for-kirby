@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import permissions from "../../helpers/permissions";
-import date from "../../helpers/date.js";
+import {date, permissions} from "../helpers.js";
 
 import Recency from "../Fields/Recency.vue";
 import TableSwitch from "./Switch.vue";
