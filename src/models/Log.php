@@ -3,18 +3,16 @@
 namespace distantnative\Retour;
 
 use Kirby\Database\Db;
-use Kirby\Toolkit\F;
 
 class Log
 {
 
-    public static $file;
-
     /**
      * Connect to database on initialization
      */
-    public function __construct(): void
+    public function __construct()
     {
+        $this->setup();
         $this->connect();
     }
 
@@ -46,19 +44,15 @@ class Log
     }
 
     /**
-     * Installs sqlite file, if needed, and connects to it
+     * Connects database
      *
      * @return void
      */
     protected function connect(): void
     {
-        if (file_exists(self::$file) === false) {
-            F::copy(dirname(__DIR__) . '/retour.sqlite', self::$file);
-        }
-
         Db::connect([
-            'type'=> 'sqlite',
-            'database' => self::$file
+            'type'     => 'sqlite',
+            'database' => Retour::root('logs')
         ]);
     }
 
@@ -69,8 +63,8 @@ class Log
      */
     public function flush(): void
     {
-        Db::query('DELETE FROM records;');
-        Db::query('DELETE FROM sqlite_sequence WHERE name="records";');
+        Db::execute('DELETE FROM records;');
+        Db::execute('DELETE FROM sqlite_sequence WHERE name="records";');
     }
 
     /**
@@ -176,4 +170,14 @@ class Log
         );
     }
 
+    public function setup(): void
+    {
+        $file = Retour::root('logs');
+        if (file_exists($file) === false) {
+            F::copy(
+                Retour::root('assets') . '/retour.sqlite',
+                $file
+            );
+        }
+    }
 }
