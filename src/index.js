@@ -11,7 +11,7 @@ const view = {
 const icon = '<use xlink:href="#icon-undo" transform="translate(7.5,7.5) rotate(170) translate(-7.5,-7.5)"></use>';
 
 // Vuex store
-import store from "./store/retour.js";
+import store from "./store.js";
 
 // 3rd party assets
 import "tbl-for-kirby/index.css";

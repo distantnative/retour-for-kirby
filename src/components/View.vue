@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import permissions from "../helpers/permissions";
+import {permissions} from "./helpers.js";
 
 import Entries from "./Sections/Entries.vue";
 import Settings from "./Sections/Settings.vue";

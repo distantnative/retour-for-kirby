@@ -91,9 +91,7 @@
 </template>
 
 <script>
-import permissions from "../../helpers/permissions";
-import status from "../../helpers/status.js";
-import date from "../../helpers/date.js";
+import {date, status, permissions} from "../helpers.js";
 
 import Recency from "../Fields/Recency.vue";
 import TableSwitch from "./Switch.vue";
