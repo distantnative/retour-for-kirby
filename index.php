@@ -2,21 +2,16 @@
 
 namespace distantnative\Retour;
 
-load(['Retour', 'Redirects', 'Update']);
-
-if (option('retour.logs', true) === true) {
-    load(['Log', 'Stats']);
-}
+load(['Retour', 'Redirects', 'Log', 'Stats', 'Update']);
 
 Update::check();
 
 \Kirby::plugin('distantnative/retour', [
-    'options'      => ['api' => true],
+    'options'      => require 'src/config/options.php',
     'api'          => require 'src/config/api.php',
     'hooks'        => require 'src/config/hooks.php' ?? [],
     'translations' => require 'src/config/translations.php'
 ]);
-
 
 function load(array $classes): void
 {

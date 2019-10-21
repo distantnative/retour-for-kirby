@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use Kirby\Database\Db;
+use Kirby\Toolkit\F;
 
 class Log
 {
@@ -140,7 +141,7 @@ class Log
 
     public function limit(): void
     {
-        $limit  = option('retour.deleteAfter', false);
+        $limit = option('distantnative.retour.deleteAfter');
 
         if ($limit) {
             $time   = strtotime('-' . $limit . ' month');
@@ -173,7 +174,7 @@ class Log
     public function setup(): void
     {
         $file = Retour::root('logs');
-        if (file_exists($file) === false) {
+        if (F::exists($file) === false) {
             F::copy(
                 Retour::root('assets') . '/retour.sqlite',
                 $file

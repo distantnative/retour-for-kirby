@@ -28,7 +28,7 @@ class Update
 
         self::forPHP($version);
 
-        if (option('retour.logs', true) === true) {
+        if (F::exists(Retour::root('logs')) === true) {
             $log = new Log;
             self::forSQL($version);
             $log->close();
