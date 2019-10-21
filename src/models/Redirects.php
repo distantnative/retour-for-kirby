@@ -37,7 +37,7 @@ class Redirects
     {
         $redirects = self::read();
 
-        if (option('retour.logs', true) === true) {
+        if (option('distantnative.retour.logs') === true) {
             $log = new Log;
             $redirects = array_map(function ($r) use ($log) {
                 return $log->forRedirect($r);

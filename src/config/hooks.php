@@ -9,7 +9,7 @@ return [
         if (empty($result) === true) {
 
             // If logging enable, initialiye model
-            if (option('retour.logs', true) === true) {
+            if (option('distantnative.retour.logs') === true) {
                 $log = new Log;
             }
 
@@ -19,7 +19,7 @@ return [
                 return $router->call($path, $method);
 
             } catch (\Throwable $e) {
-                if (option('retour.logs', true) === true) {
+                if (option('distantnative.retour.logs') === true) {
                     $log->add(['path' => $path]);
                     $log->close();
                 }

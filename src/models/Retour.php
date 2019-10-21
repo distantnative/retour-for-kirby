@@ -10,22 +10,20 @@ class Retour
     {
         return [
             'headers'     => Header::$codes,
-            'logs'        => option('retour.logs', true),
-            'deleteAfter' => option('retour.deleteAfter', false)
+            'logs'        => option('distantnative.retour.logs'),
+            'deleteAfter' => option('distantnative.retour.deleteAfter')
         ];
     }
 
     public static function root(string $type = 'root'): ?string
     {
-        $root = dirname(__DIR__, 2);
-        $src  = $root . '/src';
-        $site = dirname(__DIR__, 4);
-
+        $root  = dirname(__DIR__, 2);
+        $src   = $root . '/src';
         $roots = [
             'assets'       => $src . '/assets',
 
-            'redirects'    => option('retour.config', $site . '/config/redirects.yml'),
-            'logs'         => option('retour.database', $site . '/logs/retour.sqlite'),
+            'redirects'    => option('distantnative.retour.config'),
+            'logs'         => option('distantnative.retour.database'),
 
             'config'       => $config = $src . '/config',
             'migrations'   => $config . '/migrations',
