@@ -11,7 +11,7 @@ Add a Panel view where you can manage advanced redirections and error tracking b
 
 > This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, please consider making [a donation of your choice](https://paypal.me/distantnative/15EUR),  purchasing your Kirby license(s) through my [affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170), or [sponsoring me on a monthly basis](https://github.com/sponsors/distantnative).
 
-## Installation
+## Installation + updates
 
 [Download](https://github.com/distantnative/retour-for-kirby/archive/master.zip), unzip and copy this repository to `/site/plugins/retour`.
 
@@ -19,6 +19,8 @@ Alternatively, you can install it with composer:
 ```bash
 composer require distantnative/retour-for-kirby
 ```
+
+For updates, make a backup of your redirects and log files (`/site/config/redirects.yml` and `/site/logs/retour.sqlite`) and replace the whole `/site/plugins/retour` folder.
 
 ## What is it about?
 
