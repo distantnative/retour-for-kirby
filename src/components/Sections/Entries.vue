@@ -27,10 +27,10 @@ export default {
   .k-icon-url {
     transform: scale(.8);
     margin-right: .25rem;
-    color: #d6d6d6;
+    color: var(--color-border);
 
     &:hover {
-      color: #777;
+      color: var(--color-text-light);
     }
   }
 
