@@ -117,5 +117,15 @@ export default {
       transform-origin: top right;
     }
   }
+
+  @media screen and (max-width: 45em) {
+    ul {
+      display: block;
+    }
+
+    li:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
 }
 </style>

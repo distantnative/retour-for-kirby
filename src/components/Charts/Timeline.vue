@@ -54,7 +54,18 @@ export default {
   methods: {
     createChart() {
       const responsive = [
-        ['screen', {
+        ['screen and (max-width: 45em)', {
+          axisX: {
+            labelInterpolationFnc: function(value, index) {
+              if (this.view === "year") {
+                return index % 4  === 0 ? value : null;
+              }
+
+              return index % 3  === 0 ? value : null;
+            }.bind(this)
+          }
+        }],
+        ['screen and (min-width: 45em)', {
           axisX: {
             labelInterpolationFnc: function(value, index) {
               if (this.view === "year") {
