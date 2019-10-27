@@ -19,8 +19,7 @@ function load(array $classes): void
 
     foreach ($classes as $class) {
         $namespace       = 'distantnative\\Retour\\' . $class;
-        $path            = 'src/models/' . $class . '.php';
-        $map[$namespace] = $path;
+        $map[$namespace] = 'src/models/' . $class . '.php';
     }
 
     \load($map, __DIR__);

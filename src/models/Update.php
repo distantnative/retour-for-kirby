@@ -11,9 +11,7 @@ use Kirby\Toolkit\Str;
 class Update
 {
 
-    protected static $migrations = [
-        // '2.1.0'  => self::to210
-    ];
+    protected static $migrations = [];
 
     public static function check(): void
     {
