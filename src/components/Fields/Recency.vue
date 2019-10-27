@@ -49,12 +49,13 @@ export default {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(#4271ae, var(--f));
+    color: var(--color-focus);
+    opacity: var(--f);
   }
 
   .bg {
     position: absolute;
-    color: #ddd;
+    color: var(--color-border);
   }
 }
 </style>

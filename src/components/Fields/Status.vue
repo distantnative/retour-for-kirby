@@ -36,12 +36,12 @@ export default {
 
 <style lang="scss">
 .k-retour-view [data-status="no"] {
-  color: #c82829;
+  color: var(--color-negative-light);
 }
 .k-retour-view [data-status="yes"] {
-  color: #7ea328;
+  color: var(--color-positive-light);
 }
 .k-retour-view [data-status="mmm"] {
-  color: #f0c674;
+  color: var(--color-notice-light);
 }
 </style>

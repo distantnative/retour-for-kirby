@@ -52,7 +52,7 @@ export default {
   }
 
   &[data-current] {
-    border-bottom: 3px solid #4271ae;
+    border-bottom: 3px solid var(--color-focus);
   }
 }
 </style>

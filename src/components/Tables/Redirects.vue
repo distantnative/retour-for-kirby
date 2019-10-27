@@ -346,8 +346,8 @@ export default {
     color: #16171a;
     border-radius: 3px;
     box-decoration-break: clone;
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
-    font-size: .875em;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-tiny);
     padding: .05em .5em;
     margin-left: .5em;
   }
