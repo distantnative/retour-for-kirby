@@ -75,7 +75,7 @@ class Log
      */
     public function forFails(): array
     {
-        return Db::query('
+        $fails = Db::query('
             SELECT
                 id,
                 path,
@@ -90,7 +90,13 @@ class Log
             GROUP BY
                 path,
                 referrer;
-        ')->toArray();
+        ');
+
+        if ($fails) {
+            return $fails->toArray();
+        }
+
+        return [];
     }
 
     /**
@@ -122,7 +128,7 @@ class Log
      */
     public function forStats(string $start, string $end, string $label): array
     {
-        return Db::query('
+        $stats = Db::query('
             SELECT
                 strftime("' . $label . '", date) AS label,
                 strftime("%s", MIN(date)) - timezone AS time,
@@ -136,7 +142,13 @@ class Log
                 strftime("%s", date) < strftime("%s", "' . $end . '")
             GROUP BY
                 label;
-        ')->toArray();
+        ');
+
+        if ($stats) {
+            return $stats->toArray();
+        }
+
+        return [];
     }
 
     public function limit(): void
