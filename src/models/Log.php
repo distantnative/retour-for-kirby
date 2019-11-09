@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use Kirby\Database\Db;
+use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
 
 class Log
@@ -186,6 +187,12 @@ class Log
     public function setup(): void
     {
         $file = Retour::root('logs');
+        $dir  = dirname($file);
+
+        if (is_dir($dir) === false) {
+            Dir::make($dir);
+        }
+
         if (F::exists($file) === false) {
             F::copy(
                 Retour::root('assets') . '/retour.sqlite',
