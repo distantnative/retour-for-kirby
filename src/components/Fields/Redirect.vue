@@ -35,7 +35,8 @@ export default {
         endpoint: "retour/pagepicker",
         max: 1,
         multiple: false,
-        selected: []
+        selected: [],
+        search: true
       });
     },
     select(items) {

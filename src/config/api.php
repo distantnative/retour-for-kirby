@@ -2,7 +2,7 @@
 
 namespace distantnative\Retour;
 
-use peterkahl\locale\locale;
+use Kirby\Form\Field;
 
 return [
     'routes' => [
@@ -77,36 +77,21 @@ return [
             'pattern' => 'retour/pagepicker',
             'method'  => 'GET',
             'action'  => function () {
-                $site  = kirby()->site();
+                $field = new Field('pages', [
+                    'model' => kirby()->site()
+                ]);
 
-                if (!$parent = $site->find($this->requestQuery('parent') ?? null)) {
-                    $parent = $site;
-                }
-
-                $pages = $parent->children();
-                $self  = [
-                    'id'     => $parent->id() == '' ? null : $parent->id(),
-                    'title'  => $parent->title()->value(),
-                    'parent' => is_a($parent->parent(), Page::class) === true ? $parent->parent()->id() : null,
-                ];
-
-                $children = [];
-
-                foreach ($pages as $page) {
-                    if ($page->isReadable() === true) {
-                        $children[] = $page->panelPickerData([
-                            'image' => [],
-                            'info'  => false,
-                            'model' => $site,
-                            'text'  => null,
-                        ]);
-                    }
-                }
-
-                return [
-                    'model' => $self,
-                    'pages' => $children
-                ];
+                return $field->pagepicker([
+                    'image'    => $field->image(),
+                    'info'     => $field->info(),
+                    'limit'    => $field->limit(),
+                    'page'     => $this->requestQuery('page'),
+                    'parent'   => $this->requestQuery('parent'),
+                    'query'    => $field->query(),
+                    'search'   => $this->requestQuery('search'),
+                    'subpages' => $field->subpages(),
+                    'text'     => $field->text()
+                ]);
             }
         ]
     ]

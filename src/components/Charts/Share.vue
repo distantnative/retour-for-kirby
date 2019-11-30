@@ -84,7 +84,7 @@ export default {
 }
 
 .rt-share + .k-field-footer {
-  margin-top: -1.65rem;
+  margin-top: -1.35rem;
   padding: 0 .5rem 1rem;
   pointer-events: none;
   user-select: none;
