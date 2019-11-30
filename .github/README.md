@@ -51,6 +51,7 @@ If you use routing patterns, the matched parts can be used via numbered variable
 | Option | Default | Description |
 |--|--|--|
 | `distantnative.retour.logs` | `true` | Disable all logging by setting option to `false` |
+| `distantnative.retour.ignore` | `[]` | Array of paths to ignore |
 | `distantnative.retour.deleteAfter` | `false` | Number of months after which all the tracking log entries should be deleted automatically. Turned off by default |
 | `distantnative.retour.config` | `site/config/redirects.yml` | Location of config file |
 | `distantnative.retour.database` | `site/logs/retour.sqlite` | Location of database file |

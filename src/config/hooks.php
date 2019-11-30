@@ -8,7 +8,12 @@ return [
     'route:after' => function ($route, $path, $method, $result) {
         if (empty($result) === true) {
 
-            // If logging enable, initialiye model
+            // skip ignored paths
+            if (in_array($path, option('distantnative.retour.ignore')) === true) {
+                return $result;
+            }
+
+            // If logging enable, initialize model
             if (option('distantnative.retour.logs') === true) {
                 $log = new Log;
             }
