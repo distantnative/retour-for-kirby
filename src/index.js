@@ -15,7 +15,7 @@ import store from "./store.js";
 
 // 3rd party assets
 import "tbl-for-kirby/index.css";
-import "./assets/chart.css";
+import "./assets/css/chart.css";
 
 // Register everything
 panel.plugin("distantnative/retour", {

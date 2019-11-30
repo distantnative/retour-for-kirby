@@ -12,7 +12,7 @@ composer.lock export-ignore
 
 # Directories
 config/samples.php export-ignore
-src/assets/ export-ignore
+src/assets/css/ export-ignore
 src/components/ export-ignore
 src/helpers/ export-ignore
 src/mixins/ export-ignore

@@ -93,11 +93,7 @@ class Log
                 referrer;
         ');
 
-        if ($fails) {
-            return $fails->toArray();
-        }
-
-        return [];
+        return $fails ? $fails->toArray() : [];
     }
 
     /**
@@ -145,11 +141,7 @@ class Log
                 label;
         ');
 
-        if ($stats) {
-            return $stats->toArray();
-        }
-
-        return [];
+        return $stats ? $stats->toArray() : [];
     }
 
     public function limit(): void
