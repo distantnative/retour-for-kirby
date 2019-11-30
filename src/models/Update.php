@@ -15,7 +15,7 @@ class Update
 
     public static function check(): void
     {
-        $flag = Retour::root() . '/.updated';
+        $flag = Retour::root('updated');
 
         if (F::exists($flag) === true) {
             return;
