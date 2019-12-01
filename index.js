@@ -16364,6 +16364,12 @@ var _default = {
     }
   },
   getters: {
+    dates: function dates(state) {
+      return {
+        from: state.view.from.format("YYYY-MM-DD HH:mm:ss"),
+        to: state.view.to.format("YYYY-MM-DD HH:mm:ss")
+      };
+    },
     days: function days(state) {
       return state.view.to.diff(state.view.from, "day");
     },
@@ -16412,27 +16418,53 @@ var _default = {
     }
   },
   actions: {
+    /* Setters */
+    table: function table(context, _table) {
+      context.commit("SET_TABLE", _table);
+    },
+    timeframe: function timeframe(context, dates) {
+      context.commit("SET_TIMEFRAME", dates);
+      context.dispatch("load");
+    },
+
+    /* Initializers */
     init: function init(context) {
       context.commit("SET_TIMEFRAME", {
         from: this._vm.$library.dayjs().startOf("month"),
         to: this._vm.$library.dayjs().endOf("month")
       });
     },
-    fails: function fails(context, dates) {
-      return this._vm.$api.get("retour/fails", dates).then(function (response) {
+    load: function load(context) {
+      var _this = this;
+
+      context.dispatch("system").then(function () {
+        context.dispatch("redirects");
+
+        if (context.state.options.logs === true) {
+          context.dispatch("fails");
+          context.dispatch("stats");
+
+          _this._vm.$api.post("retour/limit");
+        }
+      });
+    },
+
+    /* Loaders */
+    fails: function fails(context) {
+      return this._vm.$api.get("retour/fails", context.getters["dates"]).then(function (response) {
         context.commit("SET_DATA", ["fails", response]);
       });
     },
-    redirects: function redirects(context, dates) {
-      return this._vm.$api.get("retour/redirects", dates).then(function (response) {
+    redirects: function redirects(context) {
+      return this._vm.$api.get("retour/redirects", context.getters["dates"]).then(function (response) {
         context.commit("SET_DATA", ["redirects", response]);
       });
     },
-    stats: function stats(context, dates) {
+    stats: function stats(context) {
       var view = context.getters["view"];
       return this._vm.$api.get("retour/stats/", _objectSpread({
         view: view ? view : "custom"
-      }, dates)).then(function (response) {
+      }, context.getters["dates"])).then(function (response) {
         context.commit("SET_DATA", ["stats", response]);
       });
     },
@@ -16440,31 +16472,6 @@ var _default = {
       return this._vm.$api.get("retour/system").then(function (response) {
         context.commit("SET_OPTIONS", response);
       });
-    },
-    load: function load(context) {
-      var _this = this;
-
-      context.dispatch("system").then(function () {
-        var dates = {
-          from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
-          to: context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
-        };
-        context.dispatch("redirects", dates);
-
-        if (context.state.options.logs === true) {
-          context.dispatch("fails", dates);
-          context.dispatch("stats", dates);
-
-          _this._vm.$api.post("retour/limit");
-        }
-      });
-    },
-    table: function table(context, _table) {
-      context.commit("SET_TABLE", _table);
-    },
-    timeframe: function timeframe(context, dates) {
-      context.commit("SET_TIMEFRAME", dates);
-      context.dispatch("load");
     }
   }
 };
