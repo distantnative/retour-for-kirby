@@ -14689,6 +14689,7 @@ exports.default = void 0;
 //
 //
 //
+//
 var _default = {
   computed: {
     current: function current() {
@@ -14703,6 +14704,9 @@ var _default = {
       }
 
       return ["redirects", "fails"];
+    },
+    icons: function icons() {
+      return ["retour", "bug"];
     }
   },
   methods: {
@@ -14726,13 +14730,13 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c(
     "k-headline",
-    { staticClass: "rt-table-switch" },
-    _vm._l(_vm.tabs, function(table) {
+    { staticClass: "rt-table-switch", attrs: { "data-current": _vm.current } },
+    _vm._l(_vm.tabs, function(table, index) {
       return _c(
-        "button",
+        "k-button",
         {
           key: table,
-          attrs: { "data-current": _vm.current === table },
+          attrs: { icon: _vm.icons[index] },
           on: {
             click: function($event) {
               return _vm.onSwitch(table)
@@ -14742,7 +14746,7 @@ exports.default = _default;
         [_vm._v("\n    " + _vm._s(_vm.$t("rt." + table)) + "\n  ")]
       )
     }),
-    0
+    1
   )
 }
 var staticRenderFns = []

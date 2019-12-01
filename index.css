@@ -124,20 +124,16 @@
   color: var(--color-border);
   fill: var(--color-border);
   fill-opacity: 0.85;
-}.rt-table-switch > button {
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: 0.15rem 0.35rem;
-  outline: none;
+}.rt-table-switch > .k-button {
+  padding: 0 1rem;
+  top: -0.2rem;
+  font-size: var(--font-size-small);
 }
-.rt-table-switch > button:not(:first-child) {
-  margin-left: 0.5rem;
+.rt-table-switch > .k-button:first-of-type {
+  padding-left: 0;
 }
-.rt-table-switch > button:not(:last-child) {
-  margin-right: 0.5rem;
-}
-.rt-table-switch > button[data-current] {
-  border-bottom: 3px solid var(--color-focus);
+.rt-table-switch[data-current=redirects] > .k-button:nth-of-type(1), .rt-table-switch[data-current=fails] > .k-button:nth-of-type(2) {
+  color: var(--color-focus);
 }.rt-redirects-status {
   display: flex;
 }

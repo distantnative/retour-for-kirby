@@ -1,13 +1,14 @@
 <template>
-  <k-headline class="rt-table-switch">
-    <button
-      v-for="table in tabs"
+  <k-headline :data-current="current" class="rt-table-switch">
+    <k-button
+      v-for="(table, index) in tabs"
       :key="table"
-      :data-current="current === table"
+      :icon="icons[index]"
+
       @click="onSwitch(table)"
     >
       {{ $t('rt.' + table) }}
-    </button>
+    </k-button>
   </k-headline>
 </template>
 
@@ -26,6 +27,9 @@ export default {
       }
 
       return ["redirects", "fails"];
+    },
+    icons() {
+      return ["retour", "bug"]
     }
   },
   methods: {
@@ -37,23 +41,23 @@ export default {
 </script>
 
 <style lang="scss">
-.rt-table-switch > button {
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: .15rem .35rem;
-  outline: none;
+.rt-table-switch {
 
-  &:not(:first-child) {
-    margin-left: .5rem;
+  > .k-button {
+    padding: 0 1rem;
+    top: -.2rem;
+    font-size: var(--font-size-small);
+
+    &:first-of-type {
+      padding-left: 0;
+    }
   }
 
-  &:not(:last-child) {
-    margin-right: .5rem;
+  &[data-current=redirects] > .k-button:nth-of-type(1),
+  &[data-current=fails] > .k-button:nth-of-type(2) {
+    color: var(--color-focus);
   }
 
-  &[data-current] {
-    border-bottom: 3px solid var(--color-focus);
-  }
 }
 </style>
 
