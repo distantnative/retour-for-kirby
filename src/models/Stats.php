@@ -12,50 +12,40 @@ class Stats
      * @param int $offset
      * @return array
      */
-    public static function get(string $by, int $offset): array
+    public static function get(string $by, string $from, string $to): array
     {
         $log = new Log;
 
         switch ($by) {
             case 'year':
-                $time = strtotime('today ' . $offset . ' year');
-                $start = date('Y-01-01 00:00:00', $time);
-                $end = date('Y-12-31 23:59:59', $time);
-                $data = $log->forStats($start, $end, '%W');
-                $data = self::fill($data, $start, $end, 'week', '%W');
+                $data = $log->forStats($from, $to, '%W');
+                $data = self::fill($data, $from, $to, 'week', '%W');
                 break;
 
             case 'month':
-                $start = date('Y-m-01 00:00:00 ', time());
-                $start = strtotime($start. $offset . ' month');
-                $start = date('Y-m-01 00:00:00', $start);
-                $end = date('Y-m-t 23:59:59', strtotime($start));
-                $data = $log->forStats($start, $end, '%d');
-                $data = self::fill($data, $start, $end, 'day', '%d');
-                break;
-
             case 'week':
-                $start = date('w') === 1 ? strtotime('today') : strtotime('last Monday ' . $offset . ' week');
-                $start = date('Y-m-d 00:00:00', $start);
-                $end = strtotime($start . ' +6 day');
-                $end = date('Y-m-d 23:59:59', $end);
-                $data = $log->forStats($start, $end, '%d');
-                $data = self::fill($data, $start, $end, 'day', '%d');
+                $data = $log->forStats($from, $to, '%d');
+                $data = self::fill($data, $from, $to, 'day', '%d');
                 break;
 
             case 'day':
-                $time = strtotime('today ' . $offset . ' day');
-                $start = date('Y-m-d 00:00:00', $time);
-                $end = date('Y-m-d 23:59:59', $time);
-                $data = $log->forStats($start, $end, '%H');
-                $data = self::fill($data, $start, $end, 'hour', '%H');
+                $data = $log->forStats($from, $to, '%H');
+                $data = self::fill($data, $from, $to, 'hour', '%H');
+                break;
+
+            case 'custom':
+                if (date("m", strtotime($from)) === date("m", strtotime($to))) {
+                    $label = '%d';
+                } else {
+                    $label = '%d/%m';
+                }
+
+                $data = $log->forStats($from, $to, $label);
+                $data = self::fill($data, $from, $to, 'day', $label);
                 break;
         }
 
-        return [
-            'data' => $data,
-            'title' => self::title($start, $end)
-        ];
+        return $data;
     }
 
     /**
@@ -90,58 +80,4 @@ class Stats
 
         return $data;
     }
-
-    /**
-     * Generate human readable title for timeframe
-     *
-     * @param string $start
-     * @param string $end
-     * @return string
-     */
-    protected static function title(string $start, string $end): string
-    {
-        $start = strtotime($start);
-        $end   = strtotime($end);
-
-        // whole day
-        if (date('Y-m-d', $start) === date('Y-m-d', $end)) {
-            return strftime('%e %B %Y', $end);
-        }
-
-        // whole month
-        if (
-            date('Y-m', $start) === date('Y-m', $end) &&
-            date('j', $start) === '1' &&
-            date('j', $end) === date('t', $end)
-        ) {
-            return strftime('%B %Y', $end);
-        }
-
-        // whole year
-        if (
-            date('Y', $start) === date('Y', $end) &&
-            date('j', $start) === '1' &&
-            date('n', $start) === '1' &&
-            date('j', $end) === '31' &&
-            date('n', $end) === '12'
-        ) {
-            return strftime('%Y', $start);
-        }
-
-        // days, same month
-        if (
-            date('m', $start) === date('m', $end) &&
-            date('Y', $start) === date('Y', $end)
-        ) {
-            return strftime('%e', $start) . '-' . strftime('%e %B %Y', $end);
-        }
-
-        // detailed date
-        if (date('Y', $start) === date('Y', $end)) {
-            return strftime('%e %B', $start) . ' - ' . strftime('%e %B %Y', $end);
-        }
-
-        return strftime('%e %B %Y', $start) . ' - ' . strftime('%e %B %Y', $end);
-    }
-
 }

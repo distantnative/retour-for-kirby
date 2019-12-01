@@ -25,6 +25,7 @@ export default {
       this.$router.push("/");
     }
 
+    this.$store.dispatch("retour/init");
     this.$store.dispatch("retour/load");
   },
   computed: {

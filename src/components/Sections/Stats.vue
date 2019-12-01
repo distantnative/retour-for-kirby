@@ -1,27 +1,29 @@
 <template>
   <div class="rt-stats">
     <k-view>
-      <k-grid gutter="medium">
-        <k-column width="1/4">
-          <share />
-        </k-column>
+      <header class="k-field-header">
+        <label class="k-field-label">
+          <timeframe />
+        </label>
 
-        <k-column width="3/4">
-          <timeline v-on="$listeners" />
-        </k-column>
-      </k-grid>
+        <prev-next />
+      </header>
+
+      <timeline />
     </k-view>
   </div>
 </template>
 
 <script>
-import Timeline from "./../Charts/Timeline.vue";
-import Share  from "./../Charts/Share.vue";
+import PrevNext from "../Navigation/PrevNext.vue";
+import Timeframe from "../Navigation/Timeframe.vue";
+import Timeline from "../Charts/Timeline.vue";
 
 export default {
   components: {
-    timeline: Timeline,
-    share: Share
+    PrevNext,
+    Timeframe,
+    Timeline
   }
 }
 </script>
@@ -36,44 +38,11 @@ export default {
     padding-top: 1.5rem !important;
     padding-bottom: 2.5rem !important;
   }
-
-  [aria-current] {
-    color: #fff;
-    font-weight: 600;
-
-    .k-button-text {
-      opacity: 1;
-    }
-  }
 }
 
 .rt-stats-box {
   background: #3a3c45;
   padding: .75rem;
-}
-
-.rt-lb-failed .k-icon,
-.ct-series-a .ct-area,
-.ct-series-c .ct-slice-pie {
-  color: var(--color-negative);
-  fill: var(--color-negative);
-  fill-opacity: .85;
-}
-
-.rt-lb-redirected .k-icon,
-.ct-series-a .ct-slice-pie,
-.rt-timeline .ct-series-e .ct-area {
-  color: var(--color-focus);
-  fill:var(--color-focus);
-  fill-opacity: .85;
-}
-
-.ct-series-b .ct-slice-pie,
-.rt-lb-resolved .k-icon,
-.rt-timeline .ct-series-c .ct-area {
-  color: var(--color-border);
-  fill: var(--color-border);
-  fill-opacity: .85;
 }
 </style>
 

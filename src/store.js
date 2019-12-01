@@ -9,9 +9,8 @@ export default {
     },
     view: {
       table: "redirects",
-      stats: "month",
-      offset: 0,
-      title: "..."
+      from: null,
+      to: null
     },
     options: {
       headers: [],
@@ -19,28 +18,81 @@ export default {
       deleteAfter: null
     }
   },
+  getters: {
+    days: state => {
+      return state.view.to.diff(state.view.from, "day");
+    },
+    view: state => {
+      const from = state.view.from;
+      const to   = state.view.to;
+
+      if (
+        from.isSame(to, "date") &&
+        from.isSame(to, "month") &&
+        from.isSame(to, "year")
+      ) {
+        return "day";
+      }
+
+      if (
+        from.isSame(to, "month") &&
+        from.isSame(to, "year") &&
+        from.date() === 1 &&
+        to.date() === to.daysInMonth()
+      ) {
+        return "month";
+      }
+
+      if (to.day() === 0) {
+        if (
+          from.isSame(to.subtract(6, "day").hour(0).minute(0).second(0))
+        ) {
+          return "week";
+        }
+      } else {
+        if (
+          from.isSame(to.subtract(to.day() - 1, "day").hour(0).minute(0).second(0))
+        ) {
+          return "week";
+        }
+      }
+
+
+      if (
+        from.isSame(to, "year") &&
+        from.date() === 1 &&
+        from.month() === 0 &&
+        to.date() === 31 &&
+        to.month() === 11
+      ) {
+        return "year";
+      }
+
+      return false;
+    }
+  },
   mutations: {
     SET_DATA(state, [type, data]) {
       this._vm.$set(state.data, type, data);
     },
-    SET_OFFSET(state, offset) {
-      state.view.offset = state.view.offset + offset;
-    },
     SET_OPTIONS(state, data) {
       this._vm.$set(state, "options", data);
-    },
-    SET_STATS(state, stats) {
-      state.view.stats = stats;
-      state.view.offset = 0;
     },
     SET_TABLE(state, table) {
       state.view.table = table;
     },
-    SET_TITLE(state, title) {
-      state.view.title = title;
+    SET_TIMEFRAME(state, dates) {
+      state.view.from = dates.from;
+      state.view.to = dates.to;
     }
   },
   actions: {
+    init(context) {
+      context.commit("SET_TIMEFRAME", {
+        from: this._vm.$library.dayjs().set("date", 1),
+        to: this._vm.$library.dayjs().set("date", this._vm.$library.dayjs().daysInMonth())
+      });
+    },
     fetchFails(context) {
       return this._vm.$api.get("retour/fails").then(response => {
         context.commit("SET_DATA", ["fails", response]);
@@ -52,12 +104,13 @@ export default {
       });
     },
     fetchStats(context) {
-      const endpoint = "retour/stats/" + context.state.view.stats + "/" + context.state.view.offset;
-      return this._vm.$api.get(endpoint, {
-        locale: context.rootState.user.current.language
+      const view = context.getters["view"];
+      return this._vm.$api.get("retour/stats/", {
+        view: view ? view : "custom",
+        from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
+        to: context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
       }).then(response => {
-        context.commit("SET_DATA", ["stats", response.data]);
-        context.commit("SET_TITLE", response.title);
+        context.commit("SET_DATA", ["stats", response]);
       });
     },
     fetchSystem(context) {
@@ -76,16 +129,12 @@ export default {
         }
       });
     },
-    offset(context, offset) {
-      context.commit("SET_OFFSET", offset);
-      context.dispatch("fetchStats");
-    },
-    stats(context, stats) {
-      context.commit("SET_STATS", stats);
-      context.dispatch("fetchStats");
-    },
     table(context, table) {
       context.commit("SET_TABLE", table);
+    },
+    timeframe(context, dates) {
+      context.commit("SET_TIMEFRAME", dates);
+      context.dispatch("load");
     }
   }
 };

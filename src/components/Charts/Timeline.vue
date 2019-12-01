@@ -1,31 +1,5 @@
 <template>
-  <div>
-    <header class="k-field-header">
-      <label class="k-field-label" />
-
-      <k-button-group>
-        <k-button
-          icon="angle-left"
-          @click="$store.dispatch('retour/offset', -1)"
-        />
-        <k-button
-          v-for="by in ['year', 'month', 'week', 'day']"
-          :key="by"
-          :current="view === by"
-          @click="$store.dispatch('retour/stats', by)"
-        >
-          {{ $t('rt.stats.' + by) }}
-        </k-button>
-        <k-button
-          icon="angle-right"
-          :disabled="$store.state.retour.view.offset >= 0"
-          @click="$store.dispatch('retour/offset', 1)"
-        />
-      </k-button-group>
-    </header>
-
-    <div class="rt-stats-box rt-timeline" />
-  </div>
+  <div class="rt-stats-box rt-timeline" />
 </template>
 
 <script>
@@ -38,9 +12,6 @@ export default {
     },
     labels() {
       return this.data.map(x => x.label);
-    },
-    view() {
-      return this.$store.state.retour.view.stats;
     }
   },
   watch: {
@@ -57,8 +28,12 @@ export default {
         ['screen and (max-width: 45em)', {
           axisX: {
             labelInterpolationFnc: function(value, index) {
-              if (this.view === "year") {
+              if (this.$store.getters["retour/view"] === "year") {
                 return index % 4  === 0 ? value : null;
+              }
+
+              if (this.$store.getters["retour/view"] === false) {
+                return index % (parseInt(this.labels.length/30) + 2)  === 0 ? value : null;
               }
 
               return index % 3  === 0 ? value : null;
@@ -68,8 +43,12 @@ export default {
         ['screen and (min-width: 45em)', {
           axisX: {
             labelInterpolationFnc: function(value, index) {
-              if (this.view === "year") {
+              if (this.$store.getters["retour/view"] === "year") {
                 return index % 2  === 0 ? value : null;
+              }
+
+              if (this.$store.getters["retour/view"] === false) {
+                return index % (parseInt(this.labels.length/30) + 1)  === 0 ? value : null;
               }
 
               return value;
@@ -142,7 +121,28 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.ct-series-a .ct-area,
+.ct-series-c .ct-slice-pie {
+  color: var(--color-negative);
+  fill: var(--color-negative);
+  fill-opacity: .85;
+}
+
+.ct-series-a .ct-slice-pie,
+.rt-timeline .ct-series-e .ct-area {
+  color: var(--color-focus);
+  fill:var(--color-focus);
+  fill-opacity: .85;
+}
+
+.rt-lb-resolved .k-icon,
+.rt-timeline .ct-series-c .ct-area {
+  color: var(--color-border);
+  fill: var(--color-border);
+  fill-opacity: .85;
+}
+
 .rt-timeline > svg {
   margin-top: .75rem;
   margin-left: -.5rem;

@@ -28,10 +28,14 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/stats/(:any)/(:num?)',
+            'pattern' => 'retour/stats',
             'method'  => 'GET',
-            'action'  => function ($by, $offset = 0) {
-                return Stats::get($by, $offset);
+            'action'  => function () {
+                return Stats::get(
+                    $this->requestQuery('view'),
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
+                );
             }
         ],
         [
