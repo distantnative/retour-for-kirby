@@ -18,12 +18,11 @@ class Stats
 
         switch ($by) {
             case 'year':
-                $data = $log->forStats($from, $to, '%W');
-                $data = self::fill($data, $from, $to, 'week', '%W');
+                $data = $log->forStats($from, $to, '%m');
+                $data = self::fill($data, $from, $to, 'month', '%m');
                 break;
 
             case 'month':
-            case 'week':
                 $data = $log->forStats($from, $to, '%d');
                 $data = self::fill($data, $from, $to, 'day', '%d');
                 break;
@@ -34,14 +33,9 @@ class Stats
                 break;
 
             case 'custom':
-                if (date("m", strtotime($from)) === date("m", strtotime($to))) {
-                    $label = '%d';
-                } else {
-                    $label = '%d/%m';
-                }
-
-                $data = $log->forStats($from, $to, $label);
-                $data = self::fill($data, $from, $to, 'day', $label);
+            case 'week':
+                $data = $log->forStats($from, $to, '%d/%m');
+                $data = self::fill($data, $from, $to, 'day', '%d/%m');
                 break;
         }
 

@@ -85,8 +85,10 @@
 }
 
 .ct-label.ct-horizontal.ct-end {
-  transform: translateX(-25%);
-  text-align: center;
+  display: block;
+  transform: translateX(-50%);
+  text-align: center !important;
+  text-anchor: middle !important;
 }.rt-stats {
   background: #2d2f36;
   color: rgba(255, 255, 255, 0.75);

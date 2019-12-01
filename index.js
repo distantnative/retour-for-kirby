@@ -14386,6 +14386,30 @@ var _default = {
       return this.data.map(function (x) {
         return x.label;
       });
+    },
+    totals: function totals() {
+      return this.data.map(function (x) {
+        return {
+          x: new Date(parseInt(x.time) * 100),
+          y: parseInt(x.total)
+        };
+      });
+    },
+    resolved: function resolved() {
+      return this.data.map(function (x) {
+        return {
+          x: new Date(parseInt(x.time) * 100),
+          y: parseInt(x.resolved) + parseInt(x.redirected)
+        };
+      });
+    },
+    redirected: function redirected() {
+      return this.data.map(function (x) {
+        return {
+          x: new Date(parseInt(x.time) * 100),
+          y: parseInt(x.redirected)
+        };
+      });
     }
   },
   watch: {
@@ -14398,48 +14422,9 @@ var _default = {
   },
   methods: {
     createChart: function createChart() {
-      var responsive = [['screen and (max-width: 45em)', {
-        axisX: {
-          labelInterpolationFnc: function (value, index) {
-            if (this.$store.getters["retour/view"] === "year") {
-              return index % 4 === 0 ? value : null;
-            }
-
-            if (this.$store.getters["retour/view"] === false) {
-              return index % (parseInt(this.labels.length / 30) + 2) === 0 ? value : null;
-            }
-
-            return index % 3 === 0 ? value : null;
-          }.bind(this)
-        }
-      }], ['screen and (min-width: 45em)', {
-        axisX: {
-          labelInterpolationFnc: function (value, index) {
-            if (this.$store.getters["retour/view"] === "year") {
-              return index % 2 === 0 ? value : null;
-            }
-
-            if (this.$store.getters["retour/view"] === false) {
-              return index % (parseInt(this.labels.length / 30) + 1) === 0 ? value : null;
-            }
-
-            return value;
-          }.bind(this)
-        }
-      }]];
       var chart = new _chartist.default.Line(".rt-timeline", {
         labels: this.labels,
-        series: [this.data.map(function (x) {
-          return parseInt(x.total);
-        }), this.data.map(function (x) {
-          return parseInt(x.resolved) + parseInt(x.redirected);
-        }), this.data.map(function (x) {
-          return parseInt(x.resolved) + parseInt(x.redirected);
-        }), this.data.map(function (x) {
-          return parseInt(x.redirected);
-        }), this.data.map(function (x) {
-          return parseInt(x.redirected);
-        })]
+        series: [this.totals, this.resolved, this.resolved, this.redirected, this.redirected]
       }, {
         height: 240,
         showLabel: false,
@@ -14448,10 +14433,55 @@ var _default = {
         showLine: false,
         showPoint: false,
         fullWidth: true,
+        lineSmooth: _chartist.default.Interpolation.simple({
+          divisor: 5
+        }),
         axisY: {
           onlyInteger: true
         }
-      }, responsive);
+      }, [['screen and (max-width: 45em)', {
+        axisX: {
+          labelInterpolationFnc: function (value, index) {
+            if (this.$store.getters["retour/view"] === "year") {
+              return this.$library.dayjs(value).format('MMM');
+            }
+
+            if (this.$store.getters["retour/view"] === "month") {
+              return index % 2 === 0 ? value : null;
+            }
+
+            if (this.$store.getters["retour/view"] === "day") {
+              return (index - 1) % 2 === 0 ? value : null;
+            }
+
+            return value;
+          }.bind(this)
+        }
+      }], ['screen and (min-width: 45em)', {
+        axisX: {
+          labelInterpolationFnc: function (value, index) {
+            if (this.$store.getters["retour/view"] === "year") {
+              return this.$library.dayjs(value).format('MMM');
+            }
+
+            if (this.$store.getters["retour/view"] === "month") {
+              return index % 2 === 0 ? value : null;
+            }
+
+            if (this.$store.getters["retour/view"] === "day") {
+              return (index - 1) % 2 === 0 ? value + ":00" : null;
+            }
+
+            if (this.$store.getters["retour/view"] === false) {
+              console.log(this.data.length);
+              console.log(parseInt(this.data.length / 20) + 1);
+              return index % (Math.floor(this.data.length / 20) + 1) === 0 ? value : null;
+            }
+
+            return value;
+          }.bind(this)
+        }
+      }]]);
       chart.on('created', function (ctx) {
         var mask1 = ctx.svg.elem('defs').elem('mask', {
           id: 'mask1'
