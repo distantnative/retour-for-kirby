@@ -14,14 +14,6 @@
     </template>
 
     <!-- Custom field cells -->
-    <template
-      v-if="hasLogs"
-      slot="column-recency"
-      slot-scope="props"
-    >
-      <p><recency :value="props.value" /></p>
-    </template>
-
     <template slot="column-status" slot-scope="props">
       <p class="rt-redirects-status" :data-status="status(props.value)">
         <k-icon type="circle" />
@@ -93,14 +85,12 @@
 <script>
 import {date, status, permissions} from "../helpers.js";
 
-import Recency from "../Fields/Recency.vue";
-import TableSwitch from "./Switch.vue";
+import TableSwitch from "../Navigation/TableSwitch.vue";
 import Tbl from "tbl-for-kirby";
 
 export default {
   mixins: [permissions],
   components: {
-    Recency,
     TableSwitch,
     Tbl
   },
@@ -134,14 +124,6 @@ export default {
 
       if (this.hasLogs === true) {
         columns = [
-          {
-            name: "recency",
-            field: "last",
-            sort: false,
-            search: false,
-            width: "1fr",
-            responsive: false,
-          },
           ...columns,
           {
             label: this.$t("rt.hits"),
@@ -212,7 +194,7 @@ export default {
           stats: {
             label: this.$t("rt.hits"),
             type: "info",
-            text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last || "–"})`,
+            text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last ? this.$library.dayjs(this.current.last).format("D MMM YYYY - HH:mm:ss") : "–"})`,
             width: "1/2"
           },
         }
@@ -309,8 +291,8 @@ export default {
         this.$api.post("retour/resolve", {
           path: this.current.from
         }).then(() => {
-          this.$store.dispatch("retour/fetchFails");
-          this.$store.dispatch("retour/fetchStats");
+          this.$store.dispatch("retour/fails");
+          this.$store.dispatch("retour/stats");
         });
 
         updated.push(this.current);
@@ -330,7 +312,7 @@ export default {
           this.afterSubmit = null;
         }
 
-        this.$store.dispatch("retour/fetchRedirects");
+        this.$store.dispatch("retour/redirects");
       });
     }
   }

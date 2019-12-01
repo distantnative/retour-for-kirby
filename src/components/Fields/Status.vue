@@ -42,6 +42,6 @@ export default {
   color: var(--color-positive-light);
 }
 .k-retour-view [data-status="mmm"] {
-  color: var(--color-notice-light);
+  color: var(--color-focus-light);
 }
 </style>

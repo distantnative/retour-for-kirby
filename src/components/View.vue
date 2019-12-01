@@ -1,7 +1,7 @@
 <template>
   <div class="k-retour-view">
     <stats v-if="hasLogs" />
-    <entries />
+    <tables />
     <settings v-if="hasLogs" />
   </div>
 </template>
@@ -9,16 +9,16 @@
 <script>
 import {permissions} from "./helpers.js";
 
-import Entries from "./Sections/Entries.vue";
-import Settings from "./Sections/Settings.vue";
 import Stats from "./Sections/Stats.vue";
+import Tables from "./Sections/Tables.vue";
+import Settings from "./Sections/Settings.vue";
 
 export default {
   mixins: [permissions],
   components: {
-    Entries,
+    Stats,
+    Tables,
     Settings,
-    Stats
   },
   mounted() {
     if (this.canAccess === false) {

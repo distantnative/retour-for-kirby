@@ -32,7 +32,7 @@ return [
     'rt.fails.resolve'  => 'Add as redirect',
 
     'rt.hits'      => 'Hits',
-    'rt.hits.last' => 'Latest',
+    'rt.hits.last' => 'Last',
 
     'rt.settings.support'            => 'Support development',
     'rt.settings.support.donate'     => 'Donate',

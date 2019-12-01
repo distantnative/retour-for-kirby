@@ -8927,1442 +8927,7 @@ if (inBrowser) {
 
 var _default = Vue;
 exports.default = _default;
-},{}],"components/Fields/Recency.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  props: {
-    value: String,
-    tooltip: String
-  },
-  computed: {
-    date: function date() {
-      return new Date(this.value.replace(/-/g, "/"));
-    },
-    factor: function factor() {
-      if (!this.value) {
-        return 0;
-      }
-
-      var diff = Math.abs(new Date().getTime() - this.date.getTime());
-      var days = Math.ceil(diff / (1000 * 3600 * 24));
-      var factor = 1 - days / 30;
-      return factor > 0 ? factor : 0;
-    },
-    short: function short() {
-      var day = this.date.getDate().toString().padStart(2, "0");
-      var month = (this.date.getMonth() + 1).toString().padStart(2, "0");
-      var year = this.date.getFullYear().toString().substr(-2);
-      return "".concat(day, "/").concat(month, "/").concat(year);
-    }
-  }
-};
-exports.default = _default;
-        var $77bcef = exports.default || module.exports;
-      
-      if (typeof $77bcef === 'function') {
-        $77bcef = $77bcef.options;
-      }
-    
-        /* template */
-        Object.assign($77bcef, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "abbr",
-    {
-      staticClass: "rt-recency",
-      attrs: { title: "Last: " + (_vm.tooltip || _vm.value || "–") }
-    },
-    [
-      _c(
-        "aside",
-        [
-          _c("k-icon", { staticClass: "bg", attrs: { type: "circle" } }),
-          _vm._v(" "),
-          _c("k-icon", {
-            style: "--f:" + _vm.factor,
-            attrs: { type: "circle" }
-          })
-        ],
-        1
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$77bcef', $77bcef);
-          } else {
-            api.reload('$77bcef', $77bcef);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Tables/Switch.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  computed: {
-    current: function current() {
-      return this.$store.state.retour.view.table;
-    },
-    hasLogs: function hasLogs() {
-      return this.$store.state.retour.options.logs;
-    },
-    tabs: function tabs() {
-      if (this.hasLogs === false) {
-        return ["redirects"];
-      }
-
-      return ["redirects", "fails"];
-    }
-  },
-  methods: {
-    onSwitch: function onSwitch(table) {
-      this.$store.dispatch("retour/table", table);
-    }
-  }
-};
-exports.default = _default;
-        var $cbd0a6 = exports.default || module.exports;
-      
-      if (typeof $cbd0a6 === 'function') {
-        $cbd0a6 = $cbd0a6.options;
-      }
-    
-        /* template */
-        Object.assign($cbd0a6, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "k-headline",
-    { staticClass: "rt-table-switch" },
-    _vm._l(_vm.tabs, function(table) {
-      return _c(
-        "button",
-        {
-          key: table,
-          attrs: { "data-current": _vm.current === table },
-          on: {
-            click: function($event) {
-              return _vm.onSwitch(table)
-            }
-          }
-        },
-        [_vm._v("\n    " + _vm._s(_vm.$t("rt." + table)) + "\n  ")]
-      )
-    }),
-    0
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$cbd0a6', $cbd0a6);
-          } else {
-            api.reload('$cbd0a6', $cbd0a6);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"../node_modules/tbl-for-kirby/index.js":[function(require,module,exports) {
-var define;
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t=t||self).Tbl=e()}(this,function(){"use strict";function t(e){return(t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(e)}return function(t,e,n,s,o,i,r,a,c,l){"boolean"!=typeof r&&(c=a,a=r,r=!1);var d,u="function"==typeof n?n.options:n;if(t&&t.render&&(u.render=t.render,u.staticRenderFns=t.staticRenderFns,u._compiled=!0,o&&(u.functional=!0)),s&&(u._scopeId=s),i?(d=function(t){(t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),e&&e.call(this,c(t)),t&&t._registeredComponents&&t._registeredComponents.add(i)},u._ssrRegister=d):e&&(d=r?function(){e.call(this,l(this.$root.$options.shadowRoot))}:function(t){e.call(this,a(t))}),d)if(u.functional){var f=u.render;u.render=function(t,e){return d.call(e),f(t,e)}}else{var h=u.beforeCreate;u.beforeCreate=h?[].concat(h,d):[d]}return n}({render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("section",{staticClass:"tbl",attrs:{"data-version":"1.0.9"}},[n("header",{staticClass:"k-section-header"},[t._t("headline",[n("k-headline",[t._v(t._s(t.headline))])]),t._v(" "),t._t("filter",[n("k-button-group",[t.showReset?n("button",{staticClass:"tbl-reset",on:{click:t.reset}},[t._v("\n          "+t._s(t.config.labels.reset)+"\n        ")]):t._e(),t._v(" "),t.showSearch?n("input",{directives:[{name:"model",rawName:"v-model",value:t.searchTerm,expression:"searchTerm"}],ref:"search",staticClass:"tbl-search",attrs:{type:"text",placeholder:t.config.labels.filter},domProps:{value:t.searchTerm},on:{keydown:function(e){return!e.type.indexOf("key")&&t._k(e.keyCode,"esc",27,e.key,["Esc","Escape"])?null:t.reset(e)},input:function(e){e.target.composing||(t.searchTerm=e.target.value)}}}):t._e(),t._v(" "),t.showAdd?n("k-button",{attrs:{icon:"add"},on:{click:function(e){return t.$emit("add")}}},[t._v("\n          "+t._s(t.$t("add"))+"\n        ")]):t._e()],1)])],2),t._v(" "),t._t("table",[n("table",[n("thead",[0===t.rowsFiltered.length?n("th",{attrs:{colspan:t.widthLoading}}):[t._l(t.columns,function(e){return n("th",{key:e.field,class:"head-"+(e.class||"field-"+e.field),attrs:{"data-align":t.getAlign(e),"data-width":e.width,"data-responsive":!1!==e.responsive,"data-sortable":t.config.sort.enabled&&!1!==e.sort,"data-sorted":t.sortBy===e&&(1===t.sortOrder?"asc":"desc")},on:{click:function(n){return t.setSort(e)}}},[t._v("\n            "+t._s(e.label)+"\n          ")])}),t._v(" "),t.showActions?n("th",{attrs:{"data-width":t.widthActions}}):t._e()]],2),t._v(" "),n("tbody",[0===t.rowsFiltered.length?n("tr",[n("td",{attrs:{colspan:t.widthLoading,"data-align":"center"}},[t._t("empty-row",[n("p",[this.isLoading?n("k-icon",{attrs:{type:"loader"}}):n("span",[t._v(t._s(t.config.labels.empty))])],1)])],2)]):t._l(t.rowsPaginated,function(e,s){return n("tr",{key:"row_"+s},[t._l(t.columns,function(o){return n("td",{key:o.field,class:"row-"+(o.class||"field-"+o.field),attrs:{"data-width":o.width,"data-align":t.getAlign(o),"data-responsive":!1!==o.responsive},on:{click:function(n){return t.$emit("action",[t.config.actions.onRow,e,o.field])}}},[t._t("column-"+(o.name||o.field),[t._t("column-$default",["url"===o.type?n("k-url-field-preview",{attrs:{value:e[o.field]}}):n("p",{domProps:{innerHTML:t._s(t.getValue(e[o.field],o.type))}})],{index:s,column:o,field:o.field,row:e,value:t.getValue(e[o.field],o.type)})],{index:s,column:o,field:o.field,row:e,value:t.getValue(e[o.field],o.type)})],2)}),t._v(" "),t.showActions?n("td",{staticClass:"tbl-options",attrs:{"data-width":t.widthActions,"data-align":"center"}},[t._t("column-$actions",[t.config.actions.inline?t._l(t.config.actions.items,function(s){return n("k-button",{key:s.click,attrs:{tooltip:s.text,icon:s.icon},on:{click:function(n){return n.stopPropagation(),t.$emit("action",[s.click,e])}}})}):[n("k-button",{attrs:{tooltip:t.$t("options"),icon:"dots"},on:{click:function(e){e.stopPropagation(),t.$refs["options-"+s][0].toggle()}}}),t._v(" "),n("k-dropdown-content",{ref:"options-"+s,refInFor:!0,attrs:{options:t.config.actions.items,align:"right"},on:{action:function(n){return t.$emit("action",[n,e])}}})]],{row:e,index:s})],2):t._e()],2)})],2)])]),t._v(" "),n("footer",{staticClass:"tbl-footer"},[t._t("footer",[t.rowsFiltered.length>0?[n("div",{staticClass:"tbl-perPage"},[t._t("footer-before-perPage"),t._v(" "),n("select",{directives:[{name:"model",rawName:"v-model",value:t.perPage,expression:"perPage"}],attrs:{autocomplete:"off"},on:{input:t.onPerPage,change:function(e){var n=Array.prototype.filter.call(e.target.options,function(t){return t.selected}).map(function(t){return"_value"in t?t._value:t.value});t.perPage=e.target.multiple?n:n[0]}}},[t._l(t.config.pagination.perPageOptions,function(e){return n("option",{key:e,domProps:{value:e,textContent:t._s(e)}})}),t._v(" "),n("option",{domProps:{value:this.rowsFiltered.length}},[t._v("\n              "+t._s(t.config.labels.all)+"\n            ")])],2),t._v(" "),n("span",[t._v(t._s(t.config.labels.perPage))]),t._v(" "),t._t("footer-after-perPage")],2),t._v(" "),t._t("footer-center"),t._v(" "),n("div",{staticClass:"tbl-navigation"},[t._t("footer-before-pagination"),t._v(" "),t.rowsFiltered.length>t.perPage?[n("div",{staticClass:"btn btn-prev",attrs:{"data-disabled":t.page<=1},on:{click:function(e){return t.navigate(-1)}}},[n("span",{staticClass:"chevron"}),t._v(" "),n("span",[t._v(t._s(t.$t("prev")))])]),t._v(" "),n("div",{staticClass:"info"},[t._v("\n              "+t._s(this.pageRowFirst)+" - "+t._s(Math.min(this.pageRowLast,this.rowsFiltered.length))+" of "+t._s(this.rowsFiltered.length)+"\n            ")]),t._v(" "),n("div",{staticClass:"btn btn-next",attrs:{"data-disabled":t.page*t.perPage>=t.rowsFiltered.length},on:{click:function(e){return t.navigate(1)}}},[n("span",[t._v(t._s(t.$t("next")))]),t._v(" "),n("span",{staticClass:"chevron"})])]:t._e(),t._v(" "),t._t("footer-after-pagination")],2)]:t._e()])],2),t._v(" "),t._t("dialogs")],2)},staticRenderFns:[]},void 0,{props:{headline:String,columns:Array,rows:Array,options:Object,actions:Object,labels:Object,pagination:{type:[Boolean,Object],default:function(){return{}}},search:{type:[Boolean,Object],default:function(){return{}}},sort:{type:[Boolean,Object],default:function(){return{}}},store:{type:[Boolean,Object],default:function(){return{}}},isLoading:{type:Boolean,default:!1}},data:function(){return{searchTerm:"",sortBy:null,sortOrder:1,page:1,perPage:10}},computed:{config:function(){return Object.assign({actions:Object.assign({inline:!1,items:[],onRow:!1},this.actions),labels:Object.assign({all:"All",empty:"No rows available",perPage:"rows displayed",reset:"Reset",filter:"Filter items..."},this.labels),pagination:Object.assign({enabled:!0,page:1,perPage:10,perPageOptions:[5,10,25,50,100]},this.resolveOptions(this.pagination)),search:Object.assign({enabled:!0},this.resolveOptions(this.search)),sort:Object.assign({enabled:!0,initialBy:null},this.resolveOptions(this.sort)),store:Object.assign({enabled:!1,name:""},this.resolveOptions(this.store)),add:!1,reset:!0},this.options)},pageOffset:function(){return(this.page-1)*this.perPage},pageRowFirst:function(){return this.pageOffset+1},pageRowLast:function(){return this.pageOffset+this.perPage},rowsFiltered:function(){var t=this;if(""===this.searchTerm)return this.rows;var e=this.searchTerm.toLowerCase();return this.rows.slice().filter(function(n){var s=!1;return Object.keys(n).forEach(function(o){var i=t.columns.find(function(t){return t.field===o});i&&!1!==i.search&&String(n[o]).toLowerCase().includes(e)&&(s=!0)}),s})},rowsPaginated:function(){return this.rowsSorted.slice(this.pageOffset,this.pageOffset+this.perPage)},rowsSorted:function(){var t=this;return this.sortBy&&!1!==this.config.sort.enabled?this.rowsFiltered.slice().sort(function(e,n){if(t.sortBy.field&&(e=e[t.sortBy.field],n=n[t.sortBy.field]),t.sortBy.sort&&t.sortBy.sort.field&&(e=e[t.sortBy.sort.field],n=n[t.sortBy.sort.field]),t.sortBy.sort&&t.sortBy.sort.value&&(e=e[t.sortBy.sort.value],n=n[t.sortBy.sort.value]),t.sortBy.callback)return t.sortBy.callback(e,n,t.sortOrder,t.sortBy);switch(t.sortBy.type){case"number":return(e-n)*t.sortOrder;case"date":return(new Date(e)-new Date(n))*t.sortOrder;default:return e=(""+e).toLowerCase(),n=(""+n).toLowerCase(),e.localeCompare(n)*t.sortOrder}}):this.rowsFiltered},showActions:function(){return!!this.$scopedSlots["column-$actions"]||!!this.config.actions.items&&this.config.actions.items.length>0},showAdd:function(){return this.config.add},showReset:function(){return this.config.reset&&(""!==this.searchTerm||null!==this.sortBy)},showSearch:function(){return this.columns.filter(function(t){return!1!==t.search}).length>0&&this.config.search.enabled},storeName:function(){return"kirby$plugin$tbl$"+this.config.store.name},widthActions:function(){return this.config.actions.width?this.config.actions.width:(this.config.actions.inline?this.config.actions.items.length:1)+"fr"},widthLoading:function(){return Math.max(this.columns.length,1)+(this.showActions?1:0)}},watch:{config:function(){this.load()},searchTerm:function(t){this.setStore(),this.page=1,this.$emit("onFilter",t)}},created:function(){this.load()},methods:{getAlign:function(t){if(t.align)return t.align;switch(t.type){case"number":case"decimal":case"percentage":case"boolean":case"date":return"right";default:return"left"}},getValue:function(t,e){switch(e){case"date":return t?new Date(t).toLocaleString(this.$user.language.replace("_","-"),{year:"numeric",month:"long",day:"numeric"}):"–";case"number":return t?1*t:"–";case"decimals":return t?Number(t).toFixed(2):"–";case"percentage":return t?Number(100*t).toFixed(2)+" %":"– %";default:return t||null}},load:function(){this.page=this.config.pagination.page,this.perPage=this.config.pagination.perPage,this.loadStore(),this.loadSort()},loadSort:function(){if(!0===this.config.sort.enabled&&null===this.sortBy){var t=this.config.sort.initialBy;if(t){var e=this.columns.find(function(e){return e.name===t});e||(e=this.columns.find(function(e){return e.field===t})),this.setSort(e)}}},loadStore:function(){if(!0===this.config.store.enabled){var t=JSON.parse(sessionStorage.getItem(this.storeName));null!==t&&(this.page=t.page,this.perPage=t.perPage,this.searchTerm=t.searchTerm,this.sortBy=t.sortBy,this.sortOrder=t.sortOrder),this.$emit("onLoadStore",t)}},navigate:function(t){this.page+=t,this.setStore(),this.$emit("onPage",this.page)},onPerPage:function(){this.page=1,this.setStore(),this.$emit("onPerPage",this.perPage)},reset:function(){Object.assign(this.$data,this.$options.data.apply(this)),this.$refs.search.blur(),this.setStore(),this.$emit("onReset")},resolveOptions:function(e){return 0===Object.keys(e).length?e:t(e)==t(!0)?{enabled:e}:Object.assign({enabled:!0},e)},setSort:function(t){!1!==this.config.sort.enabled&&!1!==t.sort&&(this.sortBy===t?this.sortOrder*=-1:(this.sortBy=t,this.sortOrder="desc"===(t.sort&&t.sort.order?t.sort.order:t.sort)?-1:1),this.setStore(),this.$emit("onSort",Object.assign({},t,{currentDirection:this.sortOrder})))},setStore:function(){var t=this;!0===this.config.store.enabled&&this.$nextTick(function(){var e={page:t.page,perPage:t.perPage,searchTerm:t.searchTerm,sortBy:t.sortBy,sortOrder:t.sortOrder};sessionStorage.setItem(t.storeName,JSON.stringify(e)),t.$emit("onLoadStore",e)})}}},void 0,!1,void 0,void 0,void 0)});
-
-},{}],"components/Tables/Fails.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _helpers = require("../helpers.js");
-
-var _Recency = _interopRequireDefault(require("../Fields/Recency.vue"));
-
-var _Switch = _interopRequireDefault(require("./Switch.vue"));
-
-var _tblForKirby = _interopRequireDefault(require("tbl-for-kirby"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  mixins: [_helpers.permissions],
-  components: {
-    Recency: _Recency.default,
-    TableSwitch: _Switch.default,
-    Tbl: _tblForKirby.default
-  },
-  computed: {
-    columns: function columns() {
-      return [{
-        name: "recency",
-        field: "last",
-        sort: false,
-        search: false,
-        width: "1fr",
-        responsive: false
-      }, {
-        label: this.$t("rt.fails.path"),
-        field: "path",
-        type: "url"
-      }, {
-        label: this.$t("rt.fails.referrer"),
-        field: "referrer",
-        type: "url"
-      }, {
-        label: this.$t("rt.hits"),
-        field: "hits",
-        type: "number",
-        sort: "desc",
-        search: false,
-        width: "1/8"
-      }, {
-        name: "last",
-        label: this.$t("rt.hits.last"),
-        field: "last",
-        type: "date",
-        sort: "desc",
-        search: false,
-        width: "1/6",
-        responsive: false
-      }];
-    },
-    fails: function fails() {
-      return (0, _helpers.date)(this.$store.state.retour.data.fails);
-    },
-    site: function site() {
-      return window.panel.site;
-    },
-    table: function table() {
-      var config = {
-        options: {
-          reset: false
-        },
-        sort: {
-          initialBy: "last"
-        },
-        labels: {
-          all: this.$t("rt.tbl.all"),
-          empty: this.$t("rt.tbl.fails.empty"),
-          perPage: this.$t("rt.tbl.perPage"),
-          filter: this.$t("rt.tbl.filter")
-        }
-      };
-
-      if (this.canUpdate) {
-        config.actions = {
-          inline: true,
-          items: [{
-            text: this.$t("rt.fails.resolve"),
-            icon: "add",
-            click: "add"
-          }]
-        };
-      }
-
-      return config;
-    }
-  },
-  methods: {
-    action: function action(_action, row) {
-      switch (_action) {
-        case "add":
-          this.$store.dispatch("retour/table", "redirects");
-          this.$parent.$parent.$refs.redirects.action("add", {
-            from: row.path
-          }, "to");
-          break;
-      }
-    }
-  }
-};
-exports.default = _default;
-        var $938479 = exports.default || module.exports;
-      
-      if (typeof $938479 === 'function') {
-        $938479 = $938479.options;
-      }
-    
-        /* template */
-        Object.assign($938479, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "tbl",
-    _vm._b(
-      {
-        attrs: {
-          columns: _vm.columns,
-          rows: _vm.fails,
-          "is-loading": this.$store.state.isLoading
-        },
-        on: {
-          action: function($event) {
-            return _vm.action.apply(void 0, $event)
-          }
-        },
-        scopedSlots: _vm._u([
-          {
-            key: "column-recency",
-            fn: function(props) {
-              return [
-                _c("p", [_c("recency", { attrs: { value: props.value } })], 1)
-              ]
-            }
-          },
-          {
-            key: "column-$default",
-            fn: function(props) {
-              return [
-                _c(
-                  "p",
-                  [
-                    props.column.type === "url" &&
-                    props.value &&
-                    props.value !== "–"
-                      ? _c("k-button", {
-                          attrs: {
-                            link:
-                              props.value && props.value.startsWith("http")
-                                ? props.value
-                                : _vm.site + "/" + props.value,
-                            icon: "url",
-                            target: "_blank"
-                          },
-                          nativeOn: {
-                            click: function($event) {
-                              $event.stopPropagation()
-                            }
-                          }
-                        })
-                      : _vm._e(),
-                    _vm._v("\n      " + _vm._s(props.value) + "\n    ")
-                  ],
-                  1
-                )
-              ]
-            }
-          }
-        ])
-      },
-      "tbl",
-      _vm.table,
-      false
-    ),
-    [_c("template", { slot: "headline" }, [_c("TableSwitch")], 1)],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$938479', $938479);
-          } else {
-            api.reload('$938479', $938479);
-          }
-        }
-
-        
-      }
-    })();
-},{"../helpers.js":"components/helpers.js","../Fields/Recency.vue":"components/Fields/Recency.vue","./Switch.vue":"components/Tables/Switch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Tables/Redirects.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _helpers = require("../helpers.js");
-
-var _Recency = _interopRequireDefault(require("../Fields/Recency.vue"));
-
-var _Switch = _interopRequireDefault(require("./Switch.vue"));
-
-var _tblForKirby = _interopRequireDefault(require("tbl-for-kirby"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-var _default = {
-  mixins: [_helpers.permissions],
-  components: {
-    Recency: _Recency.default,
-    TableSwitch: _Switch.default,
-    Tbl: _tblForKirby.default
-  },
-  data: function data() {
-    return {
-      mode: null,
-      current: null,
-      afterSubmit: null
-    };
-  },
-  computed: {
-    columns: function columns() {
-      var columns = [{
-        label: this.$t("rt.redirects.from"),
-        type: "url",
-        field: "from"
-      }, {
-        label: this.$t("rt.redirects.to"),
-        type: "url",
-        field: "to",
-        responsive: false
-      }, {
-        label: this.$t("rt.redirects.status"),
-        width: "1/6",
-        field: "status"
-      }];
-
-      if (this.hasLogs === true) {
-        columns = [{
-          name: "recency",
-          field: "last",
-          sort: false,
-          search: false,
-          width: "1fr",
-          responsive: false
-        }].concat(_toConsumableArray(columns), [{
-          label: this.$t("rt.hits"),
-          field: "hits",
-          type: "number",
-          sort: "desc",
-          search: false,
-          width: "1/8"
-        }, {
-          name: "last",
-          label: this.$t("rt.hits.last"),
-          field: "last",
-          type: "date",
-          sort: "desc",
-          search: false,
-          width: "1/6",
-          responsive: false
-        }]);
-      }
-
-      return columns;
-    },
-    fields: function fields() {
-      var _this = this;
-
-      var fields = {
-        from: {
-          label: this.$t("rt.redirects.from"),
-          type: "text",
-          before: window.panel.site + "/",
-          help: this.$t("rt.redirects.from.help", {
-            reference: "https://getkirby.com/docs/guide/routing#patterns",
-            readme: "https://github.com/distantnative/retour-for-kirby#redirects"
-          }),
-          icon: "url",
-          width: "1/2",
-          counter: false,
-          required: true
-        },
-        to: {
-          label: this.$t("rt.redirects.to"),
-          type: "rt-redirect",
-          help: this.$t("rt.redirects.to.help"),
-          icon: "retour",
-          width: "1/2",
-          counter: false
-        },
-        status: {
-          label: this.$t("rt.redirects.status"),
-          type: "rt-status",
-          options: [{
-            text: "––––",
-            value: "disabled"
-          }].concat(_toConsumableArray(Object.keys(this.headers).map(function (code) {
-            return {
-              text: code.substr(1) + " - " + _this.headers[code],
-              value: code.substr(1)
-            };
-          }))),
-          help: this.$t("rt.redirects.status.help", {
-            url: "https://httpstatuses.com"
-          }),
-          empty: false,
-          required: true,
-          width: "1/2"
-        }
-      };
-
-      if (this.hasLogs === true) {
-        fields = _objectSpread({}, fields, {
-          stats: {
-            label: this.$t("rt.hits"),
-            type: "info",
-            text: "<b>".concat(this.current.hits || 0, " ").concat(this.$t("rt.hits"), "</b> (").concat(this.$t("rt.hits.last"), ": ").concat(this.current.last || "–", ")"),
-            width: "1/2"
-          }
-        });
-      }
-
-      return fields;
-    },
-    hasLogs: function hasLogs() {
-      return this.$store.state.retour.options.logs;
-    },
-    headers: function headers() {
-      return this.$store.state.retour.options.headers;
-    },
-    redirects: function redirects() {
-      return (0, _helpers.date)(this.$store.state.retour.data.redirects);
-    },
-    site: function site() {
-      return window.panel.site;
-    },
-    table: function table() {
-      var config = {
-        options: {
-          add: this.canUpdate,
-          reset: false
-        },
-        sort: {
-          initialBy: "status"
-        },
-        labels: {
-          all: this.$t("rt.tbl.all"),
-          empty: this.$t("rt.tbl.redirects.empty"),
-          perPage: this.$t("rt.tbl.perPage"),
-          filter: this.$t("rt.tbl.filter")
-        }
-      };
-
-      if (this.canUpdate) {
-        config.actions = {
-          items: [{
-            text: this.$t("edit"),
-            icon: "edit",
-            click: "edit"
-          }, {
-            text: this.$t("remove"),
-            icon: "trash",
-            click: "remove"
-          }],
-          onRow: "edit"
-        };
-      }
-
-      return config;
-    }
-  },
-  methods: {
-    action: function action(_action) {
-      var _this2 = this;
-
-      var row = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var field = arguments.length > 2 ? arguments[2] : undefined;
-      var callback = arguments.length > 3 ? arguments[3] : undefined;
-      this.current = Object.assign({}, row);
-
-      switch (_action) {
-        case "add":
-          this.mode = "new";
-          this.current.status = "disabled";
-          this.afterSubmit = callback;
-          this.$nextTick(function () {
-            return _this2.$refs.form.focus("from");
-          });
-          break;
-
-        case "edit":
-          this.mode = this.redirects.findIndex(function (x) {
-            return x.from === row.from;
-          });
-          this.$nextTick(function () {
-            return _this2.$refs.form.focus(field || "from");
-          });
-          break;
-
-        case "remove":
-          this.$refs.remove.open();
-          break;
-      }
-    },
-    onCancel: function onCancel() {
-      this.mode = null;
-      this.current = null;
-      this.afterSubmit = null;
-    },
-    onPrev: function onPrev() {
-      this.mode -= 1;
-      this.current = this.redirects[this.mode];
-    },
-    onNext: function onNext() {
-      this.mode += 1;
-      this.current = this.redirects[this.mode];
-    },
-    onRemove: function onRemove() {
-      var _this3 = this;
-
-      this.update(this.redirects.filter(function (x) {
-        return x.from !== _this3.current.from;
-      }));
-      this.$refs.remove.close();
-      this.current = null;
-    },
-    onSubmit: function onSubmit() {
-      var _this4 = this;
-
-      var updated = this.redirects;
-
-      if (this.mode === "new") {
-        this.$api.post("retour/resolve", {
-          path: this.current.from
-        }).then(function () {
-          _this4.$store.dispatch("retour/fetchFails");
-
-          _this4.$store.dispatch("retour/fetchStats");
-        });
-        updated.push(this.current);
-      } else {
-        updated[this.mode] = this.current;
-      }
-
-      this.update(updated).then(this.onCancel);
-    },
-    status: function status(v) {
-      return (0, _helpers.status)(v);
-    },
-    update: function update(input) {
-      var _this5 = this;
-
-      return this.$api.patch("retour/redirects", input).then(function () {
-        if (_this5.afterSubmit) {
-          _this5.afterSubmit();
-
-          _this5.afterSubmit = null;
-        }
-
-        _this5.$store.dispatch("retour/fetchRedirects");
-      });
-    }
-  }
-};
-exports.default = _default;
-        var $b8bf87 = exports.default || module.exports;
-      
-      if (typeof $b8bf87 === 'function') {
-        $b8bf87 = $b8bf87.options;
-      }
-    
-        /* template */
-        Object.assign($b8bf87, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "tbl",
-    _vm._b(
-      {
-        attrs: {
-          columns: _vm.columns,
-          rows: _vm.redirects,
-          "is-loading": _vm.$store.state.isLoading
-        },
-        on: {
-          add: function($event) {
-            return _vm.action("add")
-          },
-          action: function($event) {
-            return _vm.action.apply(void 0, $event)
-          }
-        },
-        scopedSlots: _vm._u(
-          [
-            {
-              key: "column-recency",
-              fn: function(props) {
-                return _vm.hasLogs
-                  ? [
-                      _c(
-                        "p",
-                        [_c("recency", { attrs: { value: props.value } })],
-                        1
-                      )
-                    ]
-                  : undefined
-              }
-            },
-            {
-              key: "column-status",
-              fn: function(props) {
-                return [
-                  _c(
-                    "p",
-                    {
-                      staticClass: "rt-redirects-status",
-                      attrs: { "data-status": _vm.status(props.value) }
-                    },
-                    [
-                      _c("k-icon", { attrs: { type: "circle" } }),
-                      _vm._v(" "),
-                      _c("code", [_vm._v(_vm._s(props.value))])
-                    ],
-                    1
-                  )
-                ]
-              }
-            },
-            {
-              key: "column-$default",
-              fn: function(props) {
-                return [
-                  _c(
-                    "p",
-                    [
-                      props.column.type === "url" &&
-                      props.value &&
-                      props.value !== "–"
-                        ? _c("k-button", {
-                            attrs: {
-                              link:
-                                props.value && props.value.startsWith("http")
-                                  ? props.value
-                                  : _vm.site + "/" + props.value,
-                              icon: "url",
-                              target: "_blank"
-                            },
-                            nativeOn: {
-                              click: function($event) {
-                                $event.stopPropagation()
-                              }
-                            }
-                          })
-                        : _vm._e(),
-                      _vm._v("\n      " + _vm._s(props.value) + "\n    ")
-                    ],
-                    1
-                  )
-                ]
-              }
-            }
-          ],
-          null,
-          true
-        )
-      },
-      "tbl",
-      _vm.table,
-      false
-    ),
-    [
-      _c("template", { slot: "headline" }, [_c("TableSwitch")], 1),
-      _vm._v(" "),
-      _vm._v(" "),
-      _vm._v(" "),
-      _vm._v(" "),
-      _vm.mode !== null
-        ? [
-            _c("div", { attrs: { slot: "filter" }, slot: "filter" }),
-            _vm._v(" "),
-            _c("k-form", {
-              ref: "form",
-              staticClass: "rt-form",
-              attrs: { slot: "table", fields: _vm.fields },
-              on: { submit: _vm.onSubmit },
-              slot: "table",
-              model: {
-                value: _vm.current,
-                callback: function($$v) {
-                  _vm.current = $$v
-                },
-                expression: "current"
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "template",
-              { slot: "footer" },
-              [
-                _c(
-                  "k-button",
-                  {
-                    staticClass: "rt-form-btn",
-                    attrs: { icon: "cancel" },
-                    on: { click: _vm.onCancel }
-                  },
-                  [_vm._v("\n        " + _vm._s(_vm.$t("cancel")) + "\n      ")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "k-button",
-                  {
-                    staticClass: "rt-form-btn",
-                    attrs: { icon: "check" },
-                    on: { click: _vm.onSubmit }
-                  },
-                  [
-                    _vm._v(
-                      "\n        " +
-                        _vm._s(
-                          _vm.$t(_vm.mode === "new" ? "create" : "change")
-                        ) +
-                        "\n      "
-                    )
-                  ]
-                )
-              ],
-              1
-            )
-          ]
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "k-dialog",
-        {
-          ref: "remove",
-          attrs: {
-            slot: "dialogs",
-            button: _vm.$t("delete"),
-            theme: "negative",
-            icon: "trash"
-          },
-          on: { cancel: _vm.onCancel, submit: _vm.onRemove },
-          slot: "dialogs"
-        },
-        [
-          _c("k-text", [
-            _vm._v(
-              "\n      " +
-                _vm._s(_vm.$t("field.structure.delete.confirm")) +
-                "\n    "
-            )
-          ])
-        ],
-        1
-      )
-    ],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$b8bf87', $b8bf87);
-          } else {
-            api.reload('$b8bf87', $b8bf87);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"../helpers.js":"components/helpers.js","../Fields/Recency.vue":"components/Fields/Recency.vue","./Switch.vue":"components/Tables/Switch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Entries.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _Fails = _interopRequireDefault(require("../Tables/Fails.vue"));
-
-var _Redirects = _interopRequireDefault(require("../Tables/Redirects.vue"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  components: {
-    Fails: _Fails.default,
-    Redirects: _Redirects.default
-  },
-  computed: {
-    table: function table() {
-      return this.$store.state.retour.view.table;
-    }
-  }
-};
-exports.default = _default;
-        var $f28c87 = exports.default || module.exports;
-      
-      if (typeof $f28c87 === 'function') {
-        $f28c87 = $f28c87.options;
-      }
-    
-        /* template */
-        Object.assign($f28c87, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "k-view",
-    [
-      _c("redirects", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.table === "redirects",
-            expression: "table === 'redirects'"
-          }
-        ],
-        ref: "redirects"
-      }),
-      _vm._v(" "),
-      _c("fails", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.table === "fails",
-            expression: "table === 'fails'"
-          }
-        ],
-        ref: "fails"
-      })
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$f28c87', $f28c87);
-          } else {
-            api.reload('$f28c87', $f28c87);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"../Tables/Fails.vue":"components/Tables/Fails.vue","../Tables/Redirects.vue":"components/Tables/Redirects.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Settings.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _helpers = require("../helpers.js");
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  mixins: [_helpers.permissions],
-  computed: {
-    data: function data() {
-      return this.$store.state.retour.data;
-    },
-    failed: function failed() {
-      return this.data.fails.reduce(function (i, x) {
-        return i += parseInt(x.hits);
-      }, 0);
-    },
-    redirected: function redirected() {
-      return this.data.redirects.reduce(function (i, x) {
-        return i += parseInt(x.hits);
-      }, 0);
-    },
-    routes: function routes() {
-      return this.data.redirects.length;
-    }
-  },
-  methods: {
-    flush: function flush() {
-      var _this = this;
-
-      this.$api.post("retour/flush").then(function () {
-        _this.$refs.dialog.close();
-
-        _this.$store.dispatch("retour/load");
-      });
-    }
-  }
-};
-exports.default = _default;
-        var $bb58a2 = exports.default || module.exports;
-      
-      if (typeof $bb58a2 === 'function') {
-        $bb58a2 = $bb58a2.options;
-      }
-    
-        /* template */
-        Object.assign($bb58a2, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "k-view",
-    { staticClass: "rt-settings" },
-    [
-      _c("ul", { staticClass: "k-system-info-box" }, [
-        _c("li", [
-          _c("dl", [
-            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.redirects")))]),
-            _vm._v(" "),
-            _c("dd", [_vm._v(_vm._s(_vm.redirected))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.fails")))]),
-            _vm._v(" "),
-            _c("dd", [_vm._v(_vm._s(_vm.failed))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.deleteAfter")))]),
-            _vm._v(" "),
-            _c("dd", [
-              _vm._v(
-                _vm._s(
-                  _vm.$t("rt.settings.deleteAfter.months", {
-                    count: _vm.$store.state.retour.options.deleteAfter || "–"
-                  })
-                )
-              )
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.support")) + " 💛")]),
-            _vm._v(" "),
-            _c(
-              "dd",
-              [
-                _c(
-                  "k-button",
-                  {
-                    attrs: {
-                      link: "https://paypal.me/distantnative",
-                      target: "_blank",
-                      theme: "positive"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n            " +
-                        _vm._s(_vm.$t("rt.settings.support.donate")) +
-                        "\n          "
-                    )
-                  ]
-                ),
-                _vm._v("\n          ·\n          "),
-                _c(
-                  "k-button",
-                  {
-                    attrs: {
-                      link:
-                        "https://a.paddle.com/v2/click/1129/35921?link=1170",
-                      target: "_blank",
-                      theme: "positive"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n            " +
-                        _vm._s(_vm.$t("rt.settings.support.affiliate")) +
-                        "\n          "
-                    )
-                  ]
-                )
-              ],
-              1
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "footer",
-        { staticClass: "k-field-footer" },
-        [
-          _c(
-            "div",
-            {
-              staticClass: "k-text k-field-help",
-              attrs: { "data-theme": "help" }
-            },
-            [
-              _c("span", {
-                domProps: {
-                  innerHTML: _vm._s(
-                    _vm.$t("rt.settings.docs", {
-                      url: "https://github.com/distantnative/retour-for-kirby"
-                    })
-                  )
-                }
-              })
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "k-button-group",
-            [
-              _c(
-                "k-button",
-                {
-                  attrs: {
-                    disabled: !_vm.canUpdate,
-                    icon: "trash",
-                    theme: "negative"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.$refs.dialog.open()
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n        " +
-                      _vm._s(_vm.$t("rt.settings.log.clear")) +
-                      "\n      "
-                  )
-                ]
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "k-dialog",
-        {
-          ref: "dialog",
-          attrs: {
-            button: _vm.$t("rt.settings.log.clear"),
-            theme: "negative",
-            icon: "trash"
-          },
-          on: { submit: _vm.flush }
-        },
-        [
-          _c("k-text", [
-            _vm._v(
-              "\n      " +
-                _vm._s(_vm.$t("rt.settings.log.clear.confirm")) +
-                "\n    "
-            )
-          ])
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$bb58a2', $bb58a2);
-          } else {
-            api.reload('$bb58a2', $bb58a2);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"../helpers.js":"components/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Navigation/PrevNext.vue":[function(require,module,exports) {
+},{}],"components/Navigation/PrevNext.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16104,7 +14669,1280 @@ render._withStripped = true
       
       }
     })();
-},{"../Navigation/PrevNext.vue":"components/Navigation/PrevNext.vue","../Navigation/Timeframe.vue":"components/Navigation/Timeframe.vue","../Charts/Pie.vue":"components/Charts/Pie.vue","../Charts/Timeline.vue":"components/Charts/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"../Navigation/PrevNext.vue":"components/Navigation/PrevNext.vue","../Navigation/Timeframe.vue":"components/Navigation/Timeframe.vue","../Charts/Pie.vue":"components/Charts/Pie.vue","../Charts/Timeline.vue":"components/Charts/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Navigation/TableSwitch.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  computed: {
+    current: function current() {
+      return this.$store.state.retour.view.table;
+    },
+    hasLogs: function hasLogs() {
+      return this.$store.state.retour.options.logs;
+    },
+    tabs: function tabs() {
+      if (this.hasLogs === false) {
+        return ["redirects"];
+      }
+
+      return ["redirects", "fails"];
+    }
+  },
+  methods: {
+    onSwitch: function onSwitch(table) {
+      this.$store.dispatch("retour/table", table);
+    }
+  }
+};
+exports.default = _default;
+        var $2ff36e = exports.default || module.exports;
+      
+      if (typeof $2ff36e === 'function') {
+        $2ff36e = $2ff36e.options;
+      }
+    
+        /* template */
+        Object.assign($2ff36e, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "k-headline",
+    { staticClass: "rt-table-switch" },
+    _vm._l(_vm.tabs, function(table) {
+      return _c(
+        "button",
+        {
+          key: table,
+          attrs: { "data-current": _vm.current === table },
+          on: {
+            click: function($event) {
+              return _vm.onSwitch(table)
+            }
+          }
+        },
+        [_vm._v("\n    " + _vm._s(_vm.$t("rt." + table)) + "\n  ")]
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$2ff36e', $2ff36e);
+          } else {
+            api.reload('$2ff36e', $2ff36e);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"../node_modules/tbl-for-kirby/index.js":[function(require,module,exports) {
+var define;
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t=t||self).Tbl=e()}(this,function(){"use strict";function t(e){return(t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(e)}return function(t,e,n,s,o,i,r,a,c,l){"boolean"!=typeof r&&(c=a,a=r,r=!1);var d,u="function"==typeof n?n.options:n;if(t&&t.render&&(u.render=t.render,u.staticRenderFns=t.staticRenderFns,u._compiled=!0,o&&(u.functional=!0)),s&&(u._scopeId=s),i?(d=function(t){(t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),e&&e.call(this,c(t)),t&&t._registeredComponents&&t._registeredComponents.add(i)},u._ssrRegister=d):e&&(d=r?function(){e.call(this,l(this.$root.$options.shadowRoot))}:function(t){e.call(this,a(t))}),d)if(u.functional){var f=u.render;u.render=function(t,e){return d.call(e),f(t,e)}}else{var h=u.beforeCreate;u.beforeCreate=h?[].concat(h,d):[d]}return n}({render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("section",{staticClass:"tbl",attrs:{"data-version":"1.0.9"}},[n("header",{staticClass:"k-section-header"},[t._t("headline",[n("k-headline",[t._v(t._s(t.headline))])]),t._v(" "),t._t("filter",[n("k-button-group",[t.showReset?n("button",{staticClass:"tbl-reset",on:{click:t.reset}},[t._v("\n          "+t._s(t.config.labels.reset)+"\n        ")]):t._e(),t._v(" "),t.showSearch?n("input",{directives:[{name:"model",rawName:"v-model",value:t.searchTerm,expression:"searchTerm"}],ref:"search",staticClass:"tbl-search",attrs:{type:"text",placeholder:t.config.labels.filter},domProps:{value:t.searchTerm},on:{keydown:function(e){return!e.type.indexOf("key")&&t._k(e.keyCode,"esc",27,e.key,["Esc","Escape"])?null:t.reset(e)},input:function(e){e.target.composing||(t.searchTerm=e.target.value)}}}):t._e(),t._v(" "),t.showAdd?n("k-button",{attrs:{icon:"add"},on:{click:function(e){return t.$emit("add")}}},[t._v("\n          "+t._s(t.$t("add"))+"\n        ")]):t._e()],1)])],2),t._v(" "),t._t("table",[n("table",[n("thead",[0===t.rowsFiltered.length?n("th",{attrs:{colspan:t.widthLoading}}):[t._l(t.columns,function(e){return n("th",{key:e.field,class:"head-"+(e.class||"field-"+e.field),attrs:{"data-align":t.getAlign(e),"data-width":e.width,"data-responsive":!1!==e.responsive,"data-sortable":t.config.sort.enabled&&!1!==e.sort,"data-sorted":t.sortBy===e&&(1===t.sortOrder?"asc":"desc")},on:{click:function(n){return t.setSort(e)}}},[t._v("\n            "+t._s(e.label)+"\n          ")])}),t._v(" "),t.showActions?n("th",{attrs:{"data-width":t.widthActions}}):t._e()]],2),t._v(" "),n("tbody",[0===t.rowsFiltered.length?n("tr",[n("td",{attrs:{colspan:t.widthLoading,"data-align":"center"}},[t._t("empty-row",[n("p",[this.isLoading?n("k-icon",{attrs:{type:"loader"}}):n("span",[t._v(t._s(t.config.labels.empty))])],1)])],2)]):t._l(t.rowsPaginated,function(e,s){return n("tr",{key:"row_"+s},[t._l(t.columns,function(o){return n("td",{key:o.field,class:"row-"+(o.class||"field-"+o.field),attrs:{"data-width":o.width,"data-align":t.getAlign(o),"data-responsive":!1!==o.responsive},on:{click:function(n){return t.$emit("action",[t.config.actions.onRow,e,o.field])}}},[t._t("column-"+(o.name||o.field),[t._t("column-$default",["url"===o.type?n("k-url-field-preview",{attrs:{value:e[o.field]}}):n("p",{domProps:{innerHTML:t._s(t.getValue(e[o.field],o.type))}})],{index:s,column:o,field:o.field,row:e,value:t.getValue(e[o.field],o.type)})],{index:s,column:o,field:o.field,row:e,value:t.getValue(e[o.field],o.type)})],2)}),t._v(" "),t.showActions?n("td",{staticClass:"tbl-options",attrs:{"data-width":t.widthActions,"data-align":"center"}},[t._t("column-$actions",[t.config.actions.inline?t._l(t.config.actions.items,function(s){return n("k-button",{key:s.click,attrs:{tooltip:s.text,icon:s.icon},on:{click:function(n){return n.stopPropagation(),t.$emit("action",[s.click,e])}}})}):[n("k-button",{attrs:{tooltip:t.$t("options"),icon:"dots"},on:{click:function(e){e.stopPropagation(),t.$refs["options-"+s][0].toggle()}}}),t._v(" "),n("k-dropdown-content",{ref:"options-"+s,refInFor:!0,attrs:{options:t.config.actions.items,align:"right"},on:{action:function(n){return t.$emit("action",[n,e])}}})]],{row:e,index:s})],2):t._e()],2)})],2)])]),t._v(" "),n("footer",{staticClass:"tbl-footer"},[t._t("footer",[t.rowsFiltered.length>0?[n("div",{staticClass:"tbl-perPage"},[t._t("footer-before-perPage"),t._v(" "),n("select",{directives:[{name:"model",rawName:"v-model",value:t.perPage,expression:"perPage"}],attrs:{autocomplete:"off"},on:{input:t.onPerPage,change:function(e){var n=Array.prototype.filter.call(e.target.options,function(t){return t.selected}).map(function(t){return"_value"in t?t._value:t.value});t.perPage=e.target.multiple?n:n[0]}}},[t._l(t.config.pagination.perPageOptions,function(e){return n("option",{key:e,domProps:{value:e,textContent:t._s(e)}})}),t._v(" "),n("option",{domProps:{value:this.rowsFiltered.length}},[t._v("\n              "+t._s(t.config.labels.all)+"\n            ")])],2),t._v(" "),n("span",[t._v(t._s(t.config.labels.perPage))]),t._v(" "),t._t("footer-after-perPage")],2),t._v(" "),t._t("footer-center"),t._v(" "),n("div",{staticClass:"tbl-navigation"},[t._t("footer-before-pagination"),t._v(" "),t.rowsFiltered.length>t.perPage?[n("div",{staticClass:"btn btn-prev",attrs:{"data-disabled":t.page<=1},on:{click:function(e){return t.navigate(-1)}}},[n("span",{staticClass:"chevron"}),t._v(" "),n("span",[t._v(t._s(t.$t("prev")))])]),t._v(" "),n("div",{staticClass:"info"},[t._v("\n              "+t._s(this.pageRowFirst)+" - "+t._s(Math.min(this.pageRowLast,this.rowsFiltered.length))+" of "+t._s(this.rowsFiltered.length)+"\n            ")]),t._v(" "),n("div",{staticClass:"btn btn-next",attrs:{"data-disabled":t.page*t.perPage>=t.rowsFiltered.length},on:{click:function(e){return t.navigate(1)}}},[n("span",[t._v(t._s(t.$t("next")))]),t._v(" "),n("span",{staticClass:"chevron"})])]:t._e(),t._v(" "),t._t("footer-after-pagination")],2)]:t._e()])],2),t._v(" "),t._t("dialogs")],2)},staticRenderFns:[]},void 0,{props:{headline:String,columns:Array,rows:Array,options:Object,actions:Object,labels:Object,pagination:{type:[Boolean,Object],default:function(){return{}}},search:{type:[Boolean,Object],default:function(){return{}}},sort:{type:[Boolean,Object],default:function(){return{}}},store:{type:[Boolean,Object],default:function(){return{}}},isLoading:{type:Boolean,default:!1}},data:function(){return{searchTerm:"",sortBy:null,sortOrder:1,page:1,perPage:10}},computed:{config:function(){return Object.assign({actions:Object.assign({inline:!1,items:[],onRow:!1},this.actions),labels:Object.assign({all:"All",empty:"No rows available",perPage:"rows displayed",reset:"Reset",filter:"Filter items..."},this.labels),pagination:Object.assign({enabled:!0,page:1,perPage:10,perPageOptions:[5,10,25,50,100]},this.resolveOptions(this.pagination)),search:Object.assign({enabled:!0},this.resolveOptions(this.search)),sort:Object.assign({enabled:!0,initialBy:null},this.resolveOptions(this.sort)),store:Object.assign({enabled:!1,name:""},this.resolveOptions(this.store)),add:!1,reset:!0},this.options)},pageOffset:function(){return(this.page-1)*this.perPage},pageRowFirst:function(){return this.pageOffset+1},pageRowLast:function(){return this.pageOffset+this.perPage},rowsFiltered:function(){var t=this;if(""===this.searchTerm)return this.rows;var e=this.searchTerm.toLowerCase();return this.rows.slice().filter(function(n){var s=!1;return Object.keys(n).forEach(function(o){var i=t.columns.find(function(t){return t.field===o});i&&!1!==i.search&&String(n[o]).toLowerCase().includes(e)&&(s=!0)}),s})},rowsPaginated:function(){return this.rowsSorted.slice(this.pageOffset,this.pageOffset+this.perPage)},rowsSorted:function(){var t=this;return this.sortBy&&!1!==this.config.sort.enabled?this.rowsFiltered.slice().sort(function(e,n){if(t.sortBy.field&&(e=e[t.sortBy.field],n=n[t.sortBy.field]),t.sortBy.sort&&t.sortBy.sort.field&&(e=e[t.sortBy.sort.field],n=n[t.sortBy.sort.field]),t.sortBy.sort&&t.sortBy.sort.value&&(e=e[t.sortBy.sort.value],n=n[t.sortBy.sort.value]),t.sortBy.callback)return t.sortBy.callback(e,n,t.sortOrder,t.sortBy);switch(t.sortBy.type){case"number":return(e-n)*t.sortOrder;case"date":return(new Date(e)-new Date(n))*t.sortOrder;default:return e=(""+e).toLowerCase(),n=(""+n).toLowerCase(),e.localeCompare(n)*t.sortOrder}}):this.rowsFiltered},showActions:function(){return!!this.$scopedSlots["column-$actions"]||!!this.config.actions.items&&this.config.actions.items.length>0},showAdd:function(){return this.config.add},showReset:function(){return this.config.reset&&(""!==this.searchTerm||null!==this.sortBy)},showSearch:function(){return this.columns.filter(function(t){return!1!==t.search}).length>0&&this.config.search.enabled},storeName:function(){return"kirby$plugin$tbl$"+this.config.store.name},widthActions:function(){return this.config.actions.width?this.config.actions.width:(this.config.actions.inline?this.config.actions.items.length:1)+"fr"},widthLoading:function(){return Math.max(this.columns.length,1)+(this.showActions?1:0)}},watch:{config:function(){this.load()},searchTerm:function(t){this.setStore(),this.page=1,this.$emit("onFilter",t)}},created:function(){this.load()},methods:{getAlign:function(t){if(t.align)return t.align;switch(t.type){case"number":case"decimal":case"percentage":case"boolean":case"date":return"right";default:return"left"}},getValue:function(t,e){switch(e){case"date":return t?new Date(t).toLocaleString(this.$user.language.replace("_","-"),{year:"numeric",month:"long",day:"numeric"}):"–";case"number":return t?1*t:"–";case"decimals":return t?Number(t).toFixed(2):"–";case"percentage":return t?Number(100*t).toFixed(2)+" %":"– %";default:return t||null}},load:function(){this.page=this.config.pagination.page,this.perPage=this.config.pagination.perPage,this.loadStore(),this.loadSort()},loadSort:function(){if(!0===this.config.sort.enabled&&null===this.sortBy){var t=this.config.sort.initialBy;if(t){var e=this.columns.find(function(e){return e.name===t});e||(e=this.columns.find(function(e){return e.field===t})),this.setSort(e)}}},loadStore:function(){if(!0===this.config.store.enabled){var t=JSON.parse(sessionStorage.getItem(this.storeName));null!==t&&(this.page=t.page,this.perPage=t.perPage,this.searchTerm=t.searchTerm,this.sortBy=t.sortBy,this.sortOrder=t.sortOrder),this.$emit("onLoadStore",t)}},navigate:function(t){this.page+=t,this.setStore(),this.$emit("onPage",this.page)},onPerPage:function(){this.page=1,this.setStore(),this.$emit("onPerPage",this.perPage)},reset:function(){Object.assign(this.$data,this.$options.data.apply(this)),this.$refs.search.blur(),this.setStore(),this.$emit("onReset")},resolveOptions:function(e){return 0===Object.keys(e).length?e:t(e)==t(!0)?{enabled:e}:Object.assign({enabled:!0},e)},setSort:function(t){!1!==this.config.sort.enabled&&!1!==t.sort&&(this.sortBy===t?this.sortOrder*=-1:(this.sortBy=t,this.sortOrder="desc"===(t.sort&&t.sort.order?t.sort.order:t.sort)?-1:1),this.setStore(),this.$emit("onSort",Object.assign({},t,{currentDirection:this.sortOrder})))},setStore:function(){var t=this;!0===this.config.store.enabled&&this.$nextTick(function(){var e={page:t.page,perPage:t.perPage,searchTerm:t.searchTerm,sortBy:t.sortBy,sortOrder:t.sortOrder};sessionStorage.setItem(t.storeName,JSON.stringify(e)),t.$emit("onLoadStore",e)})}}},void 0,!1,void 0,void 0,void 0)});
+
+},{}],"components/Tables/Fails.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _helpers = require("../helpers.js");
+
+var _TableSwitch = _interopRequireDefault(require("../Navigation/TableSwitch.vue"));
+
+var _tblForKirby = _interopRequireDefault(require("tbl-for-kirby"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_helpers.permissions],
+  components: {
+    TableSwitch: _TableSwitch.default,
+    Tbl: _tblForKirby.default
+  },
+  computed: {
+    columns: function columns() {
+      return [{
+        label: this.$t("rt.fails.path"),
+        field: "path",
+        type: "url"
+      }, {
+        label: this.$t("rt.fails.referrer"),
+        field: "referrer",
+        type: "url"
+      }, {
+        label: this.$t("rt.hits"),
+        field: "hits",
+        type: "number",
+        sort: "desc",
+        search: false,
+        width: "1/8"
+      }, {
+        name: "last",
+        label: this.$t("rt.hits.last"),
+        field: "last",
+        type: "date",
+        sort: "desc",
+        search: false,
+        width: "1/6",
+        responsive: false
+      }];
+    },
+    fails: function fails() {
+      return (0, _helpers.date)(this.$store.state.retour.data.fails);
+    },
+    site: function site() {
+      return window.panel.site;
+    },
+    table: function table() {
+      var config = {
+        options: {
+          reset: false
+        },
+        sort: {
+          initialBy: "last"
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.fails.empty"),
+          perPage: this.$t("rt.tbl.perPage"),
+          filter: this.$t("rt.tbl.filter")
+        }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
+          inline: true,
+          items: [{
+            text: this.$t("rt.fails.resolve"),
+            icon: "add",
+            click: "add"
+          }]
+        };
+      }
+
+      return config;
+    }
+  },
+  methods: {
+    action: function action(_action, row) {
+      switch (_action) {
+        case "add":
+          this.$store.dispatch("retour/table", "redirects");
+          this.$parent.$parent.$refs.redirects.action("add", {
+            from: row.path
+          }, "to");
+          break;
+      }
+    }
+  }
+};
+exports.default = _default;
+        var $938479 = exports.default || module.exports;
+      
+      if (typeof $938479 === 'function') {
+        $938479 = $938479.options;
+      }
+    
+        /* template */
+        Object.assign($938479, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "tbl",
+    _vm._b(
+      {
+        attrs: {
+          columns: _vm.columns,
+          rows: _vm.fails,
+          "is-loading": this.$store.state.isLoading
+        },
+        on: {
+          action: function($event) {
+            return _vm.action.apply(void 0, $event)
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "column-$default",
+            fn: function(props) {
+              return [
+                _c(
+                  "p",
+                  [
+                    props.column.type === "url" &&
+                    props.value &&
+                    props.value !== "–"
+                      ? _c("k-button", {
+                          attrs: {
+                            link:
+                              props.value && props.value.startsWith("http")
+                                ? props.value
+                                : _vm.site + "/" + props.value,
+                            icon: "url",
+                            target: "_blank"
+                          },
+                          nativeOn: {
+                            click: function($event) {
+                              $event.stopPropagation()
+                            }
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v("\n      " + _vm._s(props.value) + "\n    ")
+                  ],
+                  1
+                )
+              ]
+            }
+          }
+        ])
+      },
+      "tbl",
+      _vm.table,
+      false
+    ),
+    [_c("template", { slot: "headline" }, [_c("TableSwitch")], 1)],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$938479', $938479);
+          } else {
+            api.reload('$938479', $938479);
+          }
+        }
+
+        
+      }
+    })();
+},{"../helpers.js":"components/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Tables/Redirects.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _helpers = require("../helpers.js");
+
+var _TableSwitch = _interopRequireDefault(require("../Navigation/TableSwitch.vue"));
+
+var _tblForKirby = _interopRequireDefault(require("tbl-for-kirby"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+var _default = {
+  mixins: [_helpers.permissions],
+  components: {
+    TableSwitch: _TableSwitch.default,
+    Tbl: _tblForKirby.default
+  },
+  data: function data() {
+    return {
+      mode: null,
+      current: null,
+      afterSubmit: null
+    };
+  },
+  computed: {
+    columns: function columns() {
+      var columns = [{
+        label: this.$t("rt.redirects.from"),
+        type: "url",
+        field: "from"
+      }, {
+        label: this.$t("rt.redirects.to"),
+        type: "url",
+        field: "to",
+        responsive: false
+      }, {
+        label: this.$t("rt.redirects.status"),
+        width: "1/6",
+        field: "status"
+      }];
+
+      if (this.hasLogs === true) {
+        columns = [].concat(_toConsumableArray(columns), [{
+          label: this.$t("rt.hits"),
+          field: "hits",
+          type: "number",
+          sort: "desc",
+          search: false,
+          width: "1/8"
+        }, {
+          name: "last",
+          label: this.$t("rt.hits.last"),
+          field: "last",
+          type: "date",
+          sort: "desc",
+          search: false,
+          width: "1/6",
+          responsive: false
+        }]);
+      }
+
+      return columns;
+    },
+    fields: function fields() {
+      var _this = this;
+
+      var fields = {
+        from: {
+          label: this.$t("rt.redirects.from"),
+          type: "text",
+          before: window.panel.site + "/",
+          help: this.$t("rt.redirects.from.help", {
+            reference: "https://getkirby.com/docs/guide/routing#patterns",
+            readme: "https://github.com/distantnative/retour-for-kirby#redirects"
+          }),
+          icon: "url",
+          width: "1/2",
+          counter: false,
+          required: true
+        },
+        to: {
+          label: this.$t("rt.redirects.to"),
+          type: "rt-redirect",
+          help: this.$t("rt.redirects.to.help"),
+          icon: "retour",
+          width: "1/2",
+          counter: false
+        },
+        status: {
+          label: this.$t("rt.redirects.status"),
+          type: "rt-status",
+          options: [{
+            text: "––––",
+            value: "disabled"
+          }].concat(_toConsumableArray(Object.keys(this.headers).map(function (code) {
+            return {
+              text: code.substr(1) + " - " + _this.headers[code],
+              value: code.substr(1)
+            };
+          }))),
+          help: this.$t("rt.redirects.status.help", {
+            url: "https://httpstatuses.com"
+          }),
+          empty: false,
+          required: true,
+          width: "1/2"
+        }
+      };
+
+      if (this.hasLogs === true) {
+        fields = _objectSpread({}, fields, {
+          stats: {
+            label: this.$t("rt.hits"),
+            type: "info",
+            text: "<b>".concat(this.current.hits || 0, " ").concat(this.$t("rt.hits"), "</b> (").concat(this.$t("rt.hits.last"), ": ").concat(this.current.last ? this.$library.dayjs(this.current.last).format("D MMM YYYY - HH:mm:ss") : "–", ")"),
+            width: "1/2"
+          }
+        });
+      }
+
+      return fields;
+    },
+    hasLogs: function hasLogs() {
+      return this.$store.state.retour.options.logs;
+    },
+    headers: function headers() {
+      return this.$store.state.retour.options.headers;
+    },
+    redirects: function redirects() {
+      return (0, _helpers.date)(this.$store.state.retour.data.redirects);
+    },
+    site: function site() {
+      return window.panel.site;
+    },
+    table: function table() {
+      var config = {
+        options: {
+          add: this.canUpdate,
+          reset: false
+        },
+        sort: {
+          initialBy: "status"
+        },
+        labels: {
+          all: this.$t("rt.tbl.all"),
+          empty: this.$t("rt.tbl.redirects.empty"),
+          perPage: this.$t("rt.tbl.perPage"),
+          filter: this.$t("rt.tbl.filter")
+        }
+      };
+
+      if (this.canUpdate) {
+        config.actions = {
+          items: [{
+            text: this.$t("edit"),
+            icon: "edit",
+            click: "edit"
+          }, {
+            text: this.$t("remove"),
+            icon: "trash",
+            click: "remove"
+          }],
+          onRow: "edit"
+        };
+      }
+
+      return config;
+    }
+  },
+  methods: {
+    action: function action(_action) {
+      var _this2 = this;
+
+      var row = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var field = arguments.length > 2 ? arguments[2] : undefined;
+      var callback = arguments.length > 3 ? arguments[3] : undefined;
+      this.current = Object.assign({}, row);
+
+      switch (_action) {
+        case "add":
+          this.mode = "new";
+          this.current.status = "disabled";
+          this.afterSubmit = callback;
+          this.$nextTick(function () {
+            return _this2.$refs.form.focus("from");
+          });
+          break;
+
+        case "edit":
+          this.mode = this.redirects.findIndex(function (x) {
+            return x.from === row.from;
+          });
+          this.$nextTick(function () {
+            return _this2.$refs.form.focus(field || "from");
+          });
+          break;
+
+        case "remove":
+          this.$refs.remove.open();
+          break;
+      }
+    },
+    onCancel: function onCancel() {
+      this.mode = null;
+      this.current = null;
+      this.afterSubmit = null;
+    },
+    onPrev: function onPrev() {
+      this.mode -= 1;
+      this.current = this.redirects[this.mode];
+    },
+    onNext: function onNext() {
+      this.mode += 1;
+      this.current = this.redirects[this.mode];
+    },
+    onRemove: function onRemove() {
+      var _this3 = this;
+
+      this.update(this.redirects.filter(function (x) {
+        return x.from !== _this3.current.from;
+      }));
+      this.$refs.remove.close();
+      this.current = null;
+    },
+    onSubmit: function onSubmit() {
+      var _this4 = this;
+
+      var updated = this.redirects;
+
+      if (this.mode === "new") {
+        this.$api.post("retour/resolve", {
+          path: this.current.from
+        }).then(function () {
+          _this4.$store.dispatch("retour/fails");
+
+          _this4.$store.dispatch("retour/stats");
+        });
+        updated.push(this.current);
+      } else {
+        updated[this.mode] = this.current;
+      }
+
+      this.update(updated).then(this.onCancel);
+    },
+    status: function status(v) {
+      return (0, _helpers.status)(v);
+    },
+    update: function update(input) {
+      var _this5 = this;
+
+      return this.$api.patch("retour/redirects", input).then(function () {
+        if (_this5.afterSubmit) {
+          _this5.afterSubmit();
+
+          _this5.afterSubmit = null;
+        }
+
+        _this5.$store.dispatch("retour/redirects");
+      });
+    }
+  }
+};
+exports.default = _default;
+        var $b8bf87 = exports.default || module.exports;
+      
+      if (typeof $b8bf87 === 'function') {
+        $b8bf87 = $b8bf87.options;
+      }
+    
+        /* template */
+        Object.assign($b8bf87, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "tbl",
+    _vm._b(
+      {
+        attrs: {
+          columns: _vm.columns,
+          rows: _vm.redirects,
+          "is-loading": _vm.$store.state.isLoading
+        },
+        on: {
+          add: function($event) {
+            return _vm.action("add")
+          },
+          action: function($event) {
+            return _vm.action.apply(void 0, $event)
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "column-status",
+            fn: function(props) {
+              return [
+                _c(
+                  "p",
+                  {
+                    staticClass: "rt-redirects-status",
+                    attrs: { "data-status": _vm.status(props.value) }
+                  },
+                  [
+                    _c("k-icon", { attrs: { type: "circle" } }),
+                    _vm._v(" "),
+                    _c("code", [_vm._v(_vm._s(props.value))])
+                  ],
+                  1
+                )
+              ]
+            }
+          },
+          {
+            key: "column-$default",
+            fn: function(props) {
+              return [
+                _c(
+                  "p",
+                  [
+                    props.column.type === "url" &&
+                    props.value &&
+                    props.value !== "–"
+                      ? _c("k-button", {
+                          attrs: {
+                            link:
+                              props.value && props.value.startsWith("http")
+                                ? props.value
+                                : _vm.site + "/" + props.value,
+                            icon: "url",
+                            target: "_blank"
+                          },
+                          nativeOn: {
+                            click: function($event) {
+                              $event.stopPropagation()
+                            }
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v("\n      " + _vm._s(props.value) + "\n    ")
+                  ],
+                  1
+                )
+              ]
+            }
+          }
+        ])
+      },
+      "tbl",
+      _vm.table,
+      false
+    ),
+    [
+      _c("template", { slot: "headline" }, [_c("TableSwitch")], 1),
+      _vm._v(" "),
+      _vm._v(" "),
+      _vm._v(" "),
+      _vm.mode !== null
+        ? [
+            _c("div", { attrs: { slot: "filter" }, slot: "filter" }),
+            _vm._v(" "),
+            _c("k-form", {
+              ref: "form",
+              staticClass: "rt-form",
+              attrs: { slot: "table", fields: _vm.fields },
+              on: { submit: _vm.onSubmit },
+              slot: "table",
+              model: {
+                value: _vm.current,
+                callback: function($$v) {
+                  _vm.current = $$v
+                },
+                expression: "current"
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "template",
+              { slot: "footer" },
+              [
+                _c(
+                  "k-button",
+                  {
+                    staticClass: "rt-form-btn",
+                    attrs: { icon: "cancel" },
+                    on: { click: _vm.onCancel }
+                  },
+                  [_vm._v("\n        " + _vm._s(_vm.$t("cancel")) + "\n      ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "k-button",
+                  {
+                    staticClass: "rt-form-btn",
+                    attrs: { icon: "check" },
+                    on: { click: _vm.onSubmit }
+                  },
+                  [
+                    _vm._v(
+                      "\n        " +
+                        _vm._s(
+                          _vm.$t(_vm.mode === "new" ? "create" : "change")
+                        ) +
+                        "\n      "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ]
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "k-dialog",
+        {
+          ref: "remove",
+          attrs: {
+            slot: "dialogs",
+            button: _vm.$t("delete"),
+            theme: "negative",
+            icon: "trash"
+          },
+          on: { cancel: _vm.onCancel, submit: _vm.onRemove },
+          slot: "dialogs"
+        },
+        [
+          _c("k-text", [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.$t("field.structure.delete.confirm")) +
+                "\n    "
+            )
+          ])
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$b8bf87', $b8bf87);
+          } else {
+            api.reload('$b8bf87', $b8bf87);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"../helpers.js":"components/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Tables.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Fails = _interopRequireDefault(require("../Tables/Fails.vue"));
+
+var _Redirects = _interopRequireDefault(require("../Tables/Redirects.vue"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  components: {
+    Fails: _Fails.default,
+    Redirects: _Redirects.default
+  },
+  computed: {
+    table: function table() {
+      return this.$store.state.retour.view.table;
+    }
+  }
+};
+exports.default = _default;
+        var $de10a3 = exports.default || module.exports;
+      
+      if (typeof $de10a3 === 'function') {
+        $de10a3 = $de10a3.options;
+      }
+    
+        /* template */
+        Object.assign($de10a3, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "k-view",
+    [
+      _c("redirects", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.table === "redirects",
+            expression: "table === 'redirects'"
+          }
+        ],
+        ref: "redirects"
+      }),
+      _vm._v(" "),
+      _c("fails", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.table === "fails",
+            expression: "table === 'fails'"
+          }
+        ],
+        ref: "fails"
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$de10a3', $de10a3);
+          } else {
+            api.reload('$de10a3', $de10a3);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"../Tables/Fails.vue":"components/Tables/Fails.vue","../Tables/Redirects.vue":"components/Tables/Redirects.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Settings.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _helpers = require("../helpers.js");
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_helpers.permissions],
+  computed: {
+    data: function data() {
+      return this.$store.state.retour.data;
+    },
+    failed: function failed() {
+      return this.data.fails.reduce(function (i, x) {
+        return i += parseInt(x.hits);
+      }, 0);
+    },
+    redirected: function redirected() {
+      return this.data.redirects.reduce(function (i, x) {
+        return i += parseInt(x.hits);
+      }, 0);
+    },
+    routes: function routes() {
+      return this.data.redirects.length;
+    }
+  },
+  methods: {
+    flush: function flush() {
+      var _this = this;
+
+      this.$api.post("retour/flush").then(function () {
+        _this.$refs.dialog.close();
+
+        _this.$store.dispatch("retour/load");
+      });
+    }
+  }
+};
+exports.default = _default;
+        var $bb58a2 = exports.default || module.exports;
+      
+      if (typeof $bb58a2 === 'function') {
+        $bb58a2 = $bb58a2.options;
+      }
+    
+        /* template */
+        Object.assign($bb58a2, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "k-view",
+    { staticClass: "rt-settings" },
+    [
+      _c("ul", { staticClass: "k-system-info-box" }, [
+        _c("li", [
+          _c("dl", [
+            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.redirects")))]),
+            _vm._v(" "),
+            _c("dd", [_vm._v(_vm._s(_vm.redirected))])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("dl", [
+            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.fails")))]),
+            _vm._v(" "),
+            _c("dd", [_vm._v(_vm._s(_vm.failed))])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("dl", [
+            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.deleteAfter")))]),
+            _vm._v(" "),
+            _c("dd", [
+              _vm._v(
+                _vm._s(
+                  _vm.$t("rt.settings.deleteAfter.months", {
+                    count: _vm.$store.state.retour.options.deleteAfter || "–"
+                  })
+                )
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("dl", [
+            _c("dt", [_vm._v(_vm._s(_vm.$t("rt.settings.support")) + " 💛")]),
+            _vm._v(" "),
+            _c(
+              "dd",
+              [
+                _c(
+                  "k-button",
+                  {
+                    attrs: {
+                      link: "https://paypal.me/distantnative",
+                      target: "_blank",
+                      theme: "positive"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(_vm.$t("rt.settings.support.donate")) +
+                        "\n          "
+                    )
+                  ]
+                ),
+                _vm._v("\n          ·\n          "),
+                _c(
+                  "k-button",
+                  {
+                    attrs: {
+                      link:
+                        "https://a.paddle.com/v2/click/1129/35921?link=1170",
+                      target: "_blank",
+                      theme: "positive"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(_vm.$t("rt.settings.support.affiliate")) +
+                        "\n          "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "footer",
+        { staticClass: "k-field-footer" },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "k-text k-field-help",
+              attrs: { "data-theme": "help" }
+            },
+            [
+              _c("span", {
+                domProps: {
+                  innerHTML: _vm._s(
+                    _vm.$t("rt.settings.docs", {
+                      url: "https://github.com/distantnative/retour-for-kirby"
+                    })
+                  )
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "k-button-group",
+            [
+              _c(
+                "k-button",
+                {
+                  attrs: {
+                    disabled: !_vm.canUpdate,
+                    icon: "trash",
+                    theme: "negative"
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.$refs.dialog.open()
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.$t("rt.settings.log.clear")) +
+                      "\n      "
+                  )
+                ]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "k-dialog",
+        {
+          ref: "dialog",
+          attrs: {
+            button: _vm.$t("rt.settings.log.clear"),
+            theme: "negative",
+            icon: "trash"
+          },
+          on: { submit: _vm.flush }
+        },
+        [
+          _c("k-text", [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.$t("rt.settings.log.clear.confirm")) +
+                "\n    "
+            )
+          ])
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$bb58a2', $bb58a2);
+          } else {
+            api.reload('$bb58a2', $bb58a2);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"../helpers.js":"components/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16114,11 +15952,11 @@ exports.default = void 0;
 
 var _helpers = require("./helpers.js");
 
-var _Entries = _interopRequireDefault(require("./Sections/Entries.vue"));
+var _Stats = _interopRequireDefault(require("./Sections/Stats.vue"));
+
+var _Tables = _interopRequireDefault(require("./Sections/Tables.vue"));
 
 var _Settings = _interopRequireDefault(require("./Sections/Settings.vue"));
-
-var _Stats = _interopRequireDefault(require("./Sections/Stats.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16133,9 +15971,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _default = {
   mixins: [_helpers.permissions],
   components: {
-    Entries: _Entries.default,
-    Settings: _Settings.default,
-    Stats: _Stats.default
+    Stats: _Stats.default,
+    Tables: _Tables.default,
+    Settings: _Settings.default
   },
   mounted: function mounted() {
     if (this.canAccess === false) {
@@ -16170,7 +16008,7 @@ exports.default = _default;
     [
       _vm.hasLogs ? _c("stats") : _vm._e(),
       _vm._v(" "),
-      _c("entries"),
+      _c("tables"),
       _vm._v(" "),
       _vm.hasLogs ? _c("settings") : _vm._e()
     ],
@@ -16210,7 +16048,7 @@ render._withStripped = true
       
       }
     })();
-},{"./helpers.js":"components/helpers.js","./Sections/Entries.vue":"components/Sections/Entries.vue","./Sections/Settings.vue":"components/Sections/Settings.vue","./Sections/Stats.vue":"components/Sections/Stats.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Fields/Redirect.vue":[function(require,module,exports) {
+},{"./helpers.js":"components/helpers.js","./Sections/Stats.vue":"components/Sections/Stats.vue","./Sections/Tables.vue":"components/Sections/Tables.vue","./Sections/Settings.vue":"components/Sections/Settings.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Fields/Redirect.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

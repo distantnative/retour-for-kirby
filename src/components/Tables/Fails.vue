@@ -11,10 +11,6 @@
       <TableSwitch />
     </template>
 
-    <template slot="column-recency" slot-scope="props">
-      <p><recency :value="props.value" /></p>
-    </template>
-
     <template slot="column-$default" slot-scope="props">
       <p>
         <k-button
@@ -33,28 +29,18 @@
 <script>
 import {date, permissions} from "../helpers.js";
 
-import Recency from "../Fields/Recency.vue";
-import TableSwitch from "./Switch.vue";
+import TableSwitch from "../Navigation/TableSwitch.vue";
 import Tbl from "tbl-for-kirby";
 
 export default {
   mixins: [permissions],
   components: {
-    Recency,
     TableSwitch,
     Tbl,
   },
   computed: {
     columns() {
       return [
-        {
-          name: "recency",
-          field: "last",
-          sort: false,
-          search: false,
-          width: "1fr",
-          responsive: false,
-        },
         {
           label: this.$t("rt.fails.path"),
           field: "path",
