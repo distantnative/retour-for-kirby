@@ -33,14 +33,14 @@ class Redirects
      *
      * @return array
      */
-    public static function list(): array
+    public static function list(string $from, string $to): array
     {
         $redirects = self::read();
 
         if (option('distantnative.retour.logs') === true) {
             $log = new Log;
-            $redirects = array_map(function ($r) use ($log) {
-                return $log->forRedirect($r);
+            $redirects = array_map(function ($r) use ($log, $from, $to) {
+                return $log->forRedirect($r, $from, $to);
             }, $redirects);
         }
 

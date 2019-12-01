@@ -16488,6 +16488,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -16566,31 +16572,29 @@ var _default = {
   actions: {
     init: function init(context) {
       context.commit("SET_TIMEFRAME", {
-        from: this._vm.$library.dayjs().set("date", 1),
-        to: this._vm.$library.dayjs().set("date", this._vm.$library.dayjs().daysInMonth())
+        from: this._vm.$library.dayjs().startOf("month"),
+        to: this._vm.$library.dayjs().endOf("month")
       });
     },
-    fetchFails: function fetchFails(context) {
-      return this._vm.$api.get("retour/fails").then(function (response) {
+    fails: function fails(context, dates) {
+      return this._vm.$api.get("retour/fails", dates).then(function (response) {
         context.commit("SET_DATA", ["fails", response]);
       });
     },
-    fetchRedirects: function fetchRedirects(context) {
-      return this._vm.$api.get("retour/redirects").then(function (response) {
+    redirects: function redirects(context, dates) {
+      return this._vm.$api.get("retour/redirects", dates).then(function (response) {
         context.commit("SET_DATA", ["redirects", response]);
       });
     },
-    fetchStats: function fetchStats(context) {
+    stats: function stats(context, dates) {
       var view = context.getters["view"];
-      return this._vm.$api.get("retour/stats/", {
-        view: view ? view : "custom",
-        from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
-        to: context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
-      }).then(function (response) {
+      return this._vm.$api.get("retour/stats/", _objectSpread({
+        view: view ? view : "custom"
+      }, dates)).then(function (response) {
         context.commit("SET_DATA", ["stats", response]);
       });
     },
-    fetchSystem: function fetchSystem(context) {
+    system: function system(context) {
       return this._vm.$api.get("retour/system").then(function (response) {
         context.commit("SET_OPTIONS", response);
       });
@@ -16598,12 +16602,16 @@ var _default = {
     load: function load(context) {
       var _this = this;
 
-      context.dispatch("fetchSystem").then(function () {
-        context.dispatch("fetchRedirects");
+      context.dispatch("system").then(function () {
+        var dates = {
+          from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
+          to: context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
+        };
+        context.dispatch("redirects", dates);
 
         if (context.state.options.logs === true) {
-          context.dispatch("fetchFails");
-          context.dispatch("fetchStats");
+          context.dispatch("fails", dates);
+          context.dispatch("stats", dates);
 
           _this._vm.$api.post("retour/limit");
         }

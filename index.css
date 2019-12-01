@@ -133,6 +133,7 @@
   position: absolute;
   width: 16em;
   top: 2.2em;
+  z-index: 100;
 }
 
 .rt-calendar-wrapper {

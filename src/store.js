@@ -85,42 +85,46 @@ export default {
   actions: {
     init(context) {
       context.commit("SET_TIMEFRAME", {
-        from: this._vm.$library.dayjs().set("date", 1),
-        to: this._vm.$library.dayjs().set("date", this._vm.$library.dayjs().daysInMonth())
+        from: this._vm.$library.dayjs().startOf("month"),
+        to: this._vm.$library.dayjs().endOf("month")
       });
     },
-    fetchFails(context) {
-      return this._vm.$api.get("retour/fails").then(response => {
+    fails(context, dates) {
+      return this._vm.$api.get("retour/fails", dates).then(response => {
         context.commit("SET_DATA", ["fails", response]);
       });
     },
-    fetchRedirects(context) {
-      return this._vm.$api.get("retour/redirects").then(response => {
+    redirects(context, dates) {
+      return this._vm.$api.get("retour/redirects", dates).then(response => {
         context.commit("SET_DATA", ["redirects", response]);
       });
     },
-    fetchStats(context) {
+    stats(context, dates) {
       const view = context.getters["view"];
       return this._vm.$api.get("retour/stats/", {
         view: view ? view : "custom",
-        from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
-        to: context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
+        ...dates
       }).then(response => {
         context.commit("SET_DATA", ["stats", response]);
       });
     },
-    fetchSystem(context) {
+    system(context) {
       return this._vm.$api.get("retour/system").then(response => {
         context.commit("SET_OPTIONS", response);
       });
     },
     load(context) {
-      context.dispatch("fetchSystem").then(() => {
-        context.dispatch("fetchRedirects");
+      context.dispatch("system").then(() => {
+        const dates = {
+          from: context.state.view.from.format("YYYY-MM-DD HH:mm:ss"),
+          to:   context.state.view.to.format("YYYY-MM-DD HH:mm:ss")
+        };
+
+        context.dispatch("redirects", dates);
 
         if (context.state.options.logs === true) {
-          context.dispatch("fetchFails");
-          context.dispatch("fetchStats");
+          context.dispatch("fails", dates);
+          context.dispatch("stats", dates);
           this._vm.$api.post("retour/limit");
         }
       });

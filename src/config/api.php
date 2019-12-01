@@ -10,7 +10,10 @@ return [
             'pattern' => 'retour/redirects',
             'method'  => 'GET',
             'action'  => function () {
-                return Redirects::list();
+                return Redirects::list(
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
+                );
             }
         ],
         [
@@ -24,7 +27,10 @@ return [
             'pattern' => 'retour/fails',
             'method'  => 'GET',
             'action'  => function () {
-                return (new Log)->forFails();
+                return (new Log)->forFails(
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
+                );
             }
         ],
         [

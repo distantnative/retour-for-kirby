@@ -74,7 +74,7 @@ class Log
      *
      * @return array
      */
-    public function forFails(): array
+    public function forFails(string $start, string $end): array
     {
         $fails = Db::query('
             SELECT
@@ -87,7 +87,9 @@ class Log
                 records
             WHERE
                 redirect IS NULL AND
-                wasResolved IS NULL
+                wasResolved IS NULL AND
+                strftime("%s", date) > strftime("%s", "' . $start . '") AND
+                strftime("%s", date) < strftime("%s", "' . $end . '")
             GROUP BY
                 path,
                 referrer;
@@ -102,12 +104,19 @@ class Log
      * @param array $redirect
      * @return array
      */
-    public function forRedirect(array $redirect): array
+    public function forRedirect(array $redirect, string $start, string $end): array
     {
-        $data = Db::first('records', '
-            COUNT(*) AS hits,
-            MAX(date) AS last'
-        , 'redirect="' . $redirect['from'] . '"');
+        $data = Db::query('
+            SELECT
+                COUNT(*) AS hits,
+                MAX(date) AS last
+            FROM
+                records
+            WHERE
+                redirect="' . $redirect['from'] . '" AND
+                strftime("%s", date) > strftime("%s", "' . $start . '") AND
+                strftime("%s", date) < strftime("%s", "' . $end . '")
+        ')->first();
 
         return array_merge($redirect, [
             'hits' => $data->hits(),
