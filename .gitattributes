@@ -16,5 +16,5 @@ src/assets/css/ export-ignore
 src/components/ export-ignore
 src/helpers/ export-ignore
 src/mixins/ export-ignore
-src/store/ export-ignore
 src/index.js export-ignore
+src/store.js export-ignore

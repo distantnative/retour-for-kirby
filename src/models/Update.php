@@ -15,14 +15,16 @@ class Update
 
     public static function check(): void
     {
-        $flag = Retour::root('updated');
-
-        if (F::exists($flag) === true) {
-            return;
-        }
-
+        $flag    = Retour::root('updated');
         $plugin  = Data::read(Retour::root() . '/composer.json');
         $version = $plugin['version'];
+
+        if (F::exists($flag) === true) {
+            $previous = F::read($flag);
+            if (version_compare($previous, $version, "<") === false) {
+                return;
+            }
+        }
 
         self::forPHP($version);
 
@@ -38,7 +40,7 @@ class Update
     protected static function forPHP(string $version)
     {
         foreach(self::$migrations as $migration => $callback) {
-            if (version_compare($version, $migration) <= 0) {
+            if (version_compare($version, $migration, "<=")) {
                 call_user_func($callback);
             }
         }
@@ -51,7 +53,7 @@ class Update
         foreach(Dir::read($dir) as $migration) {
             if (
                 Str::endsWith($migration, '.sql') &&
-                version_compare($version, Str::before($migration, '.sql')) <= 0
+                version_compare($version, Str::before($migration, '.sql'), "<=")
             ) {
                 $queries = F::read($dir . '/' . $migration);
                 $queries = explode(';', $queries);

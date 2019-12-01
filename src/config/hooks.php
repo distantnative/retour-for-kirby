@@ -30,5 +30,8 @@ return [
                 }
             }
         }
+    },
+    'system.loadPlugins:after' => function () {
+        Update::check();
     }
 ];
