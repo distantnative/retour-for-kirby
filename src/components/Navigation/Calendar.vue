@@ -66,14 +66,14 @@ export default {
       this.to.year()
     ) : null;
 
-    const current = start ? start : end ? end : this.$library.dayjs();
+    const current = start ? start : end ? end : this.$library.dayjs().startOf("day");
 
     return {
       month: current.month() + 1,
       year: current.year(),
       start: start,
       end: end,
-      today: this.$library.dayjs(),
+      today: this.$library.dayjs().startOf("day"),
       hover: null,
     };
   },
@@ -88,34 +88,34 @@ export default {
       return Math.ceil((this.numberOfDays + this.firstWeekday - 1) / 7);
     },
     firstWeekday() {
-      const weekday = this.date.clone().startOf('month').day();
+      const weekday = this.date.startOf("month").day();
       return weekday > 0 ? weekday : 7;
     },
     weekdays() {
       return [
-        this.$t('days.mon'),
-        this.$t('days.tue'),
-        this.$t('days.wed'),
-        this.$t('days.thu'),
-        this.$t('days.fri'),
-        this.$t('days.sat'),
-        this.$t('days.sun'),
+        this.$t("days.mon"),
+        this.$t("days.tue"),
+        this.$t("days.wed"),
+        this.$t("days.thu"),
+        this.$t("days.fri"),
+        this.$t("days.sat"),
+        this.$t("days.sun"),
       ];
     },
     monthnames() {
       return [
-        this.$t('months.january'),
-        this.$t('months.february'),
-        this.$t('months.march'),
-        this.$t('months.april'),
-        this.$t('months.may'),
-        this.$t('months.june'),
-        this.$t('months.july'),
-        this.$t('months.august'),
-        this.$t('months.september'),
-        this.$t('months.october'),
-        this.$t('months.november'),
-        this.$t('months.december'),
+        this.$t("months.january"),
+        this.$t("months.february"),
+        this.$t("months.march"),
+        this.$t("months.april"),
+        this.$t("months.may"),
+        this.$t("months.june"),
+        this.$t("months.july"),
+        this.$t("months.august"),
+        this.$t("months.september"),
+        this.$t("months.october"),
+        this.$t("months.november"),
+        this.$t("months.december"),
       ];
     },
     months() {
@@ -160,7 +160,7 @@ export default {
       return days;
     },
     next() {
-      let next = this.date.add(1, 'month');
+      let next = this.date.add(1, "month");
       this.set(next);
     },
     getDate(day, month = this.month, year = this.year) {
@@ -168,6 +168,7 @@ export default {
         year,
         month,
         day,
+        0,
         0,
         0
       ));
@@ -267,7 +268,7 @@ export default {
       return false;
     },
     prev() {
-      let prev = this.date.subtract(1, 'month');
+      let prev = this.date.subtract(1, "month");
       this.set(prev);
     },
     set(date) {
@@ -330,7 +331,8 @@ export default {
   background-color: rgba(#fff, 0.25);
 }
 .k-interval-day[aria-current] .k-button {
-  color: var(--color-focus-light);
+  color: var(--color-focus);
+  border-color: var(--color-focus);
   font-weight: 500;
 }
 .k-interval-day[aria-selected] {

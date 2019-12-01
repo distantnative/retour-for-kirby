@@ -29,7 +29,8 @@
 }
 
 .k-interval-day[aria-current] .k-button {
-  color: var(--color-focus-light);
+  color: var(--color-focus);
+  border-color: var(--color-focus);
   font-weight: 500;
 }
 

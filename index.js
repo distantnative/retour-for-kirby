@@ -9182,13 +9182,13 @@ var _default = {
   data: function data() {
     var start = this.from ? this.getDate(this.from.date(), this.from.month(), this.from.year()) : null;
     var end = this.to ? this.getDate(this.to.date(), this.to.month(), this.to.year()) : null;
-    var current = start ? start : end ? end : this.$library.dayjs();
+    var current = start ? start : end ? end : this.$library.dayjs().startOf("day");
     return {
       month: current.month() + 1,
       year: current.year(),
       start: start,
       end: end,
-      today: this.$library.dayjs(),
+      today: this.$library.dayjs().startOf("day"),
       hover: null
     };
   },
@@ -9203,14 +9203,14 @@ var _default = {
       return Math.ceil((this.numberOfDays + this.firstWeekday - 1) / 7);
     },
     firstWeekday: function firstWeekday() {
-      var weekday = this.date.clone().startOf('month').day();
+      var weekday = this.date.startOf("month").day();
       return weekday > 0 ? weekday : 7;
     },
     weekdays: function weekdays() {
-      return [this.$t('days.mon'), this.$t('days.tue'), this.$t('days.wed'), this.$t('days.thu'), this.$t('days.fri'), this.$t('days.sat'), this.$t('days.sun')];
+      return [this.$t("days.mon"), this.$t("days.tue"), this.$t("days.wed"), this.$t("days.thu"), this.$t("days.fri"), this.$t("days.sat"), this.$t("days.sun")];
     },
     monthnames: function monthnames() {
-      return [this.$t('months.january'), this.$t('months.february'), this.$t('months.march'), this.$t('months.april'), this.$t('months.may'), this.$t('months.june'), this.$t('months.july'), this.$t('months.august'), this.$t('months.september'), this.$t('months.october'), this.$t('months.november'), this.$t('months.december')];
+      return [this.$t("months.january"), this.$t("months.february"), this.$t("months.march"), this.$t("months.april"), this.$t("months.may"), this.$t("months.june"), this.$t("months.july"), this.$t("months.august"), this.$t("months.september"), this.$t("months.october"), this.$t("months.november"), this.$t("months.december")];
     },
     months: function months() {
       var options = [];
@@ -9253,13 +9253,13 @@ var _default = {
       return days;
     },
     next: function next() {
-      var next = this.date.add(1, 'month');
+      var next = this.date.add(1, "month");
       this.set(next);
     },
     getDate: function getDate(day) {
       var month = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.month;
       var year = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.year;
-      return this.$library.dayjs(new Date(year, month, day, 0, 0));
+      return this.$library.dayjs(new Date(year, month, day, 0, 0, 0));
     },
     setHover: function setHover(day) {
       this.hover = this.getDate(day);
@@ -9339,7 +9339,7 @@ var _default = {
       return false;
     },
     prev: function prev() {
-      var prev = this.date.subtract(1, 'month');
+      var prev = this.date.subtract(1, "month");
       this.set(prev);
     },
     set: function set(date) {
