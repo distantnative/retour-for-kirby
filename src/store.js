@@ -43,18 +43,14 @@ export default {
         return "month";
       }
 
-      if (to.day() === 0) {
-        if (
-          from.isSame(to.subtract(6, "day").hour(0).minute(0).second(0))
-        ) {
-          return "week";
-        }
-      } else {
-        if (
-          from.isSame(to.subtract(to.day() - 1, "day").hour(0).minute(0).second(0))
-        ) {
-          return "week";
-        }
+      if (
+        to.day() === 0 && from.isSame(to.subtract(6, "day").startOf("day"))
+      ) {
+        return "week";
+      } else if (
+        from.isSame(to.subtract(to.day() - 1, "day").startOf("day"))
+      ) {
+        return "week";
       }
 
 

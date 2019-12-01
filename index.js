@@ -11014,6 +11014,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 var _default = {
   components: {
     Calendar: _Calendar.default
@@ -11125,7 +11127,7 @@ exports.default = _default;
                 }
               }
             },
-            [_vm._v(_vm._s(_vm.display(_vm.from, _vm.to)))]
+            [_vm._v("\n    " + _vm._s(_vm.display(_vm.from, _vm.to)) + "\n  ")]
           ),
           _vm._v(" "),
           _c("calendar", {
@@ -15616,7 +15618,183 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   return Chartist;
 });
-},{}],"components/Charts/Timeline.vue":[function(require,module,exports) {
+},{}],"components/Charts/Pie.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _chartist = _interopRequireDefault(require("chartist"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  computed: {
+    data: function data() {
+      return this.$store.state.retour.data.stats;
+    },
+    fails: function fails() {
+      return this.total - this.redirects - this.resolved;
+    },
+    redirects: function redirects() {
+      return this.data.reduce(function (i, x) {
+        return i += parseInt(x.redirected);
+      }, 0);
+    },
+    resolved: function resolved() {
+      return this.data.reduce(function (i, x) {
+        return i += parseInt(x.resolved);
+      }, 0);
+    },
+    total: function total() {
+      return this.data.reduce(function (i, x) {
+        return i += parseInt(x.total);
+      }, 0);
+    }
+  },
+  watch: {
+    data: {
+      handler: function handler() {
+        this.createChart();
+      },
+      deep: true
+    }
+  },
+  methods: {
+    createChart: function createChart() {
+      new _chartist.default.Pie(".rt-share", {
+        series: [this.redirects, this.resolved, this.fails, this.total > 0 ? 0 : 1]
+      }, {
+        height: 300,
+        startAngle: 270,
+        total: (this.total > 0 ? this.total : 1) * 2,
+        showLabel: false
+      });
+    }
+  }
+};
+exports.default = _default;
+        var $dc43e8 = exports.default || module.exports;
+      
+      if (typeof $dc43e8 === 'function') {
+        $dc43e8 = $dc43e8.options;
+      }
+    
+        /* template */
+        Object.assign($dc43e8, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "rt-stats-box" }, [
+    _c("div", { staticClass: "rt-share" }),
+    _vm._v(" "),
+    _c(
+      "footer",
+      { staticClass: "k-field-footer" },
+      [
+        _c(
+          "k-button",
+          { staticClass: "rt-lb-redirected", attrs: { icon: "circle" } },
+          [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.redirects) +
+                " " +
+                _vm._s(_vm.$t("rt.redirected")) +
+                "\n    "
+            )
+          ]
+        ),
+        _c("br"),
+        _vm._v(" "),
+        _c(
+          "k-button",
+          { staticClass: "rt-lb-resolved", attrs: { icon: "circle" } },
+          [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.resolved) +
+                " " +
+                _vm._s(_vm.$t("rt.resolved")) +
+                "\n    "
+            )
+          ]
+        ),
+        _c("br"),
+        _vm._v(" "),
+        _c(
+          "k-button",
+          { staticClass: "rt-lb-failed", attrs: { icon: "circle" } },
+          [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.fails) +
+                " " +
+                _vm._s(_vm.$t("rt.failed")) +
+                "\n    "
+            )
+          ]
+        )
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$dc43e8', $dc43e8);
+          } else {
+            api.reload('$dc43e8', $dc43e8);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"chartist":"../node_modules/chartist/dist/chartist.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Charts/Timeline.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15802,6 +15980,8 @@ var _PrevNext = _interopRequireDefault(require("../Navigation/PrevNext.vue"));
 
 var _Timeframe = _interopRequireDefault(require("../Navigation/Timeframe.vue"));
 
+var _Pie = _interopRequireDefault(require("../Charts/Pie.vue"));
+
 var _Timeline = _interopRequireDefault(require("../Charts/Timeline.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15822,10 +16002,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   components: {
     PrevNext: _PrevNext.default,
     Timeframe: _Timeframe.default,
+    Pie: _Pie.default,
     Timeline: _Timeline.default
   }
 };
@@ -15865,7 +16054,16 @@ exports.default = _default;
             1
           ),
           _vm._v(" "),
-          _c("timeline")
+          _c(
+            "k-grid",
+            { attrs: { gutter: "medium" } },
+            [
+              _c("k-column", { attrs: { width: "1/4" } }, [_c("pie")], 1),
+              _vm._v(" "),
+              _c("k-column", { attrs: { width: "3/4" } }, [_c("timeline")], 1)
+            ],
+            1
+          )
         ],
         1
       )
@@ -15906,7 +16104,7 @@ render._withStripped = true
       
       }
     })();
-},{"../Navigation/PrevNext.vue":"components/Navigation/PrevNext.vue","../Navigation/Timeframe.vue":"components/Navigation/Timeframe.vue","../Charts/Timeline.vue":"components/Charts/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"../Navigation/PrevNext.vue":"components/Navigation/PrevNext.vue","../Navigation/Timeframe.vue":"components/Navigation/Timeframe.vue","../Charts/Pie.vue":"components/Charts/Pie.vue","../Charts/Timeline.vue":"components/Charts/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16333,14 +16531,10 @@ var _default = {
         return "month";
       }
 
-      if (to.day() === 0) {
-        if (from.isSame(to.subtract(6, "day").hour(0).minute(0).second(0))) {
-          return "week";
-        }
-      } else {
-        if (from.isSame(to.subtract(to.day() - 1, "day").hour(0).minute(0).second(0))) {
-          return "week";
-        }
+      if (to.day() === 0 && from.isSame(to.subtract(6, "day").startOf("day"))) {
+        return "week";
+      } else if (from.isSame(to.subtract(to.day() - 1, "day").startOf("day"))) {
+        return "week";
       }
 
       if (from.isSame(to, "year") && from.date() === 1 && from.month() === 0 && to.date() === 31 && to.month() === 11) {

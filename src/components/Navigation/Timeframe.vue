@@ -1,6 +1,8 @@
 <template>
   <div v-if="show" class="rt-calendar-wrapper">
-    <div @click.stop="close">{{ display(from, to) }}</div>
+    <div @click.stop="close">
+      {{ display(from, to) }}
+    </div>
 
     <calendar
       ref="calendar"

@@ -122,27 +122,6 @@ export default {
 </script>
 
 <style lang="scss">
-.ct-series-a .ct-area,
-.ct-series-c .ct-slice-pie {
-  color: var(--color-negative);
-  fill: var(--color-negative);
-  fill-opacity: .85;
-}
-
-.ct-series-a .ct-slice-pie,
-.rt-timeline .ct-series-e .ct-area {
-  color: var(--color-focus);
-  fill:var(--color-focus);
-  fill-opacity: .85;
-}
-
-.rt-lb-resolved .k-icon,
-.rt-timeline .ct-series-c .ct-area {
-  color: var(--color-border);
-  fill: var(--color-border);
-  fill-opacity: .85;
-}
-
 .rt-timeline > svg {
   margin-top: .75rem;
   margin-left: -.5rem;
