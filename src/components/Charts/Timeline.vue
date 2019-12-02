@@ -105,8 +105,6 @@ export default {
               }
 
               if (this.$store.getters["retour/view"] === false) {
-                console.log(this.data.length);
-                console.log(parseInt(this.data.length/20) + 1);
                 return index % (Math.floor(this.data.length/20) + 1) === 0 ? value : null;
               }
 

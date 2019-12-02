@@ -44,7 +44,6 @@ export default {
       if (this.$refs.calendar) {
         e.stopPropagation()
         if (!this.$refs.calendar.$el.contains(e.target)) {
-          console.log("hi");
           this.close();
         }
       }

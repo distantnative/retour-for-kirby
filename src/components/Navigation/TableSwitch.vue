@@ -1,5 +1,9 @@
 <template>
-  <k-headline :data-current="current" class="rt-table-switch">
+  <k-headline
+    v-if="hasLogs"
+    :data-current="current"
+    class="rt-table-switch"
+  >
     <k-button
       v-for="(table, index) in tabs"
       :key="table"
@@ -10,6 +14,7 @@
       {{ $t('rt.' + table) }}
     </k-button>
   </k-headline>
+  <p v-else><br/><br/></p>
 </template>
 
 <script>
@@ -22,10 +27,6 @@ export default {
       return this.$store.state.retour.options.logs;
     },
     tabs() {
-      if (this.hasLogs === false) {
-        return ["redirects"];
-      }
-
       return ["redirects", "fails"];
     },
     icons() {
