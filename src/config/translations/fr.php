@@ -35,7 +35,6 @@ return [
 
     'rt.settings.support'           => 'Soutenir le développement',
     'rt.settings.support.donate'    => 'Donation',
-    'rt.settings.support.affiliate' => 'Acheter une license Kirby',
     'rt.settings.log.clear'         => 'Vider le log',
     'rt.settings.log.clear.confirm' => 'Voulez-vous vraiment vider le log?',
     'rt.settings.routes'            => 'Redirections paramétrées',

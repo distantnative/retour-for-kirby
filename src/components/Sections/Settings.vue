@@ -22,7 +22,7 @@
       </li>
       <li>
         <dl>
-          <dt>{{ $t('rt.settings.support') }} 💛</dt>
+          <dt>{{ $t('rt.settings.support') }}</dt>
           <dd>
             <k-button
               link="https://paypal.me/distantnative"
@@ -30,14 +30,6 @@
               theme="positive"
             >
               {{ $t('rt.settings.support.donate') }}
-            </k-button>
-            &middot;
-            <k-button
-              link="https://a.paddle.com/v2/click/1129/35921?link=1170"
-              target="_blank"
-              theme="positive"
-            >
-              {{ $t('rt.settings.support.affiliate') }}
             </k-button>
           </dd>
         </dl>
@@ -115,6 +107,12 @@ export default {
       margin-top: -.25rem;
       transform: scale(.9);
       transform-origin: top right;
+    }
+  }
+
+  .k-system-info-box {
+    .k-button {
+      font-size: inherit;
     }
   }
 

@@ -36,7 +36,6 @@ return [
 
     'rt.settings.support'            => 'Geliştirmeyi destekle',
     'rt.settings.support.donate'     => 'Bağış Yap',
-    'rt.settings.support.affiliate'  => 'Kirby lisansı satın al',
     'rt.settings.log.clear'          => 'Günlük kayıtları temizle',
     'rt.settings.log.clear.confirm'  => 'Günlük kayıtlarını gerçekten silmek istiyor musunuz?',
     'rt.settings.fails'              => 'Başarısız günlük kayıtları',

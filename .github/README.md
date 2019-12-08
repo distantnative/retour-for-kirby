@@ -9,7 +9,7 @@ Add a Panel view where you can manage advanced redirections and error tracking b
 
 ![Screenshot](screenshot.png)
 
-> This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, please consider making [a donation of your choice](https://paypal.me/distantnative/15EUR),  purchasing your Kirby license(s) through my [affiliate link](https://a.paddle.com/v2/click/1129/35921?link=1170), or [sponsoring me on a monthly basis](https://github.com/sponsors/distantnative).
+> This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, please consider making [a donation of your choice](https://paypal.me/distantnative/25EUR) or [sponsoring me on a monthly basis](https://github.com/sponsors/distantnative).
 
 ## Installation + updates
 

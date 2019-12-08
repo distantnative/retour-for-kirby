@@ -36,7 +36,6 @@ return [
 
     'rt.settings.support'            => 'Support development',
     'rt.settings.support.donate'     => 'Donate',
-    'rt.settings.support.affiliate'  => 'Buy a Kirby license',
     'rt.settings.log.clear'          => 'Clear log',
     'rt.settings.log.clear.confirm'  => 'Do you really want to delete the log?',
     'rt.settings.fails'              => 'Logged fails',
