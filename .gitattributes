@@ -11,10 +11,10 @@ yarn.lock export-ignore
 composer.lock export-ignore
 
 # Directories
-config/samples.php export-ignore
-src/assets/css/ export-ignore
+src/assets/ export-ignore
 src/components/ export-ignore
 src/helpers/ export-ignore
 src/mixins/ export-ignore
 src/index.js export-ignore
 src/store.js export-ignore
+tests/ export-ignore

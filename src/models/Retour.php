@@ -20,7 +20,7 @@ class Retour
         $root  = dirname(__DIR__, 2);
         $src   = $root . '/src';
         $roots = [
-            'assets'       => $src . '/assets',
+            'assets'       => $root . '/assets',
 
             'redirects'    => option('distantnative.retour.config'),
             'logs'         => option('distantnative.retour.database'),
