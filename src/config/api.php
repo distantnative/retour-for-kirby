@@ -76,14 +76,6 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/samples',
-            'method'  => 'POST',
-            'action'  => function () {
-                require 'samples.php';
-                return true;
-            }
-        ],
-        [
             'pattern' => 'retour/pagepicker',
             'method'  => 'GET',
             'action'  => function () {

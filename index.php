@@ -4,7 +4,6 @@ namespace distantnative\Retour;
 
 load(['Retour', 'Redirects', 'Log', 'Stats', 'Update']);
 
-
 \Kirby::plugin('distantnative/retour', [
     'options'      => require 'src/config/options.php',
     'api'          => require 'src/config/api.php',
