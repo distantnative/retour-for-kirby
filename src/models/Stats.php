@@ -9,12 +9,14 @@ class Stats
      * Get stats data for specified timeframe
      *
      * @param string $by
-     * @param int $offset
+     * @param string $from
+     * @param string $to
      * @return array
      */
     public static function get(string $by, string $from, string $to): array
     {
-        $log = new Log;
+        $log  = new Log;
+        $data = [];
 
         switch ($by) {
             case 'year':
@@ -32,8 +34,7 @@ class Stats
                 $data = self::fill($data, $from, $to, 'hour', '%H');
                 break;
 
-            case 'custom':
-            case 'week':
+            default:
                 $data = $log->forStats($from, $to, '%d/%m');
                 $data = self::fill($data, $from, $to, 'day', '%d/%m');
                 break;

@@ -72,6 +72,8 @@ class Log
     /**
      * Get all failed records
      *
+     * @param string $start
+     * @param string $end
      * @return array
      */
     public function forFails(string $start, string $end): array
@@ -102,6 +104,8 @@ class Log
      * Get all records for a redirect
      *
      * @param array $redirect
+     * @param string $start
+     * @param string $end
      * @return array
      */
     public function forRedirect(array $redirect, string $start, string $end): array
@@ -153,6 +157,11 @@ class Log
         return $stats ? $stats->toArray() : [];
     }
 
+    /**
+     * Deletes outdated logs based on config option
+     *
+     * @return void
+     */
     public function limit(): void
     {
         $limit = option('distantnative.retour.deleteAfter');
@@ -185,6 +194,11 @@ class Log
         );
     }
 
+    /**
+     * Copies database in right location if does not exist yet
+     *
+     * @return void
+     */
     public function setup(): void
     {
         $file = Retour::root('logs');

@@ -2,7 +2,6 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Cms\App;
 use Kirby\Cms\Response;
 use Kirby\Data\Data;
 use Kirby\Http\Header;
@@ -31,6 +30,8 @@ class Redirects
     /**
      * Read all redirects and combine them with records data
      *
+     * @param string $from
+     * @param string $to
      * @return array
      */
     public static function list(string $from, string $to): array
@@ -50,17 +51,21 @@ class Redirects
     /**
      * Get routes config for all redirects
      *
-     * @param Log|bool $log
+     * @param \distantnative\Retour\Log|bool $log
      * @return array
      */
     public static function routes($log): array
     {
-        // no routes for disabled redirects
-        $data = array_filter(self::read(), function ($redirect) {
+        // Get all redirects
+        $data = self::read();
+
+        // Filter: no routes for disabled redirects
+        $data = array_filter($data, function ($redirect) {
             return $redirect['status'] !== 'disabled';
         });
 
-        return array_map(function ($redirect) use ($log) {
+        // create route array for each redirect
+        $data = array_map(function ($redirect) use ($log) {
             return [
                 'pattern' => $redirect['from'],
                 'action'  => function (...$parameters) use ($redirect, $log) {
@@ -105,6 +110,8 @@ class Redirects
                 }
             ];
         }, $data);
+
+        return $data;
     }
 
     /**
