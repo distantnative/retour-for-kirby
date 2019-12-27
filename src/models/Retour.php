@@ -38,7 +38,6 @@ class Retour
 
             'redirects'    => option('distantnative.retour.config'),
             'logs'         => option('distantnative.retour.database'),
-            'updated'      => option('distantnative.retour.updated'),
 
             'config'       => $config = $src . '/config',
             'migrations'   => $config . '/migrations',

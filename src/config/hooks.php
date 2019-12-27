@@ -32,6 +32,6 @@ return [
         }
     },
     'system.loadPlugins:after' => function () {
-        Update::check();
+        Version::update();
     }
 ];
