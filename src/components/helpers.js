@@ -1,5 +1,4 @@
 
-
 export function date(array) {
   return array.map(x => {
     if (x.last) {

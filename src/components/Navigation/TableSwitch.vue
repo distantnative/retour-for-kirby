@@ -11,7 +11,7 @@
 
       @click="onSwitch(table)"
     >
-      {{ $t('rt.' + table) }}
+      {{ $t('retour.' + table) }}
     </k-button>
   </k-headline>
   <p v-else><br/><br/></p>

@@ -10,8 +10,6 @@ use Kirby\Http\Url;
 class Redirects
 {
 
-    public static $file;
-
     /**
      * Get all redirects from file
      *
@@ -32,16 +30,18 @@ class Redirects
      *
      * @param string $from
      * @param string $to
+     *
      * @return array
      */
     public static function list(string $from, string $to): array
     {
-        $redirects = self::read();
+        $redirects = static::read();
 
+        // If logging is enabled, add log data for redirects
         if (option('distantnative.retour.logs') === true) {
             $log = new Log;
-            $redirects = array_map(function ($r) use ($log, $from, $to) {
-                return $log->forRedirect($r, $from, $to);
+            $redirects = array_map(function ($redirect) use ($log, $from, $to) {
+                return $log->forRedirect($redirect, $from, $to);
             }, $redirects);
         }
 
@@ -52,12 +52,13 @@ class Redirects
      * Get routes config for all redirects
      *
      * @param \distantnative\Retour\Log|bool $log
+     *
      * @return array
      */
     public static function routes($log): array
     {
         // Get all redirects
-        $data = self::read();
+        $data = static::read();
 
         // Filter: no routes for disabled redirects
         $data = array_filter($data, function ($redirect) {
@@ -118,6 +119,7 @@ class Redirects
      * Update redirects in file
      *
      * @param array $data
+     *
      * @return bool
      */
     public static function write(array $data = []): bool

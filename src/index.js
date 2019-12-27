@@ -25,10 +25,6 @@ panel.plugin("distantnative/retour", {
     "rt-redirect": RedirectField,
     "rt-status": StatusField
   },
-  components: {
-    "k-rt-redirect-input": { extends: "k-text-input" },
-    "k-rt-status-input":   { extends: "k-select-input" },
-  },
   created(app) {
     app.$store.registerModule("retour", store);
   }

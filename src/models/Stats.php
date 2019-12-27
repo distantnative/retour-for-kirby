@@ -11,6 +11,7 @@ class Stats
      * @param string $by
      * @param string $from
      * @param string $to
+     *
      * @return array
      */
     public static function get(string $by, string $from, string $to): array
@@ -51,6 +52,7 @@ class Stats
      * @param string $end
      * @param string $step
      * @param string $unit
+     *
      * @return array
      */
     protected static function fill(array $data, string $start, string $end, string $step, string $unit): array

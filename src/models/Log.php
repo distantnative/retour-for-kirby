@@ -22,11 +22,12 @@ class Log
      * Create a new record entry in database
      *
      * @param array $props
-     * @return void
+     *
+     * @return bool
      */
-    public function add(array $props): void
+    public function add(array $props): bool
     {
-        Db::insert('records', [
+        return Db::insert('records', [
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
             'timezone' => date('Z'),
             'path'     => $props['path'],
@@ -61,12 +62,14 @@ class Log
     /**
      * Remove database records and reset index
      *
-     * @return void
+     * @return bool
      */
-    public function flush(): void
+    public function flush(): bool
     {
-        Db::execute('DELETE FROM records;');
-        Db::execute('DELETE FROM sqlite_sequence WHERE name="records";');
+        return Db::execute('
+            DELETE FROM records;
+            DELETE FROM sqlite_sequence WHERE name="records";
+        ');
     }
 
     /**
@@ -74,6 +77,7 @@ class Log
      *
      * @param string $start
      * @param string $end
+     *
      * @return array
      */
     public function forFails(string $start, string $end): array
@@ -106,6 +110,7 @@ class Log
      * @param array $redirect
      * @param string $start
      * @param string $end
+     *
      * @return array
      */
     public function forRedirect(array $redirect, string $start, string $end): array
@@ -134,6 +139,7 @@ class Log
      * @param string $start
      * @param string $end
      * @param string $label
+     *
      * @return array
      */
     public function forStats(string $start, string $end, string $label): array
@@ -160,29 +166,32 @@ class Log
     /**
      * Deletes outdated logs based on config option
      *
-     * @return void
+     * @return bool
      */
-    public function limit(): void
+    public function limit(): bool
     {
         $limit = option('distantnative.retour.deleteAfter');
 
-        if ($limit) {
+        if ($limit !== false) {
             $time   = strtotime('-' . $limit . ' month');
             $cutoff = date('Y-m-d 00:00:00', $time);
 
-            Db::query('
+            return Db::query('
                 DELETE FROM
                     records
                 WHERE
                     strftime("%s", date) < strftime("%s", "' . $cutoff . '");
             ');
         }
+
+        return true;
     }
 
     /**
      * Mark all records for a given path as resolved
      *
      * @param string $path
+     *
      * @return bool
      */
     public function resolve(string $path): bool
@@ -204,11 +213,11 @@ class Log
         $file = Retour::root('logs');
         $dir  = dirname($file);
 
-        if (is_dir($dir) === false) {
-            Dir::make($dir);
-        }
-
         if (F::exists($file) === false) {
+            if (is_dir($dir) === false) {
+                Dir::make($dir);
+            }
+
             F::copy(
                 Retour::root('assets') . '/retour.sqlite',
                 $file

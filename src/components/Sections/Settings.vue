@@ -4,32 +4,32 @@
     <ul class="k-system-info-box">
       <li>
         <dl>
-          <dt>{{ $t("rt.settings.redirects") }}</dt>
+          <dt>{{ $t("retour.settings.redirects") }}</dt>
           <dd>{{ redirected }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt>{{ $t("rt.settings.fails") }}</dt>
+          <dt>{{ $t("retour.settings.fails") }}</dt>
           <dd>{{ failed }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt>{{ $t("rt.settings.deleteAfter") }}</dt>
-          <dd>{{ $t("rt.settings.deleteAfter.months", { count: $store.state.retour.options.deleteAfter || '–' }) }}</dd>
+          <dt>{{ $t("retour.settings.deleteAfter") }}</dt>
+          <dd>{{ $t("retour.settings.deleteAfter.months", { count: $store.state.retour.options.deleteAfter || '–' }) }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt>{{ $t('rt.settings.support') }}</dt>
+          <dt>{{ $t('retour.settings.support') }}</dt>
           <dd>
             <k-button
               link="https://paypal.me/distantnative"
               target="_blank"
               theme="positive"
             >
-              {{ $t('rt.settings.support.donate') }}
+              {{ $t('retour.settings.supporetour.donate') }} 💛
             </k-button>
           </dd>
         </dl>
@@ -38,7 +38,7 @@
 
     <footer class="k-field-footer">
       <div data-theme="help" class="k-text k-field-help">
-        <span v-html="$t('rt.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
+        <span v-html="$t('retour.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
       </div>
       <k-button-group>
         <k-button
@@ -47,20 +47,20 @@
           theme="negative"
           @click="$refs.dialog.open()"
         >
-          {{ $t('rt.settings.log.clear') }}
+          {{ $t('retour.settings.log.clear') }}
         </k-button>
       </k-button-group>
     </footer>
 
     <k-dialog
       ref="dialog"
-      :button="$t('rt.settings.log.clear')"
+      :button="$t('retour.settings.log.clear')"
       theme="negative"
       icon="trash"
       @submit="flush"
     >
       <k-text>
-        {{ $t('rt.settings.log.clear.confirm') }}
+        {{ $t('retour.settings.log.clear.confirm') }}
       </k-text>
     </k-dialog>
   </k-view>

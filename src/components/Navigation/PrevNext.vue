@@ -7,7 +7,7 @@
       :current="view === by"
       @click="show(by)"
     >
-      {{ $t('rt.stats.' + by) }}
+      {{ $t('retour.stats.' + by) }}
     </k-button>
     <k-button icon="angle-right" :disabled="view === false" @click="next" />
   </k-button-group>
@@ -29,7 +29,7 @@ export default {
     },
     navigate(method) {
       const start = this.$store.state.retour.view.from;
-      const end   =  this.$store.state.retour.view.to;
+      const end = this.$store.state.retour.view.to;
 
       switch (this.view) {
         case "year":

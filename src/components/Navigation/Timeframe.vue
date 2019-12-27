@@ -1,7 +1,7 @@
 <template>
   <div v-if="show" class="rt-calendar-wrapper">
-    <div @click.stop="close">
-      {{ display(from, to) }}
+    <div @click.stop="close" class="rt-calendar-label">
+      <k-icon type="calendar" /> {{ display(from, to) }}
     </div>
 
     <calendar
@@ -12,8 +12,8 @@
     />
   </div>
 
-  <div v-else @click="open">
-    {{ active }}
+  <div v-else @click="open" class="rt-calendar-label">
+    <k-icon type="calendar" /> {{ active }}
   </div>
 </template>
 
@@ -42,14 +42,14 @@ export default {
   methods: {
     onClick(e) {
       if (this.$refs.calendar) {
-        e.stopPropagation()
+        e.stopPropagation();
+
         if (!this.$refs.calendar.$el.contains(e.target)) {
           this.close();
         }
       }
     },
     display(from, to) {
-
       if (!from && !to) {
         return "...";
       }
@@ -136,5 +136,14 @@ export default {
 }
 .rt-calendar-wrapper {
   position: relative;
+}
+.rt-calendar-label {
+  display: flex;
+  cursor: pointer;
+
+  > .k-icon {
+    margin-right: .75rem;
+    opacity: .2;
+  }
 }
 </style>

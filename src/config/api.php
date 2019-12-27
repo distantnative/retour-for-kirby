@@ -62,17 +62,14 @@ return [
             'pattern' => 'retour/flush',
             'method'  => 'POST',
             'action'  => function () {
-                (new Log)->flush();
-                return true;
+                return (new Log)->flush();
             }
         ],
         [
             'pattern' => 'retour/limit',
             'method'  => 'POST',
             'action'  => function () {
-                $log = new Log;
-                $log->limit();
-                return true;
+                return (new Log)->limit();
             }
         ],
         [

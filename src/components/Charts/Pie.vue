@@ -4,13 +4,13 @@
 
     <footer class="k-field-footer">
       <k-button icon="circle" class="rt-lb-redirected">
-        {{ redirects }} {{ $t('rt.redirected') }}
+        {{ redirects }} {{ $t('retour.redirected') }}
       </k-button><br>
       <k-button icon="circle" class="rt-lb-resolved">
-        {{ resolved }} {{ $t('rt.resolved') }}
+        {{ resolved }} {{ $t('retour.resolved') }}
       </k-button><br>
       <k-button icon="circle" class="rt-lb-failed">
-        {{ fails }} {{ $t('rt.failed') }}
+        {{ fails }} {{ $t('retour.failed') }}
       </k-button>
     </footer>
   </div>
@@ -48,7 +48,12 @@ export default {
   methods: {
     createChart() {
       new Chartist.Pie(".rt-share", {
-        series: [this.redirects, this.resolved, this.fails, this.total > 0 ? 0 : 1]
+        series: [
+          this.redirects,
+          this.resolved,
+          this.fails,
+          this.total > 0 ? 0 : 1
+        ]
       }, {
         height: 300,
         startAngle: 270,

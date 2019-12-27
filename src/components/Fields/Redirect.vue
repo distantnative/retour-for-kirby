@@ -18,6 +18,7 @@
       ref="input"
       :id="_uid"
       v-bind="$props"
+      type="text"
       theme="field"
       v-on="$listeners"
     />

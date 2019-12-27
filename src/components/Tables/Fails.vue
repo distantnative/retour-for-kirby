@@ -42,17 +42,17 @@ export default {
     columns() {
       return [
         {
-          label: this.$t("rt.fails.path"),
+          label: this.$t("retour.fails.path"),
           field: "path",
           type: "url"
         },
         {
-          label: this.$t("rt.fails.referrer"),
+          label: this.$t("retour.fails.referrer"),
           field: "referrer",
           type: "url"
         },
         {
-          label: this.$t("rt.hits"),
+          label: this.$t("retour.hits"),
           field: "hits",
           type: "number",
           sort: "desc",
@@ -61,7 +61,7 @@ export default {
         },
         {
           name: "last",
-          label: this.$t("rt.hits.last"),
+          label: this.$t("retour.hits.last"),
           field: "last",
           type: "date",
           sort: "desc",
@@ -86,10 +86,10 @@ export default {
           initialBy: "last"
         },
         labels: {
-          all: this.$t("rt.tbl.all"),
-          empty: this.$t("rt.tbl.fails.empty"),
-          perPage: this.$t("rt.tbl.perPage"),
-          filter: this.$t("rt.tbl.filter")
+          all: this.$t("retour.tbl.all"),
+          empty: this.$t("retour.tbl.fails.empty"),
+          perPage: this.$t("retour.tbl.perPage"),
+          filter: this.$t("retour.tbl.filter")
         }
       };
 
@@ -97,7 +97,11 @@ export default {
         config.actions = {
           inline: true,
           items: [
-            { text: this.$t("rt.fails.resolve"), icon: "add", click: "add" }
+            {
+              text: this.$t("retour.fails.resolve"),
+              icon: "add",
+              click: "add"
+            }
           ]
         };
       }

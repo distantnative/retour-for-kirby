@@ -1,7 +1,8 @@
 <template>
   <k-view>
-    <redirects v-show="table === 'redirects'" ref="redirects" />
-    <fails v-show="table === 'fails'" ref="fails" />
+    <keep-alive>
+      <component :is="$store.state.retour.view.table" />
+    </keep-alive>
   </k-view>
 </template>
 
@@ -11,13 +12,8 @@ import Redirects from "../Tables/Redirects.vue";
 
 export default {
   components: {
-    Fails,
-    Redirects,
-  },
-  computed: {
-    table() {
-      return this.$store.state.retour.view.table;
-    }
+    fails: Fails,
+    redirects: Redirects,
   }
 }
 </script>
@@ -25,8 +21,8 @@ export default {
 <style lang="scss">
 .k-retour-view .tbl {
   .k-icon-url {
-    transform: scale(.8);
     margin-right: .25rem;
+    transform: scale(.8);
     color: var(--color-border);
 
     &:hover {

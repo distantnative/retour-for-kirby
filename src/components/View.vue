@@ -38,7 +38,7 @@ export default {
 
 <style>
 .k-retour-view > .k-view {
-  padding-top:    1.5rem;
+  padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
 </style>

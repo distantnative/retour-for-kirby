@@ -106,18 +106,18 @@ export default {
     columns() {
       let columns = [
         {
-          label: this.$t("rt.redirects.from"),
+          label: this.$t("retour.redirects.from"),
           type: "url",
           field: "from"
         },
         {
-          label: this.$t("rt.redirects.to"),
+          label: this.$t("retour.redirects.to"),
           type: "url",
           field: "to",
           responsive: false
         },
         {
-          label: this.$t("rt.redirects.status"),
+          label: this.$t("retour.redirects.status"),
           width: "1/6",
           field: "status"
         }
@@ -127,7 +127,7 @@ export default {
         columns = [
           ...columns,
           {
-            label: this.$t("rt.hits"),
+            label: this.$t("retour.hits"),
             field: "hits",
             type: "number",
             sort: "desc",
@@ -136,7 +136,7 @@ export default {
           },
           {
             name: "last",
-            label: this.$t("rt.hits.last"),
+            label: this.$t("retour.hits.last"),
             field: "last",
             type: "date",
             sort: "desc",
@@ -152,10 +152,10 @@ export default {
     fields() {
       let fields = {
         from: {
-          label: this.$t("rt.redirects.from"),
+          label: this.$t("retour.redirects.from"),
           type: "text",
           before: window.panel.site + "/",
-          help: this.$t("rt.redirects.from.help", {
+          help: this.$t("retour.redirects.from.help", {
             reference: "https://getkirby.com/docs/guide/routing#patterns",
             readme: "https://github.com/distantnative/retour-for-kirby#redirects",
           }),
@@ -165,15 +165,15 @@ export default {
           required: true
         },
         to: {
-          label: this.$t("rt.redirects.to"),
+          label: this.$t("retour.redirects.to"),
           type: "rt-redirect",
-          help: this.$t("rt.redirects.to.help"),
+          help: this.$t("retour.redirects.to.help"),
           icon: "retour",
           width: "1/2",
           counter: false,
         },
         status: {
-          label: this.$t("rt.redirects.status"),
+          label: this.$t("retour.redirects.status"),
           type: "rt-status",
           options: [
             { text: "––––", value: "disabled" },
@@ -182,7 +182,7 @@ export default {
               value: code.substr(1)
             }))
           ],
-          help: this.$t("rt.redirects.status.help", { url: "https://httpstatuses.com" }),
+          help: this.$t("retour.redirects.status.help", { url: "https://httpstatuses.com" }),
           empty: false,
           required: true,
           width: "1/2"
@@ -193,9 +193,9 @@ export default {
         fields = {
           ...fields,
           stats: {
-            label: this.$t("rt.hits"),
+            label: this.$t("retour.hits"),
             type: "info",
-            text: `<b>${this.current.hits || 0} ${this.$t("rt.hits")}</b> (${this.$t("rt.hits.last")}: ${this.current.last ? this.$library.dayjs(this.current.last).format("D MMM YYYY - HH:mm:ss") : "–"})`,
+            text: `<b>${this.current.hits || 0} ${this.$t("retour.hits")}</b> (${this.$t("retour.hits.last")}: ${this.current.last ? this.$library.dayjs(this.current.last).format("D MMM YYYY - HH:mm:ss") : "–"})`,
             width: "1/2"
           },
         }
@@ -231,10 +231,10 @@ export default {
           initialBy: "status"
         },
         labels: {
-          all: this.$t("rt.tbl.all"),
-          empty: this.$t("rt.tbl.redirects.empty"),
-          perPage: this.$t("rt.tbl.perPage"),
-          filter: this.$t("rt.tbl.filter")
+          all: this.$t("retour.tbl.all"),
+          empty: this.$t("retour.tbl.redirects.empty"),
+          perPage: this.$t("retour.tbl.perPage"),
+          filter: this.$t("retour.tbl.filter")
         }
       };
 
