@@ -59,6 +59,7 @@
           icon="check"
           class="rt-form-btn"
           @click="onSubmit"
+          :disabled="!isValid"
         >
           {{ $t(mode === 'new' ? 'create' : 'change') }}
         </k-button>
@@ -208,6 +209,12 @@ export default {
     headers() {
       return this.$store.state.retour.options.headers;
     },
+    isValid() {
+      return this.current.hasOwnProperty("from") &&
+             this.current.from != "" &&
+             this.current.hasOwnProperty("status") &&
+             this.current.status != "";
+    },
     redirects() {
       return date(this.$store.state.retour.data.redirects);
     },
@@ -288,20 +295,25 @@ export default {
       let updated = this.redirects;
 
       if (this.mode === "new") {
-        this.$api.post("retour/resolve", {
-          path: this.current.from
-        }).then(() => {
-          this.$store.dispatch("retour/fails");
-          this.$store.dispatch("retour/stats");
-        });
-
         updated.push(this.current);
-
       } else {
         updated[this.mode] = this.current;
       }
 
-      this.update(updated).then(this.onCancel);
+      this.update(updated).then(() => {
+
+        // Mark potential fails as resolved
+        if (this.mode === "new") {
+          this.$api.post("retour/resolve", {
+            path: this.current.from
+          }).then(() => {
+            this.$store.dispatch("retour/fails");
+            this.$store.dispatch("retour/stats");
+          });
+        }
+
+        this.onCancel();
+      });
     },
     status: (v) => status(v),
     update(input) {

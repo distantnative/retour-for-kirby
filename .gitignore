@@ -6,12 +6,14 @@
 
 # Composer files
 /vendor
-.php_cs.cache
-.phpunit.result.cache
 
 # Parcel cache folder
 .cache
 
-# plugin files
+# Plugin files
 .updated
 /.samples
+
+# Tests
+.phpunit.result.cache
+/tests

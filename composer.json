@@ -17,6 +17,6 @@
         "getkirby/cms": "^3.3.0"
     },
     "extra": {
-      "kirby-cms-path": false
+        "kirby-cms-path": false
     }
 }
