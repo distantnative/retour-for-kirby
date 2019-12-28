@@ -9617,15 +9617,15 @@ var _default = {
       }
 
       if (!to) {
-        return from.format("D MMM YYYY") + " –";
+        return from.format("ll") + " –";
       }
 
       if (!from) {
-        return "– " + to.format("D MMM YYYY");
+        return "– " + to.format("ll");
       }
 
       if (from.isSame(to, "date") && from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("D MMMM YYYY");
+        return from.format("LL");
       }
 
       if (from.isSame(to, "month") && from.isSame(to, "year") && from.date() === 1 && to.date() === to.daysInMonth()) {
@@ -9637,14 +9637,20 @@ var _default = {
       }
 
       if (from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("D") + " - " + to.format("D MMM YYYY");
-      }
+        return from.format("D") + " - " + to.format("ll");
+      } // if (
+      //   from.isSame(to, "year")
+      // ) {
+      //   return from.format("D MMM") + " - " + to.format("D MMM YYYY");
+      // }
 
-      if (from.isSame(to, "year")) {
-        return from.format("D MMM") + " - " + to.format("D MMM YYYY");
-      }
 
-      return from.format("D MMM YYYY") + " - " + to.format("D MMM YYYY");
+      return from.format("ll") + " - " + to.format("ll");
+    },
+    month: function month(date) {
+      var month = date.format("MMMM");
+      month = this.$helper.string.lcfirst(month);
+      return this.$t("months." + month);
     },
     open: function open() {
       this.from = this.$store.state.retour.view.from;
@@ -15987,6 +15993,19 @@ var _default = {
     Tables: _Tables.default,
     Settings: _Settings.default
   },
+  created: function created() {
+    var _this = this;
+
+    var locale = this.$store.state.translation.current;
+    this.loadScript("https://unpkg.com/dayjs/locale/" + locale, "dayjs-" + locale, function () {
+      window.dayjs = _this.$library.dayjs;
+    }, function () {
+      _this.$library.dayjs.locale(locale);
+    });
+    this.loadScript("https://unpkg.com/dayjs/plugin/localizedFormat", "dayjs-localizedFormat", function () {}, function () {
+      _this.$library.dayjs.extend(dayjs_plugin_localizedFormat);
+    });
+  },
   mounted: function mounted() {
     if (this.canAccess === false) {
       this.$router.push("/");
@@ -15998,6 +16017,23 @@ var _default = {
   computed: {
     hasLogs: function hasLogs() {
       return this.$store.state.retour.options.logs;
+    }
+  },
+  methods: {
+    loadScript: function loadScript(url, id, before, after) {
+      before();
+      var js,
+          fjs = document.getElementsByTagName("script")[0];
+
+      if (document.getElementById(id)) {
+        return;
+      }
+
+      js = document.createElement("script");
+      js.id = id;
+      js.onload = after;
+      js.src = url;
+      fjs.parentNode.insertBefore(js, fjs);
     }
   }
 };
@@ -16378,8 +16414,8 @@ var _default = {
   getters: {
     dates: function dates(state) {
       return {
-        from: state.view.from.format("YYYY-MM-DD HH:mm:ss"),
-        to: state.view.to.format("YYYY-MM-DD HH:mm:ss")
+        from: state.view.from.format("YYYY-MM-DD"),
+        to: state.view.to.format("YYYY-MM-DD")
       };
     },
     days: function days(state) {
@@ -16566,7 +16602,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53221" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61725" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

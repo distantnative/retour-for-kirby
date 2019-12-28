@@ -55,11 +55,11 @@ export default {
       }
 
       if (!to) {
-        return from.format("D MMM YYYY") + " –";
+        return from.format("ll") + " –";
       }
 
       if (!from) {
-        return "– " + to.format("D MMM YYYY");
+        return "– " + to.format("ll");
       }
 
       if (
@@ -67,7 +67,7 @@ export default {
         from.isSame(to, "month") &&
         from.isSame(to, "year")
       ) {
-        return from.format("D MMMM YYYY");
+        return from.format("LL");
       }
 
       if (
@@ -93,16 +93,21 @@ export default {
         from.isSame(to, "month") &&
         from.isSame(to, "year")
       ) {
-        return from.format("D") + " - " + to.format("D MMM YYYY");
+        return from.format("D") + " - " + to.format("ll");
       }
 
-      if (
-        from.isSame(to, "year")
-      ) {
-        return from.format("D MMM") + " - " + to.format("D MMM YYYY");
-      }
+      // if (
+      //   from.isSame(to, "year")
+      // ) {
+      //   return from.format("D MMM") + " - " + to.format("D MMM YYYY");
+      // }
 
-      return from.format("D MMM YYYY") + " - " + to.format("D MMM YYYY");
+      return from.format("ll") + " - " + to.format("ll");
+    },
+    month(date) {
+      let month = date.format("MMMM");
+      month = this.$helper.string.lcfirst(month);
+      return this.$t("months." + month)
     },
     open() {
       this.from = this.$store.state.retour.view.from;

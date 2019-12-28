@@ -21,8 +21,8 @@ export default {
   getters: {
     dates: state => {
       return {
-        from: state.view.from.format("YYYY-MM-DD HH:mm:ss"),
-        to:   state.view.to.format("YYYY-MM-DD HH:mm:ss")
+        from: state.view.from.format("YYYY-MM-DD"),
+        to:   state.view.to.format("YYYY-MM-DD")
       };
     },
     days: state => {

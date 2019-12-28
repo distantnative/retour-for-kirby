@@ -1,9 +1,17 @@
 {
     "name": "distantnative/retour-for-kirby",
-    "description": "Advanced redirection management and error tracking for Kirby 3",
+    "description": "Redirects and error tracking for Kirby",
     "type": "kirby-plugin",
     "version": "2.3.0",
     "license": "MIT",
+    "keywords": [
+        "kirby3",
+        "kirby3-cms",
+        "kirby3-plugin",
+        "redirects",
+        "errors",
+        "routing"
+    ],
     "authors": [
         {
             "name": "Nico Hoffmann",
