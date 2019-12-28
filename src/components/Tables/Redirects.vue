@@ -156,8 +156,7 @@ export default {
           type: "text",
           before: window.panel.site + "/",
           help: this.$t("retour.redirects.from.help", {
-            reference: "https://getkirby.com/docs/guide/routing#patterns",
-            readme: "https://github.com/distantnative/retour-for-kirby#redirects",
+            docs: "https://getkirby.com/docs/guide/routing#patterns"
           }),
           icon: "url",
           width: "1/2",
@@ -182,7 +181,7 @@ export default {
               value: code.substr(1)
             }))
           ],
-          help: this.$t("retour.redirects.status.help", { url: "https://httpstatuses.com" }),
+          help: this.$t("retour.redirects.status.help", { docs: "https://httpstatuses.com" }),
           empty: false,
           required: true,
           width: "1/2"

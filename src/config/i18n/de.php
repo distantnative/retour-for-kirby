@@ -19,13 +19,13 @@ return [
     'retour.failed'     => 'gescheitert',
 
     'retour.redirects'           => 'Umleitungen',
-    'retour.redirects.from'      => 'Ziel-URL',
-    'retour.redirects.from.help' => 'Verwende <a href="{reference}" target="_blank">dynamische Platzhalter</a> und <a href="{readme}" target="_blank">nutze sie</a> in der Weiterleitung.',
+    'retour.redirects.from'      => 'Pfad',
+    'retour.redirects.from.help' => 'Verwende <a href="{docs}" target="_blank">Platzhalter</a> für dynamische Weiterleitungen.',
 
     'retour.redirects.to'              => 'Umleiten nach',
     'retour.redirects.to.help'         => 'Relativer Pfad oder absolute URL. Frei lassen, um abzubrechen.',
     'retour.redirects.status'          => 'Status',
-    'retour.redirects.status.help'     => 'Lerne die <a href="{url}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
+    'retour.redirects.status.help'     => 'Lerne die <a href="{docs}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
 
     'retour.fails'          => 'Fehler',
     'retour.fails.path'     => 'Pfad',
@@ -42,5 +42,5 @@ return [
     'retour.settings.routes'            => 'Umleitungsrouten',
     'retour.settings.fails'             => 'Aufgezeichnete Fehler',
     'retour.settings.redirects'         => 'Erfolgreich umgeleitet',
-    'retour.settings.docs'              => 'Erfahre mehr <a href="{url}">zu den Einstellungen</a>.'
+    'retour.settings.docs'              => 'Erfahre mehr <a href="{docs}">zu den Einstellungen</a>.'
 ];

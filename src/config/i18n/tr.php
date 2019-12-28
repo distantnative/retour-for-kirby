@@ -20,11 +20,11 @@ return [
 
     'retour.redirects'                 => 'Yönlendirmeler',
     'retour.redirects.from'            => 'URL deseneni',
-    'retour.redirects.from.help'       => '<a href="{reference}" target="_blank">Dinamik yer tutucuları</a> ekleyin ve yönlendirmede <a href="{readme}" target="_blank">kullanın</a>.',
+    'retour.redirects.from.help'       => '<a href="{docs}" target="_blank">Dinamik yer tutucuları</a> ekleyin ve yönlendirmede <a href="{docs}" target="_blank">kullanın</a>.',
     'retour.redirects.to'              => 'Adresine yönlendir',
     'retour.redirects.to.help'         => 'Site içi veya tam bir adres girin. İsteğin durum kodu ile tamamlanması için boş bırakın.',
     'retour.redirects.status'          => 'Durum',
-    'retour.redirects.status.help'     => '<a href="{url}" target="_blank">HTTP durum kodları</a> ve hangisini ne zaman kullanılacağı hakkında bilgi edinin.',
+    'retour.redirects.status.help'     => '<a href="{docs}" target="_blank">HTTP durum kodları</a> ve hangisini ne zaman kullanılacağı hakkında bilgi edinin.',
 
     'retour.fails'          => 'Başarısızlar',
     'retour.fails.path'     => 'Yol',
@@ -42,6 +42,6 @@ return [
     'retour.settings.redirects'          => 'Başarıyla yönlendirildi',
     'retour.settings.deleteAfter'        => 'Günlükleri sil sıklığı',
     'retour.settings.deleteAfter.months' => '{count} ay',
-    'retour.settings.docs'               => '<a href="{url}">Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin.'
+    'retour.settings.docs'               => '<a href="{docs}">Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin.'
 
 ];

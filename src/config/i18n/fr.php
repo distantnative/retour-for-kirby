@@ -19,11 +19,11 @@ return [
 
     'retour.redirects'                 => 'Redirections',
     'retour.redirects.from'            => 'Modèle d\'URL',
-    'retour.redirects.from.help'       => 'Ajoutez <a href="{reference}" target="_blank">des placeholders dynamiques</a> et <a href="{readme}" target="_blank">utilisez-les</a> dans vos redirections.',
+    'retour.redirects.from.help'       => 'Ajoutez <a href="{docs}" target="_blank">des placeholders dynamiques</a>  pour vos redirections.',
     'retour.redirects.to'              => 'Rediriger vers',
     'retour.redirects.to.help'         => 'Chemin relatif ou URL absolue. Laisser vide pour avec le code de statut.',
     'retour.redirects.status'          => 'Statut',
-    'retour.redirects.status.help'     => 'Découvrir <a href="{url}" target="_blank">les codes de statut HTTP</a> et quand les utiliser.',
+    'retour.redirects.status.help'     => 'Découvrir <a href="{docs}" target="_blank">les codes de statut HTTP</a> et quand les utiliser.',
 
     'retour.fails'             => 'Échecs',
     'retour.fails.path'        => 'Chemin',
@@ -40,6 +40,6 @@ return [
     'retour.settings.routes'            => 'Redirections paramétrées',
     'retour.settings.fails'             => 'Échecs détectés',
     'retour.settings.redirects'         => 'Redirigées avec succès',
-    'retour.settings.docs'              => 'Retrouvez toutes les options <a href="{url}">dans la documentation</a>.'
+    'retour.settings.docs'              => 'Retrouvez toutes les options <a href="{docs}">dans la documentation</a>.'
 
 ];

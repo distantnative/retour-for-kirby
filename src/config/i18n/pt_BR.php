@@ -19,11 +19,11 @@ return [
 
     'retour.redirects'                 => 'Redirecionamentos',
     'retour.redirects.from'            => 'Padrão da URL',
-    'retour.redirects.from.help'       => 'Adicione <a href="{reference}" target="_blank">curingas dinâmicos</a> e <a href="{readme}" target="_blank">use-os</a> em seu redirecionamento.',
+    'retour.redirects.from.help'       => 'Adicione <a href="{docs}" target="_blank">curingas dinâmicos</a> em seu redirecionamento.',
     'retour.redirects.to'              => 'Redirecionar para',
     'retour.redirects.to.help'         => 'Caminho relativo ou URL absoluta. Deixe em branco para finalizar com código de estado HTTP.',
     'retour.redirects.status'          => 'Códigos de Estado HTTP',
-    'retour.redirects.status.help'     => 'Aprenda sobre os <a href="{url}" target="_blank">códigos de estado HTTP</a> e quando usar cada um.',
+    'retour.redirects.status.help'     => 'Aprenda sobre os <a href="{docs}" target="_blank">códigos de estado HTTP</a> e quando usar cada um.',
 
     'retour.fails'             => 'Falhas',
     'retour.fails.path'        => 'Caminho',
@@ -39,5 +39,5 @@ return [
     'retour.settings.routes'            => 'Rotas de redirecionamento',
     'retour.settings.fails'             => 'Falhas registradas',
     'retour.settings.redirects'         => 'Redirecionamentos bem-sucedidos',
-    'retour.settings.docs'              => 'Aprenda mais sobre as opções na <a href="{url}">documentação</a>.'
+    'retour.settings.docs'              => 'Aprenda mais sobre as opções na <a href="{docs}">documentação</a>.'
 ];

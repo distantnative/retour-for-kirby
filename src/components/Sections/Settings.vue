@@ -38,7 +38,7 @@
 
     <footer class="k-field-footer">
       <div data-theme="help" class="k-text k-field-help">
-        <span v-html="$t('retour.settings.docs', { url: 'https://github.com/distantnative/retour-for-kirby' })" />
+        <span v-html="$t('retour.settings.docs', { docs: 'https://github.com/distantnative/retour-for-kirby' })" />
       </div>
       <k-button-group>
         <k-button

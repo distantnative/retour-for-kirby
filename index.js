@@ -15158,8 +15158,7 @@ var _default = {
           type: "text",
           before: window.panel.site + "/",
           help: this.$t("retour.redirects.from.help", {
-            reference: "https://getkirby.com/docs/guide/routing#patterns",
-            readme: "https://github.com/distantnative/retour-for-kirby#redirects"
+            docs: "https://getkirby.com/docs/guide/routing#patterns"
           }),
           icon: "url",
           width: "1/2",
@@ -15187,7 +15186,7 @@ var _default = {
             };
           }))),
           help: this.$t("retour.redirects.status.help", {
-            url: "https://httpstatuses.com"
+            docs: "https://httpstatuses.com"
           }),
           empty: false,
           required: true,
@@ -15861,7 +15860,7 @@ exports.default = _default;
                 domProps: {
                   innerHTML: _vm._s(
                     _vm.$t("retour.settings.docs", {
-                      url: "https://github.com/distantnative/retour-for-kirby"
+                      docs: "https://github.com/distantnative/retour-for-kirby"
                     })
                   )
                 }
@@ -16602,7 +16601,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61725" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53613" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
