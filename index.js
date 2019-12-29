@@ -15589,11 +15589,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
 var _default = {
   components: {
     fails: _Fails.default,
     redirects: _Redirects.default
+  },
+  computed: {
+    table: function table() {
+      return this.$store.state.retour.view.table;
+    }
   }
 };
 exports.default = _default;
@@ -15612,11 +15616,29 @@ exports.default = _default;
   return _c(
     "k-view",
     [
-      _c(
-        "keep-alive",
-        [_c(_vm.$store.state.retour.view.table, { tag: "component" })],
-        1
-      )
+      _c("redirects", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.table === "redirects",
+            expression: "table === 'redirects'"
+          }
+        ],
+        ref: "redirects"
+      }),
+      _vm._v(" "),
+      _c("fails", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.table === "fails",
+            expression: "table === 'fails'"
+          }
+        ],
+        ref: "fails"
+      })
     ],
     1
   )
