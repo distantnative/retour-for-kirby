@@ -154,8 +154,8 @@ class Log
             FROM
                 records
             WHERE
-                strftime("%s", date) > strftime("%s", "' . $start . '") AND
-                strftime("%s", date) < strftime("%s", "' . $end . '")
+                strftime("%s", date) > strftime("%s", "' . $start . ' 00:00:00") AND
+                strftime("%s", date) < strftime("%s", "' . $end . ' 23:59:59")
             GROUP BY
                 label;
         ');

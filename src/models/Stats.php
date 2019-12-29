@@ -58,9 +58,9 @@ class Stats
     protected static function fill(array $data, string $start, string $end, string $step, string $unit): array
     {
         for (
-            $i = strtotime($start);
-            $i <= strtotime($end);
-            $i = strtotime(date('Y-m-d H:i:s', $i) . ' +1 ' . $step)
+            $i = strtotime($start . ' 00:00:00');
+            $i <= strtotime($end . ' 23:59:59');
+            $i = strtotime(date('Y-m-d H:00:00', $i) . ' +1 ' . $step)
         ) {
             $label = strftime($unit, $i);
 

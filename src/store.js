@@ -22,7 +22,7 @@ export default {
     dates: state => {
       return {
         from: state.view.from.format("YYYY-MM-DD"),
-        to:   state.view.to.format("YYYY-MM-DD")
+        to: state.view.to.format("YYYY-MM-DD")
       };
     },
     days: state => {
@@ -30,7 +30,7 @@ export default {
     },
     view: state => {
       const from = state.view.from;
-      const to   = state.view.to;
+      const to = state.view.to;
 
       if (
         from.isSame(to, "date") &&
@@ -95,7 +95,12 @@ export default {
     },
     timeframe(context, dates) {
       context.commit("SET_TIMEFRAME", dates);
-      context.dispatch("load");
+      context.dispatch("redirects");
+
+      if (context.state.options.logs === true) {
+        context.dispatch("fails");
+        context.dispatch("stats");
+      }
     },
 
     /* Initializers */

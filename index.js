@@ -14459,11 +14459,11 @@ var _default = {
         axisY: {
           onlyInteger: true
         }
-      }, [['screen and (max-width: 45em)', {
+      }, [["screen and (max-width: 45em)", {
         axisX: {
           labelInterpolationFnc: function (value, index) {
             if (this.$store.getters["retour/view"] === "year") {
-              return this.$library.dayjs(value).format('MMM');
+              return this.$library.dayjs(value).format("MMM");
             }
 
             if (this.$store.getters["retour/view"] === "month") {
@@ -14477,11 +14477,11 @@ var _default = {
             return value;
           }.bind(this)
         }
-      }], ['screen and (min-width: 45em)', {
+      }], ["screen and (min-width: 45em)", {
         axisX: {
           labelInterpolationFnc: function (value, index) {
             if (this.$store.getters["retour/view"] === "year") {
-              return this.$library.dayjs(value).format('MMM');
+              return this.$library.dayjs(value).format("MMM");
             }
 
             if (this.$store.getters["retour/view"] === "month") {
@@ -14500,34 +14500,34 @@ var _default = {
           }.bind(this)
         }
       }]]);
-      chart.on('created', function (ctx) {
-        var mask1 = ctx.svg.elem('defs').elem('mask', {
-          id: 'mask1'
+      chart.on("created", function (ctx) {
+        var mask1 = ctx.svg.elem("defs").elem("mask", {
+          id: "mask1"
         });
-        mask1.elem('rect', {
-          width: '100%',
-          height: '100%',
-          fill: 'white'
+        mask1.elem("rect", {
+          width: "100%",
+          height: "100%",
+          fill: "white"
         });
-        mask1.append(ctx.svg.querySelector('.ct-series.ct-series-b')).querySelector('.ct-area').attr({
-          style: 'fill: black; fill-opacity: 1'
+        mask1.append(ctx.svg.querySelector(".ct-series.ct-series-b")).querySelector(".ct-area").attr({
+          style: "fill: black; fill-opacity: 1"
         });
-        var mask2 = ctx.svg.elem('defs').elem('mask', {
-          id: 'mask2'
+        var mask2 = ctx.svg.elem("defs").elem("mask", {
+          id: "mask2"
         });
-        mask2.elem('rect', {
-          width: '100%',
-          height: '100%',
-          fill: 'white'
+        mask2.elem("rect", {
+          width: "100%",
+          height: "100%",
+          fill: "white"
         });
-        mask2.append(ctx.svg.querySelector('.ct-series.ct-series-d')).querySelector('.ct-area').attr({
-          style: 'fill: black; fill-opacity: 1'
+        mask2.append(ctx.svg.querySelector(".ct-series.ct-series-d")).querySelector(".ct-area").attr({
+          style: "fill: black; fill-opacity: 1"
         });
-        ctx.svg.querySelector('.ct-series.ct-series-a').attr({
-          mask: 'url(#mask1)'
+        ctx.svg.querySelector(".ct-series.ct-series-a").attr({
+          mask: "url(#mask1)"
         });
-        ctx.svg.querySelector('.ct-series.ct-series-c').attr({
-          mask: 'url(#mask2)'
+        ctx.svg.querySelector(".ct-series.ct-series-c").attr({
+          mask: "url(#mask2)"
         });
       });
     }
@@ -16476,7 +16476,12 @@ var _default = {
     },
     timeframe: function timeframe(context, dates) {
       context.commit("SET_TIMEFRAME", dates);
-      context.dispatch("load");
+      context.dispatch("redirects");
+
+      if (context.state.options.logs === true) {
+        context.dispatch("fails");
+        context.dispatch("stats");
+      }
     },
 
     /* Initializers */
