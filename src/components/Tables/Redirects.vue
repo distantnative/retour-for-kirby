@@ -7,7 +7,6 @@
     @add="action('add')"
     @action="action(...$event)"
   >
-
     <!-- Custom headline: table switcher -->
     <template slot="headline">
       <TableSwitch />
@@ -48,21 +47,13 @@
       />
 
       <template slot="footer">
-        <k-button
-          icon="cancel"
-          class="rt-form-btn"
-          @click="onCancel"
-        >
-          {{ $t('cancel') }}
-        </k-button>
+        <k-button icon="cancel" class="rt-form-btn" @click="onCancel">{{ $t('cancel') }}</k-button>
         <k-button
           icon="check"
           class="rt-form-btn"
           @click="onSubmit"
           :disabled="!isValid"
-        >
-          {{ $t(mode === 'new' ? 'create' : 'change') }}
-        </k-button>
+        >{{ $t(mode === 'new' ? 'create' : 'change') }}</k-button>
       </template>
     </template>
 
@@ -76,15 +67,13 @@
       @cancel="onCancel"
       @submit="onRemove"
     >
-      <k-text>
-        {{ $t('field.structure.delete.confirm') }}
-      </k-text>
+      <k-text>{{ $t('field.structure.delete.confirm') }}</k-text>
     </k-dialog>
   </tbl>
 </template>
 
 <script>
-import {date, status, permissions} from "../helpers.js";
+import { date, status, permissions } from "../helpers.js";
 
 import TableSwitch from "../Navigation/TableSwitch.vue";
 import Tbl from "tbl-for-kirby";
@@ -100,7 +89,7 @@ export default {
       mode: null,
       current: null,
       afterSubmit: null
-    }
+    };
   },
   computed: {
     columns() {
@@ -156,7 +145,7 @@ export default {
           type: "text",
           before: window.panel.site + "/",
           help: this.$t("retour.redirects.from.help", {
-            docs: "https://getkirby.com/docs/guide/routing#patterns"
+            docs: "https://distantnative.com/retour/docs"
           }),
           icon: "url",
           width: "1/2",
@@ -169,24 +158,26 @@ export default {
           help: this.$t("retour.redirects.to.help"),
           icon: "retour",
           width: "1/2",
-          counter: false,
+          counter: false
         },
         status: {
           label: this.$t("retour.redirects.status"),
           type: "rt-status",
           options: [
             { text: "––––", value: "disabled" },
-            ...Object.keys(this.headers).map((code) => ({
-              text:  code.substr(1) + " - " + this.headers[code],
+            ...Object.keys(this.headers).map(code => ({
+              text: code.substr(1) + " - " + this.headers[code],
               value: code.substr(1)
             }))
           ],
-          help: this.$t("retour.redirects.status.help", { docs: "https://httpstatuses.com" }),
+          help: this.$t("retour.redirects.status.help", {
+            docs: "https://distantnative.com/retour/docs"
+          }),
           empty: false,
           required: true,
           width: "1/2"
         }
-      }
+      };
 
       if (this.hasLogs === true) {
         fields = {
@@ -194,10 +185,18 @@ export default {
           stats: {
             label: this.$t("retour.hits"),
             type: "info",
-            text: `<b>${this.current.hits || 0} ${this.$t("retour.hits")}</b> (${this.$t("retour.hits.last")}: ${this.current.last ? this.$library.dayjs(this.current.last).format("D MMM YYYY - HH:mm:ss") : "–"})`,
+            text: `<b>${this.current.hits || 0} ${this.$t(
+              "retour.hits"
+            )}</b> (${this.$t("retour.hits.last")}: ${
+              this.current.last
+                ? this.$library
+                    .dayjs(this.current.last)
+                    .format("D MMM YYYY - HH:mm:ss")
+                : "–"
+            })`,
             width: "1/2"
-          },
-        }
+          }
+        };
       }
 
       return fields;
@@ -209,10 +208,12 @@ export default {
       return this.$store.state.retour.options.headers;
     },
     isValid() {
-      return this.current.hasOwnProperty("from") &&
-             this.current.from != "" &&
-             this.current.hasOwnProperty("status") &&
-             this.current.status != "";
+      return (
+        this.current.hasOwnProperty("from") &&
+        this.current.from != "" &&
+        this.current.hasOwnProperty("status") &&
+        this.current.status != ""
+      );
     },
     redirects() {
       return date(this.$store.state.retour.data.redirects);
@@ -300,24 +301,24 @@ export default {
       }
 
       this.update(updated).then(() => {
-
         // Mark potential fails as resolved
         if (this.mode === "new") {
-          this.$api.post("retour/resolve", {
-            path: this.current.from
-          }).then(() => {
-            this.$store.dispatch("retour/fails");
-            this.$store.dispatch("retour/stats");
-          });
+          this.$api
+            .post("retour/resolve", {
+              path: this.current.from
+            })
+            .then(() => {
+              this.$store.dispatch("retour/fails");
+              this.$store.dispatch("retour/stats");
+            });
         }
 
         this.onCancel();
       });
     },
-    status: (v) => status(v),
+    status: v => status(v),
     update(input) {
       return this.$api.patch("retour/redirects", input).then(() => {
-
         if (this.afterSubmit) {
           this.afterSubmit();
           this.afterSubmit = null;
@@ -327,7 +328,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -335,19 +336,19 @@ export default {
   display: flex;
 
   code {
-    background: rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, 0.1);
     color: #16171a;
     border-radius: 3px;
     box-decoration-break: clone;
     font-family: var(--font-family-mono);
     font-size: var(--font-size-tiny);
-    padding: .05em .5em;
-    margin-left: .5em;
+    padding: 0.05em 0.5em;
+    margin-left: 0.5em;
   }
 }
 
 .rt-form {
-  padding: .5rem .75rem;
+  padding: 0.5rem 0.75rem;
   background: #ddd;
   box-shadow: rgba(#16171a, 0.1) 0 0 0 3px;
 
