@@ -1,6 +1,5 @@
 <template>
   <k-view class="rt-settings">
-
     <ul class="k-system-info-box">
       <li>
         <dl>
@@ -28,9 +27,7 @@
               link="https://paypal.me/distantnative"
               target="_blank"
               theme="positive"
-            >
-              {{ $t('retour.settings.supporetour.donate') }} 💛
-            </k-button>
+            >{{ $t('retour.settings.support.donate') }} 💛</k-button>
           </dd>
         </dl>
       </li>
@@ -38,7 +35,9 @@
 
     <footer class="k-field-footer">
       <div data-theme="help" class="k-text k-field-help">
-        <span v-html="$t('retour.settings.docs', { docs: 'https://github.com/distantnative/retour-for-kirby' })" />
+        <span
+          v-html="$t('retour.settings.docs', { docs: 'https://github.com/distantnative/retour-for-kirby' })"
+        />
       </div>
       <k-button-group>
         <k-button
@@ -46,9 +45,7 @@
           icon="trash"
           theme="negative"
           @click="$refs.dialog.open()"
-        >
-          {{ $t('retour.settings.log.clear') }}
-        </k-button>
+        >{{ $t('retour.settings.log.clear') }}</k-button>
       </k-button-group>
     </footer>
 
@@ -59,28 +56,25 @@
       icon="trash"
       @submit="flush"
     >
-      <k-text>
-        {{ $t('retour.settings.log.clear.confirm') }}
-      </k-text>
+      <k-text>{{ $t('retour.settings.log.clear.confirm') }}</k-text>
     </k-dialog>
   </k-view>
 </template>
 
 <script>
-import {permissions} from "../helpers.js";
+import { permissions } from "../helpers.js";
 
 export default {
   mixins: [permissions],
   computed: {
     data() {
-       return this.$store.state.retour.data;
+      return this.$store.state.retour.data;
     },
     failed() {
-      return this.data.fails.reduce((i, x) => i += parseInt(x.hits), 0);
-
+      return this.data.fails.reduce((i, x) => (i += parseInt(x.hits)), 0);
     },
     redirected() {
-      return this.data.redirects.reduce((i, x) => i += parseInt(x.hits), 0);
+      return this.data.redirects.reduce((i, x) => (i += parseInt(x.hits)), 0);
     },
     routes() {
       return this.data.redirects.length;
@@ -94,7 +88,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -104,8 +98,8 @@ export default {
     justify-content: space-between;
 
     .k-button-group {
-      margin-top: -.25rem;
-      transform: scale(.9);
+      margin-top: -0.25rem;
+      transform: scale(0.9);
       transform-origin: top right;
     }
   }

@@ -36,24 +36,35 @@ export default {
     Pie,
     Timeline
   }
-}
+};
 </script>
 
 <style lang="scss">
 .rt-stats {
   background: #2d2f36;
-  color: rgba(#fff, .75);
+  color: rgba(#fff, 0.75);
 
   .k-view {
     margin-bottom: 1rem;
     padding-top: 1.5rem !important;
     padding-bottom: 2.5rem !important;
   }
+
+  @media screen and (max-width: 40em) {
+    .k-field-header {
+      display: block;
+    }
+
+    .k-button-group {
+      position: relative;
+      top: -0.25rem;
+    }
+  }
 }
 
 .rt-stats-box {
   background: #3a3c45;
-  padding: .75rem;
+  padding: 0.75rem;
 }
 
 .rt-lb-failed .k-icon,
@@ -61,15 +72,15 @@ export default {
 .ct-series-c .ct-slice-pie {
   color: var(--color-negative);
   fill: var(--color-negative);
-  fill-opacity: .85;
+  fill-opacity: 0.85;
 }
 
 .rt-lb-redirected .k-icon,
 .ct-series-a .ct-slice-pie,
 .rt-timeline .ct-series-e .ct-area {
   color: var(--color-focus);
-  fill:var(--color-focus);
-  fill-opacity: .85;
+  fill: var(--color-focus);
+  fill-opacity: 0.85;
 }
 
 .ct-series-b .ct-slice-pie,
@@ -77,7 +88,6 @@ export default {
 .rt-timeline .ct-series-c .ct-area {
   color: var(--color-border);
   fill: var(--color-border);
-  fill-opacity: .85;
+  fill-opacity: 0.85;
 }
 </style>
-

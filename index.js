@@ -15727,11 +15727,6 @@ var _helpers = require("../helpers.js");
 //
 //
 //
-//
-//
-//
-//
-//
 var _default = {
   mixins: [_helpers.permissions],
   computed: {
@@ -15832,9 +15827,7 @@ exports.default = _default;
                   },
                   [
                     _vm._v(
-                      "\n            " +
-                        _vm._s(_vm.$t("retour.settings.supporetour.donate")) +
-                        " 💛\n          "
+                      _vm._s(_vm.$t("retour.settings.support.donate")) + " 💛"
                     )
                   ]
                 )
@@ -15885,13 +15878,7 @@ exports.default = _default;
                     }
                   }
                 },
-                [
-                  _vm._v(
-                    "\n        " +
-                      _vm._s(_vm.$t("retour.settings.log.clear")) +
-                      "\n      "
-                  )
-                ]
+                [_vm._v(_vm._s(_vm.$t("retour.settings.log.clear")))]
               )
             ],
             1
@@ -15913,11 +15900,7 @@ exports.default = _default;
         },
         [
           _c("k-text", [
-            _vm._v(
-              "\n      " +
-                _vm._s(_vm.$t("retour.settings.log.clear.confirm")) +
-                "\n    "
-            )
+            _vm._v(_vm._s(_vm.$t("retour.settings.log.clear.confirm")))
           ])
         ],
         1
@@ -16601,7 +16584,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53613" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49698" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

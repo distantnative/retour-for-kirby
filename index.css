@@ -108,6 +108,15 @@
   padding-top: 1.5rem !important;
   padding-bottom: 2.5rem !important;
 }
+@media screen and (max-width: 40em) {
+  .rt-stats .k-field-header {
+    display: block;
+  }
+  .rt-stats .k-button-group {
+    position: relative;
+    top: -0.25rem;
+  }
+}
 
 .rt-stats-box {
   background: #3a3c45;
