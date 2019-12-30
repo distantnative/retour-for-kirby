@@ -8,36 +8,19 @@ import Chartist from "chartist";
 export default {
   computed: {
     data() {
-      return this.$store.state.retour.data.stats.sort(
-        (a, b) => parseInt(a.time) - parseInt(b.time)
-      );
+      return this.$store.state.retour.data.stats;
     },
     labels() {
       return this.data.map(x => x.label);
     },
     totals() {
-      return this.data.map(x => {
-        return {
-          x: new Date(parseInt(x.time) * 100),
-          y: parseInt(x.total)
-        };
-      });
+      return this.data.map(x => x.total);
     },
     resolved() {
-      return this.data.map(x => {
-        return {
-          x: new Date(parseInt(x.time) * 100),
-          y: parseInt(x.resolved) + parseInt(x.redirected)
-        };
-      });
+      return this.data.map(x => x.resolved + x.redirected);
     },
     redirected() {
-      return this.data.map(x => {
-        return {
-          x: new Date(parseInt(x.time) * 100),
-          y: parseInt(x.redirected)
-        };
-      });
+      return this.data.map(x => x.redirected);
     }
   },
   watch: {

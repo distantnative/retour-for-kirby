@@ -9,9 +9,6 @@ use Kirby\Toolkit\F;
 class Log
 {
 
-    /**
-     * Connect to database on initialization
-     */
     public function __construct()
     {
         $this->setup();
@@ -29,7 +26,6 @@ class Log
     {
         return Db::insert('records', [
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
-            'timezone' => date('Z'),
             'path'     => $props['path'],
             'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
             'redirect' => $props['redirect'] ?? null
@@ -75,13 +71,18 @@ class Log
     /**
      * Get all failed records
      *
-     * @param string $start
-     * @param string $end
+     * @param string $start  date sting (yyyy-mm-dd)
+     * @param string $end    date sting (yyyy-mm-dd)
      *
      * @return array
      */
     public function forFails(string $start, string $end): array
     {
+        // Add time to dates to capture full days
+        $start .= ' 00:00:00';
+        $end   .= ' 23:59:59';
+
+        // Run query
         $fails = Db::query('
             SELECT
                 id,
@@ -107,14 +108,19 @@ class Log
     /**
      * Get all records for a redirect
      *
-     * @param array $redirect
-     * @param string $start
-     * @param string $end
+     * @param array $redirect  redirect array
+     * @param string $start    date sting (yyyy-mm-dd)
+     * @param string $end      date sting (yyyy-mm-dd)
      *
      * @return array
      */
     public function forRedirect(array $redirect, string $start, string $end): array
     {
+        // Add time to dates to capture full days
+        $start .= ' 00:00:00';
+        $end   .= ' 23:59:59';
+
+        // Run query
         $data = Db::query('
             SELECT
                 COUNT(*) AS hits,
@@ -127,18 +133,19 @@ class Log
                 strftime("%s", date) < strftime("%s", "' . $end . '")
         ')->first();
 
+        // Add stats data to original redirect data
         return array_merge($redirect, [
-            'hits' => $data->hits(),
-            'last' => $data->last()
+            'hits' => (int)    $data->hits(),
+            'last' => (string) $data->last()
         ]);
     }
 
     /**
      * Return aggregated data as timeline
      *
-     * @param string $start
-     * @param string $end
-     * @param string $label
+     * @param string $start  date sting (yyyy-mm-dd hh:mm:ss)
+     * @param string $end    date sting (yyyy-mm-dd hh:mm:ss)
+     * @param string $label  strftime string (e.g. %m)
      *
      * @return array
      */
@@ -147,20 +154,36 @@ class Log
         $stats = Db::query('
             SELECT
                 strftime("' . $label . '", date) AS label,
-                strftime("%s", MIN(date)) - timezone AS time,
+                strftime("%s", MIN(date)) AS time,
                 COUNT(path) AS total,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(redirect) AS redirected
             FROM
                 records
             WHERE
-                strftime("%s", date) > strftime("%s", "' . $start . ' 00:00:00") AND
-                strftime("%s", date) < strftime("%s", "' . $end . ' 23:59:59")
+                strftime("%s", date) > strftime("%s", "' . $start . '") AND
+                strftime("%s", date) < strftime("%s", "' . $end . '")
             GROUP BY
-                label;
+                label
+            ORDER BY
+                time;
         ');
 
-        return $stats ? $stats->toArray() : [];
+        // Return empty array if query failed
+        if ($stats === false) {
+            return [];
+        }
+
+        // Ensure proper types for data values
+        return $stats->toArray(function ($entry) {
+            return [
+                'label'      => (string) $entry->label(),
+                'time'       => (int)    $entry->time(),
+                'total'      => (int)    $entry->total(),
+                'resolved'   => (int)    $entry->resolved(),
+                'redirected' => (int)    $entry->redirected(),
+            ];
+        });
     }
 
     /**
@@ -170,9 +193,11 @@ class Log
      */
     public function limit(): bool
     {
+        // Get limit (in months) from option
         $limit = option('distantnative.retour.deleteAfter');
 
         if ($limit !== false) {
+            // Get cutoff date by subtracting limit from today
             $time   = strtotime('-' . $limit . ' month');
             $cutoff = date('Y-m-d 00:00:00', $time);
 
