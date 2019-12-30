@@ -9580,11 +9580,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
 var _default = {
   components: {
     Calendar: _Calendar.default
@@ -9617,19 +9612,19 @@ var _default = {
       }
 
       if (!to) {
-        return from.format("ll") + " –";
+        return from.format("D ") + this.month(from) + from.format(" YYYY") + " –";
       }
 
       if (!from) {
-        return "– " + to.format("ll");
+        return "– " + to.format("D ") + this.month(to) + to.format(" YYYY");
       }
 
       if (from.isSame(to, "date") && from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("LL");
+        return from.format("D ") + this.month(from) + from.format(" YYYY");
       }
 
       if (from.isSame(to, "month") && from.isSame(to, "year") && from.date() === 1 && to.date() === to.daysInMonth()) {
-        return from.format("MMMM YYYY");
+        return this.month(from) + from.format(" YYYY");
       }
 
       if (from.isSame(to, "year") && from.date() === 1 && from.month() === 0 && to.date() === 31 && to.month() === 11) {
@@ -9637,15 +9632,14 @@ var _default = {
       }
 
       if (from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("D") + " - " + to.format("ll");
-      } // if (
-      //   from.isSame(to, "year")
-      // ) {
-      //   return from.format("D MMM") + " - " + to.format("D MMM YYYY");
-      // }
+        return from.format("D") + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
+      }
 
+      if (from.isSame(to, "year")) {
+        return from.format("D ") + this.month(from) + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
+      }
 
-      return from.format("ll") + " - " + to.format("ll");
+      return from.format("D ") + this.month(from) + from.format(" YYYY") + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
     },
     month: function month(date) {
       var month = date.format("MMMM");
@@ -15978,19 +15972,6 @@ var _default = {
     Tables: _Tables.default,
     Settings: _Settings.default
   },
-  created: function created() {
-    var _this = this;
-
-    var locale = this.$store.state.translation.current;
-    this.loadScript("https://unpkg.com/dayjs/locale/" + locale, "dayjs-" + locale, function () {
-      window.dayjs = _this.$library.dayjs;
-    }, function () {
-      _this.$library.dayjs.locale(locale);
-    });
-    this.loadScript("https://unpkg.com/dayjs/plugin/localizedFormat", "dayjs-localizedFormat", function () {}, function () {
-      _this.$library.dayjs.extend(dayjs_plugin_localizedFormat);
-    });
-  },
   mounted: function mounted() {
     if (this.canAccess === false) {
       this.$router.push("/");
@@ -16002,23 +15983,6 @@ var _default = {
   computed: {
     hasLogs: function hasLogs() {
       return this.$store.state.retour.options.logs;
-    }
-  },
-  methods: {
-    loadScript: function loadScript(url, id, before, after) {
-      before();
-      var js,
-          fjs = document.getElementsByTagName("script")[0];
-
-      if (document.getElementById(id)) {
-        return;
-      }
-
-      js = document.createElement("script");
-      js.id = id;
-      js.onload = after;
-      js.src = url;
-      fjs.parentNode.insertBefore(js, fjs);
     }
   }
 };

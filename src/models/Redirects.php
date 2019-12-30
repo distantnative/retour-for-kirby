@@ -70,7 +70,7 @@ class Redirects
             return [
                 'pattern' => $redirect['from'],
                 'action'  => function (...$parameters) use ($redirect, $log) {
-                    $code = (int)$redirect['status'];
+                    $code = (int) $redirect['status'];
                     $to   = $redirect['to'];
 
                     // Create log record

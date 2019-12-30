@@ -4,12 +4,7 @@
       <k-icon type="calendar" /> {{ display(from, to) }}
     </div>
 
-    <calendar
-      ref="calendar"
-      :from="from"
-      :to="to"
-      @select="select"
-    />
+    <calendar ref="calendar" :from="from" :to="to" @select="select" />
   </div>
 
   <div v-else @click="open" class="rt-calendar-label">
@@ -29,7 +24,7 @@ export default {
       from: null,
       to: null,
       show: false
-    }
+    };
   },
   computed: {
     active() {
@@ -49,17 +44,19 @@ export default {
         }
       }
     },
-    display(from, to) {
+    display(from, to) {
       if (!from && !to) {
         return "...";
       }
 
       if (!to) {
-        return from.format("ll") + " –";
+        return (
+          from.format("D ") + this.month(from) + from.format(" YYYY") + " –"
+        );
       }
 
       if (!from) {
-        return "– " + to.format("ll");
+        return "– " + to.format("D ") + this.month(to) + to.format(" YYYY");
       }
 
       if (
@@ -67,7 +64,7 @@ export default {
         from.isSame(to, "month") &&
         from.isSame(to, "year")
       ) {
-        return from.format("LL");
+        return from.format("D ") + this.month(from) + from.format(" YYYY");
       }
 
       if (
@@ -76,7 +73,7 @@ export default {
         from.date() === 1 &&
         to.date() === to.daysInMonth()
       ) {
-        return from.format("MMMM YYYY");
+        return this.month(from) + from.format(" YYYY");
       }
 
       if (
@@ -89,47 +86,63 @@ export default {
         return from.format("YYYY");
       }
 
-      if (
-        from.isSame(to, "month") &&
-        from.isSame(to, "year")
-      ) {
-        return from.format("D") + " - " + to.format("ll");
+      if (from.isSame(to, "month") && from.isSame(to, "year")) {
+        return (
+          from.format("D") +
+          " - " +
+          to.format("D ") +
+          this.month(to) +
+          to.format(" YYYY")
+        );
       }
 
-      // if (
-      //   from.isSame(to, "year")
-      // ) {
-      //   return from.format("D MMM") + " - " + to.format("D MMM YYYY");
-      // }
+      if (from.isSame(to, "year")) {
+        return (
+          from.format("D ") +
+          this.month(from) +
+          " - " +
+          to.format("D ") +
+          this.month(to) +
+          to.format(" YYYY")
+        );
+      }
 
-      return from.format("ll") + " - " + to.format("ll");
+      return (
+        from.format("D ") +
+        this.month(from) +
+        from.format(" YYYY") +
+        " - " +
+        to.format("D ") +
+        this.month(to) +
+        to.format(" YYYY")
+      );
     },
     month(date) {
       let month = date.format("MMMM");
       month = this.$helper.string.lcfirst(month);
-      return this.$t("months." + month)
+      return this.$t("months." + month);
     },
     open() {
       this.from = this.$store.state.retour.view.from;
-      this.to   = this.$store.state.retour.view.to;
+      this.to = this.$store.state.retour.view.to;
       this.show = true;
     },
     close() {
       if (this.from && this.to) {
         this.$store.dispatch("retour/timeframe", {
           from: this.from,
-          to: this. to
+          to: this.to
         });
         this.show = false;
       }
     },
     select(dates) {
       this.from = dates.from;
-      this.to   = dates.to;
+      this.to = dates.to;
       this.close();
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -147,8 +160,8 @@ export default {
   cursor: pointer;
 
   > .k-icon {
-    margin-right: .75rem;
-    opacity: .2;
+    margin-right: 0.75rem;
+    opacity: 0.2;
   }
 }
 </style>
