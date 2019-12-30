@@ -7,7 +7,6 @@ use Kirby\Toolkit\F;
 
 class Version
 {
-
     public static $migrations = [];
 
     /**
@@ -15,7 +14,7 @@ class Version
      *
      * @return string
      */
-    static protected function file(): string
+    protected static function file(): string
     {
         return dirname(Retour::root('redirects')) . '/.retour';
     }
@@ -25,7 +24,7 @@ class Version
      *
      * @return string
      */
-    static protected function ofCode(): string
+    protected static function ofCode(): string
     {
         $plugin  = Data::read(Retour::root() . '/composer.json');
         return $plugin['version'];
@@ -36,7 +35,7 @@ class Version
      *
      * @return string
      */
-    static protected function ofData(): string
+    protected static function ofData(): string
     {
         $file = static::file();
 
@@ -64,7 +63,7 @@ class Version
 
         // Run update code for each previous version
         $migrations = usort(static::$migrations, 'version_compare');
-        foreach($migrations as $migration => $callback) {
+        foreach ($migrations as $migration => $callback) {
             if (version_compare($data, $migration, "<=")) {
                 call_user_func($callback);
             }
@@ -75,6 +74,5 @@ class Version
     }
 }
 
-Version::$migrations['3.3.0'] = function() {
-
+Version::$migrations['3.3.0'] = function () {
 };

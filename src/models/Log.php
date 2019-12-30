@@ -8,7 +8,6 @@ use Kirby\Toolkit\F;
 
 class Log
 {
-
     public function __construct()
     {
         $this->setup();
