@@ -29,9 +29,9 @@
 .cache
 
 # Plugin files
-.updated
-/.samples
+.samples
 
 # Tests
+.php_cs.cache
 .phpunit.result.cache
-/tests
+tests

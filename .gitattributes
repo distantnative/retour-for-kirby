@@ -13,8 +13,6 @@ composer.lock export-ignore
 # Directories
 src/assets/ export-ignore
 src/components/ export-ignore
-src/helpers/ export-ignore
-src/mixins/ export-ignore
 src/index.js export-ignore
 src/store.js export-ignore
 tests/ export-ignore
