@@ -152,12 +152,12 @@ class Log
         //
         $stats = $this->db->records()
             ->select('
-                strftime("' . $label . '", date) AS label,
+                strftime(:label, date) AS label,
                 strftime("%s", MIN(date)) AS time,
                 COUNT(path) AS total,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(redirect) AS redirected
-            ')
+            ', ['label' => $label])
             ->where('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
             ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
             ->group('label')
