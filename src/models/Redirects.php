@@ -51,11 +51,9 @@ class Redirects
     /**
      * Get routes config for all redirects
      *
-     * @param \distantnative\Retour\Log|bool $log
-     *
      * @return array
      */
-    public static function routes($log): array
+    public static function routes(): array
     {
         // Get all redirects
         $data = static::read();
@@ -66,20 +64,19 @@ class Redirects
         });
 
         // create route array for each redirect
-        $data = array_map(function ($redirect) use ($log) {
+        $data = array_map(function ($redirect) {
             return [
                 'pattern' => $redirect['from'],
-                'action'  => function (...$parameters) use ($redirect, $log) {
+                'action'  => function (...$parameters) use ($redirect) {
                     $code = (int) $redirect['status'];
                     $to   = $redirect['to'];
 
                     // Create log record
-                    if ($log !== false) {
-                        $log->add([
+                    if (option('distantnative.retour.logs') === true) {
+                        (new Log)->add([
                             'path' => Url::path(),
                             'redirect' => $redirect['from']
                         ]);
-                        $log->close();
                     }
 
                     // Set the right response code

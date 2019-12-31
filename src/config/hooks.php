@@ -13,19 +13,14 @@ return [
                 return $result;
             }
 
-            // If logging enable, initialize model
-            if (option('distantnative.retour.logs') === true) {
-                $log = new Log;
-            }
-
             try {
-                $routes = Redirects::routes($log ?? false);
+                $routes = Redirects::routes();
                 $router = new Router($routes);
                 return $router->call($path, $method);
             } catch (\Throwable $e) {
+                // If logging enable, initialize model and add record
                 if (option('distantnative.retour.logs') === true) {
-                    $log->add(['path' => $path]);
-                    $log->close();
+                    (new Log)->add(['path' => $path]);
                 }
             }
         }

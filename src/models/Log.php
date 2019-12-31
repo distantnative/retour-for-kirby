@@ -2,16 +2,30 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Database\Db;
+use Kirby\Database\Database;
 use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
 
 class Log
 {
+
+    /**
+     * Database connection
+     *
+     * @var \Kirby\Database\Database;
+     */
+    protected $db;
+
     public function __construct()
     {
+        // Make sure database is in place
         $this->setup();
-        $this->connect();
+
+        // Connect to database
+        $this->db = new Database([
+            'type'     => 'sqlite',
+            'database' => Retour::root('logs')
+        ]);
     }
 
     /**
@@ -23,7 +37,7 @@ class Log
      */
     public function add(array $props): bool
     {
-        return Db::insert('records', [
+        return $this->db->records()->insert([
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
             'path'     => $props['path'],
             'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
@@ -38,20 +52,6 @@ class Log
      */
     public function close(): void
     {
-        Db::$connection = null;
-    }
-
-    /**
-     * Connects database
-     *
-     * @return void
-     */
-    protected function connect(): void
-    {
-        Db::connect([
-            'type'     => 'sqlite',
-            'database' => Retour::root('logs')
-        ]);
     }
 
     /**
@@ -61,10 +61,9 @@ class Log
      */
     public function flush(): bool
     {
-        return Db::execute('
-            DELETE FROM records;
-            DELETE FROM sqlite_sequence WHERE name="records";
-        ');
+        $table = $this->db->records()->delete();
+        $index = $this->db->sqlite_sequence()->delete(['name' => 'records']);
+        return $table && $index;
     }
 
     /**
@@ -82,26 +81,27 @@ class Log
         $end   .= ' 23:59:59';
 
         // Run query
-        $fails = Db::query('
-            SELECT
+        $fails = $this->db->records()
+            ->select('
                 id,
                 path,
                 referrer,
                 MAX(date) AS last,
                 COUNT(date) AS hits
-            FROM
-                records
-            WHERE
-                redirect IS NULL AND
-                wasResolved IS NULL AND
-                strftime("%s", date) > strftime("%s", "' . $start . '") AND
-                strftime("%s", date) < strftime("%s", "' . $end . '")
-            GROUP BY
-                path,
-                referrer;
-        ');
+            ')
+            ->where('redirect IS NULL')
+            ->andWhere('wasResolved IS NULL')
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
+            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
+            ->group('path, referrer')
+            ->fetch('array')
+            ->all();
 
-        return $fails ? $fails->toArray() : [];
+        if ($fails === false) {
+            return [];
+        }
+
+        return $fails->toArray();
     }
 
     /**
@@ -120,23 +120,22 @@ class Log
         $end   .= ' 23:59:59';
 
         // Run query
-        $data = Db::query('
-            SELECT
+        $data = $this->db->records()
+            ->select('
                 COUNT(*) AS hits,
                 MAX(date) AS last
-            FROM
-                records
-            WHERE
-                redirect="' . $redirect['from'] . '" AND
-                strftime("%s", date) > strftime("%s", "' . $start . '") AND
-                strftime("%s", date) < strftime("%s", "' . $end . '")
-        ')->first();
+            ')
+            ->where(['redirect' => $redirect['from']])
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
+            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
+            ->fetch('array')->first();
+
+        if ($data === false) {
+            return $redirect;
+        }
 
         // Add stats data to original redirect data
-        return array_merge($redirect, [
-            'hits' => (int)    $data->hits(),
-            'last' => (string) $data->last()
-        ]);
+        return array_merge($redirect, $data);
     }
 
     /**
@@ -150,25 +149,22 @@ class Log
      */
     public function forStats(string $start, string $end, string $label): array
     {
-        $stats = Db::query('
-            SELECT
+        //
+        $stats = $this->db->records()
+            ->select('
                 strftime("' . $label . '", date) AS label,
                 strftime("%s", MIN(date)) AS time,
                 COUNT(path) AS total,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(redirect) AS redirected
-            FROM
-                records
-            WHERE
-                strftime("%s", date) > strftime("%s", "' . $start . '") AND
-                strftime("%s", date) < strftime("%s", "' . $end . '")
-            GROUP BY
-                label
-            ORDER BY
-                time;
-        ');
+            ')
+            ->where('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
+            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
+            ->group('label')
+            ->order('time')
+            ->fetch('array')
+            ->all();
 
-        // Return empty array if query failed
         if ($stats === false) {
             return [];
         }
@@ -176,11 +172,11 @@ class Log
         // Ensure proper types for data values
         return $stats->toArray(function ($entry) {
             return [
-                'label'      => (string) $entry->label(),
-                'time'       => (int)    $entry->time(),
-                'total'      => (int)    $entry->total(),
-                'resolved'   => (int)    $entry->resolved(),
-                'redirected' => (int)    $entry->redirected(),
+                'label'      => (string) $entry['label'],
+                'time'       => (int)    $entry['time'],
+                'total'      => (int)    $entry['total'],
+                'resolved'   => (int)    $entry['resolved'],
+                'redirected' => (int)    $entry['redirected'],
             ];
         });
     }
@@ -200,12 +196,7 @@ class Log
             $time   = strtotime('-' . $limit . ' month');
             $cutoff = date('Y-m-d 00:00:00', $time);
 
-            return Db::query('
-                DELETE FROM
-                    records
-                WHERE
-                    strftime("%s", date) < strftime("%s", "' . $cutoff . '");
-            ');
+            return $this->db->records()->delete('strftime("%s", date) < strftime("%s", :cutoff)', ['cutoff' => $cutoff]);
         }
 
         return true;
@@ -220,7 +211,7 @@ class Log
      */
     public function resolve(string $path): bool
     {
-        return Db::update(
+        return $this->db->update(
             'records',
             ['wasResolved' => 1],
             ['path' => $path]
