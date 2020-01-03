@@ -4,7 +4,7 @@ namespace distantnative\Retour;
 
 use Kirby\Cms\App;
 
-include __DIR__ . '/vendor/autoload.php';
+@include_once __DIR__ . '/vendor/autoload.php';
 
 App::plugin('distantnative/retour', [
     'options'      => require 'src/config/options.php',
