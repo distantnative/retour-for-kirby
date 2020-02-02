@@ -310,6 +310,9 @@ export default {
             .then(() => {
               this.$store.dispatch("retour/fails");
               this.$store.dispatch("retour/stats");
+            })
+            .catch(error => {
+              this.$store.dispatch("notification/error", error);
             });
         }
 
@@ -318,14 +321,18 @@ export default {
     },
     status: v => status(v),
     update(input) {
-      return this.$api.patch("retour/redirects", input).then(() => {
-        if (this.afterSubmit) {
-          this.afterSubmit();
-          this.afterSubmit = null;
-        }
+      return this.$api
+        .patch("retour/redirects", input).then(() => {
+          if (this.afterSubmit) {
+            this.afterSubmit();
+            this.afterSubmit = null;
+          }
 
-        this.$store.dispatch("retour/redirects");
-      });
+          this.$store.dispatch("retour/redirects");
+        })
+        .catch(error => {
+          this.$store.dispatch("notification/error", error);
+        });
     }
   }
 };
