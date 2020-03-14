@@ -10,7 +10,7 @@ return [
             'pattern' => 'retour/redirects',
             'method'  => 'GET',
             'action'  => function () {
-                return Redirects::list(
+                return Retour::instance()->redirects()->get(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
@@ -20,14 +20,16 @@ return [
             'pattern' => 'retour/redirects',
             'method'  => 'PATCH',
             'action'  => function () {
-                return Redirects::write($this->requestBody());
+                return Retour::instance()
+                        ->redirects()
+                        ->update($this->requestBody());
             }
         ],
         [
             'pattern' => 'retour/fails',
             'method'  => 'GET',
             'action'  => function () {
-                return (new Log)->forFails(
+                return Retour::instance()->logs()->fails(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
@@ -37,7 +39,7 @@ return [
             'pattern' => 'retour/stats',
             'method'  => 'GET',
             'action'  => function () {
-                return Stats::get(
+                return Retour::instance()->logs()->stats(
                     $this->requestQuery('view'),
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
@@ -52,24 +54,28 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/resolve',
+            'pattern' => 'retour/logs/resolve',
             'method'  => 'POST',
             'action'  => function () {
-                return (new Log)->resolve($this->requestBody('path'));
+                return Retour::instance()
+                        ->logs()
+                        ->resolve($this->requestBody('path'));
             }
         ],
         [
-            'pattern' => 'retour/flush',
+            'pattern' => 'retour/logs/flush',
             'method'  => 'POST',
             'action'  => function () {
-                return (new Log)->flush();
+                $retour = new Retour;
+                return Retour::instance()->logs()->flush();
             }
         ],
         [
-            'pattern' => 'retour/limit',
+            'pattern' => 'retour/logs/purge',
             'method'  => 'POST',
             'action'  => function () {
-                return (new Log)->limit();
+                $retour = new Retour;
+                return Retour::instance()->logs()->purge();
             }
         ],
         [

@@ -116,7 +116,7 @@ export default {
         if (context.state.options.logs === true) {
           context.dispatch("fails");
           context.dispatch("stats");
-          this._vm.$api.post("retour/limit");
+          this._vm.$api.post("retour/logs/purge");
         }
       });
     },
