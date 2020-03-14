@@ -45,7 +45,7 @@ class Redirects
      */
     public function get(string $from, string $to): array
     {
-        $redirects = static::load();
+        $redirects = $this->load();
 
         // If logging is disabled, return without data for redirects
         if (option('distantnative.retour.logs') !== true) {
@@ -62,9 +62,9 @@ class Redirects
      *
      * @return array
      */
-    public static function toRoutes(): array
+    public function toRoutes(): array
     {
-        $data = static::load();
+        $data = $this->load();
 
         // Filter: no routes for disabled redirects
         $data = array_filter($data, function ($redirect) {
@@ -72,7 +72,7 @@ class Redirects
         });
 
         // create route array for each redirect
-        $logs = $this->retour->logs();
+        $logs = Retour::instance()->logs();
         $data = array_map(function ($redirect) use ($logs) {
             return [
                 'pattern' => $redirect['from'],
