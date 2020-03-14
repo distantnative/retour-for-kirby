@@ -10,19 +10,13 @@ use Kirby\Http\Url;
 class Redirects
 {
 
-    /**
-     * Get all redirects from file
-     *
-     * @return array
-     */
-    public static function read(): array
+    protected $retour = null;
+    protected $redirects = null;
+
+    public function __construct(Retour $retour)
     {
-        try {
-            $file = Retour::root('redirects');
-            return Data::read($file, 'yaml');
-        } catch (\Throwable $e) {
-            return [];
-        }
+        $this->retour = $retour;
+        $this->redirects = $retour->config()['redirects'] ?? [];
     }
 
     /**
@@ -33,19 +27,17 @@ class Redirects
      *
      * @return array
      */
-    public static function list(string $from, string $to): array
+    public function get(string $from, string $to): array
     {
-        $redirects = static::read();
-
-        // If logging is enabled, add log data for redirects
-        if (option('distantnative.retour.logs') === true) {
-            $log = new Log;
-            $redirects = array_map(function ($redirect) use ($log, $from, $to) {
-                return $log->forRedirect($redirect, $from, $to);
-            }, $redirects);
+        // If logging is disabled, return without data for redirects
+        if (option('distantnative.retour.logs') !== true) {
+           return $this->redirects;
         }
 
-        return $redirects;
+        $logs = $this->retour->logs();
+        return array_map(function ($redirect) use ($logs, $from, $to) {
+            return $logs->redirect($redirect, $from, $to);
+        }, $this->redirects);
     }
 
     /**
@@ -53,10 +45,9 @@ class Redirects
      *
      * @return array
      */
-    public static function routes(): array
+    public static function toRoutes(): array
     {
-        // Get all redirects
-        $data = static::read();
+        $data = $this->redirects;
 
         // Filter: no routes for disabled redirects
         $data = array_filter($data, function ($redirect) {
@@ -64,16 +55,17 @@ class Redirects
         });
 
         // create route array for each redirect
-        $data = array_map(function ($redirect) {
+        $logs = $this->retour->logs();
+        $data = array_map(function ($redirect) use ($logs) {
             return [
                 'pattern' => $redirect['from'],
-                'action'  => function (...$parameters) use ($redirect) {
+                'action'  => function (...$parameters) use ($redirect, $logs) {
                     $code = (int) $redirect['status'];
                     $to   = $redirect['to'];
 
                     // Create log record
                     if (option('distantnative.retour.logs') === true) {
-                        (new Log)->add([
+                        $logs->create([
                             'path' => Url::path(),
                             'redirect' => $redirect['from']
                         ]);
@@ -116,12 +108,11 @@ class Redirects
      * Update redirects in file
      *
      * @param array $data
-     *
-     * @return bool
      */
-    public static function write(array $data = []): bool
+    public static function update(array $data = [])
     {
-        $file = Retour::root('redirects');
-        return Data::write($file, $data, 'yaml');
+        $config = $this->retour->config();
+        $config['redirects'] = $data;
+        $this->retour->config($config);
     }
 }

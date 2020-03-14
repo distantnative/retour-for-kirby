@@ -9,23 +9,24 @@ return [
         if (empty($result) === true) {
 
             // skip ignored paths
-            if (in_array($path, option('distantnative.retour.ignore')) === true) {
+            $ignore = option('distantnative.retour.ignore');
+            if (in_array($path, $ignore) === true) {
                 return $result;
             }
 
+            $retour = Retour::instance();
+
             try {
-                $routes = Redirects::routes();
+                $routes = $retour->redirects()->toRoutes();
                 $router = new Router($routes);
                 return $router->call($path, $method);
+
             } catch (\Throwable $e) {
-                // If logging enable, initialize model and add record
+                // If logging enable, add record
                 if (option('distantnative.retour.logs') === true) {
-                    (new Log)->add(['path' => $path]);
+                    $retour->logs()->create(['path' => $path]);
                 }
             }
         }
-    },
-    'system.loadPlugins:after' => function () {
-        Version::update();
     }
 ];
