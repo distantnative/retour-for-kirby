@@ -10,34 +10,42 @@ class Logs
 {
 
     /**
-     * Database connection
-     *
-     * @param \Kireby\Retour\Retour $retour
      * @var \Kirby\Database\Database;
      */
     protected $db;
 
-    public function __construct(Retour $retour)
-    {
-        // Make sure database is in place
-        $file = $retour::root('logs');
-        $dir  = dirname($file);
+    /**
+     * @var string
+     */
+    protected $file;
 
-        if (F::exists($file) === false) {
+    public function __construct()
+    {
+        // Get path to database file
+        $this->file = option('distantnative.retour.database');
+
+        if (is_callable($this->file) === true) {
+            $this->file = call_user_func($this->file);
+        }
+
+        // Make sure database is in place
+        if (F::exists($this->file) === false) {
+            $dir = dirname($this->file);
+
             if (is_dir($dir) === false) {
                 Dir::make($dir);
             }
 
             F::copy(
-                $retour::root('assets') . '/retour.sqlite',
-                $file
+                dirname(__DIR__, 2) . '/assets/retour.sqlite',
+                $this->file
             );
         }
 
         // Connect to database
         $this->db = new Database([
             'type' => 'sqlite',
-            'database' => $retour::root('logs')
+            'database' => $this->file
         ]);
     }
 
