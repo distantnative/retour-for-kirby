@@ -10,13 +10,29 @@ use Kirby\Http\Url;
 class Redirects
 {
 
-    protected $retour = null;
-    protected $redirects = null;
+    protected $config;
 
-    public function __construct(Retour $retour)
+    public function __construct()
     {
-        $this->retour = $retour;
-        $this->redirects = $retour->config()['redirects'] ?? [];
+        $this->config = option('distantnative.retour.config');
+
+        if (is_callable($this->config) === true) {
+            $this->config = call_user_func($this->config);
+        }
+    }
+
+    /**
+     * Get all redirects from file
+     *
+     * @return array
+     */
+    public function load()
+    {
+        try {
+            return Data::read($this->config, 'yaml');
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**
@@ -29,15 +45,16 @@ class Redirects
      */
     public function get(string $from, string $to): array
     {
+        $redirects = static::load();
+
         // If logging is disabled, return without data for redirects
         if (option('distantnative.retour.logs') !== true) {
-           return $this->redirects;
+           return $redirects;
         }
 
-        $logs = $this->retour->logs();
-        return array_map(function ($redirect) use ($logs, $from, $to) {
-            return $logs->redirect($redirect, $from, $to);
-        }, $this->redirects);
+        return array_map(function ($redirect) use ($from, $to) {
+            return Retour::instance()->logs()->redirect($redirect, $from, $to);
+        }, $redirects);
     }
 
     /**
@@ -47,7 +64,7 @@ class Redirects
      */
     public static function toRoutes(): array
     {
-        $data = $this->redirects;
+        $data = static::load();
 
         // Filter: no routes for disabled redirects
         $data = array_filter($data, function ($redirect) {
@@ -111,8 +128,6 @@ class Redirects
      */
     public static function update(array $data = [])
     {
-        $config = $this->retour->config();
-        $config['redirects'] = $data;
-        $this->retour->config($config);
+        return Data::write($this->config, $data, 'yaml');
     }
 }

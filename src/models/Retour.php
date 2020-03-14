@@ -2,16 +2,15 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Data\Data;
 use Kirby\Http\Header;
-use Kirby\Toolkit\F;
 
 class Retour
 {
     /**
-     * @var array
+     * @var \distantnative\Retour\Retour
      */
-    protected $config = null;
+    protected static $instance = null;
+
 
     /**
      * @var \distantnative\Retour\Logs
@@ -23,12 +22,6 @@ class Retour
      */
     protected $redirects = null;
 
-    /**
-     * @var array
-     */
-    public static $migrations = [];
-
-    protected static $instance = null;
 
     public static function instance(): Retour
     {
@@ -39,43 +32,14 @@ class Retour
         return static::$instance = new Retour;
     }
 
-    /**
-     * Returns config array,
-     * which is stored int `site/config/retour.yml`
-     *
-     * @return array
-     */
-    public function config(array $data = null): array
-    {
-        $file = static::root('config');
-
-        // Write new config data
-        if ($data !== null) {
-            Data::write($file, $data, 'yaml');
-            return $this->config = $data;
-        }
-
-        // Return cached config data
-        if ($this->config !== null) {
-            return $this->config;
-        }
-
-        // Load config data and return
-        if (F::exists($file) === true) {
-            return $this->config = Data::read($file, 'yaml');
-        }
-
-        return [];
-    }
-
     public function logs(): Logs
     {
-        return $this->logs ?? $this->logs = new Logs($this);
+        return $this->logs ?? $this->logs = new Logs;
     }
 
     public function redirects(): Redirects
     {
-        return $this->redirects ?? $this->redirects = new Redirects($this);
+        return $this->redirects ?? $this->redirects = new Redirects;
     }
 
     /**
@@ -90,32 +54,5 @@ class Retour
             'logs'        => option('distantnative.retour.logs'),
             'deleteAfter' => option('distantnative.retour.deleteAfter')
         ];
-    }
-
-    /**
-     * Helper to get root paths to plugin locations
-     *
-     * @param string $type
-     *
-     * @return string|null
-     */
-    public static function root(string $type = 'root'): ?string
-    {
-        $root  = dirname(__DIR__, 2);
-        $roots = [
-            'assets'       => $root . '/assets',
-            'config'       => option('distantnative.retour.config'),
-            'logs'         => option('distantnative.retour.database'),
-        ];
-
-        // Support callable options
-        if (is_callable($roots['config'])) {
-            $roots['config'] = call_user_func($roots['config']);
-        }
-        if (is_callable($roots['logs'])) {
-            $roots['logs'] = call_user_func($roots['logs']);
-        }
-
-        return $roots[$type] ?? $root;
     }
 }
