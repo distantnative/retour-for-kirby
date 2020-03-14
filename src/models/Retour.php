@@ -108,6 +108,14 @@ class Retour
             'logs'         => option('distantnative.retour.database'),
         ];
 
+        // Support callable options
+        if (is_callable($roots['config'])) {
+            $roots['config'] = call_user_func($roots['config']);
+        }
+        if (is_callable($roots['logs'])) {
+            $roots['logs'] = call_user_func($roots['logs']);
+        }
+
         return $roots[$type] ?? $root;
     }
 }
