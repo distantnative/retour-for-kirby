@@ -83,7 +83,7 @@ export default {
   methods: {
     flush() {
       this.$api
-        .post("retour/flush").then(() => {
+        .post("retour/logs/flush").then(() => {
           this.$refs.dialog.close();
           this.$store.dispatch("retour/load");
         })

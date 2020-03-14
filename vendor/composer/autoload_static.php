@@ -33,10 +33,10 @@ class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'distantnative\\Retour\\Log' => __DIR__ . '/../..' . '/src/models/Log.php',
+        'distantnative\\Retour\\Logs' => __DIR__ . '/../..' . '/src/models/Logs.php',
         'distantnative\\Retour\\Redirects' => __DIR__ . '/../..' . '/src/models/Redirects.php',
         'distantnative\\Retour\\Retour' => __DIR__ . '/../..' . '/src/models/Retour.php',
-        'distantnative\\Retour\\Stats' => __DIR__ . '/../..' . '/src/models/Stats.php',
+        'distantnative\\Retour\\Version' => __DIR__ . '/../..' . '/src/models/Version.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
