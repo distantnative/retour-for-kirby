@@ -9,7 +9,7 @@ export function date(array) {
 }
 
 export function status(code) {
-  if (code === "disabled") {
+  if (code === "–") {
     return "no"
   }
 
@@ -34,4 +34,3 @@ export const permissions = {
     }
   }
 }
-
