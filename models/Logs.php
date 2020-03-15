@@ -199,8 +199,7 @@ class Logs
      */
     public function resolve(string $path): bool
     {
-        return $this->db->update(
-            'records',
+        return $this->db->records()->update(
             ['wasResolved' => 1],
             ['path' => $path]
         );
@@ -242,37 +241,37 @@ class Logs
         }
         // Get data from database
         $data = $this->db->query('
-        with recursive dates as (
-            select :from as date
-            union all
-            select ' . $use['func'] . '(date, "+1 ' . $use['step'] . '") from dates where date < :to
-        )
-        SELECT
-            dates.date,
-            COUNT(redirect) AS redirected,
-            COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
-            COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
-        FROM
-            dates
-        LEFT JOIN
-            records
-        ON
-            strftime(:group, dates.date) = strftime(:group, records.date)
-        WHERE
-            strftime("%s", dates.date) >= strftime("%s", :from)
-        AND
-            strftime("%s", dates.date) <= strftime("%s", :to)
-        GROUP BY
-            strftime(:group, dates.date)
-        ORDER BY
-            strftime(:group, dates.date)
-            ', [
-                'from'  => $from,
-                'to'    => $to,
-                'group' => $use['group']
-            ], [
-                'fetch' => 'array'
-            ]);
+            with recursive dates as (
+                select :from as date
+                union all
+                select ' . $use['func'] . '(date, "+1 ' . $use['step'] . '") from dates where date < :to
+            )
+            SELECT
+                dates.date,
+                COUNT(redirect) AS redirected,
+                COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
+                COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
+            FROM
+                dates
+            LEFT JOIN
+                records
+            ON
+                strftime(:group, dates.date) = strftime(:group, records.date)
+            WHERE
+                strftime("%s", dates.date) >= strftime("%s", :from)
+            AND
+                strftime("%s", dates.date) <= strftime("%s", :to)
+            GROUP BY
+                strftime(:group, dates.date)
+            ORDER BY
+                strftime(:group, dates.date)
+        ', [
+            'from'  => $from,
+            'to'    => $to,
+            'group' => $use['group']
+        ], [
+            'fetch' => 'array'
+        ]);
 
         if ($data === false) {
             return [];

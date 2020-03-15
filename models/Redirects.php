@@ -126,7 +126,7 @@ class Redirects
      *
      * @param array $data
      */
-    public static function update(array $data = [])
+    public function update(array $data = [])
     {
         return Data::write($this->config, $data, 'yaml');
     }
