@@ -97,17 +97,19 @@ export default {
         {
           label: this.$t("retour.redirects.from"),
           type: "url",
-          field: "from"
+          field: "from",
+          width: "full"
         },
         {
           label: this.$t("retour.redirects.to"),
           type: "url",
           field: "to",
+          width: "full",
           responsive: false
         },
         {
           label: this.$t("retour.redirects.status"),
-          width: "1/6",
+          width: "1/4",
           field: "status"
         }
       ];
@@ -121,7 +123,7 @@ export default {
             type: "number",
             sort: "desc",
             search: false,
-            width: "1/8"
+            width: "1/6"
           },
           {
             name: "last",
@@ -130,7 +132,7 @@ export default {
             type: "date",
             sort: "desc",
             search: false,
-            width: "1/6",
+            width: "2/5",
             responsive: false
           }
         ];
