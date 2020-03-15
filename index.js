@@ -14443,27 +14443,35 @@ var _default = {
     max: function max() {
       return this.$library.dayjs(this.data[this.data.length - 1].date);
     },
+    unit: function unit() {
+      if (this.view === "day") {
+        return "hour";
+      }
+
+      return "day";
+    },
+    diff: function diff() {
+      return this.max.diff(this.min, this.unit);
+    },
     ticks: function ticks() {
       var _this4 = this;
 
-      var unit;
-
-      if (this.view === "day") {
-        unit = 'hour';
-      } else {
-        unit = 'day';
-      }
-
-      var diff = this.max.diff(this.min, unit);
       var ticks = Array.from({
-        length: diff + 1
+        length: this.diff + 1
       }).map(function (e, index) {
-        return _this4.$library.dayjs(_this4.min).add(index, unit);
-      });
+        return _this4.$library.dayjs(_this4.min).add(index, _this4.unit);
+      }); // Only show month borders
 
-      if (diff > 31) {
+      if (this.diff > 62) {
         return ticks.filter(function (x) {
           return x.get("date") === 1;
+        });
+      } // Always show 5-6 ticks only
+
+
+      if (this.diff > 31) {
+        return ticks.filter(function (x, i) {
+          return i % parseInt(_this4.diff / 5) === 0;
         });
       }
 
@@ -14484,6 +14492,10 @@ var _default = {
 
       if (this.view === "year") {
         return "MMM";
+      }
+
+      if (this.diff > 62) {
+        return "MMM YYYY";
       }
 
       return "D MMM";
