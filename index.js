@@ -14238,6 +14238,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 var _default = {
+  data: function data() {
+    return {
+      chart: null
+    };
+  },
   computed: {
     data: function data() {
       return this.$store.state.retour.data.stats;
@@ -14264,21 +14269,25 @@ var _default = {
   watch: {
     data: {
       handler: function handler() {
-        this.createChart();
+        this.update();
       },
       deep: true
     }
   },
+  mounted: function mounted() {
+    this.chart = new _chartist.default.Pie(".rt-share", {}, {
+      height: 300,
+      startAngle: 270,
+      showLabel: false
+    });
+  },
   methods: {
-    createChart: function createChart() {
-      new _chartist.default.Pie(".rt-share", {
+    update: function update() {
+      this.chart.update({
         series: [this.redirected, this.resolved, this.failed, this.total > 0 ? 0 : 1]
       }, {
-        height: 300,
-        startAngle: 270,
-        total: (this.total > 0 ? this.total : 1) * 2,
-        showLabel: false
-      });
+        total: (this.total > 0 ? this.total : 1) * 2
+      }, true);
     }
   }
 };
