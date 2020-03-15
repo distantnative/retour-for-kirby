@@ -20,7 +20,7 @@ class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
     public static $prefixDirsPsr4 = array (
         'distantnative\\Retour\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src/models',
+            0 => __DIR__ . '/../..' . '/models',
         ),
         'Kirby\\' => 
         array (
@@ -33,10 +33,9 @@ class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'distantnative\\Retour\\Logs' => __DIR__ . '/../..' . '/src/models/Logs.php',
-        'distantnative\\Retour\\Redirects' => __DIR__ . '/../..' . '/src/models/Redirects.php',
-        'distantnative\\Retour\\Retour' => __DIR__ . '/../..' . '/src/models/Retour.php',
-        'distantnative\\Retour\\Version' => __DIR__ . '/../..' . '/src/models/Version.php',
+        'distantnative\\Retour\\Logs' => __DIR__ . '/../..' . '/models/Logs.php',
+        'distantnative\\Retour\\Redirects' => __DIR__ . '/../..' . '/models/Redirects.php',
+        'distantnative\\Retour\\Retour' => __DIR__ . '/../..' . '/models/Retour.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

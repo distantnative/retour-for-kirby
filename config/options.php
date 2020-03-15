@@ -2,7 +2,7 @@
 
 namespace distantnative\Retour;
 
-$site = dirname(__DIR__, 4);
+$site = dirname(__DIR__, 3);
 
 return [
     'api'         => true,
