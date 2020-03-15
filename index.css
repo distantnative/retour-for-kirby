@@ -71,20 +71,20 @@
 
 .rt-share + .k-field-footer {
   margin-top: -1.35rem;
-  padding: 0 .5rem 1rem;
+  padding: 0 .5rem 1.45rem;
   pointer-events: none;
   user-select: none;
 }
 
 .ct-series {
   stroke: #3a3c45;
-  stroke-width: 3px;
+  stroke-width: .2rem;
 }
 
 .ct-series-d .ct-slice-pie {
   fill: #2d2f36;
 }.rt-timeline > svg {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   margin-left: -0.5rem;
 }
 
