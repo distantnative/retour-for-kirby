@@ -76,7 +76,6 @@ return [
             'pattern' => 'retour/logs/flush',
             'method'  => 'POST',
             'action'  => function () {
-                $retour = new Retour;
                 return Retour::instance()->logs()->flush();
             }
         ],
@@ -84,7 +83,6 @@ return [
             'pattern' => 'retour/logs/purge',
             'method'  => 'POST',
             'action'  => function () {
-                $retour = new Retour;
                 return Retour::instance()->logs()->purge();
             }
         ],

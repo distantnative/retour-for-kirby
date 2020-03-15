@@ -217,93 +217,75 @@ class Logs
      */
     public function stats(string $unit, string $from, string $to): array
     {
-        // Add time to dates to capture full days
-        $from .= ' 00:00:00';
-        $to   .= ' 23:59:59';
+        // Define parts depending on uni
+         $use = [
+            'func'  => 'date',
+            'group' => '%Y-%m-%d',
+            'step'  => 'day'
+         ];
 
-        // Define formats based on timeframe unit
         switch ($unit) {
-            case 'year':
-                $formats = ['month', '%Y-%m'];
-                break;
             case 'day':
-                $formats = ['hour', '%Y-%m-%d %H'];
+                // Add time to dates to capture full days
+                $from .= ' 00:00:00';
+                $to   .= ' 23:59:59';
+
+                $use['func']  = 'datetime';
+                $use['group'] = '%Y-%m-%d %H';
+                $use['step']  = 'hour';
                 break;
-            default:
-                $formats = ['day', '%Y-%m-%d'];
+
+            case 'year':
+                $use['group'] = '%Y-%m';
+                $use['step']  = 'month';
                 break;
         }
-
         // Get data from database
-        $data = $this->db->records()
-            ->select('
-                strftime(:format, date) AS format,
-                strftime("%s", MIN(date)) AS time,
-                date AS label,
-                COUNT(path) AS total,
-                COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
-                COUNT(redirect) AS redirected
-            ', ['format' => $formats[1]])
-            ->where(
-                'strftime("%s", date) > strftime("%s", :start)',
-                ['start' => $from]
-            )
-            ->andWhere(
-                'strftime("%s", date) < strftime("%s", :end)',
-                ['end' => $to]
-            )
-            ->group('format')
-            ->order('time')
-            ->fetch('array')
-            ->all();
+        $data = $this->db->query('
+        with recursive dates as (
+            select :from as date
+            union all
+            select ' . $use['func'] . '(date, "+1 ' . $use['step'] . '") from dates where date < :to
+        )
+        SELECT
+            dates.date,
+            COUNT(redirect) AS redirected,
+            COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
+            COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
+        FROM
+            dates
+        LEFT JOIN
+            records
+        ON
+            strftime(:group, dates.date) = strftime(:group, records.date)
+        WHERE
+            strftime("%s", dates.date) >= strftime("%s", :from)
+        AND
+            strftime("%s", dates.date) <= strftime("%s", :to)
+        GROUP BY
+            strftime(:group, dates.date)
+        ORDER BY
+            strftime(:group, dates.date)
+            ', [
+                'from'  => $from,
+                'to'    => $to,
+                'group' => $use['group']
+            ], [
+                'fetch' => 'array'
+            ]);
 
         if ($data === false) {
-            $data = [];
+            return [];
 
-        } else {
-            // Ensure proper types for data values
-            $data = $data->toArray(function ($entry) {
-                return [
-                    'label'      => (string) $entry['label'],
-                    'time'       => (int)    $entry['time'],
-                    'total'      => (int)    $entry['total'],
-                    'resolved'   => (int)    $entry['resolved'],
-                    'redirected' => (int)    $entry['redirected'],
-                ];
-            });
         }
 
-        // Fill the holes:
-        // Run loop from the start date until the end date
-        // increasing by a step each run (e.g. +1 day, +1 month...)
-        for (
-            $date = strtotime($from);
-            $date <= strtotime($to);
-            $date = strtotime(date('Y-m-d H:00:00', $date) . ' +1 ' . $formats[0])
-        ) {
-            // Create label for hole
-            $label = strftime('%Y-%m-%d %H:%M:%S', $date);
-
-            // Check if label is already in array
-            // (data entry exists, no hole)
-            if (in_array($label, array_column($data, 'label')) === false) {
-
-                // Add empty value set to fill hole
-                $data[] = [
-                    'label'      => $label,
-                    'time'       => $date,
-                    'total'      => 0,
-                    'redirected' => 0,
-                    'resolved'   => 0
-                ];
-            }
-        }
-
-        // Sort all entries by time field
-        usort($data, function ($item1, $item2) {
-            return $item1['time'] <=> $item2['time'];
+        return $data->toArray(function ($entry) {
+            return [
+                'date'       => (string) $entry['date'],
+                'failed'     => (int)    $entry['failed'],
+                'resolved'   => (int)    $entry['resolved'],
+                'redirected' => (int)    $entry['redirected'],
+            ];
         });
-
-        return $data;
     }
 }
