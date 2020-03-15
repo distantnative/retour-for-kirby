@@ -20,6 +20,11 @@
 import Chartist from "chartist";
 
 export default {
+  data() {
+    return {
+      chart: null
+    }
+  },
   computed: {
     data() {
       return this.$store.state.retour.data.stats;
@@ -40,14 +45,21 @@ export default {
   watch: {
     data: {
       handler() {
-        this.createChart();
+        this.update();
       },
       deep: true
     }
   },
+  mounted() {
+    this.chart = new Chartist.Pie(".rt-share", {}, {
+      height: 300,
+      startAngle: 270,
+      showLabel: false
+    });
+  },
   methods: {
-    createChart() {
-      new Chartist.Pie(".rt-share", {
+    update() {
+      this.chart.update({
         series: [
           this.redirected,
           this.resolved,
@@ -55,11 +67,9 @@ export default {
           this.total > 0 ? 0 : 1
         ]
       }, {
-        height: 300,
-        startAngle: 270,
         total: (this.total > 0 ? this.total : 1) * 2,
-        showLabel: false
-      });
+      },
+      true)
     }
   }
 }

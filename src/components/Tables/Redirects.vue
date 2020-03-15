@@ -166,7 +166,7 @@ export default {
           label: this.$t("retour.redirects.status"),
           type: "rt-status",
           options: [
-            { text: "––––", value: "disabled" },
+            { text: "––––", value: "–" },
             ...Object.keys(this.headers).map(code => ({
               text: code.substr(1) + " - " + this.headers[code],
               value: code.substr(1)
@@ -260,7 +260,7 @@ export default {
       switch (action) {
         case "add":
           this.mode = "new";
-          this.current.status = "disabled";
+          this.current.status = "–";
           this.afterSubmit = callback;
           this.$nextTick(() => this.$refs.form.focus("from"));
           break;
