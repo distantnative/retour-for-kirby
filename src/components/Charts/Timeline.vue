@@ -10,17 +10,70 @@ export default {
     data() {
       return this.$store.state.retour.data.stats;
     },
-    labels() {
-      return this.data.map(x => x.label);
-    },
-    totals() {
-      return this.data.map(x => x.total);
+    failed() {
+      return this.data.map(d => ({
+        x: this.$library.dayjs(d.date),
+        y: d.failed + d.resolved + d.redirected
+      }));
     },
     resolved() {
-      return this.data.map(x => x.resolved + x.redirected);
+      return this.data.map(d => ({
+        x: this.$library.dayjs(d.date),
+        y: d.resolved + d.redirected
+      }));
     },
     redirected() {
-      return this.data.map(x => x.redirected);
+      return this.data.map(d => ({
+        x: this.$library.dayjs(d.date),
+        y: d.redirected
+      }));
+    },
+    view() {
+      return this.$store.getters["retour/view"];
+    },
+    min() {
+      return this.$library.dayjs(this.data[0].date);
+    },
+    max() {
+      return this.$library.dayjs(this.data[this.data.length - 1].date);
+    },
+    ticks() {
+      let unit;
+      if (this.view === "day") {
+        unit = 'hour';
+      } else {
+        unit = 'day';
+      }
+      let diff  = this.max.diff(this.min, unit);
+      let ticks =  Array.from({ length: diff + 1 })
+                  .map((e, index) => {
+                    return this.$library.dayjs(this.min).add(index, unit);
+                  });
+
+      if (diff > 31) {
+        return ticks.filter(x => x.get("date") === 1);
+      }
+
+      return ticks;
+    },
+    format() {
+      if (this.view === "day") {
+        return "HH"
+      }
+
+      if (this.view === "week") {
+        return "ddd"
+      }
+
+      if (this.view === "month") {
+        return "D";
+      }
+
+      if (this.view === "year") {
+        return "MMM";
+      }
+
+      return "D MMM";
     }
   },
   watch: {
@@ -38,7 +91,7 @@ export default {
         {
           labels: this.labels,
           series: [
-            this.totals,
+            this.failed,
             this.resolved,
             this.resolved,
             this.redirected,
@@ -58,6 +111,13 @@ export default {
           }),
           axisY: {
             onlyInteger: true
+          },
+          axisX: {
+            type: Chartist.FixedScaleAxis,
+            ticks: this.ticks,
+            labelInterpolationFnc: function(value) {
+              return value.format(this.format);
+            }.bind(this)
           }
         },
         [
@@ -66,47 +126,7 @@ export default {
             {
               axisX: {
                 labelInterpolationFnc: function(value, index) {
-                  if (this.$store.getters["retour/view"] === "year") {
-                    return this.$library.dayjs(value).format("MMM");
-                  }
-
-                  if (this.$store.getters["retour/view"] === "month") {
-                    return index % 2 === 0 ? value : null;
-                  }
-
-                  if (this.$store.getters["retour/view"] === "day") {
-                    return (index - 1) % 2 === 0 ? value : null;
-                  }
-
-                  return value;
-                }.bind(this)
-              }
-            }
-          ],
-          [
-            "screen and (min-width: 45em)",
-            {
-              axisX: {
-                labelInterpolationFnc: function(value, index) {
-                  if (this.$store.getters["retour/view"] === "year") {
-                    return this.$library.dayjs(value).format("MMM");
-                  }
-
-                  if (this.$store.getters["retour/view"] === "month") {
-                    return index % 2 === 0 ? value : null;
-                  }
-
-                  if (this.$store.getters["retour/view"] === "day") {
-                    return (index - 1) % 2 === 0 ? value + ":00" : null;
-                  }
-
-                  if (this.$store.getters["retour/view"] === false) {
-                    return index % (Math.floor(this.data.length / 20) + 1) === 0
-                      ? value
-                      : null;
-                  }
-
-                  return value;
+                  return index % 2 === 0 ? value.format(this.format) : null;
                 }.bind(this)
               }
             }

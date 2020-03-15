@@ -9,6 +9,7 @@
 package.json export-ignore
 yarn.lock export-ignore
 composer.lock export-ignore
+.yarnclean
 
 # Directories
 src/assets/ export-ignore

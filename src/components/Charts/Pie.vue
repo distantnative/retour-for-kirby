@@ -4,13 +4,13 @@
 
     <footer class="k-field-footer">
       <k-button icon="circle" class="rt-lb-redirected">
-        {{ redirects }} {{ $t('retour.redirected') }}
+        {{ redirected }} {{ $t('retour.redirected') }}
       </k-button><br>
       <k-button icon="circle" class="rt-lb-resolved">
         {{ resolved }} {{ $t('retour.resolved') }}
       </k-button><br>
       <k-button icon="circle" class="rt-lb-failed">
-        {{ fails }} {{ $t('retour.failed') }}
+        {{ failed }} {{ $t('retour.failed') }}
       </k-button>
     </footer>
   </div>
@@ -24,18 +24,18 @@ export default {
     data() {
       return this.$store.state.retour.data.stats;
     },
-    fails() {
-      return this.total - this.redirects - this.resolved;
-    },
-    redirects() {
-      return this.data.reduce((i, x) => i += parseInt(x.redirected), 0);
+    redirected() {
+      return this.data.reduce((i, x) => i += x.redirected, 0);
     },
     resolved() {
-      return this.data.reduce((i, x) => i += parseInt(x.resolved), 0);
+      return this.data.reduce((i, x) => i += x.resolved, 0);
+    },
+    failed() {
+      return this.data.reduce((i, x) => i += x.failed, 0);
     },
     total() {
-      return this.data.reduce((i, x) => i += parseInt(x.total), 0);
-    },
+      return this.redirected + this.resolved + this.failed
+    }
   },
   watch: {
     data: {
@@ -49,9 +49,9 @@ export default {
     createChart() {
       new Chartist.Pie(".rt-share", {
         series: [
-          this.redirects,
+          this.redirected,
           this.resolved,
-          this.fails,
+          this.failed,
           this.total > 0 ? 0 : 1
         ]
       }, {
