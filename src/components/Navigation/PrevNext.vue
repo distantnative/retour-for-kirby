@@ -1,21 +1,27 @@
 <template>
   <k-button-group>
-    <k-button icon="angle-left" :disabled="view === false" @click="prev" />
+    <k-button icon="angle-left" :disabled="showPrev" @click="prev" />
     <k-button
-      v-for="by in ['year', 'month', 'week', 'day']"
+      v-for="by in ['all', 'year', 'month', 'week', 'day']"
       :key="by"
       :current="view === by"
       @click="show(by)"
     >
       {{ $t('retour.stats.' + by) }}
     </k-button>
-    <k-button icon="angle-right" :disabled="view === false" @click="next" />
+    <k-button icon="angle-right" :disabled="showNext" @click="next" />
   </k-button-group>
 </template>
 
 <script>
 export default {
   computed: {
+    showNext() {
+      return this.view === false || this.view === 'all';
+    },
+    showPrev() {
+      return this.view === false || this.view === 'all';
+    },
     view() {
       return this.$store.getters["retour/view"];
     }
@@ -63,6 +69,9 @@ export default {
       const end   = this.$library.dayjs().endOf("day");
 
       switch (by) {
+        case "all":
+          this.$store.dispatch("retour/all");
+          break;
         case "year":
           this.$store.dispatch("retour/timeframe", {
             from: start.startOf("year"),

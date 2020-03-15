@@ -9,7 +9,8 @@ export default {
     view: {
       table: "redirects",
       from: null,
-      to: null
+      to: null,
+      all: false
     },
     options: {
       headers: [],
@@ -30,6 +31,10 @@ export default {
     view: state => {
       const from = state.view.from;
       const to = state.view.to;
+
+      if (state.view.all === true) {
+        return "all";
+      }
 
       if (
         from.isSame(to, "date") &&
@@ -89,11 +94,21 @@ export default {
   },
   actions: {
     /* Setters */
+    all(context) {
+      this._vm.$api.get("retour/logs/all").then(response => {
+        context.dispatch("timeframe", {
+          from: this._vm.$library.dayjs(response.first.date),
+          to: this._vm.$library.dayjs(response.last.date)
+        });
+        context.state.view.all = true;
+      })
+    },
     table(context, table) {
       context.commit("SET_TABLE", table);
     },
     timeframe(context, dates) {
       context.commit("SET_TIMEFRAME", dates);
+      context.state.view.all = false;
       context.dispatch("redirects");
 
       if (context.state.options.logs === true) {

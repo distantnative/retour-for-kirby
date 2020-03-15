@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {date, permissions} from "../helpers.js";
+import {date, permissions} from "../../lib/helpers.js";
 
 import TableSwitch from "../Navigation/TableSwitch.vue";
 import Tbl from "tbl-for-kirby";
