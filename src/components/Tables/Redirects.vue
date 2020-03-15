@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { date, status, permissions } from "../helpers.js";
+import { date, status, permissions } from "../../lib/helpers.js";
 
 import TableSwitch from "../Navigation/TableSwitch.vue";
 import Tbl from "tbl-for-kirby";

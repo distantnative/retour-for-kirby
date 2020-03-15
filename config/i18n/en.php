@@ -9,6 +9,7 @@ return [
     'retour.tbl.redirects.empty' => 'No redirects',
     'retour.tbl.fails.empty'     => 'No fails yet',
 
+    'retour.stats.all'   => 'All',
     'retour.stats.year'  => 'Year',
     'retour.stats.month' => 'Month',
     'retour.stats.week'  => 'Week',

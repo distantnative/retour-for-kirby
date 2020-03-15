@@ -10,8 +10,7 @@ return array(
     'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
     'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
     'Kirby\\ComposerInstaller\\PluginInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-    'distantnative\\Retour\\Logs' => $baseDir . '/src/models/Logs.php',
-    'distantnative\\Retour\\Redirects' => $baseDir . '/src/models/Redirects.php',
-    'distantnative\\Retour\\Retour' => $baseDir . '/src/models/Retour.php',
-    'distantnative\\Retour\\Version' => $baseDir . '/src/models/Version.php',
+    'distantnative\\Retour\\Logs' => $baseDir . '/models/Logs.php',
+    'distantnative\\Retour\\Redirects' => $baseDir . '/models/Redirects.php',
+    'distantnative\\Retour\\Retour' => $baseDir . '/models/Retour.php',
 );

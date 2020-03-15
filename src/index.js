@@ -4,7 +4,7 @@ import RedirectField from "./components/Fields/Redirect.vue";
 import StatusField from "./components/Fields/Status.vue";
 
 // Vuex store
-import store from "./store.js";
+import store from "./store/retour.js";
 
 // 3rd party assets
 import "tbl-for-kirby/index.css";

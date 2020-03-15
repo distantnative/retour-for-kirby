@@ -9,6 +9,7 @@ return [
     'retour.tbl.redirects.empty' => 'Keine Umleitungen',
     'retour.tbl.fails.empty'     => 'Keine Fehler bisher',
 
+    'retour.stats.all'   => 'Gesamt',
     'retour.stats.year'  => 'Jahr',
     'retour.stats.month' => 'Monat',
     'retour.stats.week'  => 'Woche',

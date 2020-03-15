@@ -54,6 +54,16 @@ return [
             }
         ],
         [
+            'pattern' => 'retour/logs/all',
+            'method'  => 'GET',
+            'action'  => function () {
+                return [
+                    'first' => Retour::instance()->logs()->first(),
+                    'last'  => Retour::instance()->logs()->last()
+                ];
+            }
+        ],
+        [
             'pattern' => 'retour/logs/resolve',
             'method'  => 'POST',
             'action'  => function () {

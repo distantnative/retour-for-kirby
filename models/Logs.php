@@ -37,7 +37,7 @@ class Logs
             }
 
             F::copy(
-                dirname(__DIR__, 2) . '/assets/retour.sqlite',
+                dirname(__DIR__) . '/assets/retour.sqlite',
                 $this->file
             );
         }
@@ -64,6 +64,24 @@ class Logs
             'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
             'redirect' => $props['redirect'] ?? null
         ]);
+    }
+
+    public function first(): array
+    {
+        return $this->db->records()
+            ->select('date')
+            ->order('date ASC')
+            ->fetch('array')
+            ->first();
+    }
+
+    public function last(): array
+    {
+        return $this->db->records()
+            ->select('date')
+            ->order('date DESC')
+            ->fetch('array')
+            ->first();
     }
 
     /**
@@ -206,31 +224,35 @@ class Logs
         // Define formats based on timeframe unit
         switch ($unit) {
             case 'year':
-                $formats = ['month', '%m'];
-                break;
-            case 'month':
-                $formats = ['day', '%d'];
+                $formats = ['month', '%Y-%m'];
                 break;
             case 'day':
-                $formats = ['hour', '%H'];
+                $formats = ['hour', '%Y-%m-%d %H'];
                 break;
             default:
-                $formats = ['day', '%d/%m'];
+                $formats = ['day', '%Y-%m-%d'];
                 break;
         }
 
         // Get data from database
         $data = $this->db->records()
             ->select('
-                strftime(:label, date) AS label,
+                strftime(:format, date) AS format,
                 strftime("%s", MIN(date)) AS time,
+                date AS label,
                 COUNT(path) AS total,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(redirect) AS redirected
-            ', ['label' => $formats[1]])
-            ->where('strftime("%s", date) > strftime("%s", :start)', ['start' => $from])
-            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $to])
-            ->group('label')
+            ', ['format' => $formats[1]])
+            ->where(
+                'strftime("%s", date) > strftime("%s", :start)',
+                ['start' => $from]
+            )
+            ->andWhere(
+                'strftime("%s", date) < strftime("%s", :end)',
+                ['end' => $to]
+            )
+            ->group('format')
             ->order('time')
             ->fetch('array')
             ->all();
@@ -260,7 +282,7 @@ class Logs
             $date = strtotime(date('Y-m-d H:00:00', $date) . ' +1 ' . $formats[0])
         ) {
             // Create label for hole
-            $label = strftime($formats[1], $date);
+            $label = strftime('%Y-%m-%d %H:%M:%S', $date);
 
             // Check if label is already in array
             // (data entry exists, no hole)
