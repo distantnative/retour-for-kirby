@@ -44,12 +44,14 @@ export default {
         {
           label: this.$t("retour.fails.path"),
           field: "path",
-          type: "url"
+          type: "url",
+          width: "full"
         },
         {
           label: this.$t("retour.fails.referrer"),
           field: "referrer",
-          type: "url"
+          type: "url",
+          width: "full"
         },
         {
           label: this.$t("retour.hits"),
@@ -57,7 +59,7 @@ export default {
           type: "number",
           sort: "desc",
           search: false,
-          width: "1/8"
+          width: "1/6"
         },
         {
           name: "last",
@@ -66,7 +68,7 @@ export default {
           type: "date",
           sort: "desc",
           search: false,
-          width: "1/6",
+          width: "2/5",
           responsive: false
         }
       ];
