@@ -1151,9 +1151,9 @@ svgo@^1.0.0:
     util.promisify "~1.0.0"
 
 tbl-for-kirby@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.1.0.tgz#fccab713be62170579bf10dbbf05ca2eeaf2b23d"
-  integrity sha512-3XEaoJnFzQ3iBWIVU8H6WMbWODks+rrTyF2F6UHEq00aJfjCyh/BJG/6NpNVMGyGFGt51R4v2+3eMCbuj5dOFw==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tbl-for-kirby/-/tbl-for-kirby-1.2.0.tgz#fd659a47caec9619dd5278c3b9b38ac65dcfe079"
+  integrity sha512-anx3qA4ss3Iw+YLsKaCrEWdPr1Q9IomihD4X5aYEmL2ksOfcS8eYQ5ZPJ5HVDqH4lC6uj34B/B9VKgjVmM78tw==
 
 timsort@^0.3.0:
   version "0.3.0"
