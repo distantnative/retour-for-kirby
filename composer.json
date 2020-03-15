@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "distantnative\\Retour\\": "src/models/"
+            "distantnative\\Retour\\": "models/"
         }
     }
 }
