@@ -72,14 +72,14 @@ export default {
 
 .rt-share + .k-field-footer {
   margin-top: -1.35rem;
-  padding: 0 .5rem 1rem;
+  padding: 0 .5rem 1.45rem;
   pointer-events: none;
   user-select: none;
 }
 
 .ct-series {
   stroke: #3a3c45;
-  stroke-width: 3px;
+  stroke-width: .2rem;
 }
 
 .ct-series-d .ct-slice-pie {

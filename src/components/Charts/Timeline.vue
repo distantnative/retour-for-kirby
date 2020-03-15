@@ -37,21 +37,30 @@ export default {
     max() {
       return this.$library.dayjs(this.data[this.data.length - 1].date);
     },
-    ticks() {
-      let unit;
+    unit() {
       if (this.view === "day") {
-        unit = 'hour';
-      } else {
-        unit = 'day';
+        return "hour";
       }
-      let diff  = this.max.diff(this.min, unit);
-      let ticks =  Array.from({ length: diff + 1 })
+
+      return "day";
+    },
+    diff () {
+      return this.max.diff(this.min, this.unit);
+    },
+    ticks() {
+      let ticks = Array.from({ length: this.diff + 1 })
                   .map((e, index) => {
-                    return this.$library.dayjs(this.min).add(index, unit);
+                    return this.$library.dayjs(this.min).add(index, this.unit);
                   });
 
-      if (diff > 31) {
+      // Only show month borders
+      if (this.diff > 62) {
         return ticks.filter(x => x.get("date") === 1);
+      }
+
+      // Always show 5-6 ticks only
+      if (this.diff > 31) {
+        return ticks.filter((x, i) => i%(parseInt(this.diff/5)) === 0);
       }
 
       return ticks;
@@ -71,6 +80,10 @@ export default {
 
       if (this.view === "year") {
         return "MMM";
+      }
+
+      if (this.diff > 62) {
+        return "MMM YYYY";
       }
 
       return "D MMM";
@@ -184,7 +197,7 @@ export default {
 
 <style lang="scss">
 .rt-timeline > svg {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   margin-left: -0.5rem;
 }
 
