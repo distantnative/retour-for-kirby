@@ -304,7 +304,7 @@ export default {
         // Mark potential fails as resolved
         if (this.mode === "new") {
           this.$api
-            .post("retour/resolve", {
+            .post("retour/logs/resolve", {
               path: this.current.from
             })
             .then(() => {

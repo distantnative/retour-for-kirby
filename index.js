@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"components/helpers.js":[function(require,module,exports) {
+})({"lib/helpers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8955,6 +8955,12 @@ exports.default = void 0;
 //
 var _default = {
   computed: {
+    showNext: function showNext() {
+      return this.view === false || this.view === 'all';
+    },
+    showPrev: function showPrev() {
+      return this.view === false || this.view === 'all';
+    },
     view: function view() {
       return this.$store.getters["retour/view"];
     }
@@ -9005,6 +9011,10 @@ var _default = {
       var end = this.$library.dayjs().endOf("day");
 
       switch (by) {
+        case "all":
+          this.$store.dispatch("retour/all");
+          break;
+
         case "year":
           this.$store.dispatch("retour/timeframe", {
             from: start.startOf("year"),
@@ -9061,11 +9071,11 @@ exports.default = _default;
     "k-button-group",
     [
       _c("k-button", {
-        attrs: { icon: "angle-left", disabled: _vm.view === false },
+        attrs: { icon: "angle-left", disabled: _vm.showPrev },
         on: { click: _vm.prev }
       }),
       _vm._v(" "),
-      _vm._l(["year", "month", "week", "day"], function(by) {
+      _vm._l(["all", "year", "month", "week", "day"], function(by) {
         return _c(
           "k-button",
           {
@@ -9082,7 +9092,7 @@ exports.default = _default;
       }),
       _vm._v(" "),
       _c("k-button", {
-        attrs: { icon: "angle-right", disabled: _vm.view === false },
+        attrs: { icon: "angle-right", disabled: _vm.showNext },
         on: { click: _vm.next }
       })
     ],
@@ -14232,23 +14242,23 @@ var _default = {
     data: function data() {
       return this.$store.state.retour.data.stats;
     },
-    fails: function fails() {
-      return this.total - this.redirects - this.resolved;
-    },
-    redirects: function redirects() {
+    redirected: function redirected() {
       return this.data.reduce(function (i, x) {
-        return i += parseInt(x.redirected);
+        return i += x.redirected;
       }, 0);
     },
     resolved: function resolved() {
       return this.data.reduce(function (i, x) {
-        return i += parseInt(x.resolved);
+        return i += x.resolved;
+      }, 0);
+    },
+    failed: function failed() {
+      return this.data.reduce(function (i, x) {
+        return i += x.failed;
       }, 0);
     },
     total: function total() {
-      return this.data.reduce(function (i, x) {
-        return i += parseInt(x.total);
-      }, 0);
+      return this.redirected + this.resolved + this.failed;
     }
   },
   watch: {
@@ -14262,7 +14272,7 @@ var _default = {
   methods: {
     createChart: function createChart() {
       new _chartist.default.Pie(".rt-share", {
-        series: [this.redirects, this.resolved, this.fails, this.total > 0 ? 0 : 1]
+        series: [this.redirected, this.resolved, this.failed, this.total > 0 ? 0 : 1]
       }, {
         height: 300,
         startAngle: 270,
@@ -14298,7 +14308,7 @@ exports.default = _default;
           [
             _vm._v(
               "\n      " +
-                _vm._s(_vm.redirects) +
+                _vm._s(_vm.redirected) +
                 " " +
                 _vm._s(_vm.$t("retour.redirected")) +
                 "\n    "
@@ -14328,7 +14338,7 @@ exports.default = _default;
           [
             _vm._v(
               "\n      " +
-                _vm._s(_vm.fails) +
+                _vm._s(_vm.failed) +
                 " " +
                 _vm._s(_vm.$t("retour.failed")) +
                 "\n    "
@@ -14394,25 +14404,89 @@ var _default = {
     data: function data() {
       return this.$store.state.retour.data.stats;
     },
-    labels: function labels() {
-      return this.data.map(function (x) {
-        return x.label;
-      });
-    },
-    totals: function totals() {
-      return this.data.map(function (x) {
-        return x.total;
+    failed: function failed() {
+      var _this = this;
+
+      return this.data.map(function (d) {
+        return {
+          x: _this.$library.dayjs(d.date),
+          y: d.failed + d.resolved + d.redirected
+        };
       });
     },
     resolved: function resolved() {
-      return this.data.map(function (x) {
-        return x.resolved + x.redirected;
+      var _this2 = this;
+
+      return this.data.map(function (d) {
+        return {
+          x: _this2.$library.dayjs(d.date),
+          y: d.resolved + d.redirected
+        };
       });
     },
     redirected: function redirected() {
-      return this.data.map(function (x) {
-        return x.redirected;
+      var _this3 = this;
+
+      return this.data.map(function (d) {
+        return {
+          x: _this3.$library.dayjs(d.date),
+          y: d.redirected
+        };
       });
+    },
+    view: function view() {
+      return this.$store.getters["retour/view"];
+    },
+    min: function min() {
+      return this.$library.dayjs(this.data[0].date);
+    },
+    max: function max() {
+      return this.$library.dayjs(this.data[this.data.length - 1].date);
+    },
+    ticks: function ticks() {
+      var _this4 = this;
+
+      var unit;
+
+      if (this.view === "day") {
+        unit = 'hour';
+      } else {
+        unit = 'day';
+      }
+
+      var diff = this.max.diff(this.min, unit);
+      var ticks = Array.from({
+        length: diff + 1
+      }).map(function (e, index) {
+        return _this4.$library.dayjs(_this4.min).add(index, unit);
+      });
+
+      if (diff > 31) {
+        return ticks.filter(function (x) {
+          return x.get("date") === 1;
+        });
+      }
+
+      return ticks;
+    },
+    format: function format() {
+      if (this.view === "day") {
+        return "HH";
+      }
+
+      if (this.view === "week") {
+        return "ddd";
+      }
+
+      if (this.view === "month") {
+        return "D";
+      }
+
+      if (this.view === "year") {
+        return "MMM";
+      }
+
+      return "D MMM";
     }
   },
   watch: {
@@ -14427,7 +14501,7 @@ var _default = {
     createChart: function createChart() {
       var chart = new _chartist.default.Line(".rt-timeline", {
         labels: this.labels,
-        series: [this.totals, this.resolved, this.resolved, this.redirected, this.redirected]
+        series: [this.failed, this.resolved, this.resolved, this.redirected, this.redirected]
       }, {
         height: 240,
         showLabel: false,
@@ -14441,45 +14515,18 @@ var _default = {
         }),
         axisY: {
           onlyInteger: true
+        },
+        axisX: {
+          type: _chartist.default.FixedScaleAxis,
+          ticks: this.ticks,
+          labelInterpolationFnc: function (value) {
+            return value.format(this.format);
+          }.bind(this)
         }
       }, [["screen and (max-width: 45em)", {
         axisX: {
           labelInterpolationFnc: function (value, index) {
-            if (this.$store.getters["retour/view"] === "year") {
-              return this.$library.dayjs(value).format("MMM");
-            }
-
-            if (this.$store.getters["retour/view"] === "month") {
-              return index % 2 === 0 ? value : null;
-            }
-
-            if (this.$store.getters["retour/view"] === "day") {
-              return (index - 1) % 2 === 0 ? value : null;
-            }
-
-            return value;
-          }.bind(this)
-        }
-      }], ["screen and (min-width: 45em)", {
-        axisX: {
-          labelInterpolationFnc: function (value, index) {
-            if (this.$store.getters["retour/view"] === "year") {
-              return this.$library.dayjs(value).format("MMM");
-            }
-
-            if (this.$store.getters["retour/view"] === "month") {
-              return index % 2 === 0 ? value : null;
-            }
-
-            if (this.$store.getters["retour/view"] === "day") {
-              return (index - 1) % 2 === 0 ? value + ":00" : null;
-            }
-
-            if (this.$store.getters["retour/view"] === false) {
-              return index % (Math.floor(this.data.length / 20) + 1) === 0 ? value : null;
-            }
-
-            return value;
+            return index % 2 === 0 ? value.format(this.format) : null;
           }.bind(this)
         }
       }]]);
@@ -14831,7 +14878,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("../helpers.js");
+var _helpers = require("../../lib/helpers.js");
 
 var _TableSwitch = _interopRequireDefault(require("../Navigation/TableSwitch.vue"));
 
@@ -15050,7 +15097,7 @@ render._withStripped = true
         
       }
     })();
-},{"../helpers.js":"components/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Tables/Redirects.vue":[function(require,module,exports) {
+},{"../../lib/helpers.js":"lib/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Tables/Redirects.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15058,7 +15105,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("../helpers.js");
+var _helpers = require("../../lib/helpers.js");
 
 var _TableSwitch = _interopRequireDefault(require("../Navigation/TableSwitch.vue"));
 
@@ -15309,7 +15356,7 @@ var _default = {
       this.update(updated).then(function () {
         // Mark potential fails as resolved
         if (_this4.mode === "new") {
-          _this4.$api.post("retour/resolve", {
+          _this4.$api.post("retour/logs/resolve", {
             path: _this4.current.from
           }).then(function () {
             _this4.$store.dispatch("retour/fails");
@@ -15547,7 +15594,7 @@ render._withStripped = true
       
       }
     })();
-},{"../helpers.js":"components/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Tables.vue":[function(require,module,exports) {
+},{"../../lib/helpers.js":"lib/helpers.js","../Navigation/TableSwitch.vue":"components/Navigation/TableSwitch.vue","tbl-for-kirby":"../node_modules/tbl-for-kirby/index.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Sections/Tables.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15663,7 +15710,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("../helpers.js");
+var _helpers = require("../../lib/helpers.js");
 
 //
 //
@@ -15945,7 +15992,7 @@ render._withStripped = true
       
       }
     })();
-},{"../helpers.js":"components/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"../../lib/helpers.js":"lib/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15953,7 +16000,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("./helpers.js");
+var _helpers = require("../lib/helpers.js");
 
 var _Stats = _interopRequireDefault(require("./Sections/Stats.vue"));
 
@@ -16051,7 +16098,7 @@ render._withStripped = true
       
       }
     })();
-},{"./helpers.js":"components/helpers.js","./Sections/Stats.vue":"components/Sections/Stats.vue","./Sections/Tables.vue":"components/Sections/Tables.vue","./Sections/Settings.vue":"components/Sections/Settings.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Fields/Redirect.vue":[function(require,module,exports) {
+},{"../lib/helpers.js":"lib/helpers.js","./Sections/Stats.vue":"components/Sections/Stats.vue","./Sections/Tables.vue":"components/Sections/Tables.vue","./Sections/Settings.vue":"components/Sections/Settings.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Fields/Redirect.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16206,7 +16253,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("../helpers.js");
+var _helpers = require("../../lib/helpers.js");
 
 //
 //
@@ -16325,7 +16372,7 @@ render._withStripped = true
       
       }
     })();
-},{"../helpers.js":"components/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store.js":[function(require,module,exports) {
+},{"../../lib/helpers.js":"lib/helpers.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store/retour.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16358,7 +16405,8 @@ var _default = {
     view: {
       table: "redirects",
       from: null,
-      to: null
+      to: null,
+      all: false
     },
     options: {
       headers: [],
@@ -16379,6 +16427,10 @@ var _default = {
     view: function view(state) {
       var from = state.view.from;
       var to = state.view.to;
+
+      if (state.view.all === true) {
+        return "all";
+      }
 
       if (from.isSame(to, "date") && from.isSame(to, "month") && from.isSame(to, "year")) {
         return "day";
@@ -16422,11 +16474,23 @@ var _default = {
   },
   actions: {
     /* Setters */
+    all: function all(context) {
+      var _this = this;
+
+      this._vm.$api.get("retour/logs/all").then(function (response) {
+        context.dispatch("timeframe", {
+          from: _this._vm.$library.dayjs(response.first.date),
+          to: _this._vm.$library.dayjs(response.last.date)
+        });
+        context.state.view.all = true;
+      });
+    },
     table: function table(context, _table) {
       context.commit("SET_TABLE", _table);
     },
     timeframe: function timeframe(context, dates) {
       context.commit("SET_TIMEFRAME", dates);
+      context.state.view.all = false;
       context.dispatch("redirects");
 
       if (context.state.options.logs === true) {
@@ -16443,7 +16507,7 @@ var _default = {
       });
     },
     load: function load(context) {
-      var _this = this;
+      var _this2 = this;
 
       context.dispatch("system").then(function () {
         context.dispatch("redirects");
@@ -16452,7 +16516,7 @@ var _default = {
           context.dispatch("fails");
           context.dispatch("stats");
 
-          _this._vm.$api.post("retour/logs/purge");
+          _this2._vm.$api.post("retour/logs/purge");
         }
       });
     },
@@ -16504,7 +16568,7 @@ var _Redirect = _interopRequireDefault(require("./components/Fields/Redirect.vue
 
 var _Status = _interopRequireDefault(require("./components/Fields/Status.vue"));
 
-var _store = _interopRequireDefault(require("./store.js"));
+var _retour = _interopRequireDefault(require("./store/retour.js"));
 
 require("tbl-for-kirby/index.css");
 
@@ -16531,10 +16595,10 @@ panel.plugin("distantnative/retour", {
     "rt-status": _Status.default
   },
   created: function created(app) {
-    app.$store.registerModule("retour", _store.default);
+    app.$store.registerModule("retour", _retour.default);
   }
 });
-},{"./components/View.vue":"components/View.vue","./components/Fields/Redirect.vue":"components/Fields/Redirect.vue","./components/Fields/Status.vue":"components/Fields/Status.vue","./store.js":"store.js","tbl-for-kirby/index.css":"../node_modules/tbl-for-kirby/index.css","./assets/chart.css":"assets/chart.css"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./components/View.vue":"components/View.vue","./components/Fields/Redirect.vue":"components/Fields/Redirect.vue","./components/Fields/Status.vue":"components/Fields/Status.vue","./store/retour.js":"store/retour.js","tbl-for-kirby/index.css":"../node_modules/tbl-for-kirby/index.css","./assets/chart.css":"assets/chart.css"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -16562,7 +16626,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59002" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56003" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
