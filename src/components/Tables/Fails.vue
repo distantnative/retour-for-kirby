@@ -87,6 +87,9 @@ export default {
         sort: {
           initialBy: "last"
         },
+        pagination: {
+          perPage: 25
+        },
         labels: {
           all: this.$t("retour.tbl.all"),
           empty: this.$t("retour.tbl.fails.empty"),
@@ -101,7 +104,7 @@ export default {
           items: [
             {
               text: this.$t("retour.fails.resolve"),
-              icon: "add",
+              icon: "bolt",
               click: "add"
             }
           ]
