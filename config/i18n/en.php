@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'view.retour' => 'Retour',
+    'view.retour' => 'Redirects',
 
     'retour.tbl.all'             => 'All',
     'retour.tbl.filter'          => 'Filter...',
