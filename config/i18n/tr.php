@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'view.retour' => 'Yönlendirme',
+    'view.retour' => 'Yönlendirmeleri',
 
     'retour.tbl.all'             => 'Tümü',
     'retour.tbl.filter'          => 'Filtrele...',
