@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use Kirby\Http\Header;
+use Kirby\Http\Remote;
 
 class Retour
 {
@@ -22,7 +23,10 @@ class Retour
      */
     protected $redirects = null;
 
-
+    /**
+     *
+     * @return \distantnative\Retour\Retour
+     */
     public static function instance(): Retour
     {
         if (static::$instance !== null) {
@@ -32,11 +36,19 @@ class Retour
         return static::$instance = new Retour;
     }
 
+    /**
+     *
+     * @return \distantnative\Retour\Logs
+     */
     public function logs(): Logs
     {
         return $this->logs ?? $this->logs = new Logs;
     }
 
+    /**
+     *
+     * @return \distantnative\Retour\Redirects
+     */
     public function redirects(): Redirects
     {
         return $this->redirects ?? $this->redirects = new Redirects;
@@ -49,10 +61,15 @@ class Retour
      */
     public static function info(): array
     {
+        $info = Remote::get('https://getkirby.com/plugins/distantnative/retour.json')->json();
+
         return [
+            'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'logs'        => option('distantnative.retour.logs'),
-            'deleteAfter' => option('distantnative.retour.deleteAfter')
+            'release'     => $release = $info['version'],
+            'version'     => $version = kirby()->plugin('distantnative/retour')->version(),
+            'update'      => version_compare($version, $release)
         ];
     }
 }

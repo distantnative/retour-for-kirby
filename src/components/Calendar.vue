@@ -1,5 +1,5 @@
 <template>
-  <div class="rt-calendar k-calendar-input">
+  <div class="rt-calendar k-calendar-input bg-black">
     <nav>
       <k-button icon="angle-left" @click="prev" />
       <span class="k-calendar-selects">

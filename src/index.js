@@ -1,31 +1,27 @@
 // Vue components
 import View from "./components/View.vue";
-import RedirectField from "./components/Fields/Redirect.vue";
-import StatusField from "./components/Fields/Status.vue";
+import StatusField from "./components/StatusField.vue";
+import TargetField from "./components/TargetField.vue";
 
 // Vuex store
-import store from "./store/retour.js";
+import Store from "./store.js";
 
 // 3rd party assets
-import "tbl-for-kirby/index.css";
-import "./assets/chart.css";
+// import "./assets/chart.css";
 
 // Register everything
 panel.plugin("distantnative/retour", {
   views: {
     retour: {
       component: View,
-      icon: "retour"
+      icon: "road-sign"
     }
   },
-  icons: {
-    retour: '<use xlink:href="#icon-undo" transform="translate(7.5,7.5) rotate(170) translate(-7.5,-7.5)"></use>'
-  },
   fields: {
-    "rt-redirect": RedirectField,
-    "rt-status": StatusField
+    "retour-status": StatusField,
+    "retour-target": TargetField
   },
   created(app) {
-    app.$store.registerModule("retour", store);
+    app.$store.registerModule("retour", Store(app));
   }
 });

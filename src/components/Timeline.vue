@@ -1,5 +1,7 @@
 <template>
-  <div class="rt-stats-box rt-timeline" />
+  <figure class="retour-timeline p-3">
+    <div class="chart" />
+  </figure>
 </template>
 
 <script>
@@ -28,17 +30,17 @@ export default {
         y: d.redirected
       }));
     },
-    view() {
-      return this.$store.getters["retour/view"];
-    },
     min() {
       return this.$library.dayjs(this.data[0].date);
     },
     max() {
       return this.$library.dayjs(this.data[this.data.length - 1].date);
     },
+    selection() {
+      return this.$store.getters["retour/selection"];
+    },
     unit() {
-      if (this.view === "day") {
+      if (this.selection === "day") {
         return "hour";
       }
 
@@ -66,19 +68,19 @@ export default {
       return ticks;
     },
     format() {
-      if (this.view === "day") {
+      if (this.selection === "day") {
         return "HH"
       }
 
-      if (this.view === "week") {
+      if (this.selection === "week") {
         return "ddd"
       }
 
-      if (this.view === "month") {
+      if (this.selection === "month") {
         return "D";
       }
 
-      if (this.view === "year") {
+      if (this.selection === "year") {
         return "MMM";
       }
 
@@ -100,7 +102,7 @@ export default {
   methods: {
     createChart() {
       let chart = new Chartist.Line(
-        ".rt-timeline",
+        ".retour-timeline .chart",
         {
           labels: this.labels,
           series: [
@@ -192,24 +194,42 @@ export default {
       });
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
-.rt-timeline > svg {
-  margin-top: 1rem;
-  margin-left: -0.5rem;
+.retour-timeline .chart > svg {
+  margin-top: .5rem;
+  margin-left: -.75rem;
 }
 
-.rt-timeline .ct-grid,
-.rt-timeline .ct-label {
-  color: #74788b;
-  stroke: #74788b;
+.retour-timeline .ct-grid,
+.retour-timeline .ct-label {
+  color: #777;
+  stroke: #777;
 }
-.ct-label.ct-horizontal.ct-end {
+.retour-timeline .ct-label.ct-vertical.ct-start {
+  font-size: .8rem;
+  padding-left: 1rem;
+}
+.retour-timeline .ct-label.ct-horizontal.ct-end {
   display: block;
   transform: translateX(-50%);
   text-align: center !important;
   text-anchor: middle !important;
+  font-size: .8rem;
+}
+
+.retour-timeline .ct-series-a .ct-area {
+  fill: var(--color-negative);
+  fill-opacity: .85;
+}
+.retour-timeline .ct-series-e .ct-area {
+  fill: var(--color-focus);
+  fill-opacity: .85;
+}
+.retour-timeline .ct-series-c .ct-area {
+  fill: var(--color-border);
+  fill-opacity: .85;
 }
 </style>
