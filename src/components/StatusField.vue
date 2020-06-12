@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {status} from "../../lib/helpers.js";
+import {status} from "../helpers.js";
 
 export default {
   extends: "k-select-field",

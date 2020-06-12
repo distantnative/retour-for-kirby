@@ -26,7 +26,7 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/fails',
+            'pattern' => 'retour/failures',
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->logs()->fails(

@@ -22,7 +22,10 @@ class Retour
      */
     protected $redirects = null;
 
-
+    /**
+     *
+     * @return \distantnative\Retour\Retour
+     */
     public static function instance(): Retour
     {
         if (static::$instance !== null) {
@@ -32,11 +35,19 @@ class Retour
         return static::$instance = new Retour;
     }
 
+    /**
+     *
+     * @return \distantnative\Retour\Logs
+     */
     public function logs(): Logs
     {
         return $this->logs ?? $this->logs = new Logs;
     }
 
+    /**
+     *
+     * @return \distantnative\Retour\Redirects
+     */
     public function redirects(): Redirects
     {
         return $this->redirects ?? $this->redirects = new Redirects;
