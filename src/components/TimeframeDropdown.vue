@@ -29,8 +29,8 @@ export default {
   computed: {
     active() {
       return this.display(
-        this.$store.state.retour.view.from,
-        this.$store.state.retour.view.to
+        this.$store.state.retour.selection.from,
+        this.$store.state.retour.selection.to
       );
     }
   },
@@ -123,8 +123,8 @@ export default {
       return this.$t("months." + month);
     },
     open() {
-      this.from = this.$store.state.retour.view.from;
-      this.to = this.$store.state.retour.view.to;
+      this.from = this.$store.state.retour.selection.from;
+      this.to = this.$store.state.retour.selection.to;
       this.show = true;
     },
     close() {
@@ -161,7 +161,6 @@ export default {
 
   > .k-icon {
     margin-right: 0.75rem;
-    opacity: 0.2;
   }
 }
 </style>

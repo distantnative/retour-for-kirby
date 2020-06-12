@@ -1,43 +1,43 @@
 <template>
   <k-button-group>
-    <k-button icon="angle-left" :disabled="showPrev" @click="prev" />
+    <k-button icon="angle-left" :disabled="hasPrev" @click="onPrev" />
     <k-button
       v-for="by in ['all', 'year', 'month', 'week', 'day']"
       :key="by"
-      :current="view === by"
+      :current="selection === by"
       @click="show(by)"
     >
       {{ $t('retour.stats.' + by) }}
     </k-button>
-    <k-button icon="angle-right" :disabled="showNext" @click="next" />
+    <k-button icon="angle-right" :disabled="hasNext" @click="onNext" />
   </k-button-group>
 </template>
 
 <script>
 export default {
   computed: {
-    showNext() {
-      return this.view === false || this.view === 'all';
+    hasNext() {
+      return this.selection === false || this.selection === 'all';
     },
-    showPrev() {
-      return this.view === false || this.view === 'all';
+    hasPrev() {
+      return this.selection === false || this.selection === 'all';
     },
-    view() {
-      return this.$store.getters["retour/view"];
+    selection() {
+      return this.$store.getters["retour/selection"];
     }
   },
   methods: {
-    prev() {
+    onPrev() {
       return this.navigate("subtract");
     },
-    next() {
+    onNext() {
       return this.navigate("add");
     },
     navigate(method) {
-      const start = this.$store.state.retour.view.from;
-      const end = this.$store.state.retour.view.to;
+      const start = this.$store.state.retour.selection.from;
+      const end = this.$store.state.retour.selection.to;
 
-      switch (this.view) {
+      switch (this.selection) {
         case "year":
           this.$store.dispatch("retour/timeframe", {
             from: start[method](1, "year"),
