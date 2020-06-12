@@ -10,7 +10,7 @@
       </header>
 
       <k-grid gutter="medium">
-        <k-column width="1/4">
+        <k-column width="1/4" class="bg-backdrop">
           <pie />
         </k-column>
 

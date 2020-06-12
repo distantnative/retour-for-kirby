@@ -1,44 +1,97 @@
 <template>
-  <div class="k-retour-view">
-    <stats v-if="hasLogs" />
-    <tables />
-    <settings v-if="hasLogs" />
+  <div class="k-retour-view pb-24">
+
+    <!-- full version -->
+    <template v-if="true">
+      <retour-stats />
+      <k-tabs :tabs="tabs" :tab="tab" />
+      <div class="p-6">
+        <component :is="'retour-' + this.tab + '-tab'" />
+      </div>
+    </template>
+
+    <!-- only routes -->
+    <template v-else>
+      <retour-routes-tab />
+      <retour-settings-tab />
+    </template>
+
   </div>
 </template>
 
 <script>
-import { permissions } from "../lib/helpers.js";
+import permissions from "../mixins/permissions.js";
 
-import Stats from "./Sections/Stats.vue";
-import Tables from "./Sections/Tables.vue";
-import Settings from "./Sections/Settings.vue";
+import Stats from "./Stats.vue";
+import RoutesTab from "./RoutesTab.vue";
+import FailuresTab from "./FailuresTab.vue";
+import SystemTab from "./SystemTab.vue";
 
 export default {
   mixins: [permissions],
   components: {
-    Stats,
-    Tables,
-    Settings
-  },
-  mounted() {
-    if (this.canAccess === false) {
-      this.$router.push("/");
-    }
-
-    this.$store.dispatch("retour/init");
-    this.$store.dispatch("retour/load");
+    "retour-stats": Stats,
+    "retour-routes-tab": RoutesTab,
+    "retour-failures-tab": FailuresTab,
+    "retour-system-tab": SystemTab
   },
   computed: {
+    data() {
+      return this.$store.state.retour.data;
+    },
     hasLogs() {
-      return this.$store.state.retour.options.logs;
+      return this.$store.getters["retour/hasLogs"];
+    },
+    tab() {
+      return this.$route.hash.slice(1) || "routes";
+    },
+    tabs() {
+      const routes = this.data.routes.length;
+      const failures = this.data.failures.length;
+
+      if (failures > 1000) {
+        failures = (Math.floor(failures / 100) / 10) + "k";
+      }
+
+      return [
+        {
+          name: "routes",
+          label: this.$t("retour.routes"),
+          icon: "road-sign",
+          badge: routes ? {
+            count: routes,
+            color: "focus"
+          }: false
+        },
+        {
+          name: "failures",
+          label: this.$t("retour.failures"),
+          icon: "alert",
+          badge: failures ? {
+            count: failures,
+            color: "negative"
+          } : false
+        },
+        {
+          name: "system",
+          label: this.$t("retour.system"),
+          icon: "box"
+        }
+      ];
     }
+  },
+  watch: {
+    "$route.hash": {
+      handler() {
+        this.$emit("breadcrumb", [
+          { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
+        ]);
+      },
+      immediate: true
+    }
+  },
+  created() {
+    this.$store.dispatch("retour/load");
   }
 };
 </script>
-
-<style>
-.k-retour-view > .k-view {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-</style>

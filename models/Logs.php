@@ -24,6 +24,7 @@ class Logs
         // Get path to database file
         $this->file = option('distantnative.retour.database');
 
+        // Support callbacks for database file option
         if (is_callable($this->file) === true) {
             $this->file = call_user_func($this->file);
         }

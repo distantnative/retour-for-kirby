@@ -3,6 +3,16 @@
 return [
     'view.retour' => 'Redirects',
 
+    'retour.routes'   => 'Routes',
+    'retour.failures' => 'Failures',
+    'retour.system'   => 'System',
+
+
+
+
+
+
+
     'retour.tbl.all'             => 'All',
     'retour.tbl.filter'          => 'Filter...',
     'retour.tbl.perPage'         => 'displayed',
