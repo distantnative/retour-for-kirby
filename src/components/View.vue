@@ -2,7 +2,7 @@
   <div class="k-retour-view pb-24">
 
     <!-- full version -->
-    <template v-if="true">
+    <template v-if="hasLogs">
       <retour-stats />
       <k-tabs :tabs="tabs" :tab="tab" />
       <div class="p-6">
@@ -12,8 +12,10 @@
 
     <!-- only routes -->
     <template v-else>
-      <retour-routes-tab />
-      <retour-settings-tab />
+      <div class="p-6 pt-16">
+        <retour-routes-tab class="mb-8" />
+        <retour-system-tab />
+      </div>
     </template>
 
   </div>
@@ -21,6 +23,7 @@
 
 <script>
 import permissions from "../mixins/permissions.js";
+import tabs from "../config/tabs.js";
 
 import Stats from "./Stats.vue";
 import RoutesTab from "./RoutesTab.vue";
@@ -36,9 +39,6 @@ export default {
     "retour-system-tab": SystemTab
   },
   computed: {
-    data() {
-      return this.$store.state.retour.data;
-    },
     hasLogs() {
       return this.$store.getters["retour/hasLogs"];
     },
@@ -46,50 +46,17 @@ export default {
       return this.$route.hash.slice(1) || "routes";
     },
     tabs() {
-      const routes = this.data.routes.length;
-      const failures = this.data.failures.length;
-
-      if (failures > 1000) {
-        failures = (Math.floor(failures / 100) / 10) + "k";
-      }
-
-      return [
-        {
-          name: "routes",
-          label: this.$t("retour.routes"),
-          icon: "road-sign",
-          badge: routes ? {
-            count: routes,
-            color: "focus"
-          }: false
-        },
-        {
-          name: "failures",
-          label: this.$t("retour.failures"),
-          icon: "alert",
-          badge: failures ? {
-            count: failures,
-            color: "negative"
-          } : false
-        },
-        {
-          name: "system",
-          label: this.$t("retour.system"),
-          icon: "box",
-          badge: this.$store.state.retour.system.update < 0 ? {
-            count: 1,
-            color: "positive"
-          } : false
-        }
-      ];
+      return tabs(this);
     }
   },
   watch: {
     "$route.hash": {
       handler() {
-        this.$emit("breadcrumb", [
-          { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
-        ]);
+        if (this.hasLogs) {
+          this.$emit("breadcrumb", [
+            { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
+          ]);
+        }
       },
       immediate: true
     }

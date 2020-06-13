@@ -4,7 +4,7 @@
     <k-button
       v-for="by in ['all', 'year', 'month', 'week', 'day']"
       :key="by"
-      :current="selection === by"
+      :current="mode === by"
       @click="show(by)"
     >
       {{ $t('retour.stats.' + by) }}
@@ -17,43 +17,43 @@
 export default {
   computed: {
     hasNext() {
-      return this.selection === false || this.selection === 'all';
+      return this.mode === false || this.mode === 'all';
     },
     hasPrev() {
-      return this.selection === false || this.selection === 'all';
+      return this.mode === false || this.mode === 'all';
     },
-    selection() {
-      return this.$store.getters["retour/selection"];
+    mode() {
+      return this.$store.getters["retour/mode"];
     }
   },
   methods: {
     navigate(method) {
-      const start = this.$store.state.retour.selection.from;
-      const end = this.$store.state.retour.selection.to;
+      const begin = this.$store.state.retour.selection.begin;
+      const end   = this.$store.state.retour.selection.end;
 
-      switch (this.selection) {
+      switch (this.mode) {
         case "year":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "year"),
-            to: end[method](1, "year")
+            begin: begin[method](1, "year"),
+            end:   end[method](1, "year")
           });
           break;
         case "month":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "month"),
-            to: end[method](1, "month").endOf("month")
+            begin: begin[method](1, "month"),
+            end:   end[method](1, "month").endOf("month")
           });
           break;
         case "week":
           this.$store.dispatch("retour/selection", {
-            from: start[method](7, "day"),
-            to: end[method](7, "day")
+            begin: begin[method](7, "day"),
+            end:   end[method](7, "day")
           });
           break;
         case "day":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "day"),
-            to: end[method](1, "day")
+            begin: begin[method](1, "day"),
+            end:   end[method](1, "day")
           });
           break;
       }
@@ -65,7 +65,7 @@ export default {
       return this.navigate("add");
     },
     show(by) {
-      const start = this.$library.dayjs().startOf("day");
+      const begin = this.$library.dayjs().startOf("day");
       const end   = this.$library.dayjs().endOf("day");
 
       switch (by) {
@@ -74,33 +74,33 @@ export default {
           break;
         case "year":
           this.$store.dispatch("retour/selection", {
-            from: start.startOf("year"),
-            to: end.endOf("year")
+            begin: begin.startOf("year"),
+            end:   end.endOf("year")
           });
           break;
         case "month":
           this.$store.dispatch("retour/selection", {
-            from: start.startOf("month"),
-            to: end.endOf("month")
+            begin: begin.beginOf("month"),
+            end:   end.endOf("month")
           });
           break;
         case "week":
-          if (start.day() === 0) {
+          if (begin.day() === 0) {
             this.$store.dispatch("retour/selection", {
-              from: start.subtract(6, "day"),
-              to: end
+              begin: begin.subtract(6, "day"),
+              end:   end
             });
           } else {
             this.$store.dispatch("retour/selection", {
-              from: start.subtract(start.day() - 1, "day"),
-              to: end.add(7 - end.day(), "day")
+              begin: begin.subtract(begin.day() - 1, "day"),
+              end:   end.add(7 - end.day(), "day")
             });
           }
           break;
         case "day":
           this.$store.dispatch("retour/selection", {
-            from: start,
-            to: end
+            begin: begin,
+            end:   end
           });
           break;
       }

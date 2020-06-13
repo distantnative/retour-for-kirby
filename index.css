@@ -1,63 +1,17 @@
-.k-interval-day .k-button {
-  width: 2rem;
-  height: 2rem;
-  margin: 0 auto;
-  color: #fff;
-  line-height: 1.75rem;
-  display: flex;
-  justify-content: center;
-  border-radius: 50%;
-  border: 2px solid transparent;
-}
-
-.k-interval-day .k-button .k-button-text {
-  opacity: 1;
-}
-
-.k-interval-day:hover .k-button {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.k-interval-day[data-intersected] {
-  background-color: rgba(255, 255, 255, 0.25);
-}
-
-.k-interval-day[aria-current] .k-button {
-  color: var(--color-focus);
-  border-color: var(--color-focus);
-  font-weight: 500;
-}
-
-.k-interval-day[aria-selected] {
-  background-color: var(--color-focus-light);
-  color: #fff;
-}
-
-.k-interval-day[data-isstart] {
+.retour-calendar .k-calendar-day[data-is-begin] {
   border-top-left-radius: 100%;
   border-bottom-left-radius: 100%;
 }
 
-.k-interval-day[data-isend] {
+.retour-calendar .k-calendar-day[data-is-end] {
   border-top-right-radius: 100%;
   border-bottom-right-radius: 100%;
-}.rt-calendar {
-  position: absolute;
-  width: 16em;
-  top: 2.2em;
-  z-index: 100;
 }
 
-.rt-calendar-wrapper {
-  position: relative;
-}
-
-.rt-calendar-label {
-  display: flex;
-  cursor: pointer;
-}
-.rt-calendar-label > .k-icon {
-  margin-right: 0.75rem;
+.retour-calendar .k-calendar-day[data-is-intersected] {
+  background-color: rgba(255, 255, 255, 0.25);
+}.retour-timeframe .k-dropdown-content {
+  top: calc(100% + .5rem);
 }.rt-stats [aria-current] {
   color: #fff;
   font-weight: 600;
@@ -110,6 +64,7 @@
 .retour-timeline .ct-label {
   color: #777;
   stroke: #777;
+  stroke-dasharray: 2px;
 }
 
 .retour-timeline .ct-label.ct-vertical.ct-start {
@@ -146,6 +101,11 @@
 
 .retour-table-filter > * {
   border-bottom: 1px solid transparent;
+}
+
+.retour-table-filter .k-button-text {
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .retour-table-filter input {

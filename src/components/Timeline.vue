@@ -36,11 +36,11 @@ export default {
     max() {
       return this.$library.dayjs(this.data[this.data.length - 1].date);
     },
-    selection() {
-      return this.$store.getters["retour/selection"];
+    mode() {
+      return this.$store.getters["retour/mode"];
     },
     unit() {
-      if (this.selection === "day") {
+      if (this.mode === "day") {
         return "hour";
       }
 
@@ -68,19 +68,19 @@ export default {
       return ticks;
     },
     format() {
-      if (this.selection === "day") {
+      if (this.mode === "day") {
         return "HH"
       }
 
-      if (this.selection === "week") {
+      if (this.mode === "week") {
         return "ddd"
       }
 
-      if (this.selection === "month") {
+      if (this.mode === "month") {
         return "D";
       }
 
-      if (this.selection === "year") {
+      if (this.mode === "year") {
         return "MMM";
       }
 
@@ -207,6 +207,7 @@ export default {
 .retour-timeline .ct-label {
   color: #777;
   stroke: #777;
+  stroke-dasharray: 2px;
 }
 .retour-timeline .ct-label.ct-vertical.ct-start {
   font-size: .8rem;

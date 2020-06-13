@@ -7,6 +7,14 @@
     tab="failures"
     @option="onResolve"
   >
+    <template #button>
+      <k-button
+        text="Clear log"
+        icon="trash"
+        @click="$refs.flushDialog.open()"
+      />
+    </template>
+
     <template #dialogs>
       <k-dialog
         ref="flushDialog"
@@ -67,6 +75,16 @@ export default {
     }
   },
   methods: {
+    async onFlush() {
+      try {
+        await this.$api.post("retour/logs/flush");
+        this.$refs.flushDialog.close();
+        this.$store.dispatch("retour/load");
+
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
+    },
     async onResolve(option, row) {
       await this.$router.push("#routes");
       this.$events.$emit("retour.resolve", { from: row.path });

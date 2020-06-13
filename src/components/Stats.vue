@@ -8,11 +8,11 @@
       </header>
 
       <k-grid gutter="medium">
-        <k-column width="1/4" class="retour-stats-box">
+        <k-column width="1/4" class="retour-stats-box rounded-sm">
           <retour-chart />
         </k-column>
 
-        <k-column width="3/4" class="retour-stats-box">
+        <k-column width="3/4" class="retour-stats-box rounded-sm">
           <retour-timeline />
         </k-column>
       </k-grid>

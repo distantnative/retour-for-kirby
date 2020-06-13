@@ -1,166 +1,89 @@
 <template>
-  <div v-if="show" class="rt-calendar-wrapper">
-    <div @click.stop="close" class="rt-calendar-label">
-      <k-icon type="calendar" /> {{ display(from, to) }}
-    </div>
-
-    <calendar ref="calendar" :from="from" :to="to" @select="select" />
-  </div>
-
-  <div v-else @click="open" class="rt-calendar-label">
-    <k-icon type="calendar" /> {{ active }}
-  </div>
+  <k-dropdown class="retour-timeframe">
+    <k-button
+      :text="label"
+      icon="calendar"
+      @click="$refs.calendar.open()"
+    />
+    <k-dropdown-content ref="calendar">
+      <retour-calendar
+        :value="selection"
+        @input="onInput"
+      />
+    </k-dropdown-content>
+  </k-dropdown>
 </template>
 
 <script>
-import Calendar from "./Calendar.vue";
-
 export default {
-  components: {
-    Calendar
-  },
-  data() {
-    return {
-      from: null,
-      to: null,
-      show: false
-    };
-  },
   computed: {
-    active() {
-      return this.display(
-        this.$store.state.retour.selection.from,
-        this.$store.state.retour.selection.to
-      );
+    begin() {
+      return this.selection.begin;
+    },
+    end() {
+      return this.selection.end;
+    },
+    label() {
+      if (
+        this.begin.isSame(this.end, "date") &&
+        this.begin.isSame(this.end, "month") &&
+        this.begin.isSame(this.end, "year")
+      ) {
+        return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")}`;
+      }
+
+      if (
+        this.begin.isSame(this.end, "month") &&
+        this.begin.isSame(this.end, "year") &&
+        this.begin.date() === 1 &&
+        this.end.date() === this.end.daysInMonth()
+      ) {
+        return `${this.month(this.begin)} ${this.begin.format("YYYY")}`;
+      }
+
+      if (
+        this.begin.isSame(this.end, "year") &&
+        this.begin.date() === 1 &&
+        this.begin.month() === 0 &&
+        this.end.date() === 31 &&
+        this.end.month() === 11
+      ) {
+        return `${this.begin.format("YYYY")}`;
+      }
+
+      if (
+        this.begin.isSame(this.end, "month") &&
+        this.begin.isSame(this.end, "year")
+      ) {
+        return `${this.begin.format("D")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      }
+
+      if (this.begin.isSame(this.end, "year")) {
+        return `${this.begin.format("D")} ${this.month(this.begin)} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      }
+
+      return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+    },
+    selection() {
+      return this.$store.state.retour.selection;
     }
   },
   methods: {
-    onClick(e) {
-      if (this.$refs.calendar) {
-        e.stopPropagation();
-
-        if (!this.$refs.calendar.$el.contains(e.target)) {
-          this.close();
-        }
-      }
-    },
-    display(from, to) {
-      if (!from && !to) {
-        return "...";
-      }
-
-      if (!to) {
-        return (
-          from.format("D ") + this.month(from) + from.format(" YYYY") + " –"
-        );
-      }
-
-      if (!from) {
-        return "– " + to.format("D ") + this.month(to) + to.format(" YYYY");
-      }
-
-      if (
-        from.isSame(to, "date") &&
-        from.isSame(to, "month") &&
-        from.isSame(to, "year")
-      ) {
-        return from.format("D ") + this.month(from) + from.format(" YYYY");
-      }
-
-      if (
-        from.isSame(to, "month") &&
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        to.date() === to.daysInMonth()
-      ) {
-        return this.month(from) + from.format(" YYYY");
-      }
-
-      if (
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        from.month() === 0 &&
-        to.date() === 31 &&
-        to.month() === 11
-      ) {
-        return from.format("YYYY");
-      }
-
-      if (from.isSame(to, "month") && from.isSame(to, "year")) {
-        return (
-          from.format("D") +
-          " - " +
-          to.format("D ") +
-          this.month(to) +
-          to.format(" YYYY")
-        );
-      }
-
-      if (from.isSame(to, "year")) {
-        return (
-          from.format("D ") +
-          this.month(from) +
-          " - " +
-          to.format("D ") +
-          this.month(to) +
-          to.format(" YYYY")
-        );
-      }
-
-      return (
-        from.format("D ") +
-        this.month(from) +
-        from.format(" YYYY") +
-        " - " +
-        to.format("D ") +
-        this.month(to) +
-        to.format(" YYYY")
-      );
-    },
     month(date) {
       let month = date.format("MMMM");
       month = this.$helper.string.lcfirst(month);
       return this.$t("months." + month);
     },
-    open() {
-      this.from = this.$store.state.retour.selection.from;
-      this.to = this.$store.state.retour.selection.to;
-      this.show = true;
-    },
-    close() {
-      if (this.from && this.to) {
-        this.$store.dispatch("retour/timeframe", {
-          from: this.from,
-          to: this.to
-        });
-        this.show = false;
-      }
-    },
-    select(dates) {
-      this.from = dates.from;
-      this.to = dates.to;
-      this.close();
+    onInput(selection) {
+      this.$store.dispatch("retour/selection", selection);
+      this.$refs.calendar.close();
     }
   }
 };
 </script>
 
 <style lang="scss">
-.rt-calendar {
-  position: absolute;
-  width: 16em;
-  top: 2.2em;
-  z-index: 100;
-}
-.rt-calendar-wrapper {
-  position: relative;
-}
-.rt-calendar-label {
-  display: flex;
-  cursor: pointer;
-
-  > .k-icon {
-    margin-right: 0.75rem;
-  }
+.retour-timeframe .k-dropdown-content {
+  top: calc(100% + .5rem);
 }
 </style>
