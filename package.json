@@ -21,8 +21,11 @@
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.0",
     "cssnano": "^4.1.10",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "sass": "^1.22.7",
     "vue-template-compiler": "^2.6.10"
   },
-  "browserslist": ["last 1 Chrome versions"]
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
 }
