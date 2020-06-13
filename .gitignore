@@ -30,6 +30,7 @@
 
 # Plugin files
 .samples
+report.html
 
 # Tests
 .php_cs.cache
