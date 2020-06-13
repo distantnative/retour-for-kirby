@@ -1,11 +1,10 @@
 <template>
   <retour-table
     :columns="columns"
-    :empty="$t('retour.tbl.redirects.empty')"
+    :empty="$t('retour.routes.empty')"
     :options="options"
     :rows="rows"
     tab="routes"
-    @add="onOption('add')"
     @cell="onCell"
     @option="onOption"
   >
@@ -14,7 +13,7 @@
       <k-button
         text="New redirect"
         icon="add"
-        @click="$emit('add')"
+        @click="onOption('add')"
       />
     </template>
 
@@ -82,19 +81,19 @@ export default {
     columns() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("retour.routes.fields.from"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         to: {
-          label: this.$t("retour.redirects.to"),
+          label: this.$t("retour.routes.fields.to"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         status: {
-          label: this.$t("retour.redirects.status"),
+          label: this.$t("retour.routes.fields.status"),
           type: "status",
           width: "1/12",
           align: "center"
@@ -113,10 +112,10 @@ export default {
     fields() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("retour.routes.fields.from"),
           type: "text",
           before: window.panel.site + "/",
-          help: this.$t("retour.redirects.from.help", {
+          help: this.$t("retour.routes.fields.from.help", {
             docs: "https://distantnative.com/retour/docs"
           }),
           icon: "url",
@@ -125,15 +124,15 @@ export default {
           width: "1/2"
         },
         to: {
-          label: this.$t("retour.redirects.to"),
+          label: this.$t("retour.routes.fields.to"),
           type: "retour-target",
-          help: this.$t("retour.redirects.to.help"),
+          help: this.$t("retour.routes.fields.to.help"),
           icon: "parent",
           counter: false,
           width: "1/2"
         },
         status: {
-          label: this.$t("retour.redirects.status"),
+          label: this.$t("retour.routes.fields.status"),
           type: "retour-status",
           options: [
             ...Object.keys(this.$store.state.retour.system.headers).map(code => ({
@@ -141,7 +140,7 @@ export default {
               value: code.substr(1)
             }))
           ],
-          help: this.$t("retour.redirects.status.help", {
+          help: this.$t("retour.routes.fields.status.help", {
             docs: "https://distantnative.com/retour/docs"
           }),
           width: "1/2"
@@ -185,8 +184,11 @@ export default {
       this.rowIndex = null;
       this.after = null;
     },
-    onCell({ row, rowIndex }) {
+    onCell({ row, rowIndex, columnIndex }) {
       this.onOption("edit", row, rowIndex);
+      setTimeout(() => {
+        this.$refs.editDialog.focus(columnIndex);
+      }, 50);
     },
     async onEdit() {
       let rows = this.$helper.clone(this.rows);

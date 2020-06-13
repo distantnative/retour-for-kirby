@@ -1,7 +1,7 @@
 <template>
   <retour-table
     :columns="columns"
-    :empty="$t('retour.tbl.fails.empty')"
+    :empty="$t('retour.failures.empty')"
     :options="options"
     :rows="rows"
     tab="failures"
@@ -9,7 +9,7 @@
   >
     <template #button>
       <k-button
-        text="Clear log"
+        :text="$t('retour.failures.clear')"
         icon="trash"
         @click="$refs.flushDialog.open()"
       />
@@ -19,13 +19,13 @@
       <k-dialog
         ref="flushDialog"
         :submit-button="{
-          text: $t('retour.settings.log.clear'),
+          text: $t('retour.failures.clear'),
           color: 'negative',
           icon: 'trash'
         }"
         @submit="onFlush"
       >
-        <k-text>{{ $t('retour.settings.log.clear.confirm') }}</k-text>
+        <k-text>{{ $t('retour.failures.clear.confirm') }}</k-text>
       </k-dialog>
     </template>
 
@@ -43,13 +43,13 @@ export default {
     columns() {
       return {
         path: {
-          label: this.$t("retour.fails.path"),
+          label: this.$t("retour.failures.path"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         referrer: {
-          label: this.$t("retour.fails.referrer"),
+          label: this.$t("retour.failures.referrer"),
           type: "link",
           filter: true,
           width: "1/3"
@@ -67,7 +67,7 @@ export default {
     },
     options() {
       return [
-        { text: this.$t("retour.fails.resolve"), icon: "add", click: "resolve" }
+        { text: this.$t("retour.failures.resolve"), icon: "add", click: "resolve" }
       ];
     },
     rows() {

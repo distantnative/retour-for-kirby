@@ -56,9 +56,9 @@
           <option :value="10">10</option>
           <option :value="25">25</option>
           <option :value="50">50</option>
-          <option :value="null">{{ $t("retour.tbl.all") }}</option>
+          <option :value="null">{{ $t("retour.table.perPage.all") }}</option>
         </select>&nbsp;
-        {{ $t("retour.tbl.perPage") }}
+        {{ $t("retour.table.perPage.after") }}
       </div>
       <k-pagination
         :details="true"
@@ -99,7 +99,7 @@ export default {
     tab: String
   },
   data() {
-    const page  = sessionStorage.getItem("retour$" + this.tab + "$page");
+    const page  = 1;
     const limit = localStorage.getItem("retour$" + this.tab + "$limit");
     return {
       page: parseInt(page) || 1,
@@ -157,15 +157,14 @@ export default {
   methods: {
     onLimit(limit) {
       this.limit = limit;
+      this.page  = 1;
       localStorage.setItem("retour$" + this.tab + "$limit", this.limit);
-      this.onPaginate({ page: 1 });
     },
     onOption(option, row, rowIndex) {
       this.$emit('option', option, row, rowIndex);
     },
     onPaginate(pagination) {
       this.page = pagination.page;
-      sessionStorage.setItem("retour$" + this.tab + "$page", this.page);
     }
   }
 }

@@ -4,13 +4,16 @@
 
     <figcaption>
       <div>
-        <k-icon type="circle" color="focus" /> {{ redirected }} {{ $t('retour.redirected') }}
+        <k-icon type="circle" color="focus" />
+        {{ redirected }} {{ $t('retour.stats.redirected') }}
       </div>
       <div>
-        <k-icon type="circle" color="border" /> {{ resolved }} {{ $t('retour.resolved') }}
+        <k-icon type="circle" color="border" />
+        {{ resolved }} {{ $t('retour.stats.resolved') }}
       </div>
       <div>
-        <k-icon type="circle" color="negative" /> {{ failed }} {{ $t('retour.failed') }}
+        <k-icon type="circle" color="negative" />
+        {{ failed }} {{ $t('retour.stats.failed') }}
       </div>
     </figcaption>
   </figure>
