@@ -15978,13 +15978,13 @@ var _default = {
   computed: {
     failed() {
       return this.$store.state.retour.data.failures.reduce((i, x) => {
-        return i += parseInt(x.hits);
+        return i += parseInt(x.hits || 0);
       }, 0);
     },
 
     redirected() {
       return this.$store.state.retour.data.routes.reduce((i, x) => {
-        return i += parseInt(x.hits);
+        return i += parseInt(x.hits || 0);
       }, 0);
     },
 
@@ -16000,7 +16000,9 @@ var _default = {
 
   },
   methods: {
-    onUpdate() {}
+    onUpdate() {
+      this.$store.dispatch("retour/system", true);
+    }
 
   }
 };
@@ -17203,8 +17205,10 @@ var _default = Vue => ({
       await Promise.all(load);
     },
 
-    async system(context) {
-      const system = await Vue.$api.get("retour/system");
+    async system(context, reload = false) {
+      const system = await Vue.$api.get("retour/system", {
+        reload: reload
+      });
       context.commit("SET_SYSTEM", system);
     }
 
