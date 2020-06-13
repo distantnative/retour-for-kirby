@@ -14789,7 +14789,163 @@ render._withStripped = true
       
       }
     })();
-},{"./TimeframeDropdown.vue":"components/TimeframeDropdown.vue","./PrevNext.vue":"components/PrevNext.vue","./Chart.vue":"components/Chart.vue","./Timeline.vue":"components/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableLinkPreview.vue":[function(require,module,exports) {
+},{"./TimeframeDropdown.vue":"components/TimeframeDropdown.vue","./PrevNext.vue":"components/PrevNext.vue","./Chart.vue":"components/Chart.vue","./Timeline.vue":"components/Timeline.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableFilter.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  props: {
+    label: String,
+    value: String
+  },
+
+  data() {
+    return {
+      isFocused: false
+    };
+  },
+
+  methods: {
+    onBlur() {
+      if (!this.value) {
+        this.isFocused = false;
+      }
+    },
+
+    onInput(value) {
+      this.$emit("input", value);
+    },
+
+    onToggle() {
+      if (this.isFocused) {
+        this.isFocused = false;
+        this.onInput(null);
+      } else {
+        this.isFocused = true;
+        this.$nextTick(() => {
+          this.$refs.input.focus();
+        });
+      }
+    }
+
+  }
+};
+exports.default = _default;
+        var $480b0f = exports.default || module.exports;
+      
+      if (typeof $480b0f === 'function') {
+        $480b0f = $480b0f.options;
+      }
+    
+        /* template */
+        Object.assign($480b0f, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "retour-table-filter flex items-center",
+      attrs: { "data-focus": _vm.isFocused }
+    },
+    [
+      _c("k-button", {
+        staticClass: "mr-2",
+        attrs: {
+          icon: {
+            type: _vm.isFocused ? "cancel" : "search",
+            size: "small"
+          },
+          text: _vm.isFocused ? null : _vm.label
+        },
+        on: { click: _vm.onToggle }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isFocused,
+            expression: "isFocused"
+          }
+        ],
+        ref: "input",
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.onInput($event.target.value)
+          },
+          blur: _vm.onBlur
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$480b0f', $480b0f);
+          } else {
+            api.reload('$480b0f', $480b0f);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableLinkPreview.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15003,6 +15159,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _TableFilter = _interopRequireDefault(require("./TableFilter.vue"));
+
 var _TableLinkPreview = _interopRequireDefault(require("./TableLinkPreview.vue"));
 
 var _TableStatusPreview = _interopRequireDefault(require("./TableStatusPreview.vue"));
@@ -15087,8 +15245,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
 var _default = {
   components: {
+    "retour-table-filter": _TableFilter.default,
     "retour-table-link-preview": _TableLinkPreview.default,
     "retour-table-status-preview": _TableStatusPreview.default
   },
@@ -15113,14 +15276,36 @@ var _default = {
     const limit = localStorage.getItem("retour$" + this.tab + "$limit");
     return {
       page: parseInt(page) || 1,
-      limit: parseInt(limit) || 10
+      limit: parseInt(limit) || 10,
+      filter: null,
+      hasFilter: false
     };
   },
 
   computed: {
+    filteredRows() {
+      if (!this.filter) {
+        return this.rows;
+      } // get columns that should be filtered
+
+
+      const columns = Object.keys(this.columns).filter(key => this.columns[key].filter === true); // filter rows by checking each column to filter if
+      // includes current query
+
+      return this.rows.filter(row => {
+        let match = false;
+        columns.forEach(column => {
+          if (row[column].includes(this.filter) === true) {
+            match = true;
+          }
+        });
+        return match === true;
+      });
+    },
+
     normalizedRows() {
       // TODO: remove when fixed in core
-      return this.paginatedRows.map(row => {
+      return this.filteredRows.map(row => {
         Object.keys(row).forEach(key => {
           row[key] = row[key] || "";
         });
@@ -15135,10 +15320,10 @@ var _default = {
 
     paginatedRows() {
       if (!this.limit) {
-        return this.rows;
+        return this.filteredRows;
       }
 
-      return this.rows.slice(this.limit * (this.page - 1), this.limit * this.page);
+      return this.filteredRows.slice(this.limit * (this.page - 1), this.limit * this.page);
     }
 
   },
@@ -15179,14 +15364,23 @@ exports.default = _default;
     "div",
     { staticClass: "retour-table" },
     [
-      _vm.add
-        ? _c(
-            "header",
-            { staticClass: "flex items-center justify-between mb-3" },
-            [
-              _c("div"),
-              _vm._v(" "),
-              _c("k-button", {
+      _c(
+        "header",
+        { staticClass: "flex items-center justify-between mb-2" },
+        [
+          _c("retour-table-filter", {
+            attrs: { label: _vm.$helper.string.ucfirst(_vm.tab) },
+            model: {
+              value: _vm.filter,
+              callback: function($$v) {
+                _vm.filter = $$v
+              },
+              expression: "filter"
+            }
+          }),
+          _vm._v(" "),
+          _vm.add
+            ? _c("k-button", {
                 attrs: { text: _vm.add, icon: "add" },
                 on: {
                   click: function($event) {
@@ -15194,10 +15388,10 @@ exports.default = _default;
                   }
                 }
               })
-            ],
-            1
-          )
-        : _vm._e(),
+            : _vm._e()
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("k-table", {
         attrs: {
@@ -15348,7 +15542,7 @@ render._withStripped = true
         
       }
     })();
-},{"./TableLinkPreview.vue":"components/TableLinkPreview.vue","./TableStatusPreview.vue":"components/TableStatusPreview.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/RoutesTab.vue":[function(require,module,exports) {
+},{"./TableFilter.vue":"components/TableFilter.vue","./TableLinkPreview.vue":"components/TableLinkPreview.vue","./TableStatusPreview.vue":"components/TableStatusPreview.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/RoutesTab.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15438,11 +15632,13 @@ var _default = {
         from: {
           label: this.$t("retour.redirects.from"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         to: {
           label: this.$t("retour.redirects.to"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         status: {
@@ -15791,11 +15987,13 @@ var _default = {
         path: {
           label: this.$t("retour.fails.path"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         referrer: {
           label: this.$t("retour.fails.referrer"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         hits: {

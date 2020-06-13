@@ -77,11 +77,13 @@ export default {
         from: {
           label: this.$t("retour.redirects.from"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         to: {
           label: this.$t("retour.redirects.to"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         status: {

@@ -37,11 +37,13 @@ export default {
         path: {
           label: this.$t("retour.fails.path"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         referrer: {
           label: this.$t("retour.fails.referrer"),
           type: "link",
+          filter: true,
           width: "1/3"
         },
         hits: {
