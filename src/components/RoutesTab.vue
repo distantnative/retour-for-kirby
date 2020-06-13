@@ -8,10 +8,10 @@
     @cell="onCell"
     @option="onOption"
   >
-
+    <!-- add button -->
     <template #button>
       <k-button
-        text="New redirect"
+        :text="$t('retour.routes.add')"
         icon="add"
         @click="onOption('add')"
       />
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      row: null,
+      row: {},
       rowIndex: null,
       after: null,
       isLoading: false
@@ -187,7 +187,7 @@ export default {
       this.$refs.addDialog.close();
     },
     onCancel() {
-      this.row = null;
+      this.row = {};
       this.rowIndex = null;
       this.after = null;
     },
@@ -199,7 +199,8 @@ export default {
     },
     async onEdit() {
       let rows = this.$helper.clone(this.rows);
-      rows.splice(this.rowIndex, 1, this.row);
+      let row  = this.$helper.clone(this.row);
+      rows.splice(this.rowIndex, 1, row);
       await this.onUpdate(rows);
       this.$refs.editDialog.close();
     },

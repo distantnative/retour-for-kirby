@@ -50,15 +50,15 @@ class Route
      */
     public function status(): ?int
     {
-        if ($this->options['status'] === 'disabled') {
-            return null;
-        }
-
         if (isset($this->options['status']) === false) {
             return null;
         }
 
         if (empty($this->options['status']) === true) {
+            return null;
+        }
+
+        if ($this->options['status'] === 'disabled') {
             return null;
         }
 

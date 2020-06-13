@@ -103,6 +103,10 @@ class Routes
      */
     public function update(array $data = [])
     {
+        $data = array_map(function ($route) {
+            $route = new Route($route);
+            return $route->toArray();
+        }, $data);
         return Data::write($this->file, $data, 'yaml');
     }
 }
