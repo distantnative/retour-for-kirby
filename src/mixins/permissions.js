@@ -1,26 +1,5 @@
 
-export function date(array) {
-  return array.map(x => {
-    if (x.last) {
-      x.last = x.last.replace(/-/g, "/");
-    }
-    return x;
-  });
-}
-
-export function status(code) {
-  if (code === "–") {
-    return "no"
-  }
-
-  if (parseInt(code) >= 300 && parseInt(code) < 400) {
-    return "yes";
-  }
-
-  return "mmm";
-}
-
-export const permissions = {
+export default {
   computed: {
     canAccess() {
       return !(this.$permissions.hasOwnProperty("access") &&

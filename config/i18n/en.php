@@ -5,7 +5,7 @@ return [
 
     'retour.routes'   => 'Routes',
     'retour.failures' => 'Failures',
-    'retour.settings' => 'Settings',
+    'retour.system'   => 'System',
 
 
 

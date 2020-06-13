@@ -8,11 +8,11 @@
       </header>
 
       <k-grid gutter="medium">
-        <k-column width="1/4">
+        <k-column width="1/4" class="retour-stats-box">
           <retour-chart />
         </k-column>
 
-        <k-column width="3/4">
+        <k-column width="3/4" class="retour-stats-box">
           <retour-timeline />
         </k-column>
       </k-grid>
@@ -35,3 +35,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.retour-stats-box {
+  background: #3d3d3d;
+}
+</style>

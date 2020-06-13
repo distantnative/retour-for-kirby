@@ -7,7 +7,7 @@
   >
     <template slot="options">
       <k-button
-        icon="page"
+        icon="circle-nested"
         class="k-field-options-button"
         @click="open"
       >

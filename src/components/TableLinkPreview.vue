@@ -29,7 +29,7 @@ export default {
 
 <style lang="scss">
 .retour-table-link-preview .k-icon-url {
-  margin-right: 0.25rem;
+  margin-right: 0.2rem;
   transform: scale(0.8);
   color: var(--color-border);
 
