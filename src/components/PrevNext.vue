@@ -7,7 +7,7 @@
       :current="mode === by"
       @click="show(by)"
     >
-      {{ $t('retour.stats.' + by) }}
+      {{ $t('retour.stats.mode.' + by) }}
     </k-button>
     <k-button icon="angle-right" :disabled="hasNext" @click="onNext" />
   </k-button-group>
@@ -58,11 +58,11 @@ export default {
           break;
       }
     },
-    onPrev() {
-      return this.navigate("subtract");
-    },
     onNext() {
       return this.navigate("add");
+    },
+    onPrev() {
+      return this.navigate("subtract");
     },
     show(by) {
       const begin = this.$library.dayjs().startOf("day");

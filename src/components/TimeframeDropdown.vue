@@ -62,7 +62,7 @@ export default {
         return `${this.begin.format("D")} ${this.month(this.begin)} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
       }
 
-      return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      return `${this.begin.format("D/MM/YYYY")} - ${this.end.format("D/MM/YYYY")}`;
     },
     selection() {
       return this.$store.state.retour.selection;
