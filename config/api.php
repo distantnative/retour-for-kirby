@@ -11,8 +11,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->redirects()->get(
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
+                    $this->requestQuery('begin'),
+                    $this->requestQuery('end')
                 );
             }
         ],
@@ -30,8 +30,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->logs()->fails(
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
+                    $this->requestQuery('begin'),
+                    $this->requestQuery('end')
                 );
             }
         ],
@@ -41,8 +41,8 @@ return [
             'action'  => function () {
                 return Retour::instance()->logs()->stats(
                     $this->requestQuery('view'),
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
+                    $this->requestQuery('begin'),
+                    $this->requestQuery('end')
                 );
             }
         ],

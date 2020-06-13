@@ -61,15 +61,35 @@ class Retour
      */
     public static function info(): array
     {
-        $info = Remote::get('https://getkirby.com/plugins/distantnative/retour.json')->json();
+        $plugin = kirby()->plugin('distantnative/retour');
 
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'logs'        => option('distantnative.retour.logs'),
-            'release'     => $release = $info['version'],
-            'version'     => $version = kirby()->plugin('distantnative/retour')->version(),
-            'update'      => version_compare($version, $release)
+            // 'release'     => $release = static::release(),
+            'version'     => $version = $plugin->version(),
+            // 'update'      => version_compare($version, $release)
         ];
+    }
+
+    protected static function release(bool $force = false)
+    {
+        $kirby  = kirby();
+        $option = $kirby->option('update.kirby') ?? $kirby->option('update');
+
+        if ($force === true || $option !== false) {
+            $cache  = $kirby->cache('retour');
+            $cached = $cache->get('release');
+
+            if ($cached === null) {
+                $url = 'https://getkirby.com/plugins/distantnative/retour.json';
+                $response = Remote::get($url)->json();
+                $cached = $response['version'];
+                $cache->set('release', $cached, 60 * 24);
+            }
+
+            return $cached;
+        }
     }
 }

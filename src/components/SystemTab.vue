@@ -1,21 +1,15 @@
 <template>
   <div class="retour-settings-tab">
 
-    <header class="flex items-center justify-between">
-      <h3 class="font-bold">
-        About Retour
+    <header class="flex items-center justify-between mb-3">
+      <h3 class="flex items-center font-bold">
+        <k-icon type="road-sign" class="mr-2" /> Retour for Kirby
       </h3>
-      <k-button-group>
-        <k-button
-          text="Check for update"
-          icon="refresh"
-          @click="onUpdate"
-        />
-        <k-button
-          text="Flush logs"
-          icon="trash"
-        />
-      </k-button-group>
+      <k-button
+        text="Check for update"
+        icon="refresh"
+        @click="onUpdate"
+      />
     </header>
 
     <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm">
@@ -107,21 +101,6 @@ export default {
       if (this.$store.state.retour.system.update > 0) {
         return "text-purple";
       }
-    }
-  },
-  methods: {
-    async onFlush() {
-      try {
-        await this.$api.post("retour/logs/flush");
-        this.$refs.flushDialog.close();
-        this.$store.dispatch("retour/load");
-
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      }
-    },
-    async onUpdate() {
-      await this.$store.dispatch("retour/update");
     }
   }
 }

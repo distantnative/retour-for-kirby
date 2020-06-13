@@ -38,12 +38,12 @@ class Redirects
     /**
      * Read all redirects and combine them with records data
      *
-     * @param string $from
-     * @param string $to
+     * @param string $begin
+     * @param string $end
      *
      * @return array
      */
-    public function get(string $from, string $to): array
+    public function get(string $begin, string $end): array
     {
         $redirects = $this->load();
 
@@ -52,8 +52,12 @@ class Redirects
            return $redirects;
         }
 
-        return array_map(function ($redirect) use ($from, $to) {
-            return Retour::instance()->logs()->redirect($redirect, $from, $to);
+        return array_map(function ($redirect) use ($begin, $end) {
+            return Retour::instance()->logs()->redirect(
+                $redirect,
+                $begin,
+                $end
+            );
         }, $redirects);
     }
 
@@ -77,7 +81,7 @@ class Redirects
             return [
                 'pattern' => $redirect['from'],
                 'action'  => function (...$parameters) use ($redirect, $logs) {
-                    $code = (int) $redirect['status'];
+                    $code = (int)$redirect['status'];
                     $to   = $redirect['to'];
 
                     // Create log record

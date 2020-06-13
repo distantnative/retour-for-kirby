@@ -1,6 +1,5 @@
 <template>
   <retour-table
-    add="Add redirect"
     :columns="columns"
     :empty="$t('retour.tbl.redirects.empty')"
     :options="options"
@@ -10,6 +9,14 @@
     @cell="onCell"
     @option="onOption"
   >
+
+    <template #button>
+      <k-button
+        text="New redirect"
+        icon="add"
+        @click="$emit('add')"
+      />
+    </template>
 
     <template #dialogs>
       <!-- add dialog -->
