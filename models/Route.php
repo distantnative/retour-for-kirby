@@ -81,7 +81,7 @@ class Route
      *
      * @return array
      */
-    protected function toRule(): array
+    public function toRule(): array
     {
         $route = $this;
 
