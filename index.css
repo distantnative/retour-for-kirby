@@ -83,6 +83,11 @@
   fill-opacity: 0.85;
 }.retour-stats-box {
   background: #3d3d3d;
+}.retour-view .k-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }.retour-table-filter {
   height: 1.1rem;
 }
