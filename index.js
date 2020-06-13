@@ -15025,21 +15025,6 @@ var _default = {
       });
     },
 
-    normalizedRows() {
-      // TODO: remove when fixed in core
-      return this.filteredRows.map(row => {
-        Object.keys(row).forEach(key => {
-          row[key] = row[key] || "";
-        });
-
-        if (row.last) {
-          row.last = row.last.replace(/-/g, "/");
-        }
-
-        return row;
-      });
-    },
-
     paginatedRows() {
       if (!this.limit) {
         return this.filteredRows;
@@ -15108,7 +15093,7 @@ exports.default = _default;
           columns: _vm.columns,
           index: _vm.limit * (_vm.page - 1) + 1,
           options: _vm.options,
-          rows: _vm.normalizedRows
+          rows: _vm.filteredRows
         },
         on: {
           cell: function($event) {
@@ -15345,7 +15330,7 @@ var _default = {
 
   data() {
     return {
-      row: null,
+      row: {},
       rowIndex: null,
       after: null,
       isLoading: false
@@ -15474,7 +15459,7 @@ var _default = {
     },
 
     onCancel() {
-      this.row = null;
+      this.row = {};
       this.rowIndex = null;
       this.after = null;
     },
@@ -15492,7 +15477,8 @@ var _default = {
 
     async onEdit() {
       let rows = this.$helper.clone(this.rows);
-      rows.splice(this.rowIndex, 1, this.row);
+      let row = this.$helper.clone(this.row);
+      rows.splice(this.rowIndex, 1, row);
       await this.onUpdate(rows);
       this.$refs.editDialog.close();
     },
@@ -15575,7 +15561,7 @@ exports.default = _default;
         fn: function() {
           return [
             _c("k-button", {
-              attrs: { text: "New redirect", icon: "add" },
+              attrs: { text: _vm.$t("retour.routes.add"), icon: "add" },
               on: {
                 click: function($event) {
                   return _vm.onOption("add")
@@ -15775,7 +15761,7 @@ var _default = {
   methods: {
     async onFlush() {
       try {
-        await this.$api.post("retour/logs/flush");
+        await this.$api.post("retour/log/flush");
         this.$refs.flushDialog.close();
         this.$store.dispatch("retour/load");
       } catch (error) {
@@ -16011,6 +15997,10 @@ var _default = {
         return "text-purple";
       }
     }
+
+  },
+  methods: {
+    onUpdate() {}
 
   }
 };
@@ -16965,7 +16955,7 @@ var _default = {
 
     select(items) {
       if (items.length > 0) {
-        this.$emit("input", items[0].id);
+        this.$emit("input", items[0]);
       }
     }
 

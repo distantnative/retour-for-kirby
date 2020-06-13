@@ -42,7 +42,7 @@ export default {
     },
     select(items) {
       if (items.length > 0) {
-        this.$emit("input", items[0].id);
+        this.$emit("input", items[0]);
       }
     }
   }

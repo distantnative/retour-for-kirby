@@ -11,6 +11,7 @@ return [
     'retour.hits.last' => 'Last',
 
     'retour.routes'       => 'Routes',
+    'retour.routes.add'   => 'Add redirect',
     'retour.routes.empty' => 'No redirect routes configured',
 
     'retour.routes.fields.from'            => 'Path',

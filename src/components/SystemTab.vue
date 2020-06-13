@@ -110,6 +110,11 @@ export default {
         return "text-purple";
       }
     }
+  },
+  methods: {
+    onUpdate() {
+
+    }
   }
 }
 </script>

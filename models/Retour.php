@@ -57,14 +57,14 @@ class Retour
      */
     public static function info(): array
     {
-        $plugin = kirby()->plugin('distantnative/retour');
+        // $plugin = kirby()->plugin('distantnative/retour');
 
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'hasLog'      => option('distantnative.retour.logs'),
             // 'release'     => $release = static::release(),
-            'version'     => $version = $plugin->version(),
+            // 'version'     => $version = $plugin->version(),
             // 'update'      => version_compare($version, $release)
         ];
     }
