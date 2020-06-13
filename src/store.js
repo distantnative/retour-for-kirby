@@ -145,8 +145,8 @@ export default (Vue) => ({
 
       await Promise.all(load);
     },
-    async system(context) {
-      const system = await Vue.$api.get("retour/system");
+    async system(context, reload = false) {
+      const system = await Vue.$api.get("retour/system", { reload: reload });
       context.commit("SET_SYSTEM", system);
     }
   }

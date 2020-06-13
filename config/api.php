@@ -50,7 +50,8 @@ return [
             'pattern' => 'retour/system',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::info();
+                $reload = $this->requestQuery('reload') !== 'false';
+                return Retour::info($reload);
             }
         ],
         [
