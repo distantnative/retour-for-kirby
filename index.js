@@ -16319,11 +16319,9 @@ var _default = {
   watch: {
     "$route.hash": {
       handler() {
-        if (this.hasLog) {
-          this.$emit("breadcrumb", [{
-            text: this.tabs.filter(tab => tab.name === this.tab)[0].label
-          }]);
-        }
+        this.$emit("breadcrumb", [{
+          text: this.tabs.filter(tab => tab.name === this.tab)[0].label
+        }]);
       },
 
       immediate: true
