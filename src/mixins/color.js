@@ -3,7 +3,7 @@ export default {
   computed: {
     color() {
       if (!this.value) {
-        return "gray-light"
+        return "red-light"
       }
 
       if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
