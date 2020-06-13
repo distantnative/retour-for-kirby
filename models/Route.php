@@ -6,7 +6,6 @@ use Kirby\Cms\Response;
 use Kirby\Http\Header;
 use Kirby\Http\Url;
 
-
 class Route
 {
 
@@ -20,7 +19,7 @@ class Route
         $this->options = $options;
     }
 
-    protected function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         return $this->options[$name] ?? null;
     }
