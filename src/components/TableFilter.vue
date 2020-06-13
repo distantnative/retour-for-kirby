@@ -15,7 +15,7 @@
     <input
       ref="input"
       v-show="isFocused"
-      :placeholder="$t('retour.tbl.filter')"
+      :placeholder="$t('retour.table.filter')"
       :value="value"
       @input="onInput($event.target.value)"
       @blur="onBlur"

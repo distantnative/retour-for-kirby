@@ -9698,7 +9698,7 @@ var _default = {
         return `${this.begin.format("D")} ${this.month(this.begin)} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
       }
 
-      return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      return `${this.begin.format("D/MM/YYYY")} - ${this.end.format("D/MM/YYYY")}`;
     },
 
     selection() {
@@ -9867,12 +9867,12 @@ var _default = {
       }
     },
 
-    onPrev() {
-      return this.navigate("subtract");
-    },
-
     onNext() {
       return this.navigate("add");
+    },
+
+    onPrev() {
+      return this.navigate("subtract");
     },
 
     show(by) {
@@ -9957,7 +9957,11 @@ exports.default = _default;
               }
             }
           },
-          [_vm._v("\n    " + _vm._s(_vm.$t("retour.stats." + by)) + "\n  ")]
+          [
+            _vm._v(
+              "\n    " + _vm._s(_vm.$t("retour.stats.mode." + by)) + "\n  "
+            )
+          ]
         )
       }),
       _vm._v(" "),
@@ -14473,6 +14477,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
 var _default = {
   data() {
     return {
@@ -14553,10 +14560,10 @@ exports.default = _default;
         [
           _c("k-icon", { attrs: { type: "circle", color: "focus" } }),
           _vm._v(
-            " " +
+            "\n      " +
               _vm._s(_vm.redirected) +
               " " +
-              _vm._s(_vm.$t("retour.redirected")) +
+              _vm._s(_vm.$t("retour.stats.redirected")) +
               "\n    "
           )
         ],
@@ -14568,10 +14575,10 @@ exports.default = _default;
         [
           _c("k-icon", { attrs: { type: "circle", color: "border" } }),
           _vm._v(
-            " " +
+            "\n      " +
               _vm._s(_vm.resolved) +
               " " +
-              _vm._s(_vm.$t("retour.resolved")) +
+              _vm._s(_vm.$t("retour.stats.resolved")) +
               "\n    "
           )
         ],
@@ -14583,10 +14590,10 @@ exports.default = _default;
         [
           _c("k-icon", { attrs: { type: "circle", color: "negative" } }),
           _vm._v(
-            " " +
+            "\n      " +
               _vm._s(_vm.failed) +
               " " +
-              _vm._s(_vm.$t("retour.failed")) +
+              _vm._s(_vm.$t("retour.stats.failed")) +
               "\n    "
           )
         ],
@@ -14914,12 +14921,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 var _default = {
   components: {
     "retour-timeframe-dropdown": _TimeframeDropdown.default,
     "retour-prevnext": _PrevNext.default,
     "retour-chart": _Chart.default,
     "retour-timeline": _Timeline.default
+  },
+  methods: {
+    onRefresh() {
+      this.$store.dispatch("retour/load");
+    }
+
   }
 };
 exports.default = _default;
@@ -14944,39 +14959,57 @@ exports.default = _default;
         { staticClass: "mb-6 pt-6 pb-8" },
         [
           _c(
-            "header",
-            {
-              staticClass: "k-header-bar flex items-center justify-between h-10"
-            },
-            [
-              _c("retour-timeframe-dropdown"),
-              _vm._v(" "),
-              _c("retour-prevnext")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
             "k-grid",
             { attrs: { gutter: "medium" } },
             [
               _c(
                 "k-column",
-                {
-                  staticClass: "retour-stats-box rounded-sm",
-                  attrs: { width: "1/4" }
-                },
-                [_c("retour-chart")],
+                { attrs: { width: "1/4" } },
+                [
+                  _c(
+                    "header",
+                    {
+                      staticClass:
+                        "k-header-bar flex items-center justify-between h-10"
+                    },
+                    [_c("retour-timeframe-dropdown")],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("retour-chart", {
+                    staticClass: "retour-stats-box rounded-sm"
+                  })
+                ],
                 1
               ),
               _vm._v(" "),
               _c(
                 "k-column",
-                {
-                  staticClass: "retour-stats-box rounded-sm",
-                  attrs: { width: "3/4" }
-                },
-                [_c("retour-timeline")],
+                { attrs: { width: "3/4" } },
+                [
+                  _c(
+                    "header",
+                    {
+                      staticClass:
+                        "k-header-bar flex items-center justify-between h-10"
+                    },
+                    [
+                      _vm.$config.debug
+                        ? _c("k-button", {
+                            attrs: { icon: "refresh" },
+                            on: { click: _vm.onRefresh }
+                          })
+                        : _c("div"),
+                      _vm._v(" "),
+                      _c("retour-prevnext")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("retour-timeline", {
+                    staticClass: "retour-stats-box rounded-sm"
+                  })
+                ],
                 1
               )
             ],
@@ -15134,7 +15167,7 @@ exports.default = _default;
           }
         ],
         ref: "input",
-        attrs: { placeholder: _vm.$t("retour.tbl.filter") },
+        attrs: { placeholder: _vm.$t("retour.table.filter") },
         domProps: { value: _vm.value },
         on: {
           input: function($event) {
@@ -15486,7 +15519,7 @@ var _default = {
   },
 
   data() {
-    const page = sessionStorage.getItem("retour$" + this.tab + "$page");
+    const page = 1;
     const limit = localStorage.getItem("retour$" + this.tab + "$limit");
     return {
       page: parseInt(page) || 1,
@@ -15544,10 +15577,8 @@ var _default = {
   methods: {
     onLimit(limit) {
       this.limit = limit;
+      this.page = 1;
       localStorage.setItem("retour$" + this.tab + "$limit", this.limit);
-      this.onPaginate({
-        page: 1
-      });
     },
 
     onOption(option, row, rowIndex) {
@@ -15556,7 +15587,6 @@ var _default = {
 
     onPaginate(pagination) {
       this.page = pagination.page;
-      sessionStorage.setItem("retour$" + this.tab + "$page", this.page);
     }
 
   }
@@ -15688,12 +15718,14 @@ exports.default = _default;
                   _c("option", { domProps: { value: 50 } }, [_vm._v("50")]),
                   _vm._v(" "),
                   _c("option", { domProps: { value: null } }, [
-                    _vm._v(_vm._s(_vm.$t("retour.tbl.all")))
+                    _vm._v(_vm._s(_vm.$t("retour.table.perPage.all")))
                   ])
                 ]
               ),
               _vm._v(
-                " \n      " + _vm._s(_vm.$t("retour.tbl.perPage")) + "\n    "
+                " \n      " +
+                  _vm._s(_vm.$t("retour.table.perPage.after")) +
+                  "\n    "
               )
             ]
           ),
@@ -15823,7 +15855,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
 var _default = {
   components: {
     "retour-table": _Table.default
@@ -15842,19 +15873,19 @@ var _default = {
     columns() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("retour.routes.fields.from"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         to: {
-          label: this.$t("retour.redirects.to"),
+          label: this.$t("retour.routes.fields.to"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         status: {
-          label: this.$t("retour.redirects.status"),
+          label: this.$t("retour.routes.fields.status"),
           type: "status",
           width: "1/12",
           align: "center"
@@ -15874,10 +15905,10 @@ var _default = {
     fields() {
       return {
         from: {
-          label: this.$t("retour.redirects.from"),
+          label: this.$t("retour.routes.fields.from"),
           type: "text",
           before: window.panel.site + "/",
-          help: this.$t("retour.redirects.from.help", {
+          help: this.$t("retour.routes.fields.from.help", {
             docs: "https://distantnative.com/retour/docs"
           }),
           icon: "url",
@@ -15886,21 +15917,21 @@ var _default = {
           width: "1/2"
         },
         to: {
-          label: this.$t("retour.redirects.to"),
+          label: this.$t("retour.routes.fields.to"),
           type: "retour-target",
-          help: this.$t("retour.redirects.to.help"),
+          help: this.$t("retour.routes.fields.to.help"),
           icon: "parent",
           counter: false,
           width: "1/2"
         },
         status: {
-          label: this.$t("retour.redirects.status"),
+          label: this.$t("retour.routes.fields.status"),
           type: "retour-status",
           options: [...Object.keys(this.$store.state.retour.system.headers).map(code => ({
             text: code.substr(1) + " - " + this.$store.state.retour.system.headers[code],
             value: code.substr(1)
           }))],
-          help: this.$t("retour.redirects.status.help", {
+          help: this.$t("retour.routes.fields.status.help", {
             docs: "https://distantnative.com/retour/docs"
           }),
           width: "1/2"
@@ -15960,9 +15991,13 @@ var _default = {
 
     onCell({
       row,
-      rowIndex
+      rowIndex,
+      columnIndex
     }) {
       this.onOption("edit", row, rowIndex);
+      setTimeout(() => {
+        this.$refs.editDialog.focus(columnIndex);
+      }, 50);
     },
 
     async onEdit() {
@@ -16038,18 +16073,12 @@ exports.default = _default;
   return _c("retour-table", {
     attrs: {
       columns: _vm.columns,
-      empty: _vm.$t("retour.tbl.redirects.empty"),
+      empty: _vm.$t("retour.routes.empty"),
       options: _vm.options,
       rows: _vm.rows,
       tab: "routes"
     },
-    on: {
-      add: function($event) {
-        return _vm.onOption("add")
-      },
-      cell: _vm.onCell,
-      option: _vm.onOption
-    },
+    on: { cell: _vm.onCell, option: _vm.onOption },
     scopedSlots: _vm._u([
       {
         key: "button",
@@ -16059,7 +16088,7 @@ exports.default = _default;
               attrs: { text: "New redirect", icon: "add" },
               on: {
                 click: function($event) {
-                  return _vm.$emit("add")
+                  return _vm.onOption("add")
                 }
               }
             })
@@ -16220,13 +16249,13 @@ var _default = {
     columns() {
       return {
         path: {
-          label: this.$t("retour.fails.path"),
+          label: this.$t("retour.failures.path"),
           type: "link",
           filter: true,
           width: "1/3"
         },
         referrer: {
-          label: this.$t("retour.fails.referrer"),
+          label: this.$t("retour.failures.referrer"),
           type: "link",
           filter: true,
           width: "1/3"
@@ -16245,7 +16274,7 @@ var _default = {
 
     options() {
       return [{
-        text: this.$t("retour.fails.resolve"),
+        text: this.$t("retour.failures.resolve"),
         icon: "add",
         click: "resolve"
       }];
@@ -16292,7 +16321,7 @@ exports.default = _default;
   return _c("retour-table", {
     attrs: {
       columns: _vm.columns,
-      empty: _vm.$t("retour.tbl.fails.empty"),
+      empty: _vm.$t("retour.failures.empty"),
       options: _vm.options,
       rows: _vm.rows,
       tab: "failures"
@@ -16304,7 +16333,7 @@ exports.default = _default;
         fn: function() {
           return [
             _c("k-button", {
-              attrs: { text: "Clear log", icon: "trash" },
+              attrs: { text: _vm.$t("retour.failures.clear"), icon: "trash" },
               on: {
                 click: function($event) {
                   return _vm.$refs.flushDialog.open()
@@ -16325,7 +16354,7 @@ exports.default = _default;
                 ref: "flushDialog",
                 attrs: {
                   "submit-button": {
-                    text: _vm.$t("retour.settings.log.clear"),
+                    text: _vm.$t("retour.failures.clear"),
                     color: "negative",
                     icon: "trash"
                   }
@@ -16334,7 +16363,7 @@ exports.default = _default;
               },
               [
                 _c("k-text", [
-                  _vm._v(_vm._s(_vm.$t("retour.settings.log.clear.confirm")))
+                  _vm._v(_vm._s(_vm.$t("retour.failures.clear.confirm")))
                 ])
               ],
               1
@@ -16382,6 +16411,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16536,7 +16573,11 @@ exports.default = _default;
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(_vm._s(_vm.$t("retour.settings.redirected")))
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.$t("retour.system.redirects")) +
+                  "\n        "
+              )
             ]),
             _vm._v(" "),
             _c("dd", [_vm._v(_vm._s(_vm.redirected))])
@@ -16546,7 +16587,11 @@ exports.default = _default;
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(_vm._s(_vm.$t("retour.settings.failed")))
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.$t("retour.system.failures")) +
+                  "\n        "
+              )
             ]),
             _vm._v(" "),
             _c("dd", [_vm._v(_vm._s(_vm.failed))])
@@ -16556,16 +16601,22 @@ exports.default = _default;
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(_vm._s(_vm.$t("retour.settings.deleteAfter")))
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.$t("retour.system.deleteAfter")) +
+                  "\n        "
+              )
             ]),
             _vm._v(" "),
             _c("dd", [
               _vm._v(
-                _vm._s(
-                  _vm.$t("retour.settings.deleteAfter.months", {
-                    count: _vm.$store.state.retour.system.deleteAfter || "–"
-                  })
-                )
+                "\n          " +
+                  _vm._s(
+                    _vm.$t("retour.system.deleteAfter.months", {
+                      count: _vm.$store.state.retour.system.deleteAfter || "–"
+                    })
+                  ) +
+                  "\n        "
               )
             ])
           ])
@@ -16577,13 +16628,17 @@ exports.default = _default;
       "ul",
       {
         staticClass:
-          "k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-1"
+          "k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-3"
       },
       [
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v("\n          Installed version\n        ")
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.$t("retour.system.version")) +
+                  "\n        "
+              )
             ]),
             _vm._v(" "),
             _c("dd", { class: _vm.updateClass }, [
@@ -16599,7 +16654,11 @@ exports.default = _default;
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v("\n          Current release\n        ")
+              _vm._v(
+                "\n          " +
+                  _vm._s(_vm.$t("retour.system.release")) +
+                  "\n        "
+              )
             ]),
             _vm._v(" "),
             _c("dd", [
@@ -16615,7 +16674,7 @@ exports.default = _default;
         _c("li", [
           _c("dl", [
             _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(_vm._s(_vm.$t("retour.settings.support")))
+              _vm._v(_vm._s(_vm.$t("retour.system.support")))
             ]),
             _vm._v(" "),
             _c(
@@ -16623,7 +16682,7 @@ exports.default = _default;
               [
                 _c("k-button", {
                   attrs: {
-                    text: "💛 " + _vm.$t("retour.settings.support.donate"),
+                    text: "💛 " + _vm.$t("retour.system.support.donate"),
                     link: "https://paypal.me/distantnative",
                     target: "_blank",
                     theme: "positive"
@@ -16645,7 +16704,7 @@ exports.default = _default;
           attrs: { theme: "help" },
           domProps: {
             innerHTML: _vm._s(
-              _vm.$t("retour.settings.docs", {
+              _vm.$t("retour.system.docs", {
                 docs: "https://distantnative.com/retour/docs"
               })
             )

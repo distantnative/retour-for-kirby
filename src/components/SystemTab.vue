@@ -15,29 +15,37 @@
     <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm">
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">{{ $t("retour.settings.redirected") }}</dt>
+          <dt class="text-sm text-gray mb-2">
+            {{ $t("retour.system.redirects") }}
+          </dt>
           <dd>{{ redirected }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">{{ $t("retour.settings.failed") }}</dt>
+          <dt class="text-sm text-gray mb-2">
+            {{ $t("retour.system.failures") }}
+          </dt>
           <dd>{{ failed }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">{{ $t("retour.settings.deleteAfter") }}</dt>
-          <dd>{{ $t("retour.settings.deleteAfter.months", { count: $store.state.retour.system.deleteAfter || '–' }) }}</dd>
+          <dt class="text-sm text-gray mb-2">
+            {{ $t("retour.system.deleteAfter") }}
+          </dt>
+          <dd>
+            {{ $t("retour.system.deleteAfter.months", { count: $store.state.retour.system.deleteAfter || '–' }) }}
+          </dd>
         </dl>
       </li>
     </ul>
 
-    <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-1">
+    <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-3">
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            Installed version
+            {{ $t("retour.system.version") }}
           </dt>
           <dd :class="updateClass">
             {{ $store.state.retour.system.version || "–" }}
@@ -47,7 +55,7 @@
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            Current release
+            {{ $t("retour.system.release") }}
           </dt>
           <dd>
             {{ $store.state.retour.system.release || "–" }}
@@ -56,10 +64,10 @@
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">{{ $t('retour.settings.support') }}</dt>
+          <dt class="text-sm text-gray mb-2">{{ $t('retour.system.support') }}</dt>
           <dd>
             <k-button
-              :text="'💛 ' + $t('retour.settings.support.donate')"
+              :text="'💛 ' + $t('retour.system.support.donate')"
               link="https://paypal.me/distantnative"
               target="_blank"
               theme="positive"
@@ -72,7 +80,7 @@
     <footer class="mt-2">
       <k-text
         theme="help"
-        v-html="$t('retour.settings.docs', {
+        v-html="$t('retour.system.docs', {
           docs: 'https://distantnative.com/retour/docs'
         })"
       />
