@@ -210,12 +210,12 @@ class Logs
      * Get stats data for specified timeframe and type
      *
      * @param string $unit  timeframe unit (year, month, ...)
-     * @param string $from  date sting (yyyy-mm-dd)
+     * @param string $begin date sting (yyyy-mm-dd)
      * @param string $to    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function stats(string $unit, string $from, string $to): array
+    public function stats(string $unit, string $begin, string $end): array
     {
         // Define parts depending on uni
          $use = [
@@ -227,8 +227,8 @@ class Logs
         switch ($unit) {
             case 'day':
                 // Add time to dates to capture full days
-                $from .= ' 00:00:00';
-                $to   .= ' 23:59:59';
+                $begin .= ' 00:00:00';
+                $end   .= ' 23:59:59';
 
                 $use['func']  = 'datetime';
                 $use['group'] = '%Y-%m-%d %H';
@@ -267,8 +267,8 @@ class Logs
             ORDER BY
                 strftime(:group, dates.date)
         ', [
-            'from'  => $from,
-            'to'    => $to,
+            'from'  => $begin,
+            'to'    => $end,
             'group' => $use['group']
         ], [
             'fetch' => 'array'

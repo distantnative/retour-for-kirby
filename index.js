@@ -117,27 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"mixins/permissions.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  computed: {
-    canAccess() {
-      return !(this.$permissions.hasOwnProperty("access") && this.$permissions.access.hasOwnProperty("retour") && this.$permissions.access.retour === false);
-    },
-
-    canUpdate() {
-      return !(this.$permissions.hasOwnProperty("site") && this.$permissions.site.hasOwnProperty("update") && this.$permissions.site.update === false);
-    }
-
-  }
-};
-exports.default = _default;
-},{}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -8960,22 +8940,50 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
+  extends: "k-calendar",
   props: {
-    from: Object,
-    to: Object
+    value: Object
   },
 
   data() {
-    const start = this.from ? this.getDate(this.from.date(), this.from.month(), this.from.year()) : null;
-    const end = this.to ? this.getDate(this.to.date(), this.to.month(), this.to.year()) : null;
-    const current = start ? start : end ? end : this.$library.dayjs().startOf("day");
-    return {
-      month: current.month() + 1,
-      year: current.year(),
-      start: start,
-      end: end,
-      today: this.$library.dayjs().startOf("day"),
+    const data = {
+      begin: this.getDate(this.value.begin.date(), this.value.begin.month(), this.value.begin.year()),
+      end: this.getDate(this.value.end.date(), this.value.end.month(), this.value.end.year()),
+      today: this.$library.dayjs().startOf("day")
+    };
+    return { ...data,
+      month: data.begin.month(),
+      year: data.begin.year(),
       hover: null
     };
   },
@@ -8983,139 +8991,36 @@ var _default = {
   computed: {
     date() {
       return this.getDate(1);
-    },
-
-    numberOfDays() {
-      return this.date.daysInMonth();
-    },
-
-    numberOfWeeks() {
-      return Math.ceil((this.numberOfDays + this.firstWeekday - 1) / 7);
-    },
-
-    firstWeekday() {
-      const weekday = this.date.startOf("month").day();
-      return weekday > 0 ? weekday : 7;
-    },
-
-    weekdays() {
-      return [this.$t("days.mon"), this.$t("days.tue"), this.$t("days.wed"), this.$t("days.thu"), this.$t("days.fri"), this.$t("days.sat"), this.$t("days.sun")];
-    },
-
-    monthnames() {
-      return [this.$t("months.january"), this.$t("months.february"), this.$t("months.march"), this.$t("months.april"), this.$t("months.may"), this.$t("months.june"), this.$t("months.july"), this.$t("months.august"), this.$t("months.september"), this.$t("months.october"), this.$t("months.november"), this.$t("months.december")];
-    },
-
-    months() {
-      var options = [];
-      this.monthnames.forEach((item, index) => {
-        options.push({
-          value: index,
-          text: item
-        });
-      });
-      return options;
-    },
-
-    years() {
-      var options = [];
-
-      for (var x = this.year - 10; x <= this.year + 10; x++) {
-        options.push({
-          value: x,
-          text: this.$helper.pad(x)
-        });
-      }
-
-      return options;
     }
 
   },
   methods: {
-    days(week) {
-      let days = [];
-      let start = (week - 1) * 7 + 1;
-
-      for (var x = start; x < start + 7; x++) {
-        var day = x - (this.firstWeekday - 1);
-
-        if (day <= 0 || day > this.numberOfDays) {
-          days.push("");
-        } else {
-          days.push(day);
-        }
-      }
-
-      return days;
-    },
-
-    next() {
-      let next = this.date.add(1, "month");
-      this.set(next);
-    },
-
     getDate(day, month = this.month, year = this.year) {
       return this.$library.dayjs(new Date(year, month, day, 0, 0, 0));
     },
 
-    setHover(day) {
-      this.hover = this.getDate(day);
+    isBegin(day) {
+      const date = this.getDate(day);
+      return date.isSame(this.begin);
     },
 
-    isStart(day) {
+    isCurrent(day) {
       const date = this.getDate(day);
-
-      if (date.isSame(this.start)) {
-        return true;
-      }
-
-      if (this.start && this.end) {
-        return false;
-      }
-
-      return !this.start && date.isSame(this.hover) && date.isBefore(this.end);
+      return date.isSame(this.begin) || date.isSame(this.end);
     },
 
     isEnd(day) {
       const date = this.getDate(day);
 
-      if (date.isSame(this.end)) {
+      if (this.end && date.isSame(this.end)) {
         return true;
       }
 
-      if (this.start && this.end) {
-        return false;
-      }
-
-      return date.isSame(this.hover) && date.isAfter(this.start);
-    },
-
-    isToday(day) {
-      return this.getDate(day).isSame(this.today);
-    },
-
-    isInRange(date, from, to) {
-      if (from && to) {
-        return date.isSame(from) || date.isSame(to) || date.isAfter(from) && date.isBefore(to);
-      }
-
-      if (from) {
-        return date.isSame(from);
-      }
-
-      if (to) {
-        return date.isSame(to);
+      if (!this.end && date.isSame(this.hover) && date.isAfter(this.begin)) {
+        return true;
       }
 
       return false;
-    },
-
-    isCurrent(day) {
-      if (day === "") {
-        return false;
-      }
-
-      return this.isInRange(this.getDate(day), this.start, this.end);
     },
 
     isIntersected(day) {
@@ -9123,64 +9028,66 @@ var _default = {
         return false;
       }
 
-      if (this.start && this.end) {
-        return false;
+      const date = this.getDate(day);
+
+      if (this.begin && this.end) {
+        return this.isInRange(date, this.begin, this.end);
       }
 
-      if (this.start && this.hover) {
-        if (this.hover.isAfter(this.start)) {
-          return this.isInRange(this.getDate(day), this.start, this.hover);
-        }
+      if (this.begin && this.hover && this.hover.isAfter(this.begin)) {
+        return this.isInRange(date, this.begin, this.hover);
       }
 
-      if (this.end && this.hover) {
-        if (this.hover.isBefore(this.end)) {
-          return this.isInRange(this.getDate(day), this.hover, this.end);
-        }
+      if (this.end && this.hover && this.hover.isBefore(this.end)) {
+        return this.isInRange(date, this.hover, this.end);
       }
 
       return false;
     },
 
-    prev() {
-      let prev = this.date.subtract(1, "month");
-      this.set(prev);
+    isInRange(date, a, b) {
+      if (a && b) {
+        return date.isSame(a) || date.isSame(b) || date.isAfter(a) && date.isBefore(b);
+      }
+
+      if (a) {
+        return date.isSame(a);
+      }
+
+      if (to) {
+        return date.isSame(b);
+      }
+
+      return false;
     },
 
-    set(date) {
-      this.day = date.date();
-      this.month = date.month();
-      this.year = date.year();
+    onHover(day) {
+      console.log(day);
+      this.hover = this.getDate(day);
     },
 
     select(day) {
-      const date = this.getDate(day);
+      const date = this.getDate(day); // existing selection
 
-      if (this.start && this.end) {
-        this.start = date;
-        this.end = null;
-      } else if (this.start) {
-        if (date.isBefore(this.start)) {
-          this.start = date;
+      if (this.begin && this.end) {
+        this.begin = date;
+        this.end = null; // begin is already selected
+      } else if (this.begin) {
+        if (date.isBefore(this.begin)) {
+          this.begin = date;
         } else {
           this.end = date;
         }
       } else {
-        if (date.isAfter(this.end)) {
-          this.end = date;
-        } else {
-          this.start = date;
-        }
+        this.begin = date;
       }
 
-      this.onSelect();
-    },
-
-    onSelect() {
-      this.$emit("select", {
-        from: this.start,
-        to: this.end
-      });
+      if (this.begin && this.end) {
+        this.$emit("input", {
+          begin: this.begin,
+          end: this.end
+        });
+      }
     }
 
   }
@@ -9198,132 +9105,149 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "rt-calendar k-calendar-input bg-black" }, [
-    _c(
-      "nav",
-      [
-        _c("k-button", {
-          attrs: { icon: "angle-left" },
-          on: { click: _vm.prev }
-        }),
-        _vm._v(" "),
-        _c(
-          "span",
-          { staticClass: "k-calendar-selects" },
-          [
-            _c("k-select-input", {
-              attrs: {
-                options: _vm.months,
-                disabled: _vm.disabled,
-                required: true
-              },
-              model: {
-                value: _vm.month,
-                callback: function($$v) {
-                  _vm.month = _vm._n($$v)
-                },
-                expression: "month"
-              }
-            }),
-            _vm._v(" "),
-            _c("k-select-input", {
-              attrs: {
-                options: _vm.years,
-                disabled: _vm.disabled,
-                required: true
-              },
-              model: {
-                value: _vm.year,
-                callback: function($$v) {
-                  _vm.year = _vm._n($$v)
-                },
-                expression: "year"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("k-button", {
-          attrs: { icon: "angle-right" },
-          on: { click: _vm.next }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("table", { staticClass: "k-calendar-table" }, [
-      _c("thead", [
-        _c(
-          "tr",
-          _vm._l(_vm.weekdays, function(day) {
-            return _c("th", { key: "weekday_" + day }, [_vm._v(_vm._s(day))])
-          }),
-          0
-        )
-      ]),
-      _vm._v(" "),
+  return _c(
+    "div",
+    { staticClass: "k-calendar-input retour-calendar bg-black rounded-sm" },
+    [
       _c(
-        "tbody",
-        {
-          on: {
-            mouseleave: function($event) {
-              _vm.hover = null
-            }
-          }
-        },
-        _vm._l(_vm.numberOfWeeks, function(week) {
-          return _c(
-            "tr",
-            { key: "week_" + week },
-            _vm._l(_vm.days(week), function(day, dayIndex) {
-              return _c(
-                "td",
-                {
-                  key: "day_" + dayIndex,
-                  staticClass: "k-interval-day",
-                  attrs: {
-                    "aria-current": _vm.isToday(day),
-                    "aria-selected": _vm.isCurrent(day),
-                    "data-intersected": _vm.isIntersected(day),
-                    "data-isStart": _vm.isStart(day),
-                    "data-isEnd": _vm.isEnd(day)
-                  },
-                  on: {
-                    mouseover: function($event) {
-                      return _vm.setHover(day)
-                    }
-                  }
+        "nav",
+        [
+          _c("k-button", {
+            attrs: { icon: "angle-left" },
+            on: { click: _vm.prev }
+          }),
+          _vm._v(" "),
+          _c(
+            "span",
+            { staticClass: "k-calendar-selects" },
+            [
+              _c("k-select-input", {
+                attrs: {
+                  options: _vm.months,
+                  disabled: _vm.disabled,
+                  required: true
                 },
-                [
-                  day
-                    ? _c(
-                        "k-button",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.select(day)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n            " + _vm._s(day) + "\n          "
-                          )
-                        ]
-                      )
-                    : _vm._e()
-                ],
-                1
-              )
+                model: {
+                  value: _vm.month,
+                  callback: function($$v) {
+                    _vm.month = _vm._n($$v)
+                  },
+                  expression: "month"
+                }
+              }),
+              _vm._v(" "),
+              _c("k-select-input", {
+                attrs: {
+                  options: _vm.years,
+                  disabled: _vm.disabled,
+                  required: true
+                },
+                model: {
+                  value: _vm.year,
+                  callback: function($$v) {
+                    _vm.year = _vm._n($$v)
+                  },
+                  expression: "year"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("k-button", {
+            attrs: { icon: "angle-right" },
+            on: { click: _vm.next }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("table", { staticClass: "k-calendar-table" }, [
+        _c("thead", [
+          _c(
+            "tr",
+            _vm._l(_vm.weekdays, function(dayHeader) {
+              return _c("th", { key: "weekday_" + dayHeader }, [
+                _vm._v("\n          " + _vm._s(dayHeader) + "\n        ")
+              ])
             }),
             0
           )
-        }),
-        0
-      )
-    ])
-  ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          {
+            on: {
+              mouseleave: function($event) {
+                _vm.hover = null
+              }
+            }
+          },
+          _vm._l(_vm.numberOfWeeks, function(week) {
+            return _c(
+              "tr",
+              { key: "week_" + week },
+              _vm._l(_vm.days(week), function(dayButton, dayIndex) {
+                return _c(
+                  "td",
+                  {
+                    key: "day_" + dayIndex,
+                    staticClass: "k-calendar-day",
+                    attrs: {
+                      "aria-current": _vm.isToday(dayButton) ? "date" : false,
+                      "aria-selected": _vm.isCurrent(dayButton)
+                        ? "date"
+                        : false,
+                      "data-is-intersected": _vm.isIntersected(dayButton),
+                      "data-is-begin": _vm.isBegin(dayButton),
+                      "data-is-end": _vm.isEnd(dayButton)
+                    },
+                    on: {
+                      mouseover: function($event) {
+                        return _vm.onHover(dayButton)
+                      }
+                    }
+                  },
+                  [
+                    dayButton
+                      ? _c("k-button", {
+                          attrs: { text: dayButton },
+                          on: {
+                            click: function($event) {
+                              return _vm.select(dayButton)
+                            }
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                )
+              }),
+              0
+            )
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("tfoot", [
+          _c("tr", [
+            _c(
+              "td",
+              { staticClass: "k-calendar-today", attrs: { colspan: "7" } },
+              [
+                _c("k-button", {
+                  attrs: { text: _vm.$t("today") },
+                  on: { click: _vm.selectToday }
+                })
+              ],
+              1
+            )
+          ])
+        ])
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -9358,7 +9282,31 @@ render._withStripped = true
       
       }
     })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TimeframeDropdown.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"mixins/color.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  computed: {
+    color() {
+      if (!this.value) {
+        return "gray-light";
+      }
+
+      if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
+        return "green-light";
+      }
+
+      return "blue-light";
+    }
+
+  }
+};
+exports.default = _default;
+},{}],"components/StatusField.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9366,7 +9314,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _Calendar = _interopRequireDefault(require("./Calendar.vue"));
+var _color = _interopRequireDefault(require("../mixins/color.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9384,98 +9332,390 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
 var _default = {
-  components: {
-    Calendar: _Calendar.default
-  },
+  extends: "k-select-field",
+  mixins: [_color.default],
+  methods: {
+    onInput(value) {
+      this.value = value;
+    }
 
-  data() {
-    return {
-      from: null,
-      to: null,
-      show: false
-    };
-  },
+  }
+};
+exports.default = _default;
+        var $98712f = exports.default || module.exports;
+      
+      if (typeof $98712f === 'function') {
+        $98712f = $98712f.options;
+      }
+    
+        /* template */
+        Object.assign($98712f, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "k-field",
+    _vm._b(
+      { staticClass: "k-select-field", attrs: { input: _vm._uid } },
+      "k-field",
+      _vm.$props,
+      false
+    ),
+    [
+      _c(
+        "k-input",
+        _vm._g(
+          _vm._b(
+            {
+              ref: "input",
+              attrs: { id: _vm._uid, type: "select", theme: "field" },
+              on: { input: _vm.onInput },
+              scopedSlots: _vm._u([
+                {
+                  key: "before",
+                  fn: function() {
+                    return [
+                      _c("k-icon", {
+                        attrs: { type: "circle", color: _vm.color }
+                      })
+                    ]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            "k-input",
+            _vm.$props,
+            false
+          ),
+          _vm.$listeners
+        )
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
 
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$98712f', $98712f);
+          } else {
+            api.reload('$98712f', $98712f);
+          }
+        }
+
+        
+      }
+    })();
+},{"../mixins/color.js":"mixins/color.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TargetField.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  extends: "k-text-field",
+  methods: {
+    open() {
+      this.$refs.selector.open({
+        endpoint: "retour/pagepicker",
+        max: 1,
+        multiple: false,
+        selected: [],
+        search: true
+      });
+    },
+
+    select(items) {
+      if (items.length > 0) {
+        this.$emit("input", items[0].id);
+      }
+    }
+
+  }
+};
+exports.default = _default;
+        var $5fc42b = exports.default || module.exports;
+      
+      if (typeof $5fc42b === 'function') {
+        $5fc42b = $5fc42b.options;
+      }
+    
+        /* template */
+        Object.assign($5fc42b, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "k-field",
+    _vm._b(
+      {
+        staticClass: "k-text-field",
+        attrs: { input: _vm._uid, counter: _vm.counterOptions }
+      },
+      "k-field",
+      _vm.$props,
+      false
+    ),
+    [
+      _c(
+        "template",
+        { slot: "options" },
+        [
+          _c(
+            "k-button",
+            {
+              staticClass: "k-field-options-button",
+              attrs: { icon: "circle-nested" },
+              on: { click: _vm.open }
+            },
+            [_vm._v("\n      " + _vm._s(_vm.$t("select")) + "\n    ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "k-input",
+        _vm._g(
+          _vm._b(
+            {
+              ref: "input",
+              attrs: { id: _vm._uid, type: "text", theme: "field" }
+            },
+            "k-input",
+            _vm.$props,
+            false
+          ),
+          _vm.$listeners
+        )
+      ),
+      _vm._v(" "),
+      _c("k-pages-dialog", { ref: "selector", on: { submit: _vm.select } })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$5fc42b', $5fc42b);
+          } else {
+            api.reload('$5fc42b', $5fc42b);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"mixins/permissions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
   computed: {
-    active() {
-      return this.display(this.$store.state.retour.selection.from, this.$store.state.retour.selection.to);
+    canAccess() {
+      return !(this.$permissions.hasOwnProperty("access") && this.$permissions.access.hasOwnProperty("retour") && this.$permissions.access.retour === false);
+    },
+
+    canUpdate() {
+      return !(this.$permissions.hasOwnProperty("site") && this.$permissions.site.hasOwnProperty("update") && this.$permissions.site.update === false);
+    }
+
+  }
+};
+exports.default = _default;
+},{}],"config/tabs.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = Vue => {
+  const store = Vue.$store.state.retour;
+  const routes = store.data.routes.length;
+  const failures = store.data.failures.length;
+
+  if (failures > 1000) {
+    failures = Math.floor(failures / 100) / 10 + "k";
+  }
+
+  return [{
+    name: "routes",
+    label: Vue.$t("retour.routes"),
+    icon: "undo",
+    badge: routes ? {
+      count: routes,
+      color: "focus"
+    } : false
+  }, {
+    name: "failures",
+    label: Vue.$t("retour.failures"),
+    icon: "alert",
+    badge: failures ? {
+      count: failures,
+      color: "negative"
+    } : false
+  }, {
+    name: "system",
+    label: Vue.$t("retour.system"),
+    icon: "box",
+    badge: store.system.update < 0 ? {
+      count: 1,
+      color: "positive"
+    } : false
+  }];
+};
+
+exports.default = _default;
+},{}],"components/TimeframeDropdown.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  computed: {
+    begin() {
+      return this.selection.begin;
+    },
+
+    end() {
+      return this.selection.end;
+    },
+
+    label() {
+      if (this.begin.isSame(this.end, "date") && this.begin.isSame(this.end, "month") && this.begin.isSame(this.end, "year")) {
+        return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")}`;
+      }
+
+      if (this.begin.isSame(this.end, "month") && this.begin.isSame(this.end, "year") && this.begin.date() === 1 && this.end.date() === this.end.daysInMonth()) {
+        return `${this.month(this.begin)} ${this.begin.format("YYYY")}`;
+      }
+
+      if (this.begin.isSame(this.end, "year") && this.begin.date() === 1 && this.begin.month() === 0 && this.end.date() === 31 && this.end.month() === 11) {
+        return `${this.begin.format("YYYY")}`;
+      }
+
+      if (this.begin.isSame(this.end, "month") && this.begin.isSame(this.end, "year")) {
+        return `${this.begin.format("D")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      }
+
+      if (this.begin.isSame(this.end, "year")) {
+        return `${this.begin.format("D")} ${this.month(this.begin)} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+      }
+
+      return `${this.begin.format("D")} ${this.month(this.begin)} ${this.begin.format("YYYY")} - ${this.end.format("D")} ${this.month(this.end)} ${this.end.format("YYYY")}`;
+    },
+
+    selection() {
+      return this.$store.state.retour.selection;
     }
 
   },
   methods: {
-    onClick(e) {
-      if (this.$refs.calendar) {
-        e.stopPropagation();
-
-        if (!this.$refs.calendar.$el.contains(e.target)) {
-          this.close();
-        }
-      }
-    },
-
-    display(from, to) {
-      if (!from && !to) {
-        return "...";
-      }
-
-      if (!to) {
-        return from.format("D ") + this.month(from) + from.format(" YYYY") + " –";
-      }
-
-      if (!from) {
-        return "– " + to.format("D ") + this.month(to) + to.format(" YYYY");
-      }
-
-      if (from.isSame(to, "date") && from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("D ") + this.month(from) + from.format(" YYYY");
-      }
-
-      if (from.isSame(to, "month") && from.isSame(to, "year") && from.date() === 1 && to.date() === to.daysInMonth()) {
-        return this.month(from) + from.format(" YYYY");
-      }
-
-      if (from.isSame(to, "year") && from.date() === 1 && from.month() === 0 && to.date() === 31 && to.month() === 11) {
-        return from.format("YYYY");
-      }
-
-      if (from.isSame(to, "month") && from.isSame(to, "year")) {
-        return from.format("D") + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
-      }
-
-      if (from.isSame(to, "year")) {
-        return from.format("D ") + this.month(from) + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
-      }
-
-      return from.format("D ") + this.month(from) + from.format(" YYYY") + " - " + to.format("D ") + this.month(to) + to.format(" YYYY");
-    },
-
     month(date) {
       let month = date.format("MMMM");
       month = this.$helper.string.lcfirst(month);
       return this.$t("months." + month);
     },
 
-    open() {
-      this.from = this.$store.state.retour.selection.from;
-      this.to = this.$store.state.retour.selection.to;
-      this.show = true;
-    },
-
-    close() {
-      if (this.from && this.to) {
-        this.$store.dispatch("retour/timeframe", {
-          from: this.from,
-          to: this.to
-        });
-        this.show = false;
-      }
-    },
-
-    select(dates) {
-      this.from = dates.from;
-      this.to = dates.to;
-      this.close();
+    onInput(selection) {
+      this.$store.dispatch("retour/selection", selection);
+      this.$refs.calendar.close();
     }
 
   }
@@ -9493,46 +9733,33 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.show
-    ? _c(
-        "div",
-        { staticClass: "rt-calendar-wrapper" },
+  return _c(
+    "k-dropdown",
+    { staticClass: "retour-timeframe" },
+    [
+      _c("k-button", {
+        attrs: { text: _vm.label, icon: "calendar" },
+        on: {
+          click: function($event) {
+            return _vm.$refs.calendar.open()
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "k-dropdown-content",
+        { ref: "calendar" },
         [
-          _c(
-            "div",
-            {
-              staticClass: "rt-calendar-label",
-              on: {
-                click: function($event) {
-                  $event.stopPropagation()
-                  return _vm.close($event)
-                }
-              }
-            },
-            [
-              _c("k-icon", { attrs: { type: "calendar" } }),
-              _vm._v(" " + _vm._s(_vm.display(_vm.from, _vm.to)) + "\n  ")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("calendar", {
-            ref: "calendar",
-            attrs: { from: _vm.from, to: _vm.to },
-            on: { select: _vm.select }
+          _c("retour-calendar", {
+            attrs: { value: _vm.selection },
+            on: { input: _vm.onInput }
           })
         ],
         1
       )
-    : _c(
-        "div",
-        { staticClass: "rt-calendar-label", on: { click: _vm.open } },
-        [
-          _c("k-icon", { attrs: { type: "calendar" } }),
-          _vm._v(" " + _vm._s(_vm.active) + "\n")
-        ],
-        1
-      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -9567,7 +9794,7 @@ render._withStripped = true
       
       }
     })();
-},{"./Calendar.vue":"components/Calendar.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/PrevNext.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/PrevNext.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9592,49 +9819,49 @@ exports.default = void 0;
 var _default = {
   computed: {
     hasNext() {
-      return this.selection === false || this.selection === 'all';
+      return this.mode === false || this.mode === 'all';
     },
 
     hasPrev() {
-      return this.selection === false || this.selection === 'all';
+      return this.mode === false || this.mode === 'all';
     },
 
-    selection() {
-      return this.$store.getters["retour/selection"];
+    mode() {
+      return this.$store.getters["retour/mode"];
     }
 
   },
   methods: {
     navigate(method) {
-      const start = this.$store.state.retour.selection.from;
-      const end = this.$store.state.retour.selection.to;
+      const begin = this.$store.state.retour.selection.begin;
+      const end = this.$store.state.retour.selection.end;
 
-      switch (this.selection) {
+      switch (this.mode) {
         case "year":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "year"),
-            to: end[method](1, "year")
+            begin: begin[method](1, "year"),
+            end: end[method](1, "year")
           });
           break;
 
         case "month":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "month"),
-            to: end[method](1, "month").endOf("month")
+            begin: begin[method](1, "month"),
+            end: end[method](1, "month").endOf("month")
           });
           break;
 
         case "week":
           this.$store.dispatch("retour/selection", {
-            from: start[method](7, "day"),
-            to: end[method](7, "day")
+            begin: begin[method](7, "day"),
+            end: end[method](7, "day")
           });
           break;
 
         case "day":
           this.$store.dispatch("retour/selection", {
-            from: start[method](1, "day"),
-            to: end[method](1, "day")
+            begin: begin[method](1, "day"),
+            end: end[method](1, "day")
           });
           break;
       }
@@ -9649,7 +9876,7 @@ var _default = {
     },
 
     show(by) {
-      const start = this.$library.dayjs().startOf("day");
+      const begin = this.$library.dayjs().startOf("day");
       const end = this.$library.dayjs().endOf("day");
 
       switch (by) {
@@ -9659,28 +9886,28 @@ var _default = {
 
         case "year":
           this.$store.dispatch("retour/selection", {
-            from: start.startOf("year"),
-            to: end.endOf("year")
+            begin: begin.startOf("year"),
+            end: end.endOf("year")
           });
           break;
 
         case "month":
           this.$store.dispatch("retour/selection", {
-            from: start.startOf("month"),
-            to: end.endOf("month")
+            begin: begin.beginOf("month"),
+            end: end.endOf("month")
           });
           break;
 
         case "week":
-          if (start.day() === 0) {
+          if (begin.day() === 0) {
             this.$store.dispatch("retour/selection", {
-              from: start.subtract(6, "day"),
-              to: end
+              begin: begin.subtract(6, "day"),
+              end: end
             });
           } else {
             this.$store.dispatch("retour/selection", {
-              from: start.subtract(start.day() - 1, "day"),
-              to: end.add(7 - end.day(), "day")
+              begin: begin.subtract(begin.day() - 1, "day"),
+              end: end.add(7 - end.day(), "day")
             });
           }
 
@@ -9688,8 +9915,8 @@ var _default = {
 
         case "day":
           this.$store.dispatch("retour/selection", {
-            from: start,
-            to: end
+            begin: begin,
+            end: end
           });
           break;
       }
@@ -9723,7 +9950,7 @@ exports.default = _default;
           "k-button",
           {
             key: by,
-            attrs: { current: _vm.selection === by },
+            attrs: { current: _vm.mode === by },
             on: {
               click: function($event) {
                 return _vm.show(by)
@@ -14454,12 +14681,12 @@ var _default = {
       return this.$library.dayjs(this.data[this.data.length - 1].date);
     },
 
-    selection() {
-      return this.$store.getters["retour/selection"];
+    mode() {
+      return this.$store.getters["retour/mode"];
     },
 
     unit() {
-      if (this.selection === "day") {
+      if (this.mode === "day") {
         return "hour";
       }
 
@@ -14490,19 +14717,19 @@ var _default = {
     },
 
     format() {
-      if (this.selection === "day") {
+      if (this.mode === "day") {
         return "HH";
       }
 
-      if (this.selection === "week") {
+      if (this.mode === "week") {
         return "ddd";
       }
 
-      if (this.selection === "month") {
+      if (this.mode === "month") {
         return "D";
       }
 
-      if (this.selection === "year") {
+      if (this.mode === "year") {
         return "MMM";
       }
 
@@ -14735,14 +14962,20 @@ exports.default = _default;
             [
               _c(
                 "k-column",
-                { staticClass: "retour-stats-box", attrs: { width: "1/4" } },
+                {
+                  staticClass: "retour-stats-box rounded-sm",
+                  attrs: { width: "1/4" }
+                },
                 [_c("retour-chart")],
                 1
               ),
               _vm._v(" "),
               _c(
                 "k-column",
-                { staticClass: "retour-stats-box", attrs: { width: "3/4" } },
+                {
+                  staticClass: "retour-stats-box rounded-sm",
+                  attrs: { width: "3/4" }
+                },
                 [_c("retour-timeline")],
                 1
               )
@@ -14796,6 +15029,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+//
 //
 //
 //
@@ -14900,12 +15134,22 @@ exports.default = _default;
           }
         ],
         ref: "input",
+        attrs: { placeholder: _vm.$t("retour.tbl.filter") },
         domProps: { value: _vm.value },
         on: {
           input: function($event) {
             return _vm.onInput($event.target.value)
           },
-          blur: _vm.onBlur
+          blur: _vm.onBlur,
+          keydown: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+            ) {
+              return null
+            }
+            return _vm.onToggle($event)
+          }
         }
       })
     ],
@@ -15045,31 +15289,7 @@ render._withStripped = true
       
       }
     })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"mixins/color.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  computed: {
-    color() {
-      if (!this.value) {
-        return "gray-light";
-      }
-
-      if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
-        return "green-light";
-      }
-
-      return "blue-light";
-    }
-
-  }
-};
-exports.default = _default;
-},{}],"components/TableStatusPreview.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableStatusPreview.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15244,11 +15464,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
 var _default = {
   components: {
     "retour-table-filter": _TableFilter.default,
@@ -15256,7 +15471,6 @@ var _default = {
     "retour-table-status-preview": _TableStatusPreview.default
   },
   props: {
-    add: String,
     columns: Object,
     empty: String,
     options: Array,
@@ -15366,7 +15580,7 @@ exports.default = _default;
     [
       _c(
         "header",
-        { staticClass: "flex items-center justify-between mb-2" },
+        { staticClass: "flex items-center justify-between mb-3" },
         [
           _c("retour-table-filter", {
             attrs: { label: _vm.$helper.string.ucfirst(_vm.tab) },
@@ -15379,18 +15593,9 @@ exports.default = _default;
             }
           }),
           _vm._v(" "),
-          _vm.add
-            ? _c("k-button", {
-                attrs: { text: _vm.add, icon: "add" },
-                on: {
-                  click: function($event) {
-                    return _vm.$emit("add")
-                  }
-                }
-              })
-            : _vm._e()
+          _vm._t("button")
         ],
-        1
+        2
       ),
       _vm._v(" "),
       _c("k-table", {
@@ -15554,6 +15759,13 @@ var _Table = _interopRequireDefault(require("./Table.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15825,7 +16037,6 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c("retour-table", {
     attrs: {
-      add: "Add redirect",
       columns: _vm.columns,
       empty: _vm.$t("retour.tbl.redirects.empty"),
       options: _vm.options,
@@ -15840,6 +16051,22 @@ exports.default = _default;
       option: _vm.onOption
     },
     scopedSlots: _vm._u([
+      {
+        key: "button",
+        fn: function() {
+          return [
+            _c("k-button", {
+              attrs: { text: "New redirect", icon: "add" },
+              on: {
+                click: function($event) {
+                  return _vm.$emit("add")
+                }
+              }
+            })
+          ]
+        },
+        proxy: true
+      },
       {
         key: "dialogs",
         fn: function() {
@@ -15977,6 +16204,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   components: {
     "retour-table": _Table.default
@@ -16022,6 +16257,16 @@ var _default = {
 
   },
   methods: {
+    async onFlush() {
+      try {
+        await this.$api.post("retour/logs/flush");
+        this.$refs.flushDialog.close();
+        this.$store.dispatch("retour/load");
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
+    },
+
     async onResolve(option, row) {
       await this.$router.push("#routes");
       this.$events.$emit("retour.resolve", {
@@ -16054,6 +16299,22 @@ exports.default = _default;
     },
     on: { option: _vm.onResolve },
     scopedSlots: _vm._u([
+      {
+        key: "button",
+        fn: function() {
+          return [
+            _c("k-button", {
+              attrs: { text: "Clear log", icon: "trash" },
+              on: {
+                click: function($event) {
+                  return _vm.$refs.flushDialog.open()
+                }
+              }
+            })
+          ]
+        },
+        proxy: true
+      },
       {
         key: "dialogs",
         fn: function() {
@@ -16203,12 +16464,6 @@ exports.default = void 0;
 //
 //
 //
-//
-//
-//
-//
-//
-//
 var _default = {
   computed: {
     failed() {
@@ -16233,22 +16488,6 @@ var _default = {
       }
     }
 
-  },
-  methods: {
-    async onFlush() {
-      try {
-        await this.$api.post("retour/logs/flush");
-        this.$refs.flushDialog.close();
-        this.$store.dispatch("retour/load");
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      }
-    },
-
-    async onUpdate() {
-      await this.$store.dispatch("retour/update");
-    }
-
   }
 };
 exports.default = _default;
@@ -16267,24 +16506,22 @@ exports.default = _default;
   return _c("div", { staticClass: "retour-settings-tab" }, [
     _c(
       "header",
-      { staticClass: "flex items-center justify-between" },
+      { staticClass: "flex items-center justify-between mb-3" },
       [
-        _c("h3", { staticClass: "font-bold" }, [
-          _vm._v("\n      About Retour\n    ")
-        ]),
-        _vm._v(" "),
         _c(
-          "k-button-group",
+          "h3",
+          { staticClass: "flex items-center font-bold" },
           [
-            _c("k-button", {
-              attrs: { text: "Check for update", icon: "refresh" },
-              on: { click: _vm.onUpdate }
-            }),
-            _vm._v(" "),
-            _c("k-button", { attrs: { text: "Flush logs", icon: "trash" } })
+            _c("k-icon", { staticClass: "mr-2", attrs: { type: "road-sign" } }),
+            _vm._v(" Retour for Kirby\n    ")
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _c("k-button", {
+          attrs: { text: "Check for update", icon: "refresh" },
+          on: { click: _vm.onUpdate }
+        })
       ],
       1
     ),
@@ -16458,6 +16695,8 @@ exports.default = void 0;
 
 var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
 
+var _tabs = _interopRequireDefault(require("../config/tabs.js"));
+
 var _Stats = _interopRequireDefault(require("./Stats.vue"));
 
 var _RoutesTab = _interopRequireDefault(require("./RoutesTab.vue"));
@@ -16489,6 +16728,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
@@ -16498,10 +16739,6 @@ var _default = {
     "retour-system-tab": _SystemTab.default
   },
   computed: {
-    data() {
-      return this.$store.state.retour.data;
-    },
-
     hasLogs() {
       return this.$store.getters["retour/hasLogs"];
     },
@@ -16511,47 +16748,18 @@ var _default = {
     },
 
     tabs() {
-      const routes = this.data.routes.length;
-      const failures = this.data.failures.length;
-
-      if (failures > 1000) {
-        failures = Math.floor(failures / 100) / 10 + "k";
-      }
-
-      return [{
-        name: "routes",
-        label: this.$t("retour.routes"),
-        icon: "road-sign",
-        badge: routes ? {
-          count: routes,
-          color: "focus"
-        } : false
-      }, {
-        name: "failures",
-        label: this.$t("retour.failures"),
-        icon: "alert",
-        badge: failures ? {
-          count: failures,
-          color: "negative"
-        } : false
-      }, {
-        name: "system",
-        label: this.$t("retour.system"),
-        icon: "box",
-        badge: this.$store.state.retour.system.update < 0 ? {
-          count: 1,
-          color: "positive"
-        } : false
-      }];
+      return (0, _tabs.default)(this);
     }
 
   },
   watch: {
     "$route.hash": {
       handler() {
-        this.$emit("breadcrumb", [{
-          text: this.tabs.filter(tab => tab.name === this.tab)[0].label
-        }]);
+        if (this.hasLogs) {
+          this.$emit("breadcrumb", [{
+            text: this.tabs.filter(tab => tab.name === this.tab)[0].label
+          }]);
+        }
       },
 
       immediate: true
@@ -16580,7 +16788,7 @@ exports.default = _default;
     "div",
     { staticClass: "k-retour-view pb-24" },
     [
-      true
+      _vm.hasLogs
         ? [
             _c("retour-stats"),
             _vm._v(" "),
@@ -16593,7 +16801,18 @@ exports.default = _default;
               1
             )
           ]
-        : [_c("retour-routes-tab"), _vm._v(" "), _c("retour-settings-tab")]
+        : [
+            _c(
+              "div",
+              { staticClass: "p-6 pt-16" },
+              [
+                _c("retour-routes-tab", { staticClass: "mb-8" }),
+                _vm._v(" "),
+                _c("retour-system-tab")
+              ],
+              1
+            )
+          ]
     ],
     2
   )
@@ -16627,280 +16846,7 @@ render._withStripped = true
         
       }
     })();
-},{"../mixins/permissions.js":"mixins/permissions.js","./Stats.vue":"components/Stats.vue","./RoutesTab.vue":"components/RoutesTab.vue","./FailuresTab.vue":"components/FailuresTab.vue","./SystemTab.vue":"components/SystemTab.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/StatusField.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _color = _interopRequireDefault(require("../mixins/color.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  extends: "k-select-field",
-  mixins: [_color.default],
-  methods: {
-    onInput(value) {
-      this.value = value;
-    }
-
-  }
-};
-exports.default = _default;
-        var $98712f = exports.default || module.exports;
-      
-      if (typeof $98712f === 'function') {
-        $98712f = $98712f.options;
-      }
-    
-        /* template */
-        Object.assign($98712f, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "k-field",
-    _vm._b(
-      { staticClass: "k-select-field", attrs: { input: _vm._uid } },
-      "k-field",
-      _vm.$props,
-      false
-    ),
-    [
-      _c(
-        "k-input",
-        _vm._g(
-          _vm._b(
-            {
-              ref: "input",
-              attrs: { id: _vm._uid, type: "select", theme: "field" },
-              on: { input: _vm.onInput },
-              scopedSlots: _vm._u([
-                {
-                  key: "before",
-                  fn: function() {
-                    return [
-                      _c("k-icon", {
-                        attrs: { type: "circle", color: _vm.color }
-                      })
-                    ]
-                  },
-                  proxy: true
-                }
-              ])
-            },
-            "k-input",
-            _vm.$props,
-            false
-          ),
-          _vm.$listeners
-        )
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$98712f', $98712f);
-          } else {
-            api.reload('$98712f', $98712f);
-          }
-        }
-
-        
-      }
-    })();
-},{"../mixins/color.js":"mixins/color.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TargetField.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  extends: "k-text-field",
-  methods: {
-    open() {
-      this.$refs.selector.open({
-        endpoint: "retour/pagepicker",
-        max: 1,
-        multiple: false,
-        selected: [],
-        search: true
-      });
-    },
-
-    select(items) {
-      if (items.length > 0) {
-        this.$emit("input", items[0].id);
-      }
-    }
-
-  }
-};
-exports.default = _default;
-        var $5fc42b = exports.default || module.exports;
-      
-      if (typeof $5fc42b === 'function') {
-        $5fc42b = $5fc42b.options;
-      }
-    
-        /* template */
-        Object.assign($5fc42b, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "k-field",
-    _vm._b(
-      {
-        staticClass: "k-text-field",
-        attrs: { input: _vm._uid, counter: _vm.counterOptions }
-      },
-      "k-field",
-      _vm.$props,
-      false
-    ),
-    [
-      _c(
-        "template",
-        { slot: "options" },
-        [
-          _c(
-            "k-button",
-            {
-              staticClass: "k-field-options-button",
-              attrs: { icon: "circle-nested" },
-              on: { click: _vm.open }
-            },
-            [_vm._v("\n      " + _vm._s(_vm.$t("select")) + "\n    ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "k-input",
-        _vm._g(
-          _vm._b(
-            {
-              ref: "input",
-              attrs: { id: _vm._uid, type: "text", theme: "field" }
-            },
-            "k-input",
-            _vm.$props,
-            false
-          ),
-          _vm.$listeners
-        )
-      ),
-      _vm._v(" "),
-      _c("k-pages-dialog", { ref: "selector", on: { submit: _vm.select } })
-    ],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$5fc42b', $5fc42b);
-          } else {
-            api.reload('$5fc42b', $5fc42b);
-          }
-        }
-
-        
-      }
-    })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store.js":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","../config/tabs.js":"config/tabs.js","./Stats.vue":"components/Stats.vue","./RoutesTab.vue":"components/RoutesTab.vue","./FailuresTab.vue":"components/FailuresTab.vue","./SystemTab.vue":"components/SystemTab.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16917,8 +16863,8 @@ var _default = Vue => ({
       stats: []
     },
     selection: {
-      from: Vue.$library.dayjs().startOf("month"),
-      to: Vue.$library.dayjs().endOf("month"),
+      begin: Vue.$library.dayjs().startOf("month"),
+      end: Vue.$library.dayjs().endOf("month"),
       all: false
     },
     system: {
@@ -16931,44 +16877,44 @@ var _default = Vue => ({
     }
   },
   getters: {
+    days: state => {
+      return state.selection.end.diff(state.selection.begin, "day");
+    },
     hasLogs: state => {
       return state.system.logs !== false;
     },
-    timeframe: state => ({
-      from: state.selection.from.format("YYYY-MM-DD"),
-      to: state.selection.to.format("YYYY-MM-DD")
-    }),
-    days: state => {
-      return state.selection.to.diff(state.selection.from, "day");
-    },
-    selection: state => {
-      const from = state.selection.from;
-      const to = state.selection.to;
-
+    mode: state => {
       if (state.selection.all === true) {
         return "all";
       }
 
-      if (from.isSame(to, "date") && from.isSame(to, "month") && from.isSame(to, "year")) {
+      const begin = state.selection.begin;
+      const end = state.selection.end;
+
+      if (begin.isSame(end, "date") && begin.isSame(end, "month") && begin.isSame(end, "year")) {
         return "day";
       }
 
-      if (from.isSame(to, "month") && from.isSame(to, "year") && from.date() === 1 && to.date() === to.daysInMonth()) {
+      if (begin.isSame(end, "month") && begin.isSame(end, "year") && begin.date() === 1 && end.date() === end.daysInMonth()) {
         return "month";
       }
 
-      if (to.day() === 0 && from.isSame(to.subtract(6, "day").startOf("day"))) {
+      if (end.day() === 0 && begin.isSame(end.subtract(6, "day").startOf("day"))) {
         return "week";
-      } else if (from.isSame(to.subtract(to.day() - 1, "day").startOf("day"))) {
+      } else if (begin.isSame(end.subtract(end.day() - 1, "day").startOf("day"))) {
         return "week";
       }
 
-      if (from.isSame(to, "year") && from.date() === 1 && from.month() === 0 && to.date() === 31 && to.month() === 11) {
+      if (begin.isSame(end, "year") && begin.date() === 1 && begin.month() === 0 && end.date() === 31 && end.month() === 11) {
         return "year";
       }
 
       return false;
-    }
+    },
+    timeframe: state => ({
+      begin: state.selection.begin.format("YYYY-MM-DD"),
+      end: state.selection.end.format("YYYY-MM-DD")
+    })
   },
   mutations: {
     SET_DATA(state, {
@@ -16979,8 +16925,8 @@ var _default = Vue => ({
     },
 
     SET_SELECTION(state, dates) {
-      state.selection.from = dates.from;
-      state.selection.to = dates.to;
+      state.selection.begin = dates.begin;
+      state.selection.end = dates.end;
       state.selection.all = dates.all || false;
     },
 
@@ -16996,7 +16942,7 @@ var _default = Vue => ({
       // what we need for sure
       await Promise.all([context.dispatch("system"), context.dispatch("routes")]); // what we might need as well
 
-      if (context.state.system.logs === true) {
+      if (context.getters["hasLogs"] === true) {
         await Promise.all([context.dispatch("failures"), context.dispatch("stats")]);
         Vue.$api.post("retour/logs/purge");
       }
@@ -17032,20 +16978,20 @@ var _default = Vue => ({
       });
     },
 
-    async selection(context, dates) {
-      if (dates === "all") {
+    async selection(context, selection) {
+      if (selection === "all") {
         const all = await Vue.$api.get("retour/logs/all");
-        dates = {
-          from: Vue.$library.dayjs(all.first.date),
-          to: Vue.$library.dayjs(all.last.date),
+        selection = {
+          begin: Vue.$library.dayjs(all.first.date),
+          end: Vue.$library.dayjs(all.last.date),
           all: true
         };
       }
 
-      context.commit("SET_SELECTION", dates);
+      context.commit("SET_SELECTION", selection);
       let load = [context.dispatch("redirects")];
 
-      if (context.getters.hasLogs) {
+      if (context.getters["hasLogs"]) {
         load.push(context.dispatch("failures"));
         load.push(context.dispatch("stats"));
       }
@@ -17065,11 +17011,13 @@ exports.default = _default;
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _View = _interopRequireDefault(require("./components/View.vue"));
+var _Calendar = _interopRequireDefault(require("./components/Calendar.vue"));
 
 var _StatusField = _interopRequireDefault(require("./components/StatusField.vue"));
 
 var _TargetField = _interopRequireDefault(require("./components/TargetField.vue"));
+
+var _View = _interopRequireDefault(require("./components/View.vue"));
 
 var _store = _interopRequireDefault(require("./store.js"));
 
@@ -17077,19 +17025,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Vue components
 // Vuex store
-// 3rd party assets
-// import "./assets/chart.css";
 // Register everything
 panel.plugin("distantnative/retour", {
+  components: {
+    "retour-calendar": _Calendar.default
+  },
+  fields: {
+    "retour-status": _StatusField.default,
+    "retour-target": _TargetField.default
+  },
   views: {
     retour: {
       component: _View.default,
       icon: "road-sign"
     }
-  },
-  fields: {
-    "retour-status": _StatusField.default,
-    "retour-target": _TargetField.default
   },
 
   created(app) {
@@ -17097,7 +17046,7 @@ panel.plugin("distantnative/retour", {
   }
 
 });
-},{"./components/View.vue":"components/View.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./store.js":"store.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./components/Calendar.vue":"components/Calendar.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./components/View.vue":"components/View.vue","./store.js":"store.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -17125,7 +17074,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51158" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59535" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
