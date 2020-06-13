@@ -75,7 +75,11 @@ export default {
         {
           name: "system",
           label: this.$t("retour.system"),
-          icon: "box"
+          icon: "box",
+          badge: this.$store.state.retour.system.update < 0 ? {
+            count: 1,
+            color: "positive"
+          } : false
         }
       ];
     }
