@@ -1,7 +1,12 @@
 <template>
   <span class="retour-table-status-preview">
-    <k-icon type="circle" :color="color" />
+    <k-icon
+      type="circle"
+      :color="color"
+      class="mr-2"
+    />
     <code v-if="value">{{ value }}</code>
+    <span v-else class="pl-1">–</span>
   </span>
 </template>
 
@@ -28,7 +33,6 @@ export default {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-tiny);
     padding: 0.05em 0.5em;
-    margin-left: 0.5em;
   }
 }
 </style>
