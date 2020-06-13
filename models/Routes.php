@@ -60,8 +60,8 @@ class Routes
         }, $routes);
 
         // if logging is disabled, return without data
-        if (option('distantnative.retour.logs') !== false) {
-           return $data;
+        if (option('distantnative.retour.logs') !== true) {
+            return $data;
         }
 
         return array_map(function ($route) use ($begin, $end) {
