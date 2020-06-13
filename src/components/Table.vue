@@ -48,7 +48,7 @@
     <!-- empty -->
     <div
       v-if="rows.length === 0"
-      class="bg-white p-4 text-center rounded-sm shadow text-sm"
+      class="bg-white text-gray p-3 text-center rounded-sm shadow text-sm"
     >
       {{ empty }}
     </div>

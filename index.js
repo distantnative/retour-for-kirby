@@ -14802,6 +14802,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
 var _default = {
   mixins: [_color.default],
   props: {
@@ -14825,9 +14830,14 @@ exports.default = _default;
     "span",
     { staticClass: "retour-table-status-preview" },
     [
-      _c("k-icon", { attrs: { type: "circle", color: _vm.color } }),
+      _c("k-icon", {
+        staticClass: "mr-2",
+        attrs: { type: "circle", color: _vm.color }
+      }),
       _vm._v(" "),
-      _vm.value ? _c("code", [_vm._v(_vm._s(_vm.value))]) : _vm._e()
+      _vm.value
+        ? _c("code", [_vm._v(_vm._s(_vm.value))])
+        : _c("span", { staticClass: "pl-1" }, [_vm._v("–")])
     ],
     1
   )
@@ -15150,7 +15160,8 @@ exports.default = _default;
         ? _c(
             "div",
             {
-              staticClass: "bg-white p-4 text-center rounded-sm shadow text-sm"
+              staticClass:
+                "bg-white text-gray p-3 text-center rounded-sm shadow text-sm"
             },
             [_vm._v("\n    " + _vm._s(_vm.empty) + "\n  ")]
           )
@@ -15359,7 +15370,7 @@ var _default = {
           align: "center"
         },
         priority: {
-          label: this.$t("retour.routes.fields.priority"),
+          label: this.$t("retour.routes.fields.priority.abbr"),
           type: "priority",
           width: "1/20"
         },
@@ -15408,14 +15419,16 @@ var _default = {
         },
         priority: {
           type: "toggle",
-          label: "Take priority over existing pages?",
+          label: this.$t("retour.routes.fields.priority"),
           icon: "bolt",
-          width: "1/2",
-          help: "lalalala"
+          help: this.$t("retour.routes.fields.priority.help"),
+          width: "1/2"
         },
         comment: {
           type: "textarea",
-          buttons: false
+          label: this.$t("retour.routes.fields.comment"),
+          buttons: false,
+          help: this.$t("retour.routes.fields.comment.help")
         }
       };
     },
@@ -16942,6 +16955,7 @@ exports.default = void 0;
 //
 //
 //
+//
 var _default = {
   extends: "k-text-field",
   methods: {
@@ -16955,10 +16969,8 @@ var _default = {
       });
     },
 
-    select(items) {
-      if (items.length > 0) {
-        this.$emit("input", items[0]);
-      }
+    onSelect(items) {
+      this.$emit("input", items[0].id);
     }
 
   }
@@ -16981,29 +16993,32 @@ exports.default = _default;
     _vm._b(
       {
         staticClass: "k-text-field",
-        attrs: { input: _vm._uid, counter: _vm.counterOptions }
+        attrs: { input: _vm._uid, counter: _vm.counterOptions },
+        scopedSlots: _vm._u([
+          {
+            key: "options",
+            fn: function() {
+              return [
+                _c(
+                  "k-button",
+                  {
+                    staticClass: "k-field-options-button",
+                    attrs: { icon: "circle-nested" },
+                    on: { click: _vm.open }
+                  },
+                  [_vm._v("\n      " + _vm._s(_vm.$t("select")) + "\n    ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
       },
       "k-field",
       _vm.$props,
       false
     ),
     [
-      _c(
-        "template",
-        { slot: "options" },
-        [
-          _c(
-            "k-button",
-            {
-              staticClass: "k-field-options-button",
-              attrs: { icon: "circle-nested" },
-              on: { click: _vm.open }
-            },
-            [_vm._v("\n      " + _vm._s(_vm.$t("select")) + "\n    ")]
-          )
-        ],
-        1
-      ),
       _vm._v(" "),
       _c(
         "k-input",
@@ -17021,9 +17036,9 @@ exports.default = _default;
         )
       ),
       _vm._v(" "),
-      _c("k-pages-dialog", { ref: "selector", on: { submit: _vm.select } })
+      _c("k-pages-dialog", { ref: "selector", on: { submit: _vm.onSelect } })
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []

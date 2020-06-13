@@ -5,7 +5,7 @@
     v-bind="$props"
     class="k-text-field"
   >
-    <template slot="options">
+    <template #options>
       <k-button
         icon="circle-nested"
         class="k-field-options-button"
@@ -14,6 +14,7 @@
         {{ $t('select') }}
       </k-button>
     </template>
+
     <k-input
       ref="input"
       :id="_uid"
@@ -23,7 +24,7 @@
       v-on="$listeners"
     />
 
-    <k-pages-dialog ref="selector" @submit="select" />
+    <k-pages-dialog ref="selector" @submit="onSelect" />
   </k-field>
 </template>
 
@@ -40,10 +41,8 @@ export default {
         search: true
       });
     },
-    select(items) {
-      if (items.length > 0) {
-        this.$emit("input", items[0]);
-      }
+    onSelect(items) {
+      this.$emit("input", items[0].id);
     }
   }
 }
