@@ -1,10 +1,15 @@
 <template>
-  <span class="retour-table-link-preview">
+  <span>
     <k-button
       v-if="value && value != '-'"
+      :icon="{
+        type: 'url',
+        color: 'gray-light',
+        size: 'small'
+      }"
       :link="link"
-      icon="url"
       target="_blank"
+      class="mr-1"
       @click.native.stop
     />
     {{ value }}
@@ -26,15 +31,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.retour-table-link-preview .k-icon-url {
-  margin-right: 0.2rem;
-  transform: scale(0.8);
-  color: var(--color-border);
-
-  &:hover {
-    color: var(--color-text-light);
-  }
-}
-</style>

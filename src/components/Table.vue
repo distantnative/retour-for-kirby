@@ -20,14 +20,22 @@
       @header="$emit('header', $event)"
       @option="onOption"
     >
-      <template #cell="{ column, value }">
+      <template #cell="{ column, row, value }">
         <p class="k-table-cell-value">
           <template v-if="column.type === 'link'">
-            <retour-table-link-preview :value="value" />
+            <retour-table-link-cell :value="value" />
           </template>
 
           <template v-else-if="column.type === 'status'">
-            <retour-table-status-preview :value="value" />
+            <retour-table-status-cell :value="value" />
+          </template>
+
+          <template v-else-if="column.type === 'priority'">
+            <retour-table-priority-cell :value="value" />
+          </template>
+
+          <template v-else-if="column.type === 'count'">
+            <retour-table-count-cell :row="row" />
           </template>
 
           <template v-else>
@@ -77,14 +85,19 @@
 
 <script>
 import TableFilter from "./TableFilter.vue";
-import TableLinkPreview from "./TableLinkPreview.vue";
-import TableStatusPreview from "./TableStatusPreview.vue";
+
+import TableCountCell from "./TableCountCell.vue";
+import TableLinkCell from "./TableLinkCell.vue";
+import TablePriorityCell from "./TablePriorityCell.vue";
+import TableStatusCell from "./TableStatusCell.vue";
 
 export default {
   components: {
     "retour-table-filter": TableFilter,
-    "retour-table-link-preview": TableLinkPreview,
-    "retour-table-status-preview": TableStatusPreview
+    "retour-table-count-cell": TableCountCell,
+    "retour-table-link-cell": TableLinkCell,
+    "retour-table-priority-cell": TablePriorityCell,
+    "retour-table-status-cell": TableStatusCell
   },
   props: {
     columns: Object,
