@@ -9161,7 +9161,7 @@ var _default = {
           if (begin.day() === 0) {
             selection.begin = selection.begin.subtract(6, "day");
           } else {
-            selection.begin = selection.begin.subtract(begin.day() - 1, "day");
+            selection.begin = selection.begin.subtract(selection.begin.begin.day() - 1, "day");
             selection.end = selection.end.add(7 - end.day(), "day");
           }
 
@@ -9182,7 +9182,7 @@ var _default = {
 
       this.$store.dispatch("retour/selection", {
         begin: this.$store.state.retour.selection.begin[method](factor, unit).startOf(unit),
-        end: this.$store.state.retour.selection.end[method](factor, unit).startOf(unit)
+        end: this.$store.state.retour.selection.end[method](factor, unit).endOf(unit)
       });
     },
 
@@ -15165,8 +15165,7 @@ exports.default = _default;
         ? _c(
             "div",
             {
-              staticClass:
-                "bg-white p-4 text-center rounded-sm shadow text-gray text-sm"
+              staticClass: "bg-white p-4 text-center rounded-sm shadow text-sm"
             },
             [_vm._v("\n    " + _vm._s(_vm.empty) + "\n  ")]
           )
@@ -15513,10 +15512,10 @@ var _default = {
 
     async onResolve() {
       try {
-        await this.$api.post("retour/logs/resolve", {
+        await this.$api.post("retour/log/resolve", {
           path: this.row.from
         });
-        const calls = [this.$store.dispatch("retour/failues"), this.$store.dispatch("retour/stats")];
+        const calls = [this.$store.dispatch("retour/failures"), this.$store.dispatch("retour/stats")];
         await Promise.all(calls);
       } catch (error) {
         this.$store.dispatch("notification/error", error);
@@ -15527,7 +15526,7 @@ var _default = {
       this.isLoading = true;
 
       try {
-        await this.$api.patch("retour/redirects", rows);
+        await this.$api.patch("retour/routes", rows);
         await this.$store.dispatch("retour/routes");
 
         if (this.after) {
@@ -16286,8 +16285,8 @@ var _default = {
     "retour-system-tab": _SystemTab.default
   },
   computed: {
-    hasLogs() {
-      return this.$store.getters["retour/hasLogs"];
+    hasLog() {
+      return this.$store.state.retour.system.hasLog;
     },
 
     tab() {
@@ -16302,7 +16301,7 @@ var _default = {
   watch: {
     "$route.hash": {
       handler() {
-        if (this.hasLogs) {
+        if (this.hasLog) {
           this.$emit("breadcrumb", [{
             text: this.tabs.filter(tab => tab.name === this.tab)[0].label
           }]);
@@ -16335,7 +16334,7 @@ exports.default = _default;
     "div",
     { staticClass: "k-retour-view pb-24" },
     [
-      _vm.hasLogs
+      _vm.hasLog
         ? [
             _c("retour-stats"),
             _vm._v(" "),
@@ -17087,8 +17086,8 @@ var _default = Vue => ({
     },
     system: {
       deleteAfter: null,
+      hasLog: false,
       headers: [],
-      logs: false,
       release: null,
       version: null,
       update: 0
@@ -17097,9 +17096,6 @@ var _default = Vue => ({
   getters: {
     days: state => {
       return state.selection.end.diff(state.selection.begin, "day");
-    },
-    hasLogs: state => {
-      return state.system.logs !== false;
     },
     mode: state => {
       if (state.selection.all === true) {
@@ -17160,9 +17156,9 @@ var _default = Vue => ({
       // what we need for sure
       await Promise.all([context.dispatch("system"), context.dispatch("routes")]); // what we might need as well
 
-      if (context.getters["hasLogs"] === true) {
+      if (context.state.system.hasLog === true) {
         await Promise.all([context.dispatch("failures"), context.dispatch("stats")]);
-        Vue.$api.post("retour/logs/purge");
+        Vue.$api.post("retour/log/purge");
       }
     },
 
@@ -17177,7 +17173,7 @@ var _default = Vue => ({
 
     async routes(context) {
       const timeframe = context.getters["timeframe"];
-      const routes = await Vue.$api.get("retour/redirects", timeframe);
+      const routes = await Vue.$api.get("retour/routes", timeframe);
       context.commit("SET_DATA", {
         type: "routes",
         data: routes
@@ -17185,9 +17181,9 @@ var _default = Vue => ({
     },
 
     async stats(context) {
-      const selection = context.getters["selection"];
+      const mode = context.getters["mode"];
       const stats = await Vue.$api.get("retour/stats", {
-        view: selection ? selection : "custom",
+        mode: mode || "custom",
         ...context.getters["timeframe"]
       });
       context.commit("SET_DATA", {
@@ -17198,10 +17194,10 @@ var _default = Vue => ({
 
     async selection(context, selection) {
       if (selection === "all") {
-        const all = await Vue.$api.get("retour/logs/all");
+        const all = await Vue.$api.get("retour/log/all");
         selection = {
-          begin: Vue.$library.dayjs(all.first.date),
-          end: Vue.$library.dayjs(all.last.date),
+          begin: Vue.$library.dayjs(all.begin.date),
+          end: Vue.$library.dayjs(all.end.date),
           all: true
         };
       }
@@ -17209,7 +17205,7 @@ var _default = Vue => ({
       context.commit("SET_SELECTION", selection);
       let load = [context.dispatch("redirects")];
 
-      if (context.getters["hasLogs"]) {
+      if (context.state.system.hasLog) {
         load.push(context.dispatch("failures"));
         load.push(context.dispatch("stats"));
       }

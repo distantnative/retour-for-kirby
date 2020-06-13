@@ -216,12 +216,12 @@ export default {
     },
     async onResolve() {
       try {
-        await this.$api.post("retour/logs/resolve", {
+        await this.$api.post("retour/log/resolve", {
           path: this.row.from
         });
 
         const calls = [
-          this.$store.dispatch("retour/failues"),
+          this.$store.dispatch("retour/failures"),
           this.$store.dispatch("retour/stats")
         ];
 
@@ -235,7 +235,7 @@ export default {
       this.isLoading = true;
 
       try {
-        await this.$api.patch("retour/redirects", rows);
+        await this.$api.patch("retour/routes", rows);
         await this.$store.dispatch("retour/routes");
 
         if (this.after) {

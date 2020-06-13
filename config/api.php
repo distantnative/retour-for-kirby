@@ -7,21 +7,21 @@ use Kirby\Form\Field;
 return [
     'routes' => [
         [
-            'pattern' => 'retour/redirects',
+            'pattern' => 'retour/routes',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->redirects()->get(
+                return Retour::instance()->routes()->toData(
                     $this->requestQuery('begin'),
                     $this->requestQuery('end')
                 );
             }
         ],
         [
-            'pattern' => 'retour/redirects',
+            'pattern' => 'retour/routes',
             'method'  => 'PATCH',
             'action'  => function () {
                 return Retour::instance()
-                        ->redirects()
+                        ->routes()
                         ->update($this->requestBody());
             }
         ],
@@ -29,7 +29,7 @@ return [
             'pattern' => 'retour/failures',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->logs()->fails(
+                return Retour::instance()->log()->fails(
                     $this->requestQuery('begin'),
                     $this->requestQuery('end')
                 );
@@ -39,8 +39,8 @@ return [
             'pattern' => 'retour/stats',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->logs()->stats(
-                    $this->requestQuery('view'),
+                return Retour::instance()->log()->stats(
+                    $this->requestQuery('mode'),
                     $this->requestQuery('begin'),
                     $this->requestQuery('end')
                 );
@@ -54,36 +54,36 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/logs/all',
+            'pattern' => 'retour/log/all',
             'method'  => 'GET',
             'action'  => function () {
                 return [
-                    'first' => Retour::instance()->logs()->first(),
-                    'last'  => Retour::instance()->logs()->last()
+                    'begin' => Retour::instance()->log()->first(),
+                    'end'   => Retour::instance()->log()->last()
                 ];
             }
         ],
         [
-            'pattern' => 'retour/logs/resolve',
+            'pattern' => 'retour/log/resolve',
             'method'  => 'POST',
             'action'  => function () {
                 return Retour::instance()
-                        ->logs()
+                        ->log()
                         ->resolve($this->requestBody('path'));
             }
         ],
         [
-            'pattern' => 'retour/logs/flush',
+            'pattern' => 'retour/log/flush',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()->logs()->flush();
+                return Retour::instance()->log()->flush();
             }
         ],
         [
-            'pattern' => 'retour/logs/purge',
+            'pattern' => 'retour/log/purge',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()->logs()->purge();
+                return Retour::instance()->log()->purge();
             }
         ],
         [
