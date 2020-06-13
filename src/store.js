@@ -7,8 +7,8 @@ export default (Vue) => ({
       stats: []
     },
     selection: {
-      from: Vue.$library.dayjs().startOf("month"),
-      to: Vue.$library.dayjs().endOf("month"),
+      begin: Vue.$library.dayjs().startOf("month"),
+      end: Vue.$library.dayjs().endOf("month"),
       all: false
     },
     system: {
@@ -21,73 +21,72 @@ export default (Vue) => ({
     }
   },
   getters: {
+    days: state => {
+      return state.selection.end.diff(state.selection.begin, "day");
+    },
     hasLogs: state => {
       return state.system.logs !== false;
     },
-    timeframe: state => ({
-      from: state.selection.from.format("YYYY-MM-DD"),
-      to:   state.selection.to.format("YYYY-MM-DD")
-    }),
-    days: state => {
-      return state.selection.to.diff(state.selection.from, "day");
-    },
-    selection: state => {
-      const from = state.selection.from;
-      const to = state.selection.to;
-
+    mode: state => {
       if (state.selection.all === true) {
         return "all";
       }
 
+      const begin = state.selection.begin;
+      const end   = state.selection.end;
+
       if (
-        from.isSame(to, "date") &&
-        from.isSame(to, "month") &&
-        from.isSame(to, "year")
+        begin.isSame(end, "date") &&
+        begin.isSame(end, "month") &&
+        begin.isSame(end, "year")
       ) {
         return "day";
       }
 
       if (
-        from.isSame(to, "month") &&
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        to.date() === to.daysInMonth()
+        begin.isSame(end, "month") &&
+        begin.isSame(end, "year") &&
+        begin.date() === 1 &&
+        end.date() === end.daysInMonth()
       ) {
         return "month";
       }
 
       if (
-        to.day() === 0 && from.isSame(to.subtract(6, "day").startOf("day"))
+        end.day() === 0 && begin.isSame(end.subtract(6, "day").startOf("day"))
       ) {
         return "week";
       } else if (
-        from.isSame(to.subtract(to.day() - 1, "day").startOf("day"))
+        begin.isSame(end.subtract(end.day() - 1, "day").startOf("day"))
       ) {
         return "week";
       }
 
-
       if (
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        from.month() === 0 &&
-        to.date() === 31 &&
-        to.month() === 11
+        begin.isSame(end, "year") &&
+        begin.date() === 1 &&
+        begin.month() === 0 &&
+        end.date() === 31 &&
+        end.month() === 11
       ) {
         return "year";
       }
 
       return false;
-    }
+    },
+    timeframe: state => ({
+      begin: state.selection.begin.format("YYYY-MM-DD"),
+      end:   state.selection.end.format("YYYY-MM-DD")
+    }),
   },
   mutations: {
     SET_DATA(state, { type, data }) {
       Vue.$set(state.data, type, data);
     },
     SET_SELECTION(state, dates) {
-      state.selection.from = dates.from;
-      state.selection.to   = dates.to;
-      state.selection.all  = dates.all || false;
+      state.selection.begin = dates.begin;
+      state.selection.end   = dates.end;
+      state.selection.all   = dates.all || false;
     },
     SET_SYSTEM(state, data) {
       state.system = { ...state.system, ...data };
@@ -102,7 +101,7 @@ export default (Vue) => ({
       ]);
 
       // what we might need as well
-      if (context.state.system.logs === true) {
+      if (context.getters["hasLogs"] === true) {
         await Promise.all([
           context.dispatch("failures"),
           context.dispatch("stats")
@@ -129,20 +128,20 @@ export default (Vue) => ({
       });
       context.commit("SET_DATA", { type: "stats", data: stats });
     },
-    async selection(context, dates) {
-      if (dates === "all") {
+    async selection(context, selection) {
+      if (selection === "all") {
         const all = await Vue.$api.get("retour/logs/all");
-        dates = {
-          from: Vue.$library.dayjs(all.first.date),
-          to: Vue.$library.dayjs(all.last.date),
-          all: true
+        selection = {
+          begin: Vue.$library.dayjs(all.first.date),
+          end:   Vue.$library.dayjs(all.last.date),
+          all:   true
         };
       }
 
-      context.commit("SET_SELECTION", dates);
+      context.commit("SET_SELECTION", selection);
       let load = [context.dispatch("redirects")];
 
-      if (context.getters.hasLogs) {
+      if (context.getters["hasLogs"]) {
         load.push(context.dispatch("failures"));
         load.push(context.dispatch("stats"));
       }

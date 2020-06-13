@@ -15,10 +15,11 @@
     <input
       ref="input"
       v-show="isFocused"
+      :placeholder="$t('retour.tbl.filter')"
       :value="value"
       @input="onInput($event.target.value)"
       @blur="onBlur"
-
+      @keydown.esc="onToggle"
     />
   </div>
 </template>
@@ -64,6 +65,10 @@ export default {
 }
 .retour-table-filter > * {
   border-bottom: 1px solid transparent;
+}
+.retour-table-filter .k-button-text {
+  font-size: 1rem;
+  font-weight: 600;
 }
 .retour-table-filter input {
   background: transparent;

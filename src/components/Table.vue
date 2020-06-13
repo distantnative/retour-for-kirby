@@ -2,17 +2,12 @@
   <div class="retour-table">
 
     <!-- header -->
-    <header class="flex items-center justify-between mb-2">
+    <header class="flex items-center justify-between mb-3">
       <retour-table-filter
         v-model="filter"
         :label="$helper.string.ucfirst(tab)"
       />
-      <k-button
-        v-if="add"
-        :text="add"
-        icon="add"
-        @click="$emit('add')"
-      />
+      <slot name="button" />
     </header>
 
     <!-- table -->
@@ -92,7 +87,6 @@ export default {
     "retour-table-status-preview": TableStatusPreview
   },
   props: {
-    add: String,
     columns: Object,
     empty: String,
     options: Array,
