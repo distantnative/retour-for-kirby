@@ -2,9 +2,13 @@
   <div class="retour-table">
 
     <!-- header -->
-    <header v-if="add" class="flex items-center justify-between mb-3">
-      <div />
+    <header class="flex items-center justify-between mb-2">
+      <retour-table-filter
+        v-model="filter"
+        :label="$helper.string.ucfirst(tab)"
+      />
       <k-button
+        v-if="add"
         :text="add"
         icon="add"
         @click="$emit('add')"
@@ -77,11 +81,13 @@
 </template>
 
 <script>
+import TableFilter from "./TableFilter.vue";
 import TableLinkPreview from "./TableLinkPreview.vue";
 import TableStatusPreview from "./TableStatusPreview.vue";
 
 export default {
   components: {
+    "retour-table-filter": TableFilter,
     "retour-table-link-preview": TableLinkPreview,
     "retour-table-status-preview": TableStatusPreview
   },
@@ -104,12 +110,36 @@ export default {
     return {
       page: parseInt(page) || 1,
       limit: parseInt(limit) || 10,
+      filter: null,
+      hasFilter: false
     };
   },
   computed: {
+    filteredRows() {
+      if (!this.filter) {
+        return this.rows;
+      }
+
+      // get columns that should be filtered
+      const columns = Object.keys(this.columns).filter(key => this.columns[key].filter === true);
+
+      // filter rows by checking each column to filter if
+      // includes current query
+      return this.rows.filter(row => {
+        let match = false;
+
+        columns.forEach(column => {
+          if (row[column].includes(this.filter) === true) {
+            match = true;
+          }
+        });
+
+        return match === true;
+      });
+    },
     normalizedRows() {
       // TODO: remove when fixed in core
-      return this.paginatedRows.map(row => {
+      return this.filteredRows.map(row => {
         Object.keys(row).forEach(key => {
           row[key] = row[key] || "";
         });
@@ -121,10 +151,10 @@ export default {
     },
     paginatedRows() {
       if (!this.limit) {
-        return this.rows;
+        return this.filteredRows;
       }
 
-      return this.rows.slice(
+      return this.filteredRows.slice(
         this.limit * (this.page - 1),
         this.limit * this.page
       );

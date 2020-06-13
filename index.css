@@ -140,6 +140,24 @@
   fill-opacity: 0.85;
 }.retour-stats-box {
   background: #3d3d3d;
+}.retour-table-filter {
+  height: 1.1rem;
+}
+
+.retour-table-filter > * {
+  border-bottom: 1px solid transparent;
+}
+
+.retour-table-filter input {
+  background: transparent;
+  font-size: var(--font-size-medium);
+  outline: none;
+}
+
+.retour-table-filter[data-focus] > input {
+  border-bottom-color: #ccc;
+  font-size: 0.875rem;
+  padding: 0.1rem;
 }.retour-table-link-preview .k-icon-url {
   margin-right: 0.2rem;
   transform: scale(0.8);
