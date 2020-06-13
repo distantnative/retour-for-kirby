@@ -15,7 +15,7 @@
       :columns="columns"
       :index="limit * (page - 1) + 1"
       :options="options"
-      :rows="normalizedRows"
+      :rows="filteredRows"
       @cell="$emit('cell', $event)"
       @header="$emit('header', $event)"
       @option="onOption"
@@ -48,7 +48,7 @@
     <!-- empty -->
     <div
       v-if="rows.length === 0"
-      class="bg-white p-4 text-center rounded-sm shadow text-gray text-sm"
+      class="bg-white p-4 text-center rounded-sm shadow text-sm"
     >
       {{ empty }}
     </div>
@@ -142,18 +142,6 @@ export default {
         });
 
         return match === true;
-      });
-    },
-    normalizedRows() {
-      // TODO: remove when fixed in core
-      return this.filteredRows.map(row => {
-        Object.keys(row).forEach(key => {
-          row[key] = row[key] || "";
-        });
-        if (row.last) {
-          row.last = row.last.replace(/-/g, "/");
-        }
-        return row;
       });
     },
     paginatedRows() {

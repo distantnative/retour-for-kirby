@@ -17,14 +17,14 @@ return [
             $retour = Retour::instance();
 
             try {
-                $routes = $retour->redirects()->toRoutes(false);
+                $routes = $retour->routes()->toRules(false);
                 $router = new Router($routes);
                 return $router->call($path, $method);
 
             } catch (\Throwable $e) {
-                // If logging enable, add record
+                // If logging enabled, add record
                 if (option('distantnative.retour.logs') === true) {
-                    $retour->logs()->create(['path' => $path]);
+                    $retour->log()->create(['path' => $path]);
                 }
             }
         }

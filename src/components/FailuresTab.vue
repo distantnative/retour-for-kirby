@@ -74,7 +74,7 @@ export default {
   methods: {
     async onFlush() {
       try {
-        await this.$api.post("retour/logs/flush");
+        await this.$api.post("retour/log/flush");
         this.$refs.flushDialog.close();
         this.$store.dispatch("retour/load");
 
