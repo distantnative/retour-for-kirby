@@ -59,6 +59,7 @@ export default {
       startAngle: 270,
       showLabel: false
     });
+    this.update();
   },
   methods: {
     update() {

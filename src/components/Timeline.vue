@@ -50,10 +50,9 @@ export default {
       return this.max.diff(this.min, this.unit);
     },
     ticks() {
-      let ticks = Array.from({ length: this.diff + 1 })
-                  .map((e, index) => {
-                    return this.$library.dayjs(this.min).add(index, this.unit);
-                  });
+      let ticks = Array.from({ length: this.diff + 1 }).map((e, index) => {
+        return this.$library.dayjs(this.min).add(index, this.unit);
+      });
 
       // Only show month borders
       if (this.diff > 62) {
@@ -98,6 +97,9 @@ export default {
       },
       deep: true
     }
+  },
+  mounted() {
+    this.createChart();
   },
   methods: {
     createChart() {
