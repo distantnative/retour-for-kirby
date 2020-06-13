@@ -9158,11 +9158,11 @@ var _default = {
           break;
 
         case "week":
-          if (begin.day() === 0) {
+          if (selection.begin.day() === 0) {
             selection.begin = selection.begin.subtract(6, "day");
           } else {
-            selection.begin = selection.begin.subtract(selection.begin.begin.day() - 1, "day");
-            selection.end = selection.end.add(7 - end.day(), "day");
+            selection.begin = selection.begin.subtract(selection.begin.day() - 1, "day");
+            selection.end = selection.end.add(7 - selection.end.day(), "day");
           }
 
           break;
@@ -13797,6 +13797,7 @@ var _default = {
       startAngle: 270,
       showLabel: false
     });
+    this.update();
   },
 
   methods: {
@@ -14029,6 +14030,11 @@ var _default = {
       deep: true
     }
   },
+
+  mounted() {
+    this.createChart();
+  },
+
   methods: {
     createChart() {
       let chart = new _chartist.default.Line(".retour-timeline .chart", {
@@ -14770,7 +14776,7 @@ var _default = {
   computed: {
     color() {
       if (!this.value) {
-        return "gray-light";
+        return "red-light";
       }
 
       if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
@@ -16281,6 +16287,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
@@ -16292,6 +16301,10 @@ var _default = {
   computed: {
     hasLog() {
       return this.$store.state.retour.system.hasLog;
+    },
+
+    isLoading() {
+      return this.$store.state.retour.system.isLoading;
     },
 
     tab() {
@@ -16337,9 +16350,11 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "k-retour-view pb-24" },
+    { staticClass: "retour-view pb-24" },
     [
-      _vm.hasLog
+      _vm.isLoading
+        ? _c("k-loader")
+        : _vm.hasLog
         ? [
             _c("retour-stats"),
             _vm._v(" "),
@@ -16395,9 +16410,13 @@ render._withStripped = true
         }
 
         
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
       }
     })();
-},{"../mixins/permissions.js":"mixins/permissions.js","../config/tabs.js":"config/tabs.js","./Stats.vue":"components/Stats.vue","./RoutesTab.vue":"components/RoutesTab.vue","./FailuresTab.vue":"components/FailuresTab.vue","./SystemTab.vue":"components/SystemTab.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Calendar.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","../config/tabs.js":"config/tabs.js","./Stats.vue":"components/Stats.vue","./RoutesTab.vue":"components/RoutesTab.vue","./FailuresTab.vue":"components/FailuresTab.vue","./SystemTab.vue":"components/SystemTab.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Calendar.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17095,6 +17114,7 @@ var _default = Vue => ({
       deleteAfter: null,
       hasLog: false,
       headers: [],
+      isLoading: false,
       release: null,
       version: null,
       update: 0
@@ -17160,13 +17180,20 @@ var _default = Vue => ({
   },
   actions: {
     async load(context) {
-      // what we need for sure
+      context.commit("SET_SYSTEM", {
+        isLoading: true
+      }); // what we need for sure
+
       await Promise.all([context.dispatch("system"), context.dispatch("routes")]); // what we might need as well
 
       if (context.state.system.hasLog === true) {
         await Promise.all([context.dispatch("failures"), context.dispatch("stats")]);
-        Vue.$api.post("retour/log/purge");
+        await Vue.$api.post("retour/log/purge");
       }
+
+      context.commit("SET_SYSTEM", {
+        isLoading: false
+      });
     },
 
     async failures(context) {

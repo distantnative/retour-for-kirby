@@ -45,11 +45,11 @@ export default {
           selection.end   = selection.end.endOf("month");
           break;
         case "week":
-          if (begin.day() === 0) {
+          if (selection.begin.day() === 0) {
             selection.begin = selection.begin.subtract(6, "day");
           } else {
-            selection.begin = selection.begin.subtract(selection.begin.begin.day() - 1, "day");
-            selection.end   = selection.end.add(7 - end.day(), "day");
+            selection.begin = selection.begin.subtract(selection.begin.day() - 1, "day");
+            selection.end   = selection.end.add(7 - selection.end.day(), "day");
           }
           break;
       }

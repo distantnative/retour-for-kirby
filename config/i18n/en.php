@@ -22,7 +22,7 @@ return [
     'retour.routes.fields.status.help' => 'Learn about <a href="{docs}" target="_blank">HTTP status codes</a> and when to use which one.',
     'retour.routes.fields.priority' => 'Has priority?',
     'retour.routes.fields.priority.abbr' => 'Prio',
-    'retour.routes.fields.priority.help' => 'If you activate this option, the redirect will be enforced even if an actual page exists.',
+    'retour.routes.fields.priority.help' => 'If activated, the redirect will be enforced even if an actual page exists.',
     'retour.routes.fields.comment' => 'Comment',
     'retour.routes.fields.comment.help' => 'If you need to add some info for yourself or others…',
 
