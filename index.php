@@ -10,5 +10,6 @@ App::plugin('distantnative/retour', [
     'options'      => require 'config/options.php',
     'api'          => require 'config/api.php',
     'hooks'        => require 'config/hooks.php',
+    'routes'       => require 'config/routes.php',
     'translations' => require 'config/translations.php'
 ]);

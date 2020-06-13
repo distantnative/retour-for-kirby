@@ -61,66 +61,70 @@ class Redirects
         }, $redirects);
     }
 
+    protected function toRoute(array $redirect): array
+    {
+        return [
+            'pattern' => $redirect['from'],
+            'action'  => function (...$parameters) use ($redirect) {
+                $code = (int)$redirect['status'];
+                $to   = $redirect['to'];
+
+                // Create log record
+                if (option('distantnative.retour.logs') === true) {
+                    Retour::instance()->logs()->create([
+                        'path' => Url::path(),
+                        'redirect' => $redirect['from']
+                    ]);
+                }
+
+                // Set the right response code
+                kirby()->response()->code($code);
+
+                // Map placeholders/parameters
+                foreach ($parameters as $i => $parameter) {
+                    $to = str_replace('$' . ($i + 1), $parameter, $to);
+                }
+
+                // Replace alias for home
+                if ($to === '/') {
+                    $to = 'home';
+                }
+
+                // Redirects
+                if ($code >= 300 && $code < 400) {
+                    return Response::redirect($to ?? '/', $code);
+                }
+
+                // Return page for other codes
+                if ($page = page($to)) {
+                    return page($page);
+                }
+
+                // Deliver HTTP status code and die
+                Header::status($code);
+                die();
+            }
+        ];
+    }
+
     /**
      * Get routes config for all redirects
      *
      * @return array
      */
-    public function toRoutes(): array
+    public function toRoutes(bool $priority = false): array
     {
         $data = $this->load();
 
         // Filter: no routes for disabled redirects
-        $data = array_filter($data, function ($redirect) {
-            return $redirect['status'] !== 'disabled';
+        //         and match the priority parameter
+        $data = array_filter($data, function ($redirect) use ($priority) {
+            return empty($redirect['status']) === false &&
+                   (bool)($redirect['priority'] ?? false) === $priority;
         });
 
         // create route array for each redirect
-        $logs = Retour::instance()->logs();
-        $data = array_map(function ($redirect) use ($logs) {
-            return [
-                'pattern' => $redirect['from'],
-                'action'  => function (...$parameters) use ($redirect, $logs) {
-                    $code = (int)$redirect['status'];
-                    $to   = $redirect['to'];
-
-                    // Create log record
-                    if (option('distantnative.retour.logs') === true) {
-                        $logs->create([
-                            'path' => Url::path(),
-                            'redirect' => $redirect['from']
-                        ]);
-                    }
-
-                    // Set the right response code
-                    kirby()->response()->code($code);
-
-                    // Map placeholders/parameters
-                    foreach ($parameters as $i => $parameter) {
-                        $to = str_replace('$' . ($i + 1), $parameter, $to);
-                    }
-
-                    // Replace alias for home
-                    if ($to === '/') {
-                        $to = 'home';
-                    }
-
-                    // Redirects
-                    if ($code >= 300 && $code < 400) {
-                        return Response::redirect($to ?? '/', $code);
-                    }
-
-                    // Return page for other codes
-                    if ($page = page($to)) {
-                        return page($page);
-                    }
-
-                    // Deliver HTTP status code and die
-                    Header::status($code);
-                    die();
-                }
-            ];
-        }, $data);
+        $data = array_map([$this, 'toRoute'], $data);
 
         return $data;
     }
