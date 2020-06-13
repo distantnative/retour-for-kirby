@@ -13,8 +13,8 @@ export default (Vue) => ({
     },
     system: {
       deleteAfter: null,
+      hasLog: false,
       headers: [],
-      logs: false,
       release: null,
       version: null,
       update: 0
@@ -23,9 +23,6 @@ export default (Vue) => ({
   getters: {
     days: state => {
       return state.selection.end.diff(state.selection.begin, "day");
-    },
-    hasLogs: state => {
-      return state.system.logs !== false;
     },
     mode: state => {
       if (state.selection.all === true) {
@@ -101,13 +98,13 @@ export default (Vue) => ({
       ]);
 
       // what we might need as well
-      if (context.getters["hasLogs"] === true) {
+      if (context.state.system.hasLog === true) {
         await Promise.all([
           context.dispatch("failures"),
           context.dispatch("stats")
         ]);
 
-        Vue.$api.post("retour/logs/purge");
+        Vue.$api.post("retour/log/purge");
       }
     },
     async failures(context) {
@@ -117,23 +114,23 @@ export default (Vue) => ({
     },
     async routes(context) {
       const timeframe = context.getters["timeframe"];
-      const routes    = await Vue.$api.get("retour/redirects", timeframe);
+      const routes    = await Vue.$api.get("retour/routes", timeframe);
       context.commit("SET_DATA", { type: "routes", data: routes });
     },
     async stats(context) {
-      const selection = context.getters["selection"];
+      const mode  = context.getters["mode"];
       const stats = await Vue.$api.get("retour/stats", {
-        view: selection ? selection : "custom",
+        mode: mode || "custom",
         ...context.getters["timeframe"]
       });
       context.commit("SET_DATA", { type: "stats", data: stats });
     },
     async selection(context, selection) {
       if (selection === "all") {
-        const all = await Vue.$api.get("retour/logs/all");
+        const all = await Vue.$api.get("retour/log/all");
         selection = {
-          begin: Vue.$library.dayjs(all.first.date),
-          end:   Vue.$library.dayjs(all.last.date),
+          begin: Vue.$library.dayjs(all.begin.date),
+          end:   Vue.$library.dayjs(all.end.date),
           all:   true
         };
       }
@@ -141,7 +138,7 @@ export default (Vue) => ({
       context.commit("SET_SELECTION", selection);
       let load = [context.dispatch("redirects")];
 
-      if (context.getters["hasLogs"]) {
+      if (context.state.system.hasLog) {
         load.push(context.dispatch("failures"));
         load.push(context.dispatch("stats"));
       }

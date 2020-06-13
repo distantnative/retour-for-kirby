@@ -48,7 +48,7 @@ export default {
           if (begin.day() === 0) {
             selection.begin = selection.begin.subtract(6, "day");
           } else {
-            selection.begin = selection.begin.subtract(begin.day() - 1, "day");
+            selection.begin = selection.begin.subtract(selection.begin.begin.day() - 1, "day");
             selection.end   = selection.end.add(7 - end.day(), "day");
           }
           break;
@@ -67,7 +67,7 @@ export default {
 
       this.$store.dispatch("retour/selection", {
         begin: this.$store.state.retour.selection.begin[method](factor, unit).startOf(unit),
-        end:   this.$store.state.retour.selection.end[method](factor, unit).startOf(unit)
+        end:   this.$store.state.retour.selection.end[method](factor, unit).endOf(unit)
       });
     },
     onNext() {
