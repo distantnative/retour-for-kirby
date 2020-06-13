@@ -99,7 +99,7 @@ export default {
           align: "center"
         },
         priority: {
-          label: this.$t("retour.routes.fields.priority"),
+          label: this.$t("retour.routes.fields.priority.abbr"),
           type: "priority",
           width: "1/20"
         },
@@ -149,14 +149,16 @@ export default {
         },
         priority: {
           type: "toggle",
-          label: "Take priority over existing pages?",
+          label: this.$t("retour.routes.fields.priority"),
           icon: "bolt",
+          help: this.$t("retour.routes.fields.priority.help"),
           width: "1/2",
-          help: "lalalala"
         },
         comment: {
           type: "textarea",
-          buttons: false
+          label: this.$t("retour.routes.fields.comment"),
+          buttons: false,
+          help: this.$t("retour.routes.fields.comment.help")
         }
       };
     },
