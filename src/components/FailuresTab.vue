@@ -56,12 +56,9 @@ export default {
         },
         hits: {
           label: this.$t("retour.hits"),
+          type: "count",
           width: "1/12",
           align: "right"
-        },
-        last: {
-          label: this.$t("retour.hits.last"),
-          width: "3/12"
         }
       };
     },
