@@ -14,44 +14,40 @@ class Retour
 
 
     /**
-     * @var \distantnative\Retour\Logs
+     * @var \distantnative\Retour\Log
      */
-    protected $logs = null;
+    protected $log = null;
 
     /**
-     * @var \distantnative\Retour\Redirects
+     * @var \distantnative\Retour\Routes
      */
-    protected $redirects = null;
+    protected $routes = null;
 
     /**
+     * Returns either an existing instance or
+     * creates a new instance and returns it
      *
      * @return \distantnative\Retour\Retour
      */
     public static function instance(): Retour
     {
-        if (static::$instance !== null) {
-            return static::$instance;
-        }
-
-        return static::$instance = new Retour;
+        return static::$instance ?? static::$instance = new Retour;
     }
 
     /**
-     *
-     * @return \distantnative\Retour\Logs
+     * @return \distantnative\Retour\Log
      */
-    public function logs(): Logs
+    public function log()
     {
-        return $this->logs ?? $this->logs = new Logs;
+        return $this->log ?? $this->log = new Log;
     }
 
     /**
-     *
-     * @return \distantnative\Retour\Redirects
+     * @return \distantnative\Retour\Routes
      */
-    public function redirects(): Redirects
+    public function routes()
     {
-        return $this->redirects ?? $this->redirects = new Redirects;
+        return $this->routes ?? $this->routes = new Routes;
     }
 
     /**
@@ -61,19 +57,19 @@ class Retour
      */
     public static function info(): array
     {
-        $plugin = kirby()->plugin('distantnative/retour');
+        // $plugin = kirby()->plugin('distantnative/retour');
 
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
-            'logs'        => option('distantnative.retour.logs'),
+            'hasLog'      => option('distantnative.retour.logs'),
             // 'release'     => $release = static::release(),
-            'version'     => $version = $plugin->version(),
+            // 'version'     => $version = $plugin->version(),
             // 'update'      => version_compare($version, $release)
         ];
     }
 
-    protected static function release(bool $force = false)
+    protected static function release(bool $force = false): string
     {
         $kirby  = kirby();
         $option = $kirby->option('update.kirby') ?? $kirby->option('update');

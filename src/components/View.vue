@@ -2,7 +2,7 @@
   <div class="k-retour-view pb-24">
 
     <!-- full version -->
-    <template v-if="hasLogs">
+    <template v-if="hasLog">
       <retour-stats />
       <k-tabs :tabs="tabs" :tab="tab" />
       <div class="p-6">
@@ -39,8 +39,8 @@ export default {
     "retour-system-tab": SystemTab
   },
   computed: {
-    hasLogs() {
-      return this.$store.getters["retour/hasLogs"];
+    hasLog() {
+      return this.$store.state.retour.system.hasLog;
     },
     tab() {
       return this.$route.hash.slice(1) || "routes";
@@ -52,7 +52,7 @@ export default {
   watch: {
     "$route.hash": {
       handler() {
-        if (this.hasLogs) {
+        if (this.hasLog) {
           this.$emit("breadcrumb", [
             { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
           ]);

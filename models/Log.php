@@ -6,7 +6,7 @@ use Kirby\Database\Database;
 use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
 
-class Logs
+class Log
 {
 
     /**
@@ -45,7 +45,7 @@ class Logs
 
         // Connect to database
         $this->db = new Database([
-            'type' => 'sqlite',
+            'type'     => 'sqlite',
             'database' => $this->file
         ]);
     }
@@ -88,15 +88,15 @@ class Logs
     /**
      * Get all failed records
      *
-     * @param string $start  date sting (yyyy-mm-dd)
+     * @param string $begin  date sting (yyyy-mm-dd)
      * @param string $end    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function fails(string $start, string $end): array
+    public function fails(string $begin, string $end): array
     {
         // Add time to dates to capture full days
-        $start .= ' 00:00:00';
+        $begin .= ' 00:00:00';
         $end   .= ' 23:59:59';
 
         // Run query
@@ -110,7 +110,7 @@ class Logs
             ')
             ->where('redirect IS NULL')
             ->andWhere('wasResolved IS NULL')
-            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $begin])
             ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
             ->group('path, referrer')
             ->fetch('array')
@@ -160,16 +160,16 @@ class Logs
     /**
      * Get all records for a redirect
      *
-     * @param array $redirect  redirect array
-     * @param string $start    date sting (yyyy-mm-dd)
-     * @param string $end      date sting (yyyy-mm-dd)
+     * @param array  $route  redirect array
+     * @param string $begin  date sting (yyyy-mm-dd)
+     * @param string $end    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function redirect(array $redirect, string $start, string $end): array
+    public function redirect(array $route, string $begin, string $end): array
     {
         // Add time to dates to capture full days
-        $start .= ' 00:00:00';
+        $begin .= ' 00:00:00';
         $end   .= ' 23:59:59';
 
         // Run query
@@ -178,17 +178,17 @@ class Logs
                 COUNT(*) AS hits,
                 MAX(date) AS last
             ')
-            ->where(['redirect' => $redirect['from']])
-            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $start])
+            ->where(['redirect' => $route['from']])
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $begin])
             ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
             ->fetch('array')->first();
 
         if ($data === false) {
-            return $redirect;
+            return $route;
         }
 
         // Add stats data to original redirect data
-        return array_merge($redirect, $data);
+        return array_merge($route, $data);
     }
 
     /**
