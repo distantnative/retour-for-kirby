@@ -93,12 +93,12 @@ export default {
   computed: {
     failed() {
       return this.$store.state.retour.data.failures.reduce((i, x) => {
-        return i += parseInt(x.hits)
+        return i += parseInt(x.hits || 0)
       }, 0);
     },
     redirected() {
       return this.$store.state.retour.data.routes.reduce((i, x) => {
-        return i += parseInt(x.hits);
+        return i += parseInt(x.hits || 0);
       }, 0);
     },
     updateClass() {
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     onUpdate() {
-
+      this.$store.dispatch("retour/system", true);
     }
   }
 }

@@ -53,32 +53,40 @@ class Retour
     /**
      * Return information for Panel
      *
+     * @param  bool  $reload Force reloading of update info
      * @return array
      */
-    public static function info(): array
+    public static function info(bool $reload = false): array
     {
-        // $plugin = kirby()->plugin('distantnative/retour');
+        $plugin = kirby()->plugin('distantnative/retour');
 
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'hasLog'      => option('distantnative.retour.logs'),
-            // 'release'     => $release = static::release(),
-            // 'version'     => $version = $plugin->version(),
-            // 'update'      => version_compare($version, $release)
+            'release'     => $release = static::release($reload),
+            'version'     => $version = $plugin->version(),
+            'update'      => $release ? version_compare($version, $release) : null
         ];
     }
 
-    protected static function release(bool $force = false): string
+    /**
+     * Loads current release info from getkirby.com
+     *
+     * @param bool $reload
+     *
+     * @return string|null
+     */
+    protected static function release(bool $reload = false): ?string
     {
         $kirby  = kirby();
         $option = $kirby->option('update.kirby') ?? $kirby->option('update');
 
-        if ($force === true || $option !== false) {
+        if ($reload === true || $option !== false) {
             $cache  = $kirby->cache('retour');
             $cached = $cache->get('release');
 
-            if ($cached === null) {
+            if ($cached === null || $reload === true) {
                 $url = 'https://getkirby.com/plugins/distantnative/retour.json';
                 $response = Remote::get($url)->json();
                 $cached = $response['version'];
@@ -87,5 +95,7 @@ class Retour
 
             return $cached;
         }
+
+        return null;
     }
 }
