@@ -9,23 +9,19 @@
       v-on="$listeners"
       @input="onInput"
     >
-      <div slot="before" :data-status="status">
-        <k-icon type="circle" />
-      </div>
+      <template #before>
+        <k-icon type="circle" :color="color" />
+      </template>
     </k-input>
   </k-field>
 </template>
 
 <script>
-import {status} from "../helpers.js";
+import color from "../mixins/color.js";
 
 export default {
   extends: "k-select-field",
-  computed: {
-    status() {
-      return status(this.value);
-    }
-  },
+  mixins: [color],
   methods: {
     onInput(value) {
       this.value = value;
@@ -33,15 +29,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.k-retour-view [data-status="no"] {
-  color: var(--color-negative-light);
-}
-.k-retour-view [data-status="yes"] {
-  color: var(--color-positive-light);
-}
-.k-retour-view [data-status="mmm"] {
-  color: var(--color-focus-light);
-}
-</style>

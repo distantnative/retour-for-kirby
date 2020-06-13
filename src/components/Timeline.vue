@@ -198,9 +198,6 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-timeline {
-  background: rgba(0, 0, 0, .2);
-}
 .retour-timeline .chart > svg {
   margin-top: .5rem;
   margin-left: -.75rem;
@@ -208,8 +205,8 @@ export default {
 
 .retour-timeline .ct-grid,
 .retour-timeline .ct-label {
-  color: #555;
-  stroke: #555;
+  color: #777;
+  stroke: #777;
 }
 .retour-timeline .ct-label.ct-vertical.ct-start {
   font-size: .8rem;

@@ -76,9 +76,6 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-chart {
-  background: rgba(0, 0, 0, .2);
-}
 .retour-chart figcaption {
   margin-top: -124px;
 }
@@ -104,5 +101,14 @@ export default {
 .retour-chart .ct-series-b .ct-slice-pie {
   fill: var(--color-border);
   fill-opacity: .85;
+}
+
+.retour-chart .ct-series {
+  stroke: #3d3d3d;
+  stroke-width: .2rem;
+}
+
+.retour-chart .ct-series-d .ct-slice-pie {
+  fill: #333;
 }
 </style>

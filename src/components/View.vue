@@ -1,19 +1,31 @@
 <template>
   <div class="k-retour-view pb-24">
-    <retour-stats />
-    <k-tabs :tabs="tabs" :tab="tab" />
-    <div class="p-6">
-      <component :is="'retour-' + this.tab + '-tab'" />
-    </div>
+
+    <!-- full version -->
+    <template v-if="true">
+      <retour-stats />
+      <k-tabs :tabs="tabs" :tab="tab" />
+      <div class="p-6">
+        <component :is="'retour-' + this.tab + '-tab'" />
+      </div>
+    </template>
+
+    <!-- only routes -->
+    <template v-else>
+      <retour-routes-tab />
+      <retour-settings-tab />
+    </template>
+
   </div>
 </template>
 
 <script>
-import { permissions } from "../helpers.js";
+import permissions from "../mixins/permissions.js";
 
 import Stats from "./Stats.vue";
 import RoutesTab from "./RoutesTab.vue";
 import FailuresTab from "./FailuresTab.vue";
+import SystemTab from "./SystemTab.vue";
 
 export default {
   mixins: [permissions],
@@ -21,45 +33,55 @@ export default {
     "retour-stats": Stats,
     "retour-routes-tab": RoutesTab,
     "retour-failures-tab": FailuresTab,
-    "retour-settings-tab": SettingsTab
+    "retour-system-tab": SystemTab
   },
   computed: {
+    data() {
+      return this.$store.state.retour.data;
+    },
     hasLogs() {
-      // return this.$store.state.retour.options.logs;
+      return this.$store.getters["retour/hasLogs"];
     },
     tab() {
       return this.$route.hash.slice(1) || "routes";
     },
     tabs() {
+      const routes = this.data.routes.length;
+      const failures = this.data.failures.length;
+
+      if (failures > 1000) {
+        failures = (Math.floor(failures / 100) / 10) + "k";
+      }
+
       return [
         {
           name: "routes",
           label: this.$t("retour.routes"),
           icon: "road-sign",
-          badge: {
-            count: this.$store.state.retour.data.routes.length,
+          badge: routes ? {
+            count: routes,
             color: "focus"
-          }
+          }: false
         },
         {
           name: "failures",
           label: this.$t("retour.failures"),
           icon: "alert",
-          badge: {
-            count: this.$store.state.retour.data.failures.length,
+          badge: failures ? {
+            count: failures,
             color: "negative"
-          }
+          } : false
         },
         {
-          name: "settings",
-          label: this.$t("retour.settings"),
+          name: "system",
+          label: this.$t("retour.system"),
           icon: "box"
         }
       ];
     }
   },
   watch: {
-    tab: {
+    "$route.hash": {
       handler() {
         this.$emit("breadcrumb", [
           { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
@@ -70,6 +92,6 @@ export default {
   },
   created() {
     this.$store.dispatch("retour/load");
-  },
+  }
 };
 </script>

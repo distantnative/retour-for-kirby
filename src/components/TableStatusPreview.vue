@@ -1,27 +1,17 @@
 <template>
   <span class="retour-table-status-preview">
     <k-icon type="circle" :color="color" />
-    <code>{{ value }}</code>
+    <code v-if="value">{{ value }}</code>
   </span>
 </template>
 
 <script>
+import color from "../mixins/color.js";
+
 export default {
+  mixins: [color],
   props: {
     value: String
-  },
-  computed: {
-    color() {
-      if (this.value === "–") {
-        return "gray-light"
-      }
-
-      if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
-        return "green-light";
-      }
-
-      return "focus-light";
-    }
   }
 }
 </script>
@@ -32,7 +22,7 @@ export default {
 
   code {
     background: rgba(0, 0, 0, 0.1);
-    color: #16171a;
+    color: var(--color-text);
     border-radius: 3px;
     box-decoration-break: clone;
     font-family: var(--font-family-mono);
