@@ -1,16 +1,4 @@
-.retour-calendar .k-calendar-day[data-is-begin] {
-  border-top-left-radius: 100%;
-  border-bottom-left-radius: 100%;
-}
-
-.retour-calendar .k-calendar-day[data-is-end] {
-  border-top-right-radius: 100%;
-  border-bottom-right-radius: 100%;
-}
-
-.retour-calendar .k-calendar-day[data-is-intersected] {
-  background-color: rgba(255, 255, 255, 0.25);
-}.retour-timeframe .k-dropdown-content {
+.retour-timeframe .k-dropdown-content {
   top: calc(100% + .5rem);
 }.rt-stats [aria-current] {
   color: #fff;
@@ -118,13 +106,6 @@
   border-bottom-color: #ccc;
   font-size: 0.875rem;
   padding: 0.1rem;
-}.retour-table-link-preview .k-icon-url {
-  margin-right: 0.2rem;
-  transform: scale(0.8);
-  color: var(--color-border);
-}
-.retour-table-link-preview .k-icon-url:hover {
-  color: var(--color-text-light);
 }.retour-table-status-preview {
   display: flex;
 }
@@ -137,4 +118,16 @@
   font-size: var(--font-size-tiny);
   padding: 0.05em 0.5em;
   margin-left: 0.5em;
+}.retour-calendar .k-calendar-day[data-is-begin] {
+  border-top-left-radius: 100%;
+  border-bottom-left-radius: 100%;
+}
+
+.retour-calendar .k-calendar-day[data-is-end] {
+  border-top-right-radius: 100%;
+  border-bottom-right-radius: 100%;
+}
+
+.retour-calendar .k-calendar-day[data-is-intersected] {
+  background-color: rgba(255, 255, 255, 0.25);
 }
