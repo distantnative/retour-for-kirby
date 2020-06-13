@@ -84,28 +84,30 @@ export default {
           label: this.$t("retour.routes.fields.from"),
           type: "link",
           filter: true,
-          width: "1/3"
+          width: "15/40"
         },
         to: {
           label: this.$t("retour.routes.fields.to"),
           type: "link",
           filter: true,
-          width: "1/3"
+          width: "15/40"
         },
         status: {
           label: this.$t("retour.routes.fields.status"),
           type: "status",
-          width: "1/12",
+          width: "1/10",
           align: "center"
+        },
+        priority: {
+          label: this.$t("retour.routes.fields.priority"),
+          type: "priority",
+          width: "1/20"
         },
         hits: {
           label: this.$t("retour.hits"),
-          width: "1/12",
+          width: "1/10",
+          type: "count",
           align: "right"
-        },
-        last: {
-          label: this.$t("retour.hits.last"),
-          width: "1/6"
         }
       };
     },
@@ -148,8 +150,13 @@ export default {
         priority: {
           type: "toggle",
           label: "Take priority over existing pages?",
+          icon: "bolt",
           width: "1/2",
           help: "lalalala"
+        },
+        comment: {
+          type: "textarea",
+          buttons: false
         }
       };
     },

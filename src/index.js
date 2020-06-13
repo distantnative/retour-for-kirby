@@ -1,8 +1,9 @@
 // Vue components
+import View from "./components/View.vue";
+
 import Calendar from "./components/Calendar.vue";
 import StatusField from "./components/StatusField.vue";
 import TargetField from "./components/TargetField.vue";
-import View from "./components/View.vue";
 
 // Vuex store
 import Store from "./store.js";
