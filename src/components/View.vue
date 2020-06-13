@@ -1,8 +1,11 @@
 <template>
-  <div class="k-retour-view pb-24">
+  <div class="retour-view pb-24">
+
+    <!-- loader -->
+    <k-loader v-if="isLoading" />
 
     <!-- full version -->
-    <template v-if="hasLog">
+    <template v-else-if="hasLog">
       <retour-stats />
       <k-tabs :tabs="tabs" :tab="tab" />
       <div class="p-6">
@@ -42,6 +45,9 @@ export default {
     hasLog() {
       return this.$store.state.retour.system.hasLog;
     },
+    isLoading() {
+      return this.$store.state.retour.system.isLoading;
+    },
     tab() {
       return this.$route.hash.slice(1) || "routes";
     },
@@ -66,3 +72,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.retour-view .k-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
