@@ -1,16 +1,24 @@
 <template>
   <div>
-    <k-box v-if="recent" theme="notice" class="mb-6">
-      <b>{{ recent }} inactive route(s)</b> for tracked changes. Either activate or dismiss by removing the route.
-    </k-box>
+    <template v-if="hasTracking === false">
+      <k-box theme="info">
+        Tracking has not been enabled. To do so, please set the <b>distantnative.retour.tracking</b> option in your <b>site/config/config.php</b>.
+      </k-box>
+    </template>
 
-    <retour-routes-table
-      :canEdit="false"
-      :label="$t('retour.tracked')"
-      :options="options"
-      :rows="rows"
-      type="tracked"
-    />
+    <template v-else>
+      <k-box v-if="recent" theme="notice" class="mb-6">
+        <b>{{ recent }} inactive route(s)</b> for tracked changes. Either activate or dismiss by removing the route.
+      </k-box>
+
+      <retour-routes-table
+        :canEdit="false"
+        :label="$t('retour.tracked')"
+        :options="options"
+        :rows="rows"
+        type="tracked"
+      />
+    </template>
   </div>
 </template>
 
@@ -25,6 +33,9 @@ export default {
     "retour-routes-table": RoutesTable
   },
   computed: {
+    hasTracking() {
+      return this.$store.state.retour.system.hasTracking;
+    },
     options() {
       if (this.canUpdate !== false) {
         return [
