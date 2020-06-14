@@ -14,4 +14,5 @@ return array(
     'distantnative\\Retour\\Retour' => $baseDir . '/models/Retour.php',
     'distantnative\\Retour\\Route' => $baseDir . '/models/Route.php',
     'distantnative\\Retour\\Routes' => $baseDir . '/models/Routes.php',
+    'distantnative\\Retour\\Upgrades' => $baseDir . '/models/Upgrades.php',
 );
