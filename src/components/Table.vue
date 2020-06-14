@@ -5,7 +5,7 @@
     <header class="flex items-center justify-between mb-3">
       <retour-table-filter
         v-model="filter"
-        :label="$t('retour.' + tab)"
+        :label="label"
       />
       <slot name="button" />
     </header>
@@ -18,32 +18,9 @@
       :rows="filteredRows"
       @cell="$emit('cell', $event)"
       @header="$emit('header', $event)"
+      @input="$emit('input', $event)"
       @option="onOption"
-    >
-      <template #cell="{ column, row, value }">
-        <p class="k-table-cell-value">
-          <template v-if="column.type === 'link'">
-            <retour-table-link-cell :value="value" :column="column" />
-          </template>
-
-          <template v-else-if="column.type === 'status'">
-            <retour-table-status-cell :value="value" :column="column" />
-          </template>
-
-          <template v-else-if="column.type === 'priority'">
-            <retour-table-priority-cell :value="value" :column="column" />
-          </template>
-
-          <template v-else-if="column.type === 'count'">
-            <retour-table-count-cell :row="row" />
-          </template>
-
-          <template v-else>
-            {{ value }}
-          </template>
-        </p>
-      </template>
-    </k-table>
+    />
 
     <!-- empty -->
     <div
@@ -86,22 +63,14 @@
 <script>
 import TableFilter from "./TableFilter.vue";
 
-import TableCountCell from "./TableCountCell.vue";
-import TableLinkCell from "./TableLinkCell.vue";
-import TablePriorityCell from "./TablePriorityCell.vue";
-import TableStatusCell from "./TableStatusCell.vue";
-
 export default {
   components: {
-    "retour-table-filter": TableFilter,
-    "retour-table-count-cell": TableCountCell,
-    "retour-table-link-cell": TableLinkCell,
-    "retour-table-priority-cell": TablePriorityCell,
-    "retour-table-status-cell": TableStatusCell
+    "retour-table-filter": TableFilter
   },
   props: {
     columns: Object,
     empty: String,
+    label: String,
     options: Array,
     rows: {
       type: Array,
@@ -109,7 +78,7 @@ export default {
         return [];
       }
     },
-    tab: String
+    type: String
   },
   data() {
     const page  = 1;
@@ -159,7 +128,7 @@ export default {
     onLimit(limit) {
       this.limit = limit;
       this.page  = 1;
-      localStorage.setItem("retour$" + this.tab + "$limit", this.limit);
+      localStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
     onOption(option, row, rowIndex) {
       this.$emit('option', option, row, rowIndex);

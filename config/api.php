@@ -7,22 +7,26 @@ use Kirby\Form\Field;
 return [
     'routes' => [
         [
-            'pattern' => 'retour/routes',
+            'pattern' => 'retour/routes/(:any)',
             'method'  => 'GET',
-            'action'  => function () {
+            'action'  => function ($type) {
                 return Retour::instance()->routes()->toData(
                     $this->requestQuery('begin'),
-                    $this->requestQuery('end')
+                    $this->requestQuery('end'),
+                    $type
                 );
             }
         ],
         [
-            'pattern' => 'retour/routes',
+            'pattern' => 'retour/routes/(:any)',
             'method'  => 'PATCH',
-            'action'  => function () {
+            'action'  => function ($type) {
                 return Retour::instance()
                         ->routes()
-                        ->update($this->requestBody());
+                        ->update(
+                            $type,
+                            $this->requestBody()
+                        );
             }
         ],
         [

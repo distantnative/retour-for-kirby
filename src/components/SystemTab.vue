@@ -96,14 +96,11 @@
 export default {
   computed: {
     failed() {
-      return this.$store.state.retour.data.failures.reduce((i, x) => {
-        return i += parseInt(x.hits || 0)
-      }, 0);
+      return this.reduce(this.$store.state.retour.data.failures);
     },
     redirected() {
-      return this.$store.state.retour.data.routes.reduce((i, x) => {
-        return i += parseInt(x.hits || 0);
-      }, 0);
+      return this.reduce(this.$store.state.retour.data.manual) +
+             this.reduce(this.$store.state.retour.data.tracked);
     },
     updateClass() {
       if (this.$store.state.retour.system.update < 0) {
@@ -118,6 +115,11 @@ export default {
   methods: {
     onUpdate() {
       this.$store.dispatch("retour/system", true);
+    },
+    reduce(data) {
+      return data.reduce((i, x) => {
+        return i += parseInt(x.hits || 0)
+      }, 0);
     }
   }
 }

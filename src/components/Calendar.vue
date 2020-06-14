@@ -191,7 +191,6 @@ export default {
       return false;
     },
     onHover(day) {
-      console.log(day);
       this.hover = this.getDate(day);
     },
     select(day) {

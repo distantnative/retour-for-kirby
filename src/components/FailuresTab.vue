@@ -2,9 +2,10 @@
   <retour-table
     :columns="columns"
     :empty="$t('retour.failures.empty')"
+    :label="$t('retour.failures')"
     :options="options"
     :rows="rows"
-    tab="failures"
+    type="failures"
     @option="onResolve"
   >
     <template v-if="canUpdate" #button>

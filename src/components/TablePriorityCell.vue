@@ -1,22 +1,18 @@
 <template>
-  <k-icon
-    v-if="value"
-    type="bolt"
-    size="small"
-    :title="column.label"
-  />
+  <div v-if="value" class="flex justify-center">
+    <k-icon
+      type="bolt"
+      size="small"
+      :title="column.label"
+    />
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     value: String,
-    column: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
+    column: Object
   }
 }
 </script>
