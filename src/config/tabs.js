@@ -21,7 +21,7 @@ export default (Vue) => {
 
   tabs.push({
     name: "tracked",
-    label: "Tracked",
+    label: Vue.$t("retour.tracked"),
     icon: "live",
     badge: tracked ? {
       count: tracked,

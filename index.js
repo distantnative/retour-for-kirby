@@ -177,7 +177,7 @@ var _default = Vue => {
   const tracked = store.data.tracked.filter(route => route.active === false).length;
   tabs.push({
     name: "tracked",
-    label: "Tracked",
+    label: Vue.$t("retour.tracked"),
     icon: "live",
     badge: tracked ? {
       count: tracked,
@@ -15296,9 +15296,12 @@ var _default = {
     },
 
     async onCellUpdate(rows) {
-      console.log(rows); //row[columnIndex] = value;
-      //rows.splice(rowIndex, 1, row);
-      //await this.onUpdate(rows);
+      // TODO: see if that's a bug in Kirby itself
+      if (Array.isArray(rows) === false) {
+        return;
+      }
+
+      await this.onUpdate(rows);
     },
 
     async onEdit() {
@@ -15310,9 +15313,15 @@ var _default = {
     },
 
     onOption(option, row = {}, rowIndex) {
-      this.row = this.$helper.clone(row);
-      this.rowIndex = rowIndex;
-      this.$refs[option + "Dialog"].open();
+      switch (option) {
+        case "move":
+          return this.$events.$emit("retour.move", row);
+
+        default:
+          this.row = this.$helper.clone(row);
+          this.rowIndex = rowIndex;
+          this.$refs[option + "Dialog"].open();
+      }
     },
 
     async onRemove() {
@@ -15320,18 +15329,6 @@ var _default = {
       rows.splice(this.rowIndex, 1);
       await this.onUpdate(rows);
       this.$refs.removeDialog.close();
-    },
-
-    async onResolve() {
-      try {
-        await this.$api.post("retour/log/resolve", {
-          path: this.row.from
-        });
-        const calls = [this.$store.dispatch("retour/failures"), this.$store.dispatch("retour/stats")];
-        await Promise.all(calls);
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      }
     },
 
     async onUpdate(rows) {
@@ -15342,8 +15339,10 @@ var _default = {
         await this.$store.dispatch("retour/routes", this.type);
 
         if (this.after) {
-          await this.after();
+          await this.after(this.row);
         }
+
+        this.$store.dispatch("notification/success");
       } catch (error) {
         this.$store.dispatch("notification/error", error);
       } finally {
@@ -15352,9 +15351,10 @@ var _default = {
       }
     },
 
-    resolve(row) {
+    insert(row, after) {
+      row.active = true;
+      this.after = after;
       this.onOption("add", row);
-      this.after = this.onResolve;
     }
 
   }
@@ -15525,6 +15525,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
@@ -15552,15 +15553,43 @@ var _default = {
   },
 
   created() {
+    // this.$events.$on("retour.move", this.move);
     this.$events.$on("retour.resolve", this.resolve);
   },
 
   destroyed() {
+    // this.$events.$off("retour.move", this.move);
     this.$events.$off("retour.resolve", this.resolve);
   },
 
   methods: {
-    onResolve() {}
+    // move(row) {
+    //   this.$refs.table.insert(row, this.onMove);
+    // },
+    resolve(row) {
+      this.$refs.table.insert(row, this.onResolve);
+    },
+
+    // async onMove(row) {
+    //   try {
+    //     // remove route from tracked
+    //     await this.$store.dispatch("retour/routes", "tracked")
+    //     await Promise.all(calls);
+    //   } catch (error) {
+    //     this.$store.dispatch("notification/error", error);
+    //   }
+    // },
+    async onResolve(row) {
+      try {
+        await this.$api.post("retour/log/resolve", {
+          path: row.from
+        });
+        const calls = [this.$store.dispatch("retour/failures"), this.$store.dispatch("retour/stats")];
+        await Promise.all(calls);
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
+    }
 
   }
 };
@@ -15578,6 +15607,7 @@ exports.default = _default;
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("retour-routes-table", {
+    ref: "table",
     attrs: {
       canEdit: _vm.canUpdate,
       label: _vm.$t("retour.routes"),
@@ -16023,6 +16053,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
@@ -16031,16 +16067,17 @@ var _default = {
   computed: {
     options() {
       if (this.canUpdate !== false) {
-        return [{
-          text: this.$t("retour.tracked.add"),
-          icon: "parent",
-          click: "insert"
-        }, {
+        return [// { text: this.$t("retour.tracked.move"), icon: "parent", click: "insert" },
+        {
           text: this.$t("remove"),
           icon: "trash",
           click: "remove"
         }];
       }
+    },
+
+    recent() {
+      return this.rows.filter(row => row.active === false).length;
     },
 
     rows() {
@@ -16062,15 +16099,30 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("retour-routes-table", {
-    attrs: {
-      canEdit: false,
-      label: _vm.$t("retour.tracked"),
-      options: _vm.options,
-      rows: _vm.rows,
-      tab: "routes"
-    }
-  })
+  return _c(
+    "div",
+    [
+      _vm.recent
+        ? _c("k-box", { staticClass: "mb-6", attrs: { theme: "notice" } }, [
+            _c("b", [_vm._v(_vm._s(_vm.recent) + " inactive route(s)")]),
+            _vm._v(
+              " for tracked changes. Either activate or dismiss by removing the route.\n  "
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("retour-routes-table", {
+        attrs: {
+          canEdit: false,
+          label: _vm.$t("retour.tracked"),
+          options: _vm.options,
+          rows: _vm.rows,
+          type: "tracked"
+        }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -16099,9 +16151,13 @@ render._withStripped = true
         }
 
         
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
       }
     })();
-},{"../mixins/permissions.js":"mixins/permissions.js","./RoutesTable.vue":"components/RoutesTable.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","./RoutesTable.vue":"components/RoutesTable.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
