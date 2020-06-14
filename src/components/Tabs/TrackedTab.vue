@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import permissions from "../mixins/permissions.js";
+import permissions from "../../mixins/permissions.js";
 
-import RoutesTable from "./RoutesTable.vue";
+import RoutesTable from "../Table/RoutesTable.vue";
 
 export default {
   mixins: [permissions],

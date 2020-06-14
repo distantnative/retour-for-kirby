@@ -1,16 +1,16 @@
 <template>
-  <div class="rt-stats bg-black-light text-white">
+  <div class=" bg-black-light text-white">
     <k-view class="pt-6 pb-8">
-      <k-grid gutter="medium">
+      <k-grid gutter="small">
         <k-column width="1/4">
-          <header class="k-header-bar flex items-center justify-between h-10">
+          <header class="k-header-bar flex items-center justify-between">
             <retour-timeframe-dropdown />
           </header>
           <retour-chart class="retour-stats-box rounded-sm" />
         </k-column>
 
         <k-column width="3/4">
-          <header class="k-header-bar flex items-center justify-between h-10">
+          <header class="k-header-bar flex items-center justify-between">
             <k-button v-if="$config.debug" icon="refresh" @click="onRefresh" />
             <div v-else />
             <retour-prevnext />
@@ -23,10 +23,11 @@
 </template>
 
 <script>
-import TimeframeDropdown from "./TimeframeDropdown.vue";
-import PrevNext from "./PrevNext.vue";
-import Chart from "./Chart.vue";
-import Timeline from "./Timeline.vue";
+import Chart from "./Graphs/Chart.vue";
+import Timeline from "./Graphs/Timeline.vue";
+
+import TimeframeDropdown from "./Interaction/TimeframeDropdown.vue";
+import PrevNext from "./Interaction/PrevNext.vue";
 
 export default {
   components: {
