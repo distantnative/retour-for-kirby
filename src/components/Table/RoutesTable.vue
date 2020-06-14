@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import permissions from "../mixins/permissions.js";
+import permissions from "../../mixins/permissions.js";
 
 import Table from "./Table.vue";
 
@@ -137,7 +137,7 @@ export default {
         },
         to: {
           label: this.$t("retour.routes.to"),
-          type: "retour-target",
+          type: "retour-destination",
           help: this.$t("retour.routes.to.help"),
           icon: "parent",
           counter: false,
