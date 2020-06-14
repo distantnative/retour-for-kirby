@@ -174,16 +174,19 @@ var _default = Vue => {
     } : false
   }); // tracked routes
 
-  const tracked = store.data.tracked.filter(route => route.active === false).length;
-  tabs.push({
-    name: "tracked",
-    label: Vue.$t("retour.tracked"),
-    icon: "live",
-    badge: tracked ? {
-      count: tracked,
-      color: "yellow"
-    } : false
-  }); // failures
+  if (store.system.hasTracking) {
+    const tracked = store.data.tracked.filter(route => route.active === false).length;
+    tabs.push({
+      name: "tracked",
+      label: Vue.$t("retour.tracked"),
+      icon: "live",
+      badge: tracked ? {
+        count: tracked,
+        color: "yellow"
+      } : false
+    });
+  } // failures
+
 
   if (store.system.hasLog) {
     const failures = store.data.failures.length;
@@ -16059,12 +16062,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
     "retour-routes-table": _RoutesTable.default
   },
   computed: {
+    hasTracking() {
+      return this.$store.state.retour.system.hasTracking;
+    },
+
     options() {
       if (this.canUpdate !== false) {
         return [// { text: this.$t("retour.tracked.move"), icon: "parent", click: "insert" },
@@ -16102,26 +16117,46 @@ exports.default = _default;
   return _c(
     "div",
     [
-      _vm.recent
-        ? _c("k-box", { staticClass: "mb-6", attrs: { theme: "notice" } }, [
-            _c("b", [_vm._v(_vm._s(_vm.recent) + " inactive route(s)")]),
-            _vm._v(
-              " for tracked changes. Either activate or dismiss by removing the route.\n  "
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("retour-routes-table", {
-        attrs: {
-          canEdit: false,
-          label: _vm.$t("retour.tracked"),
-          options: _vm.options,
-          rows: _vm.rows,
-          type: "tracked"
-        }
-      })
+      _vm.hasTracking === false
+        ? [
+            _c("k-box", { attrs: { theme: "info" } }, [
+              _vm._v(
+                "\n      Tracking has not been enabled. To do so, please set the "
+              ),
+              _c("b", [_vm._v("distantnative.retour.tracking")]),
+              _vm._v(" option in your "),
+              _c("b", [_vm._v("site/config/config.php")]),
+              _vm._v(".\n    ")
+            ])
+          ]
+        : [
+            _vm.recent
+              ? _c(
+                  "k-box",
+                  { staticClass: "mb-6", attrs: { theme: "notice" } },
+                  [
+                    _c("b", [
+                      _vm._v(_vm._s(_vm.recent) + " inactive route(s)")
+                    ]),
+                    _vm._v(
+                      " for tracked changes. Either activate or dismiss by removing the route.\n    "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("retour-routes-table", {
+              attrs: {
+                canEdit: false,
+                label: _vm.$t("retour.tracked"),
+                options: _vm.options,
+                rows: _vm.rows,
+                type: "tracked"
+              }
+            })
+          ]
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -17442,6 +17477,7 @@ var _default = Vue => ({
     system: {
       deleteAfter: null,
       hasLog: false,
+      hasTracking: false,
       headers: [],
       release: null,
       version: null,

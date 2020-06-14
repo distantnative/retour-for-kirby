@@ -15,6 +15,7 @@ export default (Vue) => ({
     system: {
       deleteAfter: null,
       hasLog: false,
+      hasTracking: false,
       headers: [],
       release: null,
       version: null,
