@@ -8,6 +8,8 @@ import TargetField from "./components/TargetField.vue";
 // Vuex store
 import Store from "./store.js";
 
+import { canAccess } from "./mixins/permissions.js";
+
 // Register everything
 panel.plugin("distantnative/retour", {
   components: {
@@ -20,7 +22,10 @@ panel.plugin("distantnative/retour", {
   views: {
     retour: {
       component: View,
-      icon: "road-sign"
+      icon: "road-sign",
+      menu(app) {
+        return canAccess(app);
+      }
     }
   },
   created(app) {
