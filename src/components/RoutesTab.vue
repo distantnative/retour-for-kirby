@@ -9,7 +9,7 @@
     @option="onOption"
   >
     <!-- add button -->
-    <template #button>
+    <template v-if="canUpdate" #button>
       <k-button
         :text="$t('retour.routes.add')"
         icon="add"
@@ -63,9 +63,12 @@
 </template>
 
 <script>
+import permissions from "../mixins/permissions.js";
+
 import Table from "./Table.vue";
 
 export default {
+  mixins: [permissions],
   components: {
     "retour-table": Table
   },
@@ -163,6 +166,10 @@ export default {
       };
     },
     options() {
+      if (this.canUpdate === false) {
+        return false;
+      }
+
       return [
         { text: this.$t("edit"), icon: "edit", click: "edit" },
         { text: this.$t("remove"), icon: "trash", click: "remove" }
@@ -194,6 +201,10 @@ export default {
       this.after = null;
     },
     onCell({ row, rowIndex, columnIndex }) {
+      if (this.canUpdate === false) {
+        return;
+      }
+
       this.onOption("edit", row, rowIndex);
       setTimeout(() => {
         this.$refs.editDialog.focus(columnIndex);

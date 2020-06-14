@@ -7,7 +7,7 @@
     tab="failures"
     @option="onResolve"
   >
-    <template #button>
+    <template v-if="canUpdate" #button>
       <k-button
         :text="$t('retour.failures.clear')"
         icon="trash"
@@ -33,9 +33,12 @@
 </template>
 
 <script>
+import permissions from "../mixins/permissions.js";
+
 import Table from "./Table.vue";
 
 export default {
+  mixins: [permissions],
   components: {
     "retour-table": Table
   },
@@ -63,8 +66,16 @@ export default {
       };
     },
     options() {
+      if (this.canUpdate === false) {
+        return false;
+      }
+
       return [
-        { text: this.$t("retour.failures.resolve"), icon: "add", click: "resolve" }
+        {
+          text: this.$t("retour.failures.resolve"),
+          icon: "add",
+          click: "resolve"
+        }
       ];
     },
     rows() {

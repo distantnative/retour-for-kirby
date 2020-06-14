@@ -123,15 +123,29 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = exports.canAccess = void 0;
+
+const canAccess = app => {
+  if (app.$permissions.hasOwnProperty("access") && app.$permissions.access.hasOwnProperty("retour")) {
+    return app.$permissions.access.retour !== false;
+  }
+
+  return true;
+};
+
+exports.canAccess = canAccess;
 var _default = {
   computed: {
     canAccess() {
-      return !(this.$permissions.hasOwnProperty("access") && this.$permissions.access.hasOwnProperty("retour") && this.$permissions.access.retour === false);
+      return canAccess(this);
     },
 
     canUpdate() {
-      return !(this.$permissions.hasOwnProperty("site") && this.$permissions.site.hasOwnProperty("update") && this.$permissions.site.update === false);
+      if (this.$permissions.hasOwnProperty("site") && this.$permissions.access.hasOwnProperty("update")) {
+        return this.$permissions.site.update !== false;
+      }
+
+      return this.canAccess;
     }
 
   }
@@ -15314,6 +15328,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
+
 var _Table = _interopRequireDefault(require("./Table.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15383,6 +15399,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 var _default = {
+  mixins: [_permissions.default],
   components: {
     "retour-table": _Table.default
   },
@@ -15482,6 +15499,10 @@ var _default = {
     },
 
     options() {
+      if (this.canUpdate === false) {
+        return false;
+      }
+
       return [{
         text: this.$t("edit"),
         icon: "edit",
@@ -15530,6 +15551,10 @@ var _default = {
       rowIndex,
       columnIndex
     }) {
+      if (this.canUpdate === false) {
+        return;
+      }
+
       this.onOption("edit", row, rowIndex);
       setTimeout(() => {
         this.$refs.editDialog.focus(columnIndex);
@@ -15616,91 +15641,97 @@ exports.default = _default;
       tab: "routes"
     },
     on: { cell: _vm.onCell, option: _vm.onOption },
-    scopedSlots: _vm._u([
-      {
-        key: "button",
-        fn: function() {
-          return [
-            _c("k-button", {
-              attrs: { text: _vm.$t("retour.routes.add"), icon: "add" },
-              on: {
-                click: function($event) {
-                  return _vm.onOption("add")
-                }
-              }
-            })
-          ]
-        },
-        proxy: true
-      },
-      {
-        key: "dialogs",
-        fn: function() {
-          return [
-            _c("k-form-drawer", {
-              ref: "addDialog",
-              attrs: {
-                autofocus: true,
-                fields: _vm.fields,
-                loading: _vm.isLoading,
-                "submit-button": { text: _vm.$t("add"), color: "positive" },
-                title: _vm.$t("retour.routes") + " / " + _vm.$t("add")
+    scopedSlots: _vm._u(
+      [
+        _vm.canUpdate
+          ? {
+              key: "button",
+              fn: function() {
+                return [
+                  _c("k-button", {
+                    attrs: { text: _vm.$t("retour.routes.add"), icon: "add" },
+                    on: {
+                      click: function($event) {
+                        return _vm.onOption("add")
+                      }
+                    }
+                  })
+                ]
               },
-              on: { cancel: _vm.onCancel, submit: _vm.onAdd },
-              model: {
-                value: _vm.row,
-                callback: function($$v) {
-                  _vm.row = $$v
-                },
-                expression: "row"
-              }
-            }),
-            _vm._v(" "),
-            _c("k-form-drawer", {
-              ref: "editDialog",
-              attrs: {
-                autofocus: false,
-                fields: _vm.fields,
-                loading: _vm.isLoading,
-                "submit-button": { text: _vm.$t("save"), color: "positive" },
-                title: _vm.$t("retour.routes") + " / " + _vm.$t("edit")
-              },
-              on: { cancel: _vm.onCancel, submit: _vm.onEdit },
-              model: {
-                value: _vm.row,
-                callback: function($$v) {
-                  _vm.row = $$v
-                },
-                expression: "row"
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "k-dialog",
-              {
-                ref: "removeDialog",
+              proxy: true
+            }
+          : null,
+        {
+          key: "dialogs",
+          fn: function() {
+            return [
+              _c("k-form-drawer", {
+                ref: "addDialog",
                 attrs: {
+                  autofocus: true,
+                  fields: _vm.fields,
                   loading: _vm.isLoading,
-                  "submit-button": {
-                    text: _vm.$t("delete"),
-                    icon: "trash",
-                    color: "negative"
-                  }
+                  "submit-button": { text: _vm.$t("add"), color: "positive" },
+                  title: _vm.$t("retour.routes") + " / " + _vm.$t("add")
                 },
-                on: { submit: _vm.onRemove }
-              },
-              [
-                _c("k-text", [
-                  _vm._v(_vm._s(_vm.$t("field.structure.delete.confirm")))
-                ])
-              ],
-              1
-            )
-          ]
-        },
-        proxy: true
-      }
-    ])
+                on: { cancel: _vm.onCancel, submit: _vm.onAdd },
+                model: {
+                  value: _vm.row,
+                  callback: function($$v) {
+                    _vm.row = $$v
+                  },
+                  expression: "row"
+                }
+              }),
+              _vm._v(" "),
+              _c("k-form-drawer", {
+                ref: "editDialog",
+                attrs: {
+                  autofocus: false,
+                  fields: _vm.fields,
+                  loading: _vm.isLoading,
+                  "submit-button": { text: _vm.$t("save"), color: "positive" },
+                  title: _vm.$t("retour.routes") + " / " + _vm.$t("edit")
+                },
+                on: { cancel: _vm.onCancel, submit: _vm.onEdit },
+                model: {
+                  value: _vm.row,
+                  callback: function($$v) {
+                    _vm.row = $$v
+                  },
+                  expression: "row"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "k-dialog",
+                {
+                  ref: "removeDialog",
+                  attrs: {
+                    loading: _vm.isLoading,
+                    "submit-button": {
+                      text: _vm.$t("delete"),
+                      icon: "trash",
+                      color: "negative"
+                    }
+                  },
+                  on: { submit: _vm.onRemove }
+                },
+                [
+                  _c("k-text", [
+                    _vm._v(_vm._s(_vm.$t("field.structure.delete.confirm")))
+                  ])
+                ],
+                1
+              )
+            ]
+          },
+          proxy: true
+        }
+      ],
+      null,
+      true
+    )
   })
 }
 var staticRenderFns = []
@@ -15732,13 +15763,15 @@ render._withStripped = true
         
       }
     })();
-},{"./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/FailuresTab.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/FailuresTab.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+
+var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
 
 var _Table = _interopRequireDefault(require("./Table.vue"));
 
@@ -15779,6 +15812,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 var _default = {
+  mixins: [_permissions.default],
   components: {
     "retour-table": _Table.default
   },
@@ -15807,6 +15841,10 @@ var _default = {
     },
 
     options() {
+      if (this.canUpdate === false) {
+        return false;
+      }
+
       return [{
         text: this.$t("retour.failures.resolve"),
         icon: "add",
@@ -15861,52 +15899,61 @@ exports.default = _default;
       tab: "failures"
     },
     on: { option: _vm.onResolve },
-    scopedSlots: _vm._u([
-      {
-        key: "button",
-        fn: function() {
-          return [
-            _c("k-button", {
-              attrs: { text: _vm.$t("retour.failures.clear"), icon: "trash" },
-              on: {
-                click: function($event) {
-                  return _vm.$refs.flushDialog.open()
-                }
-              }
-            })
-          ]
-        },
-        proxy: true
-      },
-      {
-        key: "dialogs",
-        fn: function() {
-          return [
-            _c(
-              "k-dialog",
-              {
-                ref: "flushDialog",
-                attrs: {
-                  "submit-button": {
-                    text: _vm.$t("retour.failures.clear"),
-                    color: "negative",
-                    icon: "trash"
-                  }
-                },
-                on: { submit: _vm.onFlush }
+    scopedSlots: _vm._u(
+      [
+        _vm.canUpdate
+          ? {
+              key: "button",
+              fn: function() {
+                return [
+                  _c("k-button", {
+                    attrs: {
+                      text: _vm.$t("retour.failures.clear"),
+                      icon: "trash"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.$refs.flushDialog.open()
+                      }
+                    }
+                  })
+                ]
               },
-              [
-                _c("k-text", [
-                  _vm._v(_vm._s(_vm.$t("retour.failures.clear.confirm")))
-                ])
-              ],
-              1
-            )
-          ]
-        },
-        proxy: true
-      }
-    ])
+              proxy: true
+            }
+          : null,
+        {
+          key: "dialogs",
+          fn: function() {
+            return [
+              _c(
+                "k-dialog",
+                {
+                  ref: "flushDialog",
+                  attrs: {
+                    "submit-button": {
+                      text: _vm.$t("retour.failures.clear"),
+                      color: "negative",
+                      icon: "trash"
+                    }
+                  },
+                  on: { submit: _vm.onFlush }
+                },
+                [
+                  _c("k-text", [
+                    _vm._v(_vm._s(_vm.$t("retour.failures.clear.confirm")))
+                  ])
+                ],
+                1
+              )
+            ]
+          },
+          proxy: true
+        }
+      ],
+      null,
+      true
+    )
   })
 }
 var staticRenderFns = []
@@ -15938,7 +15985,7 @@ render._withStripped = true
         
       }
     })();
-},{"./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/SystemTab.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/SystemTab.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16382,6 +16429,10 @@ var _default = {
   },
 
   created() {
+    if (this.canAccess === false) {
+      this.$router.push("/");
+    }
+
     this.$store.dispatch("retour/load");
   }
 
@@ -17322,6 +17373,8 @@ var _TargetField = _interopRequireDefault(require("./components/TargetField.vue"
 
 var _store = _interopRequireDefault(require("./store.js"));
 
+var _permissions = require("./mixins/permissions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Vue components
@@ -17338,7 +17391,12 @@ panel.plugin("distantnative/retour", {
   views: {
     retour: {
       component: _View.default,
-      icon: "road-sign"
+      icon: "road-sign",
+
+      menu(app) {
+        return (0, _permissions.canAccess)(app);
+      }
+
     }
   },
 
@@ -17347,7 +17405,7 @@ panel.plugin("distantnative/retour", {
   }
 
 });
-},{"./components/View.vue":"components/View.vue","./components/Calendar.vue":"components/Calendar.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./store.js":"store.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./components/View.vue":"components/View.vue","./components/Calendar.vue":"components/Calendar.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./store.js":"store.js","./mixins/permissions.js":"mixins/permissions.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
