@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'view.retour' => 'Yönlendirmeleri',
+    'view.retour' => 'Yönlendirmeler',
 
     'retour.table.filter'        => 'Filtrele...',
     'retour.table.perPage.all'   => 'Tümü',
@@ -11,7 +11,7 @@ return [
     'retour.hits.last' => 'Son',
 
     'retour.routes'       => 'Yönlendirmeler',
-    // 'retour.routes.add'   => 'Add redirect',
+    'retour.routes.add'   => 'Yönlendirme ekle',
     'retour.routes.empty' => 'Yönlendirme yok',
 
     'retour.routes.fields.from' => 'URL deseneni',
@@ -20,11 +20,11 @@ return [
     'retour.routes.fields.to.help' => 'Site içi veya tam bir adres girin. İsteğin durum kodu ile tamamlanması için boş bırakın.',
     'retour.routes.fields.status' => 'Durum',
     'retour.routes.fields.status.help' => '<a href="{docs}" target="_blank">HTTP durum kodları</a> ve hangisini ne zaman kullanılacağı hakkında bilgi edinin.',
-    // 'retour.routes.fields.priority' => 'Has priority?',
-    // 'retour.routes.fields.priority.abbr' => 'Prio',
-    // 'retour.routes.fields.priority.help' => 'If activated, the redirect will be enforced even if an actual page exists.',
-    // 'retour.routes.fields.comment' => 'Comment',
-    // 'retour.routes.fields.comment.help' => 'If you need to add some info for yourself or others…',
+    'retour.routes.fields.priority' => 'Önceliği var mı?',
+    'retour.routes.fields.priority.abbr' => 'Öncelik',
+    'retour.routes.fields.priority.help' => 'Etkinleştirilirse, gerçek bir sayfa olsa bile yönlendirme uygulanır.',
+    'retour.routes.fields.comment' => 'Yorum',
+    'retour.routes.fields.comment.help' => 'Kendiniz veya başkaları için not eklemeniz gerekiyorsa…',
 
     'retour.failures'          => 'Başarısızlar',
     'retour.failures.empty'    => 'Başarısız yok',
@@ -44,15 +44,15 @@ return [
     'retour.stats.mode.week'  => 'Hafta',
     'retour.stats.mode.day'   => 'Gün',
 
-    // 'retour.system'                    => 'System',
-    // 'retour.system.update'             => 'Check for update',
-    // 'retour.system.version'            => 'Installed version',
-    // 'retour.system.release'            => 'Current release',
+    'retour.system'                    => 'Sistem',
+    'retour.system.update'             => 'Güncellemeleri denetle',
+    'retour.system.version'            => 'Yüklü sürüm',
+    'retour.system.release'            => 'Mevcut sürüm',
     'retour.system.support'            => 'Geliştirmeyi destekle',
     'retour.system.support.donate'     => 'Bağış Yap',
     'retour.system.failures'           => 'Başarısız günlük kayıtları',
     'retour.system.redirects'          => 'Başarıyla yönlendirildi',
-    'retour.system.deleteAfter'        => 'Günlükleri sil sıklığı',
+    'retour.system.deleteAfter'        => 'Günlükleri silme sıklığı',
     'retour.system.deleteAfter.months' => '{count} ay',
     'retour.system.docs'               => '<a href="{docs}">Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin.'
 ];
