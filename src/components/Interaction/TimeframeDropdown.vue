@@ -15,7 +15,12 @@
 </template>
 
 <script>
+import Calendar from "./Calendar.vue";
+
 export default {
+  components: {
+    "retour-calendar": Calendar
+  },
   computed: {
     begin() {
       return this.selection.begin;

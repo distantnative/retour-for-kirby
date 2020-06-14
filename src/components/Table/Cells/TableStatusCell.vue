@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import color from "../mixins/color.js";
+import color from "../../../mixins/color.js";
 
 export default {
   mixins: [color],

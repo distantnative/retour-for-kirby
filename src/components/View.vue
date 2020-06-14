@@ -25,17 +25,17 @@ import tabs from "../config/tabs.js";
 
 import Stats from "./Stats.vue";
 
-import FailuresTab from "./FailuresTab.vue";
-import ManualTab from "./ManualTab.vue";
-import SystemTab from "./SystemTab.vue";
-import TrackedTab from "./TrackedTab.vue";
+// import FailuresTab from "./Tabs/FailuresTab.vue";
+import RoutesTab from "./Tabs/RoutesTab.vue";
+import SystemTab from "./Tabs/SystemTab.vue";
+import TrackedTab from "./Tabs/TrackedTab.vue";
 
 export default {
   mixins: [permissions],
   components: {
     "retour-stats": Stats,
-    "retour-failures-tab": FailuresTab,
-    "retour-routes-tab": ManualTab,
+    // "retour-failures-tab": FailuresTab,
+    "retour-routes-tab": RoutesTab,
     "retour-system-tab": SystemTab,
     "retour-tracked-tab": TrackedTab,
   },

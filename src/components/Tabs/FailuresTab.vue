@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import permissions from "../mixins/permissions.js";
+import permissions from "../../mixins/permissions.js";
 
-import Table from "./Table.vue";
+import Table from "../Table/Table.vue";
 
 export default {
   mixins: [permissions],
