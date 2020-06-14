@@ -161,9 +161,9 @@ exports.default = void 0;
 
 var _default = Vue => {
   let tabs = [];
-  const store = Vue.$store.state.retour; // routes
+  const store = Vue.$store.state.retour; // manual routes
 
-  const routes = store.data.routes.length;
+  const routes = store.data.manual.length;
   tabs.push({
     name: "routes",
     label: Vue.$t("retour.routes"),
@@ -171,6 +171,17 @@ var _default = Vue => {
     badge: routes ? {
       count: routes,
       color: "focus"
+    } : false
+  }); // tracked routes
+
+  const tracked = store.data.tracked.filter(route => route.active === false).length;
+  tabs.push({
+    name: "tracked",
+    label: "Tracked",
+    icon: "live",
+    badge: tracked ? {
+      count: tracked,
+      color: "yellow"
     } : false
   }); // failures
 
@@ -14524,430 +14535,7 @@ render._withStripped = true
       
       }
     })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableCountCell.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  props: {
-    row: Object
-  }
-};
-exports.default = _default;
-        var $d03297 = exports.default || module.exports;
-      
-      if (typeof $d03297 === 'function') {
-        $d03297 = $d03297.options;
-      }
-    
-        /* template */
-        Object.assign($d03297, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.row.hits > 0
-    ? _c(
-        "span",
-        {
-          staticClass: "flex justify-between",
-          attrs: { title: _vm.$t("retour.hits.last") + ": " + _vm.row.last }
-        },
-        [
-          _c("k-button", {
-            staticClass: "cursor-default",
-            attrs: {
-              icon: {
-                type: "clock",
-                size: "small",
-                color: "gray-light"
-              },
-              tooltip: _vm.$t("retour.hits.last") + ": " + _vm.row.last
-            }
-          }),
-          _vm._v("\n  " + _vm._s(_vm.row.hits) + "\n")
-        ],
-        1
-      )
-    : _vm._e()
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$d03297', $d03297);
-          } else {
-            api.reload('$d03297', $d03297);
-          }
-        }
-
-        
-      }
-    })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableLinkCell.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  props: {
-    value: String,
-    column: {
-      type: Object,
-
-      default() {
-        return {};
-      }
-
-    }
-  },
-  computed: {
-    isExternal() {
-      return this.value && this.value.startsWith('http');
-    },
-
-    link() {
-      return this.isExternal ? this.value : window.panel.site + '/' + this.value;
-    }
-
-  }
-};
-exports.default = _default;
-        var $af1eb7 = exports.default || module.exports;
-      
-      if (typeof $af1eb7 === 'function') {
-        $af1eb7 = $af1eb7.options;
-      }
-    
-        /* template */
-        Object.assign($af1eb7, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "span",
-    { attrs: { title: _vm.column.label + ": " + _vm.value } },
-    [
-      _vm.value && _vm.value != "-"
-        ? _c("k-button", {
-            staticClass: "mr-1",
-            attrs: {
-              icon: {
-                type: "url",
-                color: "gray-light",
-                size: "small"
-              },
-              link: _vm.link,
-              target: "_blank"
-            },
-            nativeOn: {
-              click: function($event) {
-                $event.stopPropagation()
-              }
-            }
-          })
-        : _vm._e(),
-      _vm._v("\n  " + _vm._s(_vm.value) + "\n")
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$af1eb7', $af1eb7);
-          } else {
-            api.reload('$af1eb7', $af1eb7);
-          }
-        }
-
-        
-      }
-    })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TablePriorityCell.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  props: {
-    value: String,
-    column: {
-      type: Object,
-
-      default() {
-        return {};
-      }
-
-    }
-  }
-};
-exports.default = _default;
-        var $04b40c = exports.default || module.exports;
-      
-      if (typeof $04b40c === 'function') {
-        $04b40c = $04b40c.options;
-      }
-    
-        /* template */
-        Object.assign($04b40c, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.value
-    ? _c("k-icon", {
-        attrs: { type: "bolt", size: "small", title: _vm.column.label }
-      })
-    : _vm._e()
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$04b40c', $04b40c);
-          } else {
-            api.reload('$04b40c', $04b40c);
-          }
-        }
-
-        
-      }
-    })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"mixins/color.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  computed: {
-    color() {
-      if (!this.value) {
-        return "red-light";
-      }
-
-      if (parseInt(this.value) >= 300 && parseInt(this.value) < 400) {
-        return "green-light";
-      }
-
-      return "blue-light";
-    }
-
-  }
-};
-exports.default = _default;
-},{}],"components/TableStatusCell.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _color = _interopRequireDefault(require("../mixins/color.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  mixins: [_color.default],
-  props: {
-    value: String,
-    column: {
-      type: Object,
-
-      default() {
-        return {};
-      }
-
-    }
-  }
-};
-exports.default = _default;
-        var $f2642c = exports.default || module.exports;
-      
-      if (typeof $f2642c === 'function') {
-        $f2642c = $f2642c.options;
-      }
-    
-        /* template */
-        Object.assign($f2642c, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "span",
-    {
-      staticClass: "retour-table-status-preview",
-      attrs: { title: _vm.column.label + ": " + (_vm.value || "-") }
-    },
-    [
-      _c("k-icon", {
-        staticClass: "mr-2",
-        attrs: { type: "circle", color: _vm.color }
-      }),
-      _vm._v(" "),
-      _vm.value
-        ? _c("code", [_vm._v(_vm._s(_vm.value))])
-        : _c("span", { staticClass: "pl-1" }, [_vm._v("–")])
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$f2642c', $f2642c);
-          } else {
-            api.reload('$f2642c', $f2642c);
-          }
-        }
-
-        
-        var reloadCSS = require('_css_loader');
-        module.hot.dispose(reloadCSS);
-        module.hot.accept(reloadCSS);
-      
-      }
-    })();
-},{"../mixins/color.js":"mixins/color.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Table.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Table.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14957,39 +14545,8 @@ exports.default = void 0;
 
 var _TableFilter = _interopRequireDefault(require("./TableFilter.vue"));
 
-var _TableCountCell = _interopRequireDefault(require("./TableCountCell.vue"));
-
-var _TableLinkCell = _interopRequireDefault(require("./TableLinkCell.vue"));
-
-var _TablePriorityCell = _interopRequireDefault(require("./TablePriorityCell.vue"));
-
-var _TableStatusCell = _interopRequireDefault(require("./TableStatusCell.vue"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -15054,15 +14611,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 var _default = {
   components: {
-    "retour-table-filter": _TableFilter.default,
-    "retour-table-count-cell": _TableCountCell.default,
-    "retour-table-link-cell": _TableLinkCell.default,
-    "retour-table-priority-cell": _TablePriorityCell.default,
-    "retour-table-status-cell": _TableStatusCell.default
+    "retour-table-filter": _TableFilter.default
   },
   props: {
     columns: Object,
     empty: String,
+    label: String,
     options: Array,
     rows: {
       type: Array,
@@ -15072,7 +14626,7 @@ var _default = {
       }
 
     },
-    tab: String
+    type: String
   },
 
   data() {
@@ -15120,7 +14674,7 @@ var _default = {
     onLimit(limit) {
       this.limit = limit;
       this.page = 1;
-      localStorage.setItem("retour$" + this.tab + "$limit", this.limit);
+      localStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
 
     onOption(option, row, rowIndex) {
@@ -15155,7 +14709,7 @@ exports.default = _default;
         { staticClass: "flex items-center justify-between mb-3" },
         [
           _c("retour-table-filter", {
-            attrs: { label: _vm.$t("retour." + _vm.tab) },
+            attrs: { label: _vm.label },
             model: {
               value: _vm.filter,
               callback: function($$v) {
@@ -15184,48 +14738,11 @@ exports.default = _default;
           header: function($event) {
             return _vm.$emit("header", $event)
           },
+          input: function($event) {
+            return _vm.$emit("input", $event)
+          },
           option: _vm.onOption
-        },
-        scopedSlots: _vm._u([
-          {
-            key: "cell",
-            fn: function(ref) {
-              var column = ref.column
-              var row = ref.row
-              var value = ref.value
-              return [
-                _c(
-                  "p",
-                  { staticClass: "k-table-cell-value" },
-                  [
-                    column.type === "link"
-                      ? [
-                          _c("retour-table-link-cell", {
-                            attrs: { value: value, column: column }
-                          })
-                        ]
-                      : column.type === "status"
-                      ? [
-                          _c("retour-table-status-cell", {
-                            attrs: { value: value, column: column }
-                          })
-                        ]
-                      : column.type === "priority"
-                      ? [
-                          _c("retour-table-priority-cell", {
-                            attrs: { value: value, column: column }
-                          })
-                        ]
-                      : column.type === "count"
-                      ? [_c("retour-table-count-cell", { attrs: { row: row } })]
-                      : [_vm._v("\n          " + _vm._s(value) + "\n        ")]
-                  ],
-                  2
-                )
-              ]
-            }
-          }
-        ])
+        }
       }),
       _vm._v(" "),
       _vm.rows.length === 0
@@ -15330,7 +14847,7 @@ render._withStripped = true
         
       }
     })();
-},{"./TableFilter.vue":"components/TableFilter.vue","./TableCountCell.vue":"components/TableCountCell.vue","./TableLinkCell.vue":"components/TableLinkCell.vue","./TablePriorityCell.vue":"components/TablePriorityCell.vue","./TableStatusCell.vue":"components/TableStatusCell.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/RoutesTab.vue":[function(require,module,exports) {
+},{"./TableFilter.vue":"components/TableFilter.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/FailuresTab.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15345,448 +14862,6 @@ var _Table = _interopRequireDefault(require("./Table.vue"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = {
-  mixins: [_permissions.default],
-  components: {
-    "retour-table": _Table.default
-  },
-
-  data() {
-    return {
-      row: {},
-      rowIndex: null,
-      after: null,
-      isLoading: false
-    };
-  },
-
-  computed: {
-    columns() {
-      return {
-        from: {
-          label: this.$t("retour.routes.fields.from"),
-          type: "link",
-          filter: true,
-          width: "15/40"
-        },
-        to: {
-          label: this.$t("retour.routes.fields.to"),
-          type: "link",
-          filter: true,
-          width: "15/40"
-        },
-        status: {
-          label: this.$t("retour.routes.fields.status"),
-          type: "status",
-          width: "1/10",
-          align: "center"
-        },
-        priority: {
-          label: this.$t("retour.routes.fields.priority.abbr"),
-          type: "priority",
-          width: "1/20"
-        },
-        hits: {
-          label: this.$t("retour.hits"),
-          width: "1/10",
-          type: "count",
-          align: "right"
-        }
-      };
-    },
-
-    fields() {
-      return {
-        from: {
-          label: this.$t("retour.routes.fields.from"),
-          type: "text",
-          before: window.panel.site + "/",
-          help: this.$t("retour.routes.fields.from.help", {
-            docs: "https://distantnative.com/retour/docs"
-          }),
-          icon: "url",
-          counter: false,
-          required: true,
-          width: "1/2"
-        },
-        to: {
-          label: this.$t("retour.routes.fields.to"),
-          type: "retour-target",
-          help: this.$t("retour.routes.fields.to.help"),
-          icon: "parent",
-          counter: false,
-          width: "1/2"
-        },
-        status: {
-          label: this.$t("retour.routes.fields.status"),
-          type: "retour-status",
-          options: [...Object.keys(this.$store.state.retour.system.headers).map(code => ({
-            text: code.substr(1) + " - " + this.$store.state.retour.system.headers[code],
-            value: code.substr(1)
-          }))],
-          help: this.$t("retour.routes.fields.status.help", {
-            docs: "https://distantnative.com/retour/docs"
-          }),
-          width: "1/2"
-        },
-        priority: {
-          type: "toggle",
-          label: this.$t("retour.routes.fields.priority"),
-          icon: "bolt",
-          help: this.$t("retour.routes.fields.priority.help"),
-          width: "1/2"
-        },
-        comment: {
-          type: "textarea",
-          label: this.$t("retour.routes.fields.comment"),
-          buttons: false,
-          help: this.$t("retour.routes.fields.comment.help")
-        }
-      };
-    },
-
-    options() {
-      if (this.canUpdate === false) {
-        return false;
-      }
-
-      return [{
-        text: this.$t("edit"),
-        icon: "edit",
-        click: "edit"
-      }, {
-        text: this.$t("remove"),
-        icon: "trash",
-        click: "remove"
-      }];
-    },
-
-    rows() {
-      return this.$store.state.retour.data.routes;
-    },
-
-    site() {
-      return window.panel.site;
-    }
-
-  },
-
-  created() {
-    this.$events.$on("retour.resolve", this.resolve);
-  },
-
-  destroyed() {
-    this.$events.$off("retour.resolve", this.resolve);
-  },
-
-  methods: {
-    async onAdd() {
-      let rows = this.$helper.clone(this.rows);
-      rows.splice(rows.length, 0, this.row);
-      await this.onUpdate(rows);
-      this.$refs.addDialog.close();
-    },
-
-    onCancel() {
-      this.row = {};
-      this.rowIndex = null;
-      this.after = null;
-    },
-
-    onCell({
-      row,
-      rowIndex,
-      columnIndex
-    }) {
-      if (this.canUpdate === false) {
-        return;
-      }
-
-      this.onOption("edit", row, rowIndex);
-      setTimeout(() => {
-        this.$refs.editDialog.focus(columnIndex);
-      }, 50);
-    },
-
-    async onEdit() {
-      let rows = this.$helper.clone(this.rows);
-      let row = this.$helper.clone(this.row);
-      rows.splice(this.rowIndex, 1, row);
-      await this.onUpdate(rows);
-      this.$refs.editDialog.close();
-    },
-
-    onOption(option, row = {}, rowIndex) {
-      this.row = this.$helper.clone(row);
-      this.rowIndex = rowIndex;
-      this.$refs[option + "Dialog"].open();
-    },
-
-    async onRemove() {
-      let rows = this.$helper.clone(this.rows);
-      rows.splice(this.rowIndex, 1);
-      await this.onUpdate(rows);
-      this.$refs.removeDialog.close();
-    },
-
-    async onResolve() {
-      try {
-        await this.$api.post("retour/log/resolve", {
-          path: this.row.from
-        });
-        const calls = [this.$store.dispatch("retour/failures"), this.$store.dispatch("retour/stats")];
-        await Promise.all(calls);
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      }
-    },
-
-    async onUpdate(rows) {
-      this.isLoading = true;
-
-      try {
-        await this.$api.patch("retour/routes", rows);
-        await this.$store.dispatch("retour/routes");
-
-        if (this.after) {
-          await this.after();
-        }
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      } finally {
-        this.isLoading = false;
-        this.onCancel();
-      }
-    },
-
-    resolve(row) {
-      this.onOption("add", row);
-      this.after = this.onResolve;
-    }
-
-  }
-};
-exports.default = _default;
-        var $44e9bd = exports.default || module.exports;
-      
-      if (typeof $44e9bd === 'function') {
-        $44e9bd = $44e9bd.options;
-      }
-    
-        /* template */
-        Object.assign($44e9bd, (function () {
-          var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("retour-table", {
-    attrs: {
-      columns: _vm.columns,
-      empty: _vm.$t("retour.routes.empty"),
-      options: _vm.options,
-      rows: _vm.rows,
-      tab: "routes"
-    },
-    on: { cell: _vm.onCell, option: _vm.onOption },
-    scopedSlots: _vm._u(
-      [
-        _vm.canUpdate
-          ? {
-              key: "button",
-              fn: function() {
-                return [
-                  _c("k-button", {
-                    attrs: { text: _vm.$t("retour.routes.add"), icon: "add" },
-                    on: {
-                      click: function($event) {
-                        return _vm.onOption("add")
-                      }
-                    }
-                  })
-                ]
-              },
-              proxy: true
-            }
-          : null,
-        {
-          key: "dialogs",
-          fn: function() {
-            return [
-              _c("k-form-drawer", {
-                ref: "addDialog",
-                attrs: {
-                  autofocus: true,
-                  fields: _vm.fields,
-                  loading: _vm.isLoading,
-                  "submit-button": { text: _vm.$t("add"), color: "positive" },
-                  title: _vm.$t("retour.routes") + " / " + _vm.$t("add")
-                },
-                on: { cancel: _vm.onCancel, submit: _vm.onAdd },
-                model: {
-                  value: _vm.row,
-                  callback: function($$v) {
-                    _vm.row = $$v
-                  },
-                  expression: "row"
-                }
-              }),
-              _vm._v(" "),
-              _c("k-form-drawer", {
-                ref: "editDialog",
-                attrs: {
-                  autofocus: false,
-                  fields: _vm.fields,
-                  loading: _vm.isLoading,
-                  "submit-button": { text: _vm.$t("save"), color: "positive" },
-                  title: _vm.$t("retour.routes") + " / " + _vm.$t("edit")
-                },
-                on: { cancel: _vm.onCancel, submit: _vm.onEdit },
-                model: {
-                  value: _vm.row,
-                  callback: function($$v) {
-                    _vm.row = $$v
-                  },
-                  expression: "row"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "k-dialog",
-                {
-                  ref: "removeDialog",
-                  attrs: {
-                    loading: _vm.isLoading,
-                    "submit-button": {
-                      text: _vm.$t("delete"),
-                      icon: "trash",
-                      color: "negative"
-                    }
-                  },
-                  on: { submit: _vm.onRemove }
-                },
-                [
-                  _c("k-text", [
-                    _vm._v(_vm._s(_vm.$t("field.structure.delete.confirm")))
-                  ])
-                ],
-                1
-              )
-            ]
-          },
-          proxy: true
-        }
-      ],
-      null,
-      true
-    )
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-
-          return {
-            render: render,
-            staticRenderFns: staticRenderFns,
-            _compiled: true,
-            _scopeId: null,
-            functional: undefined
-          };
-        })());
-      
-    /* hot reload */
-    (function () {
-      if (module.hot) {
-        var api = require('vue-hot-reload-api');
-        api.install(require('vue'));
-        if (api.compatible) {
-          module.hot.accept();
-          if (!module.hot.data) {
-            api.createRecord('$44e9bd', $44e9bd);
-          } else {
-            api.reload('$44e9bd', $44e9bd);
-          }
-        }
-
-        
-      }
-    })();
-},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/FailuresTab.vue":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
-
-var _Table = _interopRequireDefault(require("./Table.vue"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 //
 //
 //
@@ -15904,9 +14979,10 @@ exports.default = _default;
     attrs: {
       columns: _vm.columns,
       empty: _vm.$t("retour.failures.empty"),
+      label: _vm.$t("retour.failures"),
       options: _vm.options,
       rows: _vm.rows,
-      tab: "failures"
+      type: "failures"
     },
     on: { option: _vm.onResolve },
     scopedSlots: _vm._u(
@@ -15995,7 +15071,576 @@ render._withStripped = true
         
       }
     })();
-},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/SystemTab.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/RoutesTable.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
+
+var _Table = _interopRequireDefault(require("./Table.vue"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_permissions.default],
+  components: {
+    "retour-table": _Table.default
+  },
+  props: {
+    canEdit: Boolean,
+    label: String,
+    options: Array,
+    rows: Array,
+    type: String
+  },
+
+  data() {
+    return {
+      isLoading: false,
+      row: {},
+      rowIndex: null,
+      after: null
+    };
+  },
+
+  computed: {
+    columns() {
+      return {
+        active: {
+          label: " ",
+          type: "toggle",
+          width: "1/20"
+        },
+        from: {
+          label: this.$t("retour.routes.from"),
+          type: "link",
+          filter: true,
+          width: "7/20"
+        },
+        to: {
+          label: this.$t("retour.routes.to"),
+          type: "link",
+          filter: true,
+          width: "7/20"
+        },
+        status: {
+          label: this.$t("retour.routes.status"),
+          type: "status",
+          width: "2/20"
+        },
+        priority: {
+          label: this.$t("retour.routes.priority.abbr"),
+          type: "priority",
+          width: "1/20"
+        },
+        hits: {
+          label: this.$t("retour.hits"),
+          width: "2/20",
+          type: "count"
+        }
+      };
+    },
+
+    fields() {
+      return {
+        from: {
+          label: this.$t("retour.routes.from"),
+          type: "text",
+          before: window.panel.site + "/",
+          help: this.$t("retour.routes.from.help", {
+            docs: "https://distantnative.com/retour/docs"
+          }),
+          icon: "url",
+          counter: false,
+          required: true,
+          width: "1/2"
+        },
+        to: {
+          label: this.$t("retour.routes.to"),
+          type: "retour-target",
+          help: this.$t("retour.routes.to.help"),
+          icon: "parent",
+          counter: false,
+          width: "1/2"
+        },
+        status: {
+          label: this.$t("retour.routes.status"),
+          type: "retour-status",
+          options: [...Object.keys(this.$store.state.retour.system.headers).map(code => ({
+            text: code.substr(1) + " - " + this.$store.state.retour.system.headers[code],
+            value: code.substr(1)
+          }))],
+          empty: false,
+          required: true,
+          help: this.$t("retour.routes.status.help", {
+            docs: "https://distantnative.com/retour/docs"
+          }),
+          width: "1/2"
+        },
+        priority: {
+          type: "toggle",
+          label: this.$t("retour.routes.priority"),
+          icon: "bolt",
+          help: this.$t("retour.routes.priority.help"),
+          width: "1/2"
+        },
+        active: {
+          label: " ",
+          type: "info",
+          text: "This route is <b>not active</b>. Use the toggle in the table to activate it.",
+          hidden: this.row.active
+        },
+        comment: {
+          type: "textarea",
+          label: this.$t("retour.routes.comment"),
+          buttons: false,
+          help: this.$t("retour.routes.comment.help")
+        }
+      };
+    }
+
+  },
+  methods: {
+    async onAdd() {
+      let rows = this.$helper.clone(this.rows);
+      rows.splice(rows.length, 0, this.row);
+      await this.onUpdate(rows);
+      this.$refs.addDialog.close();
+    },
+
+    onCancel() {
+      this.row = {};
+      this.rowIndex = null;
+      this.after = null;
+    },
+
+    onCell({
+      row,
+      rowIndex,
+      column,
+      columnIndex
+    }) {
+      if (this.canEdit === false || column.type === "toggle") {
+        return;
+      }
+
+      this.onOption("edit", row, rowIndex);
+      setTimeout(() => {
+        this.$refs.editDialog.focus(columnIndex);
+      }, 50);
+    },
+
+    async onCellUpdate(rows) {
+      console.log(rows); //row[columnIndex] = value;
+      //rows.splice(rowIndex, 1, row);
+      //await this.onUpdate(rows);
+    },
+
+    async onEdit() {
+      let rows = this.$helper.clone(this.rows);
+      let row = this.$helper.clone(this.row);
+      rows.splice(this.rowIndex, 1, row);
+      await this.onUpdate(rows);
+      this.$refs.editDialog.close();
+    },
+
+    onOption(option, row = {}, rowIndex) {
+      this.row = this.$helper.clone(row);
+      this.rowIndex = rowIndex;
+      this.$refs[option + "Dialog"].open();
+    },
+
+    async onRemove() {
+      let rows = this.$helper.clone(this.rows);
+      rows.splice(this.rowIndex, 1);
+      await this.onUpdate(rows);
+      this.$refs.removeDialog.close();
+    },
+
+    async onResolve() {
+      try {
+        await this.$api.post("retour/log/resolve", {
+          path: this.row.from
+        });
+        const calls = [this.$store.dispatch("retour/failures"), this.$store.dispatch("retour/stats")];
+        await Promise.all(calls);
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
+    },
+
+    async onUpdate(rows) {
+      this.isLoading = true;
+
+      try {
+        await this.$api.patch("retour/routes/" + this.type, rows);
+        await this.$store.dispatch("retour/routes", this.type);
+
+        if (this.after) {
+          await this.after();
+        }
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      } finally {
+        this.isLoading = false;
+        this.onCancel();
+      }
+    },
+
+    resolve(row) {
+      this.onOption("add", row);
+      this.after = this.onResolve;
+    }
+
+  }
+};
+exports.default = _default;
+        var $013d0b = exports.default || module.exports;
+      
+      if (typeof $013d0b === 'function') {
+        $013d0b = $013d0b.options;
+      }
+    
+        /* template */
+        Object.assign($013d0b, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("retour-table", {
+    attrs: {
+      columns: _vm.columns,
+      empty: _vm.$t("retour.routes.empty"),
+      label: _vm.label,
+      options: _vm.options,
+      rows: _vm.rows,
+      type: _vm.type
+    },
+    on: { cell: _vm.onCell, input: _vm.onCellUpdate, option: _vm.onOption },
+    scopedSlots: _vm._u(
+      [
+        {
+          key: "button",
+          fn: function() {
+            return [_vm._t("button", null, { onOption: _vm.onOption })]
+          },
+          proxy: true
+        },
+        {
+          key: "dialogs",
+          fn: function() {
+            return [
+              _c("k-form-drawer", {
+                ref: "addDialog",
+                attrs: {
+                  autofocus: true,
+                  fields: _vm.fields,
+                  loading: _vm.isLoading,
+                  "submit-button": { text: _vm.$t("add"), color: "positive" },
+                  title: _vm.$t("retour.routes") + " / " + _vm.$t("add")
+                },
+                on: { cancel: _vm.onCancel, submit: _vm.onAdd },
+                model: {
+                  value: _vm.row,
+                  callback: function($$v) {
+                    _vm.row = $$v
+                  },
+                  expression: "row"
+                }
+              }),
+              _vm._v(" "),
+              _c("k-form-drawer", {
+                ref: "editDialog",
+                attrs: {
+                  autofocus: false,
+                  fields: _vm.fields,
+                  loading: _vm.isLoading,
+                  "submit-button": { text: _vm.$t("save"), color: "positive" },
+                  title: _vm.$t("retour.routes") + " / " + _vm.$t("edit")
+                },
+                on: { cancel: _vm.onCancel, submit: _vm.onEdit },
+                model: {
+                  value: _vm.row,
+                  callback: function($$v) {
+                    _vm.row = $$v
+                  },
+                  expression: "row"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "k-dialog",
+                {
+                  ref: "removeDialog",
+                  attrs: {
+                    "submit-button": {
+                      text: _vm.$t("delete"),
+                      icon: "trash",
+                      color: "negative"
+                    }
+                  },
+                  on: { submit: _vm.onRemove }
+                },
+                [
+                  _c("k-text", [
+                    _vm._v(_vm._s(_vm.$t("field.structure.delete.confirm")))
+                  ])
+                ],
+                1
+              )
+            ]
+          },
+          proxy: true
+        }
+      ],
+      null,
+      true
+    )
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$013d0b', $013d0b);
+          } else {
+            api.reload('$013d0b', $013d0b);
+          }
+        }
+
+        
+      }
+    })();
+},{"../mixins/permissions.js":"mixins/permissions.js","./Table.vue":"components/Table.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/ManualTab.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
+
+var _RoutesTable = _interopRequireDefault(require("./RoutesTable.vue"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_permissions.default],
+  components: {
+    "retour-routes-table": _RoutesTable.default
+  },
+  computed: {
+    options() {
+      if (this.canUpdate !== false) {
+        return [{
+          text: this.$t("edit"),
+          icon: "edit",
+          click: "edit"
+        }, {
+          text: this.$t("remove"),
+          icon: "trash",
+          click: "remove"
+        }];
+      }
+    },
+
+    rows() {
+      return this.$store.state.retour.data.manual;
+    }
+
+  },
+
+  created() {
+    this.$events.$on("retour.resolve", this.resolve);
+  },
+
+  destroyed() {
+    this.$events.$off("retour.resolve", this.resolve);
+  },
+
+  methods: {
+    onResolve() {}
+
+  }
+};
+exports.default = _default;
+        var $f0e66c = exports.default || module.exports;
+      
+      if (typeof $f0e66c === 'function') {
+        $f0e66c = $f0e66c.options;
+      }
+    
+        /* template */
+        Object.assign($f0e66c, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("retour-routes-table", {
+    attrs: {
+      canEdit: _vm.canUpdate,
+      label: _vm.$t("retour.routes"),
+      options: _vm.options,
+      rows: _vm.rows,
+      type: "manual"
+    },
+    scopedSlots: _vm._u(
+      [
+        _vm.canUpdate
+          ? {
+              key: "button",
+              fn: function(ref) {
+                var onOption = ref.onOption
+                return [
+                  _c("k-button", {
+                    attrs: { text: _vm.$t("retour.routes.add"), icon: "add" },
+                    on: {
+                      click: function($event) {
+                        return onOption("add", { active: true })
+                      }
+                    }
+                  })
+                ]
+              }
+            }
+          : null
+      ],
+      null,
+      true
+    )
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$f0e66c', $f0e66c);
+          } else {
+            api.reload('$f0e66c', $f0e66c);
+          }
+        }
+
+        
+      }
+    })();
+},{"../mixins/permissions.js":"mixins/permissions.js","./RoutesTable.vue":"components/RoutesTable.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/SystemTab.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16099,15 +15744,11 @@ exports.default = void 0;
 var _default = {
   computed: {
     failed() {
-      return this.$store.state.retour.data.failures.reduce((i, x) => {
-        return i += parseInt(x.hits || 0);
-      }, 0);
+      return this.reduce(this.$store.state.retour.data.failures);
     },
 
     redirected() {
-      return this.$store.state.retour.data.routes.reduce((i, x) => {
-        return i += parseInt(x.hits || 0);
-      }, 0);
+      return this.reduce(this.$store.state.retour.data.manual) + this.reduce(this.$store.state.retour.data.tracked);
     },
 
     updateClass() {
@@ -16124,6 +15765,12 @@ var _default = {
   methods: {
     onUpdate() {
       this.$store.dispatch("retour/system", true);
+    },
+
+    reduce(data) {
+      return data.reduce((i, x) => {
+        return i += parseInt(x.hits || 0);
+      }, 0);
     }
 
   }
@@ -16352,7 +15999,109 @@ render._withStripped = true
         
       }
     })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TrackedTab.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _permissions = _interopRequireDefault(require("../mixins/permissions.js"));
+
+var _RoutesTable = _interopRequireDefault(require("./RoutesTable.vue"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_permissions.default],
+  components: {
+    "retour-routes-table": _RoutesTable.default
+  },
+  computed: {
+    options() {
+      if (this.canUpdate !== false) {
+        return [{
+          text: this.$t("retour.tracked.add"),
+          icon: "parent",
+          click: "insert"
+        }, {
+          text: this.$t("remove"),
+          icon: "trash",
+          click: "remove"
+        }];
+      }
+    },
+
+    rows() {
+      return this.$store.state.retour.data.tracked;
+    }
+
+  }
+};
+exports.default = _default;
+        var $e9889e = exports.default || module.exports;
+      
+      if (typeof $e9889e === 'function') {
+        $e9889e = $e9889e.options;
+      }
+    
+        /* template */
+        Object.assign($e9889e, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("retour-routes-table", {
+    attrs: {
+      canEdit: false,
+      label: _vm.$t("retour.tracked"),
+      options: _vm.options,
+      rows: _vm.rows,
+      tab: "routes"
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$e9889e', $e9889e);
+          } else {
+            api.reload('$e9889e', $e9889e);
+          }
+        }
+
+        
+      }
+    })();
+},{"../mixins/permissions.js":"mixins/permissions.js","./RoutesTable.vue":"components/RoutesTable.vue","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16366,11 +16115,13 @@ var _tabs = _interopRequireDefault(require("../config/tabs.js"));
 
 var _Stats = _interopRequireDefault(require("./Stats.vue"));
 
-var _RoutesTab = _interopRequireDefault(require("./RoutesTab.vue"));
-
 var _FailuresTab = _interopRequireDefault(require("./FailuresTab.vue"));
 
+var _ManualTab = _interopRequireDefault(require("./ManualTab.vue"));
+
 var _SystemTab = _interopRequireDefault(require("./SystemTab.vue"));
+
+var _TrackedTab = _interopRequireDefault(require("./TrackedTab.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16399,9 +16150,10 @@ var _default = {
   mixins: [_permissions.default],
   components: {
     "retour-stats": _Stats.default,
-    "retour-routes-tab": _RoutesTab.default,
     "retour-failures-tab": _FailuresTab.default,
-    "retour-system-tab": _SystemTab.default
+    "retour-routes-tab": _ManualTab.default,
+    "retour-system-tab": _SystemTab.default,
+    "retour-tracked-tab": _TrackedTab.default
   },
 
   data() {
@@ -16516,7 +16268,7 @@ render._withStripped = true
       
       }
     })();
-},{"../mixins/permissions.js":"mixins/permissions.js","../config/tabs.js":"config/tabs.js","./Stats.vue":"components/Stats.vue","./RoutesTab.vue":"components/RoutesTab.vue","./FailuresTab.vue":"components/FailuresTab.vue","./SystemTab.vue":"components/SystemTab.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Calendar.vue":[function(require,module,exports) {
+},{"../mixins/permissions.js":"mixins/permissions.js","../config/tabs.js":"config/tabs.js","./Stats.vue":"components/Stats.vue","./FailuresTab.vue":"components/FailuresTab.vue","./ManualTab.vue":"components/ManualTab.vue","./SystemTab.vue":"components/SystemTab.vue","./TrackedTab.vue":"components/TrackedTab.vue","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/Calendar.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16694,7 +16446,6 @@ var _default = {
     },
 
     onHover(day) {
-      console.log(day);
       this.hover = this.getDate(day);
     },
 
@@ -16914,7 +16665,35 @@ render._withStripped = true
       
       }
     })();
-},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/StatusField.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"mixins/color.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  computed: {
+    color() {
+      if (!this.value) {
+        return "gray-light";
+      }
+
+      if (parseInt(this.value) >= 400) {
+        return "red-light";
+      }
+
+      if (parseInt(this.value) >= 300) {
+        return "green-light";
+      }
+
+      return "blue-light";
+    }
+
+  }
+};
+exports.default = _default;
+},{}],"components/StatusField.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17189,7 +16968,400 @@ render._withStripped = true
         
       }
     })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store.js":[function(require,module,exports) {
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableCountCell.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  props: {
+    row: Object
+  }
+};
+exports.default = _default;
+        var $d03297 = exports.default || module.exports;
+      
+      if (typeof $d03297 === 'function') {
+        $d03297 = $d03297.options;
+      }
+    
+        /* template */
+        Object.assign($d03297, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.row.hits > 0
+    ? _c(
+        "div",
+        {
+          staticClass: "flex justify-between px-2",
+          attrs: { title: _vm.$t("retour.hits.last") + ": " + _vm.row.last }
+        },
+        [
+          _c("k-button", {
+            staticClass: "cursor-default",
+            attrs: {
+              icon: {
+                type: "clock",
+                size: "small",
+                color: "gray-light"
+              },
+              tooltip: _vm.$t("retour.hits.last") + ": " + _vm.row.last
+            }
+          }),
+          _vm._v("\n  " + _vm._s(_vm.row.hits) + "\n")
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$d03297', $d03297);
+          } else {
+            api.reload('$d03297', $d03297);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableLinkCell.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  props: {
+    value: String,
+    column: Object
+  },
+  computed: {
+    isExternal() {
+      return this.value && this.value.startsWith('http');
+    },
+
+    link() {
+      return this.isExternal ? this.value : window.panel.site + '/' + this.value;
+    }
+
+  }
+};
+exports.default = _default;
+        var $af1eb7 = exports.default || module.exports;
+      
+      if (typeof $af1eb7 === 'function') {
+        $af1eb7 = $af1eb7.options;
+      }
+    
+        /* template */
+        Object.assign($af1eb7, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "px-2",
+      attrs: { title: _vm.column.label + ": " + _vm.value }
+    },
+    [
+      _vm.value && _vm.value != "-"
+        ? _c("k-button", {
+            staticClass: "mr-1",
+            attrs: {
+              icon: {
+                type: "url",
+                color: "gray-light",
+                size: "small"
+              },
+              link: _vm.link,
+              target: "_blank"
+            },
+            nativeOn: {
+              click: function($event) {
+                $event.stopPropagation()
+              }
+            }
+          })
+        : _vm._e(),
+      _vm._v("\n  " + _vm._s(_vm.value) + "\n")
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$af1eb7', $af1eb7);
+          } else {
+            api.reload('$af1eb7', $af1eb7);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TablePriorityCell.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  props: {
+    value: String,
+    column: Object
+  }
+};
+exports.default = _default;
+        var $04b40c = exports.default || module.exports;
+      
+      if (typeof $04b40c === 'function') {
+        $04b40c = $04b40c.options;
+      }
+    
+        /* template */
+        Object.assign($04b40c, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.value
+    ? _c(
+        "div",
+        { staticClass: "flex justify-center" },
+        [
+          _c("k-icon", {
+            attrs: { type: "bolt", size: "small", title: _vm.column.label }
+          })
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$04b40c', $04b40c);
+          } else {
+            api.reload('$04b40c', $04b40c);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/TableStatusCell.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _color = _interopRequireDefault(require("../mixins/color.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  mixins: [_color.default],
+  props: {
+    value: String,
+    row: Object,
+    column: Object
+  }
+};
+exports.default = _default;
+        var $f2642c = exports.default || module.exports;
+      
+      if (typeof $f2642c === 'function') {
+        $f2642c = $f2642c.options;
+      }
+    
+        /* template */
+        Object.assign($f2642c, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "retour-table-status-preview px-2",
+      attrs: { title: _vm.column.label + ": " + (_vm.value || "-") }
+    },
+    [
+      _c("k-icon", {
+        staticClass: "mr-2",
+        attrs: {
+          type: "circle",
+          color: _vm.row.active ? _vm.color : "gray-light"
+        }
+      }),
+      _vm._v(" "),
+      _c("code", [_vm._v(_vm._s(_vm.value))])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$f2642c', $f2642c);
+          } else {
+            api.reload('$f2642c', $f2642c);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"../mixins/color.js":"mixins/color.js","_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"store.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17201,7 +17373,8 @@ var _default = Vue => ({
   namespaced: true,
   state: {
     data: {
-      routes: [],
+      manual: [],
+      tracked: [],
       failures: [],
       stats: []
     },
@@ -17280,7 +17453,7 @@ var _default = Vue => ({
   actions: {
     async load(context) {
       // what we need for sure
-      await Promise.all([context.dispatch("system"), context.dispatch("routes")]); // what we might need as well
+      await Promise.all([context.dispatch("system"), context.dispatch("routes", "manual"), context.dispatch("routes", "tracked")]); // what we might need as well
 
       if (context.state.system.hasLog === true) {
         await Promise.all([context.dispatch("failures"), context.dispatch("stats")]);
@@ -17297,11 +17470,11 @@ var _default = Vue => ({
       });
     },
 
-    async routes(context) {
+    async routes(context, type = "manual") {
       const timeframe = context.getters["timeframe"];
-      const routes = await Vue.$api.get("retour/routes", timeframe);
+      const routes = await Vue.$api.get("retour/routes/" + type, timeframe);
       context.commit("SET_DATA", {
-        type: "routes",
+        type: type,
         data: routes
       });
     },
@@ -17361,6 +17534,14 @@ var _StatusField = _interopRequireDefault(require("./components/StatusField.vue"
 
 var _TargetField = _interopRequireDefault(require("./components/TargetField.vue"));
 
+var _TableCountCell = _interopRequireDefault(require("./components/TableCountCell.vue"));
+
+var _TableLinkCell = _interopRequireDefault(require("./components/TableLinkCell.vue"));
+
+var _TablePriorityCell = _interopRequireDefault(require("./components/TablePriorityCell.vue"));
+
+var _TableStatusCell = _interopRequireDefault(require("./components/TableStatusCell.vue"));
+
 var _store = _interopRequireDefault(require("./store.js"));
 
 var _permissions = require("./mixins/permissions.js");
@@ -17372,7 +17553,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Register everything
 panel.plugin("distantnative/retour", {
   components: {
-    "retour-calendar": _Calendar.default
+    "retour-calendar": _Calendar.default,
+    "k-table-count-cell": _TableCountCell.default,
+    "k-table-link-cell": _TableLinkCell.default,
+    "k-table-priority-cell": _TablePriorityCell.default,
+    "k-table-status-cell": _TableStatusCell.default
   },
   fields: {
     "retour-status": _StatusField.default,
@@ -17395,7 +17580,7 @@ panel.plugin("distantnative/retour", {
   }
 
 });
-},{"./components/View.vue":"components/View.vue","./components/Calendar.vue":"components/Calendar.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./store.js":"store.js","./mixins/permissions.js":"mixins/permissions.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./components/View.vue":"components/View.vue","./components/Calendar.vue":"components/Calendar.vue","./components/StatusField.vue":"components/StatusField.vue","./components/TargetField.vue":"components/TargetField.vue","./components/TableCountCell.vue":"components/TableCountCell.vue","./components/TableLinkCell.vue":"components/TableLinkCell.vue","./components/TablePriorityCell.vue":"components/TablePriorityCell.vue","./components/TableStatusCell.vue":"components/TableStatusCell.vue","./store.js":"store.js","./mixins/permissions.js":"mixins/permissions.js"}],"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -17423,7 +17608,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57946" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60014" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

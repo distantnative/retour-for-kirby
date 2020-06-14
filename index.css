@@ -111,17 +111,6 @@
   border-bottom-color: #ccc;
   font-size: 0.875rem;
   padding: 0.1rem;
-}.retour-table-status-preview {
-  display: flex;
-}
-.retour-table-status-preview code {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--color-text);
-  border-radius: 3px;
-  box-decoration-break: clone;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-tiny);
-  padding: 0.05em 0.5em;
 }.retour-calendar .k-calendar-day[data-is-begin] {
   border-top-left-radius: 100%;
   border-bottom-left-radius: 100%;
@@ -134,4 +123,15 @@
 
 .retour-calendar .k-calendar-day[data-is-intersected] {
   background-color: rgba(255, 255, 255, 0.25);
+}.retour-table-status-preview {
+  display: flex;
+}
+.retour-table-status-preview code {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--color-text);
+  border-radius: 3px;
+  box-decoration-break: clone;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-tiny);
+  padding: 0.05em 0.5em;
 }

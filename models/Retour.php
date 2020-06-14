@@ -7,6 +7,7 @@ use Kirby\Database\Database;
 use Kirby\Http\Header;
 use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
+use Kirby\Toolkit\Str;
 
 class Retour
 {

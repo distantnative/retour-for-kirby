@@ -24,17 +24,20 @@ import permissions from "../mixins/permissions.js";
 import tabs from "../config/tabs.js";
 
 import Stats from "./Stats.vue";
-import RoutesTab from "./RoutesTab.vue";
+
 import FailuresTab from "./FailuresTab.vue";
+import ManualTab from "./ManualTab.vue";
 import SystemTab from "./SystemTab.vue";
+import TrackedTab from "./TrackedTab.vue";
 
 export default {
   mixins: [permissions],
   components: {
     "retour-stats": Stats,
-    "retour-routes-tab": RoutesTab,
     "retour-failures-tab": FailuresTab,
-    "retour-system-tab": SystemTab
+    "retour-routes-tab": ManualTab,
+    "retour-system-tab": SystemTab,
+    "retour-tracked-tab": TrackedTab,
   },
   data() {
     return {
