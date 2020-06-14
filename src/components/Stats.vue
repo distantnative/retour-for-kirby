@@ -1,6 +1,6 @@
 <template>
   <div class="rt-stats bg-black-light text-white">
-    <k-view class="mb-6 pt-6 pb-8">
+    <k-view class="pt-6 pb-8">
       <k-grid gutter="medium">
         <k-column width="1/4">
           <header class="k-header-bar flex items-center justify-between h-10">
