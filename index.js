@@ -160,15 +160,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _default = Vue => {
-  const store = Vue.$store.state.retour;
+  let tabs = [];
+  const store = Vue.$store.state.retour; // routes
+
   const routes = store.data.routes.length;
-  const failures = store.data.failures.length;
-
-  if (failures > 1000) {
-    failures = Math.floor(failures / 100) / 10 + "k";
-  }
-
-  return [{
+  tabs.push({
     name: "routes",
     label: Vue.$t("retour.routes"),
     icon: "undo",
@@ -176,15 +172,28 @@ var _default = Vue => {
       count: routes,
       color: "focus"
     } : false
-  }, {
-    name: "failures",
-    label: Vue.$t("retour.failures"),
-    icon: "alert",
-    badge: failures ? {
-      count: failures,
-      color: "negative"
-    } : false
-  }, {
+  }); // failures
+
+  if (store.system.hasLog) {
+    const failures = store.data.failures.length;
+
+    if (failures > 1000) {
+      failures = Math.floor(failures / 100) / 10 + "k";
+    }
+
+    tabs.push({
+      name: "failures",
+      label: Vue.$t("retour.failures"),
+      icon: "alert",
+      badge: failures ? {
+        count: failures,
+        color: "negative"
+      } : false
+    });
+  } // system
+
+
+  tabs.push({
     name: "system",
     label: Vue.$t("retour.system"),
     icon: "box",
@@ -192,7 +201,8 @@ var _default = Vue => {
       count: 1,
       color: "positive"
     } : false
-  }];
+  });
+  return tabs;
 };
 
 exports.default = _default;
@@ -13860,7 +13870,7 @@ exports.default = _default;
       _c(
         "div",
         [
-          _c("k-icon", { attrs: { type: "circle", color: "border" } }),
+          _c("k-icon", { attrs: { type: "circle", color: "gray-light" } }),
           _vm._v(
             "\n      " +
               _vm._s(_vm.resolved) +
@@ -14248,7 +14258,7 @@ exports.default = _default;
     [
       _c(
         "k-view",
-        { staticClass: "mb-6 pt-6 pb-8" },
+        { staticClass: "pt-6 pb-8" },
         [
           _c(
             "k-grid",
@@ -16385,11 +16395,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
 var _default = {
   mixins: [_permissions.default],
   components: {
@@ -16461,30 +16466,18 @@ exports.default = _default;
     [
       _vm.isLoading
         ? _c("k-loader")
-        : _vm.hasLog
-        ? [
-            _c("retour-stats"),
-            _vm._v(" "),
-            _c("k-tabs", { attrs: { tabs: _vm.tabs, tab: _vm.tab } }),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "p-6" },
-              [_c("retour-" + this.tab + "-tab", { tag: "component" })],
-              1
-            )
-          ]
         : [
-            _c(
-              "div",
-              { staticClass: "p-6 pt-16" },
-              [
-                _c("retour-routes-tab", { staticClass: "mb-8" }),
-                _vm._v(" "),
-                _c("retour-system-tab")
-              ],
-              1
-            )
+            _vm.hasLog ? _c("retour-stats") : _vm._e(),
+            _vm._v(" "),
+            _c("k-tabs", {
+              staticClass: "mt-6",
+              attrs: { tabs: _vm.tabs, tab: _vm.tab }
+            }),
+            _vm._v(" "),
+            _c("retour-" + this.tab + "-tab", {
+              tag: "component",
+              staticClass: "px-6 pt-6 pb-12"
+            })
           ]
     ],
     2
@@ -17430,7 +17423,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50604" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57946" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

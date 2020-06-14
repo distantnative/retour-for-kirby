@@ -4,23 +4,18 @@
     <!-- loader -->
     <k-loader v-if="isLoading" />
 
-    <!-- full version -->
-    <template v-else-if="hasLog">
-      <retour-stats />
-      <k-tabs :tabs="tabs" :tab="tab" />
-      <div class="p-6">
-        <component :is="'retour-' + this.tab + '-tab'" />
-      </div>
-    </template>
-
-    <!-- only routes -->
     <template v-else>
-      <div class="p-6 pt-16">
-        <retour-routes-tab class="mb-8" />
-        <retour-system-tab />
-      </div>
-    </template>
 
+      <!-- stats -->
+      <retour-stats v-if="hasLog" />
+
+      <!-- tabs -->
+      <k-tabs :tabs="tabs" :tab="tab" class="mt-6" />
+      <component
+        :is="'retour-' + this.tab + '-tab'"
+        class="px-6 pt-6 pb-12"
+      />
+    </template>
   </div>
 </template>
 
