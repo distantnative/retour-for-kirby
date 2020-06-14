@@ -204,10 +204,11 @@ export default {
       }, 50);
     },
     async onCellUpdate(rows) {
-      console.log(rows);
-      //row[columnIndex] = value;
-      //rows.splice(rowIndex, 1, row);
-      //await this.onUpdate(rows);
+      // TODO: see if that's a bug in Kirby itself
+      if( Array.isArray(rows) === false) {
+        return;
+      }
+      await this.onUpdate(rows);
     },
     async onEdit() {
       let rows = this.$helper.clone(this.rows);
@@ -217,32 +218,20 @@ export default {
       this.$refs.editDialog.close();
     },
     onOption(option, row = {}, rowIndex) {
-      this.row = this.$helper.clone(row);
-      this.rowIndex = rowIndex;
-      this.$refs[option + "Dialog"].open();
+      switch (option) {
+        case "move":
+          return this.$events.$emit("retour.move", row);
+        default:
+          this.row = this.$helper.clone(row);
+          this.rowIndex = rowIndex;
+          this.$refs[option + "Dialog"].open();
+      }
     },
     async onRemove() {
       let rows = this.$helper.clone(this.rows);
       rows.splice(this.rowIndex, 1);
       await this.onUpdate(rows);
       this.$refs.removeDialog.close();
-    },
-    async onResolve() {
-      try {
-        await this.$api.post("retour/log/resolve", {
-          path: this.row.from
-        });
-
-        const calls = [
-          this.$store.dispatch("retour/failures"),
-          this.$store.dispatch("retour/stats")
-        ];
-
-        await Promise.all(calls);
-
-      } catch (error) {
-        this.$store.dispatch("notification/error", error);
-      }
     },
     async onUpdate(rows) {
       this.isLoading = true;
@@ -252,8 +241,10 @@ export default {
         await this.$store.dispatch("retour/routes", this.type);
 
         if (this.after) {
-          await this.after();
+          await this.after(this.row);
         }
+
+        this.$store.dispatch("notification/success");
 
       } catch (error) {
         this.$store.dispatch("notification/error", error);
@@ -263,10 +254,11 @@ export default {
         this.onCancel();
       }
     },
-    resolve(row) {
+    insert(row, after) {
+      row.active = true;
+      this.after = after;
       this.onOption("add", row);
-      this.after = this.onResolve;
-    },
+    }
   }
 }
 </script>
