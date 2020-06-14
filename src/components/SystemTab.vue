@@ -6,7 +6,7 @@
         <k-icon type="road-sign" class="mr-2" /> Retour for Kirby
       </h3>
       <k-button
-        text="Check for update"
+        :text="$('retour.system.update')"
         icon="refresh"
         @click="onUpdate"
       />

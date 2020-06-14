@@ -3,45 +3,56 @@
 return [
     'view.retour' => 'Weiterleitungen',
 
-    'retour.tbl.all'             => 'Alle',
-    'retour.tbl.filter'          => 'Filtern...',
-    'retour.tbl.perPage'         => 'angezeigt',
-    'retour.tbl.redirects.empty' => 'Keine Umleitungen',
-    'retour.tbl.fails.empty'     => 'Keine Fehler bisher',
-
-    'retour.stats.all'   => 'Gesamt',
-    'retour.stats.year'  => 'Jahr',
-    'retour.stats.month' => 'Monat',
-    'retour.stats.week'  => 'Woche',
-    'retour.stats.day'   => 'Tag',
-
-    'retour.redirected' => 'umgeleitet',
-    'retour.resolved'   => 'behoben',
-    'retour.failed'     => 'gescheitert',
-
-    'retour.redirects'           => 'Umleitungen',
-    'retour.redirects.from'      => 'Pfad',
-    'retour.redirects.from.help' => 'Verwende <a href="{docs}" target="_blank">Platzhalter</a> für dynamische Weiterleitungen.',
-
-    'retour.redirects.to'              => 'Umleiten nach',
-    'retour.redirects.to.help'         => 'Relativer Pfad oder absolute URL. Frei lassen, um abzubrechen.',
-    'retour.redirects.status'          => 'Status',
-    'retour.redirects.status.help'     => 'Lerne die <a href="{docs}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden.',
-
-    'retour.fails'          => 'Fehler',
-    'retour.fails.path'     => 'Pfad',
-    'retour.fails.referrer' => 'Ursprung',
-    'retour.fails.resolve'  => 'Weiterleitung anlegen',
+    'retour.table.filter'        => 'Filtern...',
+    'retour.table.perPage.all'   => 'Alle',
+    'retour.table.perPage.after' => 'pro Seite',
 
     'retour.hits'      => 'Treffer',
     'retour.hits.last' => 'Zuletzt',
 
-    'retour.settings.support'           => 'Unterstütze die Entwicklung',
-    'retour.settings.supporetour.donate'    => 'Spende',
-    'retour.settings.log.clear'         => 'Log leeren',
-    'retour.settings.log.clear.confirm' => 'Willst du wirklich alle Logs löschen?',
-    'retour.settings.routes'            => 'Umleitungsrouten',
-    'retour.settings.fails'             => 'Aufgezeichnete Fehler',
-    'retour.settings.redirects'         => 'Erfolgreich umgeleitet',
-    'retour.settings.docs'              => 'Erfahre mehr <a href="{docs}">zu den Einstellungen</a>.'
+    'retour.routes'       => 'Routen',
+    'retour.routes.add'   => 'Weiterleitung hinzufügen',
+    'retour.routes.empty' => 'Keine Weiterleitungen bisher',
+
+    'retour.routes.fields.from' => 'Pfad',
+    'retour.routes.fields.from.help' => 'Verwende <a href="{docs}" target="_blank">Platzhalter</a> für dynamische Weiterleitungen.',
+    'retour.routes.fields.to' => 'Weiterleiten nach',
+    'retour.routes.fields.to.help' => 'Relativer Pfad oder absolute URL. Frei lassen, um Anfrage mit Statuscode abzubrechen.',
+    'retour.routes.fields.status' => 'Status',
+    'retour.routes.fields.status.help' => 'Lerne die <a href="{docs}" target="_blank">HTTP Statuscodes</a> und wann welchen zu verwenden',
+    'retour.routes.fields.priority' => 'Hat Priorität?',
+    'retour.routes.fields.priority.abbr' => 'Prio',
+    'retour.routes.fields.priority.help' => 'Wenn aktiviert, wird die Weiterleitung auch vor tatsächlich bestehenden Seiten angewendet.',
+    'retour.routes.fields.comment' => 'Kommentar',
+    'retour.routes.fields.comment.help' => 'Für sich selbst oder andere…',
+
+    'retour.failures'          => 'Fehler',
+    'retour.failures.empty'    => 'Keine Fehler bisher',
+    'retour.failures.path'     => 'Pfad',
+    'retour.failures.referrer' => 'Ursprung',
+    'retour.failures.resolve'  => 'Als Weiterleitung hinzufügen',
+
+    'retour.failures.clear'          => 'Log leeren',
+    'retour.failures.clear.confirm'  => 'Willst du wirklich alle Logs endgültig löschen?',
+
+    'retour.stats.redirected' => 'weitergeleitet',
+    'retour.stats.resolved'   => 'behoben',
+    'retour.stats.failed'     => 'gescheitert',
+    'retour.stats.mode.all'   => 'Gesamt',
+    'retour.stats.mode.year'  => 'Jahr',
+    'retour.stats.mode.month' => 'Monat',
+    'retour.stats.mode.week'  => 'Woche',
+    'retour.stats.mode.day'   => 'Tag',
+
+    'retour.system'                    => 'System',
+    'retour.system.update'             => 'Update checken',
+    'retour.system.version'            => 'Installierte Version',
+    'retour.system.release'            => 'Aktuelles Release',
+    'retour.system.support'            => 'Unterstütze die Entwicklung',
+    'retour.system.support.donate'     => 'Spende',
+    'retour.system.failures'           => 'Aufgezeichnete Fehler',
+    'retour.system.redirects'          => 'Erfolgreich weitergeleitet',
+    'retour.system.deleteAfter'        => 'Leere Logs nach',
+    'retour.system.deleteAfter.months' => '{count} Monaten',
+    'retour.system.docs'               => 'Erfahre mehr <a href="{docs}">zu den Einstellungen</a>.'
 ];
