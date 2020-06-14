@@ -15131,7 +15131,7 @@ exports.default = _default;
         { staticClass: "flex items-center justify-between mb-3" },
         [
           _c("retour-table-filter", {
-            attrs: { label: _vm.$helper.string.ucfirst(_vm.tab) },
+            attrs: { label: _vm.$t("retour." + _vm.tab) },
             model: {
               value: _vm.filter,
               callback: function($$v) {
@@ -16096,7 +16096,7 @@ exports.default = _default;
         ),
         _vm._v(" "),
         _c("k-button", {
-          attrs: { text: _vm.$("retour.system.update"), icon: "refresh" },
+          attrs: { text: _vm.$t("retour.system.update"), icon: "refresh" },
           on: { click: _vm.onUpdate }
         })
       ],

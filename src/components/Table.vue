@@ -5,7 +5,7 @@
     <header class="flex items-center justify-between mb-3">
       <retour-table-filter
         v-model="filter"
-        :label="$helper.string.ucfirst(tab)"
+        :label="$t('retour.' + tab)"
       />
       <slot name="button" />
     </header>
