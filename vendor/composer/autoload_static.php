@@ -37,6 +37,7 @@ class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
         'distantnative\\Retour\\Retour' => __DIR__ . '/../..' . '/models/Retour.php',
         'distantnative\\Retour\\Route' => __DIR__ . '/../..' . '/models/Route.php',
         'distantnative\\Retour\\Routes' => __DIR__ . '/../..' . '/models/Routes.php',
+        'distantnative\\Retour\\Upgrades' => __DIR__ . '/../..' . '/models/Upgrades.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
