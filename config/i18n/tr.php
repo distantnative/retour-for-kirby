@@ -46,7 +46,7 @@ return [
 
     'retour.system'                    => 'Sistem',
     'retour.system.update'             => 'Güncellemeleri denetle',
-    'retour.system.version'            => 'Kurulu version',
+    'retour.system.version'            => 'Yüklü sürüm',
     'retour.system.release'            => 'Mevcut sürüm',
     'retour.system.support'            => 'Geliştirmeyi destekle',
     'retour.system.support.donate'     => 'Bağış Yap',
