@@ -66,6 +66,10 @@ export default {
     }
   },
   created() {
+    if (this.canAccess === false) {
+      this.$router.push("/");
+    }
+
     this.$store.dispatch("retour/load");
   }
 };
