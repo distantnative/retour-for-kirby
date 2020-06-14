@@ -89,6 +89,6 @@ class Routes
             $route = new Route($route);
             return $route->toArray();
         }, $data);
-        $this->retour->update($data, 'routes');
+        return $this->retour->update($data, 'routes');
     }
 }
