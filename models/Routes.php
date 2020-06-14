@@ -2,44 +2,26 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Data\Data;
 
 class Routes
 {
 
+    protected $retour;
+
     /**
-     * Location of the config file
-     *
-     * @var string
+     * @param \distantnative\Retour\Retour $retour
      */
-    protected $file;
-
-    public function __construct()
+    public function __construct(Retour $retour)
     {
-        $this->file = option('distantnative.retour.config');
-
-        if (is_callable($this->file) === true) {
-            $this->file = call_user_func($this->file);
-        }
+        $this->retour = $retour;
     }
 
-    /**
-     * Load all definitions from config file and
-     * turn them into Route objects
-     *
-     * @return array
-     */
-    protected function load()
+    protected function config()
     {
-        try {
-            $data = Data::read($this->file, 'yaml');
-            return array_map(function ($route) {
-                return new Route($route);
-            }, $data);
-
-        } catch (\Throwable $e) {
-            return [];
-        }
+        $config = $this->retour->config['routes'];
+        return array_map(function ($config) {
+            return new Route($config);
+        }, $config);
     }
 
     /**
@@ -52,7 +34,7 @@ class Routes
      */
     public function toData(string $begin, string $end): array
     {
-        $routes = $this->load();
+        $routes = $this->config();
 
         // turn Route objects into arrays
         $data = array_map(function ($route) {
@@ -80,18 +62,18 @@ class Routes
      */
     public function toRules(bool $hasPriority = false): array
     {
-        $data = $this->load();
+        $routes = $this->config();
 
         // Filter: no routes for disabled redirects
         //         and match the priority parameter
-        $data = array_filter($data, function ($route) use ($hasPriority) {
+        $routes = array_filter($routes, function ($route) use ($hasPriority) {
             return $route->isActive() && $route->hasPriority() === $hasPriority;
         });
 
         // create route array for each redirect
         $data = array_map(function ($route) {
             return $route->toRule();
-        }, $data);
+        }, $routes);
 
         return $data;
     }
@@ -107,6 +89,6 @@ class Routes
             $route = new Route($route);
             return $route->toArray();
         }, $data);
-        return Data::write($this->file, $data, 'yaml');
+        return $this->retour->update($data, 'routes');
     }
 }

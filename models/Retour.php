@@ -2,26 +2,86 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Data\Data;
+use Kirby\Database\Database;
 use Kirby\Http\Header;
-use Kirby\Http\Remote;
+use Kirby\Toolkit\Dir;
+use Kirby\Toolkit\F;
 
 class Retour
 {
-    /**
-     * @var \distantnative\Retour\Retour
-     */
-    protected static $instance = null;
+    protected static $instance;
 
+    protected $file;
+    public $config;
+    public $database;
+
+    protected $log;
+    protected $routes;
+    protected $upgrades;
+
+    public static $plugin;
+
+    public function __construct()
+    {
+        // set config file location
+        $this->file = option('distantnative.retour.config');
+
+        if (is_callable($this->file) === true) {
+            $this->file = call_user_func($this->file);
+        }
+
+        // load config
+        try {
+            $this->config = Data::read($this->file, 'yaml');
+        } catch (\Throwable $e) {
+            $this->config = [];
+        }
+
+        // check & run upgrades
+        $this->upgrades()->run();
+
+        // connect to database
+        if (option('distantnative.retour.logs') === true) {
+            $this->database = $this->connect();
+        }
+    }
 
     /**
-     * @var \distantnative\Retour\Log
+     * Connects to database (and creates it if missing)
+     *
+     * @return void
      */
-    protected $log = null;
+    protected function connect()
+    {
+        // Get path to database file
+        $file = option('distantnative.retour.database');
 
-    /**
-     * @var \distantnative\Retour\Routes
-     */
-    protected $routes = null;
+        // Support callbacks for database file option
+        if (is_callable($file) === true) {
+            $file = call_user_func($file);
+        }
+
+        // Make sure database is in place
+        if (F::exists($file) === false) {
+            $dir = dirname($file);
+
+            if (is_dir($dir) === false) {
+                Dir::make($dir);
+            }
+
+            F::copy(
+                dirname(__DIR__) . '/assets/retour.sqlite',
+                $file
+            );
+        }
+
+        // Connect to database
+        return new Database([
+            'type'     => 'sqlite',
+            'database' => $file
+        ]);
+    }
 
     /**
      * Returns either an existing instance or
@@ -34,20 +94,20 @@ class Retour
         return static::$instance ?? static::$instance = new Retour;
     }
 
-    /**
-     * @return \distantnative\Retour\Log
-     */
+
     public function log()
     {
-        return $this->log ?? $this->log = new Log;
+        return $this->log ?? $this->log = new Log($this);
     }
 
-    /**
-     * @return \distantnative\Retour\Routes
-     */
     public function routes()
     {
-        return $this->routes ?? $this->routes = new Routes;
+        return $this->routes ?? $this->routes = new Routes($this);
+    }
+
+    public function upgrades()
+    {
+        return $this->upgrades ?? $this->upgrades = new Upgrades($this);
     }
 
     /**
@@ -58,44 +118,37 @@ class Retour
      */
     public static function info(bool $reload = false): array
     {
-        $plugin = kirby()->plugin('distantnative/retour');
-
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'hasLog'      => option('distantnative.retour.logs'),
-            'release'     => $release = static::release($reload),
-            'version'     => $version = $plugin->version(),
+            'release'     => $release = Upgrades::latest($reload),
+            'version'     => $version = static::plugin()->version(),
             'update'      => $release ? version_compare($version, $release) : null
         ];
     }
 
-    /**
-     * Loads current release info from getkirby.com
-     *
-     * @param bool $reload
-     *
-     * @return string|null
-     */
-    protected static function release(bool $reload = false): ?string
+    public static function plugin()
     {
-        $kirby  = kirby();
-        $option = $kirby->option('update.kirby') ?? $kirby->option('update');
+        return static::$plugin = static::$plugin ?? kirby()->plugin('distantnative/retour');
+    }
 
-        if ($reload === true || $option !== false) {
-            $cache  = $kirby->cache('retour');
-            $cached = $cache->get('release');
-
-            if ($cached === null || $reload === true) {
-                $url = 'https://getkirby.com/plugins/distantnative/retour.json';
-                $response = Remote::get($url)->json();
-                $cached = $response['version'];
-                $cache->set('release', $cached, 60 * 24);
-            }
-
-            return $cached;
+    /**
+     * Updates the confg file with $data.
+     * If $key is passed, only that key is updated with $data
+     *
+     * @param array $data
+     * @param string $key
+     *
+     * @return void
+     */
+    public function update($data, string $key = null)
+    {
+        if ($key !== null) {
+            $data = array_merge($this->config, [$key => $data]);
         }
 
-        return null;
+        $this->config = $data;
+        return Data::write($this->file, $data, 'yaml');
     }
 }
