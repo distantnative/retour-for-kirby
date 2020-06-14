@@ -19,7 +19,7 @@
     "retour.routes.priority.help": "Etkinleştirilirse, gerçek bir sayfa olsa bile yönlendirme uygulanır.",
     "retour.routes.comment": "Yorum",
     "retour.routes.comment.help": "Kendiniz veya başkaları için not eklemeniz gerekiyorsa…",
-    "retour.tracked": "İzlendi",
+    "retour.tracked": "İzlenen",
     "retour.failures": "Başarısızlar",
     "retour.failures.empty": "Henüz başarısız yok",
     "retour.failures.path": "Yol",
