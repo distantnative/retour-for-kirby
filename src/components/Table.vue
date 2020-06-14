@@ -23,15 +23,15 @@
       <template #cell="{ column, row, value }">
         <p class="k-table-cell-value">
           <template v-if="column.type === 'link'">
-            <retour-table-link-cell :value="value" />
+            <retour-table-link-cell :value="value" :column="column" />
           </template>
 
           <template v-else-if="column.type === 'status'">
-            <retour-table-status-cell :value="value" />
+            <retour-table-status-cell :value="value" :column="column" />
           </template>
 
           <template v-else-if="column.type === 'priority'">
-            <retour-table-priority-cell :value="value" />
+            <retour-table-priority-cell :value="value" :column="column" />
           </template>
 
           <template v-else-if="column.type === 'count'">
