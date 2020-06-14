@@ -1,16 +1,15 @@
 <template>
-  <span
+  <div
     :title="`${column.label}: ${value || '-'}`"
-    class="retour-table-status-preview"
+    class="retour-table-status-preview px-2"
   >
     <k-icon
       type="circle"
-      :color="color"
+      :color="row.active ? color : 'gray-light'"
       class="mr-2"
     />
-    <code v-if="value">{{ value }}</code>
-    <span v-else class="pl-1">–</span>
-  </span>
+    <code>{{ value }}</code>
+  </div>
 </template>
 
 <script>
@@ -20,12 +19,8 @@ export default {
   mixins: [color],
   props: {
     value: String,
-    column: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
+    row: Object,
+    column: Object
   }
 }
 </script>

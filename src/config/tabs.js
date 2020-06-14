@@ -3,8 +3,8 @@ export default (Vue) => {
   let tabs    = [];
   const store = Vue.$store.state.retour;
 
-  // routes
-  const routes = store.data.routes.length;
+  // manual routes
+  const routes = store.data.manual.length;
 
   tabs.push({
     name: "routes",
@@ -14,6 +14,19 @@ export default (Vue) => {
       count: routes,
       color: "focus"
     }: false
+  });
+
+  // tracked routes
+  const tracked = store.data.tracked.filter(route => route.active === false).length;
+
+  tabs.push({
+    name: "tracked",
+    label: "Tracked",
+    icon: "live",
+    badge: tracked ? {
+      count: tracked,
+      color: "yellow"
+    } : false
   });
 
   // failures

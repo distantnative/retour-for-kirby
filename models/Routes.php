@@ -16,9 +16,9 @@ class Routes
         $this->retour = $retour;
     }
 
-    protected function config()
+    protected function config(string $type = 'manual')
     {
-        $config = $this->retour->config['routes'];
+        $config = $this->retour->config['routes'][$type];
         return array_map(function ($config) {
             return new Route($config);
         }, $config);
@@ -32,9 +32,9 @@ class Routes
      *
      * @return array
      */
-    public function toData(string $begin, string $end): array
+    public function toData(string $begin, string $end, string $type = 'manual'): array
     {
-        $routes = $this->config();
+        $routes = $this->config($type);
 
         // turn Route objects into arrays
         $data = array_map(function ($route) {
@@ -60,9 +60,9 @@ class Routes
      *
      * @return array
      */
-    public function toRules(bool $hasPriority = false): array
+    public function toRules(string $type, bool $hasPriority = false): array
     {
-        $routes = $this->config();
+        $routes = $this->config($type);
 
         // Filter: no routes for disabled redirects
         //         and match the priority parameter
@@ -83,12 +83,14 @@ class Routes
      *
      * @param array $data
      */
-    public function update(array $data = [])
+    public function update(string $type, array $data = [])
     {
         $data = array_map(function ($route) {
             $route = new Route($route);
             return $route->toArray();
         }, $data);
+
+        $data = array_merge($this->retour->config['routes'], [$type => $data]);
         return $this->retour->update($data, 'routes');
     }
 }

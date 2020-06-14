@@ -1,5 +1,8 @@
 <template>
-  <span :title="`${column.label}: ${value}`">
+  <div
+    :title="`${column.label}: ${value}`"
+    class="px-2"
+  >
     <k-button
       v-if="value && value != '-'"
       :icon="{
@@ -13,19 +16,14 @@
       @click.native.stop
     />
     {{ value }}
-  </span>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     value: String,
-    column: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
+    column: Object
   },
   computed: {
     isExternal() {
