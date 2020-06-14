@@ -2,7 +2,8 @@ export default (Vue) => ({
   namespaced: true,
   state: {
     data: {
-      routes: [],
+      manual: [],
+      tracked: [],
       failures: [],
       stats: []
     },
@@ -94,7 +95,8 @@ export default (Vue) => ({
       // what we need for sure
       await Promise.all([
         context.dispatch("system"),
-        context.dispatch("routes")
+        context.dispatch("routes", "manual"),
+        context.dispatch("routes", "tracked")
       ]);
 
       // what we might need as well
@@ -112,10 +114,10 @@ export default (Vue) => ({
       const failures  = await Vue.$api.get("retour/failures", timeframe);
       context.commit("SET_DATA", { type: "failures", data: failures });
     },
-    async routes(context) {
+    async routes(context, type = "manual") {
       const timeframe = context.getters["timeframe"];
-      const routes    = await Vue.$api.get("retour/routes", timeframe);
-      context.commit("SET_DATA", { type: "routes", data: routes });
+      const routes    = await Vue.$api.get("retour/routes/" + type, timeframe);
+      context.commit("SET_DATA", { type: type, data: routes });
     },
     async stats(context) {
       const mode  = context.getters["mode"];

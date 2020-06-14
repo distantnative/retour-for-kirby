@@ -15,8 +15,11 @@ return [
             }
 
             try {
-                $routes = Retour::instance()->routes()->toRules(false);
-                $router = new Router($routes);
+                $routes  = Retour::instance()->routes();
+                $manual  = $routes->toRules('manual', false);
+                $tracked = $routes->toRules('tracked', false);
+                $routes  = $manual + $tracked;
+                $router  = new Router($routes);
                 return $router->call($path, $method);
 
             } catch (\Throwable $e) {

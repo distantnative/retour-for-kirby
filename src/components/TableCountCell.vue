@@ -1,8 +1,8 @@
 <template>
-  <span
+  <div
     v-if="row.hits > 0"
     :title="$t('retour.hits.last') + ': ' + row.last"
-    class="flex justify-between"
+    class="flex justify-between px-2"
   >
     <k-button
       :icon="{
@@ -14,7 +14,7 @@
       class="cursor-default"
     />
     {{ row.hits }}
-  </span>
+  </div>
 </template>
 
 <script>
