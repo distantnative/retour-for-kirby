@@ -8,7 +8,7 @@
         {{ redirected }} {{ $t('retour.stats.redirected') }}
       </div>
       <div>
-        <k-icon type="circle" color="border" />
+        <k-icon type="circle" color="gray-light" />
         {{ resolved }} {{ $t('retour.stats.resolved') }}
       </div>
       <div>
