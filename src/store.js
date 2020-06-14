@@ -15,7 +15,6 @@ export default (Vue) => ({
       deleteAfter: null,
       hasLog: false,
       headers: [],
-      isLoading: false,
       release: null,
       version: null,
       update: 0
@@ -92,8 +91,6 @@ export default (Vue) => ({
   },
   actions: {
     async load(context) {
-      context.commit("SET_SYSTEM", { isLoading: true });
-
       // what we need for sure
       await Promise.all([
         context.dispatch("system"),
@@ -109,8 +106,6 @@ export default (Vue) => ({
 
         await Vue.$api.post("retour/log/purge");
       }
-
-      context.commit("SET_SYSTEM", { isLoading: false });
     },
     async failures(context) {
       const timeframe = context.getters["timeframe"];
