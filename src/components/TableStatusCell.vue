@@ -1,5 +1,8 @@
 <template>
-  <span class="retour-table-status-preview">
+  <span
+    :title="`${column.label}: ${value || '-'}`"
+    class="retour-table-status-preview"
+  >
     <k-icon
       type="circle"
       :color="color"
@@ -16,7 +19,13 @@ import color from "../mixins/color.js";
 export default {
   mixins: [color],
   props: {
-    value: String
+    value: String,
+    column: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
   }
 }
 </script>
