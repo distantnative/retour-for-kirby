@@ -58,7 +58,11 @@
             {{ $t("retour.system.release") }}
           </dt>
           <dd>
-            {{ $store.state.retour.system.release || "–" }}
+            <k-button
+              :text="$store.state.retour.system.release || '–'"
+              link="https://github.com/distantnative/retour-for-kirby/releases"
+              target="_blank"
+            />
           </dd>
         </dl>
       </li>
