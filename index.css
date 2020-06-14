@@ -83,6 +83,9 @@
   fill-opacity: 0.85;
 }.retour-stats-box {
   background: #3d3d3d;
+}.retour-view .k-box[data-theme=notice] {
+  background: #fbf1dd;
+  border-left: 2px solid #f0c674;
 }.retour-view .k-loader {
   position: absolute;
   top: 50%;

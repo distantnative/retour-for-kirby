@@ -28,5 +28,20 @@ return [
                 }
             }
         }
+    },
+    'page.changeSlug:after' => function ($newPage, $oldPage) {
+        if (option('distantnative.retour.tracking') !== false) {
+            Retour::instance()->routes()->track('slug', [
+                'from' => $oldPage->id(),
+                'to'   => $newPage->id()
+            ]);
+        }
+    },
+    'page.delete:after' => function ($status, $page) {
+        if (option('distantnative.retour.deletions') !== false) {
+            Retour::instance()->routes()->track('delete', [
+                'from' => $page->id()
+            ]);
+        }
     }
 ];

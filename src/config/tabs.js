@@ -17,17 +17,19 @@ export default (Vue) => {
   });
 
   // tracked routes
-  const tracked = store.data.tracked.filter(route => route.active === false).length;
+  if (store.system.hasTracking) {
+    const tracked = store.data.tracked.filter(route => route.active === false).length;
 
-  tabs.push({
-    name: "tracked",
-    label: "Tracked",
-    icon: "live",
-    badge: tracked ? {
-      count: tracked,
-      color: "yellow"
-    } : false
-  });
+    tabs.push({
+      name: "tracked",
+      label: Vue.$t("retour.tracked"),
+      icon: "live",
+      badge: tracked ? {
+        count: tracked,
+        color: "yellow"
+      } : false
+    });
+  }
 
   // failures
   if (store.system.hasLog) {

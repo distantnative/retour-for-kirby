@@ -1,5 +1,6 @@
 <template>
   <retour-routes-table
+    ref="table"
     :canEdit="canUpdate"
     :label="$t('retour.routes')"
     :options="options"
@@ -41,14 +42,47 @@ export default {
     }
   },
   created() {
+    // this.$events.$on("retour.move", this.move);
     this.$events.$on("retour.resolve", this.resolve);
   },
   destroyed() {
+    // this.$events.$off("retour.move", this.move);
     this.$events.$off("retour.resolve", this.resolve);
   },
   methods: {
-    onResolve() {
+    // move(row) {
+    //   this.$refs.table.insert(row, this.onMove);
+    // },
+    resolve(row) {
+      this.$refs.table.insert(row, this.onResolve);
+    },
+    // async onMove(row) {
+    //   try {
+    //     // remove route from tracked
 
+    //     await this.$store.dispatch("retour/routes", "tracked")
+    //     await Promise.all(calls);
+
+    //   } catch (error) {
+    //     this.$store.dispatch("notification/error", error);
+    //   }
+    // },
+    async onResolve(row) {
+      try {
+        await this.$api.post("retour/log/resolve", {
+          path: row.from
+        });
+
+        const calls = [
+          this.$store.dispatch("retour/failures"),
+          this.$store.dispatch("retour/stats")
+        ];
+
+        await Promise.all(calls);
+
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
     }
   }
 }

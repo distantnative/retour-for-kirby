@@ -78,6 +78,34 @@ class Routes
         return $data;
     }
 
+    public function track(string $event, array $data)
+    {
+        switch ($event) {
+            case 'slug':
+                return $this->trackSlug($data);
+            case 'delete':
+                return $this->trackDelete($data);
+        }
+    }
+
+    protected function trackDelete(array $data)
+    {
+        // remove all tracked routes from this route
+
+        // set all tracked routes leading to this route to error status code
+
+        // insert route with from and error status code
+    }
+
+    protected function trackSlug(array $data)
+    {
+        // if new slug is a route.from, remove that route
+
+        // if the old slug is a route.to, update that route as well
+
+        // insert route with redirect status code
+    }
+
     /**
      * Update redirect definitions in config file
      *
