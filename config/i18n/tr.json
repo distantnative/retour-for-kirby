@@ -21,7 +21,7 @@
     "retour.routes.comment.help": "Kendiniz veya başkaları için not eklemeniz gerekiyorsa…",
     "retour.tracked": "İzlendi",
     "retour.failures": "Başarısızlar",
-    "retour.failures.empty": "Başarısız yok",
+    "retour.failures.empty": "Henüz başarısız yok",
     "retour.failures.path": "Yol",
     "retour.failures.referrer": "Yönlendiren",
     "retour.failures.resolve": "Yönlendirme olarak ekle",
