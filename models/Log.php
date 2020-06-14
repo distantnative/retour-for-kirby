@@ -2,52 +2,20 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Database\Database;
-use Kirby\Toolkit\Dir;
-use Kirby\Toolkit\F;
 
 class Log
 {
 
-    /**
-     * @var \Kirby\Database\Database;
-     */
     protected $db;
+    protected $retour;
 
     /**
-     * @var string
+     * @param \distantnative\Retour\Retour $retour
      */
-    protected $file;
-
-    public function __construct()
+    public function __construct(Retour $retour)
     {
-        // Get path to database file
-        $this->file = option('distantnative.retour.database');
-
-        // Support callbacks for database file option
-        if (is_callable($this->file) === true) {
-            $this->file = call_user_func($this->file);
-        }
-
-        // Make sure database is in place
-        if (F::exists($this->file) === false) {
-            $dir = dirname($this->file);
-
-            if (is_dir($dir) === false) {
-                Dir::make($dir);
-            }
-
-            F::copy(
-                dirname(__DIR__) . '/assets/retour.sqlite',
-                $this->file
-            );
-        }
-
-        // Connect to database
-        $this->db = new Database([
-            'type'     => 'sqlite',
-            'database' => $this->file
-        ]);
+        $this->retour = $retour;
+        $this->db     = $retour->database;
     }
 
     /**
