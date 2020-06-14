@@ -16096,7 +16096,7 @@ exports.default = _default;
         ),
         _vm._v(" "),
         _c("k-button", {
-          attrs: { text: "Check for update", icon: "refresh" },
+          attrs: { text: _vm.$("retour.system.update"), icon: "refresh" },
           on: { click: _vm.onUpdate }
         })
       ],
