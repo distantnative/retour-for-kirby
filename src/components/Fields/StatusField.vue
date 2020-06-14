@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import color from "../mixins/color.js";
+import color from "../../mixins/color.js";
 
 export default {
   extends: "k-select-field",
