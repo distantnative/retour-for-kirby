@@ -45,6 +45,7 @@ return [
     'retour.stats.mode.day'   => 'Day',
 
     'retour.system'                    => 'System',
+    'retour.system.update'             => 'Check for update',
     'retour.system.version'            => 'Installed version',
     'retour.system.release'            => 'Current release',
     'retour.system.support'            => 'Support development',
