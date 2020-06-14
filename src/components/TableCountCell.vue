@@ -1,6 +1,7 @@
 <template>
   <span
     v-if="row.hits > 0"
+    :title="$t('retour.hits.last') + ': ' + row.last"
     class="flex justify-between"
   >
     <k-button
