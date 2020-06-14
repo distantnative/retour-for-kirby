@@ -16398,13 +16398,16 @@ var _default = {
     "retour-failures-tab": _FailuresTab.default,
     "retour-system-tab": _SystemTab.default
   },
+
+  data() {
+    return {
+      isLoading: true
+    };
+  },
+
   computed: {
     hasLog() {
       return this.$store.state.retour.system.hasLog;
-    },
-
-    isLoading() {
-      return this.$store.state.retour.system.isLoading;
     },
 
     tab() {
@@ -16428,12 +16431,14 @@ var _default = {
     }
   },
 
-  created() {
+  async created() {
     if (this.canAccess === false) {
       this.$router.push("/");
     }
 
-    this.$store.dispatch("retour/load");
+    this.isLoading = true;
+    await this.$store.dispatch("retour/load");
+    this.isLoading = false;
   }
 
 };
@@ -17216,7 +17221,6 @@ var _default = Vue => ({
       deleteAfter: null,
       hasLog: false,
       headers: [],
-      isLoading: false,
       release: null,
       version: null,
       update: 0
@@ -17282,20 +17286,13 @@ var _default = Vue => ({
   },
   actions: {
     async load(context) {
-      context.commit("SET_SYSTEM", {
-        isLoading: true
-      }); // what we need for sure
-
+      // what we need for sure
       await Promise.all([context.dispatch("system"), context.dispatch("routes")]); // what we might need as well
 
       if (context.state.system.hasLog === true) {
         await Promise.all([context.dispatch("failures"), context.dispatch("stats")]);
         await Vue.$api.post("retour/log/purge");
       }
-
-      context.commit("SET_SYSTEM", {
-        isLoading: false
-      });
     },
 
     async failures(context) {
