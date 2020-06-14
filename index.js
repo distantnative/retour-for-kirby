@@ -16035,6 +16035,10 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
 var _default = {
   computed: {
     failed() {
@@ -16201,13 +16205,20 @@ exports.default = _default;
               )
             ]),
             _vm._v(" "),
-            _c("dd", [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$store.state.retour.system.release || "–") +
-                  "\n        "
-              )
-            ])
+            _c(
+              "dd",
+              [
+                _c("k-button", {
+                  attrs: {
+                    text: _vm.$store.state.retour.system.release || "–",
+                    link:
+                      "https://github.com/distantnative/retour-for-kirby/releases",
+                    target: "_blank"
+                  }
+                })
+              ],
+              1
+            )
           ])
         ]),
         _vm._v(" "),
