@@ -2,7 +2,7 @@
   <figure class="retour-chart pt-4 pb-6 px-4">
     <div class="chart" />
 
-    <figcaption>
+    <figcaption class="px-3">
       <div>
         <k-icon type="circle" color="focus" />
         {{ redirected }} {{ $t('retour.stats.redirected') }}
