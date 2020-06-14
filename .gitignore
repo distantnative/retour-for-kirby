@@ -36,3 +36,9 @@ report.html
 .php_cs.cache
 .phpunit.result.cache
 tests
+
+# editors
+*.sublime-project
+*.sublime-workspace
+/.vscode
+/.idea
