@@ -123,6 +123,8 @@ class Retour
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'hasLog'      => option('distantnative.retour.logs'),
+            'hasTracking' => option('distantnative.retour.tracking') ||
+                             option('distantnative.retour.deletions'),
             'release'     => $release = Upgrades::latest($reload),
             'version'     => $version = static::plugin()->version(),
             'update'      => $release ? version_compare($version, $release) : null
