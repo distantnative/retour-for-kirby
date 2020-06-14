@@ -41,12 +41,14 @@ export default {
     "retour-failures-tab": FailuresTab,
     "retour-system-tab": SystemTab
   },
+  data() {
+    return {
+      isLoading: true
+    };
+  },
   computed: {
     hasLog() {
       return this.$store.state.retour.system.hasLog;
-    },
-    isLoading() {
-      return this.$store.state.retour.system.isLoading;
     },
     tab() {
       return this.$route.hash.slice(1) || "routes";
@@ -65,12 +67,14 @@ export default {
       immediate: true
     }
   },
-  created() {
+  async created() {
     if (this.canAccess === false) {
       this.$router.push("/");
     }
 
-    this.$store.dispatch("retour/load");
+    this.isLoading = true;
+    await this.$store.dispatch("retour/load");
+    this.isLoading = false;
   }
 };
 </script>
