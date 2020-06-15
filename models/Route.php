@@ -41,7 +41,7 @@ class Route
      */
     public function isActive(): bool
     {
-        return $this->options['active'] === true;
+        return $this->status() !== null;
     }
 
     /**
@@ -49,13 +49,24 @@ class Route
      */
     public function status(): ?int
     {
+        if (isset($this->options['status']) === false) {
+            return null;
+        }
+
+        if (empty($this->options['status']) === true) {
+            return null;
+        }
+
+        if ($this->options['status'] === 'disabled') {
+            return null;
+        }
+
         return (int)$this->options['status'];
     }
 
     public function toArray()
     {
         return [
-            'active'   => $this->active(),
             'from'     => $this->from(),
             'to'       => $this->to(),
             'status'   => $this->status(),

@@ -175,7 +175,7 @@ class Log
     }
 
     /**
-     * Get stats data for specified timeframe and type
+     * Get stats data for specified timeframe and unit
      *
      * @param string $unit  timeframe unit (year, month, ...)
      * @param string $begin date sting (yyyy-mm-dd)
