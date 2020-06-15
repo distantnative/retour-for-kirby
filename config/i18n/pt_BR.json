@@ -29,7 +29,7 @@
     "retour.failures.clear.confirm": "Deseja realmente excluir os registros?",
     "retour.stats.redirected": "redirecionados",
     "retour.stats.resolved": "resolvidos",
-    "retour.stats.failed": "Falharam",
+    "retour.stats.failed": "falharam",
     "retour.stats.mode.all": "Todos",
     "retour.stats.mode.year": "Ano",
     "retour.stats.mode.month": "Mês",
