@@ -28,7 +28,7 @@
     "retour.failures.clear": "Limpar registros",
     "retour.failures.clear.confirm": "Deseja realmente excluir os registros?",
     "retour.stats.redirected": "redirecionados",
-    "retour.stats.resolved": "Resolvidos",
+    "retour.stats.resolved": "resolvidos",
     "retour.stats.failed": "Falharam",
     "retour.stats.mode.all": "Todos",
     "retour.stats.mode.year": "Ano",
