@@ -87,11 +87,6 @@ export default {
   computed: {
     columns() {
       return {
-        active: {
-          label: " ",
-          type: "toggle",
-          width: "1/20"
-        },
         from: {
           label: this.$t("retour.routes.from"),
           type: "link",
@@ -152,8 +147,6 @@ export default {
               value: code.substr(1)
             }))
           ],
-          empty: false,
-          required: true,
           help: this.$t("retour.routes.status.help", {
             docs: "https://distantnative.com/retour/docs"
           }),
@@ -165,12 +158,6 @@ export default {
           icon: "bolt",
           help: this.$t("retour.routes.priority.help"),
           width: "1/2",
-        },
-        active: {
-          label: " ",
-          type: "info",
-          text: "This route is <b>not active</b>. Use the toggle in the table to activate it.",
-          hidden: this.row.active
         },
         comment: {
           type: "textarea",
@@ -237,8 +224,8 @@ export default {
       this.isLoading = true;
 
       try {
-        await this.$api.patch("retour/routes/" + this.type, rows);
-        await this.$store.dispatch("retour/routes", this.type);
+        await this.$api.patch("retour/routes", rows);
+        await this.$store.dispatch("retour/routes");
 
         if (this.after) {
           await this.after(this.row);

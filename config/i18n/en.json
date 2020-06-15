@@ -19,7 +19,6 @@
     "retour.routes.priority.help": "If activated, the redirect will be enforced even if an actual page exists.",
     "retour.routes.comment": "Comment",
     "retour.routes.comment.help": "If you need to add some info for yourself or others…",
-    "retour.tracked": "Tracked",
     "retour.failures": "Failures",
     "retour.failures.empty": "No failures yet",
     "retour.failures.path": "Path",
