@@ -38,35 +38,19 @@ export default {
       }
     },
     rows() {
-      return this.$store.state.retour.data.manual;
+      return this.$store.state.retour.data.routes;
     }
   },
   created() {
-    // this.$events.$on("retour.move", this.move);
     this.$events.$on("retour.resolve", this.resolve);
   },
   destroyed() {
-    // this.$events.$off("retour.move", this.move);
     this.$events.$off("retour.resolve", this.resolve);
   },
   methods: {
-    // move(row) {
-    //   this.$refs.table.insert(row, this.onMove);
-    // },
     resolve(row) {
       this.$refs.table.insert(row, this.onResolve);
     },
-    // async onMove(row) {
-    //   try {
-    //     // remove route from tracked
-
-    //     await this.$store.dispatch("retour/routes", "tracked")
-    //     await Promise.all(calls);
-
-    //   } catch (error) {
-    //     this.$store.dispatch("notification/error", error);
-    //   }
-    // },
     async onResolve(row) {
       try {
         await this.$api.post("retour/log/resolve", {

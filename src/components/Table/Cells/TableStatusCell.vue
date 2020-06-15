@@ -5,10 +5,11 @@
   >
     <k-icon
       type="circle"
-      :color="row.active ? color : 'gray-light'"
+      :color="color"
       class="mr-2"
     />
-    <code>{{ value }}</code>
+    <code v-if="value">{{ value }}</code>
+    <span v-else>&nbsp;–</span>
   </div>
 </template>
 

@@ -99,8 +99,7 @@ export default {
       return this.reduce(this.$store.state.retour.data.failures);
     },
     redirected() {
-      return this.reduce(this.$store.state.retour.data.manual) +
-             this.reduce(this.$store.state.retour.data.tracked);
+      return this.reduce(this.$store.state.retour.data.manual);
     },
     updateClass() {
       if (this.$store.state.retour.system.update < 0) {

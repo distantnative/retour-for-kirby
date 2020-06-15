@@ -15,10 +15,7 @@ return [
             }
 
             try {
-                $routes  = Retour::instance()->routes();
-                $manual  = $routes->toRules('manual', false);
-                $tracked = $routes->toRules('tracked', false);
-                $routes  = $manual + $tracked;
+                $routes  = Retour::instance()->routes()->toRules(false);
                 $router  = new Router($routes);
                 return $router->call($path, $method);
 
@@ -27,21 +24,6 @@ return [
                     Retour::instance()->log()->create(['path' => $path]);
                 }
             }
-        }
-    },
-    'page.changeSlug:after' => function ($newPage, $oldPage) {
-        if (option('distantnative.retour.tracking') !== false) {
-            Retour::instance()->routes()->track('slug', [
-                'from' => $oldPage->id(),
-                'to'   => $newPage->id()
-            ]);
-        }
-    },
-    'page.delete:after' => function ($status, $page) {
-        if (option('distantnative.retour.deletions') !== false) {
-            Retour::instance()->routes()->track('delete', [
-                'from' => $page->id()
-            ]);
         }
     }
 ];
