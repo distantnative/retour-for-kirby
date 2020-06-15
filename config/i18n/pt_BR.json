@@ -43,7 +43,7 @@
     "retour.system.support.donate": "Doe",
     "retour.system.failures": "Falhas registradas",
     "retour.system.redirects": "Redirecionamentos bem-sucedidos",
-    "retour.system.deleteAfter": "Eliminar registros después",
+    "retour.system.deleteAfter": "Excluir registros após",
     "retour.system.deleteAfter.months": "{count} meses",
     "retour.system.docs": "Aprenda mais sobre as opções na <a href='{docs}'>documentação</a>."
 }
