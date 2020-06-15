@@ -14,7 +14,7 @@
     "retour.routes.to.help": "Caminho relativo ou URL absoluta. Deixe em branco para finalizar com código de estado HTTP.",
     "retour.routes.status": "Códigos de Estado HTTP",
     "retour.routes.status.help": "Aprenda sobre os <a href='{docs}' target='_blank'>códigos de estado HTTP</a> e quando usar cada um.",
-    "retour.routes.priority": "Tiene prioridad?",
+    "retour.routes.priority": "Tem prioridade?",
     "retour.routes.priority.abbr": "Prioridade",
     "retour.routes.priority.help": "Se ativado, o redirecionamento acontecerá mesmo que uma página atual exista.",
     "retour.routes.comment": "Comentário",
