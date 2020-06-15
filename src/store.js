@@ -2,8 +2,7 @@ export default (Vue) => ({
   namespaced: true,
   state: {
     data: {
-      manual: [],
-      tracked: [],
+      routes: [],
       failures: [],
       stats: []
     },
@@ -15,7 +14,6 @@ export default (Vue) => ({
     system: {
       deleteAfter: null,
       hasLog: false,
-      hasTracking: false,
       headers: [],
       release: null,
       version: null,
@@ -96,8 +94,7 @@ export default (Vue) => ({
       // what we need for sure
       await Promise.all([
         context.dispatch("system"),
-        context.dispatch("routes", "manual"),
-        context.dispatch("routes", "tracked")
+        context.dispatch("routes")
       ]);
 
       // what we might need as well
@@ -115,10 +112,10 @@ export default (Vue) => ({
       const failures  = await Vue.$api.get("retour/failures", timeframe);
       context.commit("SET_DATA", { type: "failures", data: failures });
     },
-    async routes(context, type = "manual") {
+    async routes(context) {
       const timeframe = context.getters["timeframe"];
-      const routes    = await Vue.$api.get("retour/routes/" + type, timeframe);
-      context.commit("SET_DATA", { type: type, data: routes });
+      const routes    = await Vue.$api.get("retour/routes", timeframe);
+      context.commit("SET_DATA", { type: "routes", data: routes });
     },
     async stats(context) {
       const mode  = context.getters["mode"];

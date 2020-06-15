@@ -3,8 +3,8 @@ export default (Vue) => {
   let tabs    = [];
   const store = Vue.$store.state.retour;
 
-  // manual routes
-  const routes = store.data.manual.length;
+  // routes
+  const routes = store.data.routes.length;
 
   tabs.push({
     name: "routes",
@@ -15,21 +15,6 @@ export default (Vue) => {
       color: "focus"
     }: false
   });
-
-  // tracked routes
-  // if (store.system.hasTracking) {
-  //   const tracked = store.data.tracked.filter(route => route.active === false).length;
-
-  //   tabs.push({
-  //     name: "tracked",
-  //     label: Vue.$t("retour.tracked"),
-  //     icon: "live",
-  //     badge: tracked ? {
-  //       count: tracked,
-  //       color: "yellow"
-  //     } : false
-  //   });
-  // }
 
   // failures
   if (store.system.hasLog) {

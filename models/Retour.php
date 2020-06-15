@@ -7,7 +7,6 @@ use Kirby\Database\Database;
 use Kirby\Http\Header;
 use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
-use Kirby\Toolkit\Str;
 
 class Retour
 {
@@ -123,8 +122,6 @@ class Retour
             'deleteAfter' => option('distantnative.retour.deleteAfter'),
             'headers'     => Header::$codes,
             'hasLog'      => option('distantnative.retour.logs'),
-            'hasTracking' => option('distantnative.retour.tracking') ||
-                             option('distantnative.retour.deletions'),
             'release'     => $release = Upgrades::latest($reload),
             'version'     => $version = static::plugin()->version(),
             'update'      => $release ? version_compare($version, $release) : null
