@@ -27,7 +27,7 @@
     "retour.failures.resolve": "Adicionar como redirecionamento",
     "retour.failures.clear": "Limpar registros",
     "retour.failures.clear.confirm": "Deseja realmente excluir os registros?",
-    "retour.stats.redirected": "Redirecionados",
+    "retour.stats.redirected": "redirecionados",
     "retour.stats.resolved": "Resolvidos",
     "retour.stats.failed": "Falharam",
     "retour.stats.mode.all": "Todos",
