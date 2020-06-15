@@ -18,7 +18,7 @@
     "retour.routes.priority.abbr": "Prio",
     "retour.routes.priority.help": "Si se activa, la redirección se aplicará incluso si existe una página.",
     "retour.routes.comment": "Comentario",
-    "retour.routes.comment.help": "Si necesita agregar alguna información para usted u otros…",
+    "retour.routes.comment.help": "Caso necessite adicionar alguma informação para você ou outras pessoas...",
     "retour.tracked": "Rastreados",
     "retour.failures": "Falhas",
     "retour.failures.empty": "Nenhuma falha até o momento",
