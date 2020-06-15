@@ -19,7 +19,7 @@
     "retour.routes.priority.help": "Si se activa, la redirección se aplicará incluso si existe una página.",
     "retour.routes.comment": "Comentario",
     "retour.routes.comment.help": "Si necesita agregar alguna información para usted u otros…",
-    "retour.tracked": "Rastreado",
+    "retour.tracked": "Rastreados",
     "retour.failures": "Falhas",
     "retour.failures.empty": "Nenhuma falha até o momento",
     "retour.failures.path": "Caminho",
