@@ -15003,6 +15003,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
 var _default = {
   components: {
     "retour-table-filter": _TableFilter.default
@@ -15118,37 +15119,30 @@ exports.default = _default;
         2
       ),
       _vm._v(" "),
-      _c("k-table", {
-        attrs: {
-          columns: _vm.columns,
-          index: _vm.limit * (_vm.page - 1) + 1,
-          options: _vm.options,
-          rows: _vm.filteredRows
-        },
-        on: {
-          cell: function($event) {
-            return _vm.$emit("cell", $event)
-          },
-          header: function($event) {
-            return _vm.$emit("header", $event)
-          },
-          input: function($event) {
-            return _vm.$emit("input", $event)
-          },
-          option: _vm.onOption
-        }
-      }),
-      _vm._v(" "),
-      _vm.rows.length === 0
-        ? _c(
-            "div",
-            {
-              staticClass:
-                "bg-white text-gray p-3 text-center rounded-sm shadow text-sm"
+      _vm.rows.length
+        ? _c("k-table", {
+            attrs: {
+              columns: _vm.columns,
+              index: _vm.limit * (_vm.page - 1) + 1,
+              options: _vm.options,
+              rows: _vm.filteredRows
             },
-            [_vm._v("\n    " + _vm._s(_vm.empty) + "\n  ")]
-          )
-        : _vm._e(),
+            on: {
+              cell: function($event) {
+                return _vm.$emit("cell", $event)
+              },
+              header: function($event) {
+                return _vm.$emit("header", $event)
+              },
+              input: function($event) {
+                return _vm.$emit("input", $event)
+              },
+              option: _vm.onOption
+            }
+          })
+        : _c("k-empty", { attrs: { layout: "cards" } }, [
+            _vm._v("\n    " + _vm._s(_vm.empty) + "\n  ")
+          ]),
       _vm._v(" "),
       _c(
         "footer",
@@ -15290,11 +15284,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   mixins: [_permissions.default],
   components: {
     "retour-table": _Table.default
   },
+
+  data() {
+    this.row = null;
+  },
+
   computed: {
     columns() {
       return {
@@ -15327,7 +15340,11 @@ var _default = {
       return [{
         text: this.$t("retour.failures.resolve"),
         icon: "add",
-        click: "resolve"
+        click: "add"
+      }, {
+        text: this.$t("remove"),
+        icon: "trash",
+        click: "remove"
       }];
     },
 
@@ -15337,21 +15354,45 @@ var _default = {
 
   },
   methods: {
+    async onAdd(row) {
+      await this.$router.push("#routes");
+      this.$events.$emit("retour.resolve", {
+        from: row.path
+      });
+    },
+
     async onFlush() {
       try {
         await this.$api.post("retour/log/flush");
         this.$refs.flushDialog.close();
-        this.$store.dispatch("retour/load");
+        await this.$store.dispatch("retour/load");
+        this.$store.dispatch("notification/success");
       } catch (error) {
         this.$store.dispatch("notification/error", error);
       }
     },
 
-    async onResolve(option, row) {
-      await this.$router.push("#routes");
-      this.$events.$emit("retour.resolve", {
-        from: row.path
+    onOption(option, row) {
+      switch (option) {
+        case "add":
+          return this.onAdd(row);
+
+        case "remove":
+          this.row = row;
+          return this.$refs.removeDialog.open();
+          return this.onRemove(row);
+      }
+    },
+
+    async onRemove() {
+      await this.$api.delete("retour/failures", {
+        path: this.row.path,
+        referrer: this.row.referrer
       });
+      this.$refs.removeDialog.close();
+      await this.$store.dispatch("retour/load");
+      this.$store.dispatch("notification/success");
+      this.row = null;
     }
 
   }
@@ -15378,7 +15419,7 @@ exports.default = _default;
       rows: _vm.rows,
       type: "failures"
     },
-    on: { option: _vm.onResolve },
+    on: { option: _vm.onOption },
     scopedSlots: _vm._u(
       [
         _vm.canUpdate
@@ -15406,6 +15447,27 @@ exports.default = _default;
           key: "dialogs",
           fn: function() {
             return [
+              _c(
+                "k-dialog",
+                {
+                  ref: "removeDialog",
+                  attrs: {
+                    "submit-button": {
+                      text: _vm.$t("delete"),
+                      icon: "trash",
+                      color: "negative"
+                    }
+                  },
+                  on: { submit: _vm.onRemove }
+                },
+                [
+                  _c("k-text", [
+                    _vm._v(_vm._s(_vm.$t("field.structure.delete.confirm")))
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
               _c(
                 "k-dialog",
                 {
@@ -16138,6 +16200,8 @@ exports.default = void 0;
 //
 //
 //
+//
+//
 var _default = {
   computed: {
     failed() {
@@ -16145,16 +16209,12 @@ var _default = {
     },
 
     redirected() {
-      return this.reduce(this.$store.state.retour.data.manual);
+      return this.reduce(this.$store.state.retour.data.routes);
     },
 
     updateClass() {
       if (this.$store.state.retour.system.update < 0) {
         return "text-red";
-      }
-
-      if (this.$store.state.retour.system.update > 0) {
-        return "text-purple";
       }
     }
 
@@ -16185,187 +16245,207 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "retour-settings-tab" }, [
-    _c(
-      "header",
-      { staticClass: "flex items-center justify-between mb-3" },
-      [
-        _c(
-          "h3",
-          { staticClass: "flex items-center font-bold" },
-          [
-            _c("k-icon", { staticClass: "mr-2", attrs: { type: "road-sign" } }),
-            _vm._v(" Retour for Kirby\n    ")
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("k-button", {
-          attrs: { text: _vm.$t("retour.system.update"), icon: "refresh" },
-          on: { click: _vm.onUpdate }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "ul",
-      {
-        staticClass:
-          "k-system-info-box bg-white p-3 flex items-center shadow rounded-sm"
-      },
-      [
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$t("retour.system.redirects")) +
-                  "\n        "
-              )
-            ]),
-            _vm._v(" "),
-            _c("dd", [_vm._v(_vm._s(_vm.redirected))])
+  return _c(
+    "div",
+    { staticClass: "retour-settings-tab" },
+    [
+      _c(
+        "header",
+        { staticClass: "flex items-center justify-between mb-3" },
+        [
+          _c(
+            "h3",
+            { staticClass: "flex items-center font-bold" },
+            [
+              _c("k-icon", {
+                staticClass: "mr-2",
+                attrs: { type: "road-sign" }
+              }),
+              _vm._v(" Retour for Kirby\n    ")
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("k-button", {
+            attrs: { text: _vm.$t("retour.system.update"), icon: "refresh" },
+            on: { click: _vm.onUpdate }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "k-auto-grid",
+        {
+          staticClass: "k-system-info-box bg-white p-3 shadow rounded-sm mb-3",
+          staticStyle: { "--gap": "1.5rem" },
+          attrs: { element: "ul" }
+        },
+        [
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.redirects")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("dd", { staticClass: "truncate leading-tight" }, [
+                _vm._v(_vm._s(_vm.redirected))
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.failures")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("dd", { staticClass: "truncate leading-tight" }, [
+                _vm._v(_vm._s(_vm.failed))
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.deleteAfter")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("dd", { staticClass: "truncate leading-tight" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(
+                      _vm.$t("retour.system.deleteAfter.months", {
+                        count: _vm.$store.state.retour.system.deleteAfter || "–"
+                      })
+                    ) +
+                    "\n        "
+                )
+              ])
+            ])
           ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$t("retour.system.failures")) +
-                  "\n        "
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "k-auto-grid",
+        {
+          staticClass: "k-system-info-box bg-white p-3 shadow rounded-sm",
+          staticStyle: { "--gap": "1.5rem" },
+          attrs: { element: "ul" }
+        },
+        [
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.version")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("dd", { class: "truncate leading-tight " + _vm.updateClass }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$store.state.retour.system.version || "–") +
+                    "\n        "
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.release")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "dd",
+                { staticClass: "truncate leading-tight" },
+                [
+                  _c("k-button", {
+                    attrs: {
+                      text: _vm.$store.state.retour.system.release || "–",
+                      link:
+                        "https://github.com/distantnative/retour-for-kirby/releases",
+                      target: "_blank"
+                    }
+                  })
+                ],
+                1
               )
-            ]),
-            _vm._v(" "),
-            _c("dd", [_vm._v(_vm._s(_vm.failed))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$t("retour.system.deleteAfter")) +
-                  "\n        "
-              )
-            ]),
-            _vm._v(" "),
-            _c("dd", [
-              _vm._v(
-                "\n          " +
-                  _vm._s(
-                    _vm.$t("retour.system.deleteAfter.months", {
-                      count: _vm.$store.state.retour.system.deleteAfter || "–"
-                    })
-                  ) +
-                  "\n        "
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("dl", [
+              _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.$t("retour.system.support")) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "dd",
+                { staticClass: "truncate leading-tight" },
+                [
+                  _c("k-button", {
+                    attrs: {
+                      text: "💛 " + _vm.$t("retour.system.support.donate"),
+                      link: "https://paypal.me/distantnative",
+                      target: "_blank",
+                      theme: "positive"
+                    }
+                  })
+                ],
+                1
               )
             ])
           ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "ul",
-      {
-        staticClass:
-          "k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-3"
-      },
-      [
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$t("retour.system.version")) +
-                  "\n        "
-              )
-            ]),
-            _vm._v(" "),
-            _c("dd", { class: _vm.updateClass }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$store.state.retour.system.version || "–") +
-                  "\n        "
-              )
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(_vm.$t("retour.system.release")) +
-                  "\n        "
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "dd",
-              [
-                _c("k-button", {
-                  attrs: {
-                    text: _vm.$store.state.retour.system.release || "–",
-                    link:
-                      "https://github.com/distantnative/retour-for-kirby/releases",
-                    target: "_blank"
-                  }
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "footer",
+        { staticClass: "mt-2" },
+        [
+          _c("k-text", {
+            attrs: { theme: "help" },
+            domProps: {
+              innerHTML: _vm._s(
+                _vm.$t("retour.system.docs", {
+                  docs: "https://distantnative.com/retour/docs"
                 })
-              ],
-              1
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("dl", [
-            _c("dt", { staticClass: "text-sm text-gray mb-2" }, [
-              _vm._v(_vm._s(_vm.$t("retour.system.support")))
-            ]),
-            _vm._v(" "),
-            _c(
-              "dd",
-              [
-                _c("k-button", {
-                  attrs: {
-                    text: "💛 " + _vm.$t("retour.system.support.donate"),
-                    link: "https://paypal.me/distantnative",
-                    target: "_blank",
-                    theme: "positive"
-                  }
-                })
-              ],
-              1
-            )
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "footer",
-      { staticClass: "mt-2" },
-      [
-        _c("k-text", {
-          attrs: { theme: "help" },
-          domProps: {
-            innerHTML: _vm._s(
-              _vm.$t("retour.system.docs", {
-                docs: "https://distantnative.com/retour/docs"
-              })
-            )
-          }
-        })
-      ],
-      1
-    )
-  ])
+              )
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -16396,7 +16476,7 @@ render._withStripped = true
         
       }
     })();
-},{"vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"components/View.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17499,7 +17579,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62737" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61037" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

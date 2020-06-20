@@ -6,7 +6,7 @@
     :options="options"
     :rows="rows"
     type="failures"
-    @option="onResolve"
+    @option="onOption"
   >
     <template v-if="canUpdate" #button>
       <k-button
@@ -17,6 +17,20 @@
     </template>
 
     <template #dialogs>
+      <!-- remove dialog -->
+      <k-dialog
+        ref="removeDialog"
+        :submit-button="{
+          text: $t('delete'),
+          icon: 'trash',
+          color: 'negative'
+        }"
+        @submit="onRemove"
+      >
+        <k-text>{{ $t('field.structure.delete.confirm') }}</k-text>
+      </k-dialog>
+
+      <!-- flush dialog -->
       <k-dialog
         ref="flushDialog"
         :submit-button="{
@@ -42,6 +56,11 @@ export default {
   mixins: [permissions],
   components: {
     "retour-table": Table
+  },
+  data() {
+    return {
+      row: null
+    };
   },
   computed: {
     columns() {
@@ -75,7 +94,12 @@ export default {
         {
           text: this.$t("retour.failures.resolve"),
           icon: "add",
-          click: "resolve"
+          click: "add"
+        },
+        {
+          text: this.$t("remove"),
+          icon: "trash",
+          click: "remove"
         }
       ];
     },
@@ -84,19 +108,40 @@ export default {
     }
   },
   methods: {
+    async onAdd(row) {
+      await this.$router.push("#routes");
+      this.$events.$emit("retour.resolve", { from: row.path });
+    },
     async onFlush() {
       try {
         await this.$api.post("retour/log/flush");
         this.$refs.flushDialog.close();
-        this.$store.dispatch("retour/load");
+        await this.$store.dispatch("retour/load");
+        this.$store.dispatch("notification/success");
 
       } catch (error) {
         this.$store.dispatch("notification/error", error);
       }
     },
-    async onResolve(option, row) {
-      await this.$router.push("#routes");
-      this.$events.$emit("retour.resolve", { from: row.path });
+    onOption(option, row) {
+      switch (option) {
+        case "add":
+          return this.onAdd(row);
+        case "remove":
+          this.row = row;
+          return this.$refs.removeDialog.open();
+          return this.onRemove(row);
+      }
+    },
+    async onRemove() {
+      await this.$api.delete("retour/failures", {
+        path: this.row.path,
+        referrer: this.row.referrer
+      });
+      this.$refs.removeDialog.close();
+      await this.$store.dispatch("retour/load");
+      this.$store.dispatch("notification/success");
+      this.row = null;
     }
   }
 }
