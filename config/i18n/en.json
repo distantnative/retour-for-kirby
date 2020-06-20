@@ -6,7 +6,6 @@
     "retour.hits": "Hits",
     "retour.hits.last": "Last",
     "retour.routes": "Routes",
-    "retour.routes.add": "Add redirect",
     "retour.routes.empty": "No redirect routes configured",
     "retour.routes.from": "Path",
     "retour.routes.from.help": "Add <a href='{docs}' target='_blank'>placeholders</a> for dynamic redirects.",
