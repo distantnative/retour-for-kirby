@@ -10,7 +10,7 @@
     <!-- add button -->
     <template v-if="canUpdate" #button="{ onOption }">
       <k-button
-        :text="$t('retour.routes.add')"
+        :text="$t('add')"
         icon="add"
         @click="onOption('add', { active: true })"
       />
