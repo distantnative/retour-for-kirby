@@ -13,7 +13,7 @@ export default (Vue) => ({
     },
     system: {
       deleteAfter: null,
-      hasLog: false,
+      hasLog: true,
       headers: [],
       release: null,
       version: null,
