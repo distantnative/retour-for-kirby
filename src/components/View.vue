@@ -56,9 +56,8 @@ export default {
   watch: {
     "$route.hash": {
       handler() {
-        this.$emit("breadcrumb", [
-          { text: this.tabs.filter(tab => tab.name === this.tab)[0].label }
-        ]);
+        const tab = this.tabs.filter(tab => tab.name === this.tab)[0];
+        this.$emit("breadcrumb", [{ text: tab.label }]);
       },
       immediate: true
     }
