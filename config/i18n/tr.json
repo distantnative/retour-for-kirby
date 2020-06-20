@@ -6,7 +6,6 @@
     "retour.hits": "İsabet",
     "retour.hits.last": "Son",
     "retour.routes": "Yönlendirmeler",
-    "retour.routes.add": "Yönlendirme ekle",
     "retour.routes.empty": "Yönlendirme yok",
     "retour.routes.from": "Yol",
     "retour.routes.from.help": "Dinamik yönlendirmeler için <a href='{docs}' target='_blank'>yer tutucular</a> ekleyin.",
