@@ -6,7 +6,6 @@
     "retour.hits": "Acessos",
     "retour.hits.last": "Último",
     "retour.routes": "Rotas",
-    "retour.routes.add": "Adicionar redirecionamento",
     "retour.routes.empty": "Nenhum redirecionamento até o momento",
     "retour.routes.from": "Padrão da URL",
     "retour.routes.from.help": "Adicione <a href='{docs}' target='_blank'>curingas dinâmicos</a> em seu redirecionamento.",
