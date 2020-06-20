@@ -12,42 +12,42 @@
       />
     </header>
 
-    <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm">
+    <k-auto-grid element="ul" style="--gap: 1.5rem" class="k-system-info-box bg-white p-3 shadow rounded-sm mb-3">
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            {{ $t("retour.system.redirects") }}
+            {{ $t('retour.system.redirects') }}
           </dt>
-          <dd>{{ redirected }}</dd>
+          <dd class="truncate leading-tight">{{ redirected }}</dd>
         </dl>
       </li>
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            {{ $t("retour.system.failures") }}
+            {{ $t('retour.system.failures') }}
           </dt>
-          <dd>{{ failed }}</dd>
+          <dd class="truncate leading-tight">{{ failed }}</dd>
         </dl>
       </li>
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            {{ $t("retour.system.deleteAfter") }}
+            {{ $t('retour.system.deleteAfter') }}
           </dt>
-          <dd>
+          <dd class="truncate leading-tight">
             {{ $t("retour.system.deleteAfter.months", { count: $store.state.retour.system.deleteAfter || '–' }) }}
           </dd>
         </dl>
       </li>
-    </ul>
+    </k-auto-grid>
 
-    <ul class="k-system-info-box bg-white p-3 flex items-center shadow rounded-sm mt-3">
+    <k-auto-grid element="ul" style="--gap: 1.5rem" class="k-system-info-box bg-white p-3 shadow rounded-sm">
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            {{ $t("retour.system.version") }}
+            {{ $t('retour.system.version') }}
           </dt>
-          <dd :class="updateClass">
+          <dd :class="'truncate leading-tight ' + updateClass">
             {{ $store.state.retour.system.version || "–" }}
           </dd>
         </dl>
@@ -55,9 +55,9 @@
       <li>
         <dl>
           <dt class="text-sm text-gray mb-2">
-            {{ $t("retour.system.release") }}
+            {{ $t('retour.system.release') }}
           </dt>
-          <dd>
+          <dd class="truncate leading-tight">
             <k-button
               :text="$store.state.retour.system.release || '–'"
               link="https://github.com/distantnative/retour-for-kirby/releases"
@@ -68,8 +68,10 @@
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">{{ $t('retour.system.support') }}</dt>
-          <dd>
+          <dt class="text-sm text-gray mb-2">
+            {{ $t('retour.system.support') }}
+          </dt>
+          <dd class="truncate leading-tight">
             <k-button
               :text="'💛 ' + $t('retour.system.support.donate')"
               link="https://paypal.me/distantnative"
@@ -79,7 +81,7 @@
           </dd>
         </dl>
       </li>
-    </ul>
+    </k-auto-grid>
 
     <footer class="mt-2">
       <k-text
@@ -99,15 +101,11 @@ export default {
       return this.reduce(this.$store.state.retour.data.failures);
     },
     redirected() {
-      return this.reduce(this.$store.state.retour.data.manual);
+      return this.reduce(this.$store.state.retour.data.routes);
     },
     updateClass() {
       if (this.$store.state.retour.system.update < 0) {
         return "text-red";
-      }
-
-      if (this.$store.state.retour.system.update > 0) {
-        return "text-purple";
       }
     }
   },
