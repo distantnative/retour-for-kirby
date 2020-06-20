@@ -17,6 +17,20 @@
     </template>
 
     <template #dialogs>
+      <!-- remove dialog -->
+      <k-dialog
+        ref="removeDialog"
+        :submit-button="{
+          text: $t('delete'),
+          icon: 'trash',
+          color: 'negative'
+        }"
+        @submit="onRemove"
+      >
+        <k-text>{{ $t('field.structure.delete.confirm') }}</k-text>
+      </k-dialog>
+
+      <!-- flush dialog -->
       <k-dialog
         ref="flushDialog"
         :submit-button="{
@@ -42,6 +56,9 @@ export default {
   mixins: [permissions],
   components: {
     "retour-table": Table
+  },
+  data() {
+    this.row = null;
   },
   computed: {
     columns() {
@@ -109,16 +126,20 @@ export default {
         case "add":
           return this.onAdd(row);
         case "remove":
+          this.row = row;
+          return this.$refs.removeDialog.open();
           return this.onRemove(row);
       }
     },
-    async onRemove(row) {
+    async onRemove() {
       await this.$api.delete("retour/failures", {
-        path: row.path,
-        referrer: row.referrer
+        path: this.row.path,
+        referrer: this.row.referrer
       });
+      this.$refs.removeDialog.close();
       await this.$store.dispatch("retour/load");
       this.$store.dispatch("notification/success");
+      this.row = null;
     }
   }
 }
