@@ -6,7 +6,6 @@
     "retour.hits": "Treffer",
     "retour.hits.last": "Zuletzt",
     "retour.routes": "Routen",
-    "retour.routes.add": "Weiterleitung hinzufügen",
     "retour.routes.empty": "Keine Weiterleitungen bisher",
     "retour.routes.from": "Pfad",
     "retour.routes.from.help": "Verwende <a href='{docs}' target='_blank'>Platzhalter</a> für dynamische Weiterleitungen.",
