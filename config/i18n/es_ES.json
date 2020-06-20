@@ -6,7 +6,6 @@
     "retour.hits": "Golpes",
     "retour.hits.last": "Último",
     "retour.routes": "Rutas",
-    "retour.routes.add": "Agregar ruta",
     "retour.routes.empty": "Aún no hay rutas",
     "retour.routes.from": "Ruta URL",
     "retour.routes.from.help": "Agregue <a href='{docs}' target='_blank'> marcadores de posición </a> para redireccionamientos dinámicos.",
