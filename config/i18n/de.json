@@ -18,7 +18,6 @@
     "retour.routes.priority.help": "Wenn aktiviert, wird die Weiterleitung auch vor tatsächlich bestehenden Seiten angewendet.",
     "retour.routes.comment": "Kommentar",
     "retour.routes.comment.help": "Für sich selbst oder andere…",
-    "retour.tracked": "Nachverfolgt",
     "retour.failures": "Fehler",
     "retour.failures.empty": "Keine Fehler bisher",
     "retour.failures.path": "Pfad",
