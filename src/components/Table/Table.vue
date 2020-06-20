@@ -12,6 +12,7 @@
 
     <!-- table -->
     <k-table
+      v-if="rows.length"
       :columns="columns"
       :index="limit * (page - 1) + 1"
       :options="options"
@@ -23,12 +24,12 @@
     />
 
     <!-- empty -->
-    <div
-      v-if="rows.length === 0"
-      class="bg-white text-gray p-3 text-center rounded-sm shadow text-sm"
+    <k-empty
+      v-else
+      layout="cards"
     >
       {{ empty }}
-    </div>
+    </k-empty>
 
     <!-- footer -->
     <footer class="flex items-center justify-between">
