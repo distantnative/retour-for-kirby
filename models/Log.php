@@ -160,6 +160,27 @@ class Log
     }
 
     /**
+     * Remove an entry from the log database
+     *
+     * @param string $path
+     * @param string $referrer
+     *
+     * @return bool
+     */
+    public function remove(string $path, string $referrer = null)
+    {
+        $where = 'path = "' . $this->db->escape($path) . '" AND referrer ';
+
+        if ($referrer === null) {
+            $where .= 'IS NULL';
+        } else {
+            $where .= '= "' . $this->db->escape($referrer) . '"';
+        }
+
+        return $this->db->records()->delete($where);
+    }
+
+    /**
      * Mark all records for a given path as resolved
      *
      * @param string $path

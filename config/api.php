@@ -36,6 +36,16 @@ return [
             }
         ],
         [
+            'pattern' => 'retour/failures',
+            'method'  => 'DELETE',
+            'action'  => function () {
+                return Retour::instance()->log()->remove(
+                    $this->requestBody('path'),
+                    $this->requestBody('referrer')
+                );
+            }
+        ],
+        [
             'pattern' => 'retour/stats',
             'method'  => 'GET',
             'action'  => function () {

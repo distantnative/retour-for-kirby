@@ -6,7 +6,7 @@
     :options="options"
     :rows="rows"
     type="failures"
-    @option="onResolve"
+    @option="onOption"
   >
     <template v-if="canUpdate" #button>
       <k-button
@@ -75,7 +75,12 @@ export default {
         {
           text: this.$t("retour.failures.resolve"),
           icon: "add",
-          click: "resolve"
+          click: "add"
+        },
+        {
+          text: this.$t("remove"),
+          icon: "trash",
+          click: "remove"
         }
       ];
     },
@@ -84,19 +89,36 @@ export default {
     }
   },
   methods: {
+    async onAdd(row) {
+      await this.$router.push("#routes");
+      this.$events.$emit("retour.resolve", { from: row.path });
+    },
     async onFlush() {
       try {
         await this.$api.post("retour/log/flush");
         this.$refs.flushDialog.close();
-        this.$store.dispatch("retour/load");
+        await this.$store.dispatch("retour/load");
+        this.$store.dispatch("notification/success");
 
       } catch (error) {
         this.$store.dispatch("notification/error", error);
       }
     },
-    async onResolve(option, row) {
-      await this.$router.push("#routes");
-      this.$events.$emit("retour.resolve", { from: row.path });
+    onOption(option, row) {
+      switch (option) {
+        case "add":
+          return this.onAdd(row);
+        case "remove":
+          return this.onRemove(row);
+      }
+    },
+    async onRemove(row) {
+      await this.$api.delete("retour/failures", {
+        path: row.path,
+        referrer: row.referrer
+      });
+      await this.$store.dispatch("retour/load");
+      this.$store.dispatch("notification/success");
     }
   }
 }
