@@ -9,10 +9,8 @@
 package.json export-ignore
 yarn.lock export-ignore
 composer.lock export-ignore
+.yarnclean export-ignore
 
 # Directories
-src/assets/ export-ignore
-src/components/ export-ignore
-src/index.js export-ignore
-src/store.js export-ignore
+src/ export-ignore
 tests/ export-ignore

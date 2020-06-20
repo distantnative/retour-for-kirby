@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'distantnative\\Retour\\' => array($baseDir . '/src/models'),
+    'distantnative\\Retour\\' => array($baseDir . '/models'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
 );

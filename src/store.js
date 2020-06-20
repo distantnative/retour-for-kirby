@@ -1,150 +1,153 @@
-export default {
+export default (Vue) => ({
   namespaced: true,
   state: {
     data: {
-      redirects: [],
-      fails: [],
+      routes: [],
+      failures: [],
       stats: []
     },
-    view: {
-      table: "redirects",
-      from: null,
-      to: null
+    selection: {
+      begin: Vue.$library.dayjs().startOf("month"),
+      end: Vue.$library.dayjs().endOf("month"),
+      all: false
     },
-    options: {
+    system: {
+      deleteAfter: null,
+      hasLog: false,
       headers: [],
-      logs: false,
-      deleteAfter: null
+      release: null,
+      version: null,
+      update: 0
     }
   },
   getters: {
-    dates: state => {
-      return {
-        from: state.view.from.format("YYYY-MM-DD"),
-        to: state.view.to.format("YYYY-MM-DD")
-      };
-    },
     days: state => {
-      return state.view.to.diff(state.view.from, "day");
+      return state.selection.end.diff(state.selection.begin, "day");
     },
-    view: state => {
-      const from = state.view.from;
-      const to = state.view.to;
+    mode: state => {
+      if (state.selection.all === true) {
+        return "all";
+      }
+
+      const begin = state.selection.begin;
+      const end   = state.selection.end;
 
       if (
-        from.isSame(to, "date") &&
-        from.isSame(to, "month") &&
-        from.isSame(to, "year")
+        begin.isSame(end, "date") &&
+        begin.isSame(end, "month") &&
+        begin.isSame(end, "year")
       ) {
         return "day";
       }
 
       if (
-        from.isSame(to, "month") &&
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        to.date() === to.daysInMonth()
+        begin.isSame(end, "month") &&
+        begin.isSame(end, "year") &&
+        begin.date() === 1 &&
+        end.date() === end.daysInMonth()
       ) {
         return "month";
       }
 
       if (
-        to.day() === 0 && from.isSame(to.subtract(6, "day").startOf("day"))
+        end.day() === 0 && begin.isSame(end.subtract(6, "day").startOf("day"))
       ) {
         return "week";
       } else if (
-        from.isSame(to.subtract(to.day() - 1, "day").startOf("day"))
+        begin.isSame(end.subtract(end.day() - 1, "day").startOf("day"))
       ) {
         return "week";
       }
 
-
       if (
-        from.isSame(to, "year") &&
-        from.date() === 1 &&
-        from.month() === 0 &&
-        to.date() === 31 &&
-        to.month() === 11
+        begin.isSame(end, "year") &&
+        begin.date() === 1 &&
+        begin.month() === 0 &&
+        end.date() === 31 &&
+        end.month() === 11
       ) {
         return "year";
       }
 
       return false;
-    }
+    },
+    timeframe: state => ({
+      begin: state.selection.begin.format("YYYY-MM-DD"),
+      end:   state.selection.end.format("YYYY-MM-DD")
+    }),
   },
   mutations: {
-    SET_DATA(state, [type, data]) {
-      this._vm.$set(state.data, type, data);
+    SET_DATA(state, { type, data }) {
+      Vue.$set(state.data, type, data);
     },
-    SET_OPTIONS(state, data) {
-      this._vm.$set(state, "options", data);
+    SET_SELECTION(state, dates) {
+      state.selection.begin = dates.begin;
+      state.selection.end   = dates.end;
+      state.selection.all   = dates.all || false;
     },
-    SET_TABLE(state, table) {
-      state.view.table = table;
-    },
-    SET_TIMEFRAME(state, dates) {
-      state.view.from = dates.from;
-      state.view.to = dates.to;
+    SET_SYSTEM(state, data) {
+      state.system = { ...state.system, ...data };
     }
   },
   actions: {
-    /* Setters */
-    table(context, table) {
-      context.commit("SET_TABLE", table);
-    },
-    timeframe(context, dates) {
-      context.commit("SET_TIMEFRAME", dates);
-      context.dispatch("redirects");
+    async load(context) {
+      // what we need for sure
+      await Promise.all([
+        context.dispatch("system"),
+        context.dispatch("routes")
+      ]);
 
-      if (context.state.options.logs === true) {
-        context.dispatch("fails");
-        context.dispatch("stats");
+      // what we might need as well
+      if (context.state.system.hasLog === true) {
+        await Promise.all([
+          context.dispatch("failures"),
+          context.dispatch("stats")
+        ]);
+
+        await Vue.$api.post("retour/log/purge");
       }
     },
+    async failures(context) {
+      const timeframe = context.getters["timeframe"];
+      const failures  = await Vue.$api.get("retour/failures", timeframe);
+      context.commit("SET_DATA", { type: "failures", data: failures });
+    },
+    async routes(context) {
+      const timeframe = context.getters["timeframe"];
+      const routes    = await Vue.$api.get("retour/routes", timeframe);
+      context.commit("SET_DATA", { type: "routes", data: routes });
+    },
+    async stats(context) {
+      const mode  = context.getters["mode"];
+      const stats = await Vue.$api.get("retour/stats", {
+        mode: mode || "custom",
+        ...context.getters["timeframe"]
+      });
+      context.commit("SET_DATA", { type: "stats", data: stats });
+    },
+    async selection(context, selection) {
+      if (selection === "all") {
+        const all = await Vue.$api.get("retour/log/all");
+        selection = {
+          begin: Vue.$library.dayjs(all.begin.date),
+          end:   Vue.$library.dayjs(all.end.date),
+          all:   true
+        };
+      }
 
-    /* Initializers */
-    init(context) {
-      context.commit("SET_TIMEFRAME", {
-        from: this._vm.$library.dayjs().startOf("month"),
-        to: this._vm.$library.dayjs().endOf("month")
-      });
-    },
-    load(context) {
-      context.dispatch("system").then(() => {
-        context.dispatch("redirects");
+      context.commit("SET_SELECTION", selection);
+      let load = [context.dispatch("redirects")];
 
-        if (context.state.options.logs === true) {
-          context.dispatch("fails");
-          context.dispatch("stats");
-          this._vm.$api.post("retour/limit");
-        }
-      });
-    },
+      if (context.state.system.hasLog) {
+        load.push(context.dispatch("failures"));
+        load.push(context.dispatch("stats"));
+      }
 
-    /* Loaders */
-    fails(context) {
-      return this._vm.$api.get("retour/fails", context.getters["dates"]).then(response => {
-        context.commit("SET_DATA", ["fails", response]);
-      });
+      await Promise.all(load);
     },
-    redirects(context) {
-      return this._vm.$api.get("retour/redirects", context.getters["dates"]).then(response => {
-        context.commit("SET_DATA", ["redirects", response]);
-      });
-    },
-    stats(context) {
-      const view = context.getters["view"];
-      return this._vm.$api.get("retour/stats/", {
-        view: view ? view : "custom",
-        ...context.getters["dates"]
-      }).then(response => {
-        context.commit("SET_DATA", ["stats", response]);
-      });
-    },
-    system(context) {
-      return this._vm.$api.get("retour/system").then(response => {
-        context.commit("SET_OPTIONS", response);
-      });
+    async system(context, reload = false) {
+      const system = await Vue.$api.get("retour/system", { reload: reload });
+      context.commit("SET_SYSTEM", system);
     }
   }
-};
+});

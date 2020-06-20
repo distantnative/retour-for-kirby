@@ -1,31 +1,41 @@
 // Vue components
 import View from "./components/View.vue";
-import RedirectField from "./components/Fields/Redirect.vue";
-import StatusField from "./components/Fields/Status.vue";
+
+import DestinationField from "./components/Fields/DestinationField.vue";
+import StatusField from "./components/Fields/StatusField.vue";
+
+import TableCountCell from "./components/Table/Cells/TableCountCell.vue";
+import TableLinkCell from "./components/Table/Cells/TableLinkCell.vue";
+import TablePriorityCell from "./components/Table/Cells/TablePriorityCell.vue";
+import TableStatusCell from "./components/Table/Cells/TableStatusCell.vue";
 
 // Vuex store
-import store from "./store.js";
+import Store from "./store.js";
 
-// 3rd party assets
-import "tbl-for-kirby/index.css";
-import "./assets/chart.css";
+import { canAccess } from "./mixins/permissions.js";
 
 // Register everything
 panel.plugin("distantnative/retour", {
+  components: {
+    "k-table-count-cell": TableCountCell,
+    "k-table-link-cell": TableLinkCell,
+    "k-table-priority-cell": TablePriorityCell,
+    "k-table-status-cell": TableStatusCell
+  },
+  fields: {
+    "retour-status": StatusField,
+    "retour-destination": DestinationField
+  },
   views: {
     retour: {
       component: View,
-      icon: "retour"
+      icon: "road-sign",
+      menu(app) {
+        return canAccess(app);
+      }
     }
   },
-  icons: {
-    retour: '<use xlink:href="#icon-undo" transform="translate(7.5,7.5) rotate(170) translate(-7.5,-7.5)"></use>'
-  },
-  fields: {
-    "rt-redirect": RedirectField,
-    "rt-status": StatusField
-  },
   created(app) {
-    app.$store.registerModule("retour", store);
+    app.$store.registerModule("retour", Store(app));
   }
 });
