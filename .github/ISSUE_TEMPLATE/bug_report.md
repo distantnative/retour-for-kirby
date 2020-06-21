@@ -1,6 +1,6 @@
 ---
 name: "🐛 Bug report"
-about: "If something isn't working as expected 🤔"
+about: "If something isn't working as expected 🤬"
 ---
 
 ## Describe the bug
