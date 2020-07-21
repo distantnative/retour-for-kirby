@@ -5,8 +5,8 @@ namespace distantnative\Retour;
 use Kirby\Http\Router;
 
 return [
-    'route:after' => function ($route, $path, $method, $result) {
-        if (empty($result) === true) {
+    'route:after' => function ($route, $path, $method, $result, $final) {
+        if ($final === true && empty($result) === true) {
 
             // skip ignored paths
             if (in_array($path, option('distantnative.retour.ignore')) === true) {
