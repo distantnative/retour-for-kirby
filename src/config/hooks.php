@@ -24,8 +24,5 @@ return [
                 }
             }
         }
-    },
-    'system.loadPlugins:after' => function () {
-        Version::update();
     }
 ];
