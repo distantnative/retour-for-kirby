@@ -14,5 +14,4 @@ return array(
     'distantnative\\Retour\\Redirects' => $baseDir . '/src/models/Redirects.php',
     'distantnative\\Retour\\Retour' => $baseDir . '/src/models/Retour.php',
     'distantnative\\Retour\\Stats' => $baseDir . '/src/models/Stats.php',
-    'distantnative\\Retour\\Version' => $baseDir . '/src/models/Version.php',
 );
