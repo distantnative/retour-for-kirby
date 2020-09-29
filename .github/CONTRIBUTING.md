@@ -14,4 +14,4 @@ If you would like to contribute, please head over to [Transifex](http://transife
 
 ### Donate
 
-Retour is offered for free under the MIT license. If you still would like to support the development, I appreciate [any contribution](https://paypal.me/distantnative).
+Retour is offered for free under the MIT license. If you still would like to support the development, I would be grateful for [any contribution](https://paypal.me/distantnative).
