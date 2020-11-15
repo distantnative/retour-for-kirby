@@ -1,5 +1,5 @@
 <template>
-  <figure class="retour-timeline p-3">
+  <figure class="rt-timeline">
     <div class="chart" />
   </figure>
 </template>
@@ -104,7 +104,7 @@ export default {
   methods: {
     createChart() {
       let chart = new Chartist.Line(
-        ".retour-timeline .chart",
+        ".rt-timeline .chart",
         {
           labels: this.labels,
           series: [
@@ -116,7 +116,7 @@ export default {
           ]
         },
         {
-          height: 240,
+          height: 275,
           showLabel: false,
           low: 0,
           showArea: true,
@@ -200,22 +200,23 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-timeline .chart > svg {
-  margin-top: .5rem;
-  margin-left: -.75rem;
+.rt-timeline {
+  padding: .75rem 0;
 }
-
-.retour-timeline .ct-grid,
-.retour-timeline .ct-label {
+.rt-timeline .chart > svg {
+  margin-left: -1rem;
+}
+.rt-timeline .ct-grid,
+.rt-timeline .ct-label {
   color: #777;
   stroke: #777;
   stroke-dasharray: 2px;
 }
-.retour-timeline .ct-label.ct-vertical.ct-start {
+.rt-timeline .ct-label.ct-vertical.ct-start {
   font-size: .8rem;
   padding-left: 1rem;
 }
-.retour-timeline .ct-label.ct-horizontal.ct-end {
+.rt-timeline .ct-label.ct-horizontal.ct-end {
   display: block;
   transform: translateX(-50%);
   text-align: center !important;
@@ -223,15 +224,15 @@ export default {
   font-size: .8rem;
 }
 
-.retour-timeline .ct-series-a .ct-area {
+.rt-timeline .ct-series-a .ct-area {
   fill: var(--color-negative);
   fill-opacity: .85;
 }
-.retour-timeline .ct-series-e .ct-area {
+.rt-timeline .ct-series-e .ct-area {
   fill: var(--color-focus);
   fill-opacity: .85;
 }
-.retour-timeline .ct-series-c .ct-area {
+.rt-timeline .ct-series-c .ct-area {
   fill: var(--color-border);
   fill-opacity: .85;
 }

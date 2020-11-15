@@ -1,18 +1,18 @@
 <template>
-  <figure class="retour-chart pt-4 pb-6 px-4">
+  <figure class="rt-chart">
     <div class="chart" />
 
-    <figcaption class="px-3">
+    <figcaption>
       <div>
-        <k-icon type="circle" color="focus" />
+        <k-icon type="circle" data-type="redirected" />
         {{ redirected }} {{ $t('retour.stats.redirected') }}
       </div>
       <div>
-        <k-icon type="circle" color="gray-light" />
+        <k-icon type="circle" data-type="resolved" />
         {{ resolved }} {{ $t('retour.stats.resolved') }}
       </div>
       <div>
-        <k-icon type="circle" color="negative" />
+        <k-icon type="circle" data-type="failed" />
         {{ failed }} {{ $t('retour.stats.failed') }}
       </div>
     </figcaption>
@@ -54,7 +54,7 @@ export default {
     }
   },
   mounted() {
-    this.chart = new Chartist.Pie(".retour-chart .chart", {}, {
+    this.chart = new Chartist.Pie(".rt-chart .chart", {}, {
       height: 300,
       startAngle: 270,
       showLabel: false
@@ -80,39 +80,51 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-chart figcaption {
+.rt-chart {
+  margin-top: -.5rem;
+  padding: 1rem 1rem 1.5rem;
+}
+.rt-chart figcaption {
+  padding-left: .75rem;
+  padding-right: .75rem;
   margin-top: -124px;
 }
-.retour-chart figcaption > div {
+.rt-chart figcaption > div {
   display: flex;
 
   + div {
     margin-top: .25rem;
   }
 }
-.retour-chart figcaption .k-icon {
+.rt-chart figcaption .k-icon {
   padding-right: .75rem;
 }
 
-.retour-chart .ct-series-c .ct-slice-pie {
+.rt-chart .ct-series-c .ct-slice-pie,
+.rt-chart .k-icon[data-type="failed"] {
+  color: var(--color-negative);
   fill: var(--color-negative);
   fill-opacity: .85;
 }
-.retour-chart .ct-series-a .ct-slice-pie {
+.rt-chart .ct-series-a .ct-slice-pie,
+.rt-chart .k-icon[data-type="redirected"] {
+  color: var(--color-focus);
   fill: var(--color-focus);
   fill-opacity: .85;
 }
-.retour-chart .ct-series-b .ct-slice-pie {
+.rt-chart .ct-series-b .ct-slice-pie,
+.rt-chart .k-icon[data-type="resolved"] {
+  color: var(--color-border);
   fill: var(--color-border);
   fill-opacity: .85;
 }
 
-.retour-chart .ct-series {
-  stroke: #3d3d3d;
+.rt-chart .ct-series {
+  stroke: #2b2b2b;
   stroke-width: .2rem;
 }
 
-.retour-chart .ct-series-d .ct-slice-pie {
-  fill: #333;
+.rt-chart .ct-series-d .ct-slice-pie {
+  fill: #3d3d3d;
 }
 </style>

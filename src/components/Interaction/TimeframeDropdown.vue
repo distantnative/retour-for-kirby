@@ -1,18 +1,20 @@
 <template>
   <k-dropdown class="retour-timeframe">
-    <k-button
-      icon="calendar"
-      @click="$refs.calendar.open()"
-    >
-      {{ label }}
-    </k-button>
-    <k-dropdown-content ref="calendar">
-      <k-calendar
-        :multiple="true"
-        :value="value"
-        @input="onInput"
-      />
-    </k-dropdown-content>
+    <k-button-group>
+      <k-button
+        icon="calendar"
+        @click="$refs.calendar.open()"
+      >
+        {{ label }}
+      </k-button>
+      <k-dropdown-content ref="calendar">
+        <k-calendar
+          :multiple="true"
+          :value="value"
+          @input="onInput"
+        />
+      </k-dropdown-content>
+    </k-button-group>
   </k-dropdown>
 </template>
 

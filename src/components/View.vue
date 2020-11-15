@@ -1,20 +1,18 @@
 <template>
-  <div class="retour-view pb-24">
+  <div class="rt-view">
 
     <!-- loader -->
     <k-loader v-if="isLoading" />
 
     <template v-else>
-
       <!-- stats -->
       <retour-stats v-if="hasLog" />
 
       <!-- tabs -->
-      <k-tabs :tabs="tabs" :tab="tab" class="mt-6" />
-      <component
-        :is="'retour-' + this.tab + '-tab'"
-        class="px-6 pt-6 pb-12"
-      />
+      <k-view class="rt-tabs">
+        <k-tabs :tabs="tabs" :tab="tab" />
+        <component :is="'retour-' + this.tab + '-tab'" />
+      </k-view>
     </template>
   </div>
 </template>
@@ -75,10 +73,16 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-view .k-loader {
+.rt-view {
+  padding-bottom: 6rem;
+}
+.rt-view > .k-loader {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.rt-tabs {
+  margin-top: 1.5rem;
 }
 </style>

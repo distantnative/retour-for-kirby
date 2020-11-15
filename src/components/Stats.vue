@@ -1,21 +1,21 @@
 <template>
-  <div class=" bg-black-light text-white">
-    <k-view class="pt-6 pb-8">
+  <div class="rt-stats">
+    <k-view>
       <k-grid gutter="small">
         <k-column width="1/4">
-          <header class="k-header-bar flex items-center justify-between">
+          <header class="k-header-bar">
             <retour-timeframe-dropdown />
           </header>
-          <retour-chart class="retour-stats-box rounded-sm" />
+          <retour-chart />
         </k-column>
 
         <k-column width="3/4">
-          <header class="k-header-bar flex items-center justify-between">
-            <k-button v-if="$config.debug" icon="refresh" @click="onRefresh" />
+          <header class="k-header-bar">
+            <k-button v-if="false" icon="refresh" @click="onRefresh" />
             <div v-else />
             <retour-prevnext />
           </header>
-          <retour-timeline class="retour-stats-box rounded-sm" />
+          <retour-timeline />
         </k-column>
       </k-grid>
     </k-view>
@@ -45,7 +45,20 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-stats-box {
-  background: #3d3d3d;
+.rt-stats {
+  background: #2b2b2b;
+  color: #fff;
+}
+.rt-stats > .k-view {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+.rt-stats .k-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rt-stats .k-header-bar .k-button-group {
+  margin: 0;
 }
 </style>

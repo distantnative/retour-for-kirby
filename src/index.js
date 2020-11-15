@@ -23,8 +23,8 @@ panel.plugin("distantnative/retour", {
     "k-table-status-cell": TableStatusCell
   },
   fields: {
-    "retour-status": StatusField,
-    "retour-destination": DestinationField
+    "rt-status": StatusField,
+    "rt-destination": DestinationField
   },
   views: {
     retour: {
