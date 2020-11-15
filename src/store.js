@@ -7,8 +7,10 @@ export default (Vue) => ({
       stats: []
     },
     selection: {
-      begin: Vue.$library.dayjs().startOf("month"),
-      end: Vue.$library.dayjs().endOf("month"),
+      view: [
+        Vue.$library.dayjs.utc().startOf("month").format('YYYY-MM-DD HH:mm:ss'),
+        Vue.$library.dayjs.utc().endOf("month").format('YYYY-MM-DD HH:mm:ss')
+      ],
       all: false
     },
     system: {
@@ -22,68 +24,48 @@ export default (Vue) => ({
   },
   getters: {
     days: state => {
-      return state.selection.end.diff(state.selection.begin, "day");
+      const from = Vue.$library.dayjs.utc(state.selection.view[0]);
+      const to   = Vue.$library.dayjs.utc(state.selection.view[1]);
+      return from.diff(to, "day");
     },
     mode: state => {
       if (state.selection.all === true) {
         return "all";
       }
 
-      const begin = state.selection.begin;
-      const end   = state.selection.end;
+      const from = Vue.$library.dayjs.utc(state.selection.view[0]);
+      const to   = Vue.$library.dayjs.utc(state.selection.view[1]);
 
-      if (
-        begin.isSame(end, "date") &&
-        begin.isSame(end, "month") &&
-        begin.isSame(end, "year")
-      ) {
+      if (from.isSame(to, "day")) {
         return "day";
       }
 
-      if (
-        begin.isSame(end, "month") &&
-        begin.isSame(end, "year") &&
-        begin.date() === 1 &&
-        end.date() === end.daysInMonth()
-      ) {
+      if (to.day(0) && from.isSame(to.subtract(6, 'day'), "day")) {
+        return "week";
+      }
+
+      if (from.isSame(to, "month")) {
         return "month";
       }
 
-      if (
-        end.day() === 0 && begin.isSame(end.subtract(6, "day").startOf("day"))
-      ) {
-        return "week";
-      } else if (
-        begin.isSame(end.subtract(end.day() - 1, "day").startOf("day"))
-      ) {
-        return "week";
-      }
-
-      if (
-        begin.isSame(end, "year") &&
-        begin.date() === 1 &&
-        begin.month() === 0 &&
-        end.date() === 31 &&
-        end.month() === 11
-      ) {
+      if (from.isSame(to, "year")) {
         return "year";
       }
 
       return false;
     },
     timeframe: state => ({
-      begin: state.selection.begin.format("YYYY-MM-DD"),
-      end:   state.selection.end.format("YYYY-MM-DD")
+      begin: Vue.$library.dayjs.utc(state.selection.view[0]).format("YYYY-MM-DD"),
+      end:   Vue.$library.dayjs.utc(state.selection.view[1]).format("YYYY-MM-DD")
     }),
   },
   mutations: {
     SET_DATA(state, { type, data }) {
       Vue.$set(state.data, type, data);
     },
-    SET_SELECTION(state, dates) {
-      state.selection.begin = dates.begin;
-      state.selection.end   = dates.end;
-      state.selection.all   = dates.all || false;
+    SET_SELECTION(state, selection) {
+      state.selection.view = selection.view;
+      state.selection.all = selection.all || false;
     },
     SET_SYSTEM(state, data) {
       state.system = { ...state.system, ...data };
@@ -127,15 +109,14 @@ export default (Vue) => ({
     },
     async selection(context, selection) {
       if (selection === "all") {
-        const all = await Vue.$api.get("retour/log/all");
+        const response = await Vue.$api.get("retour/log/all");
         selection = {
-          begin: Vue.$library.dayjs(all.begin.date),
-          end:   Vue.$library.dayjs(all.end.date),
-          all:   true
+          view: [response.begin.date, response.end.date],
+          all: true
         };
       }
 
-      context.commit("SET_SELECTION", selection);
+      context.commit("SET_SELECTION", { view: selection });
       let load = [context.dispatch("redirects")];
 
       if (context.state.system.hasLog) {

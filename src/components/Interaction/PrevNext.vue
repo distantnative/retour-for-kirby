@@ -81,14 +81,12 @@ export default {
 </script>
 
 <style lang="scss">
-.rt-stats {
-  [aria-current] {
-    color: #fff;
-    font-weight: 600;
+.rt-stats [aria-current] {
+  color: #fff;
+  font-weight: 600;
 
-    .k-button-text {
-      opacity: 1;
-    }
+  .k-button-text {
+    opacity: 1;
   }
 }
 </style>
