@@ -6,6 +6,9 @@ namespace distantnative\Retour;
 class Routes
 {
 
+    /**
+     * @var \distantnative\Retour\Retour
+     */
     protected $retour;
 
     /**
@@ -16,7 +19,7 @@ class Routes
         $this->retour = $retour;
     }
 
-    protected function config()
+    protected function config(): array
     {
         $config = $this->retour->config['routes'];
         return array_map(function ($config) {
@@ -42,7 +45,7 @@ class Routes
         }, $routes);
 
         // if logging is disabled, return without data
-        if (option('distantnative.retour.logs') !== true) {
+        if (option('distantnative.retour.logs', true) !== true) {
             return $data;
         }
 

@@ -64,7 +64,7 @@ class Route
         return (int)$this->options['status'];
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'from'     => $this->from(),
@@ -129,5 +129,4 @@ class Route
             }
         ];
     }
-
 }

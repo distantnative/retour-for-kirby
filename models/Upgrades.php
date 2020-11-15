@@ -7,7 +7,14 @@ use Kirby\Http\Remote;
 class Upgrades
 {
 
+    /**
+     * @param \distantnative\Retour\Retour $retour
+     */
     protected $retour;
+
+    /**
+     * @var string
+     */
     protected $version;
 
     /**
@@ -66,7 +73,7 @@ class Upgrades
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         if ($this->hasUpgrades() === true) {
             $migrations = require dirname(__DIR__) . '/config/migrations.php';

@@ -2,6 +2,7 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Cms\Plugin;
 use Kirby\Data\Data;
 use Kirby\Database\Database;
 use Kirby\Http\Header;
@@ -10,22 +11,53 @@ use Kirby\Toolkit\F;
 
 class Retour
 {
+    /**
+     * @var \distantnative\Retour\Retour
+     */
     protected static $instance;
 
-    protected $file;
+    /**
+     * @var array
+     */
     public $config;
+
+    /**
+     * @var \Kirby\Database\Database
+     */
     public $database;
 
+    /**
+     * @var string
+     */
+    protected $file;
+
+    /**
+     * @var \distantnative\Retour\Log
+     */
     protected $log;
+
+    /**
+     * @var \distantnative\Retour\Routes
+     */
     protected $routes;
+
+    /**
+     * @var \distantnative\Retour\Upgrades
+     */
     protected $upgrades;
 
+    /**
+     * @var \Kirby\Cms\Plugin
+     */
     public static $plugin;
 
     public function __construct()
     {
         // set config file location
-        $this->file = option('distantnative.retour.config');
+        $this->file = option(
+            'distantnative.retour.config',
+            kirby()->root('logs') . '/config/redirects.yml'
+        );
 
         if (is_callable($this->file) === true) {
             $this->file = call_user_func($this->file);
@@ -42,7 +74,7 @@ class Retour
         $this->upgrades()->run();
 
         // connect to database
-        if (option('distantnative.retour.logs') === true) {
+        if (option('distantnative.retour.logs', true) === true) {
             $this->database = $this->connect();
         }
     }
@@ -50,12 +82,15 @@ class Retour
     /**
      * Connects to database (and creates it if missing)
      *
-     * @return void
+     * @return \Kirby\Database\Database
      */
-    protected function connect()
+    protected function connect(): Database
     {
         // Get path to database file
-        $file = option('distantnative.retour.database');
+        $file = option(
+            'distantnative.retour.database',
+            kirby()->root('config') . '/retour/log.sqlite'
+        );
 
         // Support callbacks for database file option
         if (is_callable($file) === true) {
@@ -95,17 +130,32 @@ class Retour
     }
 
 
-    public function log()
+    /**
+     * Gets or creates the Log instance
+     *
+     * @return \distantnative\Retour\Log
+     */
+    public function log(): Log
     {
         return $this->log ?? $this->log = new Log($this);
     }
 
-    public function routes()
+    /**
+     * Gets or creates the Routes instance
+     *
+     * @return \distantnative\Retour\Routes
+     */
+    public function routes(): Routes
     {
         return $this->routes ?? $this->routes = new Routes($this);
     }
 
-    public function upgrades()
+    /**
+     * Gets or creates the Upgrades instance
+     *
+     * @return \distantnative\Retour\Upgrades
+     */
+    public function upgrades(): Upgrades
     {
         return $this->upgrades ?? $this->upgrades = new Upgrades($this);
     }
@@ -119,16 +169,16 @@ class Retour
     public static function info(bool $reload = false): array
     {
         return [
-            'deleteAfter' => option('distantnative.retour.deleteAfter'),
+            'deleteAfter' => option('distantnative.retour.deleteAfter', false),
             'headers'     => Header::$codes,
-            'hasLog'      => option('distantnative.retour.logs'),
+            'hasLog'      => option('distantnative.retour.logs', true),
             'release'     => $release = Upgrades::latest($reload),
             'version'     => $version = static::plugin()->version(),
             'update'      => $release ? version_compare($version, $release) : null
         ];
     }
 
-    public static function plugin()
+    public static function plugin(): Plugin
     {
         return static::$plugin = static::$plugin ?? kirby()->plugin('distantnative/retour');
     }
@@ -140,9 +190,9 @@ class Retour
      * @param array $data
      * @param string $key
      *
-     * @return void
+     * @return bool
      */
-    public function update($data, string $key = null)
+    public function update($data, string $key = null): bool
     {
         if ($key !== null) {
             $data = array_merge($this->config, [$key => $data]);

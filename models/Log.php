@@ -6,8 +6,15 @@ namespace distantnative\Retour;
 class Log
 {
 
-    protected $db;
+    /**
+     * @var \distantnative\Retour\Retour
+     */
     protected $retour;
+
+    /**
+     * @var \Kirby\Database\Database
+     */
+    protected $db;
 
     /**
      * @param \distantnative\Retour\Retour $retour
@@ -37,20 +44,32 @@ class Log
 
     public function first(): array
     {
-        return $this->db->records()
+        $result = $this->db->records()
             ->select('date')
             ->order('date ASC')
             ->fetch('array')
             ->first();
+
+        if ($result) {
+            return $result;
+        }
+
+        return [];
     }
 
     public function last(): array
     {
-        return $this->db->records()
+        $result = $this->db->records()
             ->select('date')
             ->order('date DESC')
             ->fetch('array')
             ->first();
+
+        if ($result) {
+            return $result;
+        }
+
+        return [];
     }
 
     /**
@@ -207,11 +226,11 @@ class Log
     public function stats(string $unit, string $begin, string $end): array
     {
         // Define parts depending on uni
-         $use = [
+        $use = [
             'func'  => 'date',
             'group' => '%Y-%m-%d',
             'step'  => 'day'
-         ];
+        ];
 
         switch ($unit) {
             case 'day':
@@ -265,7 +284,6 @@ class Log
 
         if ($data === false) {
             return [];
-
         }
 
         return $data->toArray(function ($entry) {

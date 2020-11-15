@@ -9,7 +9,7 @@ return [
         if ($final === true && empty($result) === true) {
 
             // skip ignored paths
-            $ignore = option('distantnative.retour.ignore');
+            $ignore = option('distantnative.retour.ignore', []);
             if (in_array($path, $ignore) === true) {
                 return $result;
             }
@@ -18,9 +18,8 @@ return [
                 $routes  = Retour::instance()->routes()->toRules(false);
                 $router  = new Router($routes);
                 return $router->call($path, $method);
-
             } catch (\Throwable $e) {
-                if (option('distantnative.retour.logs') === true) {
+                if (option('distantnative.retour.logs', true) === true) {
                     Retour::instance()->log()->create(['path' => $path]);
                 }
             }
