@@ -56,7 +56,7 @@ class Retour
         // set config file location
         $this->file = option(
             'distantnative.retour.config',
-            kirby()->root('logs') . '/config/redirects.yml'
+            kirby()->root('config') . '/redirects.yml'
         );
 
         if (is_callable($this->file) === true) {
@@ -89,7 +89,7 @@ class Retour
         // Get path to database file
         $file = option(
             'distantnative.retour.database',
-            kirby()->root('config') . '/retour/log.sqlite'
+            kirby()->root('logs') . '/retour/log.sqlite'
         );
 
         // Support callbacks for database file option
