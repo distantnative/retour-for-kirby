@@ -1,18 +1,13 @@
 <template>
   <div
     :title="`${column.label}: ${value}`"
-    class="px-2"
+    class="k-table-link-cell"
   >
     <k-button
       v-if="value && value != '-'"
-      :icon="{
-        type: 'url',
-        color: 'gray-light',
-        size: 'small'
-      }"
       :link="link"
+      icon="url"
       target="_blank"
-      class="mr-1"
       @click.native.stop
     />
     {{ value }}
@@ -35,3 +30,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.k-table-link-cell {
+  padding-left: .5rem;
+  padding-right: .5rem;
+
+  .k-button {
+    margin-right: .5rem;
+  }
+
+  .k-icon {
+    color: var(--color-border);
+    transform: scale(.8);
+  }
+}
+</style>

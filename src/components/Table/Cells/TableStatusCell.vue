@@ -1,12 +1,11 @@
 <template>
   <div
     :title="`${column.label}: ${value || '-'}`"
-    class="retour-table-status-preview px-2"
+    class="k-table-status-cell"
   >
     <k-icon
       type="circle"
-      :color="color"
-      class="mr-2"
+      :style="'color: ' + color"
     />
     <code v-if="value">{{ value }}</code>
     <span v-else>&nbsp;–</span>
@@ -27,8 +26,14 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-table-status-preview {
+.k-table-status-cell {
   display: flex;
+  padding-left: .5rem;
+  padding-right: .5rem;
+
+  .k-icon {
+    margin-right: .5rem;
+  }
 
   code {
     background: rgba(0, 0, 0, 0.1);

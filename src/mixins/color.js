@@ -3,18 +3,18 @@ export default {
   computed: {
     color() {
       if (!this.value) {
-        return "gray-light";
+        return "var(--color-border)";
       }
 
       if (parseInt(this.value) >= 400) {
-        return "red-light";
+        return "var(--color-negative-light)";
       }
 
       if (parseInt(this.value) >= 300) {
-        return "green-light";
+        return "var(--color-positive-light)";
       }
 
-      return "blue-light";
+        return "var(--color-focus-light)";
     }
   }
 }

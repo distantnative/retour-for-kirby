@@ -1,8 +1,7 @@
 <template>
-  <div v-if="value" class="flex justify-center">
+  <div v-if="value" class="k-table-priority-cell">
     <k-icon
       type="bolt"
-      size="small"
       :title="column.label"
     />
   </div>
@@ -16,3 +15,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.k-table-priority-cell {
+  display: flex;
+  justify-content: center;
+
+  .k-icon {
+    transform: scale(.8);
+  }
+}
+</style>
