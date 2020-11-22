@@ -67,7 +67,7 @@ export default {
         const tab = this.tabs.filter(tab => tab.name === this.tab)[0];
         this.$store.dispatch("breadcrumb", [{
           label: tab.label,
-          link: "plugins/retour#" + tab.name
+          link: "/plugins/retour#" + tab.name
         }]);
       },
       immediate: true

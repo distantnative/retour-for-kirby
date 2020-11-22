@@ -87,7 +87,7 @@ export default (Vue) => ({
     async load(context, reload = false) {
       let payload = [];
 
-      if (reload !== false) {
+      if (reload === false) {
         await Vue.$api.post("retour/log/purge");
         payload.push("system");
       }
@@ -128,18 +128,18 @@ export default (Vue) => ({
         const response = await Vue.$api.get("retour/log/all");
         context.commit("SET_VIEW", {
           dates: [
-            Vue.$library.dayjs.utc(response.from.date),
-            Vue.$library.dayjs.utc(response.to.date)
+            Vue.$library.dayjs(response.from.date),
+            Vue.$library.dayjs(response.to.date)
           ],
           all: true
         });
       } else {
         context.commit("SET_VIEW", {
-          dates: view.map(date => Vue.$library.dayjs.utc(date))
+          dates: view.map(date => Vue.$library.dayjs(date))
         });
       }
 
-      this.dispatch("load", true);
+      context.dispatch("load", true);
     }
   }
 });
