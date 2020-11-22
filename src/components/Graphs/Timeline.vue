@@ -87,6 +87,10 @@ export default {
         return "MMM YYYY";
       }
 
+      if (this.diff === 0) {
+        return "HH"
+      }
+
       return "D MMM";
     }
   },
@@ -152,7 +156,7 @@ export default {
       );
 
       chart.on("created", function(ctx) {
-        var mask1 = ctx.svg.elem("defs").elem("mask", {
+        const mask1 = ctx.svg.elem("defs").elem("mask", {
           id: "mask1"
         });
 
@@ -162,14 +166,17 @@ export default {
           fill: "white"
         });
 
-        mask1
+        const area1 = mask1
           .append(ctx.svg.querySelector(".ct-series.ct-series-b"))
           .querySelector(".ct-area")
-          .attr({
+
+        if (area1) {
+          area1.attr({
             style: "fill: black; fill-opacity: 1"
           });
+        }
 
-        var mask2 = ctx.svg.elem("defs").elem("mask", {
+        const mask2 = ctx.svg.elem("defs").elem("mask", {
           id: "mask2"
         });
 
@@ -179,12 +186,15 @@ export default {
           fill: "white"
         });
 
-        mask2
+        const area2 = mask2
           .append(ctx.svg.querySelector(".ct-series.ct-series-d"))
-          .querySelector(".ct-area")
-          .attr({
+          .querySelector(".ct-area");
+
+        if (area2) {
+          area2.attr({
             style: "fill: black; fill-opacity: 1"
           });
+        }
 
         ctx.svg.querySelector(".ct-series.ct-series-a").attr({
           mask: "url(#mask1)"

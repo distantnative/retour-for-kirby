@@ -225,7 +225,7 @@ class Log
      */
     public function stats(string $unit, string $from, string $to): array
     {
-        // Define parts depending on uni
+        // Define parts depending on unit
         $use = [
             'func'  => 'date',
             'group' => '%Y-%m-%d',

@@ -70,6 +70,15 @@ export default (Vue) => ({
       from: getters.dates[0].format("YYYY-MM-DD"),
       to:   getters.dates[1].format("YYYY-MM-DD")
     }),
+    unit: (state, getters) => {
+      const mode = getters.mode;
+
+      if (mode === "all" && getters.days === 0) {
+        return "day";
+      }
+
+      return mode;
+    }
   },
   mutations: {
     SET_DATA(state, { type, data }) {
@@ -112,9 +121,9 @@ export default (Vue) => ({
       context.commit("SET_DATA", { type: "routes", data: routes });
     },
     async stats(context) {
-      const mode  = context.getters["mode"];
+      const unit  = context.getters["unit"];
       const stats = await Vue.$api.get("retour/stats", {
-        mode: mode || "custom",
+        unit: unit || "custom",
         ...context.getters["timeframe"]
       });
       context.commit("SET_DATA", { type: "stats", data: stats });

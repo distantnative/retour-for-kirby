@@ -50,7 +50,7 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->log()->stats(
-                    $this->requestQuery('mode'),
+                    $this->requestQuery('unit'),
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
