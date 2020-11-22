@@ -89,7 +89,7 @@ class Route
             'action'  => function (...$parameters) use ($route) {
 
                 // Create log record
-                if (option('distantnative.retour.logs') === true) {
+                if (option('distantnative.retour.logs', true) === true) {
                     Retour::instance()->log()->create([
                         'path'     => Url::path(),
                         'redirect' => $route->from()

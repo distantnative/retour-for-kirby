@@ -131,7 +131,7 @@ class Log
     public function purge(): bool
     {
         // Get limit (in months) from option
-        $limit = option('distantnative.retour.deleteAfter');
+        $limit = option('distantnative.retour.deleteAfter', false);
 
         if ($limit !== false) {
             // Get cutoff date by subtracting limit from today
