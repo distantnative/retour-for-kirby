@@ -24,7 +24,7 @@
       <!-- add/edit -->
       <k-form-drawer
         ref="drawer"
-        :title="$t('retour.routes') + ' / ' + $t('add')"
+        :title="title"
         :tabs="tabs"
         :value="row"
         icon="undo"
@@ -163,13 +163,16 @@ export default {
           }
         }
       ]
+    },
+    title() {
+      return this.$t("retour.routes") + " / " + this.$t(this.rowIndex === null ? "add" : "edit");
     }
   },
   created() {
-    this.$events.$on("retour.resolve", this.resolve);
+    this.$events.$on("retour.resolve", this.onResolve);
   },
   destroyed() {
-    this.$events.$off("retour.resolve", this.resolve);
+    this.$events.$off("retour.resolve", this.onResolve);
   },
   methods: {
     onCell({ row, rowIndex, columnIndex }) {
@@ -190,13 +193,14 @@ export default {
     onInput(input) {
       this.row = input;
     },
-    onOption(option, row = {}, rowIndex) {
+    onOption(option, row = {}, rowIndex = null) {
       switch (option) {
         case "add":
         case "edit":
           this.row = this.$helper.clone(row);
           this.rowIndex = rowIndex;
           this.$refs.drawer.open();
+          break;
       }
     },
     onResolve(row) {
