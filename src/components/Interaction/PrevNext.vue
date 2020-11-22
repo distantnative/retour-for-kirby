@@ -28,33 +28,33 @@ export default {
   },
   methods: {
     onMode(by) {
-      const selection = {
-        begin: this.$library.dayjs().startOf("day"),
-        end:   this.$library.dayjs().endOf("day")
-      };
+      const view = [
+        this.$library.dayjs().startOf("day"),
+        this.$library.dayjs().endOf("day")
+      ];
 
       switch (by) {
         case "all":
-          return this.$store.dispatch("retour/selection", "all");
+          return this.$store.dispatch("retour/view", "all");
         case "year":
-          selection.begin = selection.begin.startOf("year");
-          selection.end   = selection.end.endOf("year");
+          view[0] = view[0].startOf("year");
+          view[1] = view[1].endOf("year");
           break;
         case "month":
-          selection.begin = selection.begin.startOf("month");
-          selection.end   = selection.end.endOf("month");
+          view[0] = view[1].startOf("month");
+          view[1] = view[1].endOf("month");
           break;
         case "week":
-          if (selection.begin.day() === 0) {
-            selection.begin = selection.begin.subtract(6, "day");
+          if (view[0].day() === 0) {
+            view[0] = view[0].subtract(6, "day");
           } else {
-            selection.begin = selection.begin.subtract(selection.begin.day() - 1, "day");
-            selection.end   = selection.end.add(7 - selection.end.day(), "day");
+            view[0] = view[0].subtract(view[0].day() - 1, "day");
+            view[1] = view[1].add(7 - view[1].day(), "day");
           }
           break;
       }
 
-      return this.$store.dispatch("retour/selection", selection);
+      return this.$store.dispatch("retour/view", view);
     },
     onNavigate(method) {
       let factor = 1;
@@ -65,10 +65,13 @@ export default {
         unit   = "day";
       }
 
-      this.$store.dispatch("retour/selection", {
-        begin: this.$store.state.retour.selection.begin[method](factor, unit).startOf(unit),
-        end:   this.$store.state.retour.selection.end[method](factor, unit).endOf(unit)
-      });
+      let dates = this.$store.getters["retour/dates"];
+      dates = dates.map(date => date[method](factor, unit));
+
+      this.$store.dispatch("retour/view", [
+        dates[0].startOf(unit),
+        dates[1].endOf(unit)
+      ]);
     },
     onNext() {
       return this.onNavigate("add");

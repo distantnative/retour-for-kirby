@@ -6,13 +6,6 @@ export default (Vue) => ({
       failures: [],
       stats: []
     },
-    selection: {
-      view: [
-        Vue.$library.dayjs.utc().startOf("month").format('YYYY-MM-DD HH:mm:ss'),
-        Vue.$library.dayjs.utc().endOf("month").format('YYYY-MM-DD HH:mm:ss')
-      ],
-      all: false
-    },
     system: {
       deleteAfter: null,
       hasLog: true,
@@ -20,21 +13,30 @@ export default (Vue) => ({
       release: null,
       version: null,
       update: 0
+    },
+    view: {
+      dates: [
+        Vue.$library.dayjs().startOf("month"),
+        Vue.$library.dayjs().endOf("month")
+      ],
+      all: false
     }
   },
   getters: {
-    days: state => {
-      const from = Vue.$library.dayjs.utc(state.selection.view[0]);
-      const to   = Vue.$library.dayjs.utc(state.selection.view[1]);
-      return from.diff(to, "day");
+    dates: state => {
+      return state.view.dates;
     },
-    mode: state => {
-      if (state.selection.all === true) {
+    days: (state, getters) => {
+      const dates = getters.dates;
+      return dates[0].diff(dates[1], "day");
+    },
+    mode: (state, getters) => {
+      if (state.view.all === true) {
         return "all";
       }
 
-      const from = Vue.$library.dayjs.utc(state.selection.view[0]);
-      const to   = Vue.$library.dayjs.utc(state.selection.view[1]);
+      const from = getters.dates[0];
+      const to   = getters.dates[1];
 
       if (from.isSame(to, "day")) {
         return "day";
@@ -44,50 +46,60 @@ export default (Vue) => ({
         return "week";
       }
 
-      if (from.isSame(to, "month")) {
+      if (
+        from.isSame(to, "month") &&
+        from.date() === 1 &&
+        to.date() === to.daysInMonth()
+      ) {
         return "month";
       }
 
-      if (from.isSame(to, "year")) {
+      if (
+        from.isSame(to, "year") &&
+        from.date() === 1 &&
+        from.month() === 0 &&
+        to.date() === 31 &&
+        to.month() === 11
+      ) {
         return "year";
       }
 
       return false;
     },
-    timeframe: state => ({
-      begin: Vue.$library.dayjs.utc(state.selection.view[0]).format("YYYY-MM-DD"),
-      end:   Vue.$library.dayjs.utc(state.selection.view[1]).format("YYYY-MM-DD")
+    timeframe: (state, getters) => ({
+      from: getters.dates[0].format("YYYY-MM-DD"),
+      to:   getters.dates[1].format("YYYY-MM-DD")
     }),
   },
   mutations: {
     SET_DATA(state, { type, data }) {
       Vue.$set(state.data, type, data);
     },
-    SET_SELECTION(state, selection) {
-      state.selection.view = selection.view;
-      state.selection.all = selection.all || false;
-    },
     SET_SYSTEM(state, data) {
       state.system = { ...state.system, ...data };
-    }
+    },
+    SET_VIEW(state, view) {
+      state.view.dates = view.dates;
+      state.view.all   = view.all || false;
+    },
   },
   actions: {
-    async load(context) {
-      // what we need for sure
-      await Promise.all([
-        context.dispatch("system"),
-        context.dispatch("routes")
-      ]);
+    async load(context, reload = false) {
+      let payload = [];
 
-      // what we might need as well
-      if (context.state.system.hasLog === true) {
-        await Promise.all([
-          context.dispatch("failures"),
-          context.dispatch("stats")
-        ]);
-
+      if (reload !== false) {
         await Vue.$api.post("retour/log/purge");
+        payload.push("system");
       }
+
+      payload.push("routes");
+
+      if (context.state.system.hasLog === true) {
+        payload.push("failures");
+        payload.push("stats");
+      }
+
+      await Promise.all(payload.map(load => context.dispatch(load)));
     },
     async failures(context) {
       const timeframe = context.getters["timeframe"];
@@ -107,28 +119,27 @@ export default (Vue) => ({
       });
       context.commit("SET_DATA", { type: "stats", data: stats });
     },
-    async selection(context, selection) {
-      if (selection === "all") {
-        const response = await Vue.$api.get("retour/log/all");
-        selection = {
-          view: [response.begin.date, response.end.date],
-          all: true
-        };
-      }
-
-      context.commit("SET_SELECTION", { view: selection });
-      let load = [context.dispatch("redirects")];
-
-      if (context.state.system.hasLog) {
-        load.push(context.dispatch("failures"));
-        load.push(context.dispatch("stats"));
-      }
-
-      await Promise.all(load);
-    },
     async system(context, reload = false) {
       const system = await Vue.$api.get("retour/system", { reload: reload });
       context.commit("SET_SYSTEM", system);
+    },
+    async view(context, view) {
+      if (view === "all") {
+        const response = await Vue.$api.get("retour/log/all");
+        context.commit("SET_VIEW", {
+          dates: [
+            Vue.$library.dayjs.utc(response.from.date),
+            Vue.$library.dayjs.utc(response.to.date)
+          ],
+          all: true
+        });
+      } else {
+        context.commit("SET_VIEW", {
+          dates: view.map(date => Vue.$library.dayjs.utc(date))
+        });
+      }
+
+      this.dispatch("load", true);
     }
   }
 });

@@ -11,8 +11,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->routes()->toData(
-                    $this->requestQuery('begin'),
-                    $this->requestQuery('end')
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
                 );
             }
         ],
@@ -21,8 +21,8 @@ return [
             'method'  => 'PATCH',
             'action'  => function () {
                 return Retour::instance()
-                        ->routes()
-                        ->update($this->requestBody());
+                    ->routes()
+                    ->update($this->requestBody());
             }
         ],
         [
@@ -30,8 +30,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return Retour::instance()->log()->fails(
-                    $this->requestQuery('begin'),
-                    $this->requestQuery('end')
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
                 );
             }
         ],
@@ -51,8 +51,8 @@ return [
             'action'  => function () {
                 return Retour::instance()->log()->stats(
                     $this->requestQuery('mode'),
-                    $this->requestQuery('begin'),
-                    $this->requestQuery('end')
+                    $this->requestQuery('from'),
+                    $this->requestQuery('to')
                 );
             }
         ],
@@ -69,8 +69,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return [
-                    'begin' => Retour::instance()->log()->first(),
-                    'end'   => Retour::instance()->log()->last()
+                    'from' => Retour::instance()->log()->first(),
+                    'to'   => Retour::instance()->log()->last()
                 ];
             }
         ],
@@ -79,8 +79,8 @@ return [
             'method'  => 'POST',
             'action'  => function () {
                 return Retour::instance()
-                        ->log()
-                        ->resolve($this->requestBody('path'));
+                    ->log()
+                    ->resolve($this->requestBody('path'));
             }
         ],
         [

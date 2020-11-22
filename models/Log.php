@@ -75,16 +75,16 @@ class Log
     /**
      * Get all failed records
      *
-     * @param string $begin  date sting (yyyy-mm-dd)
-     * @param string $end    date sting (yyyy-mm-dd)
+     * @param string $from  date sting (yyyy-mm-dd)
+     * @param string $to    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function fails(string $begin, string $end): array
+    public function fails(string $from, string $to): array
     {
         // Add time to dates to capture full days
-        $begin .= ' 00:00:00';
-        $end   .= ' 23:59:59';
+        $from .= ' 00:00:00';
+        $to   .= ' 23:59:59';
 
         // Run query
         $fails = $this->db->records()
@@ -97,8 +97,8 @@ class Log
             ')
             ->where('redirect IS NULL')
             ->andWhere('wasResolved IS NULL')
-            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $begin])
-            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $from])
+            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $to])
             ->group('path, referrer')
             ->fetch('array')
             ->all();
@@ -147,17 +147,17 @@ class Log
     /**
      * Get all records for a redirect
      *
-     * @param array  $route  redirect array
-     * @param string $begin  date sting (yyyy-mm-dd)
-     * @param string $end    date sting (yyyy-mm-dd)
+     * @param array  $route redirect array
+     * @param string $from  date sting (yyyy-mm-dd)
+     * @param string $to    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function redirect(array $route, string $begin, string $end): array
+    public function redirect(array $route, string $from, string $to): array
     {
         // Add time to dates to capture full days
-        $begin .= ' 00:00:00';
-        $end   .= ' 23:59:59';
+        $from .= ' 00:00:00';
+        $to   .= ' 23:59:59';
 
         // Run query
         $data = $this->db->records()
@@ -166,8 +166,8 @@ class Log
                 MAX(date) AS last
             ')
             ->where(['redirect' => $route['from']])
-            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $begin])
-            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $end])
+            ->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $from])
+            ->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $to])
             ->fetch('array')->first();
 
         if ($data === false) {
@@ -218,12 +218,12 @@ class Log
      * Get stats data for specified timeframe and unit
      *
      * @param string $unit  timeframe unit (year, month, ...)
-     * @param string $begin date sting (yyyy-mm-dd)
+     * @param string $from  date sting (yyyy-mm-dd)
      * @param string $to    date sting (yyyy-mm-dd)
      *
      * @return array
      */
-    public function stats(string $unit, string $begin, string $end): array
+    public function stats(string $unit, string $from, string $to): array
     {
         // Define parts depending on uni
         $use = [
@@ -235,8 +235,8 @@ class Log
         switch ($unit) {
             case 'day':
                 // Add time to dates to capture full days
-                $begin .= ' 00:00:00';
-                $end   .= ' 23:59:59';
+                $from .= ' 00:00:00';
+                $to   .= ' 23:59:59';
 
                 $use['func']  = 'datetime';
                 $use['group'] = '%Y-%m-%d %H';
@@ -275,8 +275,8 @@ class Log
             ORDER BY
                 strftime(:group, dates.date)
         ', [
-            'from'  => $begin,
-            'to'    => $end,
+            'from'  => $from,
+            'to'    => $to,
             'group' => $use['group']
         ], [
             'fetch' => 'array'

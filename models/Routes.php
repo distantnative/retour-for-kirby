@@ -30,12 +30,12 @@ class Routes
     /**
      * Return redirects definitions combined with log data
      *
-     * @param string $begin
-     * @param string $end
+     * @param string $from
+     * @param string $to
      *
      * @return array
      */
-    public function toData(string $begin, string $end): array
+    public function toData(string $from, string $to): array
     {
         $routes = $this->config();
 
@@ -49,11 +49,11 @@ class Routes
             return $data;
         }
 
-        return array_map(function ($route) use ($begin, $end) {
+        return array_map(function ($route) use ($from, $to) {
             return Retour::instance()->log()->redirect(
                 $route,
-                $begin,
-                $end
+                $from,
+                $to
             );
         }, $data);
     }

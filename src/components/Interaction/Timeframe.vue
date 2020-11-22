@@ -21,9 +21,12 @@
 <script>
 export default {
   computed: {
+    dates() {
+      return this.$store.state.retour.view.dates;
+    },
     label() {
-      const from = this.$library.dayjs.utc(this.value[0]);
-      const to = this.$library.dayjs.utc(this.value[1]);
+      const from = this.dates[0];
+      const to   = this.dates[1];
 
       // single day
       if (from.isSame(to, "date")) {
@@ -64,7 +67,7 @@ export default {
       return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")} - ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}`;
     },
     value() {
-      return this.$store.state.retour.selection.view;
+      return this.dates.map(date => date.format('YYYY-MM-DD HH:mm:ss'));
     }
   },
   methods: {
@@ -73,9 +76,9 @@ export default {
       month = this.$helper.string.lcfirst(month);
       return this.$t("months." + month);
     },
-    onInput(value) {
-      if (value.length === 2) {
-        this.$store.dispatch("retour/selection", value);
+    onInput(values) {
+      if (values.length === 2) {
+        this.$store.dispatch("retour/view", values);
         this.$refs.calendar.close();
       }
     }
