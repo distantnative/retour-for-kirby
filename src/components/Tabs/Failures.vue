@@ -1,5 +1,5 @@
 <template>
-  <retour-table
+  <rt-table
     :columns="columns"
     :empty="$t('retour.failures.empty')"
     :label="$t('retour.failures')"
@@ -10,38 +10,31 @@
   >
     <template v-if="canUpdate" #button>
       <k-button
-        :text="$t('retour.failures.clear')"
         icon="trash"
         @click="$refs.flushDialog.open()"
-      />
+      >
+        {{ $t('retour.failures.clear') }}
+      </k-button>
     </template>
 
     <template #dialogs>
       <!-- remove dialog -->
-      <k-dialog
+      <k-remove-dialog
         ref="removeDialog"
-        :submit-button="{
-          text: $t('delete'),
-          icon: 'trash',
-          color: 'negative'
-        }"
+        :submit-button="$t('delete')"
         @submit="onRemove"
       >
         <k-text>{{ $t('field.structure.delete.confirm') }}</k-text>
-      </k-dialog>
+      </k-remove-dialog>
 
       <!-- flush dialog -->
-      <k-dialog
+      <k-remove-dialog
         ref="flushDialog"
-        :submit-button="{
-          text: $t('retour.failures.clear'),
-          color: 'negative',
-          icon: 'trash'
-        }"
+        :submit-button="$t('retour.failures.clear')"
         @submit="onFlush"
       >
         <k-text>{{ $t('retour.failures.clear.confirm') }}</k-text>
-      </k-dialog>
+      </k-remove-dialog>
     </template>
 
   </retour-table>
@@ -55,7 +48,7 @@ import Table from "../Table/Table.vue";
 export default {
   mixins: [permissions],
   components: {
-    "retour-table": Table
+    "rt-table": Table
   },
   data() {
     return {

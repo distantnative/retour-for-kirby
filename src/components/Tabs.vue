@@ -1,20 +1,20 @@
 <template>
   <k-view class="rt-tabs">
     <k-tabs :tabs="tabs" :tab="tab" />
-    <component :is="'rt-' + this.tab + '-tab'" class="rt-tab" />
+    <component :is="'rt-' + this.tab" class="rt-tab" />
   </k-view>
 </template>
 
 <script>
-import FailuresTab from "./Tabs/FailuresTab.vue";
-import RoutesTab from "./Tabs/RoutesTab.vue";
-import SystemTab from "./Tabs/SystemTab.vue";
+import Failures from "./Tabs/Failures.vue";
+import Routes from "./Tabs/Routes.vue";
+import System from "./Tabs/System.vue";
 
 export default {
   components: {
-    "rt-failures-tab": FailuresTab,
-    "rt-routes-tab": RoutesTab,
-    "rt-system-tab": SystemTab
+    "rt-failures": Failures,
+    "rt-routes": Routes,
+    "rt-system": System
   },
   computed: {
     tab() {

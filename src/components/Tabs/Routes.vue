@@ -1,8 +1,8 @@
 <template>
-  <retour-table
+  <rt-table
     :columns="columns"
     :empty="$t('retour.routes.empty')"
-    :label="label"
+    :label="$t('retour.routes')"
     :options="options"
     :rows="rows"
     :type="type"
@@ -11,8 +11,13 @@
     @option="onOption"
   >
     <!-- button -->
-    <template #button>
-      <slot name="button" :onOption="onOption" />
+    <template v-if="canUpdate" #button>
+      <k-button
+        icon="add"
+        @click="onOption('add', { active: true })"
+      >
+        {{ $t('add') }}
+      </k-button>
     </template>
 
     <template #dialogs>
@@ -43,38 +48,27 @@
       />
 
       <!-- remove dialog -->
-      <k-dialog
+      <k-remove-dialog
         ref="removeDialog"
-        :submit-button="{
-          text: $t('delete'),
-          icon: 'trash',
-          color: 'negative'
-        }"
+        :submit-button="$t('delete')"
         @submit="onRemove"
       >
         <k-text>{{ $t('field.structure.delete.confirm') }}</k-text>
-      </k-dialog>
+      </k-remove-dialog>
     </template>
 
-  </retour-table>
+  </rt-table>
 </template>
 
 <script>
 import permissions from "../../mixins/permissions.js";
 
-import Table from "./Table.vue";
+import Table from "../Table/Table.vue";
 
 export default {
   mixins: [permissions],
   components: {
-    "retour-table": Table
-  },
-  props: {
-    canEdit: Boolean,
-    label: String,
-    options: Array,
-    rows: Array,
-    type: String
+    "rt-table": Table
   },
   data() {
     return {
@@ -166,9 +160,46 @@ export default {
           help: this.$t("retour.routes.comment.help")
         }
       };
+    },
+    options() {
+      if (this.canUpdate !== false) {
+        return [
+          { text: this.$t("edit"), icon: "edit", click: "edit" },
+          { text: this.$t("remove"), icon: "trash", click: "remove" }
+        ];
+      }
+    },
+    rows() {
+      return this.$store.state.retour.data.routes;
     }
   },
+  created() {
+    this.$events.$on("retour.resolve", this.resolve);
+  },
+  destroyed() {
+    this.$events.$off("retour.resolve", this.resolve);
+  },
   methods: {
+    resolve(row) {
+      this.$refs.table.insert(row, this.onResolve);
+    },
+    async onResolve(row) {
+      try {
+        await this.$api.post("retour/log/resolve", {
+          path: row.from
+        });
+
+        const calls = [
+          this.$store.dispatch("retour/failures"),
+          this.$store.dispatch("retour/stats")
+        ];
+
+        await Promise.all(calls);
+
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+      }
+    },
     async onAdd() {
       let rows = this.$helper.clone(this.rows);
       rows.splice(rows.length, 0, this.row);

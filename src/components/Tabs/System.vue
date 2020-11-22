@@ -1,9 +1,9 @@
 <template>
-  <div class="retour-settings-tab">
+  <div class="rt-settings-tab">
 
-    <header class="flex items-center justify-between mb-3">
-      <h3 class="flex items-center font-bold">
-        <k-icon type="road-sign" class="mr-2" /> Retour for Kirby
+    <header>
+      <h3>
+        <k-icon type="road-sign" /> Retour for Kirby
       </h3>
       <k-button
         :text="$t('retour.system.update')"
@@ -12,76 +12,79 @@
       />
     </header>
 
-    <k-auto-grid element="ul" style="--gap: 1.5rem" class="k-system-info-box bg-white p-3 shadow rounded-sm mb-3">
+    <ul class="k-system-info-box">
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.redirects') }}
           </dt>
-          <dd class="truncate leading-tight">{{ redirected }}</dd>
+          <dd>{{ redirected }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.failures') }}
           </dt>
-          <dd class="truncate leading-tight">{{ failed }}</dd>
+          <dd>{{ failed }}</dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.deleteAfter') }}
           </dt>
-          <dd class="truncate leading-tight">
+          <dd>
             {{ $t("retour.system.deleteAfter.months", { count: $store.state.retour.system.deleteAfter || '–' }) }}
           </dd>
         </dl>
       </li>
-    </k-auto-grid>
+    </ul>
 
-    <k-auto-grid element="ul" style="--gap: 1.5rem" class="k-system-info-box bg-white p-3 shadow rounded-sm">
+    <ul class="k-system-info-box">
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.version') }}
           </dt>
-          <dd :class="'truncate leading-tight ' + updateClass">
+          <dd>
             {{ $store.state.retour.system.version || "–" }}
           </dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.release') }}
           </dt>
-          <dd class="truncate leading-tight">
+          <dd>
             <k-button
-              :text="$store.state.retour.system.release || '–'"
+              :style="updateStyle"
               link="https://github.com/distantnative/retour-for-kirby/releases"
               target="_blank"
-            />
+            >
+              {{ $store.state.retour.system.release || '–' }}
+            </k-button>
           </dd>
         </dl>
       </li>
       <li>
         <dl>
-          <dt class="text-sm text-gray mb-2">
+          <dt>
             {{ $t('retour.system.support') }}
           </dt>
-          <dd class="truncate leading-tight">
+          <dd>
             <k-button
-              :text="'💛 ' + $t('retour.system.support.donate')"
               link="https://paypal.me/distantnative"
               target="_blank"
               theme="positive"
-            />
+            >
+              💛 {{ $t('retour.system.support.donate') }}
+            </k-button>
           </dd>
         </dl>
       </li>
-    </k-auto-grid>
+    </ul>
 
     <footer class="mt-2">
       <k-text
@@ -103,9 +106,9 @@ export default {
     redirected() {
       return this.reduce(this.$store.state.retour.data.routes);
     },
-    updateClass() {
+    updateStyle() {
       if (this.$store.state.retour.system.update < 0) {
-        return "text-red";
+        return "color: #c82829; font-weight: bold;";
       }
     }
   },
@@ -121,3 +124,31 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.rt-settings-tab header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+}
+
+.rt-settings-tab h3 {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.rt-settings-tab h3 .k-icon {
+  margin-right: .5rem;
+}
+
+.rt-settings-tab .k-system-info-box {
+  margin-bottom: .75rem;
+}
+
+.rt-settings-tab .k-system-info-box .k-button {
+  font-size: 1rem;
+}
+
+</style>
