@@ -1,17 +1,15 @@
 <template>
   <div
-    class="retour-table-filter flex items-center"
+    class="rt-tbl-filter"
     :data-focus="isFocused"
   >
     <k-button
-      :icon="{
-        type: isFocused ? 'cancel' : 'search',
-        size: 'small',
-      }"
-      :text="isFocused ? null : label"
+      :icon="isFocused ? 'cancel' : 'search'"
       class="mr-2"
       @click="onToggle"
-    />
+    >
+      {{ isFocused ? null : label }}
+    </k-button>
     <input
       ref="input"
       v-show="isFocused"
@@ -60,22 +58,25 @@ export default {
 </script>
 
 <style lang="scss">
-.retour-table-filter {
+.rt-tbl-filter {
   height: 1.1rem;
+  display: flex;
+  align-items: center;
 }
-.retour-table-filter > * {
+.rt-tbl-filter > * {
   border-bottom: 1px solid transparent;
 }
-.retour-table-filter .k-button-text {
+.rt-tbl-filter .k-button-text {
   font-size: 1rem;
   font-weight: 600;
 }
-.retour-table-filter input {
+.rt-tbl-filter input {
   background: transparent;
   font-size: var(--font-size-medium);
   outline: none;
+  border: 0;
 }
-.retour-table-filter[data-focus] > input {
+.rt-tbl-filter[data-focus] > input {
   border-bottom-color: #ccc;
   font-size: .875rem;
   padding: .1rem;
