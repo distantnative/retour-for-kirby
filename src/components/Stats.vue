@@ -4,7 +4,7 @@
       <k-grid gutter="small">
         <k-column width="1/4">
           <header class="k-header-bar">
-            <retour-timeframe-dropdown />
+            <retour-timeframe />
           </header>
           <retour-chart />
         </k-column>
@@ -26,12 +26,12 @@
 import Chart from "./Graphs/Chart.vue";
 import Timeline from "./Graphs/Timeline.vue";
 
-import TimeframeDropdown from "./Interaction/TimeframeDropdown.vue";
+import Timeframe from "./Interaction/Timeframe.vue";
 import PrevNext from "./Interaction/PrevNext.vue";
 
 export default {
   components: {
-    "retour-timeframe-dropdown": TimeframeDropdown,
+    "retour-timeframe": Timeframe,
     "retour-prevnext": PrevNext,
     "retour-chart": Chart,
     "retour-timeline": Timeline,

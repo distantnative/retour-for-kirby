@@ -1,9 +1,9 @@
 <template>
-  <div class="retour-table">
+  <div class="rt-tbl">
 
     <!-- header -->
-    <header class="flex items-center justify-between mb-3">
-      <retour-table-filter
+    <header>
+      <rt-tbl-filter
         v-model="filter"
         :label="label"
       />
@@ -32,11 +32,10 @@
     </k-empty>
 
     <!-- footer -->
-    <footer class="flex items-center justify-between">
-      <div class="flex items-center text-sm text-gray" style="height: 2.5rem;">
+    <footer>
+      <div class="limit">
         <select
           :value="limit"
-          class="rounded-sm"
           @input="onLimit($event.target.value)"
         >
           <option :value="10">10</option>
@@ -66,7 +65,7 @@ import TableFilter from "./TableFilter.vue";
 
 export default {
   components: {
-    "retour-table-filter": TableFilter
+    "rt-tbl-filter": TableFilter
   },
   props: {
     columns: Object,
@@ -106,7 +105,7 @@ export default {
         let match = false;
 
         columns.forEach(column => {
-          if (row[column].includes(this.filter) === true) {
+          if (row[column] && row[column].includes(this.filter) === true) {
             match = true;
           }
         });
@@ -140,3 +139,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.rt-tbl > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+}
+
+.rt-tbl > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rt-tbl > footer > .limit {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #777;
+  height: 2.5rem;
+}
+</style>
