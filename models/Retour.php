@@ -171,10 +171,7 @@ class Retour
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter', false),
             'headers'     => Header::$codes,
-            'hasLog'      => option('distantnative.retour.logs', true),
-            'release'     => $release = Upgrades::latest($reload),
-            'version'     => $version = static::plugin()->version(),
-            'update'      => $release ? version_compare($version, $release) : null
+            'hasLog'      => option('distantnative.retour.logs', true)
         ];
     }
 

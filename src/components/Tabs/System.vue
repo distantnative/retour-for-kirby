@@ -5,11 +5,6 @@
       <h3>
         <k-icon type="road-sign" /> Retour for Kirby
       </h3>
-      <k-button
-        :text="$t('retour.system.update')"
-        icon="refresh"
-        @click="onUpdate"
-      />
     </header>
 
     <ul class="k-system-info-box">
@@ -36,35 +31,6 @@
           </dt>
           <dd>
             {{ $t("retour.system.deleteAfter.months", { count: $store.state.retour.system.deleteAfter || '–' }) }}
-          </dd>
-        </dl>
-      </li>
-    </ul>
-
-    <ul class="k-system-info-box">
-      <li>
-        <dl>
-          <dt>
-            {{ $t('retour.system.version') }}
-          </dt>
-          <dd>
-            {{ $store.state.retour.system.version || "–" }}
-          </dd>
-        </dl>
-      </li>
-      <li>
-        <dl>
-          <dt>
-            {{ $t('retour.system.release') }}
-          </dt>
-          <dd>
-            <k-button
-              :style="updateStyle"
-              link="https://github.com/distantnative/retour-for-kirby/releases"
-              target="_blank"
-            >
-              {{ $store.state.retour.system.release || '–' }}
-            </k-button>
           </dd>
         </dl>
       </li>
@@ -113,14 +79,7 @@ export default {
     }
   },
   methods: {
-    onUpdate() {
-      this.$store.dispatch("retour/system", true);
-    },
-    reduce(data) {
-      return data.reduce((i, x) => {
-        return i += parseInt(x.hits || 0)
-      }, 0);
-    }
+    reduce: data => data.reduce((i, x) => i += parseInt(x.hits || 0), 0)
   }
 }
 </script>
@@ -146,9 +105,4 @@ export default {
 .rt-settings-tab .k-system-info-box {
   margin-bottom: .75rem;
 }
-
-.rt-settings-tab .k-system-info-box .k-button {
-  font-size: 1rem;
-}
-
 </style>
