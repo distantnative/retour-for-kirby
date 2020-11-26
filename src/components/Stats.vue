@@ -11,7 +11,7 @@
 
         <k-column width="3/4">
           <header class="k-header-bar">
-            <k-button v-if="false" icon="refresh" @click="onRefresh" />
+            <k-button v-if="debug" icon="refresh" @click="onRefresh" />
             <div v-else />
             <retour-prevnext />
           </header>
@@ -35,6 +35,11 @@ export default {
     "retour-prevnext": PrevNext,
     "retour-chart": Chart,
     "retour-timeline": Timeline,
+  },
+  computed: {
+    debug() {
+      return window.panel.debug;
+    }
   },
   methods: {
     onRefresh() {
