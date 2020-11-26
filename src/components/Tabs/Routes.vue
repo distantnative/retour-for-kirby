@@ -201,6 +201,10 @@ export default {
           this.rowIndex = rowIndex;
           this.$refs.drawer.open();
           break;
+        case "remove":
+          this.rowIndex = rowIndex;
+          this.$refs.remove.open();
+          break;
       }
     },
     onResolve(row) {
