@@ -16,7 +16,7 @@
       :columns="columns"
       :index="limit * (page - 1) + 1"
       :options="options"
-      :rows="filteredRows"
+      :rows="paginatedRows"
       @cell="$emit('cell', $event)"
       @header="$emit('header', $event)"
       @input="$emit('input', $event)"
@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     onLimit(limit) {
-      this.limit = limit;
+      this.limit = parseInt(limit);
       this.page  = 1;
       localStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
