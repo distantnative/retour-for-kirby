@@ -1,4 +1,4 @@
-[![Screenshot](screenshot.jpg)](https://distantnative.com/retour)
+[![Screenshot](screenshot.png)](https://distantnative.com/retour)
 
 ## Retour for Kirby
 
