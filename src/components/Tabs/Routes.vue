@@ -24,22 +24,12 @@
       <!-- add/edit -->
       <k-form-drawer
         ref="drawer"
+        v-model="row"
         :title="title"
         :tabs="tabs"
-        :value="row"
         icon="undo"
-        @input="onInput"
-        @close="onClose"
-      >
-        <template #options>
-          <k-button
-            class="k-drawer-option"
-            icon="check"
-            theme="positive"
-            @click="save"
-          />
-        </template>
-      </k-form-drawer>
+        @close="save"
+      />
 
       <!-- remove -->
       <k-remove-dialog
@@ -190,9 +180,6 @@ export default {
       this.rowIndex = null;
       this.completion = null;
     },
-    onInput(input) {
-      this.row = input;
-    },
     onOption(option, row = {}, rowIndex = null) {
       switch (option) {
         case "add":
@@ -230,19 +217,23 @@ export default {
       let rows = this.$helper.clone(this.rows);
       let row  = this.$helper.clone(this.row);
 
-      if (this.rowIndex === null) {
-        rows.splice(rows.length, 0, row);
-      } else {
-        rows.splice(this.rowIndex, 1, row);
+      // TODO: remove workaround when drawer validation gets fixed
+      if (Object.values(row).some(x => (x !== null && x !== "" && x !== "0"))) {
+        if (this.rowIndex === null) {
+          rows.splice(rows.length, 0, row);
+        } else {
+          rows.splice(this.rowIndex, 1, row);
+        }
+
+
+        await this.update(rows);
+
+        if (this.completion) {
+          await this.completion(row);
+        }
       }
 
-      await this.update(rows);
-
-      if (this.completion) {
-        await this.completion(row);
-      }
-
-      this.$refs.drawer.close();
+      this.onClose();
     },
     async update(rows) {
       try {
