@@ -2,27 +2,17 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Database\Database;
 
 class Log
 {
 
     /**
-     * @var \distantnative\Retour\Retour
+     * @return \Kirby\Database\Database
      */
-    protected $retour;
-
-    /**
-     * @var \Kirby\Database\Database
-     */
-    protected $db;
-
-    /**
-     * @param \distantnative\Retour\Retour $retour
-     */
-    public function __construct(Retour $retour)
+    public function db(): Database
     {
-        $this->retour = $retour;
-        $this->db     = $retour->database;
+        return retour()->database;
     }
 
     /**
@@ -34,7 +24,7 @@ class Log
      */
     public function create(array $props): bool
     {
-        return $this->db->records()->insert([
+        return $this->db()->records()->insert([
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
             'path'     => $props['path'],
             'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
@@ -44,7 +34,7 @@ class Log
 
     public function first(): array
     {
-        $result = $this->db->records()
+        $result = $this->db()->records()
             ->select('date')
             ->order('date ASC')
             ->fetch('array')
@@ -59,7 +49,7 @@ class Log
 
     public function last(): array
     {
-        $result = $this->db->records()
+        $result = $this->db()->records()
             ->select('date')
             ->order('date DESC')
             ->fetch('array')
@@ -87,7 +77,7 @@ class Log
         $to   .= ' 23:59:59';
 
         // Run query
-        $fails = $this->db->records()
+        $fails = $this->db()->records()
             ->select('
                 id,
                 path,
@@ -118,8 +108,8 @@ class Log
      */
     public function flush(): bool
     {
-        $table = $this->db->records()->delete();
-        $index = $this->db->sqlite_sequence()->delete(['name' => 'records']);
+        $table = $this->db()->records()->delete();
+        $index = $this->db()->sqlite_sequence()->delete(['name' => 'records']);
         return $table && $index;
     }
 
@@ -138,7 +128,7 @@ class Log
             $time   = strtotime('-' . $limit . ' month');
             $cutoff = date('Y-m-d 00:00:00', $time);
 
-            return $this->db->records()->delete('strftime("%s", date) < strftime("%s", :cutoff)', ['cutoff' => $cutoff]);
+            return $this->db()->records()->delete('strftime("%s", date) < strftime("%s", :cutoff)', ['cutoff' => $cutoff]);
         }
 
         return true;
@@ -160,7 +150,7 @@ class Log
         $to   .= ' 23:59:59';
 
         // Run query
-        $data = $this->db->records()
+        $data = $this->db()->records()
             ->select('
                 COUNT(*) AS hits,
                 MAX(date) AS last
@@ -188,15 +178,15 @@ class Log
      */
     public function remove(string $path, string $referrer = null)
     {
-        $where = 'path = "' . $this->db->escape($path) . '" AND referrer ';
+        $where = 'path = "' . $this->db()->escape($path) . '" AND referrer ';
 
         if ($referrer === null) {
             $where .= 'IS NULL';
         } else {
-            $where .= '= "' . $this->db->escape($referrer) . '"';
+            $where .= '= "' . $this->db()->escape($referrer) . '"';
         }
 
-        return $this->db->records()->delete($where);
+        return $this->db()->records()->delete($where);
     }
 
     /**
@@ -208,7 +198,7 @@ class Log
      */
     public function resolve(string $path): bool
     {
-        return $this->db->records()->update(
+        return $this->db()->records()->update(
             ['wasResolved' => 1],
             ['path' => $path]
         );
@@ -249,7 +239,7 @@ class Log
                 break;
         }
         // Get data from database
-        $data = $this->db->query('
+        $data = $this->db()->query('
             with recursive dates as (
                 select :from as date
                 union all

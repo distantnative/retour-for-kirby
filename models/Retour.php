@@ -66,9 +66,9 @@ class Retour
         // load config
         try {
             $this->config = Data::read($this->file, 'yaml');
-        } catch (\Throwable $e) {
-            $this->config = [];
-        }
+        } catch (\Throwable $e) {}
+
+        static::$instance = $this;
 
         // check & run upgrades
         $this->upgrades()->run();
@@ -126,7 +126,7 @@ class Retour
      */
     public static function instance(): Retour
     {
-        return static::$instance ?? static::$instance = new Retour;
+        return static::$instance = static::$instance ?? new static();
     }
 
 
@@ -137,7 +137,7 @@ class Retour
      */
     public function log(): Log
     {
-        return $this->log ?? $this->log = new Log($this);
+        return $this->log ?? $this->log = new Log();
     }
 
     /**
@@ -158,7 +158,7 @@ class Retour
      */
     public function upgrades(): Upgrades
     {
-        return $this->upgrades ?? $this->upgrades = new Upgrades($this);
+        return $this->upgrades ?? $this->upgrades = new Upgrades();
     }
 
     /**
@@ -193,7 +193,9 @@ class Retour
     public function update($data, string $key = null): bool
     {
         if ($key !== null) {
-            $data = array_merge($this->config, [$key => $data]);
+            $data = array_merge($this->config ?? [
+                'schema' => $this->plugin()->version()
+            ], [$key => $data]);
         }
 
         $this->config = $data;

@@ -8,24 +8,6 @@ class Upgrades
 {
 
     /**
-     * @param \distantnative\Retour\Retour $retour
-     */
-    protected $retour;
-
-    /**
-     * @var string
-     */
-    protected $version;
-
-    /**
-     * @param \distantnative\Retour\Retour $retour
-     */
-    public function __construct(Retour $retour)
-    {
-        $this->retour = $retour;
-    }
-
-    /**
      * Whether config schema version if lower than
      * current code version
      *
@@ -36,7 +18,7 @@ class Upgrades
         $schema  = $this->schema();
         $version = $this->version();
 
-        return version_compare($schema, $version) < 0;
+        return version_compare($schema, $version, '<') === true;
     }
 
     /**
@@ -46,12 +28,14 @@ class Upgrades
      */
     public function run(): void
     {
+        $retour = retour();
+
         if ($this->hasUpgrades() === true) {
             $migrations = require dirname(__DIR__) . '/config/migrations.php';
             foreach ($migrations as $schema => $migration) {
-                if (version_compare($schema, $this->version()) <= 0) {
-                    call_user_func($migration, $this->retour);
-                    $this->retour->update($schema, 'schema');
+                if (version_compare($schema, $this->version(), '<=') === true) {
+                    call_user_func($migration, $retour);
+                    $retour->update($schema, 'schema');
                 }
             }
         }
@@ -64,7 +48,7 @@ class Upgrades
      */
     protected function schema(): string
     {
-        return $this->retour->config['schema'] ?? '2.3.1';
+        return retour()->config['schema'] ?? '2.3.1';
     }
 
     /**
@@ -74,6 +58,6 @@ class Upgrades
      */
     protected function version(): string
     {
-        return $this->version = $this->version ?? $this->retour->plugin()->version();
+        return retour()->plugin()->version();
     }
 }
