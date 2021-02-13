@@ -2,7 +2,7 @@
     "name": "distantnative/retour-for-kirby",
     "description": "Redirects and error tracking for Kirby",
     "type": "kirby-plugin",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "license": "MIT",
     "keywords": [
         "kirby3",
