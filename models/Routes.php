@@ -2,29 +2,52 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Toolkit\Collection;
+use Closure;
 
-class Routes
+class Routes extends Collection
 {
 
     /**
-     * @var \distantnative\Retour\Retour
+     * Takes an array of routes data and turns it into
+     * a collection of route objects
+     *
+     * @param array $data
+     * @return \distantnative\Retour\Routes
      */
-    protected $retour;
-
-    /**
-     * @param \distantnative\Retour\Retour $retour
-     */
-    public function __construct(Retour $retour)
+    public static function factory(array $data): Routes
     {
-        $this->retour = $retour;
+        $routes = array_map(function ($route) {
+            return new Route($route);
+        }, $data);
+
+        return new static($routes);
     }
 
-    protected function config(): array
+    /**
+     * Stores the routes in Retour config file
+     *
+     * @return bool
+     */
+    public function save(): bool
     {
-        $config = $this->retour->config['routes'];
-        return array_map(function ($config) {
-            return new Route($config);
-        }, $config);
+        return retour()->update($this->toArray(), 'routes');
+    }
+
+    /**
+     * Turns collection into array, by default turning
+     * Route object into array as well
+     *
+     * @param Closure $map
+     * @return array
+     */
+    public function toArray(Closure $map = null): array
+    {
+        $array = parent::toArray($map ?? function ($route) {
+            return $route->toArray();
+        });
+
+        return array_values($array);
     }
 
     /**
@@ -37,25 +60,18 @@ class Routes
      */
     public function toData(string $from, string $to): array
     {
-        $routes = $this->config();
-
-        // turn Route objects into arrays
-        $data = array_map(function ($route) {
-            return $route->toArray();
-        }, $routes);
-
         // if logging is disabled, return without data
         if (option('distantnative.retour.logs', true) !== true) {
-            return $data;
+            return $this->toArray();
         }
 
-        return array_map(function ($route) use ($from, $to) {
-            return Retour::instance()->log()->redirect(
-                $route,
+        return $this->toArray(function ($route) use ($from, $to) {
+            return retour()->log()->redirect(
+                $route->toArray(),
                 $from,
                 $to
             );
-        }, $data);
+        });
     }
 
     /**
@@ -65,33 +81,16 @@ class Routes
      */
     public function toRules(bool $hasPriority = false): array
     {
-        $routes = $this->config();
-
         // Filter: no routes for disabled redirects
         //         and match the priority parameter
-        $routes = array_filter($routes, function ($route) use ($hasPriority) {
+        $routes = $this->filter(function ($route) use ($hasPriority) {
             return $route->isActive() && $route->hasPriority() === $hasPriority;
         });
 
         // create route array for each redirect
-        $data = array_map(function ($route) {
+        return $routes->toArray(function ($route) {
             return $route->toRule();
-        }, $routes);
-
-        return $data;
+        });
     }
-    /**
-     * Update redirect definitions in config file
-     *
-     * @param array $data
-     */
-    public function update(array $data = [])
-    {
-        $data = array_map(function ($route) {
-            $route = new Route($route);
-            return $route->toArray();
-        }, $data);
 
-        return $this->retour->update($data, 'routes');
-    }
 }

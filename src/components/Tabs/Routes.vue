@@ -5,6 +5,7 @@
     :columns="columns"
     :rows="rows"
     :options="options"
+    :data-loading="isLoading"
     type="routes"
     @cell="onCell"
     @option="onOption"
@@ -53,7 +54,8 @@ export default {
     return {
       row: {},
       rowIndex: null,
-      completion: null
+      completion: null,
+      isLoading: false
     };
   },
   computed: {
@@ -97,7 +99,7 @@ export default {
       }
     },
     rows() {
-      return this.$store.state.retour.data.routes;
+      return Object.values(this.$store.state.retour.data.routes);
     },
     tabs() {
       return [
@@ -106,22 +108,20 @@ export default {
             from: {
               label: this.$t("retour.routes.from"),
               type: "text",
-              before: window.panel.site + "/",
+              before: window.panel.site.replace(/^(http\:\/\/|https\:\/\/)/,"").replace(/^(www\.)/,"") + "/",
               help: this.$t("retour.routes.from.help", {
                 docs: "https://distantnative.com/retour/docs"
               }),
               icon: "url",
               counter: false,
-              required: true,
-              width: "1/2"
+              required: true
             },
             to: {
               label: this.$t("retour.routes.to"),
               type: "rt-destination",
               help: this.$t("retour.routes.to.help"),
               icon: "parent",
-              counter: false,
-              width: "1/2"
+              counter: false
             },
             status: {
               label: this.$t("retour.routes.status"),
@@ -199,56 +199,75 @@ export default {
       this.onOption("add", row);
     },
     async remove() {
-      let rows = this.$helper.clone(this.rows);
-      rows.splice(this.rowIndex, 1);
-      await this.update(rows);
+      this.isLoading = true;
       this.$refs.remove.close();
+
+      try {
+        await this.$api.delete("retour/routes/" + this.rowIndex);
+        await this.$store.dispatch("retour/routes");
+        this.$store.dispatch("notification/success", ":)");
+
+      } catch (error) {
+        this.$store.dispatch("notification/error", error);
+
+      } finally {
+        this.isLoading = false;
+      }
     },
     async resolve(row) {
+      this.isLoading = true;
+
       try {
         await this.$api.post("retour/log/resolve", { path: row.from });
         await this.$store.dispatch("retour/load", true);
 
       } catch (error) {
-        this.$store.dispatch("notification/error", error);
+        this.$store.dispatch("notification/error", error.message);
+
+      } finally {
+        this.isLoading = false;
       }
     },
     async save() {
-      let rows = this.$helper.clone(this.rows);
-      let row  = this.$helper.clone(this.row);
+      this.isLoading = true;
 
-      // TODO: remove workaround when drawer validation gets fixed
-      if (Object.values(row).some(x => (x !== null && x !== "" && x !== "0"))) {
-        if (this.rowIndex === null) {
-          rows.splice(rows.length, 0, row);
-        } else {
-          rows.splice(this.rowIndex, 1, row);
-        }
-
-
-        await this.update(rows);
-
-        if (this.completion) {
-          await this.completion(row);
-        }
-      }
-
-      this.onClose();
-    },
-    async update(rows) {
       try {
-        // update rows
-        await this.$api.patch("retour/routes", rows);
 
-        // reload rows
-        await this.$store.dispatch("retour/routes");
+        // TODO: remove workaround when drawer validation gets fixed
+        if (Object.values(this.row).some(x => (x !== null && x.trim() !== "" && x !== "0"))) {
+          // adding new route
+          if (this.rowIndex === null) {
+            await this.$api.post("retour/routes", this.row);
 
-        this.$store.dispatch("notification/success");
+          // updating existing route
+          } else {
+            await this.$api.patch("retour/routes/" + this.rowIndex, this.row);
+          }
+
+          if (this.completion) {
+            await this.completion(row);
+          }
+
+          this.$store.dispatch("notification/success", ":)");
+        }
 
       } catch (error) {
-        this.$store.dispatch("notification/error", error);
+        this.$store.dispatch("notification/error", error.message);
+
+      } finally {
+        await this.$store.dispatch("retour/routes");
+        this.onClose();
+        this.isLoading = false;
       }
     }
   }
 }
 </script>
+
+<style lang="scss">
+.rt-tbl[data-loading] {
+  pointer-events: none;
+  cursor: default;
+  opacity: .85;
+}
+</style>

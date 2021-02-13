@@ -5,24 +5,10 @@ namespace distantnative\Retour;
 use Kirby\Cms\Response;
 use Kirby\Http\Header;
 use Kirby\Http\Url;
+use Kirby\Toolkit\Obj;
 
-class Route
+class Route extends Obj
 {
-
-    /**
-     * @var array
-     */
-    protected $options;
-
-    public function __construct(array $options = [])
-    {
-        $this->options = $options;
-    }
-
-    public function __call($name, $arguments)
-    {
-        return $this->options[$name] ?? null;
-    }
 
     /**
      * Whether the route takes priority over actual pages
@@ -31,7 +17,7 @@ class Route
      */
     public function hasPriority(): bool
     {
-        return $this->options['priority'] ?? false === true;
+        return $this->priority() ?? false === true;
     }
 
     /**
@@ -49,19 +35,15 @@ class Route
      */
     public function status(): ?int
     {
-        if (isset($this->options['status']) === false) {
+        if ($this->status === null) {
             return null;
         }
 
-        if (empty($this->options['status']) === true) {
+        if ($this->status === 'disabled') {
             return null;
         }
 
-        if ($this->options['status'] === 'disabled') {
-            return null;
-        }
-
-        return (int)$this->options['status'];
+        return (int)$this->status;
     }
 
     public function toArray(): array
@@ -82,26 +64,25 @@ class Route
      */
     public function toRule(): array
     {
-        $route = $this;
+
+        $from   = $this->from();
+        $to     = $this->to();
+        $status = $this->status();
 
         return [
-            'pattern' => $route->from(),
-            'action'  => function (...$parameters) use ($route) {
+            'pattern' => $from,
+            'action'  => function (...$parameters) use ($from, $to, $status) {
 
                 // Create log record
                 if (option('distantnative.retour.logs', true) === true) {
-                    Retour::instance()->log()->create([
+                    retour()->log()->create([
                         'path'     => Url::path(),
-                        'redirect' => $route->from()
+                        'redirect' => $from
                     ]);
                 }
 
                 // Set the right response code
-                $status = $route->status();
                 kirby()->response()->code($status);
-
-                $to = $route->to();
-
 
                 // Map placeholders/parameters
                 foreach ($parameters as $i => $parameter) {

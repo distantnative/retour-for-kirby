@@ -15,12 +15,12 @@ return [
             }
 
             try {
-                $routes  = Retour::instance()->routes()->toRules(false);
-                $router  = new Router($routes);
+                $routes = retour()->routes()->toRules(false);
+                $router = new Router($routes);
                 return $router->call($path, $method);
             } catch (\Throwable $e) {
                 if (option('distantnative.retour.logs', true) === true) {
-                    Retour::instance()->log()->create(['path' => $path]);
+                    retour()->log()->create(['path' => $path]);
                 }
             }
         }

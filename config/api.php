@@ -10,7 +10,7 @@ return [
             'pattern' => 'retour/routes',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->routes()->toData(
+                return retour()->routes()->toData(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
@@ -18,18 +18,35 @@ return [
         ],
         [
             'pattern' => 'retour/routes',
-            'method'  => 'PATCH',
+            'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()
-                    ->routes()
-                    ->update($this->requestBody());
+                $route  = new Route($this->requestBody());
+                $routes = retour()->routes()->prepend($route);
+                return $routes->save();
+            }
+        ],
+        [
+            'pattern' => 'retour/routes/(:num)',
+            'method'  => 'PATCH',
+            'action'  => function (int $key) {
+                $route  = new Route($this->requestBody());
+                $routes = retour()->routes()->set($key, $route);
+                return $routes->save();
+            }
+        ],
+        [
+            'pattern' => 'retour/routes/(:num)',
+            'method'  => 'DELETE',
+            'action'  => function (int $key) {
+                $routes = retour()->routes()->remove($key);
+                return $routes->save();
             }
         ],
         [
             'pattern' => 'retour/failures',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->log()->fails(
+                return retour()->log()->fails(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
@@ -39,7 +56,7 @@ return [
             'pattern' => 'retour/failures',
             'method'  => 'DELETE',
             'action'  => function () {
-                return Retour::instance()->log()->remove(
+                return retour()->log()->remove(
                     $this->requestBody('path'),
                     $this->requestBody('referrer')
                 );
@@ -49,7 +66,7 @@ return [
             'pattern' => 'retour/stats',
             'method'  => 'GET',
             'action'  => function () {
-                return Retour::instance()->log()->stats(
+                return retour()->log()->stats(
                     $this->requestQuery('unit'),
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
@@ -69,8 +86,8 @@ return [
             'method'  => 'GET',
             'action'  => function () {
                 return [
-                    'from' => Retour::instance()->log()->first(),
-                    'to'   => Retour::instance()->log()->last()
+                    'from' => retour()->log()->first(),
+                    'to'   => retour()->log()->last()
                 ];
             }
         ],
@@ -78,7 +95,7 @@ return [
             'pattern' => 'retour/log/resolve',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()
+                return retour()
                     ->log()
                     ->resolve($this->requestBody('path'));
             }
@@ -87,14 +104,14 @@ return [
             'pattern' => 'retour/log/flush',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()->log()->flush();
+                return retour()->log()->flush();
             }
         ],
         [
             'pattern' => 'retour/log/purge',
             'method'  => 'POST',
             'action'  => function () {
-                return Retour::instance()->log()->purge();
+                return retour()->log()->purge();
             }
         ],
         [

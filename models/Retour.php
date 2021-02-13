@@ -147,7 +147,8 @@ class Retour
      */
     public function routes(): Routes
     {
-        return $this->routes ?? $this->routes = new Routes($this);
+        $routes = $this->config['routes'] ?? [];
+        return $this->routes ?? $this->routes = Routes::factory($routes);
     }
 
     /**
