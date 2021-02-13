@@ -33,11 +33,14 @@ class Upgrades
         if ($this->hasUpgrades() === true) {
             $migrations = require dirname(__DIR__) . '/config/migrations.php';
             foreach ($migrations as $schema => $migration) {
-                if (version_compare($schema, $this->version(), '<=') === true) {
-                    call_user_func($migration, $retour);
-                    $retour->update($schema, 'schema');
+                if (version_compare($schema, $this->schema(), '<=') === true) {
+                    break;
                 }
+
+                call_user_func($migration, $retour);
             }
+
+            $retour->update($schema, 'schema');
         }
     }
 
