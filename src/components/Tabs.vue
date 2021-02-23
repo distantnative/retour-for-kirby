@@ -36,7 +36,7 @@ export default {
 
       // failures
       if (store.system.hasLog) {
-        const failures = store.data.failures.length;
+        let failures = store.data.failures.length;
 
         if (failures > 1000) {
           failures = (Math.floor(failures / 100) / 10) + "k";
