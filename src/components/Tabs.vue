@@ -34,8 +34,9 @@ export default {
         badge: routes || false
       });
 
-      // failures
       if (store.system.hasLog) {
+
+        // failures
         const failures = store.data.failures.length;
 
         if (failures > 1000) {
@@ -48,15 +49,15 @@ export default {
           icon: "alert",
           badge: failures || false
         });
-      }
 
-      // system
-      tabs.push({
-        name: "system",
-        label: this.$t("retour.system"),
-        icon: "box",
-        badge: store.system.update < 0 ? 1 : false
-      });
+        // system
+        tabs.push({
+          name: "system",
+          label: this.$t("retour.system"),
+          icon: "box",
+          badge: store.system.update < 0 ? 1 : false
+        });
+      }
 
       return tabs;
     }
