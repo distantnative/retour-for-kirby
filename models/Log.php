@@ -131,7 +131,7 @@ class Log
     public function purge(): bool
     {
         if ($this->db === null) {
-            return false;
+            return true;
         }
 
         // Get limit (in months) from option
