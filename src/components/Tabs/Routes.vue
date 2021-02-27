@@ -112,7 +112,6 @@ export default {
               help: this.$t("retour.routes.from.help", {
                 docs: "https://distantnative.com/retour/docs"
               }),
-              icon: "url",
               counter: false,
               required: true
             },
@@ -120,7 +119,6 @@ export default {
               label: this.$t("retour.routes.to"),
               type: "rt-destination",
               help: this.$t("retour.routes.to.help"),
-              icon: "parent",
               counter: false
             },
             status: {
