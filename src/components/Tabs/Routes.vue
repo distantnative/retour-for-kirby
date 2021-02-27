@@ -230,9 +230,8 @@ export default {
       this.isLoading = true;
 
       try {
-
         // TODO: remove workaround when drawer validation gets fixed
-        if (Object.values(this.row).some(x => (x !== null && x.trim() !== "" && x !== "0"))) {
+        if (this.row.from && this.row.from.trim() !== "") {
           // adding new route
           if (this.rowIndex === null) {
             await this.$api.post("retour/routes", this.row);
