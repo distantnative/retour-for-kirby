@@ -82,7 +82,7 @@ export default {
   },
   data() {
     const page  = 1;
-    const limit = localStorage.getItem("retour$" + this.tab + "$limit");
+    const limit = sessionStorage.getItem("retour$" + this.type + "$limit");
     return {
       page: parseInt(page) || 1,
       limit: parseInt(limit) || 10,
@@ -128,7 +128,7 @@ export default {
     onLimit(limit) {
       this.limit = parseInt(limit);
       this.page  = 1;
-      localStorage.setItem("retour$" + this.type + "$limit", this.limit);
+      sessionStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
     onOption(option, row, rowIndex) {
       this.$emit('option', option, row, rowIndex);
