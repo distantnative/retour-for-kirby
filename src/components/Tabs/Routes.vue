@@ -245,7 +245,7 @@ export default {
           }
 
           if (this.completion) {
-            await this.completion(row);
+            await this.completion(this.row);
           }
 
           this.$store.dispatch("notification/success", ":)");
