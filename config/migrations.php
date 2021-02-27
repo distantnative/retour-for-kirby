@@ -3,17 +3,16 @@
 namespace distantnative\Retour;
 
 return [
-    '3.0.0' => function (Retour $retour) {
+    '3.0.0' => function () {
+        $config = $this->config();
+
         // transform route definitions
         $routes = array_map(function ($route) {
             $route['priority'] = false;
             return $route;
-        }, $retour->config ?? []);
-
-        // create new config file structure
-        $data = ['routes' =>  $routes];
+        }, $config->data());
 
         // write to file
-        $retour->update($data);
+        $config->overwrite(['routes' =>  $routes]);
     }
 ];

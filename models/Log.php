@@ -7,12 +7,11 @@ use Kirby\Database\Database;
 class Log
 {
 
-    /**
-     * @return \Kirby\Database\Database
-     */
-    public function db(): ?Database
+    protected $database;
+
+    public function __construct(?Database $database = null)
     {
-        return retour()->database;
+        $this->db = $database;
     }
 
     /**
@@ -24,51 +23,45 @@ class Log
      */
     public function create(array $props): bool
     {
-        if ($db = $this->db()) {
-            return $db->records()->insert([
-                'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
-                'path'     => $props['path'],
-                'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
-                'redirect' => $props['redirect'] ?? null
-            ]);
+        if ($this->db === null) {
+            return false;
         }
 
-        return false;
+        return $this->db->records()->insert([
+            'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
+            'path'     => $props['path'],
+            'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
+            'redirect' => $props['redirect'] ?? null
+        ]);
+    }
+
+    protected function single(string $sort): array
+    {
+        if ($this->db === null) {
+            return [];
+        }
+
+        $result = $this->db->records()
+            ->select('date')
+            ->order($sort)
+            ->fetch('array')
+            ->first();
+
+        if ($result) {
+            return $result;
+        }
+
+        return [];
     }
 
     public function first(): array
     {
-        if ($db = $this->db()) {
-
-            $result = $db->records()
-                ->select('date')
-                ->order('date ASC')
-                ->fetch('array')
-                ->first();
-
-            if ($result) {
-                return $result;
-            }
-        }
-
-        return [];
+        return $this->single('date ASC');
     }
 
     public function last(): array
     {
-        if ($db = $this->db()) {
-            $result = $db->records()
-                ->select('date')
-                ->order('date DESC')
-                ->fetch('array')
-                ->first();
-
-            if ($result) {
-                return $result;
-            }
-        }
-
-        return [];
+        return $this->single('date DESC');
     }
 
     /**
@@ -81,9 +74,7 @@ class Log
      */
     public function fails(string $from, string $to): array
     {
-        $db = $this->db();
-
-        if ($db === null) {
+        if ($this->db === null) {
             return [];
         }
 
@@ -92,7 +83,7 @@ class Log
         $to   .= ' 23:59:59';
 
         // Run query
-        $fails = $db->records()
+        $fails = $this->db->records()
             ->select('
                 id,
                 path,
@@ -123,14 +114,12 @@ class Log
      */
     public function flush(): bool
     {
-        $db = $this->db();
-
-        if ($db === null) {
+        if ($this->db === null) {
             return false;
         }
 
-        $table = $db->records()->delete();
-        $index = $db->sqlite_sequence()->delete(['name' => 'records']);
+        $table = $this->db->records()->delete();
+        $index = $this->db->sqlite_sequence()->delete(['name' => 'records']);
         return $table && $index;
     }
 
@@ -141,19 +130,19 @@ class Log
      */
     public function purge(): bool
     {
-        $db = $this->db();
+        if ($this->db === null) {
+            return false;
+        }
 
-        if ($db !== null) {
-            // Get limit (in months) from option
-            $limit = option('distantnative.retour.deleteAfter', false);
+        // Get limit (in months) from option
+        $limit = option('distantnative.retour.deleteAfter', false);
 
-            if ($limit !== false) {
-                // Get cutoff date by subtracting limit from today
-                $time   = strtotime('-' . $limit . ' month');
-                $cutoff = date('Y-m-d 00:00:00', $time);
+        if ($limit !== false) {
+            // Get cutoff date by subtracting limit from today
+            $time   = strtotime('-' . $limit . ' month');
+            $cutoff = date('Y-m-d 00:00:00', $time);
 
-                return $db->records()->delete('strftime("%s", date) < strftime("%s", :cutoff)', ['cutoff' => $cutoff]);
-            }
+            return $this->db->records()->delete('strftime("%s", date) < strftime("%s", :cutoff)', ['cutoff' => $cutoff]);
         }
 
         return true;
@@ -170,10 +159,7 @@ class Log
      */
     public function redirect(array $route, string $from, string $to): array
     {
-
-        $db = $this->db();
-
-        if ($db === null) {
+        if ($this->db === null) {
             return false;
         }
 
@@ -182,7 +168,7 @@ class Log
         $to   .= ' 23:59:59';
 
         // Run query
-        $data = $db->records()
+        $data = $this->db->records()
             ->select('
                 COUNT(*) AS hits,
                 MAX(date) AS last
@@ -210,21 +196,19 @@ class Log
      */
     public function remove(string $path, string $referrer = null): bool
     {
-        $db = $this->db();
-
-        if ($db === null) {
+        if ($this->db === null) {
             return false;
         }
 
-        $where = 'path = "' . $db->escape($path) . '" AND referrer ';
+        $where = 'path = "' . $this->db->escape($path) . '" AND referrer ';
 
         if ($referrer === null) {
             $where .= 'IS NULL';
         } else {
-            $where .= '= "' . $db->escape($referrer) . '"';
+            $where .= '= "' . $this->db->escape($referrer) . '"';
         }
 
-        return $db->records()->delete($where);
+        return $this->db->records()->delete($where);
     }
 
     /**
@@ -236,16 +220,14 @@ class Log
      */
     public function resolve(string $path): bool
     {
-        $db = $this->db();
-
-        if ($db !== null) {
-            return $this->db()->records()->update(
-                ['wasResolved' => 1],
-                ['path' => $path]
-            );
+        if ($this->db === null) {
+            return false;
         }
 
-        return false;
+        return $this->db->records()->update(
+            ['wasResolved' => 1],
+            ['path' => $path]
+        );
     }
 
     /**
@@ -259,9 +241,7 @@ class Log
      */
     public function stats(string $unit, string $from, string $to): array
     {
-        $db = $this->db();
-
-        if ($db === null) {
+        if ($this->db === null) {
             return [];
         }
 
@@ -289,7 +269,7 @@ class Log
                 break;
         }
         // Get data from database
-        $data = $db->query('
+        $data = $this->db->query('
             with recursive dates as (
                 select :from as date
                 union all

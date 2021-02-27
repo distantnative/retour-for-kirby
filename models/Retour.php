@@ -9,6 +9,8 @@ use Kirby\Http\Header;
 use Kirby\Toolkit\Dir;
 use Kirby\Toolkit\F;
 
+use Closure;
+
 class Retour
 {
     /**
@@ -17,7 +19,7 @@ class Retour
     protected static $instance;
 
     /**
-     * @var array
+     * @var \distantnative\Retour\Config
      */
     public $config;
 
@@ -42,41 +44,36 @@ class Retour
     protected $routes;
 
     /**
-     * @var \distantnative\Retour\Upgrades
-     */
-    protected $upgrades;
-
-    /**
      * @var \Kirby\Cms\Plugin
      */
     public static $plugin;
 
     public function __construct()
     {
-        // set config file location
-        $this->file = option(
-            'distantnative.retour.config',
-            kirby()->root('config') . '/redirects.yml'
-        );
-
-        if (is_callable($this->file) === true) {
-            $this->file = call_user_func($this->file);
-        }
-
         // load config
-        try {
-            $this->config = Data::read($this->file, 'yaml');
-        } catch (\Throwable $e) {}
+        $config = kirby()->root('config') . '/redirects.yml';
+        $config = option('distantnative.retour.config', $config);
+        $this->config = new Config($config);
 
         static::$instance = $this;
 
         // check & run upgrades
-        $this->upgrades()->run();
+        $this->upgrade();
 
         // connect to database
         if (option('distantnative.retour.logs', true) === true) {
-            $this->database = $this->connect();
+            $this->database = $this->database();
         }
+    }
+
+    /**
+     * Returns Config instance
+     *
+     * @return \distantnative\Retour\Config
+     */
+    public function config(): Config
+    {
+        return $this->config;
     }
 
     /**
@@ -84,13 +81,11 @@ class Retour
      *
      * @return \Kirby\Database\Database
      */
-    protected function connect(): Database
+    protected function database(): Database
     {
         // Get path to database file
-        $file = option(
-            'distantnative.retour.database',
-            kirby()->root('logs') . '/retour/log.sqlite'
-        );
+        $file = kirby()->root('logs') . '/retour/log.sqlite';
+        $file = option('distantnative.retour.database', $file);
 
         // Support callbacks for database file option
         if (is_callable($file) === true) {
@@ -105,10 +100,7 @@ class Retour
                 Dir::make($dir);
             }
 
-            F::copy(
-                dirname(__DIR__) . '/assets/retour.sqlite',
-                $file
-            );
+            F::copy(dirname(__DIR__) . '/assets/retour.sqlite', $file);
         }
 
         // Connect to database
@@ -137,7 +129,7 @@ class Retour
      */
     public function log(): Log
     {
-        return $this->log ?? $this->log = new Log();
+        return $this->log ?? $this->log = new Log($this->database);
     }
 
     /**
@@ -147,18 +139,21 @@ class Retour
      */
     public function routes(): Routes
     {
-        $routes = $this->config['routes'] ?? [];
+        $routes = $this->config()->data('routes', []);
         return $this->routes ?? $this->routes = Routes::factory($routes);
     }
 
-    /**
-     * Gets or creates the Upgrades instance
-     *
-     * @return \distantnative\Retour\Upgrades
-     */
-    public function upgrades(): Upgrades
+    public function upgrade(): void
     {
-        return $this->upgrades ?? $this->upgrades = new Upgrades();
+        $current    = $this->config()->data('schema', '2.3.1');
+        $migrations = array_map(function (Closure $closure) {
+            return $closure->bindTo($this);
+        }, require dirname(__DIR__) . '/config/migrations.php');
+        $migrator   = new Migrator($current, $migrations);
+
+        if ($latest = $migrator->run()) {
+            $this->config()->set('schema', $latest);
+        }
     }
 
     /**
@@ -179,26 +174,5 @@ class Retour
     public static function plugin(): Plugin
     {
         return static::$plugin = static::$plugin ?? kirby()->plugin('distantnative/retour');
-    }
-
-    /**
-     * Updates the confg file with $data.
-     * If $key is passed, only that key is updated with $data
-     *
-     * @param array $data
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function update($data, string $key = null): bool
-    {
-        if ($key !== null) {
-            $data = array_merge($this->config ?? [
-                'schema' => $this->plugin()->version()
-            ], [$key => $data]);
-        }
-
-        $this->config = $data;
-        return Data::write($this->file, $data, 'yaml');
     }
 }

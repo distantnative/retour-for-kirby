@@ -31,7 +31,7 @@ class Routes extends Collection
      */
     public function save(): bool
     {
-        return retour()->update($this->toArray(), 'routes');
+        return retour()->config()->set('routes', $this->toArray());
     }
 
     /**

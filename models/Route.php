@@ -17,7 +17,7 @@ class Route extends Obj
      */
     public function hasPriority(): bool
     {
-        return $this->priority() ?? false === true;
+        return ($this->priority() ?? false) === true;
     }
 
     /**
@@ -35,11 +35,7 @@ class Route extends Obj
      */
     public function status(): ?int
     {
-        if ($this->status === null) {
-            return null;
-        }
-
-        if ($this->status === 'disabled') {
+        if ($this->status === null || $this->status === 'disabled') {
             return null;
         }
 
@@ -68,6 +64,10 @@ class Route extends Obj
         $from   = $this->from();
         $to     = $this->to();
         $status = $this->status();
+
+        if ($status === null) {
+            return [];
+        }
 
         return [
             'pattern' => $from,

@@ -35,7 +35,6 @@ report.html
 # Tests
 .php_cs.cache
 .phpunit.result.cache
-tests
 
 # editors
 *.sublime-project

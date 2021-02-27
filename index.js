@@ -14876,7 +14876,7 @@ var _default = {
           }
 
           if (this.completion) {
-            await this.completion(row);
+            await this.completion(this.row);
           }
 
           this.$store.dispatch("notification/success", ":)");
@@ -17142,10 +17142,10 @@ var _default = {
 
   data() {
     const page = 1;
-    const limit = localStorage.getItem("retour$" + this.tab + "$limit");
+    const limit = sessionStorage.getItem("retour$" + this.type + "$limit");
     return {
       page: parseInt(page) || 1,
-      limit: parseInt(limit) || 10,
+      limit: limit || 10,
       filter: null,
       hasFilter: false
     };
@@ -17173,23 +17173,27 @@ var _default = {
     },
 
     paginatedRows() {
-      if (!this.limit) {
+      if (!this.limit || this.limit === "all") {
         return this.filteredRows;
       }
 
-      return this.filteredRows.slice(this.limit * (this.page - 1), this.limit * this.page);
+      return this.filteredRows.slice(this.resolvedLimit * (this.page - 1), this.resolvedLimit * this.page);
+    },
+
+    resolvedLimit() {
+      return this.limit === 'all' ? this.rows.length : parseInt(this.limit);
     }
 
   },
   methods: {
     onLimit(limit) {
-      this.limit = parseInt(limit);
+      this.limit = limit;
       this.page = 1;
-      localStorage.setItem("retour$" + this.type + "$limit", this.limit);
+      sessionStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
 
     onOption(option, row, rowIndex) {
-      this.$emit('option', option, row, rowIndex);
+      this.$emit("option", option, row, rowIndex);
     },
 
     onPaginate(pagination) {
@@ -17238,7 +17242,7 @@ exports.default = _default;
         ? _c("k-table", {
             attrs: {
               columns: _vm.columns,
-              index: _vm.limit * (_vm.page - 1) + 1,
+              index: _vm.resolvedLimit * (_vm.page - 1) + 1,
               options: _vm.options,
               rows: _vm.paginatedRows
             },
@@ -17280,7 +17284,7 @@ exports.default = _default;
                 _vm._v(" "),
                 _c("option", { domProps: { value: 50 } }, [_vm._v("50")]),
                 _vm._v(" "),
-                _c("option", { domProps: { value: _vm.rows.length } }, [
+                _c("option", { attrs: { value: "all" } }, [
                   _vm._v(_vm._s(_vm.$t("retour.table.perPage.all")))
                 ])
               ]
@@ -17295,7 +17299,7 @@ exports.default = _default;
           _c("k-pagination", {
             attrs: {
               details: true,
-              limit: _vm.limit,
+              limit: _vm.resolvedLimit,
               page: _vm.page,
               total: _vm.rows.length
             },
@@ -17597,7 +17601,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51653" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63985" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
