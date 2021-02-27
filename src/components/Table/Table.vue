@@ -14,7 +14,7 @@
     <k-table
       v-if="rows.length"
       :columns="columns"
-      :index="limit * (page - 1) + 1"
+      :index="resolvedLimit * (page - 1) + 1"
       :options="options"
       :rows="paginatedRows"
       @cell="$emit('cell', $event)"
@@ -41,13 +41,13 @@
           <option :value="10">10</option>
           <option :value="25">25</option>
           <option :value="50">50</option>
-          <option :value="rows.length">{{ $t("retour.table.perPage.all") }}</option>
+          <option value="all">{{ $t("retour.table.perPage.all") }}</option>
         </select>&nbsp;
         {{ $t("retour.table.perPage.after") }}
       </div>
       <k-pagination
         :details="true"
-        :limit="limit"
+        :limit="resolvedLimit"
         :page="page"
         :total="rows.length"
         @paginate="onPaginate"
@@ -85,7 +85,7 @@ export default {
     const limit = sessionStorage.getItem("retour$" + this.type + "$limit");
     return {
       page: parseInt(page) || 1,
-      limit: parseInt(limit) || 10,
+      limit: limit || 10,
       filter: null,
       hasFilter: false
     };
@@ -114,24 +114,27 @@ export default {
       });
     },
     paginatedRows() {
-      if (!this.limit) {
+      if (!this.limit || this.limit === "all") {
         return this.filteredRows;
       }
 
       return this.filteredRows.slice(
-        this.limit * (this.page - 1),
-        this.limit * this.page
+        this.resolvedLimit * (this.page - 1),
+        this.resolvedLimit * this.page
       );
+    },
+    resolvedLimit() {
+      return this.limit === 'all' ? this.rows.length : parseInt(this.limit);
     }
   },
   methods: {
     onLimit(limit) {
-      this.limit = parseInt(limit);
+      this.limit = limit;
       this.page  = 1;
       sessionStorage.setItem("retour$" + this.type + "$limit", this.limit);
     },
     onOption(option, row, rowIndex) {
-      this.$emit('option', option, row, rowIndex);
+      this.$emit("option", option, row, rowIndex);
     },
     onPaginate(pagination) {
       this.page = pagination.page;
