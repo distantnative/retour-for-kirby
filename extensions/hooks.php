@@ -2,10 +2,17 @@
 
 namespace distantnative\Retour;
 
+use Kirby\Http\Route;
 use Kirby\Http\Router;
 
 return [
-    'route:after' => function ($route, $path, $method, $result, $final) {
+    'route:after' => function (
+        Route $route,
+        string $path,
+        string $method,
+        string $result,
+        bool $final
+    ) {
         if ($final === true && empty($result) === true) {
 
             // skip ignored paths
@@ -14,14 +21,15 @@ return [
                 return $result;
             }
 
+            $retour = retour();
+
             try {
-                $routes = retour()->routes()->toRules(false);
+                $routes = $retour->redirects()->toRoutes(false);
                 $router = new Router($routes);
                 return $router->call($path, $method);
-
             } catch (\Throwable $e) {
-                if (option('distantnative.retour.logs', true) === true) {
-                    retour()->log()->create(['path' => $path]);
+                if (Retour::meta()['hasLog'] !== false) {
+                    $retour->log()->add(['path' => $path]);
                 }
             }
         }

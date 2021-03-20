@@ -7,45 +7,48 @@ use Kirby\Form\Field;
 return [
     'routes' => [
         [
-            'pattern' => 'retour/routes',
+            'pattern' => 'retour/redirects',
             'method'  => 'GET',
-            'action'  => function () {
-                return retour()->routes()->toData(
+            'action'  => function (): array {
+                return retour()->redirects()->toData(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
                 );
             }
         ],
         [
-            'pattern' => 'retour/routes',
+            'pattern' => 'retour/redirects',
             'method'  => 'POST',
-            'action'  => function () {
-                $route  = new Route($this->requestBody());
-                $routes = retour()->routes()->prepend($route);
-                return $routes->save();
+            'action'  => function (): bool {
+                $redirect  = new Redirect($this->requestBody());
+                $redirects = retour()->redirects()->prepend($redirect);
+                $redirects->save();
+                return true;
             }
         ],
         [
-            'pattern' => 'retour/routes/(:num)',
+            'pattern' => 'retour/redirects/(:num)',
             'method'  => 'PATCH',
-            'action'  => function (int $key) {
-                $route  = new Route($this->requestBody());
-                $routes = retour()->routes()->set($key, $route);
-                return $routes->save();
+            'action'  => function (int $key): bool {
+                $redirect  = new Redirect($this->requestBody());
+                $redirects = retour()->redirects()->set($key, $redirect);
+                $redirects->save();
+                return true;
             }
         ],
         [
-            'pattern' => 'retour/routes/(:num)',
+            'pattern' => 'retour/redirects/(:num)',
             'method'  => 'DELETE',
-            'action'  => function (int $key) {
-                $routes = retour()->routes()->remove($key);
-                return $routes->save();
+            'action'  => function (int $key): bool {
+                $redirects = retour()->redirects()->remove($key);
+                $redirects->save();
+                return true;
             }
         ],
         [
             'pattern' => 'retour/failures',
             'method'  => 'GET',
-            'action'  => function () {
+            'action'  => function (): array {
                 return retour()->log()->fails(
                     $this->requestQuery('from'),
                     $this->requestQuery('to')
@@ -55,7 +58,7 @@ return [
         [
             'pattern' => 'retour/failures',
             'method'  => 'DELETE',
-            'action'  => function () {
+            'action'  => function (): bool {
                 return retour()->log()->remove(
                     $this->requestBody('path'),
                     $this->requestBody('referrer')
@@ -65,7 +68,7 @@ return [
         [
             'pattern' => 'retour/stats',
             'method'  => 'GET',
-            'action'  => function () {
+            'action'  => function (): array {
                 return retour()->log()->stats(
                     $this->requestQuery('unit'),
                     $this->requestQuery('from'),
@@ -74,17 +77,16 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/system',
+            'pattern' => 'retour/meta',
             'method'  => 'GET',
-            'action'  => function () {
-                $reload = $this->requestQuery('reload') !== 'false';
-                return Retour::info($reload);
+            'action'  => function (): array {
+                return Retour::meta();
             }
         ],
         [
             'pattern' => 'retour/log/all',
             'method'  => 'GET',
-            'action'  => function () {
+            'action'  => function (): array {
                 return [
                     'from' => retour()->log()->first(),
                     'to'   => retour()->log()->last()
@@ -94,7 +96,7 @@ return [
         [
             'pattern' => 'retour/log/resolve',
             'method'  => 'POST',
-            'action'  => function () {
+            'action'  => function (): bool {
                 return retour()
                     ->log()
                     ->resolve($this->requestBody('path'));
@@ -103,21 +105,21 @@ return [
         [
             'pattern' => 'retour/log/flush',
             'method'  => 'POST',
-            'action'  => function () {
+            'action'  => function (): bool {
                 return retour()->log()->flush();
             }
         ],
         [
             'pattern' => 'retour/log/purge',
             'method'  => 'POST',
-            'action'  => function () {
+            'action'  => function (): bool {
                 return retour()->log()->purge();
             }
         ],
         [
             'pattern' => 'retour/pagepicker',
             'method'  => 'GET',
-            'action'  => function () {
+            'action'  => function (): array {
                 $field = new Field('pages', [
                     'model' => kirby()->site()
                 ]);

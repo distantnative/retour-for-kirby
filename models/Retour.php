@@ -2,167 +2,77 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Cms\Plugin;
-use Kirby\Data\Data;
-use Kirby\Database\Database;
 use Kirby\Http\Header;
-use Kirby\Toolkit\Dir;
-use Kirby\Toolkit\F;
 
-use Closure;
-
-class Retour
+final class Retour
 {
     /**
      * @var \distantnative\Retour\Retour
      */
-    protected static $instance;
+    public static $instance;
 
     /**
-     * @var \distantnative\Retour\Config
-     */
-    public $config;
-
-    /**
-     * @var \Kirby\Database\Database
-     */
-    public $database;
-
-    /**
-     * @var string
-     */
-    protected $file;
-
-    /**
-     * @var \distantnative\Retour\Log
+     * @var \distantnative\Retour\Log|\distantnative\Retour\LogDisabled|null
      */
     protected $log;
 
     /**
-     * @var \distantnative\Retour\Routes
+     * @var \distantnative\Retour\Redirects
      */
-    protected $routes;
-
-    /**
-     * @var \Kirby\Cms\Plugin
-     */
-    public static $plugin;
+    protected $redirects;
 
     public function __construct()
     {
-        // load config
-        $config = kirby()->root('config') . '/redirects.yml';
-        $config = option('distantnative.retour.config', $config);
-        $this->config = new Config($config);
+        // Load and set config
+        $default = kirby()->root('config') . '/retour.yml';
+        $path    = option('distantnative.retour.config', $default);
+        Config::load($path);
+
+        // Initialize redirects
+        $redirects = Config::get('redirects') ?? [];
+        $this->redirects = Redirects::factory($redirects);
 
         static::$instance = $this;
-
-        // check & run upgrades
-        $this->upgrade();
-
-        // connect to database
-        if (option('distantnative.retour.logs', true) === true) {
-            $this->database = $this->database();
-        }
-    }
-
-    /**
-     * Returns Config instance
-     *
-     * @return \distantnative\Retour\Config
-     */
-    public function config(): Config
-    {
-        return $this->config;
-    }
-
-    /**
-     * Connects to database (and creates it if missing)
-     *
-     * @return \Kirby\Database\Database
-     */
-    protected function database(): Database
-    {
-        // Get path to database file
-        $file = kirby()->root('logs') . '/retour/log.sqlite';
-        $file = option('distantnative.retour.database', $file);
-
-        // Support callbacks for database file option
-        if (is_callable($file) === true) {
-            $file = call_user_func($file);
-        }
-
-        // Make sure database is in place
-        if (F::exists($file) === false) {
-            $dir = dirname($file);
-
-            if (is_dir($dir) === false) {
-                Dir::make($dir);
-            }
-
-            F::copy(dirname(__DIR__) . '/assets/retour.sqlite', $file);
-        }
-
-        // Connect to database
-        return new Database([
-            'type'     => 'sqlite',
-            'database' => $file
-        ]);
     }
 
     /**
      * Returns either an existing instance or
      * creates a new instance and returns it
      *
-     * @return \distantnative\Retour\Retour
+     * @return self
      */
     public static function instance(): Retour
     {
-        return static::$instance = static::$instance ?? new static();
+        /**
+         * @psalm-suppress RedundantPropertyInitializationCheck
+         */
+        return static::$instance ?? new self();
     }
-
 
     /**
      * Gets or creates the Log instance
      *
-     * @return \distantnative\Retour\Log
+     * @return \distantnative\Retour\Log|\distantnative\Retour\LogDisabled
      */
-    public function log(): Log
+    public function log()
     {
-        return $this->log ?? $this->log = new Log($this->database);
-    }
-
-    /**
-     * Gets or creates the Routes instance
-     *
-     * @return \distantnative\Retour\Routes
-     */
-    public function routes(): Routes
-    {
-        $routes = $this->config()->data('routes', []);
-        return $this->routes ?? $this->routes = Routes::factory($routes);
-    }
-
-    public function upgrade(): void
-    {
-        $current    = $this->config()->data('schema', '2.3.1');
-        $migrations = array_map(function (Closure $closure) {
-            return $closure->bindTo($this);
-        }, require dirname(__DIR__) . '/config/migrations.php');
-        $migrator   = new Migrator($current, $migrations);
-
-        if ($latest = $migrator->run()) {
-            $this->config()->set('schema', $latest);
+        if ($this->log !== null) {
+            return $this->log;
         }
+
+        if (static::meta()['hasLog'] === false) {
+            return $this->log = new LogDisabled();
+        }
+
+        return $this->log = new Log();
     }
 
     /**
      * Return information for Panel
      *
-     * @param  bool  $reload Force reloading of update info
      * @return array
      */
-    public static function info(bool $reload = false): array
+    public static function meta(): array
     {
         return [
             'deleteAfter' => option('distantnative.retour.deleteAfter', false),
@@ -171,8 +81,13 @@ class Retour
         ];
     }
 
-    public static function plugin(): Plugin
+    /**
+     * Gets or creates the Redirects instance
+     *
+     * @return \distantnative\Retour\Redirects
+     */
+    public function redirects(): Redirects
     {
-        return static::$plugin = static::$plugin ?? kirby()->plugin('distantnative/retour');
+        return $this->redirects;
     }
 }
