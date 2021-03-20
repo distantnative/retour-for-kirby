@@ -1,0 +1,27 @@
+coverage:
+  status:
+    default_rules:
+      # don't send status checks that don't have flag coverage uploaded
+      flag_coverage_not_uploaded_behavior: exclude
+
+    # rules for overall project-wide coverage
+    project:
+      backend:
+        flags: 
+          - backend
+        target: auto
+        informational: true
+
+    # rules based on the specific changes of the PR
+    patch:
+      backend:
+        flags: 
+          - backend
+        target: auto
+        informational: true
+
+flags:
+  backend:
+    paths:
+      - models/
+      - extensions/

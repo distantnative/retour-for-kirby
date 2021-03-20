@@ -1,6 +1,0 @@
-routes:
-  -
-    foo: bar
-  -
-    homer: simpson
-schema: 3.0.1

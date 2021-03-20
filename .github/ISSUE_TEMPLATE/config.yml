@@ -1,0 +1,10 @@
+contact_links:
+  - name: Feature request
+    url: https://github.com/distantnative/retour-for-kirby/discussions
+    about: Ask for a new feature or enhancement. Share an idea.
+  - name: Question
+    url: https://github.com/distantnative/retour-for-kirby/discussions
+    about: For support matters, head over to the discussions.
+  - name: Translation
+    url: http://transifex.com/distantnative/retour-for-kirby/
+    about: Contribute to language translations for Retour
