@@ -1,0 +1,37 @@
+redirects:
+  -
+    from: leistungen/(:all)
+    to: /themen/$1
+    status: 308
+    priority: null
+    comment: null
+  -
+    from: team
+    to: /ueber/team
+    status: 301
+    priority: false
+    comment: null
+  -
+    from: jobs
+    to: /karriere
+    status: 301
+    priority: false
+    comment: null
+  -
+    from: jobs/(:all)
+    to: /karriere/$1
+    status: 301
+    priority: false
+    comment: null
+  -
+    from: en
+    to: /
+    status: 307
+    priority: false
+    comment: null
+  -
+    from: en/(:all)
+    to: /$1
+    status: 307
+    priority: false
+    comment: null

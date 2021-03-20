@@ -3,56 +3,64 @@
 namespace distantnative\Retour;
 
 use Kirby\Data\Data;
+use Kirby\Exception\LogicException;
+use Kirby\Toolkit\Silo;
 
-class Config
+class Config extends Silo
 {
+    /**
+     * @var string
+     */
+    protected static $file;
 
-    protected $file;
-    public $data;
-
-    public function __construct(string $file)
+    /**
+     * Loads config from file and sets static file path
+     *
+     * @param string $file absolute path to config yaml file
+     * @return array
+     */
+    public static function load(string $file): array
     {
-        $this->file = $file;
+        static::$file = $file;
 
-        if (is_callable($this->file) === true) {
-            $this->file = call_user_func($this->file);
+        if (is_callable(static::$file) === true) {
+            static::$file = call_user_func(static::$file);
         }
 
-        $this->read();
-    }
-
-    public function data(?string $key = null, $fallback = null)
-    {
-        if ($key !== null) {
-            return $this->data[$key] ?? $fallback ?? null;
-        }
-
-        return $this->data;
-    }
-
-    public function overwrite(array $data): bool
-    {
-        $this->data = $data;
-        return $this->write();
-    }
-
-    protected function read(): void
-    {
         try {
-            $this->data = Data::read($this->file, 'yaml');
+            static::$data = Data::read(static::$file, 'yaml');
         } catch (\Throwable $th) {
-            $this->overwrite([]);
+            static::$data = [];
         }
+
+        return static::$data;
     }
 
-    public function set(string $key, $value): bool
+    /**
+     * Sets the config but also writes it to config file
+     *
+     * @param string|array $key
+     * @param mixed $value
+     * @return array
+     */
+    public static function set($key, $value = null): array
     {
-        $this->data[$key] = $value;
-        return $this->write();
+        $data = parent::set($key, $value);
+        static::write();
+        return $data;
     }
 
-    protected function write(): bool
+    /**
+     * Writes current config to yaml file
+     *
+     * @return bool
+     */
+    public static function write(): bool
     {
-        return Data::write($this->file, $this->data, 'yaml');
+        if (static::$file === null) {
+            throw new LogicException('Config::write is called before data waas loaded for the first time');
+        }
+
+        return Data::write(static::$file, static::$data, 'yaml');
     }
 }

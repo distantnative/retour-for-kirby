@@ -1,0 +1,176 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  backend-tests:
+    name: PHP ${{ matrix.php }}
+
+    # if on pull request, only run if from a fork
+    # (our own repo is covered by the push event)
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ "7.3", "7.4", "8.0" ]
+    env:
+      extensions: pcov
+      ini: pcov.directory=., "pcov.exclude=\"~(vendor|tests)~\""
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup PHP environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          ini-values: ${{ env.ini }}
+          coverage: pcov
+          tools: phpunit:^9
+
+      - name: Setup problem matchers
+        id: finishPrepare
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Run tests
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: phpunit --coverage-clover ${{ github.workspace }}/clover.xml
+
+      - name: Upload coverage results to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          file: ${{ github.workspace }}/clover.xml
+          flags: backend
+          env_vars: PHP
+        env:
+          PHP: ${{ matrix.php }}
+
+  backend-analysis:
+    name: Backend Analysis
+
+    # if on pull request, only run if from a fork
+    # (our own repo is covered by the push event)
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+
+    runs-on: ubuntu-latest
+    env:
+      php: "7.4" # TODO: Update to PHP 8.0 when PHPMD supports it (https://github.com/phpmd/phpmd/issues/853)
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Preparations
+        run: mkdir sarif
+
+      - name: Setup PHP cache environment
+        id: ext-cache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
+          key: php-analysis-v1
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.ext-cache.outputs.dir }}
+          key: ${{ steps.ext-cache.outputs.key }}
+          restore-keys: ${{ steps.ext-cache.outputs.key }}
+
+      - name: Setup PHP environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
+          coverage: none
+          tools: |
+            composer:v2, composer-normalize,
+            composer-unused, psalm, phpmd
+
+      - name: Cache analysis data
+        id: finishPrepare
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/psalm
+          key: backend-analysis
+
+      - name: Validate composer.json/composer.lock
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: composer validate --strict --no-check-version --no-check-all
+
+      - name: Ensure that composer.json is normalized
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: composer-normalize --dry-run
+
+      # TODO: Re-enable when the fatal error in CI no longer appears
+      # - name: Check for unused Composer dependencies
+      #   if: always() && steps.finishPrepare.outcome == 'success'
+      #   run: composer unused --no-progress
+
+      - name: Statically analyze using Psalm
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: psalm --output-format=github --report=sarif/psalm.sarif --report-show-info=false
+
+      - name: Statically analyze using PHPMD
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: phpmd . ansi phpmd.xml.dist --exclude 'dependencies/*,tests/*,vendor/*'
+
+      - name: Upload code scanning results to GitHub
+        if: always() && steps.finishPrepare.outcome == 'success'
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: sarif
+
+  coding-style:
+    name: Coding Style
+
+    runs-on: ubuntu-latest
+    env:
+      # TODO: update to PHP 8.0 when PHP-CS-Fixer fully supports it
+      php: "7.4"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup PHP environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php }}
+          coverage: none
+          tools: php-cs-fixer
+
+      - name: Cache analysis data
+        id: finishPrepare
+        uses: actions/cache@v2
+        with:
+          path: ~/.php-cs-fixer
+          key: coding-style
+
+      - name: Check for PHP coding style violations
+        if: always() && steps.finishPrepare.outcome == 'success'
+        # Use the --dry-run flag in push builds to get a failed CI status
+        run: >
+          php-cs-fixer fix --diff --diff-format=udiff
+          ${{ github.event_name != 'pull_request' && '--dry-run' || '' }}
+
+      - name: Create code suggestions from the coding style changes (on PR only)
+        if: >
+          always() && steps.finishPrepare.outcome == 'success' &&
+          github.event_name == 'pull_request'
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: PHP-CS-Fixer
+          fail_on_error: 'true'

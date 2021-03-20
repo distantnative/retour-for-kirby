@@ -1,6 +1,6 @@
 {
   "name": "retour-for-kirby",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Redirects and error tracking for Kirby",
   "main": "index.js",
   "author": "Nico Hoffmann <on-github@nhoffmann.com>",

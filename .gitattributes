@@ -13,4 +13,11 @@ composer.lock export-ignore
 
 # Directories
 src/ export-ignore
+
+# Tests
+.codecov.yml export-ignore
+.php_cs export-ignore
+phpmd.xml.dist export-ignore
+phpunit.xml.dist export-ignore
+psalm.xml.dist export-ignore
 tests/ export-ignore
