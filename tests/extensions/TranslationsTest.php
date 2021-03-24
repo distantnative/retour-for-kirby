@@ -11,7 +11,7 @@ final class TranslationsTest extends TestCase
 
     public function testExtension(): void
     {
-        $extension = require dirname(__DIR__, 2) . '/extensions/translations.php';
+        $extension = require dirname(__DIR__, 2) . '/src/extensions/translations.php';
 
         $this->assertTrue(isset($extension['en']));
         $this->assertTrue(isset($extension['de']));

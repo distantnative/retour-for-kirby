@@ -7,13 +7,42 @@ use Kirby\Form\Field;
 return [
     'routes' => [
         [
-            'pattern' => 'retour/redirects',
+            'pattern' => 'retour/meta',
             'method'  => 'GET',
             'action'  => function (): array {
-                return retour()->redirects()->toData(
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
-                );
+                retour()->log()->purge();
+                return array_merge(Retour::meta(), [
+                    'first' => retour()->log()->first()['date'],
+                    'last'  => retour()->log()->last()['date']
+                ]);
+            }
+        ],
+        [
+            'pattern' => 'retour/data',
+            'method'  => 'GET',
+            'action'  => function (): array {
+                $retour = retour();
+                $data = [
+                    'redirects' => retour()->redirects()->toData(
+                        $this->requestQuery('from'),
+                        $this->requestQuery('to')
+                    )
+                ];
+
+                if (Retour::meta()['hasLog'] !== false) {
+                    $data['fails'] = $retour->log()->fails(
+                        $this->requestQuery('from'),
+                        $this->requestQuery('to')
+                    );
+
+                    $data['stats'] = $retour->log()->stats(
+                        $this->requestQuery('unit'),
+                        $this->requestQuery('from'),
+                        $this->requestQuery('to')
+                    );
+                }
+
+                return $data;
             }
         ],
         [
@@ -46,51 +75,13 @@ return [
             }
         ],
         [
-            'pattern' => 'retour/failures',
-            'method'  => 'GET',
-            'action'  => function (): array {
-                return retour()->log()->fails(
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
-                );
-            }
-        ],
-        [
-            'pattern' => 'retour/failures',
+            'pattern' => 'retour/fails',
             'method'  => 'DELETE',
             'action'  => function (): bool {
                 return retour()->log()->remove(
                     $this->requestBody('path'),
                     $this->requestBody('referrer')
                 );
-            }
-        ],
-        [
-            'pattern' => 'retour/stats',
-            'method'  => 'GET',
-            'action'  => function (): array {
-                return retour()->log()->stats(
-                    $this->requestQuery('unit'),
-                    $this->requestQuery('from'),
-                    $this->requestQuery('to')
-                );
-            }
-        ],
-        [
-            'pattern' => 'retour/meta',
-            'method'  => 'GET',
-            'action'  => function (): array {
-                return Retour::meta();
-            }
-        ],
-        [
-            'pattern' => 'retour/log/all',
-            'method'  => 'GET',
-            'action'  => function (): array {
-                return [
-                    'from' => retour()->log()->first(),
-                    'to'   => retour()->log()->last()
-                ];
             }
         ],
         [
@@ -107,13 +98,6 @@ return [
             'method'  => 'POST',
             'action'  => function (): bool {
                 return retour()->log()->flush();
-            }
-        ],
-        [
-            'pattern' => 'retour/log/purge',
-            'method'  => 'POST',
-            'action'  => function (): bool {
-                return retour()->log()->purge();
             }
         ],
         [

@@ -33,7 +33,7 @@ final class Log
                 Dir::make($dir);
             }
 
-            F::copy(dirname(__DIR__) . '/assets/retour.sqlite', $file);
+            F::copy(dirname(__DIR__, 2) . '/assets/retour.sqlite', $file);
         }
 
         // Connect to database

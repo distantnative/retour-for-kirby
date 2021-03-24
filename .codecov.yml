@@ -23,5 +23,5 @@ coverage:
 flags:
   backend:
     paths:
-      - models/
-      - extensions/
+      - src/models/
+      - src/extensions/

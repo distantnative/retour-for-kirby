@@ -13,7 +13,7 @@ final class RoutesTest extends TestCase
 
     public function testExtension(): void
     {
-        $extension = require dirname(__DIR__, 2) . '/extensions/routes.php';
+        $extension = require dirname(__DIR__, 2) . '/src/extensions/routes.php';
 
         $app = new App([
             'roots'   => ['index' => '/dev/null'],

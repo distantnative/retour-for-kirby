@@ -12,7 +12,8 @@ composer.lock export-ignore
 .yarnclean export-ignore
 
 # Directories
-src/ export-ignore
+scripts/ export-ignore
+src/panel/ export-ignore
 
 # Tests
 .codecov.yml export-ignore
