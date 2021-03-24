@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+
+// check if we are indeed on the command line
+if (php_sapi_name() !== 'cli') die();
+
+// Bootstrap
+require __DIR__ . '/../tests/bootstrap.php';
+
+$kirby = new Kirby([
+    'roots'   => ['index' => '/dev/null'],
+    'options' => [
+        'distantnative.retour.database' => dirname(__DIR__, 3) . '/logs/retour/log.sqlite'
+    ]
+]);
+
+$retour = retour();
+$retour->log()->flush();
+
+$redirects = [
+    'leistungen/(:all)',
+    'team',
+    'jobs',
+    'jobs/(:all)',
+    'en'
+];
+
+$referrers = [
+    Str::random(10),
+    Str::random(15),
+    Str::random(7),
+    Str::random(8),
+    Str::random(16),
+    Str::random(10),
+    Str::random(5)
+];
+
+$start = strtotime('-3 month');
+$end   = strtotime('+1 week');
+
+for ($i=0; $i < 3500; $i++) { 
+    $time = rand($start, $end);
+    $retour->log()->add([
+        'date'     => date('Y-m-d H:i:s', $time),
+        'path'     => $path = Str::random(10),
+        'redirect' => rand(0, 9) > 5 ? array_rand($redirects) : null,
+        'referral' => rand(0, 9) > 7 ? array_rand($referrers) : null
+    ]);
+
+    if (rand(0, 15) > 12) {
+        $retour->log()->resolve($path);
+    }
+}
+
+exit(0); 
