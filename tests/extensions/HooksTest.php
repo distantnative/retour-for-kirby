@@ -4,6 +4,7 @@ namespace distantnative\Retour;
 
 use Kirby\Cms\App;
 use Kirby\Http\Route;
+use Kirby\Toolkit\F;
 
 use PHPUnit\Framework\TestCase;
 use RetourTestCase;
@@ -47,7 +48,8 @@ final class HooksTest extends TestCase
         $app = new App([
             'roots'   => ['index' => '/dev/null'],
             'options' => [
-                'distantnative.retour.logs' => false
+                'distantnative.retour.logs' => true,
+                'distantnative.retour.database' => $file = __DIR__ . '/fixtures/test.sqlite'
             ]
         ]);
 
@@ -57,26 +59,13 @@ final class HooksTest extends TestCase
             'status' => 307
         ]));
 
+        $this->assertSame(0, retour()->log()->table()->count());
+
         $hook = self::$hook;
         $this->assertNull($hook(self::$route, 'foo', 'GET', '', true));
+
+        $this->assertSame(1, retour()->log()->table()->count());
+
+        F::remove($file);
     }
-
-    // public function testMatching(): void
-    // {
-    //     $app = new App([
-    //         'roots'   => ['index' => '/dev/null'],
-    //         'options' => [
-    //             'distantnative.retour.logs' => false
-    //         ]
-    //     ]);
-
-    //     retour()->redirects()->prepend(new Redirect([
-    //         'from'   => 'foo',
-    //         'to'     => 'bar',
-    //         'status' => 307
-    //     ]));
-
-    //     $hook = self::$hook;
-    //     $this->assertNotNull($hook(self::$route, 'foo', 'GET', '', true));
-    // }
 }
