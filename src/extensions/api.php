@@ -10,11 +10,21 @@ return [
             'pattern' => 'retour/meta',
             'method'  => 'GET',
             'action'  => function (): array {
+                // Purge log entries that should be auomatically deleted
                 retour()->log()->purge();
-                return array_merge(Retour::meta(), [
-                    'first' => retour()->log()->first()['date'],
-                    'last'  => retour()->log()->last()['date']
-                ]);
+
+                // Get meta information
+                $meta = Retour::meta();
+
+                // Add log informaiton if activated
+                if ($meta['hasLog'] !== false) {
+                    $meta = array_merge($meta, [
+                        'first' => retour()->log()->first()['date'],
+                        'last'  => retour()->log()->last()['date']
+                    ]);
+                }
+
+                return $meta;
             }
         ],
         [

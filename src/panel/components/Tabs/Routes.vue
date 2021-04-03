@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     columns() {
-      return {
+      let columns = {
         from: {
           label: this.$t("retour.routes.from"),
           type: "link",
@@ -84,13 +84,18 @@ export default {
           label: this.$t("retour.routes.priority.abbr"),
           type: "priority",
           width: "1/20"
-        },
-        hits: {
+        }
+      };
+
+      if (this.hasLog) {
+        columns.hits = {
           label: this.$t("retour.hits"),
           width: "1/10",
           type: "count"
-        }
-      };
+        };
+      }
+
+      return columns;
     },
     fields() {
       const site = window.panel.site.replace(/^(http\:\/\/|https\:\/\/)/,"").replace(/^(www\.)/,"") + "/";
@@ -139,6 +144,9 @@ export default {
           help: this.$t("retour.routes.comment.help")
         }
       }
+    },
+    hasLog() {
+      return this.$store.state.retour.meta.hasLog !== false;
     },
     headers() {
       return this.$store.state.retour.meta.headers;

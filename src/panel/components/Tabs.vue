@@ -82,3 +82,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.retour .tab {
+  margin-top: 2rem;
+}
+</style>
