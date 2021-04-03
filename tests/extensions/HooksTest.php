@@ -19,9 +19,14 @@ final class HooksTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         $extension = require dirname(__DIR__, 2) . '/src/extensions/hooks.php';
-        self::$hook = $extension['route:after'];
+        self::$hook = $extension['route:after'] ?? null;
         self::$route = new Route('foo', 'GET', function () {
         });
+    }
+
+    public function testHasRouteAfterHook(): void
+    {
+        $this->assertNotNull(self::$hook);
     }
 
     public function testNotFinal(): void
