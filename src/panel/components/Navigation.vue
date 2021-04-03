@@ -1,7 +1,6 @@
 <template>
-<div>
   <header class="k-header">
-    <k-bar class="k-header-buttons">
+    <k-bar :data-loading="$store.state.isLoading" class="k-header-buttons">
       <template #left>
         <dates />
       </template>

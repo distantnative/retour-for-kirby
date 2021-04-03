@@ -31,3 +31,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.retour [data-loading] {
+  pointer-events: none;
+  opacity: .65;
+  cursor: progress;
+}
+</style>

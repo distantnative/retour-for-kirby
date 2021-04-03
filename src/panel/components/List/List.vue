@@ -201,9 +201,4 @@ export default {
   color: #777;
   height: 2.5rem;
 }
-.retour .list[data-loading] {
-  pointer-events: none;
-  opacity: .65;
-  cursor: progress;
-}
 </style>
