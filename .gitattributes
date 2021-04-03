@@ -11,6 +11,9 @@ yarn.lock export-ignore
 composer.lock export-ignore
 .yarnclean export-ignore
 
+# build
+vite.config.js export-ignore
+
 # Directories
 scripts/ export-ignore
 src/panel/ export-ignore
