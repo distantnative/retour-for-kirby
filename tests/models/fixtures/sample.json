@@ -1,0 +1,18 @@
+{
+  "redirects": [
+    {
+      "from": "leistungen/(:all)",
+      "to": "/themen/$1",
+      "status": 308,
+      "priority": null,
+      "comment": null
+    },
+    {
+      "from": "team",
+      "to": "/ueber/team",
+      "status": 301,
+      "priority": false,
+      "comment": null
+    }
+  ]
+}

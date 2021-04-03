@@ -28,7 +28,7 @@ final class Config extends Silo
         static::$file = $file;
 
         try {
-            static::$data = Data::read(static::$file, 'yaml');
+            static::$data = Data::read(static::$file);
         } catch (\Throwable $th) {
             static::$data = [];
         }
@@ -62,6 +62,6 @@ final class Config extends Silo
             throw new LogicException('Config::write is called before data waas loaded for the first time');
         }
 
-        return Data::write(static::$file, static::$data, 'yaml');
+        return Data::write(static::$file, static::$data);
     }
 }

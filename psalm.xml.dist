@@ -8,8 +8,8 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="extensions" />
-        <directory name="models" />
+        <directory name="src/extensions" />
+        <directory name="src/models" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
@@ -19,7 +19,7 @@
         <!-- Don't warn about "$this in a non-class context" in the config dir -->
         <InvalidScope>
             <errorLevel type="suppress">
-                <file name="extensions/api.php" />
+                <file name="src/extensions/api.php" />
             </errorLevel>
         </InvalidScope>
     </issueHandlers>

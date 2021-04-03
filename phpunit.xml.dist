@@ -11,11 +11,11 @@
 
     <coverage ignoreDeprecatedCodeUnits="true">
         <include>
-            <directory>./extensions</directory>
-            <directory>./models</directory>
+            <directory>./src/extensions</directory>
+            <directory>./src/models</directory>
         </include>
         <exclude>
-            <file>./extensions/api.php</file>
+            <file>./src/extensions/api.php</file>
         </exclude>
     </coverage>
 

@@ -53,6 +53,17 @@ final class ConfigTest extends TestCase
     }
 
     /**
+     * @covers ::load
+     */
+    public function testFileJSON(): void
+    {
+        $file = __DIR__ . '/fixtures/sample.json';
+        Config::load($file);
+        $this->assertSame(2, count(Config::$data['redirects']));
+        $this->assertSame('/ueber/team', Config::$data['redirects'][1]['to']);
+    }
+
+    /**
      * @covers ::write
      */
     public function testWriteNotExists(): void
