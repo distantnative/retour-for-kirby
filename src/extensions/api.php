@@ -19,8 +19,8 @@ return [
                 // Add log informaiton if activated
                 if ($meta['hasLog'] !== false) {
                     $meta = array_merge($meta, [
-                        'first' => retour()->log()->first()['date'],
-                        'last'  => retour()->log()->last()['date']
+                        'first' => retour()->log()->first()['date'] ?? null,
+                        'last'  => retour()->log()->last()['date'] ?? null
                     ]);
                 }
 
