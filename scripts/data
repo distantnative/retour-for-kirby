@@ -43,8 +43,8 @@ for ($i=0; $i < 3500; $i++) {
     $retour->log()->add([
         'date'     => date('Y-m-d H:i:s', $time),
         'path'     => $path = Str::random(10),
-        'redirect' => rand(0, 9) > 5 ? array_rand($redirects) : null,
-        'referral' => rand(0, 9) > 7 ? array_rand($referrers) : null
+        'redirect' => rand(0, 9) > 5 ? $redirects[array_rand($redirects)] : null,
+        'referrer' => rand(0, 9) > 7 ? $referrers[array_rand($referrers)] : null
     ]);
 
     if (rand(0, 15) > 12) {

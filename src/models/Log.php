@@ -177,7 +177,7 @@ final class Log
     /**
      * Get all records for a redirect
      *
-     * @param array $redirect redirect array
+     * @param string $path redirect path
      * @param string $from date sting (yyyy-mm-dd)
      * @param string $to date sting (yyyy-mm-dd)
      *
