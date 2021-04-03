@@ -9,6 +9,7 @@
       <tr 
         v-for="segment, segmentIndex in segments" 
         :key="segmentIndex"
+        @dblclick="onZoom(segment)"
       >
         <td 
           v-for="area, areaIndex in segment.areas" 
@@ -26,8 +27,9 @@
         :key="segment.label"
         :data-current="isCurrent(segment)"
         :data-first-of-month="isFirstOfMonth(segment)"
+        @dblclick="onZoom(segment)"
       >
-        <td @dblclick="onZoom(segment)">{{ label(segment) }}</td>
+        <td>{{ label(segment) }}</td>
       </tr>
     </tfoot>
   </table>
@@ -115,7 +117,7 @@ export default {
     },
     clip(segment, area) {
       let current = this.bounds(this.segments[segment], area);
-      let next    = {path: 0, mask: 0};
+      let next    = { path: 0, mask: 0 };
 
       if (this.segments[segment + 1]) {
         next = this.bounds(this.segments[segment + 1], area);
@@ -196,7 +198,7 @@ export default {
 
   height: var(--height);
   background-image: var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x);
-  background-size: 5px 1px;
+  background-size: 1px 1px, 3px 1px, 3px 1px, 3px 1px, 3px 1px, 1px 1px;
   background-repeat: repeat-x;
   background-position: center 0%, center 20%, center 40%, center 60%, center 80%, center 100%;
 }
@@ -208,16 +210,15 @@ export default {
   align-items: stretch;
   flex-direction: row;
 }
-.chart-areas thead tr,
-.chart-areas tbody tr {
-  position: relative;
+.chart-areas tbody tr:not(:nth-last-child(2)) {
   background-image: linear-gradient(#555 33%, transparent 0%);
-  background-size: 1px 5px;
+  background-size: 1px 3px;
   background-repeat: repeat-y;
   background-position: right;
 }
 .chart-areas tbody tr,
 .chart-areas tfoot tr {
+    position: relative;
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
