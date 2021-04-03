@@ -8,7 +8,7 @@ load([
     'distantnative\\Retour\\Redirects' => __DIR__ . '/src/models/Redirects.php'
 ]);
 
-function retour()
+function retour(): distantnative\Retour\Retour
 {
     return distantnative\Retour\Retour::instance();
 }
