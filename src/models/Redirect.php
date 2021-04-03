@@ -3,7 +3,6 @@
 namespace distantnative\Retour;
 
 use Kirby\Http\Header;
-use Kirby\Http\Response;
 use Kirby\Http\Url;
 use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
@@ -95,7 +94,8 @@ final class Redirect extends Obj
             'action'  => function (array ...$placeholders) use ($redirect) {
 
                 /** @var array<int, string> $placeholders */
-                $to = static::toPath($redirect->to() ?? '/', $placeholders);
+                $to = $redirect->to() ?? '/';
+                $to = Redirect::toPath($to, $placeholders);
 
                 /** @var int $status */
                 $status = $redirect->status();
@@ -108,7 +108,7 @@ final class Redirect extends Obj
 
                 // Redirects
                 if ($status >= 300 && $status < 400) {
-                    return Response::redirect($to, $status);
+                    go($to, $status);
                 }
 
                 // Set the right response code
