@@ -1,14 +1,16 @@
 <template>
   <div
-    v-if="row.hits > 0"
     :title="title"
     class="k-table-count-cell"
   >
-    <k-button
-      :tooltip="title"
-      icon="clock"
-    />
-    {{ row.hits }}
+    <template v-if="row.hits > 0">
+      {{ row.hits }}
+      <k-icon
+        :title="title"
+        type="clock"
+      />
+    </template>
+    <p v-else>–</p>
   </div>
 </template>
 
@@ -28,9 +30,13 @@ export default {
 <style>
 .k-table-count-cell {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   padding-left: .5rem;
   padding-right: .5rem;
+}
+.k-table-count-cell p {
+  color: var(--color-border);
 }
 .k-table-count-cell .k-icon {
   color: var(--color-border);

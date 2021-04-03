@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :data-loading="$store.state.isLoading">
     <!-- header -->
     <header>
       <div class="filter">
@@ -90,7 +90,8 @@ export default {
   data() {
     return {
       page: 1,
-      filter: null
+      filter: null,
+      storedLimit: sessionStorage.getItem("retour$" + this.type + "$limit") || 10
     };
   },
   computed: {
@@ -125,14 +126,17 @@ export default {
     },
     limit() {
       return this.storedLimit === 'all' ? this.rows.length : parseInt(this.storedLimit);
-    },
-    storedLimit() {
-      return sessionStorage.getItem("retour$" + this.type + "$limit") || 10;
+    }
+  },
+  watch: {
+    filteredRows() {
+      this.page = 1;
     }
   },
   methods: {
     onLimit(limit) {
       this.page = 1;
+      this.storedLimit = limit;
       sessionStorage.setItem("retour$" + this.type + "$limit", limit);
     },
     onOption(option, row, rowIndex) {
@@ -196,5 +200,10 @@ export default {
   font-size: 0.875rem;
   color: #777;
   height: 2.5rem;
+}
+.retour .list[data-loading] {
+  pointer-events: none;
+  opacity: .65;
+  cursor: progress;
 }
 </style>

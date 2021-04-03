@@ -123,10 +123,10 @@
 
 <script>
 import OptionsDropdown from "./OptionsDropdown.vue";
-import TableCountCell from "../components/Table/Cells/TableCountCell.vue";
-import TableLinkCell from "../components/Table/Cells/TableLinkCell.vue";
-import TablePriorityCell from "../components/Table/Cells/TablePriorityCell.vue";
-import TableStatusCell from "../components/Table/Cells/TableStatusCell.vue";
+import TableCountCell from "../components/List/Cells/TableCountCell.vue";
+import TableLinkCell from "../components/List/Cells/TableLinkCell.vue";
+import TablePriorityCell from "../components/List/Cells/TablePriorityCell.vue";
+import TableStatusCell from "../components/List/Cells/TableStatusCell.vue";
 
 export default {
   components: {

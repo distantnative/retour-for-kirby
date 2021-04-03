@@ -16,7 +16,6 @@ panel.plugin("distantnative/retour", {
     "rt-status": StatusField,
     "rt-destination": DestinationField
   },
-  
   created(app) {
     app.$store.registerModule("retour", Store(app));
   }

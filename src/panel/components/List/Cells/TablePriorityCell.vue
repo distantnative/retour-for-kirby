@@ -1,9 +1,11 @@
 <template>
-  <div v-if="value" class="k-table-priority-cell">
+  <div class="k-table-priority-cell">
     <k-icon
+      v-if="value"
       type="bolt"
       :title="column.label"
     />
+    <p v-else>–</p>
   </div>
 </template>
 
@@ -20,6 +22,9 @@ export default {
 .k-table-priority-cell {
   display: flex;
   justify-content: center;
+}
+.k-table-priority-cell p {
+  color: var(--color-border);
 }
 .k-table-priority-cell .k-icon {
   transform: scale(.8);
