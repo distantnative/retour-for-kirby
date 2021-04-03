@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
 
-    bootstrap="tests/bootstrap.php"
+    bootstrap="./tests/bootstrap.php"
     colors="true"
     verbose="true"
     stderr="true">
@@ -16,6 +16,7 @@
         </include>
         <exclude>
             <file>./src/extensions/api.php</file>
+            <file>./src/models/LogDisabled.php</file>
         </exclude>
     </coverage>
 

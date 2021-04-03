@@ -60,7 +60,7 @@ final class ConfigTest extends TestCase
         $file = __DIR__ . '/fixtures/sample.json';
         Config::load($file);
         $this->assertSame(2, count(Config::$data['redirects']));
-        $this->assertSame('/ueber/team', Config::$data['redirects'][1]['to']);
+        $this->assertSame('about/team', Config::$data['redirects'][1]['to']);
     }
 
     /**

@@ -99,8 +99,8 @@ final class RetourTest extends TestCase
 
         $redirects = retour()->redirects();
         $this->assertInstanceOf('distantnative\Retour\Redirects', $redirects);
-        $this->assertSame(6, $redirects->count());
-        $this->assertSame(6, count(Config::$data['redirects']));
+        $this->assertSame(4, $redirects->count());
+        $this->assertSame(4, count(Config::$data['redirects']));
     }
 
     /**

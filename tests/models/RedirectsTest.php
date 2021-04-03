@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RetourTestCase;
 
 /**
- * @coversDefaultClass \distantnative\Retour\Config
+ * @coversDefaultClass \distantnative\Retour\Redirects
  */
 final class RedirectsTest extends TestCase
 {

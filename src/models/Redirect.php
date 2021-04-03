@@ -107,9 +107,11 @@ final class Redirect extends Obj
                 ]);
 
                 // Redirects
+                // @codeCoverageIgnoreStart
                 if ($status >= 300 && $status < 400) {
                     go($to, $status);
                 }
+                // @codeCoverageIgnoreEnd
 
                 // Set the right response code
                 kirby()->response()->code($status);

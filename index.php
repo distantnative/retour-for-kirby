@@ -1,11 +1,12 @@
 <?php
 
 load([
-    'distantnative\\Retour\\Retour'    => __DIR__ . '/src/models/Retour.php',
-    'distantnative\\Retour\\Config'    => __DIR__ . '/src/models/Config.php',
-    'distantnative\\Retour\\Log'       => __DIR__ . '/src/models/Log.php',
-    'distantnative\\Retour\\Redirect'  => __DIR__ . '/src/models/Redirect.php',
-    'distantnative\\Retour\\Redirects' => __DIR__ . '/src/models/Redirects.php'
+    'distantnative\\Retour\\Retour'      => __DIR__ . '/src/models/Retour.php',
+    'distantnative\\Retour\\Config'      => __DIR__ . '/src/models/Config.php',
+    'distantnative\\Retour\\LogDisabled' => __DIR__ . '/src/models/LogDisabled.php',
+    'distantnative\\Retour\\Log'         => __DIR__ . '/src/models/Log.php',
+    'distantnative\\Retour\\Redirect'    => __DIR__ . '/src/models/Redirect.php',
+    'distantnative\\Retour\\Redirects'   => __DIR__ . '/src/models/Redirects.php'
 ]);
 
 function retour(): distantnative\Retour\Retour

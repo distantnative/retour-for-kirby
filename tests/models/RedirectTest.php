@@ -161,15 +161,6 @@ final class RedirectTest extends TestCase
 
         $redirect = new Redirect([
             'from'   => 'foo',
-            'to'     => 'bar',
-            'status' => 307
-        ]);
-
-        $route = $redirect->toRoute();
-        $this->assertInstanceOf('Kirby\\Http\\Response', $route['action']());
-
-        $redirect = new Redirect([
-            'from'   => 'foo',
             'to'     => 'projects/project-a',
             'status' => 200
         ]);

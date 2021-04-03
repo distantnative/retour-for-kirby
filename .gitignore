@@ -7,12 +7,10 @@
 # composer
 /vendor
 
-# Parcel cache folder
-.cache
-
 # Tests
 .php_cs.cache
 .phpunit.result.cache
+/tests/coverage
 
 # editors
 *.sublime-project

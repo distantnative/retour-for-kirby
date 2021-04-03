@@ -1,17 +1,17 @@
 {
   "redirects": [
     {
-      "from": "leistungen/(:all)",
-      "to": "/themen/$1",
+      "from": "blog/(:all)",
+      "to": "notes/$1",
       "status": 308,
-      "priority": null,
+      "priority": false,
       "comment": null
     },
     {
       "from": "team",
-      "to": "/ueber/team",
-      "status": 301,
-      "priority": false,
+      "to": "about/team",
+      "status": 307,
+      "priority": true,
       "comment": null
     }
   ]
