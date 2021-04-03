@@ -18,15 +18,11 @@
         />
       </tr>
     </tbody>
-    <tfoot 
-      :data-less="days > 31 && days <= 50" 
-      :data-month="days > 50"
-    >
+    <tfoot :data-less="segments.length > 30">
       <tr 
         v-for="segment in segments" 
         :key="segment.label"
         :data-current="isCurrent(segment)"
-        :data-first-of-month="isFirstOfMonth(segment)"
         @dblclick="onZoom(segment)"
       >
         <td>{{ label(segment) }}</td>
@@ -53,31 +49,21 @@ export default {
         return tick;
       });
     },
-    days() {
-      const view = this.$store.state.retour.view;
-      const min  = this.$library.dayjs(view.from);
-      const max  = this.$library.dayjs(view.to);
-      return max.diff(min, "day");
-    },
     format() {
-      if (this.unit === "day" || this.days === 0) {
-        return "HH"
+      switch (this.unit) {
+        case "day":
+          return "HH";
+        case "week":
+          return "ddd";
+        case "month":
+          return "D";
+        case "year":
+          return "MMM";
+        case "months":
+          return "MMM YY";
+        default:
+          return "D MMM";
       }
-      if (this.unit === "week") {
-        return "ddd"
-      }
-      if (this.unit === "month") {
-        return "D";
-      }
-      if (this.unit === "year") {
-        return "MMM";
-      }
-
-      if (this.days > 50) {
-        return "MMM YYYY";
-      }
-
-      return "D MMM";
     },
     unit() {
       return this.$store.getters["retour/unit"];
@@ -100,7 +86,7 @@ export default {
       if (max > 0) {
         const digits = max.toString().length;
         const next   = Math.pow(10, digits) / 4;
-        return Math.ceil(max/next) * next;
+        return Math.ceil((max * 1.1)/next) * next;
       }
 
       return 5;
@@ -132,7 +118,7 @@ export default {
         const date  = this.$library.dayjs(next.label);
         const today = this.$library.dayjs();
 
-        if (date.isAfter(today, "day")) {
+        if (date.isAfter(today, this.subunit)) {
           return "transparent";
         }
       }
@@ -142,10 +128,6 @@ export default {
     isCurrent(segment) {
       const today = this.$library.dayjs();
       return this.$library.dayjs(segment.label).isSame(today, this.subunit);
-    },
-    isFirstOfMonth(segment) {
-      const date = this.$library.dayjs(segment.label);
-      return date.date() === 1;
     },
     label(segment) {
       return this.$library.dayjs(segment.label).format(this.format);
@@ -253,18 +235,12 @@ export default {
   text-align: center;
 }
 
-.chart-areas tfoot[data-less] tr,
-.chart-areas tfoot[data-month] tr {
+.chart-areas tfoot[data-less] tr{
   display: none;
 }
 
 .chart-areas tfoot[data-less] tr:nth-child(3n+1),
 .chart-areas tfoot[data-less] tr:last-child {
-  display: block;
-}
-
-.chart-areas tfoot[data-month] tr[data-first-of-month],
-.chart-areas tfoot[data-month] tr:first-child {
   display: block;
 }
 

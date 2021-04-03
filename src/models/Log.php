@@ -273,6 +273,7 @@ final class Log
                 break;
 
             case 'year':
+            case 'months':
                 $use['group'] = '%Y-%m';
                 $use['step']  = 'month';
                 break;

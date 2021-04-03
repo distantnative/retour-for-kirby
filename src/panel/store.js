@@ -4,6 +4,7 @@
  * @returns {string}
  */
 const getUnit = ({ from, to }) => {
+  // full units
   if (from.isSame(to, "day")) {
     return "day";
   }
@@ -30,7 +31,14 @@ const getUnit = ({ from, to }) => {
     return "year";
   }
 
-  return "custom";
+  // custom ranges
+  const diff = to.diff(from, "day");
+  
+  if (diff > 50) {
+    return "months"
+  }
+
+  return "days";
 };
 
 export default (Vue) => ({

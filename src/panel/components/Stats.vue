@@ -1,18 +1,18 @@
 <template>
   <k-view class="stats">
     <pie :segments="pie" />
-    <areas :segments="areas" />
+    <timeline :segments="areas" />
   </k-view>
 </template>
 
 <script>
 import Pie from "./Graphs/Pie.vue";
-import Areas from "./Graphs/Areas.vue";
+import Timeline from "./Graphs/Timeline.vue";
 
 export default {
   components: {
-    Areas,
-    Pie
+    Pie,
+    Timeline,
   },
   computed: {
     data() {
