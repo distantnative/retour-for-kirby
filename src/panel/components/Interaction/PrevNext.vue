@@ -31,14 +31,24 @@ export default {
     timespan: Object
   },
   computed: {
+    first() {
+      return this.$library.dayjs(this.timespan.first);
+    },
+    last() {
+      return this.$library.dayjs(this.timespan.last);
+    },
     hasPrev() {
-      return this.dates.from.isAfter(this.$library.dayjs(this.timespan.first));
+      return this.dates.from.isAfter(this.first);
     },
     hasNext() {
-      return this.dates.to.isBefore(this.$library.dayjs(this.timespan.first)) || this.dates.to.isBefore(this.$library.dayjs());
+      // either has more data in the future
+      // or today is in the future
+      return this.dates.to.isBefore(this.last) ||
+             this.dates.to.isBefore(this.$library.dayjs());
     },
     isAll() {
-      return this.dates.from.isSame(this.$library.dayjs(this.timespan.first), "day") && this.dates.to.isSame(this.$library.dayjs(this.timespan.last), "day");
+      return this.dates.from.isSame(this.first, "day") &&
+             this.dates.to.isSame(this.last, "day");
     }
   },
   methods: {
@@ -53,8 +63,18 @@ export default {
       return unit === "all" && (!this.timespan.first || !this.timespan.last);
     },
     set(unit) {
+
+      if (unit === "all") {
+        this.$emit("navigate", {
+          from: this.first,
+          to: this.last
+        });
+      }
+
       let timespan = Object.assign({}, this.dates);
 
+      // on hitting the current unit again,
+      // move to current timespan around today
       if (unit === this.timespan.unit) {
         timespan = {
           from: this.$library.dayjs().clone(),
@@ -62,18 +82,10 @@ export default {
         };
       }
 
-      switch (unit) {
-      case "all":
-        timespan.from  = this.$library.dayjs(this.timespan.first);
-        timespan.to    = this.$library.dayjs(this.timespan.last);
-        break;
-      default:
-        timespan.from = timespan.from.startOf(unit);
-        timespan.to   = timespan.from.endOf(unit);
-        break;
-      }
-
-      this.$emit("navigate", timespan);
+      this.$emit("navigate", {
+        from: timespan.from.startOf(unit),
+        to: timespan.from.endOf(unit)
+      });
     },
     onNavigate(method) {
       let unit   = this.timespan.unit;
@@ -84,13 +96,13 @@ export default {
         unit   = "day";
       }
 
-      const timespan = this.dates;
-      timespan.from  = timespan.from[method](factor, unit).startOf(unit);
-      timespan.to    = timespan.to[method](factor, unit).endOf(unit);
-      this.$emit("navigate", timespan);
+      this.$emit("navigate", {
+        from: this.dates.from[method](factor, unit).startOf(unit),
+        to: this.dates.to[method](factor, unit).endOf(unit)
+      });
     }
   }
-}
+};
 </script>
 
 <style>
