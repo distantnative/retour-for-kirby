@@ -52,9 +52,9 @@ export default {
 
 <style>
 .retour-navigation .k-tab-button[title="Routes"] .k-tabs-badge {
-  color: var(--color-blue-600);
+  background: var(--color-blue-300);
 }
 .retour-navigation .k-tab-button[title="Failures"] .k-tabs-badge {
-  color: var(--color-red-600);
+  background: var(--color-red-300);
 }
 </style>

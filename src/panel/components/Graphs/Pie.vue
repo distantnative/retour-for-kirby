@@ -1,14 +1,21 @@
 <template>
   <figure class="chart-pie">
-    <div class="graph" :style="'--gradient: ' + gradient"></div>
+    <div class="graph" :style="'--gradient: ' + gradient" />
 
     <figcaption>
-      <ul>
-        <li v-for="segment in data" :key="segment.label">
-          <k-icon type="circle" :style="'--color:' + segment.color" />
-          {{ segment.data }} {{ segment.label }}
-        </li>
-      </ul>
+      <template v-for="segment in data">
+        <k-icon
+          :key="segment.label + '-icon'"
+          :style="'--color:' + segment.color"
+          type="circle"
+        />
+        <div :key="segment.label + '-no'">
+          {{ new Intl.NumberFormat().format(segment.data) }}
+        </div>
+        <div :key="segment.label + '-label'">
+          {{ segment.label }}
+        </div>
+      </template>
     </figcaption>
   </figure>
 </template>
@@ -21,7 +28,7 @@ export default {
   computed: {
     gradient() {
       let gradient = "";
-      let size     = 0
+      let size     = 0;
       const deg    = this.total/180;
 
       for (let i = 0; i < this.data.length; i++) {
@@ -30,14 +37,14 @@ export default {
         gradient += `${this.data[i].color} ${size}deg,`;
       }
 
-      gradient += `transparent 180deg`;
+      gradient += "transparent 180deg";
       return gradient;
     },
     total() {
       return this.data.reduce((i, x) => i += x.data, 0);
     }
   }
-}
+};
 </script>
 
 <style>
@@ -57,14 +64,15 @@ export default {
   clip-path: polygon(0% 0%, 0% 50%, 100% 50%, 100% 0%);
   margin-bottom: calc(-50% + 1.5rem);
 }
-.chart-pie li {
-  display: flex;
+.chart-pie figcaption {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: .5rem;
 }
-.chart-pie li + li {
-  margin-top: .35rem;
+.chart-pie figcaption :nth-child(3n+2) {
+  text-align: right;
 }
-.chart-pie li .k-icon {
+.chart-pie figcaption .k-icon {
   color: var(--color);
-  margin-right: .5rem;
 }
 </style>

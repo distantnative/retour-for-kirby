@@ -43,4 +43,7 @@ export default {
   color: var(--color-border);
   transform: scale(.8);
 }
+.k-table-link-cell .k-button:hover .k-icon {
+  color: var(--color-gray-600);
+}
 </style>

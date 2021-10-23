@@ -10,6 +10,7 @@
       v-for="unit in ['all', 'year', 'month', 'day']"
       :key="unit"
       :current="isCurrent(unit)"
+      :disabled="isDisabled(unit)"
       @click="set(unit)"
     >
       {{ $t('retour.stats.mode.' + unit) }}
@@ -47,6 +48,9 @@ export default {
       }
 
       return unit === this.timespan.unit;
+    },
+    isDisabled(unit) {
+      return unit === "all" && (!this.timespan.first || !this.timespan.last);
     },
     set(unit) {
       let timespan = Object.assign({}, this.dates);

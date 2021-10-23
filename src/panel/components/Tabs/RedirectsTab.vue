@@ -83,7 +83,7 @@ export default {
       case "add":
         return this.$dialog("retour/redirects/create");
       case "edit":
-        return this.$dialog(`retour/redirects/${rowIndex}/edit`);
+        return this.$dialog(`retour/redirects/${rowIndex}/edit`, { query: { column }});
       case "remove":
         return this.$dialog(`retour/redirects/${rowIndex}/delete`);
       }

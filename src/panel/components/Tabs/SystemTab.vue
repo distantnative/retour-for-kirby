@@ -10,7 +10,7 @@
       <li>
         <dl>
           <dt>
-            {{ $t('retour.plugin.redirects') }}
+            {{ $t('retour.system.redirects') }}
           </dt>
           <dd>{{ data.redirects }}</dd>
         </dl>
@@ -18,7 +18,7 @@
       <li>
         <dl>
           <dt>
-            {{ $t('retour.plugin.failures') }}
+            {{ $t('retour.system.failures') }}
           </dt>
           <dd>{{ data.failures }}</dd>
         </dl>
@@ -26,17 +26,17 @@
       <li>
         <dl>
           <dt>
-            {{ $t('retour.plugin.deleteAfter') }}
+            {{ $t('retour.system.deleteAfter') }}
           </dt>
           <dd>
-            {{ $t("retour.plugin.deleteAfter.months", { count: data.deleteAfter }) }}
+            {{ $t("retour.system.deleteAfter.months", { count: data.deleteAfter }) }}
           </dd>
         </dl>
       </li>
       <li>
         <dl>
           <dt>
-            {{ $t('retour.plugin.support') }}
+            {{ $t('retour.system.support') }}
           </dt>
           <dd>
             <k-button
@@ -44,7 +44,7 @@
               target="_blank"
               theme="positive"
             >
-              💛 {{ $t('retour.plugin.support.donate') }}
+              💛 {{ $t('retour.system.support.donate') }}
             </k-button>
           </dd>
         </dl>
@@ -54,7 +54,7 @@
     <footer class="mt-2">
       <k-text
         theme="help"
-        v-html="$t('retour.plugin.docs', {
+        v-html="$t('retour.system.docs', {
           docs: 'https://distantnative.com/retour/docs'
         })"
       />

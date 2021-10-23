@@ -43,7 +43,7 @@ class Panel
                 [
                     'name'  => 'redirects',
                     'label' => t('retour.redirects'),
-                    'icon'  => 'undo',
+                    'icon'  => 'shuffle',
                     'badge' => count($redirects),
                     'link'  => 'retour/redirects'
                 ]
@@ -62,16 +62,16 @@ class Panel
             $props['tabs'][] = [
                 'name'  => 'failures',
                 'label' => t('retour.failures'),
-                'icon'  => 'alert',
+                'icon'  => 'cancel-small',
                 'badge' => count($failures),
                 'link'  => 'retour/failures'
             ];
             $props['tabs'][] = [
-                'name'  => 'plugin',
-                'label' => t('retour.plugin'),
-                'icon'  => 'box',
+                'name'  => 'system',
+                'label' => t('retour.system'),
+                'icon'  => 'info',
                 'badge' => false,
-                'link'  => 'retour/plugin'
+                'link'  => 'retour/system'
             ];
 
             // get statistics data for current timeframe
@@ -86,16 +86,16 @@ class Panel
             case 'failures':
                 $props['data'] = $failures ?? [];
                 break;
-            case 'plugin':
+            case 'system':
                 $delete = $retour->info()['deleteAfter'];
 
                 $props['data'] = [
                     'redirects' => array_reduce($redirects, function ($c, $i) {
                         return $c + $i['hits'];
-                    }),
+                    }, 0),
                     'failures' => array_reduce($failures, function ($c, $i) {
                         return $c + $i['hits'];
-                    }),
+                    }, 0),
                     'deleteAfter' => $delete !== false ? $delete : '–'
                 ];
                 break;
@@ -141,8 +141,10 @@ class Panel
         }
 
         // add additional data points
-        $data['first'] = $retour->log()->first()['date'];
-        $data['last']  = $retour->log()->last()['date'];
+        $first = $retour->log()->first();
+        $last = $retour->log()->last();
+        $data['first'] = $first['date'] ?? null;
+        $data['last']  = $last['date'] ?? null;
         $data['unit']  = static::unit($data);
 
         return $data;

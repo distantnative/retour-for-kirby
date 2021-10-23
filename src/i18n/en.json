@@ -33,12 +33,12 @@
     "retour.stats.mode.month": "Month",
     "retour.stats.mode.week": "Week",
     "retour.stats.mode.day": "Day",
-    "retour.plugin": "Plugin",
-    "retour.plugin.support": "Support development",
-    "retour.plugin.support.donate": "Donate",
-    "retour.plugin.failures": "Logged failures",
-    "retour.plugin.redirects": "Successfully redirected",
-    "retour.plugin.deleteAfter": "Delete logs after",
-    "retour.plugin.deleteAfter.months": "{count} months",
-    "retour.plugin.docs": "Learn more about options <a href='{docs}'>in the docs</a>."
+    "retour.system": "System",
+    "retour.system.support": "Support development",
+    "retour.system.support.donate": "Donate",
+    "retour.system.failures": "Logged failures",
+    "retour.system.redirects": "Successfully redirected",
+    "retour.system.deleteAfter": "Delete logs after",
+    "retour.system.deleteAfter.months": "{count} months",
+    "retour.system.docs": "Learn more about options <a href='{docs}'>in the docs</a>."
 }

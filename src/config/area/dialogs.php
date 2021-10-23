@@ -6,6 +6,20 @@ use Kirby\Http\Header;
 use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
 
+/**
+ * Fiber dialogs for all Panel tabs
+ *
+ * @package   Retour for Kirby
+ * @author    Nico Hoffmann <nico@getkirby.com>
+ * @link      https://github.com/distantnative/retour-for-kirby
+ * @copyright Nico Hoffmann
+ * @license   https://opensource.org/licenses/MIT
+ */
+
+
+ /**
+  * Shared fields definition for several dialogs
+  */
 $fields = [
     'from' => [
         'label'    => t('retour.redirects.from'),
@@ -48,25 +62,6 @@ $fields = [
     ]
 ];
 
-function createRedirect(int $key = null) {
-    $redirect  = new Redirect([
-        'from'      => get('from'),
-        'to'        => get('to'),
-        'status'    => get('status'),
-        'priority'  => get('priority'),
-        'comment'   => get('comment')
-    ]);
-    $redirects = Retour::instance()->redirects();
-
-    if ($key !== null)  {
-        $redirects = $redirects->set((int)$id, $redirect);
-    } else {
-        $redirects = $redirects->prepend($redirect);
-    }
-
-    $redirects->save();
-};
-
 return [
     'retour.redirect.create' => [
         'pattern' => 'retour/redirects/create',
@@ -80,7 +75,7 @@ return [
             ];
         },
         'submit' => function () {
-            createRedirect();
+            Redirect::create();
             return true;
         }
     ],
@@ -88,8 +83,15 @@ return [
     'retour.redirect.edit' => [
         'pattern' => 'retour/redirects/(:any)/edit',
         'load' => function (string $id) use ($fields) {
+            // get redirect
             $redirects = Retour::instance()->redirects();
             $redirect  = $redirects->nth((int)$id);
+
+            // set autofocus if specific column cell
+            // was passed
+            if ($field = get('column')) {
+                $fields[$field]['autofocus'] = true;
+            }
 
             return [
               'component' => 'k-form-dialog',
@@ -101,7 +103,7 @@ return [
             ];
         },
         'submit' => function (string $id) {
-            createRedirect((int)$id);
+            Redirect::create((int)$id);
             return true;
         }
     ],
@@ -131,15 +133,15 @@ return [
               'props' => [
                 'fields' => $fields,
                 'value' => [
-                    'from' => $path
+                    'from' => urldecode($path)
                 ],
                 'size'  => 'huge'
               ]
             ];
         },
         'submit' => function (string $path) {
-            createRedirect();
-            Retour::instance()->log()->resolve($path);
+            Redirect::create();
+            Retour::instance()->log()->resolve(urldecode($path));
             Panel::go('retour/redirects');
         }
     ],
@@ -155,7 +157,7 @@ return [
             ];
         },
         'submit' => function (string $path) {
-            return Retour::instance()->log()->remove($path);
+            return Retour::instance()->log()->remove(urldecode($path));
         }
     ],
 

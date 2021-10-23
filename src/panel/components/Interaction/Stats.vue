@@ -45,7 +45,7 @@ export default {
         {
           data: this.data.reduce((i, x) => i += x.redirected, 0),
           color: "var(--color-focus)",
-          label: this.$t("retour.data.redirected")
+          label: this.$t("retour.stats.redirected")
         },
         {
           data: this.data.reduce((i, x) => i += x.resolved, 0),

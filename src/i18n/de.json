@@ -33,12 +33,12 @@
     "retour.stats.mode.month": "Monat",
     "retour.stats.mode.week": "Woche",
     "retour.stats.mode.day": "Tag",
-    "retour.plugin": "Plug-in",
-    "retour.plugin.support": "Unterstütze die Entwicklung",
-    "retour.plugin.support.donate": "Spende",
-    "retour.plugin.failures": "Aufgezeichnete Fehler",
-    "retour.plugin.redirects": "Erfolgreich weitergeleitet",
-    "retour.plugin.deleteAfter": "Leere Logs nach",
-    "retour.plugin.deleteAfter.months": "{count} Monaten",
-    "retour.plugin.docs": "Erfahre mehr <a href='{docs}'>zu den Einstellungen</a>."
+    "retour.system": "System",
+    "retour.system.support": "Unterstütze die Entwicklung",
+    "retour.system.support.donate": "Spende",
+    "retour.system.failures": "Aufgezeichnete Fehler",
+    "retour.system.redirects": "Erfolgreich weitergeleitet",
+    "retour.system.deleteAfter": "Leere Logs nach",
+    "retour.system.deleteAfter.months": "{count} Monaten",
+    "retour.system.docs": "Erfahre mehr <a href='{docs}'>zu den Einstellungen</a>."
 }

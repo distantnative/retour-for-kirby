@@ -19,7 +19,7 @@ import Stats from "./Interaction/Stats.vue";
 
 import RedirectsTab from "./Tabs/RedirectsTab.vue";
 import FailuresTab from "./Tabs/FailuresTab.vue";
-import PluginTab from "./Tabs/PluginTab.vue";
+import SystemTab from "./Tabs/SystemTab.vue";
 
 export default {
   components: {
@@ -27,7 +27,7 @@ export default {
     Navigation,
     FailuresTab,
     RedirectsTab,
-    PluginTab
+    SystemTab
   },
   props: {
     data: [Object, Array],

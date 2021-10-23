@@ -33,12 +33,12 @@
     "retour.stats.mode.month": "Ay",
     "retour.stats.mode.week": "Hafta",
     "retour.stats.mode.day": "Gün",
-    "retour.plugin": "Sistem",
-    "retour.plugin.support": "Geliştirmeyi destekle",
-    "retour.plugin.support.donate": "Bağış Yap",
-    "retour.plugin.failures": "Başarısız günlük kayıtları",
-    "retour.plugin.redirects": "Başarıyla yönlendirildi",
-    "retour.plugin.deleteAfter": "Günlükleri silme sıklığı",
-    "retour.plugin.deleteAfter.months": "{count} ay",
-    "retour.plugin.docs": "<a href='{docs}'>Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin."
+    "retour.system": "Sistem",
+    "retour.system.support": "Geliştirmeyi destekle",
+    "retour.system.support.donate": "Bağış Yap",
+    "retour.system.failures": "Başarısız günlük kayıtları",
+    "retour.system.redirects": "Başarıyla yönlendirildi",
+    "retour.system.deleteAfter": "Günlükleri silme sıklığı",
+    "retour.system.deleteAfter.months": "{count} ay",
+    "retour.system.docs": "<a href='{docs}'>Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin."
 }
