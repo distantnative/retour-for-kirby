@@ -5,14 +5,17 @@
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
     bootstrap="tests/bootstrap.php"
     colors="true"
-    forceCoversAnnotation="true"
     verbose="true"
     stderr="true"
 >
     <coverage>
         <include>
             <directory>./src/classes</directory>
+            <directory>./src/config</directory>
         </include>
+        <exclude>
+          <file>./src/config/api.php</file>
+        </exclude>
     </coverage>
 
     <testsuites>

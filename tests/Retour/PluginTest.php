@@ -117,4 +117,36 @@ class PluginTest extends TestCase
         $this->assertSame('bar', $retour->option('foo'));
         $this->assertSame('simpson', $retour->option('homer', 'simpson'));
     }
+
+    /**
+     * @covers ::__construct
+     * @covers ::redirects
+     */
+    public function testRedirects(): void
+    {
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.config' => __DIR__ . '/fixtures/sample.yml'
+            ]
+        ]);
+
+        $retour = Plugin::instance($app);
+        $redirects = $retour->redirects();
+        $this->assertInstanceOf('distantnative\Retour\Redirects', $redirects);
+        $this->assertSame(4, $redirects->count());
+        $this->assertSame(4, count(Config::$data['redirects']));
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::redirects
+     */
+    public function testRedirectsEmpty(): void
+    {
+        $app = $this->kirby->clone();
+        $retour = Plugin::instance($app);
+        $redirects = $retour->redirects();
+        $this->assertInstanceOf('distantnative\Retour\Redirects', $redirects);
+        $this->assertSame([], $redirects->toArray());
+    }
 }

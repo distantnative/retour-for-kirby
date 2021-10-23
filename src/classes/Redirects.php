@@ -108,46 +108,25 @@ class Redirects extends Collection
         return $this->toArray(function (Redirect $redirect) use ($retour, $from, $to): array {
             $data = $redirect->toArray();
             /** @var array */
-            $log  = $retour->log()->redirect($data['from'], $from, $to);
-            return array_merge($data, $log);
-        });
-    }
-
-    /**
-     * Returns routes config for all fallback redirects
-     *
-     * @return array
-     */
-    public function toFallbackRoutes(): array
-    {
-        return array_filter($this->toRoutes(), function ($route): bool {
-            return $route['priority'] === false;
-        });
-    }
-
-    /**
-     * Returns routes config for all priority redirects
-     *
-     * @return array
-     * @param bool $priority
-     */
-    public function toPriorityRoutes(): array
-    {
-        return array_filter($this->toRoutes(), function ($route): bool {
-            return $route['priority'] === true;
+            [
+                'hits' => $data['hits'],
+                'last' => $data['last']
+            ]  = $retour->log()->redirect($data['from'], $from, $to);
+            return $data;
         });
     }
 
     /**
      * Returns routes config for all active redirects
      *
+     * @param bool $priority
      * @return array
      */
-    public function toRoutes(): array
+    public function toRoutes(bool $priority = false): array
     {
         // Filter: no routes for disabled redirects
-        $redirects = $this->filter(function (Redirect $redirect): bool {
-            return $redirect->isActive();
+        $redirects = $this->filter(function (Redirect $redirect) use ($priority): bool {
+            return $redirect->priority() === $priority;
         });
 
         // create route array for each redirect

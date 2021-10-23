@@ -35,7 +35,7 @@ return [
             try {
                 // find non-priority redirect route for current path
                 // and call if possible
-                $routes = $retour->redirects()->toFallbackRoutes();
+                $routes = $retour->redirects()->toRoutes(false);
                 $router = new Router($routes);
                 return $router->call($path, $method);
             } catch (\Throwable $e) {

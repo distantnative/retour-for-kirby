@@ -12,6 +12,7 @@
         <!-- Permanently disabled -->
         <exclude name="ElseExpression" />
         <exclude name="StaticAccess" />
+        <exclude name="BooleanArgumentFlag" />
     </rule>
 
     <rule ref="rulesets/codesize.xml">

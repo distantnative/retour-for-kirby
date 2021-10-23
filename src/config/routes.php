@@ -13,5 +13,5 @@ namespace distantnative\Retour;
  */
 
 return function (): array {
-    return Plugin::instance()->redirects()->toPriorityRoutes();
+    return Plugin::instance()->redirects()->toRoutes(true);
 };

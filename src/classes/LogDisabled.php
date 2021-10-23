@@ -22,6 +22,8 @@ class LogDisabled
      * @param string $property
      * @param array $arguments
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function __call(string $property, array $arguments): bool
     {
