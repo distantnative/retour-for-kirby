@@ -5,7 +5,8 @@
     v-bind="$props"
     class="k-text-field"
   >
-    <template #options>
+    <!-- @todo: bring back once https://github.com/getkirby/kirby/issues/3840 is solved -->
+    <!-- <template #options>
       <k-button
         icon="circle-nested"
         class="k-field-options-button"
@@ -13,11 +14,11 @@
       >
         {{ $t('select') }}
       </k-button>
-    </template>
+    </template> -->
 
     <k-input
-      ref="input"
       :id="_uid"
+      ref="input"
       v-bind="$props"
       type="text"
       theme="field"

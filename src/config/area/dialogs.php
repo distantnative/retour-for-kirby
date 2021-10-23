@@ -70,7 +70,7 @@ return [
               'component' => 'k-form-dialog',
               'props' => [
                     'fields' => $fields,
-                    'size'  => 'huge'
+                    'size'  => 'large'
                 ]
             ];
         },
@@ -98,7 +98,7 @@ return [
               'props' => [
                     'fields' => $fields,
                     'value' => $redirect->toArray(),
-                    'size'  => 'huge'
+                    'size'  => 'large'
                 ]
             ];
         },
@@ -135,7 +135,7 @@ return [
                 'value' => [
                     'from' => urldecode($path)
                 ],
-                'size'  => 'huge'
+                'size'  => 'large'
               ]
             ];
         },
