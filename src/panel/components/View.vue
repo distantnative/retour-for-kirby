@@ -38,3 +38,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.k-dialog[data-size="huge"] {
+  width: 95vw;
+  max-width: 50rem;
+}
+</style>

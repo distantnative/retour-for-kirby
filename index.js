@@ -615,7 +615,7 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c("k-view", [_c("list", { attrs: { "name": "redirects", "columns": _vm.columns, "empty": _vm.$t("retour.redirects.empty"), "options": _vm.options, "rows": _vm.data }, on: { "cell": function($event) {
-      return _vm.onOption.apply(void 0, ["edit"].concat($event));
+      return _vm.onOption("edit", $event.row, $event.rowIndex, $event.columnIndex);
     }, "option": _vm.onOption }, scopedSlots: _vm._u([{ key: "button", fn: function() {
       return [_c("k-button", { attrs: { "icon": "add" }, on: { "click": function($event) {
         return _vm.onOption("add");
@@ -624,7 +624,6 @@
   };
   var staticRenderFns$a = [];
   render$a._withStripped = true;
-  var RedirectsTab_vue_vue_type_style_index_0_lang = "";
   const __vue2_script$a = {
     components: {
       List
@@ -676,7 +675,7 @@
       }
     },
     methods: {
-      onOption(option, row = {}, rowIndex = null) {
+      onOption(option, row = {}, rowIndex = null, column = null) {
         switch (option) {
           case "add":
             return this.$dialog("retour/redirects/create");
@@ -711,7 +710,6 @@
   };
   var staticRenderFns$9 = [];
   render$9._withStripped = true;
-  var FailuresTab_vue_vue_type_style_index_0_lang = "";
   const __vue2_script$9 = {
     components: {
       List
@@ -726,13 +724,13 @@
             label: this.$t("retour.failures.path"),
             type: "link",
             filter: true,
-            width: "1/3"
+            width: "1/2"
           },
           referrer: {
             label: this.$t("retour.failures.referrer"),
             type: "link",
             filter: true,
-            width: "1/3"
+            width: "1/2"
           },
           hits: {
             label: this.$t("retour.hits"),
@@ -750,12 +748,12 @@
       }
     },
     methods: {
-      onOption(option, row = {}, rowIndex = null) {
+      onOption(option, row) {
         switch (option) {
           case "remove":
-            return this.$dialog("retour/failures/remove");
+            return this.$dialog(`retour/failures/${row.path}/delete`);
           case "resolve":
-            return this.$dialog("retour/failures/resolve");
+            return this.$dialog(`retour/failures/${row.path}/resolve`);
         }
       }
     }
@@ -806,6 +804,7 @@
   };
   var staticRenderFns$7 = [];
   render$7._withStripped = true;
+  var View_vue_vue_type_style_index_0_lang = "";
   const __vue2_script$7 = {
     components: {
       Stats,
@@ -1019,7 +1018,7 @@
         return this.value && this.value.startsWith("http");
       },
       link() {
-        return this.isExternal ? this.value : window.panel.site + "/" + this.value;
+        return this.isExternal ? this.value : window.panel.$urls.site + "/" + this.value;
       }
     }
   };

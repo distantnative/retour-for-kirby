@@ -266,20 +266,11 @@ class Log
      * Remove an entry from the database
      *
      * @param string $path
-     * @param string $referrer
      * @return bool
      */
-    public function remove(string $path, string $referrer = null): bool
+    public function remove(string $path): bool
     {
-        $where = 'path = "' . $this->db->escape($path) . '" AND referrer ';
-
-        if ($referrer === null) {
-            $where .= 'IS NULL';
-        } else {
-            $where .= '= "' . $this->db->escape($referrer) . '"';
-        }
-
-        return $this->table()->delete($where);
+        return $this->table()->delete('path = "' . $this->db->escape($path) . '"');
     }
 
     /**

@@ -1,6 +1,6 @@
 <template>
   <div
-    :title="`${column.label}: ${value || '-'}`"
+    :title="`${column.label}: ${value || '-'}`"
     class="k-table-status-cell"
   >
     <k-icon
@@ -22,7 +22,7 @@ export default {
     row: Object,
     column: Object
   }
-}
+};
 </script>
 
 <style>
@@ -39,8 +39,8 @@ export default {
   color: var(--color-text);
   border-radius: 3px;
   box-decoration-break: clone;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-tiny);
-  padding: 0.05em 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: .05em .5em;
 }
 </style>

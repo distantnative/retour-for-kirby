@@ -22,13 +22,13 @@ export default {
   },
   computed: {
     isExternal() {
-      return this.value && this.value.startsWith('http');
+      return this.value && this.value.startsWith("http");
     },
     link() {
-      return this.isExternal ? this.value : window.panel.site + '/' + this.value
+      return this.isExternal ? this.value : window.panel.$urls.site + "/" + this.value;
     }
   }
-}
+};
 </script>
 
 <style>

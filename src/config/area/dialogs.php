@@ -1,7 +1,9 @@
 <?php
 
 use distantnative\Retour\Plugin as Retour;
+use distantnative\Retour\Redirect;
 use Kirby\Http\Header;
+use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
 
 $fields = [
@@ -46,6 +48,25 @@ $fields = [
     ]
 ];
 
+function createRedirect(int $key = null) {
+    $redirect  = new Redirect([
+        'from'      => get('from'),
+        'to'        => get('to'),
+        'status'    => get('status'),
+        'priority'  => get('priority'),
+        'comment'   => get('comment')
+    ]);
+    $redirects = Retour::instance()->redirects();
+
+    if ($key !== null)  {
+        $redirects = $redirects->set((int)$id, $redirect);
+    } else {
+        $redirects = $redirects->prepend($redirect);
+    }
+
+    $redirects->save();
+};
+
 return [
     'retour.redirect.create' => [
         'pattern' => 'retour/redirects/create',
@@ -59,31 +80,32 @@ return [
             ];
         },
         'submit' => function () {
-            $redirect  = new Redirect($this->requestBody());
-            $redirects = $retour->redirects()->prepend($redirect);
-            $redirects->save();
+            createRedirect();
             return true;
         }
     ],
+
     'retour.redirect.edit' => [
         'pattern' => 'retour/redirects/(:any)/edit',
         'load' => function (string $id) use ($fields) {
+            $redirects = Retour::instance()->redirects();
+            $redirect  = $redirects->nth((int)$id);
+
             return [
               'component' => 'k-form-dialog',
               'props' => [
                     'fields' => $fields,
-                    'value' => [],
+                    'value' => $redirect->toArray(),
                     'size'  => 'huge'
                 ]
             ];
         },
         'submit' => function (string $id) {
-            $redirect  = new Redirect($this->requestBody());
-            $redirects = $retour->redirects()->set($key, $redirect);
-            $redirects->save();
+            createRedirect((int)$id);
             return true;
         }
     ],
+
     'retour.redirect.delete' => [
         'pattern' => 'retour/redirects/(:any)/delete',
         'load' => function (string $id) {
@@ -95,13 +117,35 @@ return [
             ];
         },
         'submit' => function (string $id) {
-            $redirects = Retour::instance()->redirects()->remove($id);
+            $redirects = Retour::instance()->redirects()->remove((int)$id);
             $redirects->save();
             return true;
         }
     ],
+
+    'retour.failure.resolve' => [
+        'pattern' => 'retour/failures/(:any)/resolve',
+        'load' => function (string $path) use ($fields) {
+            return [
+              'component' => 'k-form-dialog',
+              'props' => [
+                'fields' => $fields,
+                'value' => [
+                    'from' => $path
+                ],
+                'size'  => 'huge'
+              ]
+            ];
+        },
+        'submit' => function (string $path) {
+            createRedirect();
+            Retour::instance()->log()->resolve($path);
+            Panel::go('retour/redirects');
+        }
+    ],
+
     'retour.failure.delete' => [
-        'pattern' => 'retour/failure/(:any)/delete',
+        'pattern' => 'retour/failures/(:any)/delete',
         'load' => function () {
             return [
               'component' => 'k-remove-dialog',
@@ -110,26 +154,11 @@ return [
                 ]
             ];
         },
-        'submit' => function () {
-            return Retour::instance()->log()->remove(
-                get('path'),
-                get('referrer')
-            );
+        'submit' => function (string $path) {
+            return Retour::instance()->log()->remove($path);
         }
     ],
-    'retour.failure.resolve' => [
-        'pattern' => 'retour/failure/(:any)/resolve',
-        'load' => function () {
-            return [
-              'component' => 'k-form-dialog',
-              'props' => [
-                ]
-            ];
-        },
-        'submit' => function () {
-            return $retour->log()->resolve($this->requestBody('path'));
-        }
-    ],
+
     'retour.failures.flush' => [
         'pattern' => 'retour/failures/flush',
         'load' => function () {

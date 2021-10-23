@@ -38,13 +38,13 @@ export default {
           label: this.$t("retour.failures.path"),
           type: "link",
           filter: true,
-          width: "1/3"
+          width: "1/2"
         },
         referrer: {
           label: this.$t("retour.failures.referrer"),
           type: "link",
           filter: true,
-          width: "1/3"
+          width: "1/2"
         },
         hits: {
           label: this.$t("retour.hits"),
@@ -62,21 +62,14 @@ export default {
     }
   },
   methods: {
-    onOption(option, row = {}, rowIndex = null) {
+    onOption(option, row) {
       switch (option) {
       case "remove":
-        return this.$dialog("retour/failures/remove");
+        return this.$dialog(`retour/failures/${row.path}/delete`);
       case "resolve":
-        return this.$dialog("retour/failures/resolve");
+        return this.$dialog(`retour/failures/${row.path}/resolve`);
       }
     }
   }
 };
 </script>
-
-<style>
-.k-dialog[data-size="huge"] {
-  width: 95vw;
-  max-width: 50rem;
-}
-</style>

@@ -6,7 +6,7 @@
       :empty="$t('retour.redirects.empty')"
       :options="options"
       :rows="data"
-      @cell="onOption('edit', ...$event)"
+      @cell="onOption('edit', $event.row, $event.rowIndex, $event.columnIndex)"
       @option="onOption"
     >
       <!-- button -->
@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    onOption(option, row = {}, rowIndex = null) {
+    onOption(option, row = {}, rowIndex = null, column = null) {
       switch (option) {
       case "add":
         return this.$dialog("retour/redirects/create");
@@ -91,10 +91,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.k-dialog[data-size="huge"] {
-  width: 95vw;
-  max-width: 50rem;
-}
-</style>

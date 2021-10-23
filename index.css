@@ -220,16 +220,6 @@
   height: 2.5rem;
 }
 
-.k-dialog[data-size="huge"] {
-  width: 95vw;
-  max-width: 50rem;
-}
-
-.k-dialog[data-size="huge"] {
-  width: 95vw;
-  max-width: 50rem;
-}
-
 .retour-plugin-tab header {
   display: flex;
   align-items: center;
@@ -246,6 +236,11 @@
 }
 .retour-plugin-tab .k-system-info-box {
   margin-bottom: .75rem;
+}
+
+.k-dialog[data-size="huge"] {
+  width: 95vw;
+  max-width: 50rem;
 }
 
 
@@ -606,7 +601,7 @@
   color: var(--color-text);
   border-radius: 3px;
   box-decoration-break: clone;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-tiny);
-  padding: 0.05em 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: .05em .5em;
 }

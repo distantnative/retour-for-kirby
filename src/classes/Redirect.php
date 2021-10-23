@@ -22,19 +22,6 @@ class Redirect extends Obj
 {
 
     /**
-     * Returns the integer HTTP code
-     * @return int|null
-     */
-    public function code(): ?int
-    {
-        if (in_array($this->code ?? null, [null, 'disabled']) == true) {
-            return null;
-        }
-
-        return (int)$this->code;
-    }
-
-    /**
      * Returns whether the route is enabled
      * with status code
      *
@@ -42,7 +29,7 @@ class Redirect extends Obj
      */
     public function isActive(): bool
     {
-        return $this->code() !== null;
+        return $this->status() !== null;
     }
 
     /**
@@ -57,6 +44,19 @@ class Redirect extends Obj
     }
 
     /**
+     * Returns the integer HTTP status code
+     * @return int|null
+     */
+    public function status(): ?int
+    {
+        if (in_array($this->status ?? null, [null, 'disabled']) == true) {
+            return null;
+        }
+
+        return (int)$this->status;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -64,7 +64,7 @@ class Redirect extends Obj
         return [
             'from'     => $this->from(),
             'to'       => $this->to(),
-            'code'     => $this->code(),
+            'status'   => $this->status(),
             'priority' => $this->priority(),
             'comment'  => $this->comment()
         ];
@@ -113,7 +113,7 @@ class Redirect extends Obj
                 $to = Redirect::toPath($to, $placeholders);
 
                 /** @var int $code */
-                $code = $redirect->code();
+                $code = $redirect->status();
 
                 // Add log entry
                 Plugin::instance()->log()->add([
