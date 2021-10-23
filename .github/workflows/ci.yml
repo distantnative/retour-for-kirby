@@ -1,100 +1,130 @@
 name: CI
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
-  backend-tests:
-    name: PHP ${{ matrix.php }}
-
-    # if on pull request, only run if from a fork
-    # (our own repo is covered by the push event)
-    if: >
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name != github.repository
+  tests:
+    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }} deps)
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ "7.3", "7.4", "8.0" ]
+        dependencies: [ "lowest", "locked" ]
     env:
-      extensions: pcov
+      extensions: mbstring, pcov
       ini: pcov.directory=., "pcov.exclude=\"~(vendor|tests)~\""
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
+
+      - name: Setup PHP cache environment
+        id: ext-cache
+        uses: shivammathur/cache-extensions@8828d749a642ae651470bd7713c2266c82cac102 # pin@v1
         with:
-          fetch-depth: 2
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: php-v1
+
+      - name: Cache PHP extensions
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ${{ steps.ext-cache.outputs.dir }}
+          key: ${{ steps.ext-cache.outputs.key }}
+          restore-keys: ${{ steps.ext-cache.outputs.key }}
 
       - name: Setup PHP environment
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@ed52ff9a52991475b075a4c2144f7276195e8620 # pin@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.extensions }}
           ini-values: ${{ env.ini }}
           coverage: pcov
-          tools: phpunit:^9
+          tools: phpunit:9.5.4, psalm:4.7.1
 
       - name: Setup problem matchers
-        id: finishPrepare
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Install composer
-        run: composer install
+      - name: Get Composer cache directory
+        id: composerCache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ${{ steps.composerCache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.dependencies }}-
+
+      - name: Install dependencies
+        run: |
+          # install the lowest or highest versions based on the matrix config
+          command=$([ "${{ matrix.dependencies }}" == "lowest" ] && echo "update --prefer-lowest" || echo "install")
+          composer $command --prefer-dist
+
+      - name: Cache analysis data
+        id: finishPrepare
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ~/.cache/psalm
+          key: backend-analysis-${{ matrix.php }}-v1
 
       - name: Run tests
         if: always() && steps.finishPrepare.outcome == 'success'
         run: phpunit --coverage-clover ${{ github.workspace }}/clover.xml
 
+      - name: Statically analyze using Psalm
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: psalm --output-format=github --php-version=${{ matrix.php }}
+
       - name: Upload coverage results to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@a1ed4b322b4b38cb846afb5a0ebfa17086917d27 # pin@v1
         with:
-          fail_ci_if_error: true
           file: ${{ github.workspace }}/clover.xml
           flags: backend
           env_vars: PHP
         env:
           PHP: ${{ matrix.php }}
 
-  backend-analysis:
-    name: Backend Analysis
-
-    # if on pull request, only run if from a fork
-    # (our own repo is covered by the push event)
-    if: >
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name != github.repository
+  analysis:
+    name: Analysis
 
     runs-on: ubuntu-latest
     env:
-      php: "7.4" # TODO: Update to PHP 8.0 when PHPMD supports it (https://github.com/phpmd/phpmd/issues/853)
+      php: "8.0"
+      extensions: mbstring
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
 
-      - name: Preparations
-        run: mkdir sarif
-
-      - name: Setup PHP environment
-        uses: shivammathur/setup-php@v2
+      - name: Setup PHP cache environment
+        id: ext-cache
+        uses: shivammathur/cache-extensions@8828d749a642ae651470bd7713c2266c82cac102 # pin@v1
         with:
           php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
+          key: php-analysis-v1
+
+      - name: Cache PHP extensions
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ${{ steps.ext-cache.outputs.dir }}
+          key: ${{ steps.ext-cache.outputs.key }}
+          restore-keys: ${{ steps.ext-cache.outputs.key }}
+
+      - name: Setup PHP environment
+        id: finishPrepare
+        uses: shivammathur/setup-php@ed52ff9a52991475b075a4c2144f7276195e8620 # pin@v2
+        with:
+          php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
           coverage: none
           tools: |
-            composer:v2, composer-normalize,
-            composer-unused, psalm, phpmd
-      
-      - name: Install composer
-        run: composer install
-
-      - name: Cache analysis data
-        id: finishPrepare
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/psalm
-          key: backend-analysis
+            composer:2.0.13, composer-normalize:2.13.3, composer-require-checker:3.2.0,
+            composer-unused:0.7.5, phpcpd:6.0.3, phpmd:2.10.0
 
       - name: Validate composer.json/composer.lock
         if: always() && steps.finishPrepare.outcome == 'success'
@@ -104,62 +134,106 @@ jobs:
         if: always() && steps.finishPrepare.outcome == 'success'
         run: composer-normalize --dry-run
 
-      # TODO: Re-enable when the fatal error in CI no longer appears
-      # - name: Check for unused Composer dependencies
-      #   if: always() && steps.finishPrepare.outcome == 'success'
-      #   run: composer unused --no-progress
-
-      - name: Statically analyze using Psalm
+      - name: Get Composer cache directory
+        id: composerCache1
         if: always() && steps.finishPrepare.outcome == 'success'
-        run: psalm --output-format=github --report=sarif/psalm.sarif --report-show-info=false
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        id: composerCache2
+        if: always() && steps.composerCache1.outcome == 'success'
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ${{ steps.composerCache1.outputs.dir }}
+          key: ${{ runner.os }}-composer-locked-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-locked-
+
+      - name: Install dependencies
+        id: composerInstall
+        if: always() && steps.composerCache2.outcome == 'success'
+        run: composer install --prefer-dist
+
+      - name: Check for missing Composer dependencies
+        if: always() && steps.composerInstall.outcome == 'success'
+        run: composer-require-checker --config-file=${{ github.workspace }}/.composer-require-checker.json
+
+      - name: Check for unused Composer dependencies
+        if: always() && steps.composerInstall.outcome == 'success'
+        run: composer unused --no-progress
+
+      - name: Check for duplicated code
+        if: always() && steps.composerInstall.outcome == 'success'
+        run: phpcpd --fuzzy --exclude tests --exclude vendor .
 
       - name: Statically analyze using PHPMD
-        if: always() && steps.finishPrepare.outcome == 'success'
-        run: phpmd . ansi phpmd.xml.dist --exclude 'dependencies/*,tests/*,vendor/*'
-
-      - name: Upload code scanning results to GitHub
-        if: always() && steps.finishPrepare.outcome == 'success'
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: sarif
+        if: always() && steps.composerInstall.outcome == 'success'
+        run: phpmd . github phpmd.xml.dist --exclude 'tests/*,vendor/*'
 
   coding-style:
-    name: Coding Style
+    name: Coding Style & Frontend Analysis
 
     runs-on: ubuntu-latest
-    env:
-      # TODO: update to PHP 8.0 when PHP-CS-Fixer fully supports it
-      php: "7.4"
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
+
+      - name: Set up Node.js problem matchers
+        uses: actions/setup-node@0696555e99b7a8260864ca027af4b004eea59379 # pin@v2
+
+      - name: Cache npm dependencies
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Setup PHP environment
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@ed52ff9a52991475b075a4c2144f7276195e8620 # pin@v2
         with:
-          php-version: ${{ env.php }}
           coverage: none
-          tools: php-cs-fixer
+          tools: php-cs-fixer:3.0.0
 
       - name: Cache analysis data
         id: finishPrepare
-        uses: actions/cache@v2
+        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
         with:
           path: ~/.php-cs-fixer
           key: coding-style
 
-      - name: Check for PHP coding style violations
+      - name: Check for JavaScript coding style violations
         if: always() && steps.finishPrepare.outcome == 'success'
-        # Use the --dry-run flag in push builds to get a failed CI status
+        # Use the --no-fix flag in push builds to get a failed CI status
         run: >
-          php-cs-fixer fix --diff ${{ github.event_name != 'pull_request' && '--dry-run' || '' }}
+          npm run lint -- --max-warnings 0 --format stylish
+          ${{ github.event_name != 'pull_request' && '--no-fix' || '' }}
 
       - name: Create code suggestions from the coding style changes (on PR only)
         if: >
           always() && steps.finishPrepare.outcome == 'success' &&
           github.event_name == 'pull_request'
-        uses: reviewdog/action-suggester@v1
+        uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
+        with:
+          tool_name: ESLint
+          fail_on_error: 'true'
+
+      - name: Check for PHP coding style violations
+        if: always() && steps.finishPrepare.outcome == 'success'
+        env:
+          PHP_CS_FIXER_IGNORE_ENV: 1
+        # Use the --dry-run flag in push builds to get a failed CI status
+        run: >
+          php-cs-fixer fix --diff
+          ${{ github.event_name != 'pull_request' && '--dry-run' || '' }}
+
+      - name: Create code suggestions from the coding style changes (on PR only)
+        if: >
+          always() && steps.finishPrepare.outcome == 'success' &&
+          github.event_name == 'pull_request'
+        uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
         with:
           tool_name: PHP-CS-Fixer
           fail_on_error: 'true'

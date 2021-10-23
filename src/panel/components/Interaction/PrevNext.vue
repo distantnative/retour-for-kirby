@@ -1,23 +1,23 @@
 <template>
   <k-button-group class="prevnext">
-    <k-button 
-      icon="angle-left" 
-      :disabled="!hasPrev" 
-      @click="onNavigate('subtract')" 
-    />
-    
     <k-button
-      v-for="unit in units"
+      icon="angle-left"
+      :disabled="!hasPrev || isAll"
+      @click="onNavigate('subtract')"
+    />
+
+    <k-button
+      v-for="unit in ['all', 'year', 'month', 'day']"
       :key="unit"
-      :current="unit === current"
+      :current="isCurrent(unit)"
       @click="set(unit)"
     >
       {{ $t('retour.stats.mode.' + unit) }}
     </k-button>
 
-    <k-button 
-      icon="angle-right" 
-      :disabled="!hasNext" 
+    <k-button
+      icon="angle-right"
+      :disabled="!hasNext || isAll"
       @click="onNavigate('add')"
     />
   </k-button-group>
@@ -25,64 +25,54 @@
 
 <script>
 export default {
+  props: {
+    dates: Object,
+    timespan: Object
+  },
   computed: {
-    current() {
-      const unit = this.$store.getters["retour/unit"];
-
-      if (
-        unit === "custom" &&
-        this.$store.getters["retour/isAll"] === true
-      ) {
-        return "all";
-      }
-
-      return unit;
-    },
-    units() {
-      return ["all", "year", "month", "week", "day"];
-    },
     hasPrev() {
-      return this.$store.getters["retour/hasPrev"];
+      return this.dates.from.isAfter(this.$library.dayjs(this.timespan.first));
     },
     hasNext() {
-      return this.$store.getters["retour/hasNext"];
+      return this.dates.to.isBefore(this.$library.dayjs(this.timespan.first)) || this.dates.to.isBefore(this.$library.dayjs());
+    },
+    isAll() {
+      return this.dates.from.isSame(this.$library.dayjs(this.timespan.first), "day") && this.dates.to.isSame(this.$library.dayjs(this.timespan.last), "day");
     }
   },
   methods: {
-    set(unit) {
-      const view = {
-        from: this.$library.dayjs().startOf("day"),
-        to:   this.$library.dayjs().endOf("day")
-      };
-
-      switch (unit) {
-        case "all":
-          const meta = this.$store.state.retour.meta;
-          view.from  = this.$library.dayjs(meta.first).startOf("day");
-          view.to    = this.$library.dayjs(meta.last).endOf("day");
-          break;
-        case "year":
-          view.from = view.from.startOf("year");
-          view.to   = view.to.endOf("year");
-          break;
-        case "month":
-          view.from = view.from.startOf("month");
-          view.to   = view.to.endOf("month");
-          break;
-        case "week":
-          if (view.from.day() === 0) {
-            view.from = view.from.subtract(6, "day");
-          } else {
-            view.from = view.from.subtract(view.from.day() - 1, "day");
-            view.to = view.to.add(7 - view.to.day(), "day");
-          }
-          break;
+    isCurrent(unit) {
+      if (unit === "all") {
+        return this.isAll;
       }
 
-      return this.$store.dispatch("retour/view", view);
+      return unit === this.timespan.unit;
+    },
+    set(unit) {
+      let timespan = Object.assign({}, this.dates);
+
+      if (unit === this.timespan.unit) {
+        timespan = {
+          from: this.$library.dayjs().clone(),
+          to: this.$library.dayjs().clone(),
+        };
+      }
+
+      switch (unit) {
+      case "all":
+        timespan.from  = this.$library.dayjs(this.timespan.first);
+        timespan.to    = this.$library.dayjs(this.timespan.last);
+        break;
+      default:
+        timespan.from = timespan.from.startOf(unit);
+        timespan.to   = timespan.from.endOf(unit);
+        break;
+      }
+
+      this.$emit("navigate", timespan);
     },
     onNavigate(method) {
-      let unit   = this.current;
+      let unit   = this.timespan.unit;
       let factor = 1;
 
       if (unit === "week") {
@@ -90,11 +80,10 @@ export default {
         unit   = "day";
       }
 
-      const view = this.$store.state.retour.view;
-      view.from  = view.from[method](factor, unit).startOf(unit);
-      view.to    = view.to[method](factor, unit).endOf(unit);
-
-      this.$store.dispatch("retour/view", view);
+      const timespan = this.dates;
+      timespan.from  = timespan.from[method](factor, unit).startOf(unit);
+      timespan.to    = timespan.to[method](factor, unit).endOf(unit);
+      this.$emit("navigate", timespan);
     }
   }
 }

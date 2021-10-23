@@ -1,15 +1,8 @@
 {
-    "name": "distantnative/retour-for-kirby",
-    "type": "kirby-plugin",
-    "description": "Redirects and error tracking for Kirby",
-    "keywords": [
-        "kirby3",
-        "kirby3-cms",
-        "kirby3-plugin",
-        "redirects",
-        "routing"
-    ],
+    "name": "distantnative/retour",
+    "description": "Redirects and 404 tracking for Kirby",
     "version": "4.0.0-beta.1",
+    "type": "kirby-plugin",
     "license": "MIT",
     "authors": [
         {
@@ -19,31 +12,35 @@
     ],
     "require": {
         "php": ">=7.3.0 <8.1.0",
-        "getkirby/cms": ">=3.5.1 <3.6.0",
-        "getkirby/composer-installer": "^1.2"
-    },
-    "config": {
-        "optimize-autoloader": true
+        "getkirby/cms": ">=3.6.0-rc.1 <3.7.0",
+        "getkirby/composer-installer": "^1.1"
     },
     "extra": {
         "installer-name": "retour",
         "kirby-cms-path": false
     },
+    "autoload-dev": {
+        "psr-4": {
+            "distantnative\\": "tests/"
+        }
+    },
     "scripts": {
         "analyze": [
             "@analyze:composer",
             "@analyze:psalm",
+            "@analyze:phpcpd",
             "@analyze:phpmd"
         ],
         "analyze:composer": "composer validate --strict --no-check-version --no-check-all",
-        "analyze:phpmd": "phpmd . ansi phpmd.xml.dist --exclude 'tests/*,vendor/*'",
+        "analyze:phpcpd": "phpcpd --fuzzy --exclude node_modules --exclude tests --exclude vendor .",
+        "analyze:phpmd": "phpmd . ansi phpmd.xml.dist --exclude 'node_modules/*,tests/*,vendor/*'",
         "analyze:psalm": "psalm",
         "ci": [
             "@fix",
             "@analyze",
             "@test"
         ],
-        "fix": "php-cs-fixer fix --config .php_cs",
-        "test": "XDEBUG_MODE=coverage phpunit --stderr --coverage-html=tests/coverage"
+        "fix": "php-cs-fixer fix",
+        "test": "phpunit --stderr --coverage-html=tests/coverage"
     }
 }

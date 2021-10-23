@@ -6,21 +6,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr 
-        v-for="segment, segmentIndex in segments" 
+      <tr
+        v-for="segment, segmentIndex in data"
         :key="segmentIndex"
         @dblclick="onZoom(segment)"
       >
-        <td 
-          v-for="area, areaIndex in segment.areas" 
-          :key="segmentInde + '_' + areaIndex" 
+        <td
+          v-for="area, areaIndex in segment.areas"
+          :key="segmentInde + '_' + areaIndex"
           :style="`--color: ${color(segmentIndex, area)}; ${clip(segmentIndex, areaIndex)}`"
         />
       </tr>
     </tbody>
-    <tfoot :data-less="segments.length > 30">
-      <tr 
-        v-for="segment in segments" 
+    <tfoot :data-less="data.length > 30">
+      <tr
+        v-for="segment in data"
         :key="segment.label"
         :data-current="isCurrent(segment)"
         @dblclick="onZoom(segment)"
@@ -34,7 +34,8 @@
 <script>
 export default {
   props: {
-    segments: Array
+    data: Array,
+    timespan: Object
   },
   computed: {
     axisY() {
@@ -50,37 +51,34 @@ export default {
       });
     },
     format() {
-      switch (this.unit) {
-        case "day":
-          return "HH";
-        case "week":
-          return "ddd";
-        case "month":
-          return "D";
-        case "year":
-          return "MMM";
-        case "months":
-          return "MMM YY";
-        default:
-          return "D MMM";
+      switch (this.timespan.unit) {
+      case "day":
+        return "HH";
+      case "week":
+        return "ddd";
+      case "month":
+        return "D";
+      case "year":
+        return "MMM";
+      case "months":
+        return "MMM YY";
+      default:
+        return "D MMM";
       }
     },
-    unit() {
-      return this.$store.getters["retour/unit"];
-    },
     subunit() {
-      switch (this.unit) {
-        case "day":
-          return "hour";
-        case "year":
-          return "month";
-        default:
-          return "day";
+      switch (this.timespan.unit) {
+      case "day":
+        return "hour";
+      case "year":
+        return "month";
+      default:
+        return "day";
       }
     },
     max() {
-      let max = Math.max(...this.segments.map(segment => {
-        return segment.areas.reduce((i, x) => i += x.data, 0)
+      let max = Math.max(...this.data.map(segment => {
+        return segment.areas.reduce((i, x) => i += x.data, 0);
       }));
 
       if (max > 0) {
@@ -102,17 +100,17 @@ export default {
       };
     },
     clip(segment, area) {
-      let current = this.bounds(this.segments[segment], area);
+      let current = this.bounds(this.data[segment], area);
       let next    = { path: 0, mask: 0 };
 
-      if (this.segments[segment + 1]) {
-        next = this.bounds(this.segments[segment + 1], area);
+      if (this.data[segment + 1]) {
+        next = this.bounds(this.data[segment + 1], area);
       }
 
       return `--p0: ${current.path/this.max}; --p1: ${next.path/this.max}; --m0: ${current.mask/this.max}; --m1: ${next.mask/this.max};`
     },
     color(segment, area) {
-      const next = this.segments[segment + 1];
+      const next = this.data[segment + 1];
 
       if (next) {
         const date  = this.$library.dayjs(next.label);
@@ -134,9 +132,11 @@ export default {
     },
     onZoom(segment) {
       const date = this.$library.dayjs(segment.label);
-      this.$store.dispatch("retour/view", {
-        from: date.startOf(this.subunit),
-        to:   date.endOf(this.subunit)
+      this.$reload({
+        query: {
+          from:  date.startOf(this.subunit).format("YYYY-MM-DD"),
+          to: date.endOf(this.subunit).format("YYYY-MM-DD")
+        }
       });
     }
   }
@@ -250,5 +250,5 @@ export default {
 .chart-areas tfoot [data-current] {
   color: #fff;
   font-weight: bold;
-} 
+}
 </style>

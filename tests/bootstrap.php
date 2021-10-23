@@ -1,19 +1,10 @@
 <?php
 
-include_once __DIR__ . '/../vendor/autoload.php';
-include_once __DIR__ . '/../index.php';
+error_reporting(E_ALL);
 
-trait RetourTestCase
-{
-    protected function tearDown(): void
-    {
-        self::tearDownAfterClass();
-    }
+ini_set('memory_limit', '512M');
+ini_set('display_errors', 'on');
+ini_set('display_startup_errors', 'on');
 
-    public static function tearDownAfterClass(): void
-    {
-        distantnative\Retour\Retour::$instance = null;
-        distantnative\Retour\Config::$file = null;
-        distantnative\Retour\Config::$data = [];
-    }
-}
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../index.php';

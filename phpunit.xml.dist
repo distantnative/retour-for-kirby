@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-
-    bootstrap="./tests/bootstrap.php"
+    bootstrap="tests/bootstrap.php"
     colors="true"
+    forceCoversAnnotation="true"
     verbose="true"
-    stderr="true">
-
-    <coverage ignoreDeprecatedCodeUnits="true">
+    stderr="true"
+>
+    <coverage>
         <include>
-            <directory>./src/extensions</directory>
-            <directory>./src/models</directory>
+            <directory>./src/classes</directory>
         </include>
-        <exclude>
-            <file>./src/extensions/api.php</file>
-            <file>./src/models/LogDisabled.php</file>
-        </exclude>
     </coverage>
 
     <testsuites>
-        <testsuite name="Classes">
+        <testsuite name="Tests">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

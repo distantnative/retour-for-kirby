@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use distantnative\Retour\Plugin as Retour;
+
 // check if we are indeed on the command line
 if (php_sapi_name() !== 'cli') die();
 
@@ -14,7 +16,7 @@ $kirby = new Kirby([
     ]
 ]);
 
-$retour = retour();
+$retour = Retour::instance();
 $retour->log()->flush();
 
 $redirects = [
@@ -38,7 +40,7 @@ $referrers = [
 $start = strtotime('-13 month');
 $end   = strtotime('+2 week');
 
-for ($i=0; $i < 10000; $i++) { 
+for ($i=0; $i < 10000; $i++) {
     $time = rand($start, $end);
     $retour->log()->add([
         'date'     => date('Y-m-d H:i:s', $time),
@@ -52,4 +54,4 @@ for ($i=0; $i < 10000; $i++) {
     }
 }
 
-exit(0); 
+exit(0);

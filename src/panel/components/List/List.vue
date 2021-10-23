@@ -1,5 +1,5 @@
 <template>
-  <div class="list" :data-loading="$store.state.isLoading">
+  <section class="list">
     <!-- header -->
     <header>
       <div class="filter">
@@ -62,21 +62,13 @@
       />
       <div />
     </footer>
-
-    <!-- dialog -->
-    <slot name="dialogs" />
-  </div>
+  </section>
 </template>
 
 <script>
-import Table from "../../polyfills/Table.vue";
-
 export default {
-  components: {
-    "k-table": Table
-  },
   props: {
-    type: String,
+    name: String,
     columns: Object,
     options: Array,
     rows: {
@@ -91,7 +83,7 @@ export default {
     return {
       page: 1,
       filter: null,
-      storedLimit: sessionStorage.getItem("retour$" + this.type + "$limit") || 10
+      storedLimit: sessionStorage.getItem("retour$" + this.name + "$limit") || 10
     };
   },
   computed: {
@@ -137,7 +129,7 @@ export default {
     onLimit(limit) {
       this.page = 1;
       this.storedLimit = limit;
-      sessionStorage.setItem("retour$" + this.type + "$limit", limit);
+      sessionStorage.setItem("retour$" + this.name + "$limit", limit);
     },
     onOption(option, row, rowIndex) {
       this.$emit("option", option, row, rowIndex);
@@ -146,7 +138,7 @@ export default {
       this.page = pagination.page;
     }
   }
-}
+};
 </script>
 
 <style>
@@ -163,7 +155,8 @@ export default {
 }
 .retour .filter label {
   cursor: pointer;
-  margin-right: .75rem;
+  padding-right: .75rem;
+  padding-left: .75rem;
 }
 .retour .filter input {
   background: transparent;
@@ -171,11 +164,11 @@ export default {
   outline: none;
   border: 0;
   border-bottom: 1px dotted transparent;
-  font-size: var(--font-size-small);
+  font-size: var(--text-sm);
   transition: width .25s, border .25s;
   padding: .15rem;
 }
-.retour .filter input::placeholder { 
+.retour .filter input::placeholder {
   opacity: 0;
   transition: opacity 1s;
 }
@@ -197,8 +190,8 @@ export default {
 .retour .list > footer > .limit {
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
-  color: #777;
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
   height: 2.5rem;
 }
 </style>

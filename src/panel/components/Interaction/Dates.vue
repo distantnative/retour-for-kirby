@@ -20,21 +20,24 @@
 
 <script>
 export default {
+  props: {
+    dates: Object,
+    timespan: Object
+  },
   computed: {
     label() {
-      const unit = this.$store.getters["retour/unit"];
-      const from = this.$store.state.retour.view.from;
-      const to   = this.$store.state.retour.view.to;
+      const from = this.dates.from;
+      const to   = this.dates.to;
 
-      if (unit === "day") {
+      if (this.timespan.unit === "day") {
         return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")}`;
       }
 
-      if (unit === "month") {
+      if (this.timespan.unit === "month") {
         return `${this.month(from)} ${from.format("YYYY")}`;
       }
 
-      if (unit === "year") {
+      if (this.timespan.unit === "year") {
         return `${from.format("YYYY")}`;
       }
 
@@ -51,7 +54,7 @@ export default {
       return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")} - ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}`;
     },
     value() {
-      return Object.values(this.$store.state.retour.view).map(date => date.format('YYYY-MM-DD HH:mm:ss'));
+      return Object.values(this.dates).map(date => date.format("YYYY-MM-DD HH:mm:ss"));
     }
   },
   methods: {
@@ -62,7 +65,7 @@ export default {
     },
     onInput(values) {
       if (values.length === 2) {
-        this.$store.dispatch("retour/view", {
+        this.$emit("navigate", {
           from: this.$library.dayjs(values[0]),
           to:   this.$library.dayjs(values[1])
         });

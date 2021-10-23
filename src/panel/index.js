@@ -1,22 +1,32 @@
 
-import Store from "./store.js";
 import View from "./components/View.vue";
 
+// polyfills
+import Table from "./ployfills/Table.vue";
+
+// table cells
+import TableCountCell from "./components/List/Cells/TableCountCell.vue";
+import TableLinkCell from "./components/List/Cells/TableLinkCell.vue";
+import TablePriorityCell from "./components/List/Cells/TablePriorityCell.vue";
+import TableStatusCell from "./components/List/Cells/TableStatusCell.vue";
+
+// fields
 import DestinationField from "./components/Fields/DestinationField.vue";
 import StatusField from "./components/Fields/StatusField.vue";
 
 panel.plugin("distantnative/retour", {
-  views: {
-    retour: {
-      component: View,
-      icon: "road-sign"
-    }
+  components: {
+    "k-table": Table,
+
+    "k-table-count-cell": TableCountCell,
+    "k-table-link-cell": TableLinkCell,
+    "k-table-priority-cell": TablePriorityCell,
+    "k-table-status-cell": TableStatusCell,
+
+    "k-retour-view": View
   },
   fields: {
+    "rt-destination": DestinationField,
     "rt-status": StatusField,
-    "rt-destination": DestinationField
-  },
-  created(app) {
-    app.$store.registerModule("retour", Store(app));
   }
 });

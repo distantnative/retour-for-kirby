@@ -4,7 +4,7 @@
 
     <figcaption>
       <ul>
-        <li v-for="segment in segments" :key="segment.label">
+        <li v-for="segment in data" :key="segment.label">
           <k-icon type="circle" :style="'--color:' + segment.color" />
           {{ segment.data }} {{ segment.label }}
         </li>
@@ -16,7 +16,7 @@
 <script>
 export default {
   props: {
-    segments: Array
+    data: Array
   },
   computed: {
     gradient() {
@@ -24,17 +24,17 @@ export default {
       let size     = 0
       const deg    = this.total/180;
 
-      for (let i = 0; i < this.segments.length; i++) {
-        gradient += `${this.segments[i].color} ${size}deg,`;
-        size     += this.segments[i].data/deg;
-        gradient += `${this.segments[i].color} ${size}deg,`;
+      for (let i = 0; i < this.data.length; i++) {
+        gradient += `${this.data[i].color} ${size}deg,`;
+        size     += this.data[i].data/deg;
+        gradient += `${this.data[i].color} ${size}deg,`;
       }
 
       gradient += `transparent 180deg`;
       return gradient;
     },
     total() {
-      return this.segments.reduce((i, x) => i += x.data, 0);
+      return this.data.reduce((i, x) => i += x.data, 0);
     }
   }
 }

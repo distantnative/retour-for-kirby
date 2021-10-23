@@ -1,41 +1,40 @@
 <template>
-  <div class="retour">
-    <stats v-if="hasLog" />
-    <tabs />
-  </div>
+  <k-inside class="retour">
+    <template v-if="stats">
+      <stats :data="stats" :timespan="timespan" />
+      <navigation
+        :tab="tab"
+        :tabs="tabs"
+        :timespan="timespan"
+      />
+    </template>
+
+    <component :is="'' + tab +'-tab'" :data="data" :has-log="!!stats" />
+  </k-inside>
 </template>
 
 <script>
-import permissions from "../mixins/permissions.js";
+import Navigation from "./Interaction/Navigation.vue";
+import Stats from "./Interaction/Stats.vue";
 
-import Stats from "./Stats.vue";
-import Tabs from "./Tabs.vue";
+import RedirectsTab from "./Tabs/RedirectsTab.vue";
+import FailuresTab from "./Tabs/FailuresTab.vue";
+import PluginTab from "./Tabs/PluginTab.vue";
 
 export default {
-  mixins: [permissions],
   components: {
     Stats,
-    Tabs
+    Navigation,
+    FailuresTab,
+    RedirectsTab,
+    PluginTab
   },
-  computed: {
-    hasLog() {
-      return this.$store.state.retour.meta.hasLog !== false;
-    },
-  },
-  async created() {
-    if (this.canAccess === false) {
-      this.$router.push("/");
-    }
-
-    await this.$store.dispatch("retour/init");
+  props: {
+    data: [Object, Array],
+    stats: [Boolean, Array],
+    tab: String,
+    tabs: Array,
+    timespan: Array
   }
-}
+};
 </script>
-
-<style>
-.retour [data-loading] {
-  pointer-events: none;
-  opacity: .65;
-  cursor: progress;
-}
-</style>

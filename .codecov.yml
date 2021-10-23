@@ -7,21 +7,33 @@ coverage:
     # rules for overall project-wide coverage
     project:
       backend:
-        flags: 
+        flags:
           - backend
         target: auto
-        informational: true
+        threshold: 1%
+      frontend:
+        flags:
+          - frontend
+        target: auto
+        informational: true # don't fail because of frontend tests for now
 
     # rules based on the specific changes of the PR
     patch:
       backend:
-        flags: 
+        flags:
           - backend
+        target: 100%
+        threshold: 2%
+      frontend:
+        flags:
+          - frontend
         target: auto
-        informational: true
+        informational: true # don't fail because of frontend tests for now
 
 flags:
   backend:
     paths:
-      - src/models/
-      - src/extensions/
+      - src/classes/
+  frontend:
+    paths:
+      - src/panel/
