@@ -14,10 +14,8 @@ use Kirby\Cms\App;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Plugin
 {
-
     /**
      * Singleton plugin instance
      *
@@ -83,7 +81,7 @@ class Plugin
     /**
      * Returns if log feature is activated
      *
-     * @return boolean
+     * @return bool
      */
     public function hasLog(): bool
     {

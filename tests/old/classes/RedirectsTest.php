@@ -12,43 +12,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class RedirectsTest extends TestCase
 {
-
-    protected function data(): array
-    {
-        return [
-            ['from' => 'foo', 'to' => 'bar', 'status' => 307],
-            ['from' => 'homer', 'to' => 'simpson', 'status' => 'disabled', 'priority' => true],
-            ['from' => 'berlin', 'to' => 'caracas', 'status' => 200]
-        ];
-    }
-
-    protected function expected(): array
-    {
-        return [
-            [
-                'from'     => 'foo',
-                'to'       => 'bar',
-                'status'   => 307,
-                'priority' => false,
-                'comment'  => null
-            ],
-            [
-                'from'     => 'homer',
-                'to'       => 'simpson',
-                'status'   => null,
-                'priority' => true,
-                'comment'  => null
-            ],
-            [
-                'from'     => 'berlin',
-                'to'       => 'caracas',
-                'status'   => 200,
-                'priority' => false,
-                'comment'  => null
-            ]
-        ];
-    }
-
     /**
      * @covers ::factory
      */
@@ -170,5 +133,41 @@ final class RedirectsTest extends TestCase
         // with priority
         $routes    = $redirects->toRoutes(true);
         $this->assertSame(0, count($routes));
+    }
+
+    protected function data(): array
+    {
+        return [
+            ['from' => 'foo', 'to' => 'bar', 'status' => 307],
+            ['from' => 'homer', 'to' => 'simpson', 'status' => 'disabled', 'priority' => true],
+            ['from' => 'berlin', 'to' => 'caracas', 'status' => 200]
+        ];
+    }
+
+    protected function expected(): array
+    {
+        return [
+            [
+                'from'     => 'foo',
+                'to'       => 'bar',
+                'status'   => 307,
+                'priority' => false,
+                'comment'  => null
+            ],
+            [
+                'from'     => 'homer',
+                'to'       => 'simpson',
+                'status'   => null,
+                'priority' => true,
+                'comment'  => null
+            ],
+            [
+                'from'     => 'berlin',
+                'to'       => 'caracas',
+                'status'   => 200,
+                'priority' => false,
+                'comment'  => null
+            ]
+        ];
     }
 }

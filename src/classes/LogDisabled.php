@@ -14,7 +14,6 @@ namespace distantnative\Retour;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class LogDisabled
 {
     /**

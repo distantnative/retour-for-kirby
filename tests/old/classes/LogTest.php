@@ -13,36 +13,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class LogTest extends TestCase
 {
-
-    protected function log($file, array $options = [])
-    {
-        $app  = new App([
-            'roots'   => ['index' => '/dev/null'],
-            'options' => array_merge($options, [
-                'distantnative.retour.database' => $file
-            ])
-        ]);
-
-        return new Log();
-    }
-
-    /**
-     * @covers ::__construct
-     */
-    public function testFile(): void
-    {
-        $file = __DIR__ . '/fixtures/log/test.sqlite';
-        $this->assertFalse(F::exists($file));
-
-        $log = $this->log(function () use ($file): string {
-            return $file;
-        });
-
-        $this->assertTrue(F::exists($file));
-        Dir::remove(dirname($file));
-    }
-
-
     /**
      * @covers ::add
      * @covers ::table
@@ -75,26 +45,14 @@ final class LogTest extends TestCase
     }
 
     /**
-     * @covers ::first
-     * @covers ::last
-     * @covers ::single
+     * @doesNotPerformAssertions
      */
-    public function testFirstLast(): void
+    public function testDisabled(): void
     {
-        $file = __DIR__ . '/fixtures/test.sqlite';
-        $log  = $this->log($file);
-
-        $this->assertSame([], $log->first());
-        $this->assertSame([], $log->last());
-
+        $log = new LogDisabled();
         $log->add(['path' => 'foo']);
-
-        $this->assertSame(1, $log->table()->fetch('array')->all()->count());
-        $this->assertTrue(isset($log->first()['date']));
-        $this->assertTrue(isset($log->last()['date']));
-        $this->assertSame($log->first(), $log->last());
-
-        F::remove($file);
+        $log->first();
+        $log->redirect('foo', '2020-01-01', '2020-31-12');
     }
 
     /**
@@ -121,6 +79,45 @@ final class LogTest extends TestCase
         $this->assertSame($path, $fail['path']);
         $this->assertSame($date, $fail['last']);
         $this->assertSame(2, $fail['hits']);
+
+        F::remove($file);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testFile(): void
+    {
+        $file = __DIR__ . '/fixtures/log/test.sqlite';
+        $this->assertFalse(F::exists($file));
+
+        $log = $this->log(function () use ($file): string {
+            return $file;
+        });
+
+        $this->assertTrue(F::exists($file));
+        Dir::remove(dirname($file));
+    }
+
+    /**
+     * @covers ::first
+     * @covers ::last
+     * @covers ::single
+     */
+    public function testFirstLast(): void
+    {
+        $file = __DIR__ . '/fixtures/test.sqlite';
+        $log  = $this->log($file);
+
+        $this->assertSame([], $log->first());
+        $this->assertSame([], $log->last());
+
+        $log->add(['path' => 'foo']);
+
+        $this->assertSame(1, $log->table()->fetch('array')->all()->count());
+        $this->assertTrue(isset($log->first()['date']));
+        $this->assertTrue(isset($log->last()['date']));
+        $this->assertSame($log->first(), $log->last());
 
         F::remove($file);
     }
@@ -319,14 +316,15 @@ final class LogTest extends TestCase
         $this->assertSame(4, $stats[6]['redirected']);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testDisabled(): void
+    protected function log($file, array $options = [])
     {
-        $log = new LogDisabled();
-        $log->add(['path' => 'foo']);
-        $log->first();
-        $log->redirect('foo', '2020-01-01', '2020-31-12');
+        $app  = new App([
+            'roots'   => ['index' => '/dev/null'],
+            'options' => array_merge($options, [
+                'distantnative.retour.database' => $file
+            ])
+        ]);
+
+        return new Log();
     }
 }

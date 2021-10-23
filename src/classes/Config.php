@@ -17,10 +17,8 @@ use Kirby\Toolkit\Silo;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Config extends Silo
 {
-
     /**
      * Absolute path to the config file
      *
@@ -80,6 +78,4 @@ class Config extends Silo
 
         return Data::write(static::$file, static::$data);
     }
-
-
 }

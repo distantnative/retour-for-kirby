@@ -3,8 +3,8 @@
 namespace distantnative\Retour;
 
 use Kirby\Cms\App;
-use Kirby\Http\Route;
 use Kirby\Filesystem\F;
+use Kirby\Http\Route;
 
 use PHPUnit\Framework\TestCase;
 use RetourTestCase;
@@ -29,12 +29,6 @@ final class HooksTest extends TestCase
         $this->assertNotNull(self::$hook);
     }
 
-    public function testNotFinal(): void
-    {
-        $hook = self::$hook;
-        $this->assertNull($hook(self::$route, 'foo', 'GET', '', false));
-    }
-
     public function testIgnore(): void
     {
         $app = new App([
@@ -46,6 +40,12 @@ final class HooksTest extends TestCase
 
         $hook = self::$hook;
         $this->assertSame('', $hook(self::$route, 'foo', 'GET', '', true));
+    }
+
+    public function testNotFinal(): void
+    {
+        $hook = self::$hook;
+        $this->assertNull($hook(self::$route, 'foo', 'GET', '', false));
     }
 
     public function testNotMatching(): void

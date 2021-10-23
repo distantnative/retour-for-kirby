@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class PluginTest extends TestCase
 {
-
     /**
      * @backupStaticAttributes enabled
      * @covers ::instance

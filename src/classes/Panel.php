@@ -3,7 +3,6 @@
 namespace distantnative\Retour;
 
 use DateTime;
-use DateInterval;
 
 /**
  * Panel
@@ -15,10 +14,8 @@ use DateInterval;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Panel
 {
-
     /**
      * Returns all props for the Panel view
      *
@@ -27,7 +24,6 @@ class Panel
      */
     public static function props(string $tab): array
     {
-
         $retour   = Plugin::instance();
         $timespan = static::timespan($retour);
         extract($timespan);
@@ -52,7 +48,7 @@ class Panel
 
         // if log feature is supported...
         if ($retour->hasLog()) {
-             // purge log entries that should be auomatically deleted
+            // purge log entries that should be auomatically deleted
             $retour->log()->purge();
 
             // get all data for 404 failures
@@ -110,10 +106,10 @@ class Panel
      * based on active session
      *
      * @return array
+     * @param Plugin $retour
      */
     public static function timespan(Plugin $retour): array
     {
-
         $session = kirby()->session();
         $from    = get('from');
         $to      = get('to');
@@ -148,27 +144,6 @@ class Panel
         $data['unit']  = static::unit($data);
 
         return $data;
-    }
-
-    /**
-     * Returns the Fiber view definition
-     *
-     * @param string $tab
-     * @return array
-     */
-    public static function view(string $tab): array
-    {
-        return [
-            'component' => 'k-retour-view',
-            'title' => t('retour.' . $tab),
-            'breadcrumb' => [
-                [
-                    'label' => t('retour.' . $tab),
-                    'link'  => 'retour/' . $tab,
-                ]
-            ],
-            'props' => static::props($tab)
-        ];
     }
 
     /**
@@ -210,5 +185,26 @@ class Panel
         }
 
         return 'days';
+    }
+
+    /**
+     * Returns the Fiber view definition
+     *
+     * @param string $tab
+     * @return array
+     */
+    public static function view(string $tab): array
+    {
+        return [
+            'component' => 'k-retour-view',
+            'title' => t('retour.' . $tab),
+            'breadcrumb' => [
+                [
+                    'label' => t('retour.' . $tab),
+                    'link'  => 'retour/' . $tab,
+                ]
+            ],
+            'props' => static::props($tab)
+        ];
     }
 }

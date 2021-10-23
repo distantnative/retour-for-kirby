@@ -15,7 +15,6 @@ use Kirby\Toolkit\Collection;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Redirects extends Collection
 {
     /**
@@ -117,14 +116,15 @@ class Redirects extends Collection
      * Returns routes config for all redirects
      *
      * @return array
+     * @param bool $priority
      */
-    public function toRoutes(bool $hasPriority = false): array
+    public function toRoutes(bool $priority = false): array
     {
         // Filter: no routes for disabled redirects
         //         and match the priority parameter
-        $redirects = $this->filter(function (Redirect $redirect) use ($hasPriority): bool {
+        $redirects = $this->filter(function (Redirect $redirect) use ($priority): bool {
             return $redirect->isActive() &&
-                   $redirect->priority() === $hasPriority;
+                   $redirect->priority() === $priority;
         });
 
         // create route array for each redirect

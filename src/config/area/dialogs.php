@@ -17,9 +17,9 @@ use Kirby\Toolkit\I18n;
  */
 
 
- /**
-  * Shared fields definition for several dialogs
-  */
+/**
+ * Shared fields definition for several dialogs
+ */
 $fields = [
     'from' => [
         'label'    => t('retour.redirects.from'),
@@ -28,7 +28,7 @@ $fields = [
         'counter'  => false,
         'required' => true,
         'help'     => I18n::template('retour.redirects.from.help', ['docs' => 'https://github.com/distantnative/retour-for-kirby'])
-        ],
+    ],
     'to' => [
         'label'    => t('retour.redirects.to'),
         'type'     => 'rt-destination',
@@ -67,8 +67,8 @@ return [
         'pattern' => 'retour/redirects/create',
         'load' => function () use ($fields) {
             return [
-              'component' => 'k-form-dialog',
-              'props' => [
+                'component' => 'k-form-dialog',
+                'props' => [
                     'fields' => $fields,
                     'size'  => 'large'
                 ]
@@ -94,8 +94,8 @@ return [
             }
 
             return [
-              'component' => 'k-form-dialog',
-              'props' => [
+                'component' => 'k-form-dialog',
+                'props' => [
                     'fields' => $fields,
                     'value' => $redirect->toArray(),
                     'size'  => 'large'
@@ -112,8 +112,8 @@ return [
         'pattern' => 'retour/redirects/(:any)/delete',
         'load' => function (string $id) {
             return [
-              'component' => 'k-remove-dialog',
-              'props' => [
+                'component' => 'k-remove-dialog',
+                'props' => [
                     'text' => t('field.structure.delete.confirm')
                 ]
             ];
@@ -129,14 +129,14 @@ return [
         'pattern' => 'retour/failures/(:any)/resolve',
         'load' => function (string $path) use ($fields) {
             return [
-              'component' => 'k-form-dialog',
-              'props' => [
-                'fields' => $fields,
-                'value' => [
-                    'from' => urldecode($path)
-                ],
-                'size'  => 'large'
-              ]
+                'component' => 'k-form-dialog',
+                'props' => [
+                    'fields' => $fields,
+                    'value' => [
+                        'from' => urldecode($path)
+                    ],
+                    'size'  => 'large'
+                ]
             ];
         },
         'submit' => function (string $path) {
@@ -150,9 +150,9 @@ return [
         'pattern' => 'retour/failures/(:any)/delete',
         'load' => function () {
             return [
-              'component' => 'k-remove-dialog',
-              'props' => [
-                  'text' => t('field.structure.delete.confirm')
+                'component' => 'k-remove-dialog',
+                'props' => [
+                    'text' => t('field.structure.delete.confirm')
                 ]
             ];
         },

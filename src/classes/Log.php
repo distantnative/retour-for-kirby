@@ -18,7 +18,6 @@ use Kirby\Filesystem\F;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Log
 {
     /**
@@ -40,6 +39,7 @@ class Log
      * Class constructor
      *
      * @param \distantnative\Retour\Plugin Plugin instance
+     * @param Plugin $plugin
      */
     public function __construct(Plugin $plugin)
     {
@@ -90,58 +90,6 @@ class Log
     }
 
     /**
-     * Returns a single entry based on the sort order
-     *
-     * @param string $sort
-     * @return array
-     */
-    protected function single(string $sort): array
-    {
-        /** @var array|false */
-        $result = $this->table()
-            ->select('date')
-            ->order($sort)
-            ->fetch('array')
-            ->first();
-
-        if ($result === false) {
-            return [];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns the database table object
-     *
-     * @return \Kirby\Database\Query
-     */
-    public function table(): Query
-    {
-        return $this->db->records();
-    }
-
-    /**
-     * Returns the first log entry
-     *
-     * @return array
-     */
-    public function first(): array
-    {
-        return $this->single('date ASC');
-    }
-
-    /**
-     * Returns the last log entry
-     *
-     * @return array
-     */
-    public function last(): array
-    {
-        return $this->single('date DESC');
-    }
-
-    /**
      * Returns all logged 404s
      *
      * @param string $from date sting (yyyy-mm-dd)
@@ -181,6 +129,16 @@ class Log
         });
     }
 
+    /**
+     * Returns the first log entry
+     *
+     * @return array
+     */
+    public function first(): array
+    {
+        return $this->single('date ASC');
+    }
+
 
     /**
      * Remove database records and reset index
@@ -192,6 +150,16 @@ class Log
         $table = $this->table()->delete();
         $index = $this->db->sqlite_sequence()->delete(['name' => 'records']);
         return $table && $index;
+    }
+
+    /**
+     * Returns the last log entry
+     *
+     * @return array
+     */
+    public function last(): array
+    {
+        return $this->single('date DESC');
     }
 
     /**
@@ -365,5 +333,37 @@ class Log
                 'redirected' => (int)$entry['redirected'],
             ];
         });
+    }
+
+    /**
+     * Returns the database table object
+     *
+     * @return \Kirby\Database\Query
+     */
+    public function table(): Query
+    {
+        return $this->db->records();
+    }
+
+    /**
+     * Returns a single entry based on the sort order
+     *
+     * @param string $sort
+     * @return array
+     */
+    protected function single(string $sort): array
+    {
+        /** @var array|false */
+        $result = $this->table()
+            ->select('date')
+            ->order($sort)
+            ->fetch('array')
+            ->first();
+
+        if ($result === false) {
+            return [];
+        }
+
+        return $result;
     }
 }

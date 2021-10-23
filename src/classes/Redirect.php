@@ -17,15 +17,13 @@ use Kirby\Toolkit\Str;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-
 class Redirect extends Obj
 {
-
     /**
      * Creates (new) redirect from query parameters
      * and updates the colleciton and config file
      *
-     * @param integer|null $id index of existing redirect to be updated
+     * @param int|null $id index of existing redirect to be updated
      * @return void
      */
     public static function create(?int $id = null)
@@ -39,7 +37,7 @@ class Redirect extends Obj
         ]);
         $redirects = Plugin::instance()->redirects();
 
-        if ($id !== null)  {
+        if ($id !== null) {
             $redirects = $redirects->set($id, $redirect);
         } else {
             $redirects = $redirects->prepend($redirect);

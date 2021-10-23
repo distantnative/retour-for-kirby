@@ -9,8 +9,6 @@ use ReflectionProperty;
  */
 class PluginTest extends TestCase
 {
-
-
     /**
      * @backupStaticAttributes enabled
      * @covers ::instance

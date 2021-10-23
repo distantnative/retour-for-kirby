@@ -38,7 +38,6 @@ return [
                 $routes = $retour->redirects()->toRoutes(false);
                 $router = new Router($routes);
                 return $router->call($path, $method);
-
             } catch (\Throwable $e) {
                 // log 404 if feature enabled
                 if ($retour->hasLog() === true) {

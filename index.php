@@ -15,7 +15,6 @@
 
 use Kirby\Cms\App as Kirby;
 
-
 // validate Kirby version
 if (version_compare(Kirby::version() ?? '0.0.0', '3.6.0-rc.1', '<') === true) {
     throw new Exception('Retour requires at least Kirby 3.6.0-rc.1');

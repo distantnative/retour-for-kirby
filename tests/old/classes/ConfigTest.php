@@ -2,7 +2,6 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 
 use PHPUnit\Framework\TestCase;
@@ -12,24 +11,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class ConfigTest extends TestCase
 {
-    /**
-     * @covers ::write
-     */
-    public function testWriteBeforeLoad(): void
-    {
-        $this->expectException(LogicException::class);
-        Config::write();
-    }
-
-    /**
-     * @covers ::load
-     */
-    public function testFileNotExists(): void
-    {
-        Config::load(__DIR__ . '/fixtures/nowhere.yml');
-        $this->assertSame([], Config::$data);
-    }
-
     /**
      * @covers ::load
      */
@@ -58,6 +39,23 @@ final class ConfigTest extends TestCase
         Config::load($file);
         $this->assertSame(2, count(Config::$data['redirects']));
         $this->assertSame('about/team', Config::$data['redirects'][1]['to']);
+    }
+
+    /**
+     * @covers ::load
+     */
+    public function testFileNotExists(): void
+    {
+        Config::load(__DIR__ . '/fixtures/nowhere.yml');
+        $this->assertSame([], Config::$data);
+    }
+    /**
+     * @covers ::write
+     */
+    public function testWriteBeforeLoad(): void
+    {
+        $this->expectException('Kirby\Exception\LogicException');
+        Config::write();
     }
 
     /**
