@@ -157,7 +157,8 @@ class Redirect extends Obj
                 kirby()->response()->code($code);
 
                 // Return page for other codes
-                if ($page = page($to)) {
+                $page = page($to);
+                if ($page !== null) {
                     return $page;
                 }
 

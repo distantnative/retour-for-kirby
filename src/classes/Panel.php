@@ -26,10 +26,12 @@ class Panel
     {
         $retour   = Plugin::instance();
         $timespan = static::timespan($retour);
-        extract($timespan);
+        ['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
         // get all data for redirects
+        // and fallback for failures
         $redirects = $retour->redirects()->toData($from, $to);
+        $failures  = [];
 
         // props for minimal Panel view
         $props = [
@@ -52,6 +54,7 @@ class Panel
             $retour->log()->purge();
 
             // get all data for 404 failures
+            /** @var array */
             $failures = $retour->log()->fails($from, $to);
 
             // add additional tabs
@@ -77,10 +80,10 @@ class Panel
         // add tab=specific data, e.g. for table rows
         switch ($tab) {
             case 'redirects':
-                $props['data'] = $redirects ?? [];
+                $props['data'] = $redirects;
                 break;
             case 'failures':
-                $props['data'] = $failures ?? [];
+                $props['data'] = $failures;
                 break;
             case 'system':
                 $delete = $retour->info()['deleteAfter'];

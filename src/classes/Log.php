@@ -25,7 +25,7 @@ class Log
      *
      * @var \Kirby\Database\Database
      */
-    protected $db;
+    protected $database;
 
     /**
      * Plugin instance
@@ -67,7 +67,7 @@ class Log
         }
 
         // connect to database
-        $this->db = new Database([
+        $this->database = new Database([
             'type'     => 'sqlite',
             'database' => $file
         ]);
@@ -148,7 +148,7 @@ class Log
     public function flush(): bool
     {
         $table = $this->table()->delete();
-        $index = $this->db->sqlite_sequence()->delete(['name' => 'records']);
+        $index = $this->database->sqlite_sequence()->delete(['name' => 'records']);
         return $table && $index;
     }
 
@@ -238,7 +238,7 @@ class Log
      */
     public function remove(string $path): bool
     {
-        return $this->table()->delete('path = "' . $this->db->escape($path) . '"');
+        return $this->table()->delete('path = "' . $this->database->escape($path) . '"');
     }
 
     /**
@@ -292,7 +292,7 @@ class Log
                 break;
         }
         // Get data from database
-        $data = $this->db->query('
+        $data = $this->database->query('
             with recursive dates as (
                 select :from as date
                 union all
@@ -342,7 +342,7 @@ class Log
      */
     public function table(): Query
     {
-        return $this->db->records();
+        return $this->database->records();
     }
 
     /**

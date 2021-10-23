@@ -24,7 +24,7 @@ $fields = [
     'from' => [
         'label'    => t('retour.redirects.from'),
         'type'     => 'text',
-        'before'   => preg_replace('$^(http(s)?\:\/\/(www\.)?)$', '', kirby()->url()) . '/',
+        'before'   => preg_replace('$^(http(s)?\:\/\/(www\.)?)$', '', (string)kirby()->url()) . '/',
         'counter'  => false,
         'required' => true,
         'help'     => I18n::template('retour.redirects.from.help', ['docs' => 'https://github.com/distantnative/retour-for-kirby'])

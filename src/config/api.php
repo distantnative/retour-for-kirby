@@ -27,6 +27,9 @@ return [
                         'model' => kirby()->site()
                     ]);
 
+                    /**
+                     * @psalm-suppress InvalidScope
+                     */
                     return $field->pagepicker([
                         'image'    => $field->image(),
                         'info'     => $field->info(),
