@@ -14,13 +14,13 @@ class TestCase extends BaseTestCase
 
     public function setUp(): void
     {
+        Dir::remove($this->tmp);
+
         $this->kirby = new App([
             'roots' => [
-                'index'   => '/dev/null'
+                'index'   => $this->tmp
             ]
         ]);
-
-        Dir::remove($this->tmp);
 
         $this->plugin = new Plugin($this->kirby);
     }

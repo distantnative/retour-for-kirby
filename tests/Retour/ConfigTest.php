@@ -2,14 +2,12 @@
 
 namespace distantnative\Retour;
 
-use Kirby\Filesystem\F;
-
-use PHPUnit\Framework\TestCase;
+use Kirby\Toolkit\F;
 
 /**
  * @coversDefaultClass \distantnative\Retour\Config
  */
-final class ConfigTest extends TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @covers ::load
@@ -49,11 +47,13 @@ final class ConfigTest extends TestCase
         Config::load(__DIR__ . '/fixtures/nowhere.yml');
         $this->assertSame([], Config::$data);
     }
+
     /**
      * @covers ::write
      */
     public function testWriteBeforeLoad(): void
     {
+        Config::$file = null;
         $this->expectException('Kirby\Exception\LogicException');
         Config::write();
     }
@@ -63,13 +63,12 @@ final class ConfigTest extends TestCase
      */
     public function testWriteNotExists(): void
     {
-        $file = __DIR__ . '/fixtures/test.yml';
+        $file = __DIR__ . '/tmp/test.yml';
         Config::load($file);
         $this->assertFalse(F::exists($file));
 
         Config::write();
         $this->assertTrue(F::exists($file));
-        F::remove($file);
     }
 
     /**
@@ -77,12 +76,11 @@ final class ConfigTest extends TestCase
      */
     public function testWriteWhenSet(): void
     {
-        $file = __DIR__ . '/fixtures/test.yml';
+        $file = __DIR__ . '/tmp/test.yml';
         Config::load($file);
         $this->assertFalse(F::exists($file));
 
         Config::set(['routes' => [['path' => 'foo/bar']]]);
         $this->assertTrue(F::exists($file));
-        F::remove($file);
     }
 }

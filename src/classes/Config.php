@@ -71,7 +71,6 @@ class Config extends Silo
      */
     public static function write(): bool
     {
-        /** @var string|null static::$file */
         if (static::$file === null) {
             throw new LogicException('Config::write is called before data waas loaded for the first time');
         }

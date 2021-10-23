@@ -85,20 +85,7 @@ class Plugin
      */
     public function hasLog(): bool
     {
-        return $this->info()['hasLog'] !== false;
-    }
-
-    /**
-     * Returns plugin information
-     *
-     * @return array
-     */
-    public function info(): array
-    {
-        return [
-            'deleteAfter' => $this->option('deleteAfter', false),
-            'hasLog'      => $this->option('logs', true)
-        ];
+        return $this->option('logs', true) !== false;
     }
 
     /**

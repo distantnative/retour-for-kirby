@@ -86,8 +86,6 @@ class Panel
                 $props['data'] = $failures;
                 break;
             case 'system':
-                $delete = $retour->info()['deleteAfter'];
-
                 $props['data'] = [
                     'redirects' => array_reduce($redirects, function ($c, $i) {
                         return $c + $i['hits'];
@@ -95,7 +93,7 @@ class Panel
                     'failures' => array_reduce($failures, function ($c, $i) {
                         return $c + $i['hits'];
                     }, 0),
-                    'deleteAfter' => $delete !== false ? $delete : '–'
+                    'deleteAfter' => $retour->option('deleteAfter', '-')
                 ];
                 break;
         }

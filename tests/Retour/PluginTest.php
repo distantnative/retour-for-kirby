@@ -10,6 +10,34 @@ use ReflectionProperty;
 class PluginTest extends TestCase
 {
     /**
+     * @covers ::hasLog
+     */
+    public function testHasLog()
+    {
+        // default = true
+        $retour = Plugin::instance();
+        $this->assertTrue($retour->hasLog());
+
+        // explicitly deactivated
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.logs' => false
+            ]
+        ]);
+        $retour = Plugin::instance($app);
+        $this->assertFalse($retour->hasLog());
+
+        // explicitly activated
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.logs' => true
+            ]
+        ]);
+        $retour = Plugin::instance($app);
+        $this->assertTrue($retour->hasLog());
+    }
+
+    /**
      * @backupStaticAttributes enabled
      * @covers ::instance
      * @covers ::__construct
@@ -41,12 +69,52 @@ class PluginTest extends TestCase
     }
 
     /**
+     * @covers ::log
+     */
+    public function testLog(): void
+    {
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite'
+            ]
+        ]);
+
+        $log = Plugin::instance($app)->log();
+        $this->assertInstanceOf('distantnative\Retour\Log', $log);
+
+        // Repeated access, cached instance
+        $this->assertInstanceOf('distantnative\Retour\Log', Plugin::instance($app)->log());
+    }
+
+    /**
+     * @covers ::log
+     */
+    public function testLogDisabled(): void
+    {
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.logs'     => false,
+                'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite'
+            ]
+        ]);
+
+        $log = Plugin::instance($app)->log();
+        $this->assertInstanceOf('distantnative\Retour\LogDisabled', $log);
+    }
+
+    /**
      * @covers ::option
      */
     public function testOption()
     {
-        // $this->assertSame($this->tmp . '/media/versions-export', $this->plugin->exportRoot());
-        // $this->assertSame('https://example.com/media/versions-export', $this->plugin->exportUrl());
-        // $this->assertSame(20, $this->plugin->option('autodelete.count'));
+        $app = $this->kirby->clone([
+            'options' => [
+                'distantnative.retour.foo'   => 'bar'
+            ]
+        ]);
+
+        $retour = Plugin::instance($app);
+        $this->assertSame('bar', $retour->option('foo'));
+        $this->assertSame('simpson', $retour->option('homer', 'simpson'));
     }
 }

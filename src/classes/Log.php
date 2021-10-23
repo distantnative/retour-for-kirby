@@ -180,7 +180,7 @@ class Log
     public function purge(): bool
     {
         // Get limit (in months) from option
-        $limit = $this->plugin()->info()['deleteAfter'];
+        $limit = $this->plugin()->option('deleteAfter', false);
 
         if ($limit !== false) {
             // Get cutoff date by subtracting limit from today
