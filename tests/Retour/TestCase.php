@@ -18,7 +18,7 @@ class TestCase extends BaseTestCase
 
         $this->kirby = new App([
             'roots' => [
-                'index'   => $this->tmp
+                'index'    => $this->tmp
             ]
         ]);
 

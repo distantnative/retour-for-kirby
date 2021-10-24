@@ -107,7 +107,7 @@ class Panel
      * based on active session
      *
      * @return array
-     * @param Plugin $retour
+     * @param \distantnative\Retour\Plugin $retour
      */
     public static function timespan(Plugin $retour): array
     {

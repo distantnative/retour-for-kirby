@@ -7,8 +7,29 @@ use Kirby\Filesystem\F;
 /**
  * @coversDefaultClass \distantnative\Retour\Redirects
  */
-final class RedirectsTest extends TestCase
+class RedirectsTest extends TestCase
 {
+    /**
+     * @covers ::create
+     */
+    public function testCreate(): void
+    {
+        $app       = $this->kirby->clone();
+        $retour    = Plugin::instance($app);
+
+        $_GET['from'] = 'foo';
+
+        $this->assertSame(0, $retour->redirects()->count());
+        Redirects::create();
+        $this->assertSame(1, $retour->redirects()->count());
+        $this->assertSame('foo', $retour->redirects()->first()->from());
+
+        $_GET['from'] = 'bar';
+        Redirects::create(0);
+        $this->assertSame(1, $retour->redirects()->count());
+        $this->assertSame('foo', $retour->redirects()->first()->from());
+    }
+
     /**
      * @covers ::factory
      */
@@ -19,6 +40,17 @@ final class RedirectsTest extends TestCase
 
         $this->assertSame(3, $redirects->count());
         $this->assertInstanceOf('distantnative\Retour\Redirect', $redirects->first());
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::plugin
+     */
+    public function testPlugin(): void
+    {
+        $retour    = Plugin::instance();
+        $redirects = Redirects::factory($retour, []);
+        $this->assertInstanceOf('distantnative\Retour\Plugin', $redirects->plugin());
     }
 
     /**

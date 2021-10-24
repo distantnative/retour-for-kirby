@@ -37,6 +37,37 @@ class Redirects extends Collection
     }
 
     /**
+     * Creates (new) redirect from query parameters
+     * and updates the colleciton and config file
+     *
+     * @param int|null $id index of existing redirect to be updated
+     * @return static
+     *
+     * @todo Add validation
+     */
+    public static function create(?int $id = null)
+    {
+        $redirect  = new Redirect([
+            'from'      => get('from'),
+            'to'        => get('to'),
+            'status'    => get('status'),
+            'priority'  => get('priority'),
+            'comment'   => get('comment')
+        ]);
+
+        $redirects = Plugin::instance()->redirects();
+
+        if ($id !== null) {
+            $redirects = $redirects->set($id, $redirect);
+        } else {
+            $redirects = $redirects->prepend($redirect);
+        }
+
+        $redirects->save();
+        return $redirects;
+    }
+
+    /**
      * Takes a config array and turns it into
      * a collection of redirect objects
      *

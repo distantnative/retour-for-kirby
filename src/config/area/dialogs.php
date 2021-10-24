@@ -1,7 +1,7 @@
 <?php
 
 use distantnative\Retour\Plugin as Retour;
-use distantnative\Retour\Redirect;
+use distantnative\Retour\Redirects;
 use Kirby\Http\Header;
 use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
@@ -75,7 +75,7 @@ return [
             ];
         },
         'submit' => function () {
-            Redirect::create();
+            Redirects::create();
             return true;
         }
     ],
@@ -103,7 +103,7 @@ return [
             ];
         },
         'submit' => function (string $id) {
-            Redirect::create((int)$id);
+            Redirects::create((int)$id);
             return true;
         }
     ],
@@ -140,8 +140,8 @@ return [
             ];
         },
         'submit' => function (string $path) {
-            Redirect::create();
-            Retour::instance()->log()->resolve(urldecode($path));
+            $redirects = Redirects::create();
+            $redirects->plugin()->log()->resolve(urldecode($path));
             Panel::go('retour/redirects');
         }
     ],

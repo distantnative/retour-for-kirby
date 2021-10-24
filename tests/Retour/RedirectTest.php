@@ -7,7 +7,7 @@ use Kirby\Http\Route;
 /**
  * @coversDefaultClass \distantnative\Retour\Redirect
  */
-final class RedirectTest extends TestCase
+class RedirectTest extends TestCase
 {
     /**
      * @covers ::priority

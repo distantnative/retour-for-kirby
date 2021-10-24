@@ -15,8 +15,7 @@ class PluginTest extends TestCase
     public function testHasLog()
     {
         // default = true
-        $retour = Plugin::instance();
-        $this->assertTrue($retour->hasLog());
+        $this->assertTrue($this->plugin->hasLog());
 
         // explicitly deactivated
         $app = $this->kirby->clone([
@@ -24,8 +23,8 @@ class PluginTest extends TestCase
                 'distantnative.retour.logs' => false
             ]
         ]);
-        $retour = Plugin::instance($app);
-        $this->assertFalse($retour->hasLog());
+        $this->plugin = Plugin::instance($app);
+        $this->assertFalse($this->plugin->hasLog());
 
         // explicitly activated
         $app = $this->kirby->clone([
@@ -33,8 +32,8 @@ class PluginTest extends TestCase
                 'distantnative.retour.logs' => true
             ]
         ]);
-        $retour = Plugin::instance($app);
-        $this->assertTrue($retour->hasLog());
+        $this->plugin = Plugin::instance($app);
+        $this->assertTrue($this->plugin->hasLog());
     }
 
     /**
@@ -143,9 +142,7 @@ class PluginTest extends TestCase
      */
     public function testRedirectsEmpty(): void
     {
-        $app = $this->kirby->clone();
-        $retour = Plugin::instance($app);
-        $redirects = $retour->redirects();
+        $redirects = $this->plugin->redirects();
         $this->assertInstanceOf('distantnative\Retour\Redirects', $redirects);
         $this->assertSame([], $redirects->toArray());
     }

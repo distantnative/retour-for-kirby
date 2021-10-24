@@ -121,6 +121,16 @@ class LogTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::plugin
+     */
+    public function testPlugin(): void
+    {
+        $log = $this->log();
+        $this->assertInstanceOf('distantnative\Retour\Plugin', $log->plugin());
+    }
+
+    /**
      * @covers ::purge
      */
     public function testPurge(): void
@@ -277,6 +287,7 @@ class LogTest extends TestCase
         $this->assertSame(0, $stats[6]['resolved']);
         $this->assertSame(4, $stats[6]['redirected']);
     }
+
     protected function log($file = null, array $options = [])
     {
         if ($file === null) {
@@ -288,8 +299,9 @@ class LogTest extends TestCase
                 'distantnative.retour.database' => $file
             ])
         ]);
-        $retour = Plugin::instance($app);
 
-        return new Log($retour);
+        $this->plugin = Plugin::instance($app);
+
+        return new Log($this->plugin);
     }
 }
