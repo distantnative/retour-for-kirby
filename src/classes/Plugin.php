@@ -157,4 +157,14 @@ class Plugin
     {
         return $this->redirects;
     }
+
+    /**
+     * Resets the singleton plugin instance
+     *
+     * @return void
+     */
+    public static function reset()
+    {
+        self::$instance = null;
+    }
 }

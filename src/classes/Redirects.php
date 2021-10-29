@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use Closure;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Collection;
 
 /**
@@ -47,14 +48,20 @@ class Redirects extends Collection
      */
     public static function create(?int $id = null)
     {
-        $redirect  = new Redirect([
+        $data = [
             'from'      => get('from'),
             'to'        => get('to'),
             'status'    => get('status'),
             'priority'  => get('priority'),
             'comment'   => get('comment')
-        ]);
+        ];
 
+        // validation
+        if ($data['from'] === null) {
+            throw new InvalidArgumentException('Missing "from" parameter');
+        }
+
+        $redirect  = new Redirect($data);
         $redirects = Plugin::instance()->redirects();
 
         if ($id !== null) {

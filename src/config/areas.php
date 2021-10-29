@@ -34,7 +34,7 @@ return [
                     }
                 ]
             ],
-            'dialogs' => require 'area/dialogs.php'
+            'dialogs' => require 'dialogs.php'
         ];
     }
 ];

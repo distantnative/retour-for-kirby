@@ -50,31 +50,6 @@ class PanelTest extends TestCase
         $this->assertSame(1, count($props['tabs']));
     }
 
-    // /**
-    //  * @covers ::props
-    //  */
-    // public function testPropsWithData(): void
-    // {
-    //     $app = $this->kirby->clone([
-    //         'options' => [
-    //             'distantnative.retour.config' => __DIR__ . '/fixtures/sample.yml',
-    //             'distantnative.retour.logs' => __DIR__ . '/fixtures/sample.sqlite'
-    //         ]
-    //     ]);
-    //     $this->plugin = Plugin::instance($app);
-
-    //     $_GET['from'] = '2021-01-01';
-    //     $_GET['to']   = '2021-01-31';
-
-    //     $props = Panel::props('system');
-    //     $this->assertSame('system', $props['tab']);
-    //     $this->assertSame(3, count($props['tabs']));
-    //     $this->assertSame(4, $props['tabs'][0]['badge']);
-    //     $this->assertSame(0, $props['tabs'][1]['badge']);
-    //     $this->assertSame(0, $props['data']['redirects']);
-    //     $this->assertSame(0, $props['data']['failures']);
-    // }
-
     /**
      * @covers ::timespan
      */

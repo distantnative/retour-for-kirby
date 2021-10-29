@@ -301,7 +301,6 @@ class LogTest extends TestCase
         ]);
 
         $this->plugin = Plugin::instance($app);
-
         return new Log($this->plugin);
     }
 }

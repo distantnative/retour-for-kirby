@@ -27,6 +27,7 @@ class TestCase extends BaseTestCase
 
     public function tearDown(): void
     {
+        Plugin::reset();
         Dir::remove($this->tmp);
     }
 }

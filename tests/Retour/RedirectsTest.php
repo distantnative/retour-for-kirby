@@ -14,9 +14,7 @@ class RedirectsTest extends TestCase
      */
     public function testCreate(): void
     {
-        $app       = $this->kirby->clone();
-        $retour    = Plugin::instance($app);
-
+        $retour = Plugin::instance();
         $_GET['from'] = 'foo';
 
         $this->assertSame(0, $retour->redirects()->count());
@@ -28,6 +26,17 @@ class RedirectsTest extends TestCase
         Redirects::create(0);
         $this->assertSame(1, $retour->redirects()->count());
         $this->assertSame('foo', $retour->redirects()->first()->from());
+    }
+
+    /**
+     * @covers ::create
+     */
+    public function testCreateWithoutValidParameters(): void
+    {
+        $_GET['from'] = null;
+        $retour       = Plugin::instance();
+        $this->expectException('Kirby\Exception\InvalidArgumentException');
+        Redirects::create();
     }
 
     /**
