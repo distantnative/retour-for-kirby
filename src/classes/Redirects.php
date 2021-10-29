@@ -43,8 +43,6 @@ class Redirects extends Collection
      *
      * @param int|null $id index of existing redirect to be updated
      * @return static
-     *
-     * @todo Add validation
      */
     public static function create(?int $id = null)
     {

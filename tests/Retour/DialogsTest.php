@@ -21,6 +21,23 @@ class DialogsTest extends TestCase
         $this->assertSame(1, $redirects->count());
     }
 
+    public function testDeleteRedirectDialog(): void
+    {
+        $dialog = $this->dialog('retour.redirect.delete');
+        $this->assertSame('retour/redirects/(:any)/delete', $dialog['pattern']);
+
+        $redirects = Plugin::instance()->redirects();
+        $this->assertSame(0, $redirects->count());
+        $redirects = $redirects->prepend(new Redirect(['from' => 'foo']));
+        $this->assertSame(1, $redirects->count());
+
+        $load = $dialog['load'](0);
+        $this->assertSame('k-remove-dialog', $load['component']);
+
+        $submit = $dialog['submit'](0);
+        $this->assertSame(0, $redirects->count());
+    }
+
     public function testEditRedirectDialog(): void
     {
         $_GET['from'] = 'bar';

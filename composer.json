@@ -1,8 +1,8 @@
 {
     "name": "distantnative/retour",
+    "type": "kirby-plugin",
     "description": "Redirects and 404 tracking for Kirby",
     "version": "4.0.0-beta.1",
-    "type": "kirby-plugin",
     "license": "MIT",
     "authors": [
         {
