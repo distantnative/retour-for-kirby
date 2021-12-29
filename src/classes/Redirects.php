@@ -162,7 +162,8 @@ class Redirects extends Collection
     public function toRoutes(bool $priority = false): array
     {
         // Filter: no routes for disabled redirects
-        $redirects = $this->filter(fn (Redirect $redirect): bool => $redirect->priority() === $priority);
+        $redirects = $this->filter(fn (Redirect $redirect): bool => $redirect->isActive() === true &&
+            $redirect->priority() === $priority);
 
         // create route array for each redirect
         return $redirects->toArray(fn (Redirect $route) => $route->toRoute());
