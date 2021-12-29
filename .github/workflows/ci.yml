@@ -40,36 +40,19 @@ jobs:
           extensions: ${{ env.extensions }}
           ini-values: ${{ env.ini }}
           coverage: pcov
-          tools: phpunit:9.5.4, psalm:4.7.1
+          tools: phpunit:9.5.10, psalm:4.11.2
 
       - name: Setup problem matchers
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Get Composer cache directory
-        id: composerCache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
-        with:
-          path: ${{ steps.composerCache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.dependencies }}-
-
-      - name: Install dependencies
-        run: |
-          # install the lowest or highest versions based on the matrix config
-          command=$([ "${{ matrix.dependencies }}" == "lowest" ] && echo "update --prefer-lowest" || echo "install")
-          composer $command --prefer-dist
-
       - name: Cache analysis data
         id: finishPrepare
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353 # pin@v2
         with:
           path: ~/.cache/psalm
-          key: backend-analysis-${{ matrix.php }}-v1
+          key: backend-analysis-${{ matrix.php }}
 
       - name: Run tests
         if: always() && steps.finishPrepare.outcome == 'success'
@@ -77,7 +60,7 @@ jobs:
 
       - name: Statically analyze using Psalm
         if: always() && steps.finishPrepare.outcome == 'success'
-        run: psalm --output-format=github --php-version=${{ matrix.php }}
+        run: psalm --output-format=github --php-version=${{ matrix.php }} --report=sarif/psalm.sarif --report-show-info=false
 
       - name: Upload coverage results to Codecov
         uses: codecov/codecov-action@a1ed4b322b4b38cb846afb5a0ebfa17086917d27 # pin@v1
@@ -94,22 +77,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       php: "8.0"
-      extensions: mbstring
+      extensions: mbstring, ctype, curl
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin@v2
+
+      - name: Preparations
+        run: mkdir sarif
 
       - name: Setup PHP cache environment
         id: ext-cache
-        uses: shivammathur/cache-extensions@8828d749a642ae651470bd7713c2266c82cac102 # pin@v1
+        uses: shivammathur/cache-extensions@2e789925e438042ecda2b83f0fd00bbc016da76e # pin@v1
         with:
           php-version: ${{ env.php }}
           extensions: ${{ env.extensions }}
           key: php-analysis-v1
 
       - name: Cache PHP extensions
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353 # pin@v2
         with:
           path: ${{ steps.ext-cache.outputs.dir }}
           key: ${{ steps.ext-cache.outputs.key }}
@@ -117,14 +103,14 @@ jobs:
 
       - name: Setup PHP environment
         id: finishPrepare
-        uses: shivammathur/setup-php@ed52ff9a52991475b075a4c2144f7276195e8620 # pin@v2
+        uses: shivammathur/setup-php@e2e76ea34f2059c0d66bf5c54ea75610185397f3 # pin@v2
         with:
           php-version: ${{ env.php }}
           extensions: ${{ env.extensions }}
           coverage: none
           tools: |
-            composer:2.0.13, composer-normalize:2.13.3, composer-require-checker:3.2.0,
-            composer-unused:0.7.5, phpcpd:6.0.3, phpmd:2.10.0
+            composer:2.2.0, composer-normalize:2.18.0, composer-require-checker:4.0.0,
+            composer-unused:0.7.10, phpcpd:6.0.3, phpmd:2.11.1
 
       - name: Validate composer.json/composer.lock
         if: always() && steps.finishPrepare.outcome == 'success'
@@ -134,40 +120,17 @@ jobs:
         if: always() && steps.finishPrepare.outcome == 'success'
         run: composer-normalize --dry-run
 
-      - name: Get Composer cache directory
-        id: composerCache1
-        if: always() && steps.finishPrepare.outcome == 'success'
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        id: composerCache2
-        if: always() && steps.composerCache1.outcome == 'success'
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
-        with:
-          path: ${{ steps.composerCache1.outputs.dir }}
-          key: ${{ runner.os }}-composer-locked-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-locked-
-
-      - name: Install dependencies
-        id: composerInstall
-        if: always() && steps.composerCache2.outcome == 'success'
-        run: composer install --prefer-dist
-
-      - name: Check for missing Composer dependencies
-        if: always() && steps.composerInstall.outcome == 'success'
-        run: composer-require-checker --config-file=${{ github.workspace }}/.composer-require-checker.json
-
       - name: Check for unused Composer dependencies
-        if: always() && steps.composerInstall.outcome == 'success'
+        if: always() && steps.finishPrepare.outcome == 'success'
         run: composer unused --no-progress
 
       - name: Check for duplicated code
-        if: always() && steps.composerInstall.outcome == 'success'
+        if: always() && steps.finishPrepare.outcome == 'success'
         run: phpcpd --fuzzy --exclude tests --exclude vendor .
 
       - name: Statically analyze using PHPMD
-        if: always() && steps.composerInstall.outcome == 'success'
-        run: phpmd . github phpmd.xml.dist --exclude 'tests/*,vendor/*'
+        if: always() && steps.finishPrepare.outcome == 'success'
+        run: phpmd . github phpmd.xml.dist --exclude 'dependencies/*,tests/*,vendor/*' --reportfile-sarif sarif/phpmd.sarif
 
   coding-style:
     name: Coding Style & Frontend Analysis
@@ -176,54 +139,68 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f1d3225b5376a0791fdee5a0e8eac5289355e43a # pin@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin@v2
 
-      - name: Set up Node.js problem matchers
-        uses: actions/setup-node@0696555e99b7a8260864ca027af4b004eea59379 # pin@v2
-
-      - name: Cache npm dependencies
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+      - name: Set up Node.js problem matchers and cache npm dependencies
+        uses: actions/setup-node@04c56d2f954f1e4c69436aa54cfef261a018f458 # pin@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
+          cache: "npm"
+          cache-dependency-path: package-lock.json
 
       - name: Install npm dependencies
         run: npm ci
+        working-directory: panel
 
       - name: Setup PHP environment
-        uses: shivammathur/setup-php@ed52ff9a52991475b075a4c2144f7276195e8620 # pin@v2
+        uses: shivammathur/setup-php@e2e76ea34f2059c0d66bf5c54ea75610185397f3 # pin@v2
         with:
+          php-version: ${{ env.php }}
           coverage: none
-          tools: php-cs-fixer:3.0.0
+          tools: php-cs-fixer:3.2.1
 
       - name: Cache analysis data
         id: finishPrepare
-        uses: actions/cache@1c6fb82ebbd610035c324e764e5e74d0e82f8a60 # pin@v2
+        uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353 # pin@v2
         with:
           path: ~/.php-cs-fixer
           key: coding-style
 
-      - name: Check for JavaScript coding style violations
+      - name: Check for JavaScript coding style violations (ESLint)
         if: always() && steps.finishPrepare.outcome == 'success'
         # Use the --no-fix flag in push builds to get a failed CI status
         run: >
           npm run lint -- --max-warnings 0 --format stylish
           ${{ github.event_name != 'pull_request' && '--no-fix' || '' }}
+        working-directory: panel
 
       - name: Create code suggestions from the coding style changes (on PR only)
         if: >
           always() && steps.finishPrepare.outcome == 'success' &&
           github.event_name == 'pull_request'
-        uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
+        uses: reviewdog/action-suggester@1b18099af6c3c023256eb87a27aab5623e9b934d # pin@v1
         with:
           tool_name: ESLint
           fail_on_error: "true"
 
+      - name: Check for JavaScript coding style violations (Prettier)
+        if: always() && steps.finishPrepare.outcome == 'success'
+        # Use the --check flag in push builds to get a failed CI status
+        run: >
+          npm run format --
+          ${{ github.event_name != 'pull_request' && '--check' || '--write' }}
+        working-directory: panel
+
+      - name: Create code suggestions from the coding style changes (on PR only)
+        if: >
+          always() && steps.finishPrepare.outcome == 'success' &&
+          github.event_name == 'pull_request'
+        uses: reviewdog/action-suggester@1b18099af6c3c023256eb87a27aab5623e9b934d # pin@v1
+        with:
+          tool_name: Prettier
+          fail_on_error: "true"
+
       - name: Check for PHP coding style violations
         if: always() && steps.finishPrepare.outcome == 'success'
-        env:
-          PHP_CS_FIXER_IGNORE_ENV: 1
         # Use the --dry-run flag in push builds to get a failed CI status
         run: >
           php-cs-fixer fix --diff
@@ -233,7 +210,7 @@ jobs:
         if: >
           always() && steps.finishPrepare.outcome == 'success' &&
           github.event_name == 'pull_request'
-        uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
+        uses: reviewdog/action-suggester@1b18099af6c3c023256eb87a27aab5623e9b934d # pin@v1
         with:
           tool_name: PHP-CS-Fixer
           fail_on_error: "true"
