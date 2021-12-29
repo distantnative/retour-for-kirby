@@ -1,0 +1,18 @@
+{
+  "redirects": [
+    {
+      "from": "blog/(:all)",
+      "to": "notes/$1",
+      "status": 308,
+      "priority": false,
+      "comment": null
+    },
+    {
+      "from": "team",
+      "to": "about/team",
+      "status": 307,
+      "priority": true,
+      "comment": null
+    }
+  ]
+}
