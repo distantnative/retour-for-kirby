@@ -1,17 +1,15 @@
-> **⏸ Development on hold**  
-> Retour 3 was a flawed release with a [severe bug](https://github.com/distantnative/retour-for-kirby/issues/229). Unfortunately, the release of Retour 4 is facing my lack of time and energy to actively uphold development at the moment. Kirby 3.6 will change some big ways of how Panel views are created. I will await the release of Kirby 3.6 to release Retour 4 built on top of these changes. Retour 4 will be a breakign change and a reset of the plugin in a way. 
-> 
-> Until then, use the plugin at your own risk - there are known [issues](https://github.com/distantnative/search-for-kirby/issues). 
-> 
-> Apologies from my side, COVID takes its toll on me as well. If you want to help, please get in touch.
+> **✋ Pre-release**  
+> Retour 4.0 is currently in pre-release and the only supported version in active development. 
+> It would be great if you could help testing (please report [issues](https://github.com/distantnative/retour-for-kirby/issues)) but please test with care.
+> Retour 4.0 is a breaking change - start with the release notes. 
  <br>
  
  
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-3.0.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.5.0-cca000.svg?style=for-the-badge)](https://getkirby.com/)
-[![License](https://img.shields.io/badge/license-MIT-7ea328.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/release-4.0.0_beta.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.6.1-cca000.svg?style=for-the-badge)](https://getkirby.com/)
+[![Coverage](https://img.shields.io/codecov/c/gh/distantnative/retour-for-kirby?style=for-the-badge)](https://codecov.io/gh/distantnative/retour-for-kirby)
 [![Donate](https://img.shields.io/badge/support-donate-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
 [![Screenshot](screenshot.png)](https://distantnative.com/retour)
@@ -19,7 +17,7 @@
 ## Getting started
 
 ### Installation
-[Download](https://github.com/distantnative/retour-for-kirby/archive/master.zip), unzip and copy this repository to `/site/plugins/retour`.
+[Download](https://github.com/distantnative/retour-for-kirby/archive/main.zip), unzip and copy this repository to `/site/plugins/retour`.
 
 Alternatively, you can install it with composer:
 
@@ -31,8 +29,8 @@ composer require distantnative/retour-for-kirby
 Make backups of the redirects config and database.
 
 ```
-/site/config/redirects.yml
-/site/logs/retour.sqlite
+/site/config/retour.yml
+/site/logs/retour/log.sqlite
 ```
 
 After that, replace the `/site/plugins/retour` folder with the new version. Make sure to read the release notes for breaking changes.
@@ -48,7 +46,7 @@ Retour lets you manage redirect routes right from the Panel – all through a fa
 
 ### Adding a redirect
 
-![add-redirect](https://user-images.githubusercontent.com/3788865/124011380-3af57a80-d9e0-11eb-9346-f64c3c7b49e6.png)
+<img width="1371" alt="add" src="https://user-images.githubusercontent.com/3788865/147659446-5bc87219-b13c-41f1-99f3-b740e61de959.png">
 
 #### Path
 is the path after your site's URL that you would like to catch and redirect.
@@ -81,12 +79,10 @@ refers to the [HTTP status code](https://httpstatuses.com/) the redirect will re
 If the priority flag is activated, the redirect route will overrule any actuaylly existing pages as well.
 
 ## Failures log
-### Selecting a timeframe
+### Timeframe
 When you open up Retour, you will be shown the data of the current month. The selected timeframe not only applies to the graphs, but also the data displayed in the tables.
 
-You can change the timeframe by clicking on the label on the left side and selecting a new date range in the calendar dropdown. You can also click on any of the options on the right side which will select the current year, month, week or day and navigate back/forward with the arrow buttons.
-
-![timeframe](https://user-images.githubusercontent.com/3788865/124011702-93c51300-d9e0-11eb-9f40-0147a6253253.png)
+You can change the timeframe by using the navigation bar: moving between previous and next month or even changing the span to a full year or only a day.
 
 ### Resolving a failure
 You can choose from the dropdown menu of a failure entry (three dots to the right), to create a new redirect route which will be pre-filled with the path to prevent any more failing requests in the future.
@@ -97,8 +93,7 @@ Once you save that new route, all failure entries for that path will also be mar
 Depending on your use case, you might want to clear the logs from time to time.
 This can be either done manually by clicking the button above the failures table:
 
-![delete-logs](https://user-images.githubusercontent.com/3788865/124011751-a17a9880-d9e0-11eb-9063-8fd630aa5776.png)
-
+<img width="1344" alt="flush" src="https://user-images.githubusercontent.com/3788865/147659438-b82e6995-dbf0-4706-aa20-a1e53864cf17.png">
 
 Or automatically via the `distantnative.retour.deleteAfter` option.
 
@@ -107,7 +102,7 @@ Or automatically via the `distantnative.retour.deleteAfter` option.
 The following config options are available:
 
 ```php
-// site/sonfig/config.php
+// site/config/config.php
 
 'distantnative.retour' => [
 
@@ -121,7 +116,8 @@ The following config options are available:
   'deleteAfter' => false,
 
   // Absolut path for location of redirects config
-  // Default: site/config/redirects.yml
+  // Default: site/config/retour.yml
+  // (allows for yml and json files/formats)
   'config' => ...,
 
   // Absolut path for location of database
@@ -139,11 +135,7 @@ title: Editor
 permissions:
  access:
    retour: false
- site:
-   update: false
 ```
-
-Creating, updating and deleting redirects is tied to the `site.update` permission.
 
 ## Translations
 Retour has been translated into some more languages, thanks to the following contributors:
