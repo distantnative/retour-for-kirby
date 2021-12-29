@@ -56,30 +56,23 @@ export default {
       });
     },
     format() {
-      switch (this.timespan.unit) {
-        case "day":
-          return "HH";
-        case "week":
-          return "ddd";
-        case "month":
-          return "D";
-        case "year":
-          return "MMM";
-        case "months":
-          return "MMM YY";
-        default:
-          return "D MMM";
-      }
+      return (
+        {
+          day: "HH",
+          week: "ddd",
+          mnoth: "D",
+          year: "MMM",
+          months: "MMM YY",
+        }[this.timespan.unit] ?? "D MMM"
+      );
     },
     subunit() {
-      switch (this.timespan.unit) {
-        case "day":
-          return "hour";
-        case "year":
-          return "month";
-        default:
-          return "day";
-      }
+      return (
+        {
+          day: "hour",
+          year: "month",
+        }[this.timespan.unit] ?? "day"
+      );
     },
     max() {
       let max = Math.max(

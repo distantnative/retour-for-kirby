@@ -73,6 +73,7 @@ export default {
     },
   },
   methods: {
+    // eslint-disable-next-line no-unused-vars
     onOption(option, row = {}, rowIndex = null, column = null) {
       if (option === "create") {
         return this.$dialog("retour/redirects/create");

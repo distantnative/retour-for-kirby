@@ -1,6 +1,7 @@
 <template>
   <div class="k-table-priority-cell">
     <k-icon v-if="value" type="bolt" :title="column.label" />
+    <!-- eslint-disable vue/singleline-html-element-content-newline -->
     <p v-else>–</p>
   </div>
 </template>

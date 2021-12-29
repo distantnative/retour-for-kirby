@@ -4,6 +4,7 @@
       {{ row.hits }}
       <k-icon :title="title" type="clock" />
     </template>
+    <!-- eslint-disable vue/singleline-html-element-content-newline -->
     <p v-else>–</p>
   </div>
 </template>

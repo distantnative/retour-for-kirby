@@ -54,6 +54,7 @@
     </ul>
 
     <footer class="mt-2">
+      <!-- eslint-disable vue/no-v-html -->
       <k-text
         theme="help"
         v-html="
@@ -62,6 +63,7 @@
           })
         "
       />
+      <!-- eslint-enable vue/no-v-html -->
     </footer>
   </k-view>
 </template>

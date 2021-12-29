@@ -28,11 +28,13 @@
     <footer>
       <div class="limit">
         <select :value="storedLimit" @input="onLimit($event.target.value)">
-          <option :value="10">10</option>
-          <option :value="25">25</option>
-          <option :value="50">50</option>
+          <option v-for="step in [10, 25, 50]" :key="step" :value="step">
+            {{ step }}
+          </option>
           <option value="all">
             {{ $t("retour.table.perPage.all") }}
+            <!-- eslint-disable vue/html-closing-bracket-newline -->
+            <!-- eslint-disable vue/multiline-html-element-content-newline -->
           </option></select
         >&nbsp;{{ $t("retour.table.perPage.after") }}
       </div>

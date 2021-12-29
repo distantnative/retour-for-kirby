@@ -1,4 +1,3 @@
-
 export default {
   computed: {
     color() {
@@ -14,7 +13,7 @@ export default {
         return "var(--color-positive-light)";
       }
 
-        return "var(--color-focus-light)";
-    }
-  }
-}
+      return "var(--color-focus-light)";
+    },
+  },
+};

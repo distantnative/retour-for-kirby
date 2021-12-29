@@ -56,19 +56,14 @@ export default {
           icon: "add",
           click: "resolve",
         },
-        { text: this.$t("remove"), icon: "trash", click: "remove" },
+        { text: this.$t("remove"), icon: "trash", click: "delete" },
       ];
     },
   },
   methods: {
     onOption(option, row) {
       const path = encodeURIComponent(row.path);
-      switch (option) {
-        case "remove":
-          return this.$dialog(`retour/failures/${path}/delete`);
-        case "resolve":
-          return this.$dialog(`retour/failures/${path}/resolve`);
-      }
+      return this.$dialog(`retour/failures/${path}/${option}`);
     },
   },
 };
