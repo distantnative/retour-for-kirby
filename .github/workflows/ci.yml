@@ -1,5 +1,5 @@
 name: CI
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   tests:
@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ "7.3", "7.4", "8.0" ]
-        dependencies: [ "lowest", "locked" ]
+        php: ["7.4", "8.0", "8.1"]
+        dependencies: ["lowest", "locked"]
     env:
       extensions: mbstring, pcov
       ini: pcov.directory=., "pcov.exclude=\"~(vendor|tests)~\""
@@ -218,7 +218,7 @@ jobs:
         uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
         with:
           tool_name: ESLint
-          fail_on_error: 'true'
+          fail_on_error: "true"
 
       - name: Check for PHP coding style violations
         if: always() && steps.finishPrepare.outcome == 'success'
@@ -236,4 +236,4 @@ jobs:
         uses: reviewdog/action-suggester@5d5b9f8c693e036796f828e47886bd10d368c273 # pin@v1
         with:
           tool_name: PHP-CS-Fixer
-          fail_on_error: 'true'
+          fail_on_error: "true"

@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4.0 <8.1.0",
+        "php": ">=7.4.0 <8.2.0",
         "ext-json": "*",
         "getkirby/cms": ">=3.6.1 <3.7.0",
         "getkirby/composer-installer": "^1.1"
