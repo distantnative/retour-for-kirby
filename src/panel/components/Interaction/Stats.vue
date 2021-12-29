@@ -70,7 +70,7 @@ export default {
   gap: 2rem;
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
-  background: #2b2b2b;
+  background: var(--color-dark);
   color: var(--color-white);
 }
 
