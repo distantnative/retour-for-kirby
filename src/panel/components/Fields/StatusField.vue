@@ -25,7 +25,7 @@ export default {
   methods: {
     onInput(value) {
       this.value = value;
-    }
-  }
-}
+    },
+  },
+};
 </script>

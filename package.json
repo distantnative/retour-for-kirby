@@ -1,36 +1,12 @@
 {
-  "name": "retour-for-kirby",
-  "version": "3.0.0",
-  "description": "Redirects and error tracking for Kirby",
-  "main": "index.js",
-  "author": "Nico Hoffmann <on-github@nhoffmann.com>",
-  "license": "MIT",
   "scripts": {
-    "dev": "parcel watch src/index.js --no-source-maps -d ./",
-    "build": "parcel build src/index.js --no-source-maps --experimental-scope-hoisting -d ./"
-  },
-  "posthtml": {
-    "recognizeSelfClosing": true
-  },
-  "dependencies": {
-    "chartist": "^0.11.0"
+    "dev": "npx -y kirbyup src/panel/index.js --watch",
+    "build": "npx -y kirbyup src/panel/index.js",
+    "lint": "eslint --ext js,vue src/panel"
   },
   "devDependencies": {
-    "@vue/component-compiler-utils": "^3.0.0",
-    "cssnano": "^4.1.10",
-    "parcel-bundler": "^1.12.4",
-    "sass": "^1.22.7",
-    "vue": "^2.6.10",
-    "vue-hot-reload-api": "^2.3.3",
-    "vue-template-compiler": "^2.6.10"
+    "eslint": "^7.21.0",
+    "eslint-plugin-vue": "^7.7.0"
   },
-  "browserslist": [
-    "last 2 Android versions",
-    "last 2 Chrome versions",
-    "last 2 ChromeAndroid versions",
-    "last 2 Edge versions",
-    "last 2 Firefox versions",
-    "last 2 iOS versions",
-    "last 2 Safari versions"
-  ]
+  "browserslist": "> 2%"
 }

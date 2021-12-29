@@ -36,7 +36,9 @@
         <th
           v-if="options"
           class="k-table-options-column"
-        />
+        >
+          <slot name="button" />
+        </th>
       </tr>
     </thead>
 
@@ -120,18 +122,7 @@
 </template>
 
 <script>
-import TableCountCell from "../components/Table/Cells/TableCountCell.vue";
-import TableLinkCell from "../components/Table/Cells/TableLinkCell.vue";
-import TablePriorityCell from "../components/Table/Cells/TablePriorityCell.vue";
-import TableStatusCell from "../components/Table/Cells/TableStatusCell.vue";
-
 export default {
-  components: {
-    "k-table-count-cell": TableCountCell,
-    "k-table-link-cell": TableLinkCell,
-    "k-table-priority-cell": TablePriorityCell,
-    "k-table-status-cell": TableStatusCell
-  },
   props: {
     columns: Object,
     index: {
@@ -208,11 +199,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
-$table-row-height: 38px;
-
+<style>
 /** Table Layout **/
 .k-table {
+  --table-row-height: 38px;
   position: relative;
   table-layout: fixed;
   width: 100%;
@@ -226,20 +216,21 @@ $table-row-height: 38px;
 /** Cells **/
 .k-table th,
 .k-table td {
-  height: $table-row-height + 1;
+  height: var(--table-row-height);
   text-overflow: ellipsis;
   width: 100%;
   border-bottom: 1px solid #efefef;
   line-height: 1.15em;
+}
 
-  [dir="ltr"] & {
-    border-right: 1px solid #efefef;
-  }
+[dir="ltr"] .k-table th,
+[dir="ltr"] .k-table td {
+  border-right: 1px solid #efefef;
+}
 
-  [dir="rtl"] & {
-    border-left: 1px solid #efefef;
-  }
-
+[dir="rtl"] .k-table th,
+[dir="rtl"] .k-table td {
+  border-left: 1px solid #efefef;
 }
 
 .k-table tr:last-child td {
@@ -262,15 +253,14 @@ $table-row-height: 38px;
 .k-table td.k-table-column[data-align="center"] {
   text-align: center;
 }
-.k-table th.k-table-column[data-align="right"],
-.k-table td.k-table-column[data-align="right"] {
-  [dir="ltr"] & {
-    text-align: right;
-  }
+[dir="ltr"] .k-table th.k-table-column[data-align="right"],
+[dir="ltr"] .k-table td.k-table-column[data-align="right"] {
+  text-align: right;
+}
 
-  [dir="rtl"] & {
-    text-align: left;
-  }
+[dir="rtl"] .k-table th.k-table-column[data-align="right"],
+[dir="rtl"] .k-table td.k-table-column[data-align="right"] {
+  text-align: left;
 }
 
 /** Sticky header **/
@@ -284,15 +274,13 @@ $table-row-height: 38px;
   z-index: 1;
   color: #555;
   background: #fff;
+}
+[dir="ltr"] .k-table th {
+  text-align: left;
+}
 
-  [dir="ltr"] & {
-    text-align: left;
-  }
-
-  [dir="rtl"] & {
-    text-align: right;
-  }
-
+[dir="rtl"] .k-table th {
+  text-align: right;
 }
 .k-table th::after {
   content: "";
@@ -308,7 +296,7 @@ $table-row-height: 38px;
 /** Index column **/
 .k-table th.k-table-index-column,
 .k-table td.k-table-index-column {
-  width: $table-row-height;
+  width: var(--table-row-height);
   text-align: center;
 }
 .k-table .k-table-index {
@@ -320,7 +308,6 @@ $table-row-height: 38px;
 /** Options column **/
 .k-table th.k-table-options-column,
 .k-table td.k-table-options-column {
-  width: $table-row-height !important;
+  width: var(--table-row-height) !important;
 }
-
 </style>
