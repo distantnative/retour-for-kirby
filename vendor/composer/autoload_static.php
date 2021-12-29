@@ -4,12 +4,40 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
+class ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e
 {
+    public static $files = array (
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'f864ae44e8154e5ff6f4eec32f46d37f' => __DIR__ . '/..' . '/getkirby/cms/config/setup.php',
+        '87988fc7b1c1f093da22a1a3de972f3a' => __DIR__ . '/..' . '/getkirby/cms/config/helpers.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'd' => 
         array (
-            'distantnative\\Retour\\' => 21,
+            'distantnative\\' => 14,
+        ),
+        'W' => 
+        array (
+            'Whoops\\' => 7,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
+            'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'L' => 
+        array (
+            'Laminas\\Escaper\\' => 16,
         ),
         'K' => 
         array (
@@ -18,35 +46,81 @@ class ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2
     );
 
     public static $prefixDirsPsr4 = array (
-        'distantnative\\Retour\\' => 
+        'distantnative\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/models',
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
+        'Whoops\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
+        'Symfony\\Polyfill\\Intl\\Idn\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Laminas\\Escaper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-escaper/src',
         ),
         'Kirby\\' => 
         array (
-            0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
+            0 => __DIR__ . '/..' . '/getkirby/cms/src',
+            1 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
+        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/league/color-extractor/src',
+    );
+
+    public static $prefixesPsr0 = array (
+        'c' => 
+        array (
+            'claviska' => 
+            array (
+                0 => __DIR__ . '/..' . '/claviska/simpleimage/src',
+            ),
+        ),
+        'M' => 
+        array (
+            'Michelf' => 
+            array (
+                0 => __DIR__ . '/..' . '/michelf/php-smartypants',
+            ),
         ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
-        'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
-        'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
-        'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'distantnative\\Retour\\Log' => __DIR__ . '/../..' . '/models/Log.php',
-        'distantnative\\Retour\\Retour' => __DIR__ . '/../..' . '/models/Retour.php',
-        'distantnative\\Retour\\Route' => __DIR__ . '/../..' . '/models/Route.php',
-        'distantnative\\Retour\\Routes' => __DIR__ . '/../..' . '/models/Routes.php',
-        'distantnative\\Retour\\Upgrades' => __DIR__ . '/../..' . '/models/Upgrades.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'Parsedown' => __DIR__ . '/..' . '/getkirby/cms/dependencies/parsedown/Parsedown.php',
+        'ParsedownExtra' => __DIR__ . '/..' . '/getkirby/cms/dependencies/parsedown-extra/ParsedownExtra.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit518cd2f437d72438d8709a2ebd885cc2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit29827e05077bcae52e376b6cb1d0fa2e::$classMap;
 
         }, null, ClassLoader::class);
     }
