@@ -1,7 +1,7 @@
 > **✋ Pre-release**  
 > Retour 4.0 is currently in pre-release and the only supported version in active development. 
 > It would be great if you could help testing (please report [issues](https://github.com/distantnative/retour-for-kirby/issues)) but please test with care.
-> Retour 4.0 is a breaking change - start with the release notes. 
+> Retour 4.0 is a breaking change - start with the [release notes](https://github.com/distantnative/retour-for-kirby/releases/tag/4.0.0-beta.1). 
  <br>
  
  
