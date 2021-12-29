@@ -43,5 +43,10 @@
         ],
         "fix": "php-cs-fixer fix",
         "test": "phpunit --stderr --coverage-html=tests/coverage"
+    },
+    "config": {
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
     }
 }
