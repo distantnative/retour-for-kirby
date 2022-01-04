@@ -129,7 +129,7 @@ class Redirect extends Obj
 
         return [
             'pattern' => $this->from(),
-            'action'  => function (array ...$placeholders) use ($redirect) {
+            'action'  => function (...$placeholders) use ($redirect) {
 
                 /** @var array<int, string> $placeholders */
                 $to = $redirect->to() ?? '/';
