@@ -51,7 +51,7 @@ Retour lets you manage redirect routes right from the Panel – all through a fa
 #### Path
 is the path after your site's URL that you would like to catch and redirect.
 It can be a static path, e.g. team, or you can use placeholders to define dynamic redirects, e.g. `blog/(:all)`.
-Dynamic redirects use Kirby's route patterns as placholder.
+Dynamic redirects use [Kirby's route patterns](https://getkirby.com/docs/guide/routing#patterns) as placholder.
 
 Only paths without existing pages or custom routes can be redirected.
 
