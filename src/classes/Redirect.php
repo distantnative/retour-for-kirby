@@ -27,7 +27,7 @@ class Redirect extends Obj
      */
     public function __construct(array $data = [])
     {
-        if (($data['from'] ?? null) === null) {
+        if (empty($data['from'] ?? null) === true) {
             throw new InvalidArgumentException('Route requires path');
         }
 
