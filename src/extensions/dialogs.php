@@ -90,7 +90,7 @@ return [
 
             // set autofocus if specific column cell
             // was passed
-            if ($field = get('column')) {
+            if (($field = get('column')) && isset($fields[$field]) === true) {
                 $fields[$field]['autofocus'] = true;
             }
 
