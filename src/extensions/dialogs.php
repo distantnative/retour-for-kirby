@@ -27,7 +27,7 @@ $fields = [
         'counter'  => false,
         'required' => true,
         'help'     => I18n::template('retour.redirects.from.help', [
-            'docs' => 'https://github.com/distantnative/retour-for-kirby'
+            'docs' => 'https://github.com/distantnative/retour-for-kirby#path'
         ])
     ],
     'to' => [
@@ -45,7 +45,7 @@ $fields = [
         ], array_keys(Header::$codes)),
         'width'    => '1/2',
         'help'     => I18n::template('retour.redirects.status.help', [
-            'docs' => 'https://github.com/distantnative/retour-for-kirby'
+            'docs' => 'https://github.com/distantnative/retour-for-kirby#status'
         ])
     ],
     'priority' => [
