@@ -21,7 +21,7 @@ return [
         Route $route,
         string $path,
         string $method,
-        $result = null,
+        $result,
         bool $final
     ) {
         if (
