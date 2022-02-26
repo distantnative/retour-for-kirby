@@ -27,7 +27,7 @@ class Redirect extends Obj
      */
     public function __construct(array $data = [])
     {
-        if (($data['from'] ?? null) === null) {
+        if (empty($data['from'] ?? null) === true) {
             throw new InvalidArgumentException('Route requires path');
         }
 
@@ -129,7 +129,7 @@ class Redirect extends Obj
 
         return [
             'pattern' => $this->from(),
-            'action'  => function (array ...$placeholders) use ($redirect) {
+            'action'  => function (...$placeholders) use ($redirect) {
 
                 /** @var array<int, string> $placeholders */
                 $to = $redirect->to() ?? '/';

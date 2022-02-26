@@ -1,14 +1,7 @@
-> **✋ Pre-release**  
-> Retour 4.0 is currently in pre-release and the only supported version in active development. 
-> It would be great if you could help testing (please report [issues](https://github.com/distantnative/retour-for-kirby/issues)) but please test with care.
-> Retour 4.0 is a breaking change - start with the [release notes](https://github.com/distantnative/retour-for-kirby/releases/tag/4.0.0-beta.1). 
- <br>
- 
- 
 # Retour for Kirby
 
-[![Version](https://img.shields.io/badge/release-4.0.0_beta.1-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-3.6.1-cca000.svg?style=for-the-badge)](https://getkirby.com/)
+[![Version](https://img.shields.io/badge/release-4.0.0-4271ae.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-3.6.1_--_3.6.x-cca000.svg?style=for-the-badge)](https://getkirby.com/)
 [![Coverage](https://img.shields.io/codecov/c/gh/distantnative/retour-for-kirby?style=for-the-badge)](https://codecov.io/gh/distantnative/retour-for-kirby)
 [![Donate](https://img.shields.io/badge/support-donate-c82829.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
@@ -51,7 +44,7 @@ Retour lets you manage redirect routes right from the Panel – all through a fa
 #### Path
 is the path after your site's URL that you would like to catch and redirect.
 It can be a static path, e.g. team, or you can use placeholders to define dynamic redirects, e.g. `blog/(:all)`.
-Dynamic redirects use Kirby's route patterns as placholder.
+Dynamic redirects use [Kirby's route patterns](https://getkirby.com/docs/guide/routing#patterns) as placholder.
 
 Only paths without existing pages or custom routes can be redirected.
 
@@ -123,6 +116,10 @@ The following config options are available:
   // Absolut path for location of database
   // Default: $kirby->root('logs) + /retour/log.sqlite
   'database' => ...,
+  
+  // set your own string as prefix in the Panel dialog
+  // (disable completely by setting to `false`)
+  'site' => 'my.short.domain'
 ]
 ```
 

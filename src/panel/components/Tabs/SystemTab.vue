@@ -4,7 +4,7 @@
       <h3><k-icon type="road-sign" /> Retour for Kirby</h3>
     </header>
 
-    <ul class="k-system-info-box">
+    <ul class="k-system-info-box" style="--columns: 4">
       <li>
         <dl>
           <dt>
@@ -59,7 +59,7 @@
         theme="help"
         v-html="
           $t('retour.system.docs', {
-            docs: 'https://distantnative.com/retour/docs',
+            docs: 'https://github.com/distantnative/retour-for-kirby',
           })
         "
       />

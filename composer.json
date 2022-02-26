@@ -3,7 +3,7 @@
     "description": "Redirects and 404 tracking for Kirby",
     "license": "MIT",
     "type": "kirby-plugin",
-    "version": "4.0.0-beta.1",
+    "version": "4.0.0",
     "authors": [
         {
             "name": "Nico Hoffmann",
