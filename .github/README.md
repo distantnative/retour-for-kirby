@@ -123,6 +123,10 @@ The following config options are available:
   // Absolut path for location of database
   // Default: $kirby->root('logs) + /retour/log.sqlite
   'database' => ...,
+  
+  // set your own string as prefix in the Panel dialog
+  // (disable completely by setting to `false`)
+  'site' => 'my.short.domain'
 ]
 ```
 
