@@ -68,7 +68,7 @@ export default {
     },
     set(unit) {
       if (unit === "all") {
-        this.$emit("navigate", {
+        return this.$emit("navigate", {
           from: this.first,
           to: this.last,
         });
