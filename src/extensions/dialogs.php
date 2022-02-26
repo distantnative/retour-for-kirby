@@ -19,49 +19,51 @@ use Kirby\Toolkit\I18n;
 /**
  * Shared fields definition for several dialogs
  */
-$fields = [
-    'from' => [
-        'label'    => t('retour.redirects.from'),
-        'type'     => 'text',
-        'before'   => preg_replace('$^(http(s)?\:\/\/(www\.)?)$', '', (string)kirby()->url()) . '/',
-        'counter'  => false,
-        'required' => true,
-        'help'     => I18n::template('retour.redirects.from.help', [
-            'docs' => 'https://github.com/distantnative/retour-for-kirby#path'
-        ])
-    ],
-    'to' => [
-        'label'    => t('retour.redirects.to'),
-        'type'     => 'text',
-        'counter'  => false,
-        'help'     => t('retour.redirects.to.help')
-    ],
-    'status' => [
-        'label'    => t('retour.redirects.status'),
-        'type'     => 'rt-status',
-        'options'  => array_map(fn ($code) => [
-            'text'  => ltrim($code, '_') . ' - ' . Header::$codes[$code],
-            'value' => ltrim($code, '_')
-        ], array_keys(Header::$codes)),
-        'width'    => '1/2',
-        'help'     => I18n::template('retour.redirects.status.help', [
-            'docs' => 'https://github.com/distantnative/retour-for-kirby#status'
-        ])
-    ],
-    'priority' => [
-        'label'    => t('retour.redirects.priority'),
-        'type'     => 'toggle',
-        'icon'     => 'bolt',
-        'width'    => '1/2',
-        'help'     => t('retour.redirects.priority.help')
-    ],
-    'comment' => [
-        'label'    => t('retour.redirects.comment'),
-        'type'     => 'textarea',
-        'buttons'  => false,
-        'help'     => t('retour.redirects.comment.help')
-    ]
-];
+$fields = function (Retour $retour): array {
+    return [
+        'from' => [
+            'label'    => t('retour.redirects.from'),
+            'type'     => 'text',
+            'before'   => $retour->site(),
+            'counter'  => false,
+            'required' => true,
+            'help'     => I18n::template('retour.redirects.from.help', [
+                'docs' => 'https://github.com/distantnative/retour-for-kirby#path'
+            ])
+        ],
+        'to' => [
+            'label'    => t('retour.redirects.to'),
+            'type'     => 'text',
+            'counter'  => false,
+            'help'     => t('retour.redirects.to.help')
+        ],
+        'status' => [
+            'label'    => t('retour.redirects.status'),
+            'type'     => 'rt-status',
+            'options'  => array_map(fn ($code) => [
+                'text'  => ltrim($code, '_') . ' - ' . Header::$codes[$code],
+                'value' => ltrim($code, '_')
+            ], array_keys(Header::$codes)),
+            'width'    => '1/2',
+            'help'     => I18n::template('retour.redirects.status.help', [
+                'docs' => 'https://github.com/distantnative/retour-for-kirby#status'
+            ])
+        ],
+        'priority' => [
+            'label'    => t('retour.redirects.priority'),
+            'type'     => 'toggle',
+            'icon'     => 'bolt',
+            'width'    => '1/2',
+            'help'     => t('retour.redirects.priority.help')
+        ],
+        'comment' => [
+            'label'    => t('retour.redirects.comment'),
+            'type'     => 'textarea',
+            'buttons'  => false,
+            'help'     => t('retour.redirects.comment.help')
+        ]
+    ];
+};
 
 return [
     'retour.redirect.create' => [
@@ -69,7 +71,7 @@ return [
         'load' => fn () => [
             'component' => 'k-form-dialog',
             'props' => [
-                'fields' => $fields,
+                'fields' => $fields(Retour::instance()),
                 'size'   => 'large'
             ]
         ],
@@ -85,8 +87,11 @@ return [
         'pattern' => 'retour/redirects/(:any)/edit',
         'load' => function (string $id) use ($fields) {
             // get redirect
-            $redirects = Retour::instance()->redirects();
+            $retour    = Retour::instance();
+            $redirects = $retour->redirects();
             $redirect  = $redirects->get(urldecode($id));
+
+            $fields = $fields($retour);
 
             // set autofocus if specific column cell
             // was passed
@@ -132,7 +137,7 @@ return [
         'load' => fn (string $path) => [
             'component' => 'k-form-dialog',
             'props' => [
-                'fields' => $fields,
+                'fields' => $fields(Retour::instance()),
                 'value' => [
                     'from' => urldecode($path)
                 ],

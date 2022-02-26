@@ -167,4 +167,25 @@ class Plugin
     {
         self::$instance = null;
     }
+
+    /**
+     * Returns domain for site
+     *
+     * @return string|false
+     */
+    public function site()
+    {
+        $site = $this->option('site', true);
+
+        if (is_string($site) === true) {
+            return $site . '/';
+        }
+
+        if ($site === true) {
+            $url = (string)kirby()->url();
+            return preg_replace('$^(http(s)?\:\/\/(www\.)?)$', '', $url) . '/';
+        }
+
+       return false;
+    }
 }
