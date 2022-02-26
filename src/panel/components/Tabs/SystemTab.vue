@@ -59,7 +59,7 @@
         theme="help"
         v-html="
           $t('retour.system.docs', {
-            docs: 'https://distantnative.com/retour/docs',
+            docs: 'https://github.com/distantnative/retour-for-kirby',
           })
         "
       />
