@@ -51,6 +51,10 @@ export default {
 </script>
 
 <style>
+.retour-navigation .k-header {
+  border-bottom: 0;
+}
+
 .retour-navigation .k-tab-button[title="Routes"] .k-tabs-badge {
   background: var(--color-blue-300);
 }

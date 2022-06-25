@@ -1,25 +1,20 @@
 import View from "./components/View.vue";
 
-// polyfills
-import Table from "./ployfills/Table.vue";
-
-// table cells
-import TableCountCell from "./components/List/Cells/TableCountCell.vue";
-import TableLinkCell from "./components/List/Cells/TableLinkCell.vue";
-import TablePriorityCell from "./components/List/Cells/TablePriorityCell.vue";
-import TableStatusCell from "./components/List/Cells/TableStatusCell.vue";
+// table previews
+import CountFieldPreview from "./components/List/CountFieldPreview.vue";
+import PathFieldPreview from "./components/List/PathFieldPreview.vue";
+import PriorityFieldPreview from "./components/List/PriorityFieldPreview.vue";
+import StatusFieldPreview from "./components/List/StatusFieldPreview.vue";
 
 // fields
 import StatusField from "./components/Fields/StatusField.vue";
 
 panel.plugin("distantnative/retour", {
   components: {
-    "k-table": Table,
-
-    "k-table-count-cell": TableCountCell,
-    "k-table-link-cell": TableLinkCell,
-    "k-table-priority-cell": TablePriorityCell,
-    "k-table-status-cell": TableStatusCell,
+    "k-count-field-preview": CountFieldPreview,
+    "k-path-field-preview": PathFieldPreview,
+    "k-priority-field-preview": PriorityFieldPreview,
+    "k-status-field-preview": StatusFieldPreview,
 
     "k-retour-view": View,
   },
