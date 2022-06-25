@@ -17,7 +17,7 @@ use Kirby\Cms\App as Kirby;
 
 // validate Kirby version
 if (
-    version_compare(Kirby::version() ?? '0.0.0', '3.7.0', '<') === true ||
+    version_compare(Kirby::version() ?? '0.0.0', '3.7.0-rc.1', '<') === true ||
     version_compare(Kirby::version() ?? '0.0.0', '3.8.0', '>=') === true
 ) {
     throw new Exception('Retour 4.1 supports Kirby 3.7.0 to 3.8.0');
