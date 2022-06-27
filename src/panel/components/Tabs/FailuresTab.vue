@@ -33,12 +33,12 @@ export default {
       return {
         path: {
           label: this.$t("retour.failures.path"),
-          type: "link",
+          type: "path",
           width: "1/2",
         },
         referrer: {
           label: this.$t("retour.failures.referrer"),
-          type: "link",
+          type: "path",
           width: "1/2",
         },
         hits: {

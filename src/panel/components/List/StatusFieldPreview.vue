@@ -1,5 +1,8 @@
 <template>
-  <div :title="`${column.label}: ${value || '-'}`" class="k-table-status-cell">
+  <div
+    :title="`${column.label}: ${value || '-'}`"
+    class="k-status-field-preview"
+  >
     <k-icon type="circle" :style="'color: ' + color" />
     <code v-if="value">{{ value }}</code>
     <span v-else>&nbsp;–</span>
@@ -7,7 +10,7 @@
 </template>
 
 <script>
-import color from "../../../mixins/color.js";
+import color from "../../mixins/color.js";
 
 export default {
   mixins: [color],
@@ -20,15 +23,15 @@ export default {
 </script>
 
 <style>
-.k-table-status-cell {
+.k-status-field-preview {
   display: flex;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
-.k-table-status-cell .k-icon {
+.k-status-field-preview .k-icon {
   margin-right: 0.5rem;
 }
-.k-table-status-cell code {
+.k-status-field-preview code {
   background: rgba(0, 0, 0, 0.1);
   color: var(--color-text);
   border-radius: 3px;

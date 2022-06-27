@@ -1,5 +1,5 @@
 <template>
-  <div :title="title" class="k-table-count-cell">
+  <div :title="title" class="k-count-preview-field">
     <template v-if="row.hits > 0">
       {{ row.hits }}
       <k-icon :title="title" type="clock" />
@@ -23,17 +23,17 @@ export default {
 </script>
 
 <style>
-.k-table-count-cell {
+.k-count-preview-field {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
-.k-table-count-cell p {
+.k-count-preview-field p {
   color: var(--color-border);
 }
-.k-table-count-cell .k-icon {
+.k-count-preview-field .k-icon {
   color: var(--color-border);
   transform: scale(0.8);
   cursor: default;

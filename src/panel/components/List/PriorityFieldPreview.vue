@@ -1,5 +1,5 @@
 <template>
-  <div class="k-table-priority-cell">
+  <div class="k-priority-field-preview">
     <k-icon v-if="value" type="bolt" :title="column.label" />
     <!-- eslint-disable vue/singleline-html-element-content-newline -->
     <p v-else>–</p>
@@ -16,14 +16,14 @@ export default {
 </script>
 
 <style>
-.k-table-priority-cell {
+.k-priority-field-preview {
   display: flex;
   justify-content: center;
 }
-.k-table-priority-cell p {
+.k-priority-field-preview p {
   color: var(--color-border);
 }
-.k-table-priority-cell .k-icon {
+.k-priority-field-preview .k-icon {
   transform: scale(0.8);
 }
 </style>

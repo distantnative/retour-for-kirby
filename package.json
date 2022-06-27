@@ -5,8 +5,8 @@
     "lint": "eslint --ext js,vue src/panel"
   },
   "devDependencies": {
-    "eslint": "^8.10.0",
-    "eslint-plugin-vue": "^8.5.0"
+    "eslint": "^8.18.0",
+    "eslint-plugin-vue": "^9.1.1"
   },
   "browserslist": "> 2%"
 }

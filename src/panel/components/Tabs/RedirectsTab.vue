@@ -35,12 +35,12 @@ export default {
       let columns = {
         from: {
           label: this.$t("retour.redirects.from"),
-          type: "link",
+          type: "path",
           width: "7/20",
         },
         to: {
           label: this.$t("retour.redirects.to"),
-          type: "link",
+          type: "path",
           width: "7/20",
         },
         status: {
