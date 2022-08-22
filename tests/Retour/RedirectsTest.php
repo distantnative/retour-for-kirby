@@ -222,7 +222,7 @@ class RedirectsTest extends TestCase
 
         // with priority
         $routes = $redirects->toRoutes(true);
-        $this->assertSame(1, count($routes));
+        $this->assertSame(0, count($routes));
     }
 
     /**
