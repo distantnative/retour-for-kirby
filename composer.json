@@ -13,7 +13,7 @@
     "require": {
         "php": ">=7.4.0 <8.2.0",
         "ext-json": "*",
-        "getkirby/cms": ">=3.7.0 <3.8.0",
+        "getkirby/cms": "^3.6.6.1",
         "getkirby/composer-installer": "^1.1"
     },
     "autoload-dev": {
