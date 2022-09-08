@@ -139,7 +139,7 @@ return [
             'props' => [
                 'fields' => $fields(Retour::instance()),
                 'value' => [
-                    'from' => urldecode($path)
+                    'from' => str_replace("\x1D",'/', urldecode($path))
                 ],
                 'size'  => 'large'
             ]
