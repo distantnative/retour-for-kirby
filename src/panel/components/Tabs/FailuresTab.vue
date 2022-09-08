@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     onOption(option, row) {
-      const path = encodeURIComponent(row.path);
+      const path = encodeURIComponent(row.path.replace(/\//g, "\x1D"));
       return this.$dialog(`retour/failures/${path}/${option}`);
     },
   },
