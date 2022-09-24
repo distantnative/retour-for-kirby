@@ -60,7 +60,7 @@ export default {
         {
           day: "HH",
           week: "ddd",
-          mnoth: "D",
+          month: "D",
           year: "MMM",
           months: "MMM YY",
         }[this.timespan.unit] ?? "D MMM"
