@@ -30,7 +30,7 @@ export default {
     stats: [Boolean, Array],
     tab: String,
     tabs: Array,
-    timespan: Array,
+    timespan: Object,
   },
 };
 </script>
