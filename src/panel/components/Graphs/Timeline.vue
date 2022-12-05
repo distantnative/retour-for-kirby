@@ -15,7 +15,7 @@
       >
         <td
           v-for="(area, areaIndex) in segment.areas"
-          :key="segmentInde + '_' + areaIndex"
+          :key="segmentIndex + '_' + areaIndex"
           :style="`--color: ${color(segmentIndex, area)}; ${clip(
             segmentIndex,
             areaIndex
