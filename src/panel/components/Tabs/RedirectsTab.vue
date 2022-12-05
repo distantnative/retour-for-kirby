@@ -27,7 +27,7 @@ export default {
     List,
   },
   props: {
-    data: Object,
+    data: Array,
     hasLog: Boolean,
   },
   computed: {

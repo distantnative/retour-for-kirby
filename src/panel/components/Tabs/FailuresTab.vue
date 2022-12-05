@@ -26,7 +26,7 @@ export default {
     List,
   },
   props: {
-    data: Object,
+    data: Array,
   },
   computed: {
     columns() {
