@@ -11,9 +11,9 @@
         }
     ],
     "require": {
-        "php": ">=8.0.0 <8.2.0",
+        "php": ">=8.0.0 <8.3.0",
         "ext-json": "*",
-        "getkirby/cms": ">=3.7.4 <3.9.0",
+        "getkirby/cms": ">=3.7.4 <4.0",
         "getkirby/composer-installer": "^1.1"
     },
     "autoload-dev": {
