@@ -272,9 +272,12 @@ class Log
         // Define parts depending on unit
         $use = [
             'func'  => 'date',
-            'group' => '%Y-%m-%d',
-            'step'  => 'day'
+            'group_sql' => '%Y-%m-%d',
+            'group_php' => 'Y-m-d',
+            'step'  => 'P1D'
         ];
+
+        $steps = [];
 
         switch ($unit) {
             case 'day':
@@ -283,51 +286,53 @@ class Log
                 $to   .= ' 23:59:59';
 
                 $use['func']  = 'datetime';
-                $use['group'] = '%Y-%m-%d %H';
-                $use['step']  = 'hour';
+                $use['group_sql'] = '%Y-%m-%d %H';
+                $use['group_php'] = 'Y-m-d H';
+                $use['step']  = 'PT1H';
                 break;
 
             case 'year':
             case 'months':
-                $use['group'] = '%Y-%m';
-                $use['step']  = 'month';
+                $use['group_sql'] = '%Y-%m';
+                $use['group_php'] = 'Y-m';
+                $use['step']  = 'P1M';
                 break;
         }
+
+        $current_step = new \DateTime($from);
+        $last_step = new \DateTime($to);
+        do {
+            $steps[] = $current_step->format($use['group_php']);
+            $current_step->add(new \DateInterval($use['step']));
+        } while ($current_step < $last_step);
+
+
         // Get data from database
         $data = $this->database->query('
-            with recursive dates as (
-                select :from as date
-                union all
-                select ' . $use['func'] . '(date, "+1 ' . $use['step'] . '") from dates where date < :to
-            )
             SELECT
-                dates.date,
+                strftime(:group, date) AS date,
                 COUNT(redirect) AS redirected,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
             FROM
-                dates
-            LEFT JOIN
                 records
-            ON
-                strftime(:group, dates.date) = strftime(:group, records.date)
             WHERE
-                strftime("%s", dates.date) >= strftime("%s", :from)
+                strftime("%s", date) >= strftime("%s", :from)
             AND
-                strftime("%s", dates.date) <= strftime("%s", :to)
+                strftime("%s", date) <= strftime("%s", :to)
             GROUP BY
-                strftime(:group, dates.date)
+                strftime(:group, date)
             ORDER BY
-                strftime(:group, dates.date)
+                strftime(:group, date)
         ', [
             'from'  => $from,
             'to'    => $to,
-            'group' => $use['group']
+            'group' => $use['group_sql']
         ], [
             'fetch' => 'array'
         ]);
 
-        return $data->toArray(function (array $entry) {
+        $data_array = $data->toArray(function (array $entry) {
             return [
                 'date'       => (string)$entry['date'],
                 'failed'     => (int)$entry['failed'],
@@ -335,6 +340,29 @@ class Log
                 'redirected' => (int)$entry['redirected'],
             ];
         });
+
+        $result = [];
+        foreach ($steps as $step) {
+            $r = null;
+            foreach ($data_array as $d) {
+                if ($d['date'] == $step) {
+                    $r = $d;
+                    break;
+                }
+            }
+
+            if (is_null($r)) {
+                $r = [
+                    'date' => $step,
+                    'failed' => 0,
+                    'resolved' => 0,
+                    'redirected' => 0
+                ];
+            }
+            $result[] = $r;
+        }
+
+        return $result;
     }
 
     /**
