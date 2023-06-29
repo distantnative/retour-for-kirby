@@ -447,7 +447,7 @@
           areas: [
             {
               data: entry.redirected,
-              color: "var(--color-blue-700)"
+              color: "var(--color-blue-600)"
             },
             {
               data: entry.resolved,
@@ -455,7 +455,7 @@
             },
             {
               data: entry.failed,
-              color: "var(--color-red-700)"
+              color: "var(--color-red-600)"
             }
           ]
         }));
@@ -464,7 +464,7 @@
         return [
           {
             data: this.data.reduce((i, x) => i += x.redirected, 0),
-            color: "var(--color-blue-700)",
+            color: "var(--color-blue-600)",
             label: this.$t("retour.stats.redirected")
           },
           {
@@ -474,7 +474,7 @@
           },
           {
             data: this.data.reduce((i, x) => i += x.failed, 0),
-            color: "var(--color-red-700)",
+            color: "var(--color-red-600)",
             label: this.$t("retour.stats.failed")
           }
         ];
