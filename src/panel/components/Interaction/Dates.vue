@@ -1,11 +1,8 @@
 <template>
-  <div class="dates">
-    <k-button-group>
-      <k-button icon="calendar">
-        {{ label }}
-      </k-button>
-    </k-button-group>
-  </div>
+  <span class="retour-dates">
+    <k-icon type="calendar" />
+    {{ label }}
+  </span>
 </template>
 
 <script>
@@ -68,11 +65,9 @@ export default {
 </script>
 
 <style>
-.retour .dates {
-  display: inline-block;
-}
-.retour .dates .k-button {
-  cursor: default;
-  pointer-events: none;
+.retour-dates {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 </style>

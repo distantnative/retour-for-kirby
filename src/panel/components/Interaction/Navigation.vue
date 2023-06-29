@@ -1,18 +1,12 @@
 <template>
-  <k-view class="retour-navigation">
-    <header class="k-header">
-      <k-bar class="k-header-buttons">
-        <template #left>
-          <dates :dates="dates" :timespan="timespan" @navigate="navigate" />
-        </template>
-        <template #right>
-          <prev-next :dates="dates" :timespan="timespan" @navigate="navigate" />
-        </template>
-      </k-bar>
+  <header class="retour-navigation">
+    <k-tabs :tab="tab" :tabs="tabs" />
 
-      <k-tabs :tab="tab" :tabs="tabs" />
-    </header>
-  </k-view>
+    <k-bar>
+      <dates :dates="dates" :timespan="timespan" @navigate="navigate" />
+      <prev-next :dates="dates" :timespan="timespan" @navigate="navigate" />
+    </k-bar>
+  </header>
 </template>
 
 <script>
@@ -51,14 +45,23 @@ export default {
 </script>
 
 <style>
-.retour-navigation .k-header {
-  border-bottom: 0;
+.retour-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-8);
 }
-
+.retour-navigation .k-tabs {
+  margin-bottom: 0;
+}
 .retour-navigation .k-tab-button[title="Routes"] .k-tabs-badge {
   background: var(--color-blue-300);
 }
 .retour-navigation .k-tab-button[title="Failures"] .k-tabs-badge {
   background: var(--color-red-300);
+}
+
+.retour-navigation .k-bar {
+  gap: var(--spacing-4);
 }
 </style>

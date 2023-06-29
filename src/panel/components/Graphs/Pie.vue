@@ -52,17 +52,17 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.5rem;
+  padding: var(--spacing-2);
 }
 .chart-pie > .graph {
   width: 100%;
   padding-bottom: 100%;
   opacity: 0.85;
-  background: #3d3d3d;
+  background: var(--color-gray-800);
   background-image: conic-gradient(from -90deg, var(--gradient));
   border-radius: 50%;
   clip-path: polygon(0% 0%, 0% 50%, 100% 50%, 100% 0%);
-  margin-bottom: calc(-50% + 1.5rem);
+  margin-bottom: calc(-50% + var(--spacing-6));
 }
 .chart-pie figcaption {
   display: grid;

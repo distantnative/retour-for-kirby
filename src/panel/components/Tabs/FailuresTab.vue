@@ -1,5 +1,5 @@
 <template>
-  <k-view>
+  <section>
     <list
       name="failures"
       :columns="columns"
@@ -10,12 +10,17 @@
     >
       <!-- button -->
       <template #button>
-        <k-button icon="trash" @click="$dialog('retour/failures/flush')">
+        <k-button
+          icon="trash"
+          size="sm"
+          variant="filled"
+          @click="$dialog('retour/failures/flush')"
+        >
           {{ $t("retour.failures.clear") }}
         </k-button>
       </template>
     </list>
-  </k-view>
+  </section>
 </template>
 
 <script>

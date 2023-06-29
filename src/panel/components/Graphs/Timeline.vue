@@ -177,10 +177,14 @@ export default {
   font-size: 0.75rem;
   font-weight: normal;
   text-align: right;
-  color: var(--color-text-light);
+  color: var(--color-text-dimmed);
 }
 .chart-areas tbody {
-  --grid-x: linear-gradient(to right, #555 33%, transparent 0%);
+  --grid-x: linear-gradient(
+    to right,
+    var(--color-gray-800) 33%,
+    transparent 0%
+  );
 
   height: var(--height);
   background-image: var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x),
@@ -199,7 +203,7 @@ export default {
   flex-direction: row;
 }
 .chart-areas tbody tr:not(:nth-last-child(2)) {
-  background-image: linear-gradient(#555 33%, transparent 0%);
+  background-image: linear-gradient(var(--color-gray-800) 33%, transparent 0%);
   background-size: 1px 3px;
   background-repeat: repeat-y;
   background-position: right;

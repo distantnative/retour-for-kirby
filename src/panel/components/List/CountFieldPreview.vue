@@ -27,14 +27,13 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-inline: var(--spacing-2);
 }
 .k-count-preview-field p {
   color: var(--color-border);
 }
 .k-count-preview-field .k-icon {
-  color: var(--color-border);
+  color: var(--color-gray-400);
   transform: scale(0.8);
   cursor: default;
 }

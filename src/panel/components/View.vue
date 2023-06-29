@@ -34,3 +34,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.retour .k-topbar {
+  margin-bottom: var(--spacing-12);
+}
+</style>

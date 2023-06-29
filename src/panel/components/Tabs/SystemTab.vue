@@ -1,15 +1,11 @@
 <template>
-  <k-view class="retour-plugin-tab">
-    <header>
-      <h3><k-icon type="road-sign" /> Retour for Kirby</h3>
-    </header>
-
+  <section class="retour-plugin-tab">
     <k-stats :reports="reports" />
 
     <footer>
       <!-- eslint-disable vue/no-v-html -->
       <k-text
-        theme="help"
+        class="k-help"
         v-html="
           $t('retour.system.docs', {
             docs: 'https://github.com/distantnative/retour-for-kirby',
@@ -18,7 +14,7 @@
       />
       <!-- eslint-enable vue/no-v-html -->
     </footer>
-  </k-view>
+  </section>
 </template>
 
 <script>
@@ -56,24 +52,10 @@ export default {
 </script>
 
 <style>
-.retour-plugin-tab header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-.retour-plugin-tab h3 {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-}
-.retour-plugin-tab h3 .k-icon {
-  margin-right: 0.75rem;
-}
 .retour-plugin-tab .k-stats [data-theme] .k-stat-value {
   color: var(--theme);
 }
 .retour-plugin-tab .k-stats {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--spacing-3);
 }
 </style>
