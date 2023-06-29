@@ -11,9 +11,7 @@ export default {
   props: {
     column: {
       type: Object,
-      default() {
-        return {};
-      },
+      default: () => ({}),
     },
     field: Object,
     value: [String, Object],

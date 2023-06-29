@@ -1,5 +1,5 @@
 <template>
-  <k-view>
+  <section>
     <list
       name="redirects"
       :columns="columns"
@@ -11,12 +11,17 @@
     >
       <!-- button -->
       <template #button>
-        <k-button icon="add" @click="onOption('create')">
+        <k-button
+          icon="add"
+          size="sm"
+          variant="filled"
+          @click="$dialog('retour/redirects/create')"
+        >
           {{ $t("add") }}
         </k-button>
       </template>
     </list>
-  </k-view>
+  </section>
 </template>
 
 <script>
@@ -75,10 +80,6 @@ export default {
   methods: {
     // eslint-disable-next-line no-unused-vars
     onOption(option, row = {}, rowIndex = null, column = null) {
-      if (option === "create") {
-        return this.$dialog("retour/redirects/create");
-      }
-
       /**
        * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
        *

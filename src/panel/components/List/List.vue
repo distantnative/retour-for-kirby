@@ -26,18 +26,6 @@
 
     <!-- footer -->
     <footer>
-      <div class="limit">
-        <select :value="storedLimit" @input="onLimit($event.target.value)">
-          <option v-for="step in [10, 25, 50]" :key="step" :value="step">
-            {{ step }}
-          </option>
-          <option value="all">
-            {{ $t("retour.table.perPage.all") }}
-            <!-- eslint-disable vue/html-closing-bracket-newline -->
-            <!-- eslint-disable vue/multiline-html-element-content-newline -->
-          </option></select
-        >&nbsp;{{ $t("retour.table.perPage.after") }}
-      </div>
       <k-pagination
         :details="true"
         :limit="limit"
@@ -45,7 +33,6 @@
         :total="rows.length"
         @paginate="onPaginate"
       />
-      <div />
     </footer>
   </section>
 </template>
@@ -67,33 +54,18 @@ export default {
   data() {
     return {
       page: 1,
-      storedLimit:
-        sessionStorage.getItem("retour$" + this.name + "$limit") || 10,
+      limit: 50,
     };
   },
   computed: {
     paginatedRows() {
-      if (!this.limit || this.limit === "all") {
-        return this.rows;
-      }
-
       return this.rows.slice(
         this.limit * (this.page - 1),
         this.limit * this.page
       );
     },
-    limit() {
-      return this.storedLimit === "all"
-        ? this.rows.length
-        : parseInt(this.storedLimit);
-    },
   },
   methods: {
-    onLimit(limit) {
-      this.page = 1;
-      this.storedLimit = limit;
-      sessionStorage.setItem("retour$" + this.name + "$limit", limit);
-    },
     onOption(option, row, rowIndex) {
       this.$emit("option", option, row, rowIndex);
     },
@@ -109,18 +81,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--spacing-3);
 }
 .retour .list > footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.retour .list > footer > .limit {
-  display: flex;
-  align-items: center;
-  font-size: var(--text-sm);
-  color: var(--color-gray-600);
-  height: 2.5rem;
+  margin-top: var(--spacing-2);
 }
 </style>

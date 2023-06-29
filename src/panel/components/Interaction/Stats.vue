@@ -1,8 +1,8 @@
 <template>
-  <k-view class="retour-stats">
+  <section class="retour-stats">
     <pie :data="pie" />
     <timeline :data="areas" :timespan="timespan" />
-  </k-view>
+  </section>
 </template>
 
 <script>
@@ -20,41 +20,39 @@ export default {
   },
   computed: {
     areas() {
-      return this.data.map((entry) => {
-        return {
-          label: entry.date,
-          areas: [
-            {
-              data: entry.redirected,
-              color: "var(--color-focus)",
-            },
-            {
-              data: entry.resolved,
-              color: "var(--color-border)",
-            },
-            {
-              data: entry.failed,
-              color: "var(--color-negative)",
-            },
-          ],
-        };
-      });
+      return this.data.map((entry) => ({
+        label: entry.date,
+        areas: [
+          {
+            data: entry.redirected,
+            color: "var(--color-blue-700)",
+          },
+          {
+            data: entry.resolved,
+            color: "var(--color-gray-300)",
+          },
+          {
+            data: entry.failed,
+            color: "var(--color-red-700)",
+          },
+        ],
+      }));
     },
     pie() {
       return [
         {
           data: this.data.reduce((i, x) => (i += x.redirected), 0),
-          color: "var(--color-focus)",
+          color: "var(--color-blue-700)",
           label: this.$t("retour.stats.redirected"),
         },
         {
           data: this.data.reduce((i, x) => (i += x.resolved), 0),
-          color: "var(--color-border)",
+          color: "var(--color-gray-300)",
           label: this.$t("retour.stats.resolved"),
         },
         {
           data: this.data.reduce((i, x) => (i += x.failed), 0),
-          color: "var(--color-negative)",
+          color: "var(--color-red-700)",
           label: this.$t("retour.stats.failed"),
         },
       ];
@@ -68,13 +66,14 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-  background: var(--color-dark);
+  padding: var(--spacing-8) var(--spacing-6);
   color: var(--color-white);
+  background: var(--color-gray-900);
+  border-radius: var(--rounded-lg);
+  margin-bottom: var(--spacing-6);
 }
 
-@media screen and (min-width: 45em) {
+@container (min-width: 42em) {
   .retour-stats {
     grid-template-columns: 1fr 3fr;
   }

@@ -1,7 +1,9 @@
 <template>
-  <k-button-group class="prevnext">
+  <k-button-group layout="collapsed" class="retour-prevnext">
     <k-button
       icon="angle-left"
+      size="xs"
+      variant="filled"
       :disabled="!hasPrev || isAll"
       @click="onNavigate('subtract')"
     />
@@ -11,14 +13,18 @@
       :key="unit"
       :current="isCurrent(unit)"
       :disabled="isDisabled(unit)"
+      size="xs"
+      variant="filled"
       @click="set(unit)"
     >
       {{ $t("retour.stats.mode." + unit) }}
     </k-button>
 
     <k-button
-      icon="angle-right"
       :disabled="!hasNext || isAll"
+      icon="angle-right"
+      size="xs"
+      variant="filled"
       @click="onNavigate('add')"
     />
   </k-button-group>
@@ -109,10 +115,11 @@ export default {
 </script>
 
 <style>
-.retour .prevnext [aria-current] {
-  font-weight: 600;
+.retour-prevnext .k-button {
+  --button-padding: var(--spacing-2);
 }
-.retour .prevnext .k-button-text {
-  opacity: 1;
+.retour-prevnext .k-button[aria-current] {
+  --button-color-back: var(--color-blue-400);
+  font-weight: 600;
 }
 </style>
