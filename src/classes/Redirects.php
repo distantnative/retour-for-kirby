@@ -19,31 +19,22 @@ use Kirby\Exception\DuplicateException;
 class Redirects extends Collection
 {
     /**
-     * Plugin instance
-     *
-     * @var \distantnative\Retour\Plugin
-     */
-    protected $plugin;
-
-    /**
      * Class constructor
      *
-     * @param \distantnative\Retour\Plugin $plugin Plugin instance
      * @param array $redirects Array of redirects
      */
-    public function __construct(Plugin $plugin, array $redirects)
+    public function __construct(
+        protected Plugin $plugin,
+        array $redirects
+    )
     {
-        $this->plugin = $plugin;
         parent::__construct($redirects);
     }
 
     /**
      * Creates new redirect
-     *
-     * @param array|null $data
-     * @return self
      */
-    public function create(?array $data = null): self
+    public function create(array|null $data = null): self
     {
         $data   ??= static::fromQuery();
         $redirect = new Redirect($data);
@@ -59,10 +50,6 @@ class Redirects extends Collection
     /**
      * Takes a config array and turns it into
      * a collection of redirect objects
-     *
-     * @param \distantnative\Retour\Plugin $plugin Plugin instance
-     * @param array $config
-     * @return self
      */
     public static function factory(Plugin $plugin, array $config): self
     {
@@ -78,8 +65,6 @@ class Redirects extends Collection
 
     /**
      * Gets form data from query for redirect
-     *
-     * @return array
      */
     public static function fromQuery(): array
     {
@@ -94,8 +79,6 @@ class Redirects extends Collection
 
     /**
      * Returns the Plugin instance
-     *
-     * @return \distantnative\Retour\Plugin
      */
     public function plugin(): Plugin
     {
@@ -104,8 +87,6 @@ class Redirects extends Collection
 
     /**
      * Writes collection to config file
-     *
-     * @return void
      */
     public function save(): void
     {
@@ -115,9 +96,6 @@ class Redirects extends Collection
     /**
      * Turns collection into array, by default turning
      * Redirect objects into array as well
-     *
-     * @param Closure $map
-     * @return array
      */
     public function toArray(Closure $map = null): array
     {
@@ -128,10 +106,6 @@ class Redirects extends Collection
 
     /**
      * Returns redirects data combined with log data
-     *
-     * @param string $from
-     * @param string $to
-     * @return array
      */
     public function toData(string $from, string $to): array
     {
@@ -155,9 +129,6 @@ class Redirects extends Collection
 
     /**
      * Returns routes config for all active redirects
-     *
-     * @param bool $priority
-     * @return array
      */
     public function toRoutes(bool $priority = false): array
     {
@@ -173,10 +144,8 @@ class Redirects extends Collection
      * Updates existing redirect
      *
      * @param string $id ID of exisiting redirect
-     * @param array|null $data
-     * @return self
      */
-    public function update(string $id, ?array $data = null): self
+    public function update(string $id, array|null $data = null): self
     {
         $data   ??= static::fromQuery();
         $redirect = new Redirect($data);

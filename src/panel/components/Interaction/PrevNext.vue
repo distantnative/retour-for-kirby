@@ -119,7 +119,7 @@ export default {
   --button-padding: var(--spacing-2);
 }
 .retour-prevnext .k-button[aria-current] {
-  --button-color-back: var(--color-blue-400);
+  --button-color-back: var(--color-gray-400);
   font-weight: 600;
 }
 </style>

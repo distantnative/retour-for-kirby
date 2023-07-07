@@ -11,12 +11,7 @@
     >
       <!-- button -->
       <template #button>
-        <k-button
-          icon="add"
-          size="sm"
-          variant="filled"
-          @click="$dialog('retour/redirects/create')"
-        >
+        <k-button icon="add" size="sm" variant="filled" @click="add">
           {{ $t("add") }}
         </k-button>
       </template>
@@ -78,6 +73,9 @@ export default {
     },
   },
   methods: {
+    add() {
+      window.panel.drawer.open("/drawers/retour/redirects/create");
+    },
     // eslint-disable-next-line no-unused-vars
     onOption(option, row = {}, rowIndex = null, column = null) {
       /**
@@ -102,9 +100,7 @@ export default {
        * code-base. In this file, and in src/classes/Redirect.php
        */
       const id = encodeURIComponent(row.from.replace(/\//g, "\x1D"));
-      return this.$dialog(`retour/redirects/${id}/${option}`, {
-        query: { column },
-      });
+      return window.panel.drawer.open(`/drawers/retour/${id}/${option}`);
     },
   },
 };

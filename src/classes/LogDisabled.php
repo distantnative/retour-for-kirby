@@ -13,19 +13,15 @@ namespace distantnative\Retour;
  * @link      https://github.com/distantnative/retour-for-kirby
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
+ *
+ * @codeCoverageIgnore
  */
 class LogDisabled
 {
     /**
      * Magic caller that blocks any call to the instance
-     *
-     * @param string $property
-     * @param array $arguments
-     * @return bool
-     *
-     * @codeCoverageIgnore
      */
-    public function __call(string $property, array $arguments): bool
+    public function __call(string $name, array $args): bool
     {
         return false;
     }

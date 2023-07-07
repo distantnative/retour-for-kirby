@@ -20,31 +20,11 @@ use Kirby\Filesystem\F;
  */
 class Log
 {
-    /**
-     * Database instance
-     *
-     * @var \Kirby\Database\Database
-     */
-    protected $database;
+    protected Database $database;
 
-    /**
-     * Plugin instance
-     *
-     * @var \distantnative\Retour\Plugin
-     */
-    protected $plugin;
-
-
-    /**
-     * Class constructor
-     *
-     * @param \distantnative\Retour\Plugin Plugin instance
-     * @param Plugin $plugin
-     */
-    public function __construct(Plugin $plugin)
-    {
-        $this->plugin = $plugin;
-
+    public function __construct(
+        protected Plugin $plugin
+    ) {
         // get path to database file
         $default = kirby()->root('logs') . '/retour/log.sqlite';
         $file    = $this->plugin()->option('database', $default);
@@ -75,11 +55,8 @@ class Log
 
     /**
      * Create a new record entry in database
-     *
-     * @param array $props
-     * @return int|false
      */
-    public function add(array $props)
+    public function add(array $props): int|false
     {
         return $this->table()->insert([
             'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
@@ -94,8 +71,6 @@ class Log
      *
      * @param string $from date sting (yyyy-mm-dd)
      * @param string $to date sting (yyyy-mm-dd)
-     *
-     * @return array
      */
     public function fails(string $from, string $to): array
     {
@@ -119,20 +94,16 @@ class Log
             ->fetch('array')
             ->all();
 
-        return $fails->toArray(function (array $entry) {
-            return [
-                'path'     => $entry['path'],
-                'referrer' => $entry['referrer'],
-                'last'     => $entry['last'],
-                'hits'     => (int)$entry['hits'],
-            ];
-        });
+        return $fails->toArray(fn (array $entry) => [
+            'path'     => $entry['path'],
+            'referrer' => $entry['referrer'],
+            'last'     => $entry['last'],
+            'hits'     => (int)$entry['hits'],
+        ]);
     }
 
     /**
      * Returns the first log entry
-     *
-     * @return array
      */
     public function first(): array
     {
@@ -142,8 +113,6 @@ class Log
 
     /**
      * Remove database records and reset index
-     *
-     * @return bool
      */
     public function flush(): bool
     {
@@ -156,8 +125,6 @@ class Log
 
     /**
      * Returns the last log entry
-     *
-     * @return array
      */
     public function last(): array
     {
@@ -166,8 +133,6 @@ class Log
 
     /**
      * Returns the Plugin instance
-     *
-     * @return \distantnative\Retour\Plugin
      */
     public function plugin(): Plugin
     {
@@ -176,8 +141,6 @@ class Log
 
     /**
      * Deletes outdated logs based on config option
-     *
-     * @return bool
      */
     public function purge(): bool
     {
@@ -204,8 +167,6 @@ class Log
      * @param string $path redirect path
      * @param string $from date sting (yyyy-mm-dd)
      * @param string $to date sting (yyyy-mm-dd)
-     *
-     * @return array
      */
     public function redirect(string $path, string $from, string $to): array
     {
@@ -234,21 +195,16 @@ class Log
 
     /**
      * Remove an entry from the database
-     *
-     * @param string $path
-     * @return bool
      */
     public function remove(string $path): bool
     {
-        return $this->table()->delete('path = "' . $this->database->escape($path) . '"');
+        return $this->table()->delete(
+            'path = "' . $this->database->escape($path) . '"'
+        );
     }
 
     /**
      * Mark all records for a given path as resolved
-     *
-     * @param string $path
-     *
-     * @return bool
      */
     public function resolve(string $path): bool
     {
@@ -264,8 +220,6 @@ class Log
      * @param string $unit timeframe unit (year, month, ...)
      * @param string $from date sting (yyyy-mm-dd)
      * @param string $to date sting (yyyy-mm-dd)
-     *
-     * @return array
      */
     public function stats(string $unit, string $from, string $to): array
     {
@@ -327,20 +281,16 @@ class Log
             'fetch' => 'array'
         ]);
 
-        return $data->toArray(function (array $entry) {
-            return [
-                'date'       => (string)$entry['date'],
-                'failed'     => (int)$entry['failed'],
-                'resolved'   => (int)$entry['resolved'],
-                'redirected' => (int)$entry['redirected'],
-            ];
-        });
+        return $data->toArray(fn (array $entry) => [
+            'date'       => (string)$entry['date'],
+            'failed'     => (int)$entry['failed'],
+            'resolved'   => (int)$entry['resolved'],
+            'redirected' => (int)$entry['redirected'],
+        ]);
     }
 
     /**
      * Returns the database table object
-     *
-     * @return \Kirby\Database\Query
      */
     public function table(): Query
     {
@@ -348,10 +298,6 @@ class Log
     }
 
     /**
-     * Returns a single entry based on the sort order
-     *
-     * @param string $sort
-     * @return array
      */
     protected function single(string $sort): array
     {

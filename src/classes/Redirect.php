@@ -22,8 +22,6 @@ class Redirect extends Obj
 {
     /**
      * Class constructor, validates data
-     *
-     * @param array $data
      */
     public function __construct(array $data = [])
     {
@@ -36,8 +34,6 @@ class Redirect extends Obj
 
     /**
      * Use redirect pattern as id for object
-     *
-     * @return string
      */
     public function id(): string
     {
@@ -68,8 +64,6 @@ class Redirect extends Obj
     /**
      * Returns whether the route is enabled
      * with status code
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
@@ -79,8 +73,6 @@ class Redirect extends Obj
     /**
      * Returns whether the route takes priority
      * over actual pages
-     *
-     * @return bool
      */
     public function priority(): bool
     {
@@ -89,9 +81,8 @@ class Redirect extends Obj
 
     /**
      * Returns the integer HTTP status code
-     * @return int|null
      */
-    public function status(): ?int
+    public function status(): int|null
     {
         if (in_array($this->status ?? null, [null, 'disabled']) == true) {
             return null;
@@ -100,9 +91,6 @@ class Redirect extends Obj
         return (int)$this->status;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -117,12 +105,12 @@ class Redirect extends Obj
     /**
      * Replaces placeholders in $path string
      *
-     * @param string $path
      * @param array<int, string> $placeholders
-     * @return string
      */
-    public static function toPath(string $path, array $placeholders = []): string
-    {
+    public static function toPath(
+        string $path,
+        array $placeholders = []
+    ): string {
         // Replace alias for home
         if ($path === '/') {
             return 'home';
@@ -137,10 +125,8 @@ class Redirect extends Obj
 
     /**
      * Return route definition for Router
-     *
-     * @return array|false
      */
-    public function toRoute()
+    public function toRoute(): array|false
     {
         if ($this->isActive() === false) {
             return false;

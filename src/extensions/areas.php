@@ -30,7 +30,7 @@ return [
                     'action'  => fn (string $tab) => Retour::view($tab)
                 ]
             ],
-            'dialogs' => require 'dialogs.php'
+            'drawers' => require 'drawers.php'
         ];
     }
 ];
