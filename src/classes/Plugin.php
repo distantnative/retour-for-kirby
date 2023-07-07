@@ -18,55 +18,45 @@ class Plugin
 {
     /**
      * Singleton plugin instance
-     *
-     * @var self|null
      */
     protected static $instance;
 
     /**
      * Kirby App instance
-     *
-     * @var \Kirby\Cms\App
      */
     protected App $kirby;
 
     /**
      * Instance for accessing the log database
      * or a mockup for when this feature is disabled
-     *
-     * @var \distantnative\Retour\Log|\distantnative\Retour\LogDisabled|null
      */
-    protected $log;
+    protected Log|LogDisabled|null $log = null;
 
     /**
      * Instnace for accessing all configures redirects
-     *
-     * @var \distantnative\Retour\Redirects
      */
     protected Redirects $redirects;
 
 
     /**
      * Class constructor
-     *
-     * @param \Kirby\Cms\App|null $kirby Kirby App instance
      */
-    public function __construct(?App $kirby = null)
+    public function __construct(App|null $kirby = null)
     {
-        $this->kirby = $kirby ?? kirby();
+        $this->kirby = $kirby ?? App::instance();
 
         // load config
         $config = $this->config();
 
         // initialize redirects
-        $redirects = $config['redirects'] ?? [];
-        $this->redirects = Redirects::factory($this, $redirects);
+        $this->redirects = Redirects::factory(
+            $this,
+            $config['redirects'] ?? []
+        );
     }
 
     /**
      * Initalizes the Config silo
-     *
-     * @return array
      */
     public function config(): array
     {
@@ -80,8 +70,6 @@ class Plugin
 
     /**
      * Returns if log feature is activated
-     *
-     * @return bool
      */
     public function hasLog(): bool
     {
@@ -90,11 +78,8 @@ class Plugin
 
     /**
      * Returns the singleton plugin instance
-     *
-     * @param \Kirby\Cms\App|null $kirby Kirby App instance
-     * @return self
      */
-    public static function instance(?App $kirby = null): self
+    public static function instance(App|null $kirby = null): self
     {
         if (
             self::$instance !== null &&
@@ -108,8 +93,6 @@ class Plugin
 
     /**
      * Returns the Kirby App instance
-     *
-     * @return \Kirby\Cms\App
      */
     public function kirby(): App
     {
@@ -118,10 +101,8 @@ class Plugin
 
     /**
      * Returns a log instance
-     *
-     * @return \distantnative\Retour\Log|\distantnative\Retour\LogDisabled
      */
-    public function log()
+    public function log(): Log|LogDisabled
     {
         // log instance already exists
         if ($this->log !== null) {
@@ -138,20 +119,14 @@ class Plugin
 
     /**
      * Returns a plugin option value
-     *
-     * @param string $key Option key
-     * @param mixed|null $default Fallback value
-     * @return mixed
      */
-    public function option(string $key, $default = null)
+    public function option(string $key, mixed $default = null): mixed
     {
         return $this->kirby()->option('distantnative.retour.' . $key, $default);
     }
 
     /**
      * Returns the Redirects instance
-     *
-     * @return \distantnative\Retour\Redirects
      */
     public function redirects(): Redirects
     {
@@ -160,20 +135,16 @@ class Plugin
 
     /**
      * Resets the singleton plugin instance
-     *
-     * @return void
      */
-    public static function reset()
+    public static function reset(): void
     {
         self::$instance = null;
     }
 
     /**
      * Returns domain for site
-     *
-     * @return string|false
      */
-    public function site()
+    public function site(): string|false
     {
         $site = $this->option('site', true);
 

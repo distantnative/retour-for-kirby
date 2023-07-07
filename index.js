@@ -609,12 +609,13 @@
       }
     },
     methods: {
+      add() {
+        window.panel.drawer.open("/drawers/retour/redirects/create");
+      },
       // eslint-disable-next-line no-unused-vars
       onOption(option, row = {}, rowIndex = null, column = null) {
         const id = encodeURIComponent(row.from.replace(/\//g, ""));
-        return this.$dialog(`retour/redirects/${id}/${option}`, {
-          query: { column }
-        });
+        return window.panel.drawer.open(`/drawers/retour/${id}/${option}`);
       }
     }
   };
@@ -623,9 +624,7 @@
     return _c("section", [_c("list", { attrs: { "name": "redirects", "columns": _vm.columns, "empty": _vm.$t("retour.redirects.empty"), "options": _vm.options, "rows": _vm.data }, on: { "cell": function($event) {
       return _vm.onOption("edit", $event.row, $event.rowIndex, $event.columnIndex);
     }, "option": _vm.onOption }, scopedSlots: _vm._u([{ key: "button", fn: function() {
-      return [_c("k-button", { attrs: { "icon": "add", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
-        return _vm.$dialog("retour/redirects/create");
-      } } }, [_vm._v(" " + _vm._s(_vm.$t("add")) + " ")])];
+      return [_c("k-button", { attrs: { "icon": "add", "size": "sm", "variant": "filled" }, on: { "click": _vm.add } }, [_vm._v(" " + _vm._s(_vm.$t("add")) + " ")])];
     }, proxy: true }]) })], 1);
   };
   var _sfc_staticRenderFns$8 = [];

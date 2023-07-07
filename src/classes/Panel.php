@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use DateTime;
+use Kirby\Cms\App;
 
 /**
  * Panel
@@ -18,9 +19,6 @@ class Panel
 {
     /**
      * Returns all props for the Panel view
-     *
-     * @param string $tab
-     * @return array
      */
     public static function props(string $tab): array
     {
@@ -78,29 +76,23 @@ class Panel
         }
 
         // add tab=specific data, e.g. for table rows
-        switch ($tab) {
-            case 'redirects':
-                $props['data'] = $redirects;
-                break;
-            case 'failures':
-                $props['data'] = $failures;
-                break;
-            case 'system':
-                $props['data'] = [
-                    'redirects' => array_reduce(
-                        $redirects,
-                        fn ($c, $i) => $c + $i['hits'],
-                        0
-                    ),
-                    'failures' => array_reduce(
-                        $failures,
-                        fn ($c, $i) => $c + $i['hits'],
-                        0
-                    ),
-                    'deleteAfter' => $retour->option('deleteAfter', '-')
-                ];
-                break;
-        }
+        $props['data'] = match ($tab) {
+            'redirects' => $redirects,
+            'failures'  => $failures,
+            'system'    => [
+                'redirects' => array_reduce(
+                    $redirects,
+                    fn ($c, $i) => $c + $i['hits'],
+                    0
+                ),
+                'failures' => array_reduce(
+                    $failures,
+                    fn ($c, $i) => $c + $i['hits'],
+                    0
+                ),
+                'deleteAfter' => $retour->option('deleteAfter', '-')
+            ]
+        };
 
         return $props;
     }
@@ -109,15 +101,14 @@ class Panel
     /**
      * Returns the timespan info
      * based on active session
-     *
-     * @return array
-     * @param \distantnative\Retour\Plugin $retour
      */
     public static function timespan(Plugin $retour): array
     {
-        $session = kirby()->session();
-        $from    = get('from');
-        $to      = get('to');
+        $kirby   = App::instance();
+        $session = $kirby->session();
+        $request = $kirby->request();
+        $from    = $request->get('from');
+        $to      = $request->get('to');
 
         // get timespan from query parameters
         if ($from !== null && $to !== null) {
@@ -154,9 +145,6 @@ class Panel
     /**
      * Returns the appropriate date unit for a
      * given timespan
-     *
-     * @param array $timespan
-     * @return string
      */
     public static function unit(array $timespan): string
     {
@@ -194,15 +182,12 @@ class Panel
 
     /**
      * Returns the Fiber view definition
-     *
-     * @param string $tab
-     * @return array
      */
     public static function view(string $tab): array
     {
         return [
-            'component' => 'k-retour-view',
-            'title' => t('retour.' . $tab),
+            'component'  => 'k-retour-view',
+            'title'      => t('retour.' . $tab),
             'breadcrumb' => [
                 [
                     'label' => t('retour.' . $tab),

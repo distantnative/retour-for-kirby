@@ -21,18 +21,15 @@ class Config extends Silo
 {
     /**
      * Absolute path to the config file
-     *
-     * @var string|null
      */
-    public static $file = null;
+    public static string|null $file = null;
 
     /**
      * Loads config from file and sets file path
      *
      * @param string|callable $file absolute path to config file
-     * @return array
      */
-    public static function load($file): array
+    public static function load(string|callable $file): array
     {
         static::$file = static::file($file);
 
@@ -46,12 +43,8 @@ class Config extends Silo
     /**
      * Sets the config value
      * but also writes it directly to file
-     *
-     * @param string|array $key
-     * @param mixed $value
-     * @return array
      */
-    public static function set($key, $value = null): array
+    public static function set(string|array $key, mixed $value = null): array
     {
         if (static::$file === null) {
             throw new LogicException('Config::write is called before data waas loaded for the first time');
@@ -72,9 +65,8 @@ class Config extends Silo
      * Resolves file definition to path string
      *
      * @param string|callable $file absolute path to config file
-     * @return string
      */
-    protected static function file($file): string
+    protected static function file(string|callable $file): string
     {
         if (is_callable($file) === true) {
             return $file();

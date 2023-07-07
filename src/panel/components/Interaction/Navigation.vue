@@ -49,7 +49,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
 }
 .retour-navigation .k-tabs {
   margin-bottom: 0;
