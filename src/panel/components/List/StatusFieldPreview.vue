@@ -1,9 +1,9 @@
 <template>
   <div
-    :title="`${column.label}: ${value || '-'}`"
+    :title="`${column.label}: ${value ?? '-'}`"
     class="k-status-field-preview"
   >
-    <k-icon type="circle" :style="'color: ' + color" />
+    <k-icon type="circle-filled" :style="'color: ' + color" />
     <code v-if="value">{{ value }}</code>
     <span v-else>&nbsp;–</span>
   </div>

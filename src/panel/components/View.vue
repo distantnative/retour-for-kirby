@@ -36,6 +36,9 @@ export default {
 </script>
 
 <style>
+.retour .k-panel-main {
+  margin-bottom: var(--spacing-24);
+}
 .retour .k-topbar {
   margin-bottom: var(--spacing-12);
 }
