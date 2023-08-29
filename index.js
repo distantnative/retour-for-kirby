@@ -107,7 +107,7 @@
   };
   var _sfc_render$f = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("span", { staticClass: "retour-dates" }, [_c("k-icon", { attrs: { "type": "calendar" } }), _vm._v(" " + _vm._s(_vm.label) + " ")], 1);
+    return _c("span", { staticClass: "retour-dates" }, [_c("k-icon", { attrs: { "type": "calendar", "title": _vm.label } }), _c("span", [_vm._v(_vm._s(_vm.label))])], 1);
   };
   var _sfc_staticRenderFns$f = [];
   _sfc_render$f._withStripped = true;
@@ -191,13 +191,13 @@
   };
   var _sfc_render$e = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-button-group", { staticClass: "retour-prevnext", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
+    return _c("k-button-group", { staticClass: "retour-prevnext", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "icon": "angle-left", "size": "sm", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
       return _vm.onNavigate("subtract");
     } } }), _vm._l(["all", "year", "month", "day"], function(unit) {
-      return _c("k-button", { key: unit, attrs: { "current": _vm.isCurrent(unit), "disabled": _vm.isDisabled(unit), "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+      return _c("k-button", { key: unit, attrs: { "current": _vm.isCurrent(unit), "disabled": _vm.isDisabled(unit), "size": "sm", "variant": "filled" }, on: { "click": function($event) {
         return _vm.set(unit);
       } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]);
-    }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+    }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
       return _vm.onNavigate("add");
     } } })], 2);
   };
@@ -917,7 +917,7 @@
   };
   var _sfc_render$1 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("div", { staticClass: "k-status-field-preview", attrs: { "title": `${_vm.column.label}: ${_vm.value || "-"}` } }, [_c("k-icon", { style: "color: " + _vm.color, attrs: { "type": "circle" } }), _vm.value ? _c("code", [_vm._v(_vm._s(_vm.value))]) : _c("span", [_vm._v(" –")])], 1);
+    return _c("div", { staticClass: "k-status-field-preview", attrs: { "title": `${_vm.column.label}: ${_vm.value ?? "-"}` } }, [_c("k-icon", { style: "color: " + _vm.color, attrs: { "type": "circle-filled" } }), _vm.value ? _c("code", [_vm._v(_vm._s(_vm.value))]) : _c("span", [_vm._v(" –")])], 1);
   };
   var _sfc_staticRenderFns$1 = [];
   _sfc_render$1._withStripped = true;
@@ -972,6 +972,9 @@
     },
     fields: {
       "rt-status": StatusField
+    },
+    icons: {
+      retour: '<path d="M13 8V16C13 17.6569 11.6569 19 10 19H7.82929C7.41746 20.1652 6.30622 21 5 21C3.34315 21 2 19.6569 2 18C2 16.3431 3.34315 15 5 15C6.30622 15 7.41746 15.8348 7.82929 17H10C10.5523 17 11 16.5523 11 16V8C11 6.34315 12.3431 5 14 5H17V2L22 6L17 10V7H14C13.4477 7 13 7.44772 13 8ZM5 19C5.55228 19 6 18.5523 6 18C6 17.4477 5.55228 17 5 17C4.44772 17 4 17.4477 4 18C4 18.5523 4.44772 19 5 19Z"></path>'
     }
   });
 })();

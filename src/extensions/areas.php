@@ -17,7 +17,7 @@ return [
     'retour' => function ($kirby) {
         return [
             'label' => t('view.retour'),
-            'icon'  => 'road-sign',
+            'icon'  => 'retour',
             'menu'  => true,
             'link'  => 'retour/redirects',
             'views' => [

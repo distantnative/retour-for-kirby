@@ -2,7 +2,7 @@
   <k-button-group layout="collapsed" class="retour-prevnext">
     <k-button
       icon="angle-left"
-      size="xs"
+      size="sm"
       variant="filled"
       :disabled="!hasPrev || isAll"
       @click="onNavigate('subtract')"
@@ -13,7 +13,7 @@
       :key="unit"
       :current="isCurrent(unit)"
       :disabled="isDisabled(unit)"
-      size="xs"
+      size="sm"
       variant="filled"
       @click="set(unit)"
     >
@@ -23,7 +23,7 @@
     <k-button
       :disabled="!hasNext || isAll"
       icon="angle-right"
-      size="xs"
+      size="sm"
       variant="filled"
       @click="onNavigate('add')"
     />

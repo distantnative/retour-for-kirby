@@ -4,6 +4,11 @@
   align-items: center;
   gap: var(--spacing-2);
 }
+@container (max-width: 60rem) {
+.retour-dates span {
+    display: none;
+}
+}
 
 .retour-prevnext .k-button {
   --button-padding: var(--spacing-2);
@@ -207,6 +212,9 @@
   margin-bottom: var(--spacing-3);
 }
 
+.retour .k-panel-main {
+  margin-bottom: var(--spacing-24);
+}
 .retour .k-topbar {
   margin-bottom: var(--spacing-12);
 }
