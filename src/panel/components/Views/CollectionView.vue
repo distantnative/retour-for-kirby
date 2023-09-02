@@ -1,6 +1,6 @@
 <template>
-  <k-inside class="k-retour-view">
-    <template #topbar>
+  <k-inside class="k-retour-view k-retour-collection-view">
+    <template v-if="stats" #topbar>
       <k-retour-timespan :timespan="timespan" />
     </template>
 
@@ -24,6 +24,18 @@
         <k-options-dropdown :options="options(item)" />
       </template>
     </k-collection>
+
+    <k-text
+      v-if="!stats"
+      class="k-help"
+      v-html="
+        `${this.$t(
+          'retour.system.support'
+        )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
+          'retour.system.support.donate'
+        )}</strong></a>`
+      "
+    />
   </k-inside>
 </template>
 
@@ -92,3 +104,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.k-retour-collection-view .k-collection {
+  margin-bottom: var(--spacing-3);
+}
+</style>

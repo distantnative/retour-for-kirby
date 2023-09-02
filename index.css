@@ -1,4 +1,8 @@
 
+.k-retour-collection-view .k-collection {
+  margin-bottom: var(--spacing-3);
+}
+
 .k-retour-system-view .k-stats {
   margin-bottom: var(--spacing-3);
 }
@@ -166,6 +170,9 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-6);
+}
+.k-retour-tabs[data-end="true"] {
+  justify-content: end;
 }
 .k-retour-tabs .k-tabs {
   margin-bottom: 0;

@@ -1,5 +1,6 @@
 (function() {
   "use strict";
+  const CollectionView_vue_vue_type_style_index_0_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -100,15 +101,21 @@
   };
   var _sfc_render$f = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", { staticClass: "k-retour-view", scopedSlots: _vm._u([{ key: "topbar", fn: function() {
+    return _c("k-inside", { staticClass: "k-retour-view k-retour-collection-view", scopedSlots: _vm._u([_vm.stats ? { key: "topbar", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
-    }, proxy: true }]) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs }, scopedSlots: _vm._u([{ key: "buttons", fn: function() {
+    }, proxy: true } : null], null, true) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs }, scopedSlots: _vm._u([{ key: "buttons", fn: function() {
       return [_c("k-button-group", { attrs: { "buttons": _vm.buttons, "size": "sm", "variant": "filled" } })];
     }, proxy: true }]) }), _c("k-collection", { attrs: { "columns": _vm.columns, "empty": _vm.empty, "items": _vm.items, "pagination": { ..._vm.pagination, total: _vm.data.length }, "layout": "table" }, on: { "paginate": function($event) {
       _vm.pagination.page = $event.page;
     } }, scopedSlots: _vm._u([{ key: "options", fn: function({ item }) {
       return [_c("k-options-dropdown", { attrs: { "options": _vm.options(item) } })];
-    } }]) })], 1);
+    } }]) }), !_vm.stats ? _c("k-text", { staticClass: "k-help", domProps: { "innerHTML": _vm._s(
+      `${this.$t(
+        "retour.system.support"
+      )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
+        "retour.system.support.donate"
+      )}</strong></a>`
+    ) } }) : _vm._e()], 1);
   };
   var _sfc_staticRenderFns$f = [];
   _sfc_render$f._withStripped = true;
@@ -580,7 +587,7 @@
   };
   var _sfc_render$8 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("div", { staticClass: "k-retour-tabs" }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _vm._t("buttons")], 2);
+    return _c("div", { staticClass: "k-retour-tabs", attrs: { "data-end": _vm.tabs.length < 2 } }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _vm._t("buttons")], 2);
   };
   var _sfc_staticRenderFns$8 = [];
   _sfc_render$8._withStripped = true;
