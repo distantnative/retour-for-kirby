@@ -33,7 +33,7 @@ export default {
         priority: {
           label: this.$t("retour.redirects.priority.abbr"),
           type: "priority",
-          width: "1/20",
+          width: "1/10",
         },
       };
 

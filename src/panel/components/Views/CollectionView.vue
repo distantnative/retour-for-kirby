@@ -4,19 +4,47 @@
       <k-retour-timespan :timespan="timespan" />
     </template>
 
+    <!-- Stats -->
     <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
 
+    <!-- Buttons in task bar -->
     <k-retour-tabs :tab="tab" :tabs="tabs">
       <template #buttons>
-        <k-button-group :buttons="buttons" size="sm" variant="filled" />
+        <k-button-group
+          :buttons="[
+            { icon: 'search', click: () => (searching = !searching) },
+            ...buttons,
+          ]"
+          size="sm"
+          variant="filled"
+        />
       </template>
     </k-retour-tabs>
 
+    <!-- Search filter  -->
+    <k-input
+      v-if="searching"
+      :autofocus="true"
+      :placeholder="$t('search') + ' …'"
+      :value="q"
+      type="text"
+      class="k-models-section-search"
+      @input="
+        q = $event;
+        pagination.page = 1;
+      "
+      @keydown.esc="
+        searching = false;
+        q = null;
+      "
+    />
+
+    <!-- Collection table -->
     <k-collection
       :columns="columns"
       :empty="empty"
-      :items="items"
-      :pagination="{ ...pagination, total: data.length }"
+      :items="paginatedItems"
+      :pagination="{ ...pagination, total: filteredItems.length }"
       layout="table"
       @paginate="pagination.page = $event.page"
     >
@@ -25,6 +53,7 @@
       </template>
     </k-collection>
 
+    <!-- Donate text -->
     <k-text
       v-if="!stats"
       class="k-help"
@@ -50,6 +79,8 @@ export default {
   },
   data() {
     return {
+      searching: false,
+      q: null,
       pagination: {
         page: 1,
         limit: 50,
@@ -66,8 +97,19 @@ export default {
     empty() {
       return {};
     },
-    items() {
-      return this.data.slice(
+    filteredItems() {
+      let items = this.data;
+
+      if (this.q) {
+        items = items.filter((item) =>
+          JSON.stringify(item).toLowerCase().includes(this.q.toLowerCase())
+        );
+      }
+
+      return items;
+    },
+    paginatedItems() {
+      return this.filteredItems.slice(
         this.pagination.limit * (this.pagination.page - 1),
         this.pagination.limit * this.pagination.page
       );
