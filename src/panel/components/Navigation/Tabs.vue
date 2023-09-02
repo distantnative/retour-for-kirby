@@ -1,5 +1,5 @@
 <template>
-  <div class="k-retour-tabs">
+  <div class="k-retour-tabs" :data-end="tabs.length < 2">
     <k-tabs :tab="tab" :tabs="tabs" />
     <slot name="buttons" />
   </div>
@@ -20,6 +20,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-6);
+}
+.k-retour-tabs[data-end="true"] {
+  justify-content: end;
 }
 .k-retour-tabs .k-tabs {
   margin-bottom: 0;
