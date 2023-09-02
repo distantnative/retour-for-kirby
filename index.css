@@ -1,40 +1,9 @@
 
-.retour-dates {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
+.k-retour-system-view .k-stats {
+  margin-bottom: var(--spacing-3);
 }
-@container (max-width: 60rem) {
-.retour-dates span {
-    display: none;
-}
-}
-
-.retour-prevnext .k-button {
-  --button-padding: var(--spacing-2);
-}
-.retour-prevnext .k-button[aria-current] {
-  --button-color-back: var(--color-gray-400);
-  font-weight: 600;
-}
-
-.retour-navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-12);
-}
-.retour-navigation .k-tabs {
-  margin-bottom: 0;
-}
-.retour-navigation .k-tab-button[title="Routes"] .k-tabs-badge {
-  background: var(--color-blue-300);
-}
-.retour-navigation .k-tab-button[title="Failures"] .k-tabs-badge {
-  background: var(--color-red-300);
-}
-.retour-navigation .k-bar {
-  gap: var(--spacing-4);
+.k-retour-system-view .k-stats [data-theme] .k-stat-value {
+  color: var(--theme);
 }
 
 .chart-pie {
@@ -176,7 +145,7 @@
   font-weight: bold;
 }
 
-.retour-stats {
+.k-retour-stats {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -187,36 +156,48 @@
   margin-bottom: var(--spacing-6);
 }
 @container (min-width: 42em) {
-.retour-stats {
+.k-retour-stats {
     grid-template-columns: 1fr 3fr;
 }
 }
 
-.retour .list > header {
+.k-retour-tabs {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-3);
+  align-items: center;
+  margin-bottom: var(--spacing-6);
 }
-.retour .list > footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: var(--spacing-2);
+.k-retour-tabs .k-tabs {
+  margin-bottom: 0;
+}
+.k-retour-tabs .k-tab-button[title="Routes"] .k-tabs-badge {
+  background: var(--color-blue-300);
+}
+.k-retour-tabs .k-tab-button[title="Failures"] .k-tabs-badge {
+  background: var(--color-red-300);
 }
 
-.retour-plugin-tab .k-stats [data-theme] .k-stat-value {
-  color: var(--theme);
+.k-retour-dates {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
-.retour-plugin-tab .k-stats {
-  margin-bottom: var(--spacing-3);
+@container (max-width: 60rem) {
+.k-retour-dates span {
+    display: none;
+}
 }
 
-.retour .k-panel-main {
-  margin-bottom: var(--spacing-24);
+.k-retour-prevnext .k-button {
+  --button-padding: var(--spacing-2);
 }
-.retour .k-topbar {
-  margin-bottom: var(--spacing-12);
+.k-retour-prevnext .k-button[aria-current] {
+  --button-color-back: var(--color-gray-400);
+  font-weight: 600;
+}
+
+.k-retour-timespan {
+  gap: var(--spacing-4);
 }
 
 .k-count-preview-field {

@@ -1,6 +1,6 @@
 <template>
-  <span class="retour-dates">
-    <k-icon type="calendar" :title="label" />
+  <span :title="label" class="k-retour-dates">
+    <k-icon type="calendar" />
     <span>{{ label }}</span>
   </span>
 </template>
@@ -65,14 +65,14 @@ export default {
 </script>
 
 <style>
-.retour-dates {
+.k-retour-dates {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
 }
 
 @container (max-width: 60rem) {
-  .retour-dates span {
+  .k-retour-dates span {
     display: none;
   }
 }

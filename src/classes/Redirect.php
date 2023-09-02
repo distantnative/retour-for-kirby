@@ -47,7 +47,7 @@ class Redirect extends Obj
          * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
          * Server. The problem occurs in relation to nginx.
          *
-         * Many hosting solutions does now allow customers to change such
+         * Many hosting solutions do not allow customers to change such
          * settings for the web-server, and so another solution is required.
          *
          * So, in order to remedy this problem, we replace forward-slash with the

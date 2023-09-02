@@ -3,6 +3,7 @@
 namespace distantnative\Retour;
 
 use Closure;
+use Kirby\Cms\App;
 use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
 
@@ -34,9 +35,8 @@ class Redirects extends Collection
     /**
      * Creates new redirect
      */
-    public function create(array|null $data = null): self
+    public function create(array $data): self
     {
-        $data   ??= static::fromQuery();
         $redirect = new Redirect($data);
 
         if ($this->has($redirect->id()) === true) {
@@ -61,20 +61,6 @@ class Redirects extends Collection
         }
 
         return $redirects;
-    }
-
-    /**
-     * Gets form data from query for redirect
-     */
-    public static function fromQuery(): array
-    {
-        return [
-            'from'      => get('from'),
-            'to'        => get('to'),
-            'status'    => get('status'),
-            'priority'  => get('priority'),
-            'comment'   => get('comment')
-        ];
     }
 
     /**
@@ -145,9 +131,8 @@ class Redirects extends Collection
      *
      * @param string $id ID of exisiting redirect
      */
-    public function update(string $id, array|null $data = null): self
+    public function update(string $id, array $data): self
     {
-        $data   ??= static::fromQuery();
         $redirect = new Redirect($data);
         $this->set($id, $redirect);
         return $this;

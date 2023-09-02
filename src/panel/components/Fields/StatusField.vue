@@ -10,7 +10,7 @@
       @input="onInput"
     >
       <template #before>
-        <k-icon type="circle" :color="color" />
+        <k-icon type="circle-filled" :color="color" />
       </template>
     </k-input>
   </k-field>

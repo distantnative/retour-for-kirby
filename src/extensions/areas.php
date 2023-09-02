@@ -17,7 +17,7 @@ return [
     'retour' => function ($kirby) {
         return [
             'label' => t('view.retour'),
-            'icon'  => 'retour',
+            'icon'  => 'shuffle',
             'menu'  => true,
             'link'  => 'retour/redirects',
             'views' => [
@@ -30,6 +30,7 @@ return [
                     'action'  => fn (string $tab) => Retour::view($tab)
                 ]
             ],
+            'dialogs' => require 'dialogs.php',
             'drawers' => require 'drawers.php'
         ];
     }
