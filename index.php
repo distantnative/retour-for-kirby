@@ -17,7 +17,7 @@ use Kirby\Cms\App as Kirby;
 
 // validate Kirby version
 if (
-    version_compare(Kirby::version() ?? '0.0.0', '4.0.0-alpha.1', '<') === true ||
+    version_compare(Kirby::version() ?? '0.0.0', '4.0.0-alpha.7', '<') === true ||
     version_compare(Kirby::version() ?? '0.0.0', '5.0.0', '>=') === true
 ) {
     throw new Exception('Retour 5 only supports Kirby 4');

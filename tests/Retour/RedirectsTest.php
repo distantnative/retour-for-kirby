@@ -39,34 +39,6 @@ class RedirectsTest extends TestCase
     /**
      * @covers ::create
      */
-    public function testCreateFromQuery(): void
-    {
-        $_GET['from']     = $from     = 'from1';
-        $_GET['to']       = $to       = 'to2';
-        $_GET['status']   = $status   = 'status3';
-        $_GET['priority'] = $priority = 'priority4';
-        $_GET['comment']  = $comment  = 'comment5';
-
-        $this->assertSame([
-            'from'      => $from,
-            'to'        => $to,
-            'status'    => $status,
-            'priority'  => $priority,
-            'comment'   => $comment
-        ], Redirects::fromQuery());
-
-        unset(
-            $_GET['from'],
-            $_GET['to'],
-            $_GET['status'],
-            $_GET['priority'],
-            $_GET['comment']
-        );
-    }
-
-    /**
-     * @covers ::create
-     */
     public function testCreateWithoutValidParameters(): void
     {
         $redirects = Plugin::instance()->redirects();
@@ -92,13 +64,11 @@ class RedirectsTest extends TestCase
     public function testFromQuery(): void
     {
         $redirects = Plugin::instance()->redirects();
-        $_GET['from'] = 'bar';
         $this->assertSame(0, $redirects->count());
 
-        $redirects->create();
+        $redirects->create(['from' => 'bar']);
         $this->assertSame(1, $redirects->count());
         $this->assertSame('bar', $redirects->first()->from());
-        unset($_GET['from']);
     }
 
     /**
