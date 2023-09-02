@@ -24,6 +24,8 @@
   "retour.failures.resolve": "Add as redirect",
   "retour.failures.clear": "Clear log",
   "retour.failures.clear.confirm": "Do you really want to permanently delete the log?",
+  "retour.timespan.from.label": "From",
+  "retour.timespan.to.label": "To",
   "retour.stats.redirected": "redirected",
   "retour.stats.resolved": "resolved",
   "retour.stats.failed": "failed",

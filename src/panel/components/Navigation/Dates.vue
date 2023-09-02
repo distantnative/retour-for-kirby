@@ -1,8 +1,11 @@
 <template>
-  <span :title="label" class="k-retour-dates">
-    <k-icon type="calendar" />
-    <span>{{ label }}</span>
-  </span>
+  <k-button
+    :text="label"
+    :responsive="true"
+    icon="calendar"
+    class="k-retour-dates"
+    @click="() => $dialog('retour/timespan')"
+  />
 </template>
 
 <script>
@@ -63,17 +66,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.k-retour-dates {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-}
-
-@container (max-width: 60rem) {
-  .k-retour-dates span {
-    display: none;
-  }
-}
-</style>
