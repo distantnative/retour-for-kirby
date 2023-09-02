@@ -1,6 +1,5 @@
 (function() {
   "use strict";
-  const Dates_vue_vue_type_style_index_0_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -59,55 +58,57 @@
   }
   const _sfc_main$f = {
     props: {
-      dates: Object,
+      data: [Object, Array],
+      stats: [Boolean, Array],
+      tab: String,
+      tabs: Array,
       timespan: Object
     },
+    data() {
+      return {
+        pagination: {
+          page: 1,
+          limit: 50
+        }
+      };
+    },
     computed: {
-      label() {
-        const from = this.dates.from;
-        const to = this.dates.to;
-        if (this.timespan.unit === "day") {
-          return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")}`;
-        }
-        if (this.timespan.unit === "month") {
-          return `${this.month(from)} ${from.format("YYYY")}`;
-        }
-        if (this.timespan.unit === "year") {
-          return `${from.format("YYYY")}`;
-        }
-        if (from.isSame(to, "month")) {
-          return `
-        ${from.format("D")} - ${to.format("D")}
-        ${this.month(to)} ${to.format("YYYY")}
-        `;
-        }
-        if (from.isSame(to, "year")) {
-          return `
-        ${from.format("D")} ${this.month(from)} -
-        ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}
-        `;
-        }
-        return `
-      ${from.format("D")} ${this.month(from)} ${from.format("YYYY")} -
-      ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}`;
+      buttons() {
+        return [];
       },
-      value() {
-        return Object.values(this.dates).map(
-          (date) => date.format("YYYY-MM-DD HH:mm:ss")
+      columns() {
+        return {};
+      },
+      empty() {
+        return {};
+      },
+      items() {
+        return this.data.slice(
+          this.pagination.limit * (this.pagination.page - 1),
+          this.pagination.limit * this.pagination.page
         );
       }
     },
     methods: {
-      month(date) {
-        date = date.format("MMMM");
-        date = this.$helper.string.lcfirst(date);
-        return this.$t("months." + date);
+      options(item) {
+        return [];
+      },
+      id(path) {
+        return encodeURIComponent(path.replace(/\//g, ""));
       }
     }
   };
   var _sfc_render$f = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("span", { staticClass: "retour-dates" }, [_c("k-icon", { attrs: { "type": "calendar", "title": _vm.label } }), _c("span", [_vm._v(_vm._s(_vm.label))])], 1);
+    return _c("k-inside", { staticClass: "k-retour-view", scopedSlots: _vm._u([{ key: "topbar", fn: function() {
+      return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
+    }, proxy: true }]) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs }, scopedSlots: _vm._u([{ key: "buttons", fn: function() {
+      return [_c("k-button-group", { attrs: { "buttons": _vm.buttons, "size": "sm", "variant": "filled" } })];
+    }, proxy: true }]) }), _c("k-collection", { attrs: { "columns": _vm.columns, "empty": _vm.empty, "items": _vm.items, "pagination": { ..._vm.pagination, total: _vm.data.length }, "layout": "table" }, on: { "paginate": function($event) {
+      _vm.pagination.page = $event.page;
+    } }, scopedSlots: _vm._u([{ key: "options", fn: function({ item }) {
+      return [_c("k-options-dropdown", { attrs: { "options": _vm.options(item) } })];
+    } }]) })], 1);
   };
   var _sfc_staticRenderFns$f = [];
   _sfc_render$f._withStripped = true;
@@ -121,88 +122,78 @@
     null,
     null
   );
-  __component__$f.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Interaction/Dates.vue";
-  const Dates = __component__$f.exports;
-  const PrevNext_vue_vue_type_style_index_0_lang = "";
+  __component__$f.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/CollectionView.vue";
+  const CollectionView = __component__$f.exports;
   const _sfc_main$e = {
-    props: {
-      dates: Object,
-      timespan: Object
-    },
+    extends: CollectionView,
     computed: {
-      first() {
-        return this.$library.dayjs(this.timespan.first);
+      buttons() {
+        return [
+          {
+            icon: "add",
+            text: this.$t("add"),
+            click: () => this.$drawer("retour/redirects/create")
+          }
+        ];
       },
-      last() {
-        return this.$library.dayjs(this.timespan.last);
+      columns() {
+        let columns = {
+          from: {
+            label: this.$t("retour.redirects.from"),
+            type: "path",
+            width: "7/20"
+          },
+          to: {
+            label: this.$t("retour.redirects.to"),
+            type: "path",
+            width: "7/20"
+          },
+          status: {
+            label: this.$t("retour.redirects.status"),
+            type: "status",
+            width: "1/10"
+          },
+          priority: {
+            label: this.$t("retour.redirects.priority.abbr"),
+            type: "priority",
+            width: "1/20"
+          }
+        };
+        if (!!this.stats) {
+          columns.hits = {
+            label: this.$t("retour.hits"),
+            width: "1/10",
+            type: "count"
+          };
+        }
+        return columns;
       },
-      hasPrev() {
-        return this.dates.from.isAfter(this.first);
-      },
-      hasNext() {
-        return this.dates.to.isBefore(this.last) || this.dates.to.isBefore(this.$library.dayjs());
-      },
-      isAll() {
-        return this.dates.from.isSame(this.first, "day") && this.dates.to.isSame(this.last, "day");
+      empty() {
+        return {
+          icon: "shuffle",
+          text: this.$t("retour.redirects.empty")
+        };
       }
     },
     methods: {
-      isCurrent(unit) {
-        if (unit === "all") {
-          return this.isAll;
-        }
-        return unit === this.timespan.unit;
-      },
-      isDisabled(unit) {
-        return unit === "all" && (!this.timespan.first || !this.timespan.last);
-      },
-      set(unit) {
-        if (unit === "all") {
-          return this.$emit("navigate", {
-            from: this.first,
-            to: this.last
-          });
-        }
-        let timespan = Object.assign({}, this.dates);
-        if (unit === this.timespan.unit) {
-          timespan = {
-            from: this.$library.dayjs(),
-            to: this.$library.dayjs()
-          };
-        }
-        this.$emit("navigate", {
-          from: timespan.from.startOf(unit),
-          to: timespan.from.endOf(unit)
-        });
-      },
-      onNavigate(method) {
-        let unit = this.timespan.unit;
-        let factor = 1;
-        if (unit === "week") {
-          factor = 7;
-          unit = "day";
-        }
-        this.$emit("navigate", {
-          from: this.dates.from[method](factor, unit).startOf(unit),
-          to: this.dates.to[method](factor, unit).endOf(unit)
-        });
+      options(redirect) {
+        return [
+          {
+            text: this.$t("edit"),
+            icon: "edit",
+            click: () => this.$drawer(`retour/redirects/${this.id(redirect.from)}/edit`)
+          },
+          {
+            text: this.$t("remove"),
+            icon: "trash",
+            click: () => this.$dialog(`retour/redirects/${this.id(redirect.from)}/delete`)
+          }
+        ];
       }
     }
   };
-  var _sfc_render$e = function render() {
-    var _vm = this, _c = _vm._self._c;
-    return _c("k-button-group", { staticClass: "retour-prevnext", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "icon": "angle-left", "size": "sm", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
-      return _vm.onNavigate("subtract");
-    } } }), _vm._l(["all", "year", "month", "day"], function(unit) {
-      return _c("k-button", { key: unit, attrs: { "current": _vm.isCurrent(unit), "disabled": _vm.isDisabled(unit), "size": "sm", "variant": "filled" }, on: { "click": function($event) {
-        return _vm.set(unit);
-      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]);
-    }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
-      return _vm.onNavigate("add");
-    } } })], 2);
-  };
-  var _sfc_staticRenderFns$e = [];
-  _sfc_render$e._withStripped = true;
+  const _sfc_render$e = null;
+  const _sfc_staticRenderFns$e = null;
   var __component__$e = /* @__PURE__ */ normalizeComponent(
     _sfc_main$e,
     _sfc_render$e,
@@ -213,44 +204,66 @@
     null,
     null
   );
-  __component__$e.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Interaction/PrevNext.vue";
-  const PrevNext = __component__$e.exports;
-  const Navigation_vue_vue_type_style_index_0_lang = "";
+  __component__$e.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/RedirectsView.vue";
+  const RedirectsView = __component__$e.exports;
   const _sfc_main$d = {
-    components: {
-      Dates,
-      PrevNext
-    },
-    props: {
-      tab: String,
-      tabs: Array,
-      timespan: Object
-    },
+    extends: CollectionView,
     computed: {
-      dates() {
+      buttons() {
+        return [
+          {
+            icon: "trash",
+            text: this.$t("retour.failures.clear"),
+            click: () => this.$dialog("retour/failures/flush")
+          }
+        ];
+      },
+      columns() {
         return {
-          from: this.$library.dayjs(this.timespan.from),
-          to: this.$library.dayjs(this.timespan.to)
+          path: {
+            label: this.$t("retour.failures.path"),
+            type: "path",
+            width: "1/2"
+          },
+          referrer: {
+            label: this.$t("retour.failures.referrer"),
+            type: "path",
+            width: "1/2"
+          },
+          hits: {
+            label: this.$t("retour.hits"),
+            type: "count",
+            width: "1/12",
+            align: "right"
+          }
+        };
+      },
+      empty() {
+        return {
+          icon: "alert",
+          text: this.$t("retour.failures.empty")
         };
       }
     },
     methods: {
-      navigate(timespan) {
-        this.$reload({
-          query: {
-            from: timespan.from.format("YYYY-MM-DD"),
-            to: timespan.to.format("YYYY-MM-DD")
+      options(failure) {
+        return [
+          {
+            text: this.$t("retour.failures.resolve"),
+            icon: "add",
+            click: () => this.$drawer(`retour/failures/${this.id(failure.path)}/resolve`)
+          },
+          {
+            text: this.$t("remove"),
+            icon: "trash",
+            click: () => this.$dialog(`retour/failures/${this.id(failure.path)}/delete`)
           }
-        });
+        ];
       }
     }
   };
-  var _sfc_render$d = function render() {
-    var _vm = this, _c = _vm._self._c;
-    return _c("header", { staticClass: "retour-navigation" }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _c("k-bar", [_c("dates", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } }), _c("prev-next", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } })], 1)], 1);
-  };
-  var _sfc_staticRenderFns$d = [];
-  _sfc_render$d._withStripped = true;
+  const _sfc_render$d = null;
+  const _sfc_staticRenderFns$d = null;
   var __component__$d = /* @__PURE__ */ normalizeComponent(
     _sfc_main$d,
     _sfc_render$d,
@@ -261,10 +274,69 @@
     null,
     null
   );
-  __component__$d.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Interaction/Navigation.vue";
-  const Navigation = __component__$d.exports;
-  const Pie_vue_vue_type_style_index_0_lang = "";
+  __component__$d.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/FailuresView.vue";
+  const FailuresView = __component__$d.exports;
+  const SystemView_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$c = {
+    props: {
+      data: [Object, Array],
+      stats: [Boolean, Array],
+      tabs: Array,
+      timespan: Object
+    },
+    computed: {
+      reports() {
+        return [
+          {
+            label: this.$t("retour.system.redirects"),
+            value: this.data.redirects
+          },
+          {
+            label: this.$t("retour.system.failures"),
+            value: this.data.failures
+          },
+          {
+            label: this.$t("retour.system.deleteAfter"),
+            value: this.$t("retour.system.deleteAfter.months", {
+              count: this.data.deleteAfter
+            })
+          },
+          {
+            label: this.$t("retour.system.support"),
+            value: `💛 ${this.$t("retour.system.support.donate")}`,
+            link: "https://paypal.me/distantnative",
+            theme: "positive"
+          }
+        ];
+      }
+    }
+  };
+  var _sfc_render$c = function render() {
+    var _vm = this, _c = _vm._self._c;
+    return _c("k-inside", { staticClass: "k-retour-view k-retour-system-view", scopedSlots: _vm._u([{ key: "topbar", fn: function() {
+      return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
+    }, proxy: true }]) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tabs": _vm.tabs, "tab": "system" } }), _c("k-stats", { attrs: { "reports": _vm.reports } }), _c("k-text", { staticClass: "k-help", domProps: { "innerHTML": _vm._s(
+      _vm.$t("retour.system.docs", {
+        docs: "https://github.com/distantnative/retour-for-kirby"
+      })
+    ) } })], 1);
+  };
+  var _sfc_staticRenderFns$c = [];
+  _sfc_render$c._withStripped = true;
+  var __component__$c = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$c,
+    _sfc_render$c,
+    _sfc_staticRenderFns$c,
+    false,
+    null,
+    null,
+    null,
+    null
+  );
+  __component__$c.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/SystemView.vue";
+  const SystemView = __component__$c.exports;
+  const Pie_vue_vue_type_style_index_0_lang = "";
+  const _sfc_main$b = {
     props: {
       data: Array
     },
@@ -286,28 +358,28 @@
       }
     }
   };
-  var _sfc_render$c = function render() {
+  var _sfc_render$b = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("figure", { staticClass: "chart-pie" }, [_c("div", { staticClass: "graph", style: "--gradient: " + _vm.gradient }), _c("figcaption", [_vm._l(_vm.data, function(segment) {
       return [_c("k-icon", { key: segment.label + "-icon", style: "--color:" + segment.color, attrs: { "type": "circle" } }), _c("div", { key: segment.label + "-no" }, [_vm._v(" " + _vm._s(new Intl.NumberFormat().format(segment.data)) + " ")]), _c("div", { key: segment.label + "-label" }, [_vm._v(" " + _vm._s(segment.label) + " ")])];
     })], 2)]);
   };
-  var _sfc_staticRenderFns$c = [];
-  _sfc_render$c._withStripped = true;
-  var __component__$c = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$c,
-    _sfc_render$c,
-    _sfc_staticRenderFns$c,
+  var _sfc_staticRenderFns$b = [];
+  _sfc_render$b._withStripped = true;
+  var __component__$b = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$b,
+    _sfc_render$b,
+    _sfc_staticRenderFns$b,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$c.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Graphs/Pie.vue";
-  const Pie = __component__$c.exports;
+  __component__$b.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Pie.vue";
+  const Pie = __component__$b.exports;
   const Timeline_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$b = {
+  const _sfc_main$a = {
     props: {
       data: Array,
       timespan: Object
@@ -397,7 +469,7 @@
       }
     }
   };
-  var _sfc_render$b = function render() {
+  var _sfc_render$a = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("table", { staticClass: "chart-areas" }, [_c("thead", [_c("tr", _vm._l(_vm.axisY, function(tick) {
       return _c("th", { key: tick }, [_vm._v(" " + _vm._s(tick) + " ")]);
@@ -416,22 +488,22 @@
       } } }, [_c("td", [_vm._v(_vm._s(_vm.label(segment)))])]);
     }), 0)]);
   };
-  var _sfc_staticRenderFns$b = [];
-  _sfc_render$b._withStripped = true;
-  var __component__$b = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$b,
-    _sfc_render$b,
-    _sfc_staticRenderFns$b,
+  var _sfc_staticRenderFns$a = [];
+  _sfc_render$a._withStripped = true;
+  var __component__$a = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$a,
+    _sfc_render$a,
+    _sfc_staticRenderFns$a,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$b.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Graphs/Timeline.vue";
-  const Timeline = __component__$b.exports;
+  __component__$a.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Timeline.vue";
+  const Timeline = __component__$a.exports;
   const Stats_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$a = {
+  const _sfc_main$9 = {
     components: {
       Pie,
       Timeline
@@ -481,70 +553,9 @@
       }
     }
   };
-  var _sfc_render$a = function render() {
-    var _vm = this, _c = _vm._self._c;
-    return _c("section", { staticClass: "retour-stats" }, [_c("pie", { attrs: { "data": _vm.pie } }), _c("timeline", { attrs: { "data": _vm.areas, "timespan": _vm.timespan } })], 1);
-  };
-  var _sfc_staticRenderFns$a = [];
-  _sfc_render$a._withStripped = true;
-  var __component__$a = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$a,
-    _sfc_render$a,
-    _sfc_staticRenderFns$a,
-    false,
-    null,
-    null,
-    null,
-    null
-  );
-  __component__$a.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Interaction/Stats.vue";
-  const Stats = __component__$a.exports;
-  const List_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$9 = {
-    props: {
-      name: String,
-      columns: Object,
-      options: Array,
-      rows: {
-        type: Array,
-        default() {
-          return [];
-        }
-      },
-      empty: String
-    },
-    data() {
-      return {
-        page: 1,
-        limit: 50
-      };
-    },
-    computed: {
-      paginatedRows() {
-        return this.rows.slice(
-          this.limit * (this.page - 1),
-          this.limit * this.page
-        );
-      }
-    },
-    methods: {
-      onOption(option, row, rowIndex) {
-        this.$emit("option", option, row, rowIndex);
-      },
-      onPaginate(pagination) {
-        this.page = pagination.page;
-      }
-    }
-  };
   var _sfc_render$9 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("section", { staticClass: "list" }, [_c("header", [_c("div"), _vm._t("button")], 2), _vm.rows.length ? _c("k-table", { attrs: { "columns": _vm.columns, "index": _vm.limit * (_vm.page - 1) + 1, "options": _vm.options, "rows": _vm.paginatedRows }, on: { "cell": function($event) {
-      return _vm.$emit("cell", $event);
-    }, "header": function($event) {
-      return _vm.$emit("header", $event);
-    }, "input": function($event) {
-      return _vm.$emit("input", $event);
-    }, "option": _vm.onOption } }) : _c("k-empty", { attrs: { "layout": "cards" } }, [_vm._v(" " + _vm._s(_vm.empty) + " ")]), _c("footer", [_c("k-pagination", { attrs: { "details": true, "limit": _vm.limit, "page": _vm.page, "total": _vm.rows.length }, on: { "paginate": _vm.onPaginate } })], 1)], 1);
+    return _c("section", { staticClass: "k-retour-stats" }, [_c("pie", { attrs: { "data": _vm.pie } }), _c("timeline", { attrs: { "data": _vm.areas, "timespan": _vm.timespan } })], 1);
   };
   var _sfc_staticRenderFns$9 = [];
   _sfc_render$9._withStripped = true;
@@ -558,74 +569,18 @@
     null,
     null
   );
-  __component__$9.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/List/List.vue";
-  const List = __component__$9.exports;
+  __component__$9.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Stats.vue";
+  const Stats = __component__$9.exports;
+  const Tabs_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$8 = {
-    components: {
-      List
-    },
     props: {
-      data: Array,
-      hasLog: Boolean
-    },
-    computed: {
-      columns() {
-        let columns = {
-          from: {
-            label: this.$t("retour.redirects.from"),
-            type: "path",
-            width: "7/20"
-          },
-          to: {
-            label: this.$t("retour.redirects.to"),
-            type: "path",
-            width: "7/20"
-          },
-          status: {
-            label: this.$t("retour.redirects.status"),
-            type: "status",
-            width: "1/10"
-          },
-          priority: {
-            label: this.$t("retour.redirects.priority.abbr"),
-            type: "priority",
-            width: "1/20"
-          }
-        };
-        if (this.hasLog) {
-          columns.hits = {
-            label: this.$t("retour.hits"),
-            width: "1/10",
-            type: "count"
-          };
-        }
-        return columns;
-      },
-      options() {
-        return [
-          { text: this.$t("edit"), icon: "edit", click: "edit" },
-          { text: this.$t("remove"), icon: "trash", click: "delete" }
-        ];
-      }
-    },
-    methods: {
-      add() {
-        window.panel.drawer.open("/drawers/retour/redirects/create");
-      },
-      // eslint-disable-next-line no-unused-vars
-      onOption(option, row = {}, rowIndex = null, column = null) {
-        const id = encodeURIComponent(row.from.replace(/\//g, ""));
-        return window.panel.drawer.open(`/drawers/retour/${id}/${option}`);
-      }
+      tab: String,
+      tabs: Array
     }
   };
   var _sfc_render$8 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("section", [_c("list", { attrs: { "name": "redirects", "columns": _vm.columns, "empty": _vm.$t("retour.redirects.empty"), "options": _vm.options, "rows": _vm.data }, on: { "cell": function($event) {
-      return _vm.onOption("edit", $event.row, $event.rowIndex, $event.columnIndex);
-    }, "option": _vm.onOption }, scopedSlots: _vm._u([{ key: "button", fn: function() {
-      return [_c("k-button", { attrs: { "icon": "add", "size": "sm", "variant": "filled" }, on: { "click": _vm.add } }, [_vm._v(" " + _vm._s(_vm.$t("add")) + " ")])];
-    }, proxy: true }]) })], 1);
+    return _c("div", { staticClass: "k-retour-tabs" }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _vm._t("buttons")], 2);
   };
   var _sfc_staticRenderFns$8 = [];
   _sfc_render$8._withStripped = true;
@@ -639,61 +594,60 @@
     null,
     null
   );
-  __component__$8.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Tabs/RedirectsTab.vue";
-  const RedirectsTab = __component__$8.exports;
+  __component__$8.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Tabs.vue";
+  const Tabs = __component__$8.exports;
+  const Dates_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$7 = {
-    components: {
-      List
-    },
     props: {
-      data: Array
+      dates: Object,
+      timespan: Object
     },
     computed: {
-      columns() {
-        return {
-          path: {
-            label: this.$t("retour.failures.path"),
-            type: "path",
-            width: "1/2"
-          },
-          referrer: {
-            label: this.$t("retour.failures.referrer"),
-            type: "path",
-            width: "1/2"
-          },
-          hits: {
-            label: this.$t("retour.hits"),
-            type: "count",
-            width: "1/12",
-            align: "right"
-          }
-        };
+      label() {
+        const from = this.dates.from;
+        const to = this.dates.to;
+        if (this.timespan.unit === "day") {
+          return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")}`;
+        }
+        if (this.timespan.unit === "month") {
+          return `${this.month(from)} ${from.format("YYYY")}`;
+        }
+        if (this.timespan.unit === "year") {
+          return `${from.format("YYYY")}`;
+        }
+        if (from.isSame(to, "month")) {
+          return `
+        ${from.format("D")} - ${to.format("D")}
+        ${this.month(to)} ${to.format("YYYY")}
+        `;
+        }
+        if (from.isSame(to, "year")) {
+          return `
+        ${from.format("D")} ${this.month(from)} -
+        ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}
+        `;
+        }
+        return `
+      ${from.format("D")} ${this.month(from)} ${from.format("YYYY")} -
+      ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}`;
       },
-      options() {
-        return [
-          {
-            text: this.$t("retour.failures.resolve"),
-            icon: "add",
-            click: "resolve"
-          },
-          { text: this.$t("remove"), icon: "trash", click: "delete" }
-        ];
+      value() {
+        return Object.values(this.dates).map(
+          (date) => date.format("YYYY-MM-DD HH:mm:ss")
+        );
       }
     },
     methods: {
-      onOption(option, row) {
-        const path = encodeURIComponent(row.path.replace(/\//g, ""));
-        return this.$dialog(`retour/failures/${path}/${option}`);
+      month(date) {
+        date = date.format("MMMM");
+        date = this.$helper.string.lcfirst(date);
+        return this.$t("months." + date);
       }
     }
   };
   var _sfc_render$7 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("section", [_c("list", { attrs: { "name": "failures", "columns": _vm.columns, "empty": _vm.$t("retour.failures.empty"), "options": _vm.options, "rows": _vm.data }, on: { "option": _vm.onOption }, scopedSlots: _vm._u([{ key: "button", fn: function() {
-      return [_c("k-button", { attrs: { "icon": "trash", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
-        return _vm.$dialog("retour/failures/flush");
-      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.failures.clear")) + " ")])];
-    }, proxy: true }]) })], 1);
+    return _c("span", { staticClass: "k-retour-dates", attrs: { "title": _vm.label } }, [_c("k-icon", { attrs: { "type": "calendar" } }), _c("span", [_vm._v(_vm._s(_vm.label))])], 1);
   };
   var _sfc_staticRenderFns$7 = [];
   _sfc_render$7._withStripped = true;
@@ -707,47 +661,85 @@
     null,
     null
   );
-  __component__$7.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Tabs/FailuresTab.vue";
-  const FailuresTab = __component__$7.exports;
-  const SystemTab_vue_vue_type_style_index_0_lang = "";
+  __component__$7.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Dates.vue";
+  const Dates = __component__$7.exports;
+  const PrevNext_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$6 = {
     props: {
-      data: Object
+      dates: Object,
+      timespan: Object
     },
     computed: {
-      reports() {
-        return [
-          {
-            label: this.$t("retour.system.redirects"),
-            value: this.data.redirects
-          },
-          {
-            label: this.$t("retour.system.failures"),
-            value: this.data.failures
-          },
-          {
-            label: this.$t("retour.system.deleteAfter"),
-            value: this.$t("retour.system.deleteAfter.months", {
-              count: this.data.deleteAfter
-            })
-          },
-          {
-            label: this.$t("retour.system.support"),
-            value: `💛 ${this.$t("retour.system.support.donate")}`,
-            link: "https://paypal.me/distantnative",
-            theme: "positive"
-          }
-        ];
+      first() {
+        return this.$library.dayjs(this.timespan.first);
+      },
+      last() {
+        return this.$library.dayjs(this.timespan.last);
+      },
+      hasPrev() {
+        return this.dates.from.isAfter(this.first);
+      },
+      hasNext() {
+        return this.dates.to.isBefore(this.last) || this.dates.to.isBefore(this.$library.dayjs());
+      },
+      isAll() {
+        return this.dates.from.isSame(this.first, "day") && this.dates.to.isSame(this.last, "day");
+      }
+    },
+    methods: {
+      isCurrent(unit) {
+        if (unit === "all") {
+          return this.isAll;
+        }
+        return unit === this.timespan.unit;
+      },
+      isDisabled(unit) {
+        return unit === "all" && (!this.timespan.first || !this.timespan.last);
+      },
+      set(unit) {
+        if (unit === "all") {
+          return this.$emit("navigate", {
+            from: this.first,
+            to: this.last
+          });
+        }
+        let timespan = Object.assign({}, this.dates);
+        if (unit === this.timespan.unit) {
+          timespan = {
+            from: this.$library.dayjs(),
+            to: this.$library.dayjs()
+          };
+        }
+        this.$emit("navigate", {
+          from: timespan.from.startOf(unit),
+          to: timespan.from.endOf(unit)
+        });
+      },
+      onNavigate(method) {
+        let unit = this.timespan.unit;
+        let factor = 1;
+        if (unit === "week") {
+          factor = 7;
+          unit = "day";
+        }
+        this.$emit("navigate", {
+          from: this.dates.from[method](factor, unit).startOf(unit),
+          to: this.dates.to[method](factor, unit).endOf(unit)
+        });
       }
     }
   };
   var _sfc_render$6 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("section", { staticClass: "retour-plugin-tab" }, [_c("k-stats", { attrs: { "reports": _vm.reports } }), _c("footer", [_c("k-text", { staticClass: "k-help", domProps: { "innerHTML": _vm._s(
-      _vm.$t("retour.system.docs", {
-        docs: "https://github.com/distantnative/retour-for-kirby"
-      })
-    ) } })], 1)], 1);
+    return _c("k-button-group", { staticClass: "k-retour-prevnext", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
+      return _vm.onNavigate("subtract");
+    } } }), _vm._l(["all", "year", "month", "day"], function(unit) {
+      return _c("k-button", { key: unit, attrs: { "current": _vm.isCurrent(unit), "disabled": _vm.isDisabled(unit), "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+        return _vm.set(unit);
+      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]);
+    }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+      return _vm.onNavigate("add");
+    } } })], 2);
   };
   var _sfc_staticRenderFns$6 = [];
   _sfc_render$6._withStripped = true;
@@ -761,28 +753,39 @@
     null,
     null
   );
-  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Tabs/SystemTab.vue";
-  const SystemTab = __component__$6.exports;
-  const View_vue_vue_type_style_index_0_lang = "";
+  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/PrevNext.vue";
+  const PrevNext = __component__$6.exports;
+  const Timespan_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$5 = {
     components: {
-      Stats,
-      Navigation,
-      FailuresTab,
-      RedirectsTab,
-      SystemTab
+      Dates,
+      PrevNext
     },
     props: {
-      data: [Object, Array],
-      stats: [Boolean, Array],
-      tab: String,
-      tabs: Array,
       timespan: Object
+    },
+    computed: {
+      dates() {
+        return {
+          from: this.$library.dayjs(this.timespan.from),
+          to: this.$library.dayjs(this.timespan.to)
+        };
+      }
+    },
+    methods: {
+      navigate(timespan) {
+        this.$reload({
+          query: {
+            from: timespan.from.format("YYYY-MM-DD"),
+            to: timespan.to.format("YYYY-MM-DD")
+          }
+        });
+      }
     }
   };
   var _sfc_render$5 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", { staticClass: "retour" }, [_vm.stats ? [_c("stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }), _c("navigation", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs, "timespan": _vm.timespan } })] : _vm._e(), _c("" + _vm.tab + "-tab", { tag: "component", attrs: { "data": _vm.data, "has-log": !!_vm.stats } })], 2);
+    return _c("k-bar", { staticClass: "k-retour-timespan" }, [_c("dates", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } }), _c("prev-next", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } })], 1);
   };
   var _sfc_staticRenderFns$5 = [];
   _sfc_render$5._withStripped = true;
@@ -796,8 +799,8 @@
     null,
     null
   );
-  __component__$5.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/View.vue";
-  const View = __component__$5.exports;
+  __component__$5.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Timespan.vue";
+  const Timespan = __component__$5.exports;
   const CountFieldPreview_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$4 = {
     props: {
@@ -825,7 +828,7 @@
     null,
     null
   );
-  __component__$4.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/List/CountFieldPreview.vue";
+  __component__$4.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Table/CountFieldPreview.vue";
   const CountFieldPreview = __component__$4.exports;
   const _sfc_main$3 = {
     props: {
@@ -863,7 +866,7 @@
     null,
     null
   );
-  __component__$3.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/List/PathFieldPreview.vue";
+  __component__$3.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Table/PathFieldPreview.vue";
   const PathFieldPreview = __component__$3.exports;
   const PriorityFieldPreview_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$2 = {
@@ -888,7 +891,7 @@
     null,
     null
   );
-  __component__$2.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/List/PriorityFieldPreview.vue";
+  __component__$2.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Table/PriorityFieldPreview.vue";
   const PriorityFieldPreview = __component__$2.exports;
   const color = {
     computed: {
@@ -931,7 +934,7 @@
     null,
     null
   );
-  __component__$1.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/List/StatusFieldPreview.vue";
+  __component__$1.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Table/StatusFieldPreview.vue";
   const StatusFieldPreview = __component__$1.exports;
   const _sfc_main = {
     extends: "k-select-field",
@@ -945,7 +948,7 @@
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("k-field", _vm._b({ staticClass: "k-select-field", attrs: { "input": _vm._uid } }, "k-field", _vm.$props, false), [_c("k-input", _vm._g(_vm._b({ ref: "input", attrs: { "id": _vm._uid, "type": "select", "theme": "field" }, on: { "input": _vm.onInput }, scopedSlots: _vm._u([{ key: "before", fn: function() {
-      return [_c("k-icon", { attrs: { "type": "circle", "color": _vm.color } })];
+      return [_c("k-icon", { attrs: { "type": "circle-filled", "color": _vm.color } })];
     }, proxy: true }]) }, "k-input", _vm.$props, false), _vm.$listeners))], 1);
   };
   var _sfc_staticRenderFns = [];
@@ -968,13 +971,15 @@
       "k-path-field-preview": PathFieldPreview,
       "k-priority-field-preview": PriorityFieldPreview,
       "k-status-field-preview": StatusFieldPreview,
-      "k-retour-view": View
+      "k-retour-stats": Stats,
+      "k-retour-tabs": Tabs,
+      "k-retour-timespan": Timespan,
+      "k-retour-redirects-view": RedirectsView,
+      "k-retour-failures-view": FailuresView,
+      "k-retour-system-view": SystemView
     },
     fields: {
-      "rt-status": StatusField
-    },
-    icons: {
-      retour: '<path d="M13 8V16C13 17.6569 11.6569 19 10 19H7.82929C7.41746 20.1652 6.30622 21 5 21C3.34315 21 2 19.6569 2 18C2 16.3431 3.34315 15 5 15C6.30622 15 7.41746 15.8348 7.82929 17H10C10.5523 17 11 16.5523 11 16V8C11 6.34315 12.3431 5 14 5H17V2L22 6L17 10V7H14C13.4477 7 13 7.44772 13 8ZM5 19C5.55228 19 6 18.5523 6 18C6 17.4477 5.55228 17 5 17C4.44772 17 4 17.4477 4 18C4 18.5523 4.44772 19 5 19Z"></path>'
+      "retour-status": StatusField
     }
   });
 })();

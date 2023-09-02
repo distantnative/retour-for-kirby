@@ -1,13 +1,13 @@
 <template>
-  <section class="retour-stats">
+  <section class="k-retour-stats">
     <pie :data="pie" />
     <timeline :data="areas" :timespan="timespan" />
   </section>
 </template>
 
 <script>
-import Pie from "../Graphs/Pie.vue";
-import Timeline from "../Graphs/Timeline.vue";
+import Pie from "./Pie.vue";
+import Timeline from "./Timeline.vue";
 
 export default {
   components: {
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style>
-.retour-stats {
+.k-retour-stats {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -74,7 +74,7 @@ export default {
 }
 
 @container (min-width: 42em) {
-  .retour-stats {
+  .k-retour-stats {
     grid-template-columns: 1fr 3fr;
   }
 }

@@ -39,7 +39,6 @@ class Panel
                 [
                     'name'  => 'redirects',
                     'label' => t('retour.redirects'),
-                    'icon'  => 'shuffle',
                     'badge' => count($redirects),
                     'link'  => 'retour/redirects'
                 ]
@@ -59,14 +58,12 @@ class Panel
             $props['tabs'][] = [
                 'name'  => 'failures',
                 'label' => t('retour.failures'),
-                'icon'  => 'live',
                 'badge' => count($failures),
                 'link'  => 'retour/failures'
             ];
             $props['tabs'][] = [
                 'name'  => 'system',
                 'label' => t('retour.system'),
-                'icon'  => 'info',
                 'badge' => false,
                 'link'  => 'retour/system'
             ];
@@ -186,7 +183,7 @@ class Panel
     public static function view(string $tab): array
     {
         return [
-            'component'  => 'k-retour-view',
+            'component'  => 'k-retour-' . $tab .'-view',
             'title'      => t('retour.' . $tab),
             'breadcrumb' => [
                 [

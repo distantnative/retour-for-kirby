@@ -1,6 +1,7 @@
 <?php
 
 use distantnative\Retour\Plugin as Retour;
+use Kirby\Cms\App;
 use Kirby\Http\Header;
 use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
@@ -16,14 +17,13 @@ use Kirby\Toolkit\I18n;
  */
 
 
-/**
- * Shared fields definition for several drawers
- */
+// Fields for redirects
 $fields = function (Retour $retour): array {
     return [
         'from' => [
-            'label'    => t('retour.redirects.from'),
             'type'     => 'text',
+            'label'    => t('retour.redirects.from'),
+            'icon'     => 'bookmark',
             'before'   => $retour->site(),
             'counter'  => false,
             'required' => true,
@@ -32,14 +32,21 @@ $fields = function (Retour $retour): array {
             ])
         ],
         'to' => [
-            'label'    => t('retour.redirects.to'),
             'type'     => 'text',
+            'label'    => t('retour.redirects.to'),
+            'icon'     => 'open',
             'counter'  => false,
             'help'     => t('retour.redirects.to.help')
         ],
+        // 'to' => [
+        //     'label'    => t('retour.redirects.to'),
+        //     'type'     => 'link',
+        //     'options'  => ['page', 'url', 'custom'],
+        //     'help'     => t('retour.redirects.to.help')
+        // ],
         'status' => [
+            'type'     => 'retour-status',
             'label'    => t('retour.redirects.status'),
-            'type'     => 'rt-status',
             'options'  => array_map(fn ($code) => [
                 'text'  => ltrim($code, '_') . ' - ' . Header::$codes[$code],
                 'value' => ltrim($code, '_')
@@ -50,15 +57,16 @@ $fields = function (Retour $retour): array {
             ])
         ],
         'priority' => [
-            'label'    => t('retour.redirects.priority'),
             'type'     => 'toggle',
+            'label'    => t('retour.redirects.priority'),
             'icon'     => 'bolt',
             'width'    => '1/2',
             'help'     => t('retour.redirects.priority.help')
         ],
         'comment' => [
-            'label'    => t('retour.redirects.comment'),
             'type'     => 'textarea',
+            'label'    => t('retour.redirects.comment'),
+            'icon'     => 'chat',
             'buttons'  => false,
             'help'     => t('retour.redirects.comment.help')
         ]
@@ -78,7 +86,8 @@ return [
         ],
         'submit' => function () {
             $redirects = Retour::instance()->redirects();
-            $redirects->create();
+            $data      = App::instance()->request()->get(['from', 'to', 'status', 'priority', 'comment'], '');
+            $redirects->create($data);
             $redirects->save();
             return true;
         }
@@ -112,7 +121,8 @@ return [
         },
         'submit' => function (string $id) {
             $redirects = Retour::instance()->redirects();
-            $redirects->update(urldecode($id));
+            $data      = App::instance()->request()->get(['from', 'to', 'status', 'priority', 'comment'], '');
+            $redirects->update(urldecode($id), $data);
             $redirects->save();
             return true;
         }
@@ -132,7 +142,8 @@ return [
         'submit' => function (string $path) {
             $plugin    = Retour::instance();
             $redirects = $plugin->redirects();
-            $redirects->create();
+            $data      = App::instance()->request()->get(['from', 'to', 'status', 'priority', 'comment'], '');
+            $redirects->create($data);
             $redirects->save();
             $log = $plugin->log();
             $log->resolve(urldecode($path));

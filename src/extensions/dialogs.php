@@ -1,9 +1,6 @@
 <?php
 
 use distantnative\Retour\Plugin as Retour;
-use Kirby\Http\Header;
-use Kirby\Panel\Panel;
-use Kirby\Toolkit\I18n;
 
 /**
  * Fiber dialogs for all Panel tabs

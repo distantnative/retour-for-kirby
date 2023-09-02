@@ -1,26 +1,34 @@
 <template>
-  <section class="retour-plugin-tab">
+  <k-inside class="k-retour-view k-retour-system-view">
+    <template #topbar>
+      <k-retour-timespan :timespan="timespan" />
+    </template>
+
+    <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
+    <k-retour-tabs :tabs="tabs" tab="system" />
+
     <k-stats :reports="reports" />
 
-    <footer>
-      <!-- eslint-disable vue/no-v-html -->
-      <k-text
-        class="k-help"
-        v-html="
-          $t('retour.system.docs', {
-            docs: 'https://github.com/distantnative/retour-for-kirby',
-          })
-        "
-      />
-      <!-- eslint-enable vue/no-v-html -->
-    </footer>
-  </section>
+    <!-- eslint-disable vue/no-v-html -->
+    <k-text
+      class="k-help"
+      v-html="
+        $t('retour.system.docs', {
+          docs: 'https://github.com/distantnative/retour-for-kirby',
+        })
+      "
+    />
+    <!-- eslint-enable vue/no-v-html -->
+  </k-inside>
 </template>
 
 <script>
 export default {
   props: {
-    data: Object,
+    data: [Object, Array],
+    stats: [Boolean, Array],
+    tabs: Array,
+    timespan: Object,
   },
   computed: {
     reports() {
@@ -52,10 +60,10 @@ export default {
 </script>
 
 <style>
-.retour-plugin-tab .k-stats [data-theme] .k-stat-value {
-  color: var(--theme);
-}
-.retour-plugin-tab .k-stats {
+.k-retour-system-view .k-stats {
   margin-bottom: var(--spacing-3);
+}
+.k-retour-system-view .k-stats [data-theme] .k-stat-value {
+  color: var(--theme);
 }
 </style>
