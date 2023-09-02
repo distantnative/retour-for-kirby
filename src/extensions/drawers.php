@@ -32,18 +32,11 @@ $fields = function (Retour $retour): array {
             ])
         ],
         'to' => [
-            'type'     => 'text',
+            'type'     => 'link',
             'label'    => t('retour.redirects.to'),
-            'icon'     => 'open',
-            'counter'  => false,
+            'options'  => ['url', 'page', 'custom'],
             'help'     => t('retour.redirects.to.help')
         ],
-        // 'to' => [
-        //     'label'    => t('retour.redirects.to'),
-        //     'type'     => 'link',
-        //     'options'  => ['page', 'url', 'custom'],
-        //     'help'     => t('retour.redirects.to.help')
-        // ],
         'status' => [
             'type'     => 'retour-status',
             'label'    => t('retour.redirects.status'),
