@@ -67,6 +67,8 @@
     },
     data() {
       return {
+        searching: false,
+        q: null,
         pagination: {
           page: 1,
           limit: 50
@@ -83,8 +85,17 @@
       empty() {
         return {};
       },
-      items() {
-        return this.data.slice(
+      filteredItems() {
+        let items = this.data;
+        if (this.q) {
+          items = items.filter(
+            (item) => JSON.stringify(item).toLowerCase().includes(this.q.toLowerCase())
+          );
+        }
+        return items;
+      },
+      paginatedItems() {
+        return this.filteredItems.slice(
           this.pagination.limit * (this.pagination.page - 1),
           this.pagination.limit * this.pagination.page
         );
@@ -104,8 +115,19 @@
     return _c("k-inside", { staticClass: "k-retour-view k-retour-collection-view", scopedSlots: _vm._u([_vm.stats ? { key: "topbar", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
     }, proxy: true } : null], null, true) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs }, scopedSlots: _vm._u([{ key: "buttons", fn: function() {
-      return [_c("k-button-group", { attrs: { "buttons": _vm.buttons, "size": "sm", "variant": "filled" } })];
-    }, proxy: true }]) }), _c("k-collection", { attrs: { "columns": _vm.columns, "empty": _vm.empty, "items": _vm.items, "pagination": { ..._vm.pagination, total: _vm.data.length }, "layout": "table" }, on: { "paginate": function($event) {
+      return [_c("k-button-group", { attrs: { "buttons": [
+        { icon: "search", click: () => _vm.searching = !_vm.searching },
+        ..._vm.buttons
+      ], "size": "sm", "variant": "filled" } })];
+    }, proxy: true }]) }), _vm.searching ? _c("k-input", { staticClass: "k-models-section-search", attrs: { "autofocus": true, "placeholder": _vm.$t("search") + " …", "value": _vm.q, "type": "text" }, on: { "input": function($event) {
+      _vm.q = $event;
+      _vm.pagination.page = 1;
+    }, "keydown": function($event) {
+      if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"]))
+        return null;
+      _vm.searching = false;
+      _vm.q = null;
+    } } }) : _vm._e(), _c("k-collection", { attrs: { "columns": _vm.columns, "empty": _vm.empty, "items": _vm.paginatedItems, "pagination": { ..._vm.pagination, total: _vm.filteredItems.length }, "layout": "table" }, on: { "paginate": function($event) {
       _vm.pagination.page = $event.page;
     } }, scopedSlots: _vm._u([{ key: "options", fn: function({ item }) {
       return [_c("k-options-dropdown", { attrs: { "options": _vm.options(item) } })];
@@ -163,7 +185,7 @@
           priority: {
             label: this.$t("retour.redirects.priority.abbr"),
             type: "priority",
-            width: "1/20"
+            width: "1/10"
           }
         };
         if (!!this.stats) {
