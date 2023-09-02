@@ -17,7 +17,9 @@ return [
         'pattern' => 'retour/redirects/(:any)/delete',
         'load' => fn (string $id) => [
             'component' => 'k-remove-dialog',
-            'props'     => ['text' => t('field.structure.delete.confirm')]
+            'props'     => [
+                'text' => t('field.structure.delete.confirm')
+            ]
         ],
         'submit' => function (string $id) {
             $redirects = Retour::instance()->redirects();
@@ -31,21 +33,21 @@ return [
         'pattern' => 'retour/failures/(:any)/delete',
         'load' => fn () => [
             'component' => 'k-remove-dialog',
-            'props'     => ['text' => t('field.structure.delete.confirm')]
+            'props'     => [
+                'text' => t('field.structure.delete.confirm')
+            ]
         ],
-        'submit' => function (string $path) {
-            return Retour::instance()->log()->remove(urldecode($path));
-        }
+        'submit' => fn (string $path) => Retour::instance()->log()->remove(urldecode($path))
     ],
 
     'retour.failures.flush' => [
         'pattern' => 'retour/failures/flush',
         'load' => fn () => [
             'component' => 'k-remove-dialog',
-            'props'     => ['text' => t('retour.failures.clear.confirm') ]
+            'props'     => [
+                'text' => t('retour.failures.clear.confirm')
+            ]
         ],
-        'submit' => function () {
-            return Retour::instance()->log()->flush();
-        }
+        'submit' => fn () => Retour::instance()->log()->flush()
     ]
 ];

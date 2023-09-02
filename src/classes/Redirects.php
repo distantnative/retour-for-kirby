@@ -3,7 +3,6 @@
 namespace distantnative\Retour;
 
 use Closure;
-use Kirby\Cms\App;
 use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
 

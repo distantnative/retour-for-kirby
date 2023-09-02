@@ -95,10 +95,21 @@ class PanelTest extends TestCase
     public function testView(): void
     {
         $view = Panel::view('redirects');
-
-        $this->assertSame('k-retour-view', $view['component']);
+        $this->assertSame('k-retour-redirects-view', $view['component']);
         $this->assertSame('Routes', $view['title']);
         $this->assertSame('retour/redirects', $view['breadcrumb'][0]['link']);
+        $this->assertIsArray($view['props']);
+
+        $view = Panel::view('failures');
+        $this->assertSame('k-retour-failures-view', $view['component']);
+        $this->assertSame('Failures', $view['title']);
+        $this->assertSame('retour/failures', $view['breadcrumb'][0]['link']);
+        $this->assertIsArray($view['props']);
+
+        $view = Panel::view('system');
+        $this->assertSame('k-retour-system-view', $view['component']);
+        $this->assertSame('System', $view['title']);
+        $this->assertSame('retour/system', $view['breadcrumb'][0]['link']);
         $this->assertIsArray($view['props']);
     }
 }

@@ -7,7 +7,7 @@ class AreasTest extends TestCase
     public function testExtension(): void
     {
         $area = $this->area();
-        $this->assertSame('road-sign', $area['icon']);
+        $this->assertSame('shuffle', $area['icon']);
         $this->assertIsArray($area['views']);
         $this->assertIsArray($area['dialogs']);
     }
@@ -23,7 +23,7 @@ class AreasTest extends TestCase
     {
         $area = $this->area();
         $view = $area['views'][1]['action']('redirects');
-        $this->assertSame('k-retour-view', $view['component']);
+        $this->assertSame('k-retour-redirects-view', $view['component']);
     }
 
     protected function area(): array
