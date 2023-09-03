@@ -5,7 +5,19 @@
     </template>
 
     <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
-    <k-retour-tabs :tabs="tabs" tab="system" />
+
+    <k-retour-tabs
+      tab="system"
+      :tabs="tabs"
+      :buttons="[
+        {
+          link: 'https://paypal.me/distantnative',
+          theme: 'positive',
+          target: '_blank',
+          text: `💛 ${$t('retour.system.support')}`,
+        },
+      ]"
+    />
 
     <k-stats :reports="reports" />
 
@@ -46,12 +58,6 @@ export default {
           value: this.$t("retour.system.deleteAfter.months", {
             count: this.data.deleteAfter,
           }),
-        },
-        {
-          label: this.$t("retour.system.support"),
-          value: `💛 ${this.$t("retour.system.support.donate")}`,
-          link: "https://paypal.me/distantnative",
-          theme: "positive",
         },
       ];
     },
