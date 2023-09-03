@@ -27,30 +27,74 @@ class Timespan
             // either has more data in the future
             // or today is in the future
             'hasAll'    => $first && $last,
-            'hasNext'   => $to->isBefore($last) || $to->isBefore($today),
-            'hasPrev'   => $from->isAfter($first),
-            'isAll'     => $from->year() === $first->year() &&
+            'hasNext'   => static::hasNext($to, $today, $last),
+            'hasPrev'   => static::hasPrev($from, $first),
+            'isAll'     => static::isAll($from, $to, $first, $last),
+            'isCurrent' => static::isCurrent($from, $to, $today),
+        ];
+    }
+
+    protected static function hasNext(
+        Date $to,
+        Date $today,
+        Date|null $last,
+    ): bool {
+        if ($last === null) {
+            return false;
+        }
+
+        return $to->isBefore($last) || $to->isBefore($today);
+    }
+
+    protected static function hasPrev(
+        Date $from,
+        Date|null $first,
+    ): bool {
+        if ($first === null) {
+            return false;
+        }
+
+        return $from->isAfter($first);
+    }
+
+    protected static function isAll(
+        Date $from,
+        Date $to,
+        Date|null $first,
+        Date|null $last,
+    ): bool {
+        if ($first === null || $last === null) {
+            return false;
+        }
+
+        return $from->year() === $first->year() &&
                $from->month() === $first->month() &&
                $from->day() === $first->day() &&
                $to->year() === $last->year() &&
                $to->month() === $last->month() &&
-               $to->day() === $last->day(),
-            'isCurrent' => (
-                $from->isBefore($today) ||
-                (
-                    $from->year() === $today->year() &&
-                    $from->month() === $today->month() &&
-                    $from->day() === $today->day()
-                    )
-            ) && (
-                $to->isAfter($today) ||
-                (
-                    $to->year() === $today->year() &&
-                    $to->month() === $today->month() &&
-                    $to->day() === $today->day()
+               $to->day() === $last->day();
+    }
+
+    protected static function isCurrent(
+        Date $from,
+        Date $to,
+        Date $today
+    ): bool {
+        return (
+            $from->isBefore($today) ||
+            (
+                $from->year() === $today->year() &&
+                $from->month() === $today->month() &&
+                $from->day() === $today->day()
                 )
+        ) && (
+            $to->isAfter($today) ||
+            (
+                $to->year() === $today->year() &&
+                $to->month() === $today->month() &&
+                $to->day() === $today->day()
             )
-        ];
+        );
     }
 
     public static function limits(): array
