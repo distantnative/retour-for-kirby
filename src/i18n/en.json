@@ -26,6 +26,7 @@
   "retour.failures.clear.confirm": "Do you really want to permanently delete the log?",
   "retour.timespan.from.label": "From",
   "retour.timespan.to.label": "To",
+  "retour.timespan.set.label": "Set custom",
   "retour.stats.redirected": "redirected",
   "retour.stats.resolved": "resolved",
   "retour.stats.failed": "failed",

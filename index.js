@@ -57,7 +57,7 @@
       options
     };
   }
-  const _sfc_main$f = {
+  const _sfc_main$d = {
     props: {
       data: [Object, Array],
       stats: [Boolean, Array],
@@ -110,7 +110,7 @@
       }
     }
   };
-  var _sfc_render$f = function render() {
+  var _sfc_render$d = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("k-inside", { staticClass: "k-retour-view k-retour-collection-view", scopedSlots: _vm._u([_vm.stats ? { key: "topbar", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
@@ -139,21 +139,21 @@
       )}</strong></a>`
     ) } }) : _vm._e()], 1);
   };
-  var _sfc_staticRenderFns$f = [];
-  _sfc_render$f._withStripped = true;
-  var __component__$f = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$f,
-    _sfc_render$f,
-    _sfc_staticRenderFns$f,
+  var _sfc_staticRenderFns$d = [];
+  _sfc_render$d._withStripped = true;
+  var __component__$d = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$d,
+    _sfc_render$d,
+    _sfc_staticRenderFns$d,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$f.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/CollectionView.vue";
-  const CollectionView = __component__$f.exports;
-  const _sfc_main$e = {
+  __component__$d.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/CollectionView.vue";
+  const CollectionView = __component__$d.exports;
+  const _sfc_main$c = {
     extends: CollectionView,
     computed: {
       buttons() {
@@ -221,21 +221,21 @@
       }
     }
   };
-  const _sfc_render$e = null;
-  const _sfc_staticRenderFns$e = null;
-  var __component__$e = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$e,
-    _sfc_render$e,
-    _sfc_staticRenderFns$e,
+  const _sfc_render$c = null;
+  const _sfc_staticRenderFns$c = null;
+  var __component__$c = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$c,
+    _sfc_render$c,
+    _sfc_staticRenderFns$c,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$e.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/RedirectsView.vue";
-  const RedirectsView = __component__$e.exports;
-  const _sfc_main$d = {
+  __component__$c.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/RedirectsView.vue";
+  const RedirectsView = __component__$c.exports;
+  const _sfc_main$b = {
     extends: CollectionView,
     computed: {
       buttons() {
@@ -291,22 +291,22 @@
       }
     }
   };
-  const _sfc_render$d = null;
-  const _sfc_staticRenderFns$d = null;
-  var __component__$d = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$d,
-    _sfc_render$d,
-    _sfc_staticRenderFns$d,
+  const _sfc_render$b = null;
+  const _sfc_staticRenderFns$b = null;
+  var __component__$b = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$b,
+    _sfc_render$b,
+    _sfc_staticRenderFns$b,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$d.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/FailuresView.vue";
-  const FailuresView = __component__$d.exports;
+  __component__$b.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/FailuresView.vue";
+  const FailuresView = __component__$b.exports;
   const SystemView_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$c = {
+  const _sfc_main$a = {
     props: {
       data: [Object, Array],
       stats: [Boolean, Array],
@@ -340,7 +340,7 @@
       }
     }
   };
-  var _sfc_render$c = function render() {
+  var _sfc_render$a = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("k-inside", { staticClass: "k-retour-view k-retour-system-view", scopedSlots: _vm._u([{ key: "topbar", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
@@ -350,22 +350,22 @@
       })
     ) } })], 1);
   };
-  var _sfc_staticRenderFns$c = [];
-  _sfc_render$c._withStripped = true;
-  var __component__$c = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$c,
-    _sfc_render$c,
-    _sfc_staticRenderFns$c,
+  var _sfc_staticRenderFns$a = [];
+  _sfc_render$a._withStripped = true;
+  var __component__$a = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$a,
+    _sfc_render$a,
+    _sfc_staticRenderFns$a,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$c.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/SystemView.vue";
-  const SystemView = __component__$c.exports;
+  __component__$a.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Views/SystemView.vue";
+  const SystemView = __component__$a.exports;
   const Pie_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$b = {
+  const _sfc_main$9 = {
     props: {
       data: Array
     },
@@ -387,28 +387,28 @@
       }
     }
   };
-  var _sfc_render$b = function render() {
+  var _sfc_render$9 = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("figure", { staticClass: "chart-pie" }, [_c("div", { staticClass: "graph", style: "--gradient: " + _vm.gradient }), _c("figcaption", [_vm._l(_vm.data, function(segment) {
       return [_c("k-icon", { key: segment.label + "-icon", style: "--color:" + segment.color, attrs: { "type": "circle" } }), _c("div", { key: segment.label + "-no" }, [_vm._v(" " + _vm._s(new Intl.NumberFormat().format(segment.data)) + " ")]), _c("div", { key: segment.label + "-label" }, [_vm._v(" " + _vm._s(segment.label) + " ")])];
     })], 2)]);
   };
-  var _sfc_staticRenderFns$b = [];
-  _sfc_render$b._withStripped = true;
-  var __component__$b = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$b,
-    _sfc_render$b,
-    _sfc_staticRenderFns$b,
+  var _sfc_staticRenderFns$9 = [];
+  _sfc_render$9._withStripped = true;
+  var __component__$9 = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$9,
+    _sfc_render$9,
+    _sfc_staticRenderFns$9,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$b.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Pie.vue";
-  const Pie = __component__$b.exports;
+  __component__$9.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Pie.vue";
+  const Pie = __component__$9.exports;
   const Timeline_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$a = {
+  const _sfc_main$8 = {
     props: {
       data: Array,
       timespan: Object
@@ -498,7 +498,7 @@
       }
     }
   };
-  var _sfc_render$a = function render() {
+  var _sfc_render$8 = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("table", { staticClass: "chart-areas" }, [_c("thead", [_c("tr", _vm._l(_vm.axisY, function(tick) {
       return _c("th", { key: tick }, [_vm._v(" " + _vm._s(tick) + " ")]);
@@ -517,22 +517,22 @@
       } } }, [_c("td", [_vm._v(_vm._s(_vm.label(segment)))])]);
     }), 0)]);
   };
-  var _sfc_staticRenderFns$a = [];
-  _sfc_render$a._withStripped = true;
-  var __component__$a = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$a,
-    _sfc_render$a,
-    _sfc_staticRenderFns$a,
+  var _sfc_staticRenderFns$8 = [];
+  _sfc_render$8._withStripped = true;
+  var __component__$8 = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$8,
+    _sfc_render$8,
+    _sfc_staticRenderFns$8,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$a.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Timeline.vue";
-  const Timeline = __component__$a.exports;
+  __component__$8.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Timeline.vue";
+  const Timeline = __component__$8.exports;
   const Stats_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$9 = {
+  const _sfc_main$7 = {
     components: {
       Pie,
       Timeline
@@ -582,55 +582,75 @@
       }
     }
   };
-  var _sfc_render$9 = function render() {
+  var _sfc_render$7 = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("section", { staticClass: "k-retour-stats" }, [_c("pie", { attrs: { "data": _vm.pie } }), _c("timeline", { attrs: { "data": _vm.areas, "timespan": _vm.timespan } })], 1);
   };
-  var _sfc_staticRenderFns$9 = [];
-  _sfc_render$9._withStripped = true;
-  var __component__$9 = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$9,
-    _sfc_render$9,
-    _sfc_staticRenderFns$9,
+  var _sfc_staticRenderFns$7 = [];
+  _sfc_render$7._withStripped = true;
+  var __component__$7 = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$7,
+    _sfc_render$7,
+    _sfc_staticRenderFns$7,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$9.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Stats.vue";
-  const Stats = __component__$9.exports;
+  __component__$7.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Stats/Stats.vue";
+  const Stats = __component__$7.exports;
   const Tabs_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$8 = {
+  const _sfc_main$6 = {
     props: {
       tab: String,
       tabs: Array
     }
   };
-  var _sfc_render$8 = function render() {
+  var _sfc_render$6 = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("div", { staticClass: "k-retour-tabs", attrs: { "data-end": _vm.tabs.length < 2 } }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _vm._t("buttons")], 2);
   };
-  var _sfc_staticRenderFns$8 = [];
-  _sfc_render$8._withStripped = true;
-  var __component__$8 = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$8,
-    _sfc_render$8,
-    _sfc_staticRenderFns$8,
+  var _sfc_staticRenderFns$6 = [];
+  _sfc_render$6._withStripped = true;
+  var __component__$6 = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$6,
+    _sfc_render$6,
+    _sfc_staticRenderFns$6,
     false,
     null,
     null,
     null,
     null
   );
-  __component__$8.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Tabs.vue";
-  const Tabs = __component__$8.exports;
-  const _sfc_main$7 = {
+  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Tabs.vue";
+  const Tabs = __component__$6.exports;
+  const _sfc_main$5 = {
     props: {
-      dates: Object,
       timespan: Object
     },
     computed: {
+      dates() {
+        return {
+          from: this.$library.dayjs(this.timespan.from),
+          to: this.$library.dayjs(this.timespan.to)
+        };
+      },
+      first() {
+        return this.$library.dayjs(this.timespan.first);
+      },
+      last() {
+        return this.$library.dayjs(this.timespan.last);
+      },
+      hasPrev() {
+        return this.dates.from.isAfter(this.first);
+      },
+      hasNext() {
+        return this.dates.to.isBefore(this.last) || this.dates.to.isBefore(this.$library.dayjs());
+      },
+      isAll() {
+        return this.dates.from.isSame(this.first, "day") && this.dates.to.isSame(this.last, "day");
+      },
       label() {
         const from = this.dates.from;
         const to = this.dates.to;
@@ -666,67 +686,35 @@
       }
     },
     methods: {
-      month(date) {
-        date = date.format("MMMM");
-        date = this.$helper.string.lcfirst(date);
-        return this.$t("months." + date);
-      }
-    }
-  };
-  var _sfc_render$7 = function render() {
-    var _vm = this, _c = _vm._self._c;
-    return _c("k-button", { staticClass: "k-retour-dates", attrs: { "text": _vm.label, "responsive": true, "icon": "calendar" }, on: { "click": () => _vm.$dialog("retour/timespan") } });
-  };
-  var _sfc_staticRenderFns$7 = [];
-  _sfc_render$7._withStripped = true;
-  var __component__$7 = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$7,
-    _sfc_render$7,
-    _sfc_staticRenderFns$7,
-    false,
-    null,
-    null,
-    null,
-    null
-  );
-  __component__$7.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/Dates.vue";
-  const Dates = __component__$7.exports;
-  const PrevNext_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$6 = {
-    props: {
-      dates: Object,
-      timespan: Object
-    },
-    computed: {
-      first() {
-        return this.$library.dayjs(this.timespan.first);
+      isDisabled(unit) {
+        return unit === "all" && (!this.timespan.first || !this.timespan.last);
       },
-      last() {
-        return this.$library.dayjs(this.timespan.last);
-      },
-      hasPrev() {
-        return this.dates.from.isAfter(this.first);
-      },
-      hasNext() {
-        return this.dates.to.isBefore(this.last) || this.dates.to.isBefore(this.$library.dayjs());
-      },
-      isAll() {
-        return this.dates.from.isSame(this.first, "day") && this.dates.to.isSame(this.last, "day");
-      }
-    },
-    methods: {
-      isCurrent(unit) {
+      isUnit(unit) {
         if (unit === "all") {
           return this.isAll;
         }
         return unit === this.timespan.unit;
       },
-      isDisabled(unit) {
-        return unit === "all" && (!this.timespan.first || !this.timespan.last);
+      month(date) {
+        date = date.format("MMMM");
+        date = this.$helper.string.lcfirst(date);
+        return this.$t("months." + date);
+      },
+      navigate(method) {
+        let unit = this.timespan.unit;
+        let factor = 1;
+        if (unit === "week") {
+          factor = 7;
+          unit = "day";
+        }
+        this.update({
+          from: this.dates.from[method](factor, unit).startOf(unit),
+          to: this.dates.to[method](factor, unit).endOf(unit)
+        });
       },
       set(unit) {
         if (unit === "all") {
-          return this.$emit("navigate", {
+          return this.update({
             from: this.first,
             to: this.last
           });
@@ -738,74 +726,16 @@
             to: this.$library.dayjs()
           };
         }
-        this.$emit("navigate", {
+        this.update({
           from: timespan.from.startOf(unit),
           to: timespan.from.endOf(unit)
         });
       },
-      onNavigate(method) {
-        let unit = this.timespan.unit;
-        let factor = 1;
-        if (unit === "week") {
-          factor = 7;
-          unit = "day";
-        }
-        this.$emit("navigate", {
-          from: this.dates.from[method](factor, unit).startOf(unit),
-          to: this.dates.to[method](factor, unit).endOf(unit)
-        });
-      }
-    }
-  };
-  var _sfc_render$6 = function render() {
-    var _vm = this, _c = _vm._self._c;
-    return _c("k-button-group", { staticClass: "k-retour-prevnext", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
-      return _vm.onNavigate("subtract");
-    } } }), _vm._l(["all", "year", "month", "day"], function(unit) {
-      return _c("k-button", { key: unit, attrs: { "current": _vm.isCurrent(unit), "disabled": _vm.isDisabled(unit), "size": "xs", "variant": "filled" }, on: { "click": function($event) {
-        return _vm.set(unit);
-      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]);
-    }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
-      return _vm.onNavigate("add");
-    } } })], 2);
-  };
-  var _sfc_staticRenderFns$6 = [];
-  _sfc_render$6._withStripped = true;
-  var __component__$6 = /* @__PURE__ */ normalizeComponent(
-    _sfc_main$6,
-    _sfc_render$6,
-    _sfc_staticRenderFns$6,
-    false,
-    null,
-    null,
-    null,
-    null
-  );
-  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/plugins/site/plugins/retour/src/panel/components/Navigation/PrevNext.vue";
-  const PrevNext = __component__$6.exports;
-  const Timespan_vue_vue_type_style_index_0_lang = "";
-  const _sfc_main$5 = {
-    components: {
-      Dates,
-      PrevNext
-    },
-    props: {
-      timespan: Object
-    },
-    computed: {
-      dates() {
-        return {
-          from: this.$library.dayjs(this.timespan.from),
-          to: this.$library.dayjs(this.timespan.to)
-        };
-      }
-    },
-    methods: {
-      navigate(timespan) {
+      update({ from, to }) {
         this.$reload({
           query: {
-            from: timespan.from.format("YYYY-MM-DD"),
-            to: timespan.to.format("YYYY-MM-DD")
+            from: from.format("YYYY-MM-DD"),
+            to: to.format("YYYY-MM-DD")
           }
         });
       }
@@ -813,7 +743,17 @@
   };
   var _sfc_render$5 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-bar", { staticClass: "k-retour-timespan" }, [_c("dates", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } }), _c("prev-next", { attrs: { "dates": _vm.dates, "timespan": _vm.timespan }, on: { "navigate": _vm.navigate } })], 1);
+    return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-dropdown", [_c("k-button", { attrs: { "text": _vm.label, "icon": "calendar", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+      return _vm.$refs.units.toggle();
+    } } }), _c("k-dropdown-content", { ref: "units", attrs: { "x-align": "end" } }, [_vm._l(["all", "year", "month", "day"], function(unit) {
+      return !_vm.isDisabled(unit) ? _c("k-dropdown-item", { key: unit, attrs: { "current": _vm.isUnit(unit), "icon": _vm.isUnit(unit) ? "circle-nested" : "circle", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+        return _vm.set(unit);
+      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]) : _vm._e();
+    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2)], 1), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
+      return _vm.navigate("subtract");
+    } } }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+      return _vm.navigate("add");
+    } } })], 1);
   };
   var _sfc_staticRenderFns$5 = [];
   _sfc_render$5._withStripped = true;
