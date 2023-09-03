@@ -28,9 +28,9 @@ export default {
   margin-bottom: 0;
 }
 .k-retour-tabs .k-tab-button[title="Routes"] .k-tabs-badge {
-  background: var(--color-blue-300);
+  --theme-color-back: var(--color-blue-300);
 }
 .k-retour-tabs .k-tab-button[title="Failures"] .k-tabs-badge {
-  background: var(--color-red-300);
+  --theme-color-back: var(--color-red-300);
 }
 </style>
