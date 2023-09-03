@@ -3,6 +3,11 @@ import CollectionView from "./CollectionView.vue";
 
 export default {
   extends: CollectionView,
+  data() {
+    return {
+      sortBy: "from",
+    };
+  },
   computed: {
     buttons() {
       return [
