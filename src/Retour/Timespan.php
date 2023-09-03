@@ -4,6 +4,7 @@ namespace Kirby\Retour;
 
 use Kirby\Cms\App;
 use Kirby\Toolkit\Date;
+use Kirby\Toolkit\I18n;
 
 /**
  * @package   Retour for Kirby
@@ -14,23 +15,126 @@ use Kirby\Toolkit\Date;
  */
 class Timespan
 {
-
-    /**
-     * Returns the timespan info based on active session
-     */
-    public static function get(): array
+    protected static function checks(array $data): array
     {
-        $retour  = Retour::instance();
-        $session = App::instance()->session();
-        $data    = static::query();
+        $today = Date::now();
+        $from  = Date::optional($data['from']);
+        $to    = Date::optional($data['to']);
+        $first = Date::optional($data['first']);
+        $last  = Date::optional($data['last']);
+
+        return [
+            // either has more data in the future
+            // or today is in the future
+            'hasAll'    => $first && $last,
+            'hasNext'   => $to->isBefore($last) || $to->isBefore($today),
+            'hasPrev'   => $from->isAfter($first),
+            'isAll'     => $from->year() === $first->year() &&
+               $from->month() === $first->month() &&
+               $from->day() === $first->day() &&
+               $to->year() === $last->year() &&
+               $to->month() === $last->month() &&
+               $to->day() === $last->day(),
+            'isCurrent' => (
+                $from->isBefore($today) ||
+                (
+                    $from->year() === $today->year() &&
+                    $from->month() === $today->month() &&
+                    $from->day() === $today->day()
+                    )
+            ) && (
+                $to->isAfter($today) ||
+                (
+                    $to->year() === $today->year() &&
+                    $to->month() === $today->month() &&
+                    $to->day() === $today->day()
+                )
+            )
+        ];
+    }
+
+    public static function limits(): array
+    {
+        $retour = Retour::instance();
+        return [
+            $retour->log()->first()['date'] ?? null,
+            $retour->log()->last()['date'] ?? null
+        ];
+    }
+
+    protected static function label(array $data): string
+    {
+        $unit = $data['unit'];
+        $from = Date::optional($data['from']);
+        $to   = Date::optional($data['to']);
+
+        if ($unit === 'day') {
+            return implode(' ', [
+                $from->format('j'),
+                static::month($from),
+                $from->format('Y')
+            ]);
+        }
+
+        if ($unit === 'month') {
+            return implode(' ', [static::month($from), $from->format('Y')]);
+        }
+
+        if ($unit === 'year') {
+            return $from->format('Y');
+        }
+
+        // within same month
+        if (
+            $from->year() === $to->year() &&
+            $from->month() === $to->month()
+        ) {
+            return $from->format('j') . ' - ' . $to->format('j') . ' ' . static::month($from) . ' ' . $from->format('Y');
+        }
+
+        // within same year
+        if ($from->year() === $to->year()) {
+            return $from->format('j') . ' ' . static::month($from) . ' - ' . $to->format('j') . ' ' . static::month($to) . ' ' . $from->format('Y');
+        }
+
+         return $from->format('j') . ' ' . static::month($from) . ' ' . $from->format('Y') . ' - ' . $to->format('j') . ' ' . static::month($to) . ' ' . $to->format('Y');
+    }
+
+    protected static function month(Date $date): string|null
+    {
+        $month = $date->format("F");
+        $month = lcfirst($month);
+        return I18n::translate('months.' . $month);
+    }
+
+    public static function props(): array
+    {
+        $data = static::selection();
+        [$data['first'], $data['last']] = static::limits();
+
+        $data['unit']    = static::unit($data);
+        $data['label']   = static::label($data);
+        $data += static::checks($data);
+
+        return $data;
+    }
+
+    public static function query(): array
+    {
+        return App::instance()->request()->get(['from', 'to']);
+    }
+
+    public static function selection(): array
+    {
+        $data = static::query();
 
         if ($data['from'] !== null && $data['to']  !== null) {
             // get timespan from query parameters
-            $session->set('retour', $data);
+           static::set($data);
 
         } else {
             // otherwise try to get from session
-            $data = $session->get('retour');
+            $data = App::instance()->session()->get('retour');
         }
 
         // if no data exists, use current month
@@ -41,19 +145,12 @@ class Timespan
             ];
         }
 
-        // add additional data points
-        $first = $retour->log()->first();
-        $last  = $retour->log()->last();
-        $data['first'] = $first['date'] ?? null;
-        $data['last']  = $last['date'] ?? null;
-        $data['unit']  = static::unit($data);
-
         return $data;
     }
 
-    public static function query(): array
+    public static function set(array $data): void
     {
-        return App::instance()->request()->get(['from', 'to']);
+        App::instance()->session()->set('retour', $data);
     }
 
     /**

@@ -33,10 +33,11 @@ class TimespanDialog
 
     public function load(): array
     {
-        $retour = Retour::instance();
-        $data   = Timespan::get($retour);
+        $retour    = Retour::instance();
+        $selection = Timespan::selection($retour);
+        [$limit]   = Timespan::limits();
 
-        $min  = $this->date($data['first']);
+        $min  = $this->date($limit);
         $day  = DateInterval::createFromDateString('1 day');
         $max  = $this->date(Date::now()->add($day));
 
@@ -62,8 +63,8 @@ class TimespanDialog
                     ]
                 ],
                 'value' => [
-                    'from' => $this->date($data['from']),
-                    'to'   => $this->date($data['to'])
+                    'from' => $this->date($selection['from']),
+                    'to'   => $this->date($selection['to'])
                 ],
                 'submitButton' => [
                     'text' => I18n::translate('change')

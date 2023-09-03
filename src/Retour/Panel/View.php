@@ -22,7 +22,7 @@ class View
     public static function props(string $tab): array
     {
         $retour   = Retour::instance();
-        $timespan = Timespan::get($retour);
+        $timespan = Timespan::props($retour);
         ['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
         // get all data for redirects
