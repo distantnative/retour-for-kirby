@@ -724,7 +724,8 @@
           });
         }
         let timespan = Object.assign({}, this.dates);
-        if (unit === this.timespan.unit) {
+        if (unit === this.timespan.unit || unit === "today") {
+          unit = this.timespan.unit;
           timespan = {
             from: this.$library.dayjs(),
             to: this.$library.dayjs()
@@ -753,7 +754,7 @@
       return !_vm.isDisabled(unit) ? _c("k-dropdown-item", { key: unit, attrs: { "current": _vm.isUnit(unit), "icon": _vm.isUnit(unit) ? _vm.isCurrent ? "retour-circle-focus" : "circle-nested" : "circle", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
         return _vm.set(unit);
       } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]) : _vm._e();
-    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2)], 1), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
+    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "merge", "variant": "filled" }, on: { "click": () => _vm.set("today") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.today.label")) + " ")]), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2)], 1), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
       return _vm.navigate("subtract");
     } } }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
       return _vm.navigate("add");
