@@ -1,7 +1,7 @@
 <?php
 
-use distantnative\Retour\Panel as Retour;
 use Kirby\Panel\Panel;
+use Kirby\Retour\Panel as RetourPanel;
 
 /**
  * Sets up Panel area
@@ -27,11 +27,11 @@ return [
                 ],
                 [
                     'pattern' => 'retour/(:any)',
-                    'action'  => fn (string $tab) => Retour::view($tab)
+                    'action'  => fn (string $tab) => RetourPanel::view($tab)
                 ]
             ],
-            'dialogs' => require 'dialogs.php',
-            'drawers' => require 'drawers.php'
+            'dialogs' => require_once 'dialogs.php',
+            'drawers' => require_once 'drawers.php'
         ];
     }
 ];

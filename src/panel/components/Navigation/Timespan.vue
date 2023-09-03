@@ -2,6 +2,7 @@
   <k-button-group layout="collapsed" class="k-retour-timespan">
     <k-dropdown>
       <k-button
+        :dropdown="true"
         :text="label"
         icon="calendar"
         size="xs"
@@ -15,7 +16,13 @@
           v-if="!isDisabled(unit)"
           :key="unit"
           :current="isUnit(unit)"
-          :icon="isUnit(unit) ? 'circle-nested' : 'circle'"
+          :icon="
+            isUnit(unit)
+              ? isCurrent
+                ? 'retour-circle-focus'
+                : 'circle-nested'
+              : 'circle'
+          "
           size="xs"
           variant="filled"
           @click="set(unit)"
@@ -84,6 +91,15 @@ export default {
       return (
         this.dates.from.isSame(this.first, "day") &&
         this.dates.to.isSame(this.last, "day")
+      );
+    },
+    isCurrent() {
+      const today = this.$library.dayjs();
+      return (
+        (this.dates.from.isBefore(today, "day") ||
+          this.dates.from.isSame(today, "day")) &&
+        (this.dates.to.isAfter(today, "day") ||
+          this.dates.to.isSame(today, "day"))
       );
     },
     label() {

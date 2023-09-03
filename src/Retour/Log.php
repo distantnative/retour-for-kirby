@@ -1,6 +1,6 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use Kirby\Database\Database;
 use Kirby\Database\Query;
@@ -8,7 +8,6 @@ use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 
 /**
- * Log
  * Reads and writes to the database log
  * for all 404 requests or successful redirects
  *
@@ -23,11 +22,11 @@ class Log
     protected Database $database;
 
     public function __construct(
-        protected Plugin $plugin
+        protected Retour $retour
     ) {
         // get path to database file
-        $default = kirby()->root('logs') . '/retour/log.sqlite';
-        $file    = $this->plugin()->option('database', $default);
+        $default = $retour->kirby()->root('logs') . '/retour/log.sqlite';
+        $file    = $retour->option('database', $default);
 
         // support callbacks for database file option
         if (is_callable($file) === true) {
@@ -132,20 +131,12 @@ class Log
     }
 
     /**
-     * Returns the Plugin instance
-     */
-    public function plugin(): Plugin
-    {
-        return $this->plugin;
-    }
-
-    /**
      * Deletes outdated logs based on config option
      */
     public function purge(): bool
     {
         // Get limit (in months) from option
-        $limit = $this->plugin()->option('deleteAfter', false);
+        $limit = $this->retour()->option('deleteAfter', false);
 
         if ($limit !== false) {
             // Get cutoff date by subtracting limit from today
@@ -212,6 +203,14 @@ class Log
             ['wasResolved' => 1],
             ['path' => $path]
         );
+    }
+
+    /**
+     * Returns the Plugin instance
+     */
+    public function retour(): Retour
+    {
+        return $this->retour;
     }
 
     /**

@@ -1,11 +1,10 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use Kirby\Cms\App;
 
 /**
- * Plugin
  * Main plugin class responsible for general tasks
  *
  * @package   Retour for Kirby
@@ -14,17 +13,13 @@ use Kirby\Cms\App;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-class Plugin
+class Retour
 {
-    /**
-     * Singleton plugin instance
-     */
     protected static $instance;
 
-    /**
-     * Kirby App instance
-     */
     protected App $kirby;
+    protected Config $config;
+    protected Redirects $redirects;
 
     /**
      * Instance for accessing the log database
@@ -32,40 +27,21 @@ class Plugin
      */
     protected Log|LogDisabled|null $log = null;
 
-    /**
-     * Instnace for accessing all configures redirects
-     */
-    protected Redirects $redirects;
-
-
-    /**
-     * Class constructor
-     */
     public function __construct(App|null $kirby = null)
     {
-        $this->kirby = $kirby ?? App::instance();
-
-        // load config
-        $config = $this->config();
+        $this->kirby  = $kirby ?? App::instance();
+        $this->config = new Config($this);
 
         // initialize redirects
         $this->redirects = Redirects::factory(
             $this,
-            $config['redirects'] ?? []
+            $this->config->data('redirects') ?? []
         );
     }
 
-    /**
-     * Initalizes the Config silo
-     */
-    public function config(): array
+    public function config(): Config
     {
-        // get path to config file
-        $default = $this->kirby()->root('config') . '/retour.yml';
-        $path    = $this->option('config', $default);
-
-        // load config into silo
-        return Config::load($path);
+        return $this->config;
     }
 
     /**
@@ -91,9 +67,6 @@ class Plugin
         return self::$instance = new self($kirby);
     }
 
-    /**
-     * Returns the Kirby App instance
-     */
     public function kirby(): App
     {
         return $this->kirby;

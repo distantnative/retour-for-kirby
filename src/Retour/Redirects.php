@@ -1,6 +1,6 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use Closure;
 use Kirby\Cms\Collection;
@@ -19,12 +19,10 @@ use Kirby\Exception\DuplicateException;
 class Redirects extends Collection
 {
     /**
-     * Class constructor
-     *
      * @param array $redirects Array of redirects
      */
     public function __construct(
-        protected Plugin $plugin,
+        protected Retour $retour,
         array $redirects
     )
     {
@@ -50,9 +48,9 @@ class Redirects extends Collection
      * Takes a config array and turns it into
      * a collection of redirect objects
      */
-    public static function factory(Plugin $plugin, array $config): self
+    public static function factory(Retour $retour, array $config): self
     {
-        $redirects = new self($plugin, []);
+        $redirects = new self($retour, []);
 
         foreach ($config as $data) {
             $redirect = new Redirect($data);
@@ -62,12 +60,9 @@ class Redirects extends Collection
         return $redirects;
     }
 
-    /**
-     * Returns the Plugin instance
-     */
-    public function plugin(): Plugin
+    public function retour(): Retour
     {
-        return $this->plugin;
+        return $this->retour;
     }
 
     /**
@@ -75,7 +70,8 @@ class Redirects extends Collection
      */
     public function save(): void
     {
-        Config::set('redirects', $this->toArray());
+        $config = $this->retour()->config();
+        $config->write('redirects', $this->toArray());
     }
 
     /**
@@ -94,7 +90,7 @@ class Redirects extends Collection
      */
     public function toData(string $from, string $to): array
     {
-        $retour = $this->plugin();
+        $retour = $this->retour();
 
         // If logging is disabled, return without data
         if ($retour->hasLog() === false) {

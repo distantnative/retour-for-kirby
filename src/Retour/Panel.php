@@ -1,12 +1,11 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use DateTime;
 use Kirby\Cms\App;
 
 /**
- * Panel
  * Handles (Fiber) Panel requests
  *
  * @package   Retour for Kirby
@@ -22,7 +21,7 @@ class Panel
      */
     public static function props(string $tab): array
     {
-        $retour   = Plugin::instance();
+        $retour   = Retour::instance();
         $timespan = static::timespan($retour);
         ['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
@@ -46,7 +45,7 @@ class Panel
         ];
 
         // if log feature is supported...
-        if ($retour->hasLog()) {
+        if ($retour->hasLog() === true) {
             // purge log entries that should be auomatically deleted
             $retour->log()->purge();
 
@@ -99,7 +98,7 @@ class Panel
      * Returns the timespan info
      * based on active session
      */
-    public static function timespan(Plugin $retour): array
+    public static function timespan(Retour $retour): array
     {
         $kirby   = App::instance();
         $session = $kirby->session();

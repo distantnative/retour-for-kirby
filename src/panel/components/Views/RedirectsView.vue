@@ -22,7 +22,7 @@ export default {
         },
         to: {
           label: this.$t("retour.redirects.to"),
-          type: "path",
+          type: "link",
           width: "7/20",
         },
         status: {
