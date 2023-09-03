@@ -78,6 +78,6 @@ class Config
             return $this->data = $data;
         }
 
-        throw new LogicException('$config()->write() failed');
+        throw new LogicException('Retour: writing config file failed');
     }
 }

@@ -26,7 +26,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
         ];
     }
 
-    public function submit(): bool
+    public function submit(): array
     {
         $redirects = $this->redirects();
         $data      = $this->data();
@@ -35,7 +35,8 @@ class FailureResolveDrawer extends RedirectCreateDrawer
         $log = $this->retour()->log();
         $log->resolve($this->path);
 
-        Panel::go('retour/redirects');
-        return true;
+        return [
+            'redirect' => 'retour/redirects'
+        ];
     }
 }

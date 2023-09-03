@@ -192,12 +192,11 @@
   padding-right: var(--spacing-2);
 }
 .k-count-preview-field p {
-  color: var(--color-border);
+  color: var(--color-gray-400);
 }
 .k-count-preview-field .k-icon {
-  color: var(--color-gray-400);
+  --icon-color: var(--color-gray-400);
   transform: scale(0.8);
-  cursor: default;
 }
 
 .k-priority-field-preview {
@@ -205,7 +204,7 @@
   justify-content: center;
 }
 .k-priority-field-preview p {
-  color: var(--color-border);
+  color: var(--color-gray-400);
 }
 .k-priority-field-preview .k-icon {
   transform: scale(0.8);
@@ -213,18 +212,11 @@
 
 .k-status-field-preview {
   display: flex;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  gap: var(--spacing-2);
+  padding-left: var(--spacing-2);
+  padding-right: var(--spacing-2);
 }
-.k-status-field-preview .k-icon {
-  margin-right: 0.5rem;
-}
-.k-status-field-preview code {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--color-text);
-  border-radius: 3px;
-  box-decoration-break: clone;
-  font-family: var(--font-mono);
+.k-status-field-preview kbd {
   font-size: var(--text-xs);
-  padding: 0.05em 0.5em;
+  font-family: var(--font-mono);
 }
