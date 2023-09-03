@@ -1,6 +1,6 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use Kirby\Http\Route;
 use Kirby\Http\Router;
@@ -28,7 +28,7 @@ return [
             $final === true &&
             empty($result) === true
         ) {
-            $retour = Plugin::instance();
+            $retour = Retour::instance();
 
             // skip ignored paths
             if (in_array($path, $retour->option('ignore', [])) === true) {

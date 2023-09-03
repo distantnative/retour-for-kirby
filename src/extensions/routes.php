@@ -1,6 +1,6 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 /**
  * Sets up priority redirects as routes
@@ -12,4 +12,4 @@ namespace distantnative\Retour;
  * @license   https://opensource.org/licenses/MIT
  */
 
-return fn (): array => Plugin::instance()->redirects()->toRoutes(true);
+return fn (): array => Retour::instance()->redirects()->toRoutes(true);

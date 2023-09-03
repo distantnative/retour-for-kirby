@@ -1,9 +1,8 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 /**
- * LogDisabled
  * Dummy class for when the log feature is disabled
  * to safely make calls to the log instance that will
  * be ignored.

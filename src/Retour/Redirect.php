@@ -1,9 +1,10 @@
 <?php
 
-namespace distantnative\Retour;
+namespace Kirby\Retour;
 
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Http\Header;
+use Kirby\Http\Response;
 use Kirby\Http\Url;
 use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
@@ -137,6 +138,7 @@ class Redirect extends Obj
         return [
             'pattern' => $this->from(),
             'action'  => function (...$placeholders) use ($redirect) {
+                $retour = Retour::instance();
 
                 /** @var array<int, string> $placeholders */
                 $to = $redirect->to() ?? '/';
@@ -146,7 +148,7 @@ class Redirect extends Obj
                 $code = $redirect->status();
 
                 // Add log entry
-                Plugin::instance()->log()->add([
+                $retour->log()->add([
                     'path'     => Url::path(),
                     'redirect' => $redirect->from()
                 ]);
@@ -154,16 +156,16 @@ class Redirect extends Obj
                 // Redirects
                 // @codeCoverageIgnoreStart
                 if ($code >= 300 && $code < 400) {
-                    go($to, $code);
+                    Response::go($to, $code);
                 }
                 // @codeCoverageIgnoreEnd
 
                 // Set the right response code
-                kirby()->response()->code($code);
+                $kirby = $retour->kirby();
+                $kirby->response()->code($code);
 
                 // Return page for other codes
-                $page = page($to);
-                if ($page !== null) {
+                if ($page = $kirby->site()->find($to)) {
                     return $page;
                 }
 

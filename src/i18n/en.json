@@ -15,6 +15,7 @@
   "retour.redirects.priority": "Has priority?",
   "retour.redirects.priority.abbr": "Prio",
   "retour.redirects.priority.help": "If activated, the redirect will be enforced even if an actual page exists.",
+  "retour.redirects.creator": "Created by",
   "retour.redirects.comment": "Comment",
   "retour.redirects.comment.help": "If you need to add some info for yourself or others…",
   "retour.failures": "Failures",

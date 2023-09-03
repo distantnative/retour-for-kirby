@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use distantnative\Retour\Plugin as Retour;
+use Kirby\Cms\App;
+use Kirby\Retour\Retour;
+use Kirby\Toolkit\Str;
 
 // check if we are indeed on the command line
 if (php_sapi_name() !== 'cli') die();
@@ -9,7 +11,7 @@ if (php_sapi_name() !== 'cli') die();
 // Bootstrap
 require __DIR__ . '/../tests/bootstrap.php';
 
-$kirby = new Kirby([
+$kirby = new App([
     'roots'   => ['index' => '/dev/null'],
     'options' => [
         'distantnative.retour.database' => dirname(__DIR__, 3) . '/logs/retour/log.sqlite'
