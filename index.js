@@ -629,111 +629,40 @@
     props: {
       timespan: Object
     },
-    computed: {
-      dates() {
-        return {
-          from: this.$library.dayjs(this.timespan.from),
-          to: this.$library.dayjs(this.timespan.to)
-        };
-      },
-      first() {
-        return this.$library.dayjs(this.timespan.first);
-      },
-      last() {
-        return this.$library.dayjs(this.timespan.last);
-      },
-      hasPrev() {
-        return this.dates.from.isAfter(this.first);
-      },
-      hasNext() {
-        return this.dates.to.isBefore(this.last) || this.dates.to.isBefore(this.$library.dayjs());
-      },
-      isAll() {
-        return this.dates.from.isSame(this.first, "day") && this.dates.to.isSame(this.last, "day");
-      },
-      isCurrent() {
-        const today = this.$library.dayjs();
-        return (this.dates.from.isBefore(today, "day") || this.dates.from.isSame(today, "day")) && (this.dates.to.isAfter(today, "day") || this.dates.to.isSame(today, "day"));
-      },
-      label() {
-        const from = this.dates.from;
-        const to = this.dates.to;
-        if (this.timespan.unit === "day") {
-          return `${from.format("D")} ${this.month(from)} ${from.format("YYYY")}`;
-        }
-        if (this.timespan.unit === "month") {
-          return `${this.month(from)} ${from.format("YYYY")}`;
-        }
-        if (this.timespan.unit === "year") {
-          return `${from.format("YYYY")}`;
-        }
-        if (from.isSame(to, "month")) {
-          return `
-        ${from.format("D")} - ${to.format("D")}
-        ${this.month(to)} ${to.format("YYYY")}
-        `;
-        }
-        if (from.isSame(to, "year")) {
-          return `
-        ${from.format("D")} ${this.month(from)} -
-        ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}
-        `;
-        }
-        return `
-      ${from.format("D")} ${this.month(from)} ${from.format("YYYY")} -
-      ${to.format("D")} ${this.month(to)} ${to.format("YYYY")}`;
-      },
-      value() {
-        return Object.values(this.dates).map(
-          (date) => date.format("YYYY-MM-DD HH:mm:ss")
-        );
-      }
-    },
     methods: {
-      isDisabled(unit) {
-        return unit === "all" && (!this.timespan.first || !this.timespan.last);
-      },
-      isUnit(unit) {
-        if (unit === "all") {
-          return this.isAll;
+      icon(unit) {
+        if (this.isCurrentUnit(unit) === true) {
+          return this.timespan.isCurrent ? "retour-circle-focus" : "circle-nested";
         }
-        return unit === this.timespan.unit;
+        return "circle";
       },
-      month(date) {
-        date = date.format("MMMM");
-        date = this.$helper.string.lcfirst(date);
-        return this.$t("months." + date);
+      isCurrentUnit(unit) {
+        return unit === this.timespan.unit || unit === "all" && this.timespan.isAll;
       },
       navigate(method) {
-        let unit = this.timespan.unit;
-        let factor = 1;
-        if (unit === "week") {
-          factor = 7;
-          unit = "day";
-        }
+        const unit = this.timespan.unit;
+        const from = this.$library.dayjs(this.timespan.from);
+        const to = this.$library.dayjs(this.timespan.to);
         this.update({
-          from: this.dates.from[method](factor, unit).startOf(unit),
-          to: this.dates.to[method](factor, unit).endOf(unit)
+          from: from[method](1, unit).startOf(unit),
+          to: to[method](1, unit).endOf(unit)
         });
       },
       set(unit) {
         if (unit === "all") {
           return this.update({
-            from: this.first,
-            to: this.last
+            from: this.$library.dayjs(this.timespan.first),
+            to: this.$library.dayjs(this.timespan.last)
           });
         }
-        let timespan = Object.assign({}, this.dates);
+        let date = this.$library.dayjs(this.timespan.from);
         if (unit === this.timespan.unit || unit === "today") {
           unit = this.timespan.unit;
-          timespan = {
-            from: this.$library.dayjs(),
-            to: this.$library.dayjs()
-          };
+          date = this.$library.dayjs();
         }
         this.update({
-          from: timespan.from.startOf(unit),
-          to: timespan.from.endOf(unit)
+          from: date.startOf(unit),
+          to: date.endOf(unit)
         });
       },
       update({ from, to }) {
@@ -748,15 +677,15 @@
   };
   var _sfc_render$5 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-dropdown", [_c("k-button", { attrs: { "dropdown": true, "text": _vm.label, "icon": "calendar", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+    return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-dropdown", [_c("k-button", { attrs: { "dropdown": true, "text": _vm.timespan.label, "icon": "calendar", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
       return _vm.$refs.units.toggle();
     } } }), _c("k-dropdown-content", { ref: "units", attrs: { "x-align": "end" } }, [_vm._l(["all", "year", "month", "day"], function(unit) {
-      return !_vm.isDisabled(unit) ? _c("k-dropdown-item", { key: unit, attrs: { "current": _vm.isUnit(unit), "icon": _vm.isUnit(unit) ? _vm.isCurrent ? "retour-circle-focus" : "circle-nested" : "circle", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+      return unit !== "all" || _vm.timespan.hasAll ? _c("k-dropdown-item", { key: unit, attrs: { "current": _vm.isCurrentUnit(unit), "icon": _vm.icon(unit), "size": "xs", "variant": "filled" }, on: { "click": function($event) {
         return _vm.set(unit);
       } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]) : _vm._e();
-    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "merge", "variant": "filled" }, on: { "click": () => _vm.set("today") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.today.label")) + " ")]), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2)], 1), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.hasPrev || _vm.isAll }, on: { "click": function($event) {
+    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "merge", "variant": "filled" }, on: { "click": () => _vm.set("today") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.today.label")) + " ")]), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2)], 1), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.timespan.hasPrev || _vm.timespan.isAll }, on: { "click": function($event) {
       return _vm.navigate("subtract");
-    } } }), _c("k-button", { attrs: { "disabled": !_vm.hasNext || _vm.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+    } } }), _c("k-button", { attrs: { "disabled": !_vm.timespan.hasNext || _vm.timespan.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
       return _vm.navigate("add");
     } } })], 1);
   };
