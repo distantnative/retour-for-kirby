@@ -40,7 +40,7 @@
             "@test"
         ],
         "fix": "php-cs-fixer fix",
-        "test": "phpunit --stderr --coverage-html=tests/coverage"
+        "test": "XDEBUG_MODE=coverage phpunit --stderr --coverage-html=tests/coverage"
     },
     "config": {
         "allow-plugins": {
