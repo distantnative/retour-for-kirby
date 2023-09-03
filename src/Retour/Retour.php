@@ -3,6 +3,8 @@
 namespace Kirby\Retour;
 
 use Kirby\Cms\App;
+use Kirby\Http\Route;
+use Kirby\Toolkit\A;
 
 /**
  * Main plugin class responsible for general tasks
@@ -50,6 +52,20 @@ class Retour
     public function hasLog(): bool
     {
         return $this->option('logs', true) !== false;
+    }
+
+    public function ignore(string $path): bool
+    {
+        // temporary route for regex matching
+        $route  = new Route($path, 'GET', fn () => null);
+        $ignore = $this->option('ignore', []);
+        $ignore = $route->regex(implode('|', $ignore));
+
+        if (preg_match('!^(' . $ignore . ')$!i', $path) === 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
