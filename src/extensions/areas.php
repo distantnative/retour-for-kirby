@@ -1,7 +1,7 @@
 <?php
 
 use Kirby\Panel\Panel;
-use Kirby\Retour\Panel as RetourPanel;
+use Kirby\Retour\Panel\View;
 
 /**
  * Sets up Panel area
@@ -27,7 +27,7 @@ return [
                 ],
                 [
                     'pattern' => 'retour/(:any)',
-                    'action'  => fn (string $tab) => RetourPanel::view($tab)
+                    'action'  => fn (string $tab) => View::tab($tab)
                 ]
             ],
             'dialogs' => require_once 'dialogs.php',

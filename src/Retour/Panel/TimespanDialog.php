@@ -5,9 +5,9 @@ namespace Kirby\Retour\Panel;
 use DateInterval;
 use DateTime;
 use Kirby\Cms\App;
-use Kirby\Panel\Panel as Kirby;
-use Kirby\Retour\Panel;
+use Kirby\Panel\Panel;
 use Kirby\Retour\Retour;
+use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
 use Kirby\Toolkit\I18n;
 
@@ -34,7 +34,7 @@ class TimespanDialog
     public function load(): array
     {
         $retour = Retour::instance();
-        $data   = Panel::timespan($retour);
+        $data   = Timespan::get($retour);
 
         $min  = $this->date($data['first']);
         $day  = DateInterval::createFromDateString('1 day');
@@ -75,7 +75,7 @@ class TimespanDialog
     public function submit(): array
     {
         $kirby   = App::instance();
-        $data    = $kirby->request()->get(['from', 'to']);
+        $data    = Timespan::query();
         $from    = Date::optional($data['from']);
         $to      = Date::optional($data['to']);
 
@@ -83,14 +83,13 @@ class TimespanDialog
             $to = $from;
         }
 
-        $session = $kirby->session();
-        $session->set('retour', [
+        $kirby->session()->set('retour', [
             'from' => $from->format('Y-m-d'),
             'to'   => $to->format('Y-m-d')
         ]);
 
         return [
-            'redirect' => Kirby::referrer()
+            'redirect' => Panel::referrer()
         ];
     }
 }

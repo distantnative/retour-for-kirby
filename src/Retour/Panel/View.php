@@ -1,12 +1,12 @@
 <?php
 
-namespace Kirby\Retour;
+namespace Kirby\Retour\Panel;
 
-use DateTime;
-use Kirby\Cms\App;
+use Kirby\Retour\Retour;
+use Kirby\Retour\Timespan;
 
 /**
- * Handles (Fiber) Panel requests
+ * Handles (Fiber) Panel view requests
  *
  * @package   Retour for Kirby
  * @author    Nico Hoffmann <nico@getkirby.com>
@@ -14,7 +14,7 @@ use Kirby\Cms\App;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-class Panel
+class View
 {
     /**
      * Returns all props for the Panel view
@@ -22,7 +22,7 @@ class Panel
     public static function props(string $tab): array
     {
         $retour   = Retour::instance();
-        $timespan = static::timespan($retour);
+        $timespan = Timespan::get($retour);
         ['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
         // get all data for redirects
@@ -93,93 +93,10 @@ class Panel
         return $props;
     }
 
-
     /**
-     * Returns the timespan info
-     * based on active session
+     * Returns the Fiber view definition for a tab
      */
-    public static function timespan(Retour $retour): array
-    {
-        $kirby   = App::instance();
-        $session = $kirby->session();
-        $request = $kirby->request();
-        $from    = $request->get('from');
-        $to      = $request->get('to');
-
-        // get timespan from query parameters
-        if ($from !== null && $to !== null) {
-            $data = [
-                'from' => $from,
-                'to'   => $to
-            ];
-
-            $session->set('retour', $data);
-
-        // otherwise try to get from session
-        } else {
-            $data = $session->get('retour');
-        }
-
-        // if no data exists, use current month
-        if ($data === null) {
-            $data = [
-                'from' => date('Y-m-01'),
-                'to'   => date('Y-m-t')
-            ];
-        }
-
-        // add additional data points
-        $first = $retour->log()->first();
-        $last = $retour->log()->last();
-        $data['first'] = $first['date'] ?? null;
-        $data['last']  = $last['date'] ?? null;
-        $data['unit']  = static::unit($data);
-
-        return $data;
-    }
-
-    /**
-     * Returns the appropriate date unit for a
-     * given timespan
-     */
-    public static function unit(array $timespan): string
-    {
-        $from = new DateTime($timespan['from']);
-        $to   = new DateTime($timespan['to']);
-
-        // full units
-        if ($from->format('Y-m-d') === $to->format('Y-m-d')) {
-            return 'day';
-        }
-
-        if (
-            $from->format('Y-m') === $to->format('Y-m') &&
-            $from->format('Y-m-j') === $from->format('Y-m-1') &&
-            $to->format('Y-m-j') === $to->format('Y-m-t')
-        ) {
-            return 'month';
-        }
-
-        if (
-            $from->format('Y') === $to->format('Y') &&
-            $from->format('Y-n-j') === $from->format('Y-1-1') &&
-            $to->format('Y-n-j') === $to->format('Y-12-31')
-        ) {
-            return 'year';
-        }
-
-        // custom ranges
-        if ($from->diff($to)->days > 50) {
-            return 'months';
-        }
-
-        return 'days';
-    }
-
-    /**
-     * Returns the Fiber view definition
-     */
-    public static function view(string $tab): array
+    public static function tab(string $tab): array
     {
         return [
             'component'  => 'k-retour-' . $tab .'-view',
