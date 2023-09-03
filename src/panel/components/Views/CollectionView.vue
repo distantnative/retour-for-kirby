@@ -11,7 +11,7 @@
     <k-retour-tabs
       :tab="tab"
       :tabs="tabs"
-      :buttons="[{ icon: 'search', click: toggleSearch }, ...buttons]"
+      :buttons="[{ icon: 'filter', click: toggleSearch }, ...buttons]"
     />
 
     <!-- Search filter  -->
