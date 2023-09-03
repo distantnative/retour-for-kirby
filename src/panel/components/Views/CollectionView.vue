@@ -8,15 +8,11 @@
     <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
 
     <!-- Buttons in task bar -->
-    <k-retour-tabs :tab="tab" :tabs="tabs">
-      <template #buttons>
-        <k-button-group
-          :buttons="[{ icon: 'search', click: toggleSearch }, ...buttons]"
-          size="sm"
-          variant="filled"
-        />
-      </template>
-    </k-retour-tabs>
+    <k-retour-tabs
+      :tab="tab"
+      :tabs="tabs"
+      :buttons="[{ icon: 'search', click: toggleSearch }, ...buttons]"
+    />
 
     <!-- Search filter  -->
     <k-input

@@ -1,13 +1,14 @@
 <template>
   <div class="k-retour-tabs" :data-end="tabs.length < 2">
     <k-tabs :tab="tab" :tabs="tabs" />
-    <slot name="buttons" />
+    <k-button-group :buttons="buttons" size="sm" variant="filled" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    buttons: Array,
     tab: String,
     tabs: Array,
   },
