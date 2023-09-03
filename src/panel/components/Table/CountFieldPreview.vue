@@ -4,7 +4,6 @@
       {{ row.hits }}
       <k-icon :title="title" type="clock" />
     </template>
-    <!-- eslint-disable vue/singleline-html-element-content-newline -->
     <p v-else>–</p>
   </div>
 </template>
@@ -30,11 +29,10 @@ export default {
   padding-inline: var(--spacing-2);
 }
 .k-count-preview-field p {
-  color: var(--color-border);
+  color: var(--color-gray-400);
 }
 .k-count-preview-field .k-icon {
-  color: var(--color-gray-400);
+  --icon-color: var(--color-gray-400);
   transform: scale(0.8);
-  cursor: default;
 }
 </style>

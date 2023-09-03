@@ -13,6 +13,13 @@ use Kirby\Toolkit\I18n;
  */
 class RedirectCreateDrawer extends RedirectDrawer
 {
+    protected function data(): array
+    {
+        return parent::data() + [
+            'creator' => $this->creator()->email(),
+        ];
+    }
+
     public function load(): array
     {
         return [
@@ -26,7 +33,7 @@ class RedirectCreateDrawer extends RedirectDrawer
         ];
     }
 
-    public function submit(): bool
+    public function submit(): bool|array
     {
         $redirects = $this->redirects();
         $data      = $this->data();

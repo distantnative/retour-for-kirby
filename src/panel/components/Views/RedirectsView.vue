@@ -55,6 +55,13 @@ export default {
     },
   },
   methods: {
+    onCell({ row, columnIndex }) {
+      this.$drawer(`retour/redirects/${this.id(row.from)}/edit`, {
+        query: {
+          column: columnIndex,
+        },
+      });
+    },
     options(redirect) {
       return [
         {

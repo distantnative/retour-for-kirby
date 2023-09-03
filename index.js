@@ -94,6 +94,16 @@
         }
         return items;
       },
+      help() {
+        if (this.stats) {
+          return;
+        }
+        return `${this.$t(
+          "retour.system.support"
+        )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
+          "retour.system.support.donate"
+        )}</strong></a>`;
+      },
       paginatedItems() {
         return this.filteredItems.slice(
           this.pagination.limit * (this.pagination.page - 1),
@@ -102,11 +112,17 @@
       }
     },
     methods: {
+      id(path) {
+        return encodeURIComponent(path.replace(/\//g, ""));
+      },
+      onCell({ row, columnIndex }) {
+      },
       options(item) {
         return [];
       },
-      id(path) {
-        return encodeURIComponent(path.replace(/\//g, ""));
+      toggleSearch() {
+        this.searching = !this.searching;
+        this.q = null;
       }
     }
   };
@@ -115,29 +131,19 @@
     return _c("k-inside", { staticClass: "k-retour-view k-retour-collection-view", scopedSlots: _vm._u([_vm.stats ? { key: "topbar", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
     }, proxy: true } : null], null, true) }, [_vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs }, scopedSlots: _vm._u([{ key: "buttons", fn: function() {
-      return [_c("k-button-group", { attrs: { "buttons": [
-        { icon: "search", click: () => _vm.searching = !_vm.searching },
-        ..._vm.buttons
-      ], "size": "sm", "variant": "filled" } })];
+      return [_c("k-button-group", { attrs: { "buttons": [{ icon: "search", click: _vm.toggleSearch }, ..._vm.buttons], "size": "sm", "variant": "filled" } })];
     }, proxy: true }]) }), _vm.searching ? _c("k-input", { staticClass: "k-models-section-search", attrs: { "autofocus": true, "placeholder": _vm.$t("search") + " …", "value": _vm.q, "type": "text" }, on: { "input": function($event) {
       _vm.q = $event;
       _vm.pagination.page = 1;
     }, "keydown": function($event) {
       if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"]))
         return null;
-      _vm.searching = false;
-      _vm.q = null;
-    } } }) : _vm._e(), _c("k-collection", { attrs: { "columns": _vm.columns, "empty": _vm.empty, "items": _vm.paginatedItems, "pagination": { ..._vm.pagination, total: _vm.filteredItems.length }, "layout": "table" }, on: { "paginate": function($event) {
+      return _vm.toggleSearch.apply(null, arguments);
+    } } }) : _vm._e(), _vm.filteredItems.length === 0 ? _c("k-empty", _vm._b({ attrs: { "layout": "table" } }, "k-empty", _vm.empty, false)) : _c("k-table", { attrs: { "columns": _vm.columns, "rows": _vm.paginatedItems }, on: { "cell": _vm.onCell }, scopedSlots: _vm._u([{ key: "options", fn: function({ row }) {
+      return [_c("k-options-dropdown", { attrs: { "options": _vm.options(row) } })];
+    } }]) }), _c("footer", { staticClass: "k-bar k-collection-footer" }, [_c("k-text", { staticClass: "k-help", domProps: { "innerHTML": _vm._s(_vm.help) } }), _c("k-pagination", _vm._b({ attrs: { "details": true, "total": _vm.filteredItems.length }, on: { "paginate": function($event) {
       _vm.pagination.page = $event.page;
-    } }, scopedSlots: _vm._u([{ key: "options", fn: function({ item }) {
-      return [_c("k-options-dropdown", { attrs: { "options": _vm.options(item) } })];
-    } }]) }), !_vm.stats ? _c("k-text", { staticClass: "k-help", domProps: { "innerHTML": _vm._s(
-      `${this.$t(
-        "retour.system.support"
-      )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
-        "retour.system.support.donate"
-      )}</strong></a>`
-    ) } }) : _vm._e()], 1);
+    } } }, "k-pagination", _vm.pagination, false))], 1)], 1);
   };
   var _sfc_staticRenderFns$d = [];
   _sfc_render$d._withStripped = true;
@@ -205,6 +211,13 @@
       }
     },
     methods: {
+      onCell({ row, columnIndex }) {
+        this.$drawer(`retour/redirects/${this.id(row.from)}/edit`, {
+          query: {
+            column: columnIndex
+          }
+        });
+      },
       options(redirect) {
         return [
           {
@@ -752,7 +765,7 @@
   };
   var _sfc_render$3 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("p", { staticClass: "k-url-field-preview k-path-field-preview" }, [_c("k-link", { attrs: { "to": _vm.link, "title": `${_vm.column.label}: ${_vm.value}` }, nativeOn: { "click": function($event) {
+    return _c("p", { staticClass: "k-url-field-preview k-path-field-preview" }, [_c("k-link", { attrs: { "to": _vm.link, "title": `${_vm.column.label}: ${_vm.value}`, "target": "_blank" }, nativeOn: { "click": function($event) {
       $event.stopPropagation();
     } } }, [_vm._v(" " + _vm._s(_vm.value) + " ")])], 1);
   };
@@ -822,7 +835,7 @@
   };
   var _sfc_render$1 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("div", { staticClass: "k-status-field-preview", attrs: { "title": `${_vm.column.label}: ${_vm.value ?? "-"}` } }, [_c("k-icon", { style: "color: " + _vm.color, attrs: { "type": "circle-filled" } }), _vm.value ? _c("code", [_vm._v(_vm._s(_vm.value))]) : _c("span", [_vm._v(" –")])], 1);
+    return _c("div", { staticClass: "k-status-field-preview", attrs: { "title": `${_vm.column.label}: ${_vm.value}` } }, [_c("k-icon", { style: "color: " + _vm.color, attrs: { "type": "circle-filled" } }), _c("kbd", [_vm._v(_vm._s(_vm.value))])], 1);
   };
   var _sfc_staticRenderFns$1 = [];
   _sfc_render$1._withStripped = true;

@@ -33,11 +33,10 @@ class RedirectEditDrawer extends RedirectDrawer
         $fields = $this->fields();
 
         // set autofocus if specific column cell was passed
-        if (
-            ($field = $this->kirby()->request()->get('column')) &&
-            isset($fields[$field]) === true
-        ) {
-            $fields[$field]['autofocus'] = true;
+        if ($column = $this->kirby()->request()->get('column')) {
+            foreach ($fields as $name => $field) {
+                $fields[$name]['autofocus'] = $name === $column;
+            }
         }
 
         return [

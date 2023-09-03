@@ -11,10 +11,7 @@
     <k-retour-tabs :tab="tab" :tabs="tabs">
       <template #buttons>
         <k-button-group
-          :buttons="[
-            { icon: 'search', click: () => (searching = !searching) },
-            ...buttons,
-          ]"
+          :buttons="[{ icon: 'search', click: toggleSearch }, ...buttons]"
           size="sm"
           variant="filled"
         />
@@ -33,38 +30,30 @@
         q = $event;
         pagination.page = 1;
       "
-      @keydown.esc="
-        searching = false;
-        q = null;
-      "
+      @keydown.esc="toggleSearch"
     />
 
-    <!-- Collection table -->
-    <k-collection
-      :columns="columns"
-      :empty="empty"
-      :items="paginatedItems"
-      :pagination="{ ...pagination, total: filteredItems.length }"
-      layout="table"
-      @paginate="pagination.page = $event.page"
-    >
-      <template #options="{ item }">
-        <k-options-dropdown :options="options(item)" />
+    <!-- Empty state -->
+    <k-empty v-if="filteredItems.length === 0" v-bind="empty" layout="table" />
+
+    <!-- Table -->
+    <k-table v-else :columns="columns" :rows="paginatedItems" @cell="onCell">
+      <template #options="{ row }">
+        <k-options-dropdown :options="options(row)" />
       </template>
-    </k-collection>
+    </k-table>
 
-    <!-- Donate text -->
-    <k-text
-      v-if="!stats"
-      class="k-help"
-      v-html="
-        `${this.$t(
-          'retour.system.support'
-        )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
-          'retour.system.support.donate'
-        )}</strong></a>`
-      "
-    />
+    <footer class="k-bar k-collection-footer">
+      <!-- Donate text -->
+      <k-text class="k-help" v-html="help" />
+
+      <k-pagination
+        v-bind="pagination"
+        :details="true"
+        :total="filteredItems.length"
+        @paginate="pagination.page = $event.page"
+      />
+    </footer>
   </k-inside>
 </template>
 
@@ -108,6 +97,17 @@ export default {
 
       return items;
     },
+    help() {
+      if (this.stats) {
+        return;
+      }
+
+      return `${this.$t(
+        "retour.system.support"
+      )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
+        "retour.system.support.donate"
+      )}</strong></a>`;
+    },
     paginatedItems() {
       return this.filteredItems.slice(
         this.pagination.limit * (this.pagination.page - 1),
@@ -116,9 +116,6 @@ export default {
     },
   },
   methods: {
-    options(item) {
-      return [];
-    },
     id(path) {
       /**
        * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
@@ -142,6 +139,14 @@ export default {
        * code-base. In this file, and in src/classes/Redirect.php
        */
       return encodeURIComponent(path.replace(/\//g, "\x1D"));
+    },
+    onCell({ row, columnIndex }) {},
+    options(item) {
+      return [];
+    },
+    toggleSearch() {
+      this.searching = !this.searching;
+      this.q = null;
     },
   },
 };

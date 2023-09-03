@@ -1,11 +1,7 @@
 <template>
-  <div
-    :title="`${column.label}: ${value ?? '-'}`"
-    class="k-status-field-preview"
-  >
+  <div :title="`${column.label}: ${value}`" class="k-status-field-preview">
     <k-icon type="circle-filled" :style="'color: ' + color" />
-    <code v-if="value">{{ value }}</code>
-    <span v-else>&nbsp;–</span>
+    <kbd>{{ value }}</kbd>
   </div>
 </template>
 
@@ -25,19 +21,11 @@ export default {
 <style>
 .k-status-field-preview {
   display: flex;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  gap: var(--spacing-2);
+  padding-inline: var(--spacing-2);
 }
-.k-status-field-preview .k-icon {
-  margin-right: 0.5rem;
-}
-.k-status-field-preview code {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--color-text);
-  border-radius: 3px;
-  box-decoration-break: clone;
-  font-family: var(--font-mono);
+.k-status-field-preview kbd {
   font-size: var(--text-xs);
-  padding: 0.05em 0.5em;
+  font-family: var(--font-mono);
 }
 </style>

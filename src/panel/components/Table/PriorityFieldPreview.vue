@@ -1,7 +1,6 @@
 <template>
   <div class="k-priority-field-preview">
     <k-icon v-if="value" type="bolt" :title="column.label" />
-    <!-- eslint-disable vue/singleline-html-element-content-newline -->
     <p v-else>–</p>
   </div>
 </template>
@@ -21,7 +20,7 @@ export default {
   justify-content: center;
 }
 .k-priority-field-preview p {
-  color: var(--color-border);
+  color: var(--color-gray-400);
 }
 .k-priority-field-preview .k-icon {
   transform: scale(0.8);
