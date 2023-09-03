@@ -25,10 +25,10 @@ class RedirectCreateDrawer extends RedirectDrawer
         return [
             'component' => 'k-form-drawer',
             'props' => [
-                'title'  => I18n::translate('add'),
+                'title'  => $this->title(),
                 'icon'   => 'add',
                 'fields' => $this->fields(),
-                'value'  => $this->value()
+                'value'  => $this->value(),
             ]
         ];
     }
@@ -40,5 +40,10 @@ class RedirectCreateDrawer extends RedirectDrawer
         $redirects->create($data);
         $redirects->save();
         return true;
+    }
+
+    protected function title(): string
+    {
+        return I18n::translate('add');
     }
 }
