@@ -1,6 +1,5 @@
 <?php
 
-use Kirby\Retour\Panel\Dialog;
 use Kirby\Retour\Panel\TimespanDialog;
 use Kirby\Retour\Retour;
 
