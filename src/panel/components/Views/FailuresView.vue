@@ -18,17 +18,22 @@ export default {
         path: {
           label: this.$t("retour.failures.path"),
           type: "path",
-          width: "1/2",
+          width: "1/3",
         },
         referrer: {
           label: this.$t("retour.failures.referrer"),
           type: "path",
-          width: "1/2",
+          width: "1/3",
+        },
+        last: {
+          label: this.$t("retour.last"),
+          type: "date",
+          width: "2/8",
         },
         hits: {
           label: this.$t("retour.hits"),
           type: "count",
-          width: "1/12",
+          width: "1/16",
           align: "right",
         },
       };

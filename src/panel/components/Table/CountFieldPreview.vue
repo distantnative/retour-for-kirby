@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$t("retour.hits.last") + ": " + this.row.last;
+      return this.$t("retour.hits.last") + ": " + (this.row.last ?? "-");
     },
   },
 };
