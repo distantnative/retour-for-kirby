@@ -32,6 +32,14 @@
         <hr />
         <k-dropdown-item
           size="xs"
+          icon="merge"
+          variant="filled"
+          @click="() => set('today')"
+        >
+          {{ $t("retour.timespan.today.label") }}
+        </k-dropdown-item>
+        <k-dropdown-item
+          size="xs"
           icon="calendar"
           variant="filled"
           @click="() => $dialog('retour/timespan')"
@@ -186,7 +194,8 @@ export default {
 
       // on hitting the current unit again,
       // move to current timespan around today
-      if (unit === this.timespan.unit) {
+      if (unit === this.timespan.unit || unit === "today") {
+        unit = this.timespan.unit;
         timespan = {
           from: this.$library.dayjs(),
           to: this.$library.dayjs(),
