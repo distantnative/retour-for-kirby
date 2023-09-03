@@ -33,7 +33,22 @@
     <k-empty v-if="filteredItems.length === 0" v-bind="empty" layout="table" />
 
     <!-- Table -->
-    <k-table v-else :columns="columns" :rows="paginatedItems" @cell="onCell">
+    <k-table
+      v-else
+      :columns="columns"
+      :rows="paginatedItems"
+      @cell="onCell"
+      @header="onHeader"
+    >
+      <template #header="{ columnIndex, label }">
+        <span>
+          {{ label }}
+          <k-icon
+            v-if="columnIndex === sortBy"
+            :type="sortDirection === 'asc' ? 'angle-up' : 'angle-down'"
+          />
+        </span>
+      </template>
       <template #options="{ row }">
         <k-options-dropdown :options="options(row)" />
       </template>
@@ -66,6 +81,7 @@ export default {
     return {
       searching: false,
       q: null,
+      sortDirection: "asc",
       pagination: {
         page: 1,
         limit: 20,
@@ -105,10 +121,12 @@ export default {
       )}</strong></a>`;
     },
     paginatedItems() {
-      return this.filteredItems.slice(
-        this.pagination.limit * (this.pagination.page - 1),
-        this.pagination.limit * this.pagination.page
-      );
+      return this.filteredItems
+        .sortBy(`${this.sortBy} ${this.sortDirection}`)
+        .slice(
+          this.pagination.limit * (this.pagination.page - 1),
+          this.pagination.limit * this.pagination.page
+        );
     },
   },
   methods: {
@@ -137,6 +155,16 @@ export default {
       return encodeURIComponent(path.replace(/\//g, "\x1D"));
     },
     onCell({ row, columnIndex }) {},
+    onHeader({ column, columnIndex }) {
+      if (this.sortBy === columnIndex) {
+        this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+      } else {
+        this.sortDirection = "asc";
+      }
+
+      this.sortBy = columnIndex;
+      this.pagination.page = 1;
+    },
     options(item) {
       return [];
     },
@@ -149,7 +177,13 @@ export default {
 </script>
 
 <style>
-.k-retour-collection-view .k-collection {
-  margin-bottom: var(--spacing-3);
+.k-retour-collection-view .k-table-column {
+  cursor: pointer;
+}
+.k-retour-collection-view .k-table-column span {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

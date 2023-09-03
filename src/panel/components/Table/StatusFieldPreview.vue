@@ -11,7 +11,7 @@ import color from "../../mixins/color.js";
 export default {
   mixins: [color],
   props: {
-    value: String,
+    value: Number,
     row: Object,
     column: Object,
   },

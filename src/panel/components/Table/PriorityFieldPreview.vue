@@ -8,7 +8,7 @@
 <script>
 export default {
   props: {
-    value: String,
+    value: Boolean,
     column: Object,
   },
 };
