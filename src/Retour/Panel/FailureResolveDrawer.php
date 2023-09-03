@@ -3,6 +3,7 @@
 namespace Kirby\Retour\Panel;
 
 use Kirby\Panel\Panel;
+use Kirby\Toolkit\I18n;
 
 /**
  * @package   Retour for Kirby
@@ -38,5 +39,10 @@ class FailureResolveDrawer extends RedirectCreateDrawer
         return [
             'redirect' => 'retour/redirects'
         ];
+    }
+
+    protected function title(): string
+    {
+        return I18n::translate('retour.failures.resolve');
     }
 }
