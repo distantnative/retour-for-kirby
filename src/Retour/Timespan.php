@@ -106,7 +106,7 @@ class Timespan
         ];
     }
 
-    protected static function label(array $data): string
+    public static function label(array $data): string
     {
         $unit = $data['unit'];
         $from = Date::optional($data['from']);
@@ -200,10 +200,10 @@ class Timespan
     /**
      * Returns the appropriate date unit for a given timespan
      */
-    public static function unit(array $timespan): string
+    public static function unit(array $data): string
     {
-        $from = Date::optional($timespan['from']);
-        $to   = Date::optional($timespan['to']);
+        $from = Date::optional($data['from']);
+        $to   = Date::optional($data['to']);
 
         // full units
         if ($from->format('Y-m-d') === $to->format('Y-m-d')) {

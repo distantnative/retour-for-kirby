@@ -23,5 +23,13 @@ class TestCase extends BaseTestCase
     public function tearDown(): void
     {
         Dir::remove($this->tmp);
+        Retour::reset();
+    }
+
+    protected function app(array $options = []): App
+    {
+        return $this->kirby->clone([
+            'options' => $options
+        ]);
     }
 }

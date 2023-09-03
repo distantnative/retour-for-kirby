@@ -10,12 +10,9 @@
 >
     <coverage>
         <include>
-            <directory>./src/classes</directory>
+            <directory>./src/Retour</directory>
             <directory>./src/extensions</directory>
         </include>
-        <exclude>
-          <file>./src/extensions/api.php</file>
-        </exclude>
     </coverage>
 
     <testsuites>
