@@ -13,18 +13,6 @@ use Kirby\Toolkit\I18n;
  */
 class RedirectCreateDrawer extends RedirectDrawer
 {
-    protected function creator(): array
-    {
-        return $this->kirby()->user()->panel()->pickerData();
-    }
-
-    protected function value(): array
-    {
-        return [
-            'creator' => [$this->creator()]
-        ];
-    }
-
     public function load(): array
     {
         return [

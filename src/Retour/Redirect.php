@@ -99,7 +99,8 @@ class Redirect extends Obj
             'to'       => $this->to(),
             'status'   => $this->status(),
             'priority' => $this->priority(),
-            'comment'  => $this->comment()
+            'comment'  => $this->comment(),
+            'creator'  => $this->creator(),
         ];
     }
 

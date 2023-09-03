@@ -2,6 +2,8 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Cms\User;
+use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
 
 /**
@@ -20,12 +22,15 @@ class RedirectEditDrawer extends RedirectDrawer
         $this->id = urldecode($id);
     }
 
+    protected function creator(): User|null
+    {
+        $creator = $this->redirect()->creator();
+        return $creator ? $this->kirby()->user($creator) : null;
+    }
+
     public function load(): array
     {
-        // get redirect
-        $redirects = $this->redirects();
-        $redirect  = $redirects->get($this->id);
-        $fields    = $this->fields();
+        $fields = $this->fields();
 
         // set autofocus if specific column cell was passed
         if (
@@ -40,10 +45,15 @@ class RedirectEditDrawer extends RedirectDrawer
             'props' => [
                 'fields' => $fields,
                 'icon'   => 'shuffle',
-                'title'  => $redirect->from(),
-                'value'  => $redirect->toArray(),
+                'title'  => $this->redirect()->from(),
+                'value'  => $this->value(),
             ]
         ];
+    }
+
+    protected function redirect(): Redirect
+    {
+        return $this->redirects()->get($this->id);
     }
 
     public function submit(): bool
@@ -53,5 +63,13 @@ class RedirectEditDrawer extends RedirectDrawer
         $redirects->update($this->id, $data);
         $redirects->save();
         return true;
+    }
+
+    protected function value(): array
+    {
+        return array_merge(
+            $this->redirect()->toArray(),
+            parent::value()
+        );
     }
 }
