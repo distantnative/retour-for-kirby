@@ -2,10 +2,12 @@
 
 namespace Kirby\Retour;
 
+use DateInterval;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use Kirby\Toolkit\Date;
 
 /**
  * Reads and writes to the database log
@@ -224,9 +226,9 @@ class Log
     {
         // Define parts depending on unit
         $use = [
-            'func'  => 'date',
-            'group' => '%Y-%m-%d',
-            'step'  => 'day'
+            'group_sql' => '%Y-%m-%d',
+            'group_php' => 'Y-m-d',
+            'step'      => 'P1D'
         ];
 
         switch ($unit) {
@@ -235,57 +237,76 @@ class Log
                 $from .= ' 00:00:00';
                 $to   .= ' 23:59:59';
 
-                $use['func']  = 'datetime';
-                $use['group'] = '%Y-%m-%d %H';
-                $use['step']  = 'hour';
+                $use['group_sql'] = '%Y-%m-%d %H';
+                $use['group_php'] = 'Y-m-d H';
+                $use['step']      = 'PT1H';
                 break;
 
             case 'year':
             case 'months':
-                $use['group'] = '%Y-%m';
-                $use['step']  = 'month';
+                $use['group_sql'] = '%Y-%m';
+                $use['group_php'] = 'Y-m';
+                $use['step']      = 'P1M';
                 break;
         }
+
         // Get data from database
         $data = $this->database->query('
-            with recursive dates as (
-                select :from as date
-                union all
-                select ' . $use['func'] . '(date, "+1 ' . $use['step'] . '") from dates where date < :to
-            )
             SELECT
-                dates.date,
+                strftime(:group, date) AS date,
                 COUNT(redirect) AS redirected,
                 COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
                 COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
             FROM
-                dates
-            LEFT JOIN
                 records
-            ON
-                strftime(:group, dates.date) = strftime(:group, records.date)
             WHERE
-                strftime("%s", dates.date) >= strftime("%s", :from)
+                strftime("%s", date) >= strftime("%s", :from)
             AND
-                strftime("%s", dates.date) <= strftime("%s", :to)
+                strftime("%s", date) <= strftime("%s", :to)
             GROUP BY
-                strftime(:group, dates.date)
+                strftime(:group, date)
             ORDER BY
-                strftime(:group, dates.date)
+                strftime(:group, date)
         ', [
             'from'  => $from,
             'to'    => $to,
-            'group' => $use['group']
+            'group' => $use['group_sql']
         ], [
             'fetch' => 'array'
         ]);
 
-        return $data->toArray(fn (array $entry) => [
+        $data = $data->toArray(fn (array $entry) => [
             'date'       => (string)$entry['date'],
             'failed'     => (int)$entry['failed'],
             'resolved'   => (int)$entry['resolved'],
             'redirected' => (int)$entry['redirected'],
         ]);
+
+        $result = [];
+        $entry  = array_shift($data);
+
+        for (
+            $i = Date::optional($from);
+            $i <= Date::optional($to);
+            $i->add(new DateInterval($use['step']))
+        ) {
+            $step = $i->format($use['group_php']);
+
+            if (($entry['date'] ?? null) === $step) {
+                $result[] = $entry;
+                $entry    = array_shift($data);
+            } else {
+                $result[] = [
+                    'date'       => $step,
+                    'failed'     => 0,
+                    'resolved'   => 0,
+                    'redirected' => 0,
+                ];
+            }
+        }
+
+
+        return $result;
     }
 
     /**
