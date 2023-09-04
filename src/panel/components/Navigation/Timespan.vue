@@ -68,9 +68,7 @@ export default {
   methods: {
     icon(unit) {
       if (this.isCurrentUnit(unit) === true) {
-        return this.timespan.isCurrent
-          ? "retour-circle-focus"
-          : "circle-nested";
+        return this.timespan.isCurrent ? "circle-focus" : "circle-nested";
       }
 
       return "circle";

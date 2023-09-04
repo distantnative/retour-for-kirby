@@ -3,11 +3,11 @@
     <div class="graph" :style="'--gradient: ' + gradient" />
 
     <figcaption>
-      <template v-for="segment in data">
+      <template v-for="(segment, index) in data">
         <k-icon
           :key="segment.label + '-icon'"
           :style="'--color:' + segment.color"
-          type="circle"
+          :type="icons[index]"
         />
         <div :key="segment.label + '-no'">
           {{ new Intl.NumberFormat().format(segment.data) }}
@@ -40,6 +40,9 @@ export default {
       gradient += "transparent 180deg";
       return gradient;
     },
+    icons() {
+      return ["shuffle", "check-double", "cloud-off"];
+    },
     total() {
       return this.data.reduce((i, x) => (i += x.data), 0);
     },
@@ -67,7 +70,8 @@ export default {
 .chart-pie figcaption {
   display: grid;
   grid-template-columns: auto auto auto;
-  gap: 0.5rem;
+  column-gap: var(--spacing-2);
+  row-gap: var(--spacing-3);
 }
 .chart-pie figcaption :nth-child(3n + 2) {
   text-align: right;
