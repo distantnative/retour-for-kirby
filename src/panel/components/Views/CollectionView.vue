@@ -36,6 +36,7 @@
     <k-table
       v-else
       :columns="columns"
+      :index="index"
       :rows="paginatedItems"
       @cell="onCell"
       @header="onHeader"
@@ -120,13 +121,13 @@ export default {
         "retour.system.support.donate"
       )}</strong></a>`;
     },
+    index() {
+      return (this.pagination.page - 1) * this.pagination.limit + 1;
+    },
     paginatedItems() {
       return this.filteredItems
         .sortBy(`${this.sortBy} ${this.sortDirection}`)
-        .slice(
-          this.pagination.limit * (this.pagination.page - 1),
-          this.pagination.limit * this.pagination.page
-        );
+        .slice(this.index - 1, this.pagination.limit * this.pagination.page);
     },
   },
   methods: {
