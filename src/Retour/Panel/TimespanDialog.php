@@ -20,7 +20,7 @@ use Kirby\Toolkit\I18n;
  */
 class TimespanDialog
 {
-    protected function date(
+    public function date(
         DateTime|string|null $date,
         string $format = 'Y-m-d H:i:s'
     ): string|null {
@@ -31,15 +31,20 @@ class TimespanDialog
         return $date?->format($format);
     }
 
+    public function limits(): array
+    {
+        [$limit] = Timespan::limits();
+        $min     = $this->date($limit);
+        $day     = DateInterval::createFromDateString('1 day');
+        $max     = $this->date(Date::now()->add($day));
+        return [$min, $max];
+    }
+
     public function load(): array
     {
-        $retour    = Retour::instance();
-        $selection = Timespan::selection($retour);
-        [$limit]   = Timespan::limits();
-
-        $min  = $this->date($limit);
-        $day  = DateInterval::createFromDateString('1 day');
-        $max  = $this->date(Date::now()->add($day));
+        $retour      = Retour::instance();
+        $selection   = Timespan::selection($retour);
+        [$min, $max] = $this->limits();
 
         return [
             'component' => 'k-form-dialog',

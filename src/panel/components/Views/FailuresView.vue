@@ -46,7 +46,7 @@ export default {
     },
     empty() {
       return {
-        icon: "alert",
+        icon: "cloud-off",
         text: this.$t("retour.failures.empty"),
       };
     },
