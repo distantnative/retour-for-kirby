@@ -39,10 +39,10 @@ $referrers = [
     Str::random(5)
 ];
 
-$start = strtotime('-13 month');
-$end   = strtotime('+2 week');
+$start = strtotime('-25 month');
+$end   = strtotime('today');
 
-for ($i=0; $i < 10000; $i++) {
+for ($i=0; $i < 50000; $i++) {
     $time = rand($start, $end);
     $retour->log()->add([
         'date'     => date('Y-m-d H:i:s', $time),
