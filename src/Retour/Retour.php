@@ -4,7 +4,6 @@ namespace Kirby\Retour;
 
 use Kirby\Cms\App;
 use Kirby\Http\Route;
-use Kirby\Toolkit\A;
 
 /**
  * Main plugin class responsible for general tasks
@@ -17,7 +16,7 @@ use Kirby\Toolkit\A;
  */
 class Retour
 {
-    protected static $instance;
+    public static $instance;
 
     protected App $kirby;
     protected Config $config;
@@ -93,17 +92,12 @@ class Retour
      */
     public function log(): Log|LogDisabled
     {
-        // log instance already exists
-        if ($this->log !== null) {
-            return $this->log;
-        }
-
         // log feature disabled, return dummy class
         if ($this->hasLog() === false) {
-            return $this->log = new LogDisabled();
+            return $this->log ??= new LogDisabled();
         }
 
-        return $this->log = new Log($this);
+        return $this->log ??= new Log($this);
     }
 
     /**
@@ -120,14 +114,6 @@ class Retour
     public function redirects(): Redirects
     {
         return $this->redirects;
-    }
-
-    /**
-     * Resets the singleton plugin instance
-     */
-    public static function reset(): void
-    {
-        self::$instance = null;
     }
 
     /**

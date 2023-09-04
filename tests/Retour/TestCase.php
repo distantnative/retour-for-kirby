@@ -23,7 +23,7 @@ class TestCase extends BaseTestCase
     public function tearDown(): void
     {
         Dir::remove($this->tmp);
-        Retour::reset();
+        Retour::$instance = null;
     }
 
     protected function app(array $options = []): App
