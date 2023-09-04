@@ -228,7 +228,7 @@ class Log
         $use = [
             'group_sql' => '%Y-%m-%d',
             'group_php' => 'Y-m-d',
-            'step'      => 'P1D'
+            'step'      => new DateInterval('P1D')
         ];
 
         switch ($unit) {
@@ -239,14 +239,14 @@ class Log
 
                 $use['group_sql'] = '%Y-%m-%d %H';
                 $use['group_php'] = 'Y-m-d H';
-                $use['step']      = 'PT1H';
+                $use['step']      = new DateInterval('PT1H');
                 break;
 
             case 'year':
             case 'months':
                 $use['group_sql'] = '%Y-%m';
                 $use['group_php'] = 'Y-m';
-                $use['step']      = 'P1M';
+                $use['step']      = new DateInterval('P1M');
                 break;
         }
 
@@ -269,7 +269,7 @@ class Log
                 strftime(:group, date)
         ', [
             'from'  => $from,
-            'to'    => $to,
+            'to'    => Date::optional($to)->add($use['step'])->format('Y-m-d'),
             'group' => $use['group_sql']
         ], [
             'fetch' => 'array'
@@ -288,9 +288,10 @@ class Log
         for (
             $i = Date::optional($from);
             $i <= Date::optional($to);
-            $i->add(new DateInterval($use['step']))
+            $i->add($use['step'])
         ) {
             $step = $i->format($use['group_php']);
+
 
             if (($entry['date'] ?? null) === $step) {
                 $result[] = $entry;
