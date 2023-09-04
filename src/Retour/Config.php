@@ -17,7 +17,7 @@ use Throwable;
  */
 class Config
 {
-    public array $data;
+    protected array $data;
 
     public function __construct(
         protected Retour $retour
@@ -26,7 +26,7 @@ class Config
         $this->read();
     }
 
-    public function data(string|null $key): mixed
+    public function data(string|null $key = null): mixed
     {
         if ($key === null) {
             return $this->data;
@@ -35,7 +35,7 @@ class Config
         return $this->data[$key] ?? null;
     }
 
-    protected function file(): string
+    public function file(): string
     {
         $retour  = $this->retour();
         $default = $retour->kirby()->root('config') . '/retour.yml';
@@ -78,6 +78,8 @@ class Config
             return $this->data = $data;
         }
 
+        // @codeCoverageIgnoreStart
         throw new LogicException('Retour: writing config file failed');
+        // @codeCoverageIgnoreEnd
     }
 }
