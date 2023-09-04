@@ -43,7 +43,7 @@ class Timespan
             return false;
         }
 
-        return $to->isBefore($last) || $to->isBefore($today);
+        return $to< $last || $to < $today;
     }
 
     protected static function hasPrev(
@@ -54,7 +54,7 @@ class Timespan
             return false;
         }
 
-        return $from->isAfter($first);
+        return $from > $first;
     }
 
     protected static function isAll(
@@ -67,12 +67,8 @@ class Timespan
             return false;
         }
 
-        return $from->year() === $first->year() &&
-               $from->month() === $first->month() &&
-               $from->day() === $first->day() &&
-               $to->year() === $last->year() &&
-               $to->month() === $last->month() &&
-               $to->day() === $last->day();
+        return $from->format('Y-m-d') === $first->format('Y-m-d') &&
+               $to->format('Y-m-d') === $last->format('Y-m-d');
     }
 
     protected static function isCurrent(
@@ -81,19 +77,11 @@ class Timespan
         Date $today
     ): bool {
         return (
-            $from->isBefore($today) ||
-            (
-                $from->year() === $today->year() &&
-                $from->month() === $today->month() &&
-                $from->day() === $today->day()
-                )
+            $from < $today ||
+            $from->format('Y-m-d') === $today->format('Y-m-d')
         ) && (
-            $to->isAfter($today) ||
-            (
-                $to->year() === $today->year() &&
-                $to->month() === $today->month() &&
-                $to->day() === $today->day()
-            )
+            $to > $today ||
+            $to->format('Y-m-d') === $today->format('Y-m-d')
         );
     }
 
@@ -129,15 +117,12 @@ class Timespan
         }
 
         // within same month
-        if (
-            $from->year() === $to->year() &&
-            $from->month() === $to->month()
-        ) {
+        if ($from->format('Y-m') === $to->format('Y-m')) {
             return $from->format('j') . ' - ' . $to->format('j') . ' ' . static::month($from) . ' ' . $from->format('Y');
         }
 
         // within same year
-        if ($from->year() === $to->year()) {
+        if ($from->format('Y') === $to->format('Y')) {
             return $from->format('j') . ' ' . static::month($from) . ' - ' . $to->format('j') . ' ' . static::month($to) . ' ' . $from->format('Y');
         }
 
@@ -156,8 +141,8 @@ class Timespan
         $data = static::selection();
         [$data['first'], $data['last']] = static::limits();
 
-        $data['unit']    = static::unit($data);
-        $data['label']   = static::label($data);
+        $data['unit']  = static::unit($data);
+        $data['label'] = static::label($data);
         $data += static::checks($data);
 
         return $data;
