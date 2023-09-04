@@ -11,7 +11,7 @@
       <tr
         v-for="(segment, segmentIndex) in data"
         :key="segmentIndex"
-        @dblclick="onZoom(segment)"
+        @dblclick="zoom(segment)"
       >
         <td
           v-for="(area, areaIndex) in segment.areas"
@@ -23,12 +23,12 @@
         />
       </tr>
     </tbody>
-    <tfoot :data-less="data.length > 30">
+    <tfoot :data-less="data.length > 31">
       <tr
         v-for="segment in data"
         :key="segment.label"
         :data-current="isCurrent(segment)"
-        @dblclick="onZoom(segment)"
+        @dblclick="zoom(segment)"
       >
         <td>{{ label(segment) }}</td>
       </tr>
@@ -134,7 +134,7 @@ export default {
     label(segment) {
       return this.$library.dayjs(segment.label).format(this.format);
     },
-    onZoom(segment) {
+    zoom(segment) {
       const date = this.$library.dayjs(segment.label);
       this.$reload({
         query: {
