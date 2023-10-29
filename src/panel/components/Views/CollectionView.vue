@@ -11,17 +11,19 @@
     <k-retour-tabs
       :tab="tab"
       :tabs="tabs"
-      :buttons="[{ icon: 'filter', click: toggleSearch }, ...buttons]"
+      :buttons="[
+        { icon: 'filter', title: $t('filter'), click: toggleSearch },
+        ...buttons,
+      ]"
     />
 
     <!-- Search filter  -->
-    <k-input
+    <k-search-input
       v-if="searching"
       :autofocus="true"
-      :placeholder="$t('search') + ' …'"
+      :placeholder="$t('filter') + ' …'"
       :value="q"
-      type="text"
-      class="k-models-section-search"
+      class="k-models-section-search k-input"
       @input="
         q = $event;
         pagination.page = 1;

@@ -42,10 +42,17 @@ class RedirectEditDrawer extends RedirectDrawer
         return [
             'component' => 'k-form-drawer',
             'props' => [
-                'fields' => $fields,
-                'icon'   => 'shuffle',
-                'title'  => $this->redirect()->from(),
-                'value'  => $this->value(),
+                'fields'  => $fields,
+                'icon'    => 'shuffle',
+                'title'   => $this->redirect()->from(),
+                'value'   => $this->value(),
+                'options' => [
+                    [
+                        'icon'   => 'trash',
+                        'title'  => I18n::translate('remove'),
+                        'dialog' => 'retour/redirects/' . urlencode($this->id) .'/delete'
+                    ]
+                ]
             ]
         ];
     }
