@@ -57,7 +57,7 @@
 
     <footer class="k-bar k-collection-footer">
       <!-- Donate text -->
-      <k-text class="k-help" v-html="help" />
+      <k-text class="k-help" :html="help" />
 
       <k-pagination
         v-bind="pagination"
@@ -104,7 +104,7 @@ export default {
 
       if (this.q) {
         items = items.filter((item) =>
-          JSON.stringify(item).toLowerCase().includes(this.q.toLowerCase())
+          JSON.stringify(item).toLowerCase().includes(this.q.toLowerCase()),
         );
       }
 
@@ -116,9 +116,9 @@ export default {
       }
 
       return `${this.$t(
-        "retour.system.support"
+        "retour.system.support",
       )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
-        "retour.system.support.donate"
+        "retour.system.support.donate",
       )}</strong></a>`;
     },
     index() {
@@ -155,8 +155,8 @@ export default {
        */
       return encodeURIComponent(path.replace(/\//g, "\x1D"));
     },
-    onCell({ row, columnIndex }) {},
-    onHeader({ column, columnIndex }) {
+    onCell() {},
+    onHeader({ columnIndex }) {
       if (this.sortBy === columnIndex) {
         this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
       } else {
@@ -166,7 +166,7 @@ export default {
       this.sortBy = columnIndex;
       this.pagination.page = 1;
     },
-    options(item) {
+    options() {
       return [];
     },
     toggleSearch() {

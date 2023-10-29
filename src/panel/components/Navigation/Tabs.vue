@@ -26,6 +26,7 @@ export default {
   justify-content: end;
 }
 .k-retour-tabs .k-tabs {
+  flex-grow: 1;
   margin-bottom: 0;
 }
 .k-retour-tabs .k-tab-button:nth-child(1) .k-tabs-badge {

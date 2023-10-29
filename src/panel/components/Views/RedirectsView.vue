@@ -42,7 +42,7 @@ export default {
         },
       };
 
-      if (!!this.stats) {
+      if (this.stats) {
         columns.hits = {
           label: this.$t("retour.hits"),
           width: "1/10",
