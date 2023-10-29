@@ -1,18 +1,17 @@
 <template>
   <k-button-group layout="collapsed" class="k-retour-timespan">
-    <k-dropdown>
-      <k-button
-        :dropdown="true"
-        :text="timespan.label"
-        icon="calendar"
-        size="xs"
-        variant="filled"
-        @click="$refs.units.toggle()"
-      />
+    <k-button
+      :dropdown="true"
+      :text="timespan.label"
+      icon="calendar"
+      size="xs"
+      variant="filled"
+      @click="$refs.units.toggle()"
+    />
 
-      <k-dropdown-content ref="units" x-align="end">
+    <k-dropdown-content ref="units" x-align="end">
+      <template v-for="unit in units">
         <k-dropdown-item
-          v-for="unit in ['all', 'year', 'month', 'day']"
           v-if="unit !== 'all' || timespan.hasAll"
           :key="unit"
           :current="isCurrentUnit(unit)"
@@ -23,25 +22,25 @@
         >
           {{ $t("retour.stats.mode." + unit) }}
         </k-dropdown-item>
-        <hr />
-        <k-dropdown-item
-          size="xs"
-          icon="merge"
-          variant="filled"
-          @click="() => set('today')"
-        >
-          {{ $t("retour.timespan.today.label") }}
-        </k-dropdown-item>
-        <k-dropdown-item
-          size="xs"
-          icon="calendar"
-          variant="filled"
-          @click="() => $dialog('retour/timespan')"
-        >
-          {{ $t("retour.timespan.set.label") }}
-        </k-dropdown-item>
-      </k-dropdown-content>
-    </k-dropdown>
+      </template>
+      <hr />
+      <k-dropdown-item
+        size="xs"
+        icon="merge"
+        variant="filled"
+        @click="() => set('today')"
+      >
+        {{ $t("retour.timespan.today.label") }}
+      </k-dropdown-item>
+      <k-dropdown-item
+        size="xs"
+        icon="calendar"
+        variant="filled"
+        @click="() => $dialog('retour/timespan')"
+      >
+        {{ $t("retour.timespan.set.label") }}
+      </k-dropdown-item>
+    </k-dropdown-content>
 
     <k-button
       icon="angle-left"
@@ -64,6 +63,11 @@
 export default {
   props: {
     timespan: Object,
+  },
+  computed: {
+    units() {
+      return ["all", "year", "month", "day"];
+    },
   },
   methods: {
     icon(unit) {

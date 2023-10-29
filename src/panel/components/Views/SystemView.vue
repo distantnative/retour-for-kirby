@@ -14,7 +14,8 @@
           link: 'https://paypal.me/distantnative',
           theme: 'positive',
           target: '_blank',
-          text: `💛 ${$t('retour.system.support')}`,
+          icon: 'heart',
+          text: $t('retour.system.support'),
         },
       ]"
     />
@@ -24,7 +25,7 @@
     <!-- eslint-disable vue/no-v-html -->
     <k-text
       class="k-help"
-      v-html="
+      :html="
         $t('retour.system.docs', {
           docs: 'https://github.com/distantnative/retour-for-kirby',
         })
@@ -47,11 +48,11 @@ export default {
       return [
         {
           label: this.$t("retour.system.redirects"),
-          value: this.data.redirects,
+          value: String(this.data.redirects),
         },
         {
           label: this.$t("retour.system.failures"),
-          value: this.data.failures,
+          value: String(this.data.failures),
         },
         {
           label: this.$t("retour.system.deleteAfter"),
