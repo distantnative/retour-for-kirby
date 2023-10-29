@@ -137,7 +137,7 @@ class Redirect extends Obj
         $redirect = $this;
 
         return [
-            'pattern' => $this->from(),
+            'pattern' => trim($this->from(), '/'),
             'action'  => function (...$placeholders) use ($redirect) {
                 $retour = Retour::instance();
                 $kirby  = $retour->kirby();
