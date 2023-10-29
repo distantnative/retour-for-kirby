@@ -1,12 +1,12 @@
 <template>
-  <p class="k-url-field-preview k-path-field-preview">
+  <p class="k-text k-url-field-preview k-path-field-preview">
     <k-link
       :to="link"
       :title="`${column.label}: ${value}`"
       target="_blank"
       @click.native.stop
     >
-      {{ value }}
+      <span>{{ value }}</span>
     </k-link>
   </p>
 </template>

@@ -140,13 +140,11 @@ class Redirect extends Obj
             'pattern' => $this->from(),
             'action'  => function (...$placeholders) use ($redirect) {
                 $retour = Retour::instance();
-
-                /** @var array<int, string> $placeholders */
-                $to = $redirect->to() ?? '/';
-                $to = Redirect::toPath($to, $placeholders);
-
-                /** @var int $code */
-                $code = $redirect->status();
+                $kirby  = $retour->kirby();
+                $to     = $redirect->to() ?? '/';
+                $to     = Redirect::toPath($to, $placeholders);
+                $page   = $kirby->page($to);
+                $code   = $redirect->status();
 
                 // Add log entry
                 $retour->log()->add([
@@ -157,16 +155,15 @@ class Redirect extends Obj
                 // Redirects
                 // @codeCoverageIgnoreStart
                 if ($code >= 300 && $code < 400) {
-                    Response::go($to, $code);
+                    Response::go($page?->url() ?? $to, $code);
                 }
                 // @codeCoverageIgnoreEnd
 
                 // Set the right response code
-                $kirby = $retour->kirby();
                 $kirby->response()->code($code);
 
                 // Return page for other codes
-                if ($page = $kirby->site()->find($to)) {
+                if ($page) {
                     return $page;
                 }
 
