@@ -34,6 +34,7 @@ export default {
         last: {
           label: this.$t("retour.last"),
           type: "date",
+          display: "D MMM YYYY, HH:mm:ss",
           width: "2/8",
         },
         hits: {

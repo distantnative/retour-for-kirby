@@ -20,7 +20,7 @@
       ]"
     />
 
-    <k-stats :reports="reports" />
+    <k-stats :reports="reports" size="huge" />
 
     <!-- eslint-disable vue/no-v-html -->
     <k-text
