@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-use Kirby\Cms\App;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\Str;
 
@@ -10,13 +9,6 @@ if (php_sapi_name() !== 'cli') die();
 
 // Bootstrap
 require __DIR__ . '/../tests/bootstrap.php';
-
-$kirby = new App([
-    'roots'   => ['index' => '/dev/null'],
-    'options' => [
-        'distantnative.retour.database' => dirname(__DIR__, 3) . '/logs/retour/log.sqlite'
-    ]
-]);
 
 $retour = Retour::instance();
 $retour->log()->flush();
