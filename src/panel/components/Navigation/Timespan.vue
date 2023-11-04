@@ -9,7 +9,7 @@
       @click="$refs.units.toggle()"
     />
 
-    <k-dropdown-content ref="units" :options="dropdown" x-align="end" />
+    <k-dropdown-content ref="units" :options="dropdown" align-x="end" />
 
     <k-button
       icon="angle-left"
