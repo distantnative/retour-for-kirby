@@ -49,6 +49,7 @@ class TimespanDialog
         return [
             'component' => 'k-form-dialog',
             'props'     => [
+                'size'   => 'small',
                 'fields' => [
                     'from' => [
                         'type'     => 'date',
