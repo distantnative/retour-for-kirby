@@ -1,6 +1,17 @@
 <template>
   <k-retour-view v-bind="$props" class="k-retour-collection-view">
     <template #buttons>
+      <k-button
+       v-if="!stats"
+       link="https://paypal.me/distantnative"
+       theme="positive"
+       icon="heart"
+       size="sm"
+       variant="filled"
+      >
+        {{  $t('retour.system.support') }}
+      </k-button>
+
       <k-search-input
         v-if="searching"
         ref="search"
@@ -57,9 +68,6 @@
     </k-table>
 
     <footer class="k-bar k-collection-footer">
-      <!-- Donate text -->
-      <k-text class="k-help" :html="help" />
-
       <k-pagination
         v-bind="pagination"
         :details="true"
@@ -106,17 +114,6 @@ export default {
       }
 
       return items;
-    },
-    help() {
-      if (this.stats) {
-        return;
-      }
-
-      return `${this.$t(
-        "retour.system.support",
-      )}: 💛 <a href='https://paypal.me/distantnative'><strong> ${this.$t(
-        "retour.system.support.donate",
-      )}</strong></a>`;
     },
     index() {
       return (this.pagination.page - 1) * this.pagination.limit + 1;
@@ -196,7 +193,8 @@ export default {
   justify-content: space-between;
 }
 .k-retour-collection-view .k-models-section-search.k-input {
-  --input-height: var(--height-sm);
+  min-height: auto;
+  height: var(--height-sm);
   margin-bottom: 0;
 }
 </style>
