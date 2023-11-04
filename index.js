@@ -697,6 +697,32 @@
       timespan: Object
     },
     computed: {
+      dropdown() {
+        return [
+          ...this.units.map((unit) => {
+            if (unit === "all" && !this.timespan.hasAll) {
+              return;
+            }
+            return {
+              text: this.$t("retour.stats.mode." + unit),
+              icon: this.icon(unit),
+              current: this.isCurrentUnit(unit),
+              click: () => this.set(unit)
+            };
+          }),
+          "-",
+          {
+            text: this.$t("retour.timespan.today.label"),
+            icon: "merge",
+            click: () => this.set("today")
+          },
+          {
+            text: this.$t("retour.timespan.set.label"),
+            icon: "calendar",
+            click: () => this.$dialog("retour/timespan")
+          }
+        ].filter(Boolean);
+      },
       units() {
         return ["all", "year", "month", "day"];
       }
@@ -749,15 +775,11 @@
   };
   var _sfc_render$5 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "dropdown": true, "text": _vm.timespan.label, "icon": "calendar", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+    return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "dropdown": true, "text": _vm.timespan.label, "icon": "calendar", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
       return _vm.$refs.units.toggle();
-    } } }), _c("k-dropdown-content", { ref: "units", attrs: { "x-align": "end" } }, [_vm._l(_vm.units, function(unit) {
-      return [unit !== "all" || _vm.timespan.hasAll ? _c("k-dropdown-item", { key: unit, attrs: { "current": _vm.isCurrentUnit(unit), "icon": _vm.icon(unit), "size": "xs", "variant": "filled" }, on: { "click": function($event) {
-        return _vm.set(unit);
-      } } }, [_vm._v(" " + _vm._s(_vm.$t("retour.stats.mode." + unit)) + " ")]) : _vm._e()];
-    }), _c("hr"), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "merge", "variant": "filled" }, on: { "click": () => _vm.set("today") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.today.label")) + " ")]), _c("k-dropdown-item", { attrs: { "size": "xs", "icon": "calendar", "variant": "filled" }, on: { "click": () => _vm.$dialog("retour/timespan") } }, [_vm._v(" " + _vm._s(_vm.$t("retour.timespan.set.label")) + " ")])], 2), _c("k-button", { attrs: { "icon": "angle-left", "size": "xs", "variant": "filled", "disabled": !_vm.timespan.hasPrev || _vm.timespan.isAll }, on: { "click": function($event) {
+    } } }), _c("k-dropdown-content", { ref: "units", attrs: { "options": _vm.dropdown, "x-align": "end" } }), _c("k-button", { attrs: { "icon": "angle-left", "size": "sm", "variant": "filled", "disabled": !_vm.timespan.hasPrev || _vm.timespan.isAll }, on: { "click": function($event) {
       return _vm.navigate("subtract");
-    } } }), _c("k-button", { attrs: { "disabled": !_vm.timespan.hasNext || _vm.timespan.isAll, "icon": "angle-right", "size": "xs", "variant": "filled" }, on: { "click": function($event) {
+    } } }), _c("k-button", { attrs: { "disabled": !_vm.timespan.hasNext || _vm.timespan.isAll, "icon": "angle-right", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
       return _vm.navigate("add");
     } } })], 1);
   };
