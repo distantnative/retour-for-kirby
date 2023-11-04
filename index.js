@@ -779,7 +779,7 @@
     var _vm = this, _c = _vm._self._c;
     return _c("k-button-group", { staticClass: "k-retour-timespan", attrs: { "layout": "collapsed" } }, [_c("k-button", { attrs: { "dropdown": true, "text": _vm.timespan.label, "icon": "calendar", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
       return _vm.$refs.units.toggle();
-    } } }), _c("k-dropdown-content", { ref: "units", attrs: { "options": _vm.dropdown, "x-align": "end" } }), _c("k-button", { attrs: { "icon": "angle-left", "size": "sm", "variant": "filled", "disabled": !_vm.timespan.hasPrev || _vm.timespan.isAll }, on: { "click": function($event) {
+    } } }), _c("k-dropdown-content", { ref: "units", attrs: { "options": _vm.dropdown, "align-x": "end" } }), _c("k-button", { attrs: { "icon": "angle-left", "size": "sm", "variant": "filled", "disabled": !_vm.timespan.hasPrev || _vm.timespan.isAll }, on: { "click": function($event) {
       return _vm.navigate("subtract");
     } } }), _c("k-button", { attrs: { "disabled": !_vm.timespan.hasNext || _vm.timespan.isAll, "icon": "angle-right", "size": "sm", "variant": "filled" }, on: { "click": function($event) {
       return _vm.navigate("add");
