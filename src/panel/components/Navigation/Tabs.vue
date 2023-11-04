@@ -1,14 +1,15 @@
 <template>
   <div class="k-retour-tabs" :data-end="tabs.length < 2">
     <k-tabs :tab="tab" :tabs="tabs" />
-    <k-button-group :buttons="buttons" size="sm" variant="filled" />
+    <k-button-group>
+      <slot />
+    </k-button-group>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    buttons: Array,
     tab: String,
     tabs: Array,
   },
@@ -34,5 +35,9 @@ export default {
 }
 .k-retour-tabs .k-tab-button:nth-child(2) .k-tabs-badge {
   --theme-color-back: var(--color-red-300);
+}
+
+.k-retour-tabs > .k-button-group {
+  flex-wrap: nowrap;
 }
 </style>

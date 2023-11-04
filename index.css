@@ -8,6 +8,10 @@
   align-items: center;
   justify-content: space-between;
 }
+.k-retour-collection-view .k-models-section-search.k-input {
+  --input-height: var(--height-sm);
+  margin-bottom: 0;
+}
 
 .k-retour-system-view .k-stats {
   margin-bottom: var(--spacing-3);
@@ -187,6 +191,9 @@
 }
 .k-retour-tabs .k-tab-button:nth-child(2) .k-tabs-badge {
   --theme-color-back: var(--color-red-300);
+}
+.k-retour-tabs > .k-button-group {
+  flex-wrap: nowrap;
 }
 
 .k-count-preview-field {

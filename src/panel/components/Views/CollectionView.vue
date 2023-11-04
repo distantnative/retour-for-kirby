@@ -1,28 +1,34 @@
 <template>
   <k-retour-view v-bind="$props" class="k-retour-collection-view">
-    <!-- Buttons in task bar -->
-    <k-retour-tabs
-      :tab="tab"
-      :tabs="tabs"
-      :buttons="[
-        { icon: 'filter', title: $t('filter'), click: toggleSearch },
-        ...buttons,
-      ]"
-    />
+    <template #buttons>
+      <k-search-input
+        v-if="searching"
+        ref="search"
+        :autofocus="true"
+        :placeholder="$t('filter') + ' …'"
+        :value="q"
+        class="k-models-section-search k-input"
+        @input="
+          q = $event;
+          pagination.page = 1;
+        "
+        @keydown.native.esc="toggleSearch(true)"
+      />
 
-    <!-- Search filter  -->
-    <k-search-input
-      v-if="searching"
-      :autofocus="true"
-      :placeholder="$t('filter') + ' …'"
-      :value="q"
-      class="k-models-section-search k-input"
-      @input="
-        q = $event;
-        pagination.page = 1;
-      "
-      @keydown.esc="toggleSearch"
-    />
+      <k-button icon="filter"
+        :title="$t('filter')"
+        size="sm"
+        variant="filled"
+        @click="toggleSearch"
+      />
+      <k-button
+        v-for="(button, index) in buttons"
+        v-bind="button"
+        :key="index"
+        size="sm"
+        variant="filled"
+      />
+    </template>
 
     <!-- Empty state -->
     <k-empty v-if="filteredItems.length === 0" v-bind="empty" layout="table" />
@@ -160,9 +166,20 @@ export default {
     options() {
       return [];
     },
-    toggleSearch() {
-      this.searching = !this.searching;
+    async toggleSearch(forgiving = false) {
+      if (forgiving && this.q) {
+        this.q = null;
+        return;
+
+      }
+
       this.q = null;
+      this.searching = !this.searching;
+
+      if (this.searching) {
+        await this.$nextTick();
+        this.$refs.search.focus();
+      }
     },
   },
 };
@@ -177,5 +194,9 @@ export default {
   width: 100%;
   align-items: center;
   justify-content: space-between;
+}
+.k-retour-collection-view .k-models-section-search.k-input {
+  --input-height: var(--height-sm);
+  margin-bottom: 0;
 }
 </style>
