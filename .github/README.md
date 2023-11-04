@@ -112,6 +112,9 @@ The following config options are available:
 // site/config/config.php
 
 'distantnative.retour' => [
+  // En-/disable all logging (true/false)
+  'logs' => true,
+
   // Array of paths to ignore as failures (can include placeholder wildcards or regular expressions)
   'ignore' => [],
 
@@ -125,15 +128,11 @@ The following config options are available:
 
   // Absolut path for location of database
   // Default: $kirby->root('logs) + /retour/log.sqlite
-  // Set to `false` to disable any logging
   'database' => ...,
   
   // set your own string as prefix in the Panel dialog
   // (disable completely by setting to `false`)
   'site' => 'my.short.domain'
-
-  // DEPRECATED
-  'logs' => true, // use `database: false` instead
 ]
 ```
 
