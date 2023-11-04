@@ -1,8 +1,12 @@
 <template>
   <k-inside class="k-retour-view k-retour-collection-view">
-    <template v-if="stats" #topbar>
-      <k-retour-timespan :timespan="timespan" />
-    </template>
+    <k-header>
+      {{  $t('view.retour') }}
+
+      <template v-if="stats" #buttons>
+        <k-retour-timespan :timespan="timespan" />
+      </template>
+    </k-header>
 
     <!-- Stats -->
     <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
