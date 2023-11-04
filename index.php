@@ -14,12 +14,10 @@
  */
 
 use Kirby\Cms\App as Kirby;
+use Composer\Semver\Semver;
 
 // validate Kirby version
-if (
-    version_compare(Kirby::version() ?? '0.0.0', '4.0.0-beta.2', '<') === true ||
-    version_compare(Kirby::version() ?? '0.0.0', '5.0.0', '>=') === true
-) {
+if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~4.0') === false) {
     throw new Exception('Retour 5 requires Kirby 4');
 }
 
