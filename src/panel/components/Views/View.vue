@@ -3,19 +3,22 @@
     <k-header>
       {{  $t('view.retour') }}
 
-      <template v-if="stats" #buttons>
-        <k-retour-timespan :timespan="timespan" />
+      <template #buttons>
+        <k-retour-timespan v-if="stats" :timespan="timespan" />
+        <slot v-else name="buttons" />
       </template>
     </k-header>
 
-    <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
+    <template v-if="stats">
+      <k-retour-stats  :data="stats" :timespan="timespan" />
 
-    <k-retour-tabs
-      :tab="tab"
-      :tabs="tabs"
-    >
-      <slot name="buttons" />
-    </k-retour-tabs>
+      <k-retour-tabs
+        :tab="tab"
+        :tabs="tabs"
+      >
+        <slot name="buttons" />
+      </k-retour-tabs>
+    </template>
 
     <slot />
   </k-inside>
@@ -38,7 +41,7 @@ export default {
 </script>
 
 <style>
-.k-retour-view .k-header {
+.k-retour-view .k-header:has(+ .k-retour-stats) {
   margin-bottom: 0;
 }
 </style>

@@ -19,7 +19,7 @@ export default {
       ];
     },
     columns() {
-      let columns = {
+      return {
         from: {
           label: this.$t("retour.redirects.from"),
           type: "path",
@@ -40,17 +40,12 @@ export default {
           type: "priority",
           width: "1/10",
         },
-      };
-
-      if (this.stats) {
-        columns.hits = {
+        hits: {
           label: this.$t("retour.hits"),
           width: "1/10",
           type: "count",
-        };
-      }
-
-      return columns;
+        }
+      };
     },
     empty() {
       return {
