@@ -100,7 +100,7 @@ class View
     {
         return [
             'component'  => 'k-retour-' . $tab .'-view',
-            'title'      => t('retour.' . $tab),
+            'title'      => t('view.retour'),
             'breadcrumb' => [
                 [
                     'label' => t('retour.' . $tab),
