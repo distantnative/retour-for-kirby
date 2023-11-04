@@ -1,8 +1,8 @@
 ![Retour for Kirby](title.png)
 
-[![Version](https://img.shields.io/badge/release-5.0-8dbae7.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
-[![Dependency](https://img.shields.io/badge/kirby-4.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
-[![Donate](https://img.shields.io/badge/support-donate-bdde7a.svg?style=for-the-badge)](https://paypal.me/distantnative)
+[![Version](https://img.shields.io/badge/version-5.0-8dbae7.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Dependency](https://img.shields.io/badge/kirby-4.0--4.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
+[![Donate](https://img.shields.io/badge/support-give_back-bdde7a.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
 > Add and manage redirects. Track requests to your site that end up nowhere. All directly from the Panel in a familiar UI.
 
