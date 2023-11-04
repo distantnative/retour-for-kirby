@@ -4,47 +4,16 @@
       :dropdown="true"
       :text="timespan.label"
       icon="calendar"
-      size="xs"
+      size="sm"
       variant="filled"
       @click="$refs.units.toggle()"
     />
 
-    <k-dropdown-content ref="units" x-align="end">
-      <template v-for="unit in units">
-        <k-dropdown-item
-          v-if="unit !== 'all' || timespan.hasAll"
-          :key="unit"
-          :current="isCurrentUnit(unit)"
-          :icon="icon(unit)"
-          size="xs"
-          variant="filled"
-          @click="set(unit)"
-        >
-          {{ $t("retour.stats.mode." + unit) }}
-        </k-dropdown-item>
-      </template>
-      <hr />
-      <k-dropdown-item
-        size="xs"
-        icon="merge"
-        variant="filled"
-        @click="() => set('today')"
-      >
-        {{ $t("retour.timespan.today.label") }}
-      </k-dropdown-item>
-      <k-dropdown-item
-        size="xs"
-        icon="calendar"
-        variant="filled"
-        @click="() => $dialog('retour/timespan')"
-      >
-        {{ $t("retour.timespan.set.label") }}
-      </k-dropdown-item>
-    </k-dropdown-content>
+    <k-dropdown-content ref="units" :options="dropdown" x-align="end" />
 
     <k-button
       icon="angle-left"
-      size="xs"
+      size="sm"
       variant="filled"
       :disabled="!timespan.hasPrev || timespan.isAll"
       @click="navigate('subtract')"
@@ -52,7 +21,7 @@
     <k-button
       :disabled="!timespan.hasNext || timespan.isAll"
       icon="angle-right"
-      size="xs"
+      size="sm"
       variant="filled"
       @click="navigate('add')"
     />
@@ -65,6 +34,33 @@ export default {
     timespan: Object,
   },
   computed: {
+    dropdown() {
+      return [
+        ...this.units.map((unit) => {
+          if (unit === "all" && !this.timespan.hasAll) {
+            return;
+          }
+
+          return {
+            text: this.$t("retour.stats.mode." + unit),
+            icon: this.icon(unit),
+            current: this.isCurrentUnit(unit),
+            click: () => this.set(unit),
+          };
+        }),
+        "-",
+        {
+          text: this.$t("retour.timespan.today.label"),
+          icon: "merge",
+          click: () => this.set("today"),
+        },
+        {
+          text: this.$t("retour.timespan.set.label"),
+          icon: "calendar",
+          click: () => this.$dialog("retour/timespan"),
+        }
+      ].filter(Boolean);
+    },
     units() {
       return ["all", "year", "month", "day"];
     },
