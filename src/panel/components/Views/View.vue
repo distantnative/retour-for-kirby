@@ -10,6 +10,13 @@
 
     <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
 
+    <k-retour-tabs
+      :tab="tab"
+      :tabs="tabs"
+    >
+      <slot name="buttons" />
+    </k-retour-tabs>
+
     <slot />
   </k-inside>
 </template>

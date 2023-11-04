@@ -1,18 +1,17 @@
 <template>
   <k-retour-view v-bind="$props" class="k-retour-system-view">
-    <k-retour-tabs
-      tab="system"
-      :tabs="tabs"
-      :buttons="[
-        {
-          link: 'https://paypal.me/distantnative',
-          theme: 'positive',
-          target: '_blank',
-          icon: 'heart',
-          text: $t('retour.system.support'),
-        },
-      ]"
-    />
+    <template #buttons>
+      <k-button
+        link="https://paypal.me/distantnative"
+        icon="heart"
+        size="sm"
+        target="_blank"
+        theme="positive"
+        variant="filled"
+      >
+        {{ $t("retour.system.support") }}
+      </k-button>
+    </template>
 
     <k-stats :reports="reports" size="huge" />
 

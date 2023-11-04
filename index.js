@@ -72,7 +72,7 @@
     var _vm = this, _c = _vm._self._c;
     return _c("k-inside", { staticClass: "k-retour-view" }, [_c("k-header", { scopedSlots: _vm._u([_vm.stats ? { key: "buttons", fn: function() {
       return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
-    }, proxy: true } : null], null, true) }, [_vm._v(" " + _vm._s(_vm.$t("view.retour")) + " ")]), _vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _vm._t("default")], 2);
+    }, proxy: true } : null], null, true) }, [_vm._v(" " + _vm._s(_vm.$t("view.retour")) + " ")]), _vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }, [_vm._t("buttons")], 2), _vm._t("default")], 2);
   };
   var _sfc_staticRenderFns$e = [];
   _sfc_render$e._withStripped = true;
@@ -156,25 +156,34 @@
       options() {
         return [];
       },
-      toggleSearch() {
-        this.searching = !this.searching;
+      async toggleSearch(forgiving = false) {
+        if (forgiving && this.q) {
+          this.q = null;
+          return;
+        }
         this.q = null;
+        this.searching = !this.searching;
+        if (this.searching) {
+          await this.$nextTick();
+          this.$refs.search.focus();
+        }
       }
     }
   };
   var _sfc_render$d = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-collection-view" }, "k-retour-view", _vm.$props, false), [_c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs, "buttons": [
-      { icon: "filter", title: _vm.$t("filter"), click: _vm.toggleSearch },
-      ..._vm.buttons
-    ] } }), _vm.searching ? _c("k-search-input", { staticClass: "k-models-section-search k-input", attrs: { "autofocus": true, "placeholder": _vm.$t("filter") + " …", "value": _vm.q }, on: { "input": function($event) {
-      _vm.q = $event;
-      _vm.pagination.page = 1;
-    }, "keydown": function($event) {
-      if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"]))
-        return null;
-      return _vm.toggleSearch.apply(null, arguments);
-    } } }) : _vm._e(), _vm.filteredItems.length === 0 ? _c("k-empty", _vm._b({ attrs: { "layout": "table" } }, "k-empty", _vm.empty, false)) : _c("k-table", { attrs: { "columns": _vm.columns, "index": _vm.index, "rows": _vm.paginatedItems }, on: { "cell": _vm.onCell, "header": _vm.onHeader }, scopedSlots: _vm._u([{ key: "header", fn: function({ columnIndex, label }) {
+    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-collection-view", scopedSlots: _vm._u([{ key: "buttons", fn: function() {
+      return [_vm.searching ? _c("k-search-input", { ref: "search", staticClass: "k-models-section-search k-input", attrs: { "autofocus": true, "placeholder": _vm.$t("filter") + " …", "value": _vm.q }, on: { "input": function($event) {
+        _vm.q = $event;
+        _vm.pagination.page = 1;
+      } }, nativeOn: { "keydown": function($event) {
+        if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"]))
+          return null;
+        return _vm.toggleSearch(true);
+      } } }) : _vm._e(), _c("k-button", { attrs: { "icon": "filter", "title": _vm.$t("filter"), "size": "sm", "variant": "filled" }, on: { "click": _vm.toggleSearch } }), _vm._l(_vm.buttons, function(button, index) {
+        return _c("k-button", _vm._b({ key: index, attrs: { "size": "sm", "variant": "filled" } }, "k-button", button, false));
+      })];
+    }, proxy: true }]) }, "k-retour-view", _vm.$props, false), [_vm.filteredItems.length === 0 ? _c("k-empty", _vm._b({ attrs: { "layout": "table" } }, "k-empty", _vm.empty, false)) : _c("k-table", { attrs: { "columns": _vm.columns, "index": _vm.index, "rows": _vm.paginatedItems }, on: { "cell": _vm.onCell, "header": _vm.onHeader }, scopedSlots: _vm._u([{ key: "header", fn: function({ columnIndex, label }) {
       return [_c("span", [_vm._v(" " + _vm._s(label) + " "), columnIndex === _vm.sortBy ? _c("k-icon", { attrs: { "type": _vm.sortDirection === "asc" ? "angle-up" : "angle-down" } }) : _vm._e()], 1)];
     } }, { key: "options", fn: function({ row }) {
       return [_c("k-options-dropdown", { attrs: { "options": _vm.options(row) } })];
@@ -401,15 +410,9 @@
   };
   var _sfc_render$a = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-system-view" }, "k-retour-view", _vm.$props, false), [_c("k-retour-tabs", { attrs: { "tab": "system", "tabs": _vm.tabs, "buttons": [
-      {
-        link: "https://paypal.me/distantnative",
-        theme: "positive",
-        target: "_blank",
-        icon: "heart",
-        text: _vm.$t("retour.system.support")
-      }
-    ] } }), _c("k-stats", { attrs: { "reports": _vm.reports, "size": "huge" } }), _c("k-text", { staticClass: "k-help", attrs: { "html": _vm.$t("retour.system.docs", {
+    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-system-view", scopedSlots: _vm._u([{ key: "buttons", fn: function() {
+      return [_c("k-button", { attrs: { "link": "https://paypal.me/distantnative", "icon": "heart", "size": "sm", "target": "_blank", "theme": "positive", "variant": "filled" } }, [_vm._v(" " + _vm._s(_vm.$t("retour.system.support")) + " ")])];
+    }, proxy: true }]) }, "k-retour-view", _vm.$props, false), [_c("k-stats", { attrs: { "reports": _vm.reports, "size": "huge" } }), _c("k-text", { staticClass: "k-help", attrs: { "html": _vm.$t("retour.system.docs", {
       docs: "https://github.com/distantnative/retour-for-kirby"
     }) } })], 1);
   };
@@ -669,14 +672,13 @@
   const Tabs_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$6 = {
     props: {
-      buttons: Array,
       tab: String,
       tabs: Array
     }
   };
   var _sfc_render$6 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("div", { staticClass: "k-retour-tabs", attrs: { "data-end": _vm.tabs.length < 2 } }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _c("k-button-group", { attrs: { "buttons": _vm.buttons, "size": "sm", "variant": "filled" } })], 1);
+    return _c("div", { staticClass: "k-retour-tabs", attrs: { "data-end": _vm.tabs.length < 2 } }, [_c("k-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs } }), _c("k-button-group", [_vm._t("default")], 2)], 1);
   };
   var _sfc_staticRenderFns$6 = [];
   _sfc_render$6._withStripped = true;
