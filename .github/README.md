@@ -4,7 +4,7 @@
 [![Dependency](https://img.shields.io/badge/kirby-4.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
 [![Donate](https://img.shields.io/badge/support-donate-bdde7a.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
-[![Screenshot](screenshot.png)](https://distantnative.com/retour)
+![Retour for Kirby](title.png)
 
 ## Getting started
 
