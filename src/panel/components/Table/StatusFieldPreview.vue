@@ -17,7 +17,7 @@ export default {
     value: Number,
     row: Object,
     column: Object,
-  },
+  }
 };
 </script>
 

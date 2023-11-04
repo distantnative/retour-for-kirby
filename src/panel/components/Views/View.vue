@@ -36,3 +36,9 @@ export default {
   mixins: [props],
 };
 </script>
+
+<style>
+.k-retour-view .k-header {
+  margin-bottom: 0;
+}
+</style>
