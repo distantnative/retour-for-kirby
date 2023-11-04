@@ -12,9 +12,6 @@
 .k-retour-system-view .k-stats {
   margin-bottom: var(--spacing-3);
 }
-.k-retour-system-view .k-stats [data-theme] .k-stat-value {
-  color: var(--theme);
-}
 
 .chart-pie {
   display: flex;

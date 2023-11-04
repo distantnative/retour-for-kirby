@@ -1,16 +1,5 @@
 <template>
-  <k-inside class="k-retour-view k-retour-collection-view">
-    <k-header>
-      {{  $t('view.retour') }}
-
-      <template v-if="stats" #buttons>
-        <k-retour-timespan :timespan="timespan" />
-      </template>
-    </k-header>
-
-    <!-- Stats -->
-    <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
-
+  <k-retour-view v-bind="$props" class="k-retour-collection-view">
     <!-- Buttons in task bar -->
     <k-retour-tabs
       :tab="tab"
@@ -72,18 +61,14 @@
         @paginate="pagination.page = $event.page"
       />
     </footer>
-  </k-inside>
+  </k-retour-view>
 </template>
 
 <script>
+import { props as View } from "./View.vue";
+
 export default {
-  props: {
-    data: [Object, Array],
-    stats: [Boolean, Array],
-    tab: String,
-    tabs: Array,
-    timespan: Object,
-  },
+  mixins: [View],
   data() {
     return {
       searching: false,

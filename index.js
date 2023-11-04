@@ -1,6 +1,5 @@
 (function() {
   "use strict";
-  const CollectionView_vue_vue_type_style_index_0_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -57,14 +56,41 @@
       options
     };
   }
-  const _sfc_main$d = {
+  const props = {
     props: {
       data: [Object, Array],
       stats: [Boolean, Array],
       tab: String,
       tabs: Array,
       timespan: Object
-    },
+    }
+  };
+  const _sfc_main$e = {
+    mixins: [props]
+  };
+  var _sfc_render$e = function render() {
+    var _vm = this, _c = _vm._self._c;
+    return _c("k-inside", { staticClass: "k-retour-view" }, [_c("k-header", { scopedSlots: _vm._u([_vm.stats ? { key: "buttons", fn: function() {
+      return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
+    }, proxy: true } : null], null, true) }, [_vm._v(" " + _vm._s(_vm.$t("view.retour")) + " ")]), _vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _vm._t("default")], 2);
+  };
+  var _sfc_staticRenderFns$e = [];
+  _sfc_render$e._withStripped = true;
+  var __component__$e = /* @__PURE__ */ normalizeComponent(
+    _sfc_main$e,
+    _sfc_render$e,
+    _sfc_staticRenderFns$e,
+    false,
+    null,
+    null,
+    null,
+    null
+  );
+  __component__$e.options.__file = "/Users/nhoffmann/Sites/kirby/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Views/View.vue";
+  const View = __component__$e.exports;
+  const CollectionView_vue_vue_type_style_index_0_lang = "";
+  const _sfc_main$d = {
+    mixins: [props],
     data() {
       return {
         searching: false,
@@ -138,9 +164,7 @@
   };
   var _sfc_render$d = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", { staticClass: "k-retour-view k-retour-collection-view" }, [_c("k-header", { scopedSlots: _vm._u([_vm.stats ? { key: "buttons", fn: function() {
-      return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
-    }, proxy: true } : null], null, true) }, [_vm._v(" " + _vm._s(_vm.$t("view.retour")) + " ")]), _vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs, "buttons": [
+    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-collection-view" }, "k-retour-view", _vm.$props, false), [_c("k-retour-tabs", { attrs: { "tab": _vm.tab, "tabs": _vm.tabs, "buttons": [
       { icon: "filter", title: _vm.$t("filter"), click: _vm.toggleSearch },
       ..._vm.buttons
     ] } }), _vm.searching ? _c("k-search-input", { staticClass: "k-models-section-search k-input", attrs: { "autofocus": true, "placeholder": _vm.$t("filter") + " …", "value": _vm.q }, on: { "input": function($event) {
@@ -350,28 +374,26 @@
   const FailuresView = __component__$b.exports;
   const SystemView_vue_vue_type_style_index_0_lang = "";
   const _sfc_main$a = {
-    props: {
-      data: [Object, Array],
-      stats: [Boolean, Array],
-      tabs: Array,
-      timespan: Object
-    },
+    mixins: [props],
     computed: {
       reports() {
         return [
           {
             label: this.$t("retour.system.redirects"),
-            value: String(this.data.redirects)
+            value: String(this.data.redirects),
+            icon: "shuffle"
           },
           {
             label: this.$t("retour.system.failures"),
-            value: String(this.data.failures)
+            value: String(this.data.failures),
+            icon: "cloud-off"
           },
           {
             label: this.$t("retour.system.deleteAfter"),
             value: this.$t("retour.system.deleteAfter.months", {
               count: this.data.deleteAfter
-            })
+            }),
+            icon: "trash"
           }
         ];
       }
@@ -379,9 +401,7 @@
   };
   var _sfc_render$a = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-inside", { staticClass: "k-retour-view k-retour-system-view" }, [_c("k-header", { scopedSlots: _vm._u([_vm.stats ? { key: "buttons", fn: function() {
-      return [_c("k-retour-timespan", { attrs: { "timespan": _vm.timespan } })];
-    }, proxy: true } : null], null, true) }, [_vm._v(" " + _vm._s(_vm.$t("view.retour")) + " ")]), _vm.stats ? _c("k-retour-stats", { attrs: { "data": _vm.stats, "timespan": _vm.timespan } }) : _vm._e(), _c("k-retour-tabs", { attrs: { "tab": "system", "tabs": _vm.tabs, "buttons": [
+    return _c("k-retour-view", _vm._b({ staticClass: "k-retour-system-view" }, "k-retour-view", _vm.$props, false), [_c("k-retour-tabs", { attrs: { "tab": "system", "tabs": _vm.tabs, "buttons": [
       {
         link: "https://paypal.me/distantnative",
         theme: "positive",
@@ -928,6 +948,7 @@
       "k-retour-stats": Stats,
       "k-retour-tabs": Tabs,
       "k-retour-timespan": Timespan,
+      "k-retour-view": View,
       "k-retour-redirects-view": RedirectsView,
       "k-retour-failures-view": FailuresView,
       "k-retour-system-view": SystemView
