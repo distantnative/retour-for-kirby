@@ -1,4 +1,5 @@
 // Views
+import View from "./components/Views/View.vue";
 import RedirectsView from "./components/Views/RedirectsView.vue";
 import FailuresView from "./components/Views/FailuresView.vue";
 import SystemView from "./components/Views/SystemView.vue";
@@ -28,6 +29,7 @@ panel.plugin("distantnative/retour", {
     "k-retour-tabs": Tabs,
     "k-retour-timespan": Timespan,
 
+    "k-retour-view": View,
     "k-retour-redirects-view": RedirectsView,
     "k-retour-failures-view": FailuresView,
     "k-retour-system-view": SystemView,

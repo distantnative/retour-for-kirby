@@ -1,15 +1,5 @@
 <template>
-  <k-inside class="k-retour-view k-retour-system-view">
-    <k-header>
-      {{  $t('view.retour') }}
-
-      <template v-if="stats" #buttons>
-        <k-retour-timespan :timespan="timespan" />
-      </template>
-    </k-header>
-
-    <k-retour-stats v-if="stats" :data="stats" :timespan="timespan" />
-
+  <k-retour-view v-bind="$props" class="k-retour-system-view">
     <k-retour-tabs
       tab="system"
       :tabs="tabs"
@@ -36,33 +26,33 @@
       "
     />
     <!-- eslint-enable vue/no-v-html -->
-  </k-inside>
+  </k-retour-view>
 </template>
 
 <script>
+import { props as View } from "./View.vue";
+
 export default {
-  props: {
-    data: [Object, Array],
-    stats: [Boolean, Array],
-    tabs: Array,
-    timespan: Object,
-  },
+  mixins: [View],
   computed: {
     reports() {
       return [
         {
           label: this.$t("retour.system.redirects"),
           value: String(this.data.redirects),
+          icon: "shuffle"
         },
         {
           label: this.$t("retour.system.failures"),
           value: String(this.data.failures),
+          icon: "cloud-off"
         },
         {
           label: this.$t("retour.system.deleteAfter"),
           value: this.$t("retour.system.deleteAfter.months", {
             count: this.data.deleteAfter,
           }),
+          icon: "trash"
         },
       ];
     },
@@ -73,8 +63,5 @@ export default {
 <style>
 .k-retour-system-view .k-stats {
   margin-bottom: var(--spacing-3);
-}
-.k-retour-system-view .k-stats [data-theme] .k-stat-value {
-  color: var(--theme);
 }
 </style>
