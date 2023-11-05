@@ -4,6 +4,7 @@
     "license": "MIT",
     "type": "kirby-plugin",
     "version": "5.0.0",
+    "homepage": "https://github.com/distantnative/retour-for-kirby",
     "authors": [
         {
             "name": "Nico Hoffmann",
