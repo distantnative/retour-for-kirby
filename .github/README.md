@@ -4,6 +4,7 @@
 [![Dependency](https://img.shields.io/badge/kirby-4.0--4.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
 [![Donate](https://img.shields.io/badge/support-give_back-bdde7a.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
+> [!NOTE]
 > Add and manage redirects based on rules, supporting wildcards and HTTP status codes. Track requests to your site that end up nowhere. All directly from the Panel in a familiar UI without writing any code.
 
 ## Getting started
