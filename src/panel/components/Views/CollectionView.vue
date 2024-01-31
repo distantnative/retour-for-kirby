@@ -119,9 +119,10 @@ export default {
       return (this.pagination.page - 1) * this.pagination.limit + 1;
     },
     paginatedItems() {
-      return this.filteredItems
-        .sortBy(`${this.sortBy} ${this.sortDirection}`)
-        .slice(this.index - 1, this.pagination.limit * this.pagination.page);
+      return this.$helper.array.sortBy(
+        this.filteredItems,
+        `${this.sortBy} ${this.sortDirection}`
+      ).slice(this.index - 1, this.pagination.limit * this.pagination.page);
     },
   },
   methods: {
