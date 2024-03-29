@@ -143,7 +143,8 @@ class Redirect extends Obj
 				$retour = Retour::instance();
 				$kirby  = $retour->kirby();
 				$to     = $redirect->to() ?? '/';
-				$to     = Redirect::toPath($to, $placeholders);
+				$parts  = Str::split($to, '.');
+				$to     = Redirect::toPath($parts[0], $placeholders);
 				$page   = $kirby->page($to);
 				$code   = $redirect->status();
 
@@ -156,7 +157,14 @@ class Redirect extends Obj
 				// Redirects
 				// @codeCoverageIgnoreStart
 				if ($code >= 300 && $code < 400) {
-					Response::go($page?->url() ?? $to, $code);
+					$url = $page?->url() ?? $to;
+
+					// support for content representations
+					if ($extension = $parts[1] ?? null) {
+						$url .= '.' . $extension;
+					}
+
+					Response::go($url, $code);
 				}
 				// @codeCoverageIgnoreEnd
 
