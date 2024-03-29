@@ -29,7 +29,7 @@
 	"retour.failures.clear.confirm": "Willst du wirklich alle Logs endgültig löschen?",
 	"retour.timespan.from.label": "Von",
 	"retour.timespan.to.label": "Bis",
-	"retour.timespan.set.label": "Set custom",
+	"retour.timespan.set.label": "Anpassen",
 	"retour.timespan.today.label": "Jump to today",
 	"retour.stats.redirected": "weitergeleitet",
 	"retour.stats.resolved": "behoben",
