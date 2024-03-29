@@ -16,7 +16,7 @@
 	"retour.redirects.priority.abbr": "Prio",
 	"retour.redirects.priority.help": "Die Weiterleitung wird forciert auch bei einer bestehenden Seite, wenn aktiviert.",
 	"retour.redirects.creator": "Erstellt von",
-	"retour.redirects.creator.empty": "Unknown user",
+	"retour.redirects.creator.empty": "Unbekannter Benutzer",
 	"retour.redirects.modifier": "Last modified by",
 	"retour.redirects.comment": "Kommentar",
 	"retour.redirects.comment.help": "Für einen selbst oder andere…",
