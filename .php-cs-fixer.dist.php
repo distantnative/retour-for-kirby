@@ -13,7 +13,6 @@ return $config
         'array_indentation' => true,
         'array_syntax' => ['syntax' => 'short'],
         'cast_spaces' => ['space' => 'none'],
-        'class_keyword_remove' => true,
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
         'combine_nested_dirname' => true,
@@ -32,7 +31,6 @@ return $config
         'multiline_comment_opening_closing' => true,
         'native_function_casing' => true,
         'native_function_type_declaration_casing' => true,
-        'new_with_braces' => true,
         'no_blank_lines_after_class_opening' => true,
         'no_blank_lines_after_phpdoc' => true,
         'no_empty_comment' => true,
@@ -43,9 +41,8 @@ return $config
         'no_unneeded_control_parentheses' => true,
         'no_unused_imports' => true,
         'no_useless_return' => true,
-        'ordered_class_elements' => ['sort_algorithm' => 'alpha'],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
-        'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
+        'phpdoc_add_missing_param_annotation' => ['only_untyped' => true],
         'phpdoc_align' => ['align' => 'left'],
         'phpdoc_indent' => true,
         'phpdoc_scalar' => true,
@@ -56,5 +53,6 @@ return $config
         'ternary_to_null_coalescing' => true,
         'whitespace_after_comma_in_array' => true
     ])
+    ->setIndent("\t")
     ->setRiskyAllowed(true)
     ->setFinder($finder);

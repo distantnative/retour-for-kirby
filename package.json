@@ -1,14 +1,14 @@
 {
-  "scripts": {
-    "dev": "npx -y kirbyup src/panel/index.js --watch",
-    "build": "npx -y kirbyup src/panel/index.js",
-    "lint": "eslint --ext js,vue src/panel"
-  },
-  "devDependencies": {
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-vue": "^9.21.0",
-    "prettier": "^3.2.4"
-  },
-  "browserslist": "> 2%"
+	"scripts": {
+		"dev": "npx -y kirbyup src/panel/index.js --watch",
+		"build": "npx -y kirbyup src/panel/index.js",
+		"lint": "eslint --ext js,vue src/panel"
+	},
+	"devDependencies": {
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-vue": "^9.24.0",
+		"prettier": "^3.2.5"
+	},
+	"browserslist": "> 2%"
 }

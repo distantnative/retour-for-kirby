@@ -8,28 +8,28 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    protected $kirby;
-    protected $tmp = __DIR__ . '/tmp';
+	protected $kirby;
+	protected $tmp = __DIR__ . '/tmp';
 
-    public function setUp(): void
-    {
-        $this->kirby = new App([
-            'roots' => [
-                'index' => $this->tmp
-            ]
-        ]);
-    }
+	public function setUp(): void
+	{
+		$this->kirby = new App([
+			'roots' => [
+				'index' => $this->tmp
+			]
+		]);
+	}
 
-    public function tearDown(): void
-    {
-        Dir::remove($this->tmp);
-        Retour::$instance = null;
-    }
+	public function tearDown(): void
+	{
+		Dir::remove($this->tmp);
+		Retour::$instance = null;
+	}
 
-    protected function app(array $options = []): App
-    {
-        return $this->kirby->clone([
-            'options' => $options
-        ]);
-    }
+	protected function app(array $options = []): App
+	{
+		return $this->kirby->clone([
+			'options' => $options
+		]);
+	}
 }

@@ -21,158 +21,158 @@ use Kirby\Toolkit\Str;
  */
 class Redirect extends Obj
 {
-    /**
-     * Class constructor, validates data
-     */
-    public function __construct(array $data = [])
-    {
-        if (empty($data['from'] ?? null) === true) {
-            throw new InvalidArgumentException('Route requires path');
-        }
+	/**
+	 * Class constructor, validates data
+	 */
+	public function __construct(array $data = [])
+	{
+		if (empty($data['from'] ?? null) === true) {
+			throw new InvalidArgumentException('Route requires path');
+		}
 
-        parent::__construct($data);
-    }
+		parent::__construct($data);
+	}
 
-    /**
-     * Use redirect pattern as id for object
-     */
-    public function id(): string
-    {
-        /**
-         * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
-         *
-         * Depending on the settings, the webserver might not always handle
-         * escaped forward-slashes in the way, which this plugin expects it to.
-         *
-         * This specifically results in a 404 when trying to edit a redirect-entry,
-         * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
-         * Server. The problem occurs in relation to nginx.
-         *
-         * Many hosting solutions do not allow customers to change such
-         * settings for the web-server, and so another solution is required.
-         *
-         * So, in order to remedy this problem, we replace forward-slash with the
-         * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
-         * Hex: 1D). By using a non-visible chracter we ensure that the id
-         * generation from redirect pattern is always unique.
-         *
-         * Note that this fix include changes to two parts of the plug-in
-         * code-base. In this file, and in src/panel/components/Tabs/RedirectsTab.vue
-         */
-        return str_replace('/', "\x1D", $this->from());
-    }
+	/**
+	 * Use redirect pattern as id for object
+	 */
+	public function id(): string
+	{
+		/**
+		 * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
+		 *
+		 * Depending on the settings, the webserver might not always handle
+		 * escaped forward-slashes in the way, which this plugin expects it to.
+		 *
+		 * This specifically results in a 404 when trying to edit a redirect-entry,
+		 * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
+		 * Server. The problem occurs in relation to nginx.
+		 *
+		 * Many hosting solutions do not allow customers to change such
+		 * settings for the web-server, and so another solution is required.
+		 *
+		 * So, in order to remedy this problem, we replace forward-slash with the
+		 * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
+		 * Hex: 1D). By using a non-visible chracter we ensure that the id
+		 * generation from redirect pattern is always unique.
+		 *
+		 * Note that this fix include changes to two parts of the plug-in
+		 * code-base. In this file, and in src/panel/components/Tabs/RedirectsTab.vue
+		 */
+		return str_replace('/', "\x1D", $this->from());
+	}
 
-    /**
-     * Returns whether the route is enabled
-     * with status code
-     */
-    public function isActive(): bool
-    {
-        return $this->status() !== null;
-    }
+	/**
+	 * Returns whether the route is enabled
+	 * with status code
+	 */
+	public function isActive(): bool
+	{
+		return $this->status() !== null;
+	}
 
-    /**
-     * Returns whether the route takes priority
-     * over actual pages
-     */
-    public function priority(): bool
-    {
-        return Str::toType($this->priority ?? 'false', 'bool') === true;
-    }
+	/**
+	 * Returns whether the route takes priority
+	 * over actual pages
+	 */
+	public function priority(): bool
+	{
+		return Str::toType($this->priority ?? 'false', 'bool') === true;
+	}
 
-    /**
-     * Returns the integer HTTP status code
-     */
-    public function status(): int|null
-    {
-        if (in_array($this->status ?? null, [null, 'disabled']) == true) {
-            return null;
-        }
+	/**
+	 * Returns the integer HTTP status code
+	 */
+	public function status(): int|null
+	{
+		if (in_array($this->status ?? null, [null, 'disabled']) == true) {
+			return null;
+		}
 
-        return (int)$this->status;
-    }
+		return (int)$this->status;
+	}
 
-    public function toArray(): array
-    {
-        return [
-            'from'     => $this->from(),
-            'to'       => $this->to(),
-            'status'   => $this->status(),
-            'priority' => $this->priority(),
-            'comment'  => $this->comment(),
-            'creator'  => $this->creator(),
-        ];
-    }
+	public function toArray(): array
+	{
+		return [
+			'from'     => $this->from(),
+			'to'       => $this->to(),
+			'status'   => $this->status(),
+			'priority' => $this->priority(),
+			'comment'  => $this->comment(),
+			'creator'  => $this->creator(),
+		];
+	}
 
-    /**
-     * Replaces placeholders in $path string
-     *
-     * @param array<int, string> $placeholders
-     */
-    public static function toPath(
-        string $path,
-        array $placeholders = []
-    ): string {
-        // Replace alias for home
-        if ($path === '/') {
-            return 'home';
-        }
+	/**
+	 * Replaces placeholders in $path string
+	 *
+	 * @param array<int, string> $placeholders
+	 */
+	public static function toPath(
+		string $path,
+		array $placeholders = []
+	): string {
+		// Replace alias for home
+		if ($path === '/') {
+			return 'home';
+		}
 
-        foreach ($placeholders as $i => $placeholder) {
-            $path = str_replace('$' . ($i + 1), $placeholder, $path);
-        }
+		foreach ($placeholders as $i => $placeholder) {
+			$path = str_replace('$' . ($i + 1), $placeholder, $path);
+		}
 
-        return $path;
-    }
+		return $path;
+	}
 
-    /**
-     * Return route definition for Router
-     */
-    public function toRoute(): array|false
-    {
-        if ($this->isActive() === false) {
-            return false;
-        }
+	/**
+	 * Return route definition for Router
+	 */
+	public function toRoute(): array|false
+	{
+		if ($this->isActive() === false) {
+			return false;
+		}
 
-        $redirect = $this;
+		$redirect = $this;
 
-        return [
-            'pattern' => trim($this->from(), '/'),
-            'action'  => function (...$placeholders) use ($redirect) {
-                $retour = Retour::instance();
-                $kirby  = $retour->kirby();
-                $to     = $redirect->to() ?? '/';
-                $to     = Redirect::toPath($to, $placeholders);
-                $page   = $kirby->page($to);
-                $code   = $redirect->status();
+		return [
+			'pattern' => trim($this->from(), '/'),
+			'action'  => function (...$placeholders) use ($redirect) {
+				$retour = Retour::instance();
+				$kirby  = $retour->kirby();
+				$to     = $redirect->to() ?? '/';
+				$to     = Redirect::toPath($to, $placeholders);
+				$page   = $kirby->page($to);
+				$code   = $redirect->status();
 
-                // Add log entry
-                $retour->log()->add([
-                    'path'     => Url::path(),
-                    'redirect' => $redirect->from()
-                ]);
+				// Add log entry
+				$retour->log()->add([
+					'path'     => Url::path(),
+					'redirect' => $redirect->from()
+				]);
 
-                // Redirects
-                // @codeCoverageIgnoreStart
-                if ($code >= 300 && $code < 400) {
-                    Response::go($page?->url() ?? $to, $code);
-                }
-                // @codeCoverageIgnoreEnd
+				// Redirects
+				// @codeCoverageIgnoreStart
+				if ($code >= 300 && $code < 400) {
+					Response::go($page?->url() ?? $to, $code);
+				}
+				// @codeCoverageIgnoreEnd
 
-                // Set the right response code
-                $kirby->response()->code($code);
+				// Set the right response code
+				$kirby->response()->code($code);
 
-                // Return page for other codes
-                if ($page) {
-                    return $page;
-                }
+				// Return page for other codes
+				if ($page) {
+					return $page;
+				}
 
-                // Deliver HTTP status code and die
-                // @codeCoverageIgnoreStart
-                Header::status($code);
-                die();
-                // @codeCoverageIgnoreEnd
-            }
-        ];
-    }
+				// Deliver HTTP status code and die
+				// @codeCoverageIgnoreStart
+				Header::status($code);
+				die();
+				// @codeCoverageIgnoreEnd
+			}
+		];
+	}
 }
