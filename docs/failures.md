@@ -8,7 +8,7 @@ When you open up Retour, you will be shown the data of the current month. The se
 
 You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a day or any custom interval:
 
-![Change timespan](timespan.png)
+![Change timespan](/timespan.png)
 
 ## Add as redirect
 
@@ -20,6 +20,6 @@ Once you save that new route, all failure entries for that path will also be mar
 
 Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table:
 
-![Clear the log](clear.png)
+![Clear the log](/clear.png)
 
 Or automatically via the `distantnative.retour.deleteAfter` option.

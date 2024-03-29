@@ -8,7 +8,7 @@ export default defineConfig({
 	base: "/retour-for-kirby/",
 	appearance: "force-dark",
 	cleanUrls: true,
-	head: [["link", { rel: "og:image", href: "./ogimage.png" }]],
+	head: [["link", { rel: "og:image", href: "/ogimage.png" }]],
 	themeConfig: {
 		logo: "/scribbles.svg",
 
