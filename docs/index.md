@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Retour"
   text: "for Kirby"
-  tagline: Redirects and 404 tracking from the Panel
+  tagline: Redirects and 404 tracking in the Panel
   image: /scribbles.svg
   actions:
     - theme: brand
@@ -17,13 +17,13 @@ hero:
 features:
   - icon: 🙌
     title: Add and manage redirects
-    details: based on patterns/wildcards and HTTP status code
+    details: "Ensure your old URLs still find their goal: Easily define matching routes with patterns/wildcards and the HTTP status code of your choice."
   - icon: 😶‍🌫️
     title: 404 tracking
-    details: See what requests to your site that end up nowhere.
+    details: Monitor all the requests to your site that end up nowhere. Retour empowers you to find and fix broken links or add a new redirect.
   - icon: 🤩
     title: Beautiful Panel UI
-    details: All directly from the Panel in a familiar UI without writing any code.
+    details: Allow your editors to handle this all themselves directly from the Panel in a familiar UI and without writing any code.
 ---
 
 ![Retour view in the Panel](/retour.png)
