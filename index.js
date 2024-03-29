@@ -216,7 +216,8 @@
           from: {
             label: this.$t("retour.redirects.from"),
             type: "path",
-            width: "7/20"
+            width: "7/20",
+            mobile: true
           },
           to: {
             label: this.$t("retour.redirects.to"),
@@ -308,7 +309,8 @@
           path: {
             label: this.$t("retour.failures.path"),
             type: "path",
-            width: "1/3"
+            width: "1/3",
+            mobile: true
           },
           referrer: {
             label: this.$t("retour.failures.referrer"),
@@ -552,7 +554,7 @@
   };
   var _sfc_render$8 = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("table", { staticClass: "chart-areas" }, [_c("thead", [_c("tr", _vm._l(_vm.axisY, function(tick) {
+    return _c("div", { staticClass: "chart-areas" }, [_c("table", [_c("thead", [_c("tr", _vm._l(_vm.axisY, function(tick) {
       return _c("th", { key: tick }, [_vm._v(" " + _vm._s(tick) + " ")]);
     }), 0)]), _c("tbody", _vm._l(_vm.data, function(segment, segmentIndex) {
       return _c("tr", { key: segmentIndex, on: { "dblclick": function($event) {
@@ -567,7 +569,7 @@
       return _c("tr", { key: segment.label, attrs: { "data-current": _vm.isCurrent(segment) }, on: { "dblclick": function($event) {
         return _vm.zoom(segment);
       } } }, [_c("td", [_vm._v(_vm._s(_vm.label(segment)))])]);
-    }), 0)]);
+    }), 0)])]);
   };
   var _sfc_staticRenderFns$8 = [];
   _sfc_render$8._withStripped = true;

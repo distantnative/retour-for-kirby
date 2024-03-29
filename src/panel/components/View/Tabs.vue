@@ -18,9 +18,6 @@ export default {
 
 <style>
 .k-retour-tabs {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 	margin-bottom: var(--spacing-6);
 }
 .k-retour-tabs[data-end="true"] {
@@ -39,5 +36,21 @@ export default {
 
 .k-retour-tabs > .k-button-group {
 	flex-wrap: nowrap;
+}
+
+@container (max-width: 30rem) {
+	.k-retour-tabs .k-tabs {
+		margin-bottom: var(--spacing-6);
+	}
+	.k-retour-tabs > .k-button-group {
+		justify-content: end;
+	}
+}
+@container (min-width: 30rem) {
+	.k-retour-tabs {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 }
 </style>

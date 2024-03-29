@@ -55,7 +55,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: var(--spacing-2);
+	padding-block: var(--spacing-6);
 }
 .chart-pie > .graph {
 	width: 100%;

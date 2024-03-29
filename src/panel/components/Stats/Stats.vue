@@ -63,19 +63,26 @@ export default {
 
 <style>
 .k-retour-stats {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 2rem;
-	padding: var(--spacing-8) var(--spacing-6);
+	padding: var(--spacing-6);
 	color: var(--color-white);
 	background: var(--color-gray-900);
 	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
 
-@container (min-width: 42em) {
+@container (max-width: 42rem) {
 	.k-retour-stats {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+}
+
+@container (min-width: 42rem) {
+	.k-retour-stats {
+		display: grid;
 		grid-template-columns: 1fr 3fr;
+		gap: 2rem;
 	}
 }
 </style>

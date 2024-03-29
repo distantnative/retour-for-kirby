@@ -41,4 +41,10 @@ export default {
 .k-retour-view .k-header:has(+ .k-retour-stats) {
 	margin-bottom: 0;
 }
+
+@container (max-width: 30rem) {
+	.k-retour-view .k-header {
+		flex-direction: column;
+	}
+}
 </style>

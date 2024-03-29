@@ -1,39 +1,41 @@
 <template>
-	<table class="chart-areas">
-		<thead>
-			<tr>
-				<th v-for="tick in axisY" :key="tick">
-					{{ tick }}
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				v-for="(segment, segmentIndex) in data"
-				:key="segmentIndex"
-				@dblclick="zoom(segment)"
-			>
-				<td
-					v-for="(area, areaIndex) in segment.areas"
-					:key="segmentIndex + '_' + areaIndex"
-					:style="`--color: ${color(segmentIndex, area)}; ${clip(
-						segmentIndex,
-						areaIndex,
-					)}`"
-				/>
-			</tr>
-		</tbody>
-		<tfoot :data-less="data.length > 31">
-			<tr
-				v-for="segment in data"
-				:key="segment.label"
-				:data-current="isCurrent(segment)"
-				@dblclick="zoom(segment)"
-			>
-				<td>{{ label(segment) }}</td>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="chart-areas">
+		<table>
+			<thead>
+				<tr>
+					<th v-for="tick in axisY" :key="tick">
+						{{ tick }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					v-for="(segment, segmentIndex) in data"
+					:key="segmentIndex"
+					@dblclick="zoom(segment)"
+				>
+					<td
+						v-for="(area, areaIndex) in segment.areas"
+						:key="segmentIndex + '_' + areaIndex"
+						:style="`--color: ${color(segmentIndex, area)}; ${clip(
+							segmentIndex,
+							areaIndex,
+						)}`"
+					/>
+				</tr>
+			</tbody>
+			<tfoot :data-less="data.length > 31">
+				<tr
+					v-for="segment in data"
+					:key="segment.label"
+					:data-current="isCurrent(segment)"
+					@dblclick="zoom(segment)"
+				>
+					<td>{{ label(segment) }}</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </template>
 
 <script>
@@ -149,13 +151,18 @@ export default {
 
 <style>
 .chart-areas {
+	overflow-x: scroll;
+	padding-block: var(--spacing-6);
+}
+
+.chart-areas table {
 	--height: 250px;
 
 	position: relative;
 	width: calc(100% - 3rem);
 	height: var(--height);
-	margin-left: 2rem;
-	margin-right: 1rem;
+	margin-inline-start: 2rem;
+	margin-inline-end: 1rem;
 	border-collapse: collapse;
 	border-spacing: 0;
 }

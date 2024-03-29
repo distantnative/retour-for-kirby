@@ -2,6 +2,11 @@
 .k-retour-view .k-header:has(+ .k-retour-stats) {
 	margin-bottom: 0;
 }
+@container (max-width: 30rem) {
+.k-retour-view .k-header {
+		flex-direction: column;
+}
+}
 
 .k-retour-collection-view .k-table-column {
 	cursor: pointer;
@@ -26,7 +31,8 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: var(--spacing-2);
+	padding-top: var(--spacing-6);
+	padding-bottom: var(--spacing-6);
 }
 .chart-pie > .graph {
 	width: 100%;
@@ -53,6 +59,11 @@
 }
 
 .chart-areas {
+	overflow-x: scroll;
+	padding-top: var(--spacing-6);
+	padding-bottom: var(--spacing-6);
+}
+.chart-areas table {
 	--height: 250px;
 
 	position: relative;
@@ -175,25 +186,28 @@
 }
 
 .k-retour-stats {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 2rem;
-	padding: var(--spacing-8) var(--spacing-6);
+	padding: var(--spacing-6);
 	color: var(--color-white);
 	background: var(--color-gray-900);
 	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
-@container (min-width: 42em) {
+@container (max-width: 42rem) {
 .k-retour-stats {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+}
+}
+@container (min-width: 42rem) {
+.k-retour-stats {
+		display: grid;
 		grid-template-columns: 1fr 3fr;
+		gap: 2rem;
 }
 }
 
 .k-retour-tabs {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 	margin-bottom: var(--spacing-6);
 }
 .k-retour-tabs[data-end="true"] {
@@ -211,6 +225,21 @@
 }
 .k-retour-tabs > .k-button-group {
 	flex-wrap: nowrap;
+}
+@container (max-width: 30rem) {
+.k-retour-tabs .k-tabs {
+		margin-bottom: var(--spacing-6);
+}
+.k-retour-tabs > .k-button-group {
+		justify-content: end;
+}
+}
+@container (min-width: 30rem) {
+.k-retour-tabs {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+}
 }
 
 .k-count-preview-field {

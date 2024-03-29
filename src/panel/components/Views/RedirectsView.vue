@@ -24,6 +24,7 @@ export default {
 					label: this.$t("retour.redirects.from"),
 					type: "path",
 					width: "7/20",
+					mobile: true,
 				},
 				to: {
 					label: this.$t("retour.redirects.to"),

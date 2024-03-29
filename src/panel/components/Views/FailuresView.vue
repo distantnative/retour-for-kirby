@@ -25,6 +25,7 @@ export default {
 					label: this.$t("retour.failures.path"),
 					type: "path",
 					width: "1/3",
+					mobile: true,
 				},
 				referrer: {
 					label: this.$t("retour.failures.referrer"),
