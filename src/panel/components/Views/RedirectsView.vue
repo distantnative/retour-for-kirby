@@ -5,7 +5,7 @@ export default {
 	extends: CollectionView,
 	data() {
 		return {
-			sortBy: "from",
+			sortBy: null,
 		};
 	},
 	computed: {

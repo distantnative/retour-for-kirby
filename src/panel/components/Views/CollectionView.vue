@@ -120,9 +120,20 @@ export default {
 			return (this.pagination.page - 1) * this.pagination.limit + 1;
 		},
 		paginatedItems() {
-			return this.$helper.array
-				.sortBy(this.filteredItems, `${this.sortBy} ${this.sortDirection}`)
-				.slice(this.index - 1, this.pagination.limit * this.pagination.page);
+			return this.sortedItems.slice(
+				this.index - 1,
+				this.pagination.limit * this.pagination.page,
+			);
+		},
+		sortedItems() {
+			if (this.sortBy) {
+				return this.$helper.array.sortBy(
+					this.$helper.object.clone(this.filteredItems),
+					`${this.sortBy} ${this.sortDirection}`,
+				);
+			}
+
+			return this.filteredItems;
 		},
 	},
 	methods: {
@@ -153,7 +164,11 @@ export default {
 		onCell() {},
 		onHeader({ columnIndex }) {
 			if (this.sortBy === columnIndex) {
-				this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+				if (this.sortDirection === "desc") {
+					columnIndex = null;
+				} else {
+					this.sortDirection = "desc";
+				}
 			} else {
 				this.sortDirection = "asc";
 			}
