@@ -113,6 +113,7 @@ class RedirectTest extends TestCase
 			'priority' => false,
 			'comment'  => null,
 			'creator'  => null,
+			'modifier' => null,
 		];
 
 		$this->assertSame($expected, $redirect->toArray());

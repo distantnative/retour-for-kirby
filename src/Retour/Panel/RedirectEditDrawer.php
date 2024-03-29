@@ -2,7 +2,6 @@
 
 namespace Kirby\Retour\Panel;
 
-use Kirby\Cms\User;
 use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
 
@@ -13,18 +12,12 @@ use Kirby\Toolkit\I18n;
  * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
-class RedirectEditDrawer extends RedirectDrawer
+class RedirectEditDrawer extends RedirectCreateDrawer
 {
 	public function __construct(
 		protected string $id
 	) {
 		$this->id = urldecode($id);
-	}
-
-	protected function creator(): User|null
-	{
-		$creator = $this->redirect()->creator();
-		return $creator ? $this->kirby()->user($creator) : null;
 	}
 
 	public function load(): array
@@ -65,16 +58,39 @@ class RedirectEditDrawer extends RedirectDrawer
 	{
 		$redirects = $this->redirects();
 		$data      = $this->data();
-		$redirects->update($this->id, $data);
+		$redirects->update($this->id, [
+			...$data,
+			'creator'  => $this->redirect()->creator(),
+			'modifier' => $this->kirby()->user()?->email(),
+		]);
 		$redirects->save();
 		return true;
 	}
 
+	protected function userField(string $field): array
+	{
+		if ($user = $this->redirect()->$field()) {
+			if ($user = $this->kirby()->user($user)) {
+				return [$user->panel()->pickerData()];
+			}
+		}
+
+		return [];
+	}
+
 	protected function value(): array
 	{
-		return array_merge(
-			$this->redirect()->toArray(),
-			parent::value()
-		);
+		$creator  = $this->userField('creator');
+		$modifier = $this->userField('modifier');
+
+		if (empty($modifier) === true) {
+			$modifier = $creator;
+		}
+
+		return [
+			...$this->redirect()->toArray(),
+			'creator'  => $creator,
+			'modifier' => $modifier,
+		];
 	}
 }

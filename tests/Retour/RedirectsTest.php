@@ -108,6 +108,7 @@ class RedirectsTest extends TestCase
 			'priority' => false,
 			'comment'  => null,
 			'creator'  => null,
+			'modifier' => null,
 		];
 		$redirect = new Redirect($new);
 		$redirects = $redirects->prepend($redirect);
@@ -235,6 +236,7 @@ class RedirectsTest extends TestCase
 				'priority' => false,
 				'comment'  => null,
 				'creator'  => null,
+				'modifier' => null,
 			],
 			[
 				'from'     => 'homer',
@@ -243,6 +245,7 @@ class RedirectsTest extends TestCase
 				'priority' => true,
 				'comment'  => null,
 				'creator'  => null,
+				'modifier' => null,
 			],
 			[
 				'from'     => 'berlin',
@@ -251,6 +254,7 @@ class RedirectsTest extends TestCase
 				'priority' => false,
 				'comment'  => null,
 				'creator'  => null,
+				'modifier' => null,
 			]
 		];
 	}

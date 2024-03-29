@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Retour\Retour;
 use Kirby\Toolkit\I18n;
 
 /**
@@ -26,13 +27,19 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		];
 	}
 
-	public function submit(): array
+	public function submit(): bool|array
 	{
 		$redirects = $this->redirects();
-		$data      = $this->data();
-		$redirects->create($data);
+		$input     = $this->data();
+
+		$redirects->create([
+			'creator' => $this->creator()->email(),
+			...$input
+		]);
+
 		$redirects->save();
-		$log = $this->retour()->log();
+
+		$log = Retour::instance()->log();
 		$log->resolve($this->path);
 
 		return [

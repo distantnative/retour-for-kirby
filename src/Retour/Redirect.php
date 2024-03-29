@@ -27,7 +27,7 @@ class Redirect extends Obj
 	public function __construct(array $data = [])
 	{
 		if (empty($data['from'] ?? null) === true) {
-			throw new InvalidArgumentException('Route requires path');
+			throw new InvalidArgumentException('Route requires path: ' . json_encode($data));
 		}
 
 		parent::__construct($data);
@@ -101,6 +101,7 @@ class Redirect extends Obj
 			'priority' => $this->priority(),
 			'comment'  => $this->comment(),
 			'creator'  => $this->creator(),
+			'modifier' => $this->modifier(),
 		];
 	}
 

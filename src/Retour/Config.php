@@ -31,7 +31,7 @@ class Config
 			return $this->data;
 		}
 
-    	return $this->data[$key] ?? null;
+		return $this->data[$key] ?? null;
 	}
 
 	public function file(): string
