@@ -50,18 +50,16 @@ export default defineConfig({
 				items: [
 					{ text: "Troubleshooting", link: "/troubleshooting" },
 					{
-						text: "Bug report",
+						text: "Report a bug",
 						link: "https://github.com/distantnative/retour-for-kirby/issues",
 					},
-					{
-						text: "Support development",
-						link: "https://paypal.me/distantnative",
-					},
+					{ text: "Report a vulnerability", link: "/security" },
 				],
 			},
 			{
 				text: "Support development",
 				items: [
+					{ text: "How to contribute", link: "/contribute" },
 					{
 						text: "Donate",
 						link: "https://paypal.me/distantnative",

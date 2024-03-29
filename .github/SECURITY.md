@@ -1,12 +1,4 @@
-# Security policy
-
-## Supported versions
-
-| Version | Supported          | Status                             |
-| ------- | ------------------ | ---------------------------------- |
-| 4.0.0   | :white_check_mark: | Latest release, actively supported |
-| 4.0.0   | :white_check_mark: | No known vulnerabilities           |
-| < 4.0   | :x:                | Not supported                      |
+# Security
 
 ## Reporting a vulnerability
 
