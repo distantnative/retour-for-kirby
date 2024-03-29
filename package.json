@@ -2,13 +2,16 @@
 	"scripts": {
 		"dev": "npx -y kirbyup src/panel/index.js --watch",
 		"build": "npx -y kirbyup src/panel/index.js",
-		"lint": "eslint --ext js,vue src/panel"
+		"lint": "eslint --ext js,vue src/panel",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs"
 	},
 	"devDependencies": {
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-vue": "^9.24.0",
-		"prettier": "^3.2.5"
+		"prettier": "^3.2.5",
+		"vitepress": "^1.0.1"
 	},
 	"browserslist": "> 2%"
 }
