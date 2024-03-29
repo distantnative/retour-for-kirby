@@ -14,3 +14,7 @@
 .vp-doc img {
 	border-radius: 0.5rem;
 }
+
+.vp-doc ul + .custom-block {
+	margin-top: 2rem;
+}

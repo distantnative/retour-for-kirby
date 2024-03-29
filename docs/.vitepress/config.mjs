@@ -4,7 +4,11 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
 	title: "Retour",
 	description: "Redirects and 404 tracking for Kirby",
+	lang: "en-US",
+	base: "/retour-for-kirby/",
 	appearance: "force-dark",
+	cleanUrls: true,
+	head: [["link", { rel: "og:image", href: "./ogimage.png" }]],
 	themeConfig: {
 		logo: "/scribbles.svg",
 
@@ -21,9 +25,13 @@ export default defineConfig({
 			},
 		],
 
+		search: {
+			provider: "local",
+		},
+
 		sidebar: [
 			{
-				text: "Docs",
+				text: "Documentation",
 				items: [
 					{ text: "Getting started", link: "/quickstart" },
 					{ text: "Redirects", link: "/redirects" },
@@ -31,7 +39,7 @@ export default defineConfig({
 				],
 			},
 			{
-				text: "Config",
+				text: "Configuration",
 				items: [
 					{ text: "Options", link: "/options" },
 					{ text: "Translations", link: "/i18n" },
@@ -42,7 +50,20 @@ export default defineConfig({
 				items: [
 					{ text: "Troubleshooting", link: "/troubleshooting" },
 					{
+						text: "Bug report",
+						link: "https://github.com/distantnative/retour-for-kirby/issues",
+					},
+					{
 						text: "Support development",
+						link: "https://paypal.me/distantnative",
+					},
+				],
+			},
+			{
+				text: "Support development",
+				items: [
+					{
+						text: "Donate",
 						link: "https://paypal.me/distantnative",
 					},
 				],
@@ -59,5 +80,10 @@ export default defineConfig({
 				link: "https://chaos.social/@distantnative",
 			},
 		],
+
+		footer: {
+			message:
+				"Retour is made for <a href='https://getkirby.com'>Kirby CMS</a> with love 💛",
+		},
 	},
 });

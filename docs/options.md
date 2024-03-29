@@ -40,6 +40,6 @@ Moreover, Retour obeys to the following user blueprint permissions:
 title: Editor
 
 permissions:
-  access:
-    retour: false
+  access: // [!code focus]
+    retour: false // [!code focus]
 ```

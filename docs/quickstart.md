@@ -1,5 +1,7 @@
 # Getting started
 
+## Requirements
+
 Retour 5 requires Kirby 4.
 
 For Kirby 3, you can use [<Badge type="info" text="v4.4.2" />](https://github.com/distantnative/retour-for-kirby/releases/tag/4.4.2) (although without further support or development).
@@ -37,6 +39,6 @@ Or, if you installed the plugin via composer, run:
 composer update distantnative/retour-for-kirby
 ```
 
-::: danger
+::: warning Create a backup
 When updating, always make sure to first create backups of the redirects config (`/site/config/retour.yml`) and database (`/site/logs/retour/log.sqlite`).
 :::
