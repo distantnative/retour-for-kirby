@@ -9,12 +9,12 @@
 					:style="'--color:' + segment.color"
 					:type="icons[index]"
 				/>
-				<div :key="segment.label + '-no'">
+				<span :key="segment.label + '-no'">
 					{{ new Intl.NumberFormat().format(segment.data) }}
-				</div>
-				<div :key="segment.label + '-label'">
+				</span>
+				<span :key="segment.label + '-label'">
 					{{ segment.label }}
-				</div>
+				</span>
 			</template>
 		</figcaption>
 	</figure>
@@ -70,10 +70,11 @@ export default {
 .chart-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
-	column-gap: var(--spacing-2);
+	column-gap: 0.5ch;
 	row-gap: var(--spacing-3);
 }
 .chart-pie figcaption :nth-child(3n + 2) {
+	padding-inline-start: var(--spacing-2);
 	text-align: right;
 }
 .chart-pie figcaption .k-icon {

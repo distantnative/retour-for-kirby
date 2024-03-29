@@ -6,14 +6,14 @@ import SystemView from "./components/Views/SystemView.vue";
 
 // Components
 import Stats from "./components/Stats/Stats.vue";
-import Tabs from "./components/Navigation/Tabs.vue";
-import Timespan from "./components/Navigation/Timespan.vue";
+import Tabs from "./components/View/Tabs.vue";
+import Timespan from "./components/View/Timespan.vue";
 
 // Table previews
-import CountFieldPreview from "./components/Table/CountFieldPreview.vue";
-import PathFieldPreview from "./components/Table/PathFieldPreview.vue";
-import PriorityFieldPreview from "./components/Table/PriorityFieldPreview.vue";
-import StatusFieldPreview from "./components/Table/StatusFieldPreview.vue";
+import CountFieldPreview from "./components/Previews/CountFieldPreview.vue";
+import PathFieldPreview from "./components/Previews/PathFieldPreview.vue";
+import PriorityFieldPreview from "./components/Previews/PriorityFieldPreview.vue";
+import StatusFieldPreview from "./components/Previews/StatusFieldPreview.vue";
 
 // Fields
 import StatusField from "./components/Fields/StatusField.vue";

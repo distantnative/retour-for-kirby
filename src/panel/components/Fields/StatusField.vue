@@ -1,13 +1,14 @@
 <template>
-	<k-field :input="_uid" v-bind="$props" class="k-select-field">
+	<k-field
+		v-bind="$props"
+		:input="id"
+		:class="['k-select-field', $attrs.class]"
+	>
 		<k-input
-			:id="_uid"
-			ref="input"
 			v-bind="$props"
+			ref="input"
 			type="select"
-			theme="field"
-			v-on="$listeners"
-			@input="onInput"
+			@input="$emit('input', $event)"
 		>
 			<template #before>
 				<k-icon type="circle-filled" :color="color" />
@@ -22,10 +23,5 @@ import color from "../../mixins/color.js";
 export default {
 	extends: "k-select-field",
 	mixins: [color],
-	methods: {
-		onInput(value) {
-			this.value = value;
-		},
-	},
 };
 </script>

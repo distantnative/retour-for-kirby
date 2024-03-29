@@ -124,10 +124,7 @@
         return (this.pagination.page - 1) * this.pagination.limit + 1;
       },
       paginatedItems() {
-        return this.$helper.array.sortBy(
-          this.filteredItems,
-          `${this.sortBy} ${this.sortDirection}`
-        ).slice(this.index - 1, this.pagination.limit * this.pagination.page);
+        return this.$helper.array.sortBy(this.filteredItems, `${this.sortBy} ${this.sortDirection}`).slice(this.index - 1, this.pagination.limit * this.pagination.page);
       }
     },
     methods: {
@@ -165,15 +162,15 @@
   var _sfc_render$d = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("k-retour-view", _vm._b({ staticClass: "k-retour-collection-view", scopedSlots: _vm._u([{ key: "buttons", fn: function() {
-      return [!_vm.stats ? _c("k-button", { attrs: { "link": "https://paypal.me/distantnative", "theme": "positive", "icon": "heart", "size": "sm", "variant": "filled" } }, [_vm._v(" " + _vm._s(_vm.$t("retour.system.support")) + " ")]) : _vm._e(), _vm.searching ? _c("k-search-input", { ref: "search", staticClass: "k-models-section-search k-input", attrs: { "autofocus": true, "placeholder": _vm.$t("filter") + " …", "value": _vm.q }, on: { "input": function($event) {
+      return [!_vm.stats ? _c("k-button", { attrs: { "icon": "heart", "link": "https://paypal.me/distantnative", "size": "sm", "theme": "positive", "variant": "filled" } }, [_vm._v(" " + _vm._s(_vm.$t("retour.system.support")) + " ")]) : _vm._e(), _vm.searching ? _c("k-search-input", { ref: "search", staticClass: "k-models-section-search k-input", attrs: { "autofocus": true, "placeholder": _vm.$t("filter") + " …", "value": _vm.q }, on: { "input": function($event) {
         _vm.q = $event;
         _vm.pagination.page = 1;
       } }, nativeOn: { "keydown": function($event) {
         if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"]))
           return null;
         return _vm.toggleSearch(true);
-      } } }) : _vm._e(), _c("k-button", { attrs: { "icon": "filter", "title": _vm.$t("filter"), "size": "sm", "variant": "filled" }, on: { "click": _vm.toggleSearch } }), _vm._l(_vm.buttons, function(button, index) {
-        return _c("k-button", _vm._b({ key: index, attrs: { "size": "sm", "variant": "filled" } }, "k-button", button, false));
+      } } }) : _vm._e(), _c("k-button", { attrs: { "title": _vm.$t("filter"), "icon": "filter", "size": "sm", "variant": "filled" }, on: { "click": _vm.toggleSearch } }), _vm._l(_vm.buttons, function(button, key) {
+        return _c("k-button", _vm._b({ key, attrs: { "size": "sm", "variant": "filled" } }, "k-button", button, false));
       })];
     }, proxy: true }]) }, "k-retour-view", _vm.$props, false), [_vm.filteredItems.length === 0 ? _c("k-empty", _vm._b({ attrs: { "layout": "table" } }, "k-empty", _vm.empty, false)) : _c("k-table", { attrs: { "columns": _vm.columns, "index": _vm.index, "rows": _vm.paginatedItems }, on: { "cell": _vm.onCell, "header": _vm.onHeader }, scopedSlots: _vm._u([{ key: "header", fn: function({ columnIndex, label }) {
       return [_c("span", [_vm._v(" " + _vm._s(label) + " "), columnIndex === _vm.sortBy ? _c("k-icon", { attrs: { "type": _vm.sortDirection === "asc" ? "angle-up" : "angle-down" } }) : _vm._e()], 1)];
@@ -446,7 +443,7 @@
   var _sfc_render$9 = function render() {
     var _vm = this, _c = _vm._self._c;
     return _c("figure", { staticClass: "chart-pie" }, [_c("div", { staticClass: "graph", style: "--gradient: " + _vm.gradient }), _c("figcaption", [_vm._l(_vm.data, function(segment, index) {
-      return [_c("k-icon", { key: segment.label + "-icon", style: "--color:" + segment.color, attrs: { "type": _vm.icons[index] } }), _c("div", { key: segment.label + "-no" }, [_vm._v(" " + _vm._s(new Intl.NumberFormat().format(segment.data)) + " ")]), _c("div", { key: segment.label + "-label" }, [_vm._v(" " + _vm._s(segment.label) + " ")])];
+      return [_c("k-icon", { key: segment.label + "-icon", style: "--color:" + segment.color, attrs: { "type": _vm.icons[index] } }), _c("span", { key: segment.label + "-no" }, [_vm._v(" " + _vm._s(new Intl.NumberFormat().format(segment.data)) + " ")]), _c("span", { key: segment.label + "-label" }, [_vm._v(" " + _vm._s(segment.label) + " ")])];
     })], 2)]);
   };
   var _sfc_staticRenderFns$9 = [];
@@ -676,7 +673,7 @@
     null,
     null
   );
-  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Navigation/Tabs.vue";
+  __component__$6.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/View/Tabs.vue";
   const Tabs = __component__$6.exports;
   const _sfc_main$5 = {
     props: {
@@ -781,7 +778,7 @@
     null,
     null
   );
-  __component__$5.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Navigation/Timespan.vue";
+  __component__$5.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/View/Timespan.vue";
   const Timespan = __component__$5.exports;
   const _sfc_main$4 = {
     props: {
@@ -809,7 +806,7 @@
     null,
     null
   );
-  __component__$4.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Table/CountFieldPreview.vue";
+  __component__$4.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Previews/CountFieldPreview.vue";
   const CountFieldPreview = __component__$4.exports;
   const _sfc_main$3 = {
     props: {
@@ -847,7 +844,7 @@
     null,
     null
   );
-  __component__$3.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Table/PathFieldPreview.vue";
+  __component__$3.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Previews/PathFieldPreview.vue";
   const PathFieldPreview = __component__$3.exports;
   const _sfc_main$2 = {
     props: {
@@ -871,7 +868,7 @@
     null,
     null
   );
-  __component__$2.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Table/PriorityFieldPreview.vue";
+  __component__$2.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Previews/PriorityFieldPreview.vue";
   const PriorityFieldPreview = __component__$2.exports;
   const color = {
     computed: {
@@ -913,22 +910,19 @@
     null,
     null
   );
-  __component__$1.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Table/StatusFieldPreview.vue";
+  __component__$1.options.__file = "/Users/nhoffmann/Sites/kirby/sites/sandbox/environments/custom-retour/site/plugins/retour/src/panel/components/Previews/StatusFieldPreview.vue";
   const StatusFieldPreview = __component__$1.exports;
   const _sfc_main = {
     extends: "k-select-field",
-    mixins: [color],
-    methods: {
-      onInput(value) {
-        this.value = value;
-      }
-    }
+    mixins: [color]
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("k-field", _vm._b({ staticClass: "k-select-field", attrs: { "input": _vm._uid } }, "k-field", _vm.$props, false), [_c("k-input", _vm._g(_vm._b({ ref: "input", attrs: { "id": _vm._uid, "type": "select", "theme": "field" }, on: { "input": _vm.onInput }, scopedSlots: _vm._u([{ key: "before", fn: function() {
+    return _c("k-field", _vm._b({ class: ["k-select-field", _vm.$attrs.class], attrs: { "input": _vm.id } }, "k-field", _vm.$props, false), [_c("k-input", _vm._b({ ref: "input", attrs: { "type": "select" }, on: { "input": function($event) {
+      return _vm.$emit("input", $event);
+    } }, scopedSlots: _vm._u([{ key: "before", fn: function() {
       return [_c("k-icon", { attrs: { "type": "circle-filled", "color": _vm.color } })];
-    }, proxy: true }]) }, "k-input", _vm.$props, false), _vm.$listeners))], 1);
+    }, proxy: true }]) }, "k-input", _vm.$props, false))], 1);
   };
   var _sfc_staticRenderFns = [];
   _sfc_render._withStripped = true;

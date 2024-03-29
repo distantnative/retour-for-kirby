@@ -3,10 +3,10 @@
 		<template #buttons>
 			<k-button
 				v-if="!stats"
-				link="https://paypal.me/distantnative"
-				theme="positive"
 				icon="heart"
+				link="https://paypal.me/distantnative"
 				size="sm"
+				theme="positive"
 				variant="filled"
 			>
 				{{ $t("retour.system.support") }}
@@ -186,7 +186,7 @@ export default {
 .k-retour-collection-view .k-table-column {
 	cursor: pointer;
 }
-.k-retour-collection-view .k-table-column span {
+.k-retour-collection-view th.k-table-column > span {
 	display: inline-flex;
 	width: 100%;
 	align-items: center;
