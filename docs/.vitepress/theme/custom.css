@@ -8,6 +8,8 @@
 	--vp-c-bg: #e8e9f1;
 	--vp-home-hero-name-color: #5d71b5;
 	--vp-home-hero-image-filter: blur(10rem);
+	--vp-button-alt-bg: #d2d5ea;
+	--vp-button-alt-hover-bg: #c5c9e1;
 }
 
 .VPHomeFeatures {
