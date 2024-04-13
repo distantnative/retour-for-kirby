@@ -1,10 +1,10 @@
 {
 	"name": "distantnative/retour",
-	"description": "Redirects and 404 tracking for Kirby",
+	"description": "Manage redirects and track 404s right from the Kirby CMS Panel",
 	"license": "MIT",
 	"type": "kirby-plugin",
 	"version": "5.2.0",
-	"homepage": "https://github.com/distantnative/retour-for-kirby",
+	"homepage": "https://distantnative.com/retour-for-kirby/",
 	"authors": [
 		{
 			"name": "Nico Hoffmann",
