@@ -5,7 +5,7 @@ hero:
   name: "Retour"
   text: "for Kirby"
   tagline: Redirects and 404 tracking in the Panel
-  image: /scribbles.svg
+  image: /visual.svg
   actions:
     - theme: brand
       text: Download

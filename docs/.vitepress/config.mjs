@@ -6,12 +6,10 @@ export default defineConfig({
 	description: "Redirects and 404 tracking for Kirby",
 	lang: "en-US",
 	base: "/retour-for-kirby/",
-	appearance: "force-dark",
+	appearance: false,
 	cleanUrls: true,
 	head: [["link", { rel: "og:image", href: "/retour-for-kirby/ogimage.png" }]],
 	themeConfig: {
-		logo: "/scribbles.svg",
-
 		nav: [
 			{ text: "Home", link: "/" },
 			{ text: "Docs", link: "/quickstart" },

@@ -1,18 +1,28 @@
 :root {
-	--vp-home-hero-name-color: transparent;
-	--vp-home-hero-name-background: -webkit-linear-gradient(
-		120deg,
-		#9ec6f7,
-		#42548b
-	);
+	--vp-font-family-base: ui-rounded, "Hiragino Maru Gothic ProN", Quicksand,
+		Comfortaa, Manjari, "Arial Rounded MT", "Arial Rounded MT Bold", Calibri,
+		source-sans-pro, sans-serif;
+	--vp-font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+		Consolas, "DejaVu Sans Mono", monospace;
+
+	--vp-c-bg: #e8e9f1;
+	--vp-home-hero-name-color: #5d71b5;
+	--vp-home-hero-image-filter: blur(10rem);
 }
 
 .VPHomeFeatures {
 	margin-bottom: 4.5rem;
 }
 
+.VPHomeHero .image-bg {
+	opacity: 0.5;
+}
+
 .vp-doc img {
 	border-radius: 0.5rem;
+	box-shadow:
+		rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+		rgba(0, 0, 0, 0.05) 0px 10px 10px -5px;
 }
 
 .vp-doc ul + .custom-block {
