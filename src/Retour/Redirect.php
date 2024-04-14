@@ -3,6 +3,7 @@
 namespace Kirby\Retour;
 
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Filesystem\F;
 use Kirby\Http\Header;
 use Kirby\Http\Response;
 use Kirby\Http\Url;
@@ -140,13 +141,14 @@ class Redirect extends Obj
 		return [
 			'pattern' => trim($this->from(), '/'),
 			'action'  => function (...$placeholders) use ($redirect) {
-				$retour = Retour::instance();
-				$kirby  = $retour->kirby();
-				$to     = $redirect->to() ?? '/';
-				$parts  = Str::split($to, '.');
-				$to     = Redirect::toPath($parts[0], $placeholders);
-				$page   = $kirby->page($to);
-				$code   = $redirect->status();
+				$retour    = Retour::instance();
+				$kirby     = $retour->kirby();
+				$to        = $redirect->to() ?? '/';
+				$to        = Redirect::toPath($to, $placeholders);
+				$extension = F::extension($to);
+				$path      = Str::beforeEnd($to, '.' . $extension);
+				$page      = $kirby->page($path);
+				$code      = $redirect->status();
 
 				// Add log entry
 				$retour->log()->add([
@@ -157,14 +159,16 @@ class Redirect extends Obj
 				// Redirects
 				// @codeCoverageIgnoreStart
 				if ($code >= 300 && $code < 400) {
-					$url = $page?->url() ?? $to;
+					if ($page) {
+						$to = $page->url();
 
-					// support for content representations
-					if ($extension = $parts[1] ?? null) {
-						$url .= '.' . $extension;
+						// support for content representations
+						if (empty($extension) === false) {
+							$to .= '.' . $extension;
+						}
 					}
 
-					Response::go($url, $code);
+					Response::go($to, $code);
 				}
 				// @codeCoverageIgnoreEnd
 
