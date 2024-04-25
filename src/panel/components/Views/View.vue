@@ -1,5 +1,5 @@
 <template>
-	<k-inside class="k-retour-view">
+	<k-panel-inside class="k-retour-view">
 		<k-header>
 			{{ $t("view.retour") }}
 
@@ -18,7 +18,7 @@
 		</template>
 
 		<slot />
-	</k-inside>
+	</k-panel-inside>
 </template>
 
 <script>
