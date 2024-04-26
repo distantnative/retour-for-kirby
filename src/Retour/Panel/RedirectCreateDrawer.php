@@ -44,7 +44,7 @@ class RedirectCreateDrawer
 				'counter'  => false,
 				'required' => true,
 				'help'     => I18n::template('retour.redirects.from.help', [
-					'docs' => 'https://github.com/distantnative/retour-for-kirby#path'
+					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#path'
 				])
 			],
 			'to' => [
@@ -59,7 +59,7 @@ class RedirectCreateDrawer
 				'options'  => $codes,
 				'width'    => '1/2',
 				'help'     => I18n::template('retour.redirects.status.help', [
-					'docs' => 'https://github.com/distantnative/retour-for-kirby#status'
+					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#status'
 				])
 			],
 			'priority' => [
