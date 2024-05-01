@@ -33,7 +33,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		$input     = $this->data();
 
 		$redirects->create([
-			'creator' => $this->creator()->email(),
+			'creator' => $this->kirby()->user()?->email(),
 			...$input
 		]);
 
