@@ -17,8 +17,8 @@ use Composer\Semver\Semver;
 use Kirby\Cms\App as Kirby;
 
 // validate Kirby version
-if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~4.0') === false) {
-	throw new Exception('Retour 5 requires Kirby 4');
+if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~4.0 || ~5.0') === false) {
+	throw new Exception('Retour requires Kirby 4 or 5');
 }
 
 // load classes
