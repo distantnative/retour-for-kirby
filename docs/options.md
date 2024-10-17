@@ -29,6 +29,10 @@ The following config options are available:
   // set your own string as prefix in the Panel dialog
   // (disable completely by setting to `false`)
   'site' => 'my.short.domain'
+
+  // set default HTTP status code the redirect will respond with
+  // Default: null (which disables the redirect)
+  'defaultStatus' => ...,
 ]
 ```
 
