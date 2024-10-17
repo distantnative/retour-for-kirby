@@ -8,6 +8,7 @@
 			v-bind="$props"
 			ref="input"
 			type="select"
+			:value=$props.default
 			@input="$emit('input', $event)"
 		>
 			<template #before>
