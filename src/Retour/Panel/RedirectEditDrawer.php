@@ -4,6 +4,7 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
+use Kirby\Toolkit\A;
 
 /**
  * @package   Retour for Kirby
@@ -23,6 +24,9 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	public function load(): array
 	{
 		$fields = $this->fields();
+
+		// remove default value for status
+		$fields['status'] = A::merge($fields['status'], ['default' => null]);
 
 		// set autofocus if specific column cell was passed
 		if ($column = $this->kirby()->request()->get('column')) {
