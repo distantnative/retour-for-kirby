@@ -4,6 +4,7 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
+use Kirby\Toolkit\I18n;
 
 /**
  * Handles (Fiber) Panel view requests
@@ -37,7 +38,7 @@ class View
 			'tabs'     => [
 				[
 					'name'  => 'redirects',
-					'label' => t('retour.redirects'),
+					'label' => I18n::translate('retour.redirects'),
 					'badge' => count($redirects),
 					'link'  => 'retour/redirects'
 				]
@@ -56,13 +57,13 @@ class View
 			// add additional tabs
 			$props['tabs'][] = [
 				'name'  => 'failures',
-				'label' => t('retour.failures'),
+				'label' => I18n::translate('retour.failures'),
 				'badge' => count($failures),
 				'link'  => 'retour/failures'
 			];
 			$props['tabs'][] = [
 				'name'  => 'system',
-				'label' => t('retour.system'),
+				'label' => I18n::translate('retour.system'),
 				'badge' => false,
 				'link'  => 'retour/system'
 			];
@@ -100,10 +101,10 @@ class View
 	{
 		return [
 			'component'  => 'k-retour-' . $tab . '-view',
-			'title'      => t('view.retour'),
+			'title'      => I18n::translate('view.retour'),
 			'breadcrumb' => [
 				[
-					'label' => t('retour.' . $tab),
+					'label' => I18n::translate('retour.' . $tab),
 					'link'  => 'retour/' . $tab,
 				]
 			],
