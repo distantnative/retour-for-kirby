@@ -4,7 +4,7 @@
  * Retour for Kirby Plugin
  *
  * Easily add and manage redirects from the
- * Kirby 4 Panel and track 404 errors
+ * Kirby Panel and track 404 errors
  *
  * @package   Retour for Kirby
  * @author    Nico Hoffmann <nico@getkirby.com>
