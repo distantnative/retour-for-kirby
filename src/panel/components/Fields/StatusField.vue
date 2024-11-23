@@ -23,5 +23,10 @@ import color from "../../mixins/color.js";
 export default {
 	extends: "k-select-field",
 	mixins: [color],
+	mounted() {
+        if (!this.value && this.default) {
+            this.$emit('input', this.default);
+        }
+    }
 };
 </script>
