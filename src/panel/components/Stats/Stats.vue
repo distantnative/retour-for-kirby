@@ -65,7 +65,7 @@ export default {
 .k-retour-stats {
 	padding: var(--spacing-6);
 	color: var(--color-white);
-	background: var(--color-gray-900);
+	background: light-dark(var(--color-gray-900), var(--color-gray-950));
 	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
