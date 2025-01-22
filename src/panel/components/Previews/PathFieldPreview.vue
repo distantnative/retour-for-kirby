@@ -28,7 +28,7 @@ export default {
 		link() {
 			return this.isExternal
 				? this.value
-				: window.panel.$urls.site + "/" + this.value;
+				: window.panel.urls.site + "/" + this.value;
 		},
 	},
 };
