@@ -77,7 +77,7 @@ class Redirects extends Collection
 	 * Turns collection into array, by default turning
 	 * Redirect objects into array as well
 	 */
-	public function toArray(Closure $map = null): array
+	public function toArray(Closure|null $map = null): array
 	{
 		$map ??= fn (Redirect $redirect) => $redirect->toArray();
 		$array = parent::toArray($map);
