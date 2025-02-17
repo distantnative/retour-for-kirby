@@ -4,7 +4,6 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
-use Kirby\Toolkit\A;
 
 /**
  * @package   Retour for Kirby
