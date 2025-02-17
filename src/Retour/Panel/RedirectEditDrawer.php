@@ -26,7 +26,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 		$fields = $this->fields();
 
 		// remove default value for status
-		$fields['status'] = A::merge($fields['status'], ['default' => null]);
+		unset($fields['status']['default']);
 
 		// set autofocus if specific column cell was passed
 		if ($column = $this->kirby()->request()->get('column')) {
