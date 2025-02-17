@@ -31,8 +31,8 @@ The following config options are available:
   'site' => 'my.short.domain'
 
   // set default HTTP status code the redirect will respond with
-  // Default: null (which disables the redirect)
-  'defaultStatus' => ...,
+  // Default: `null` (which disables the redirect)
+  'status' => 308,
 ]
 ```
 
