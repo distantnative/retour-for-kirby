@@ -58,7 +58,6 @@ class RedirectCreateDrawer
 				'label'    => I18n::translate('retour.redirects.status'),
 				'options'  => $codes,
 				'width'    => '1/2',
-				'default'  => (string)Retour::instance()->option('status'),
 				'help'     => I18n::template('retour.redirects.status.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#status'
 				])
@@ -140,6 +139,7 @@ class RedirectCreateDrawer
 	{
 		return [
 			'creator' => [$this->kirby()->user()?->panel()->pickerData()],
+			'status'  => Retour::instance()->option('status')
 		];
 	}
 }
