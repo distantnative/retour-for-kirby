@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "897b6cd27b2a1fe906b1c67f15018b74",
+    "content-hash": "64371ad7ec1fad31211807cff805c45a",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -201,16 +201,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.17.0",
+            "version": "2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "075bc0c26631110584175de6523ab3f1652eb28e"
+                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/075bc0c26631110584175de6523ab3f1652eb28e",
-                "reference": "075bc0c26631110584175de6523ab3f1652eb28e",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
+                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
                 "shasum": ""
             },
             "require": {
@@ -260,7 +260,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.17.0"
+                "source": "https://github.com/filp/whoops/tree/2.18.0"
             },
             "funding": [
                 {
@@ -268,20 +268,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-25T12:00:00+00:00"
+            "time": "2025-03-15T12:00:00+00:00"
         },
         {
             "name": "getkirby/cms",
-            "version": "4.6.0",
+            "version": "4.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkirby/kirby.git",
-                "reference": "994556ca78eab3c11415702870b6388e8472addc"
+                "reference": "938fe98951cace6c77aab744779bf4e0799ad705"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkirby/kirby/zipball/994556ca78eab3c11415702870b6388e8472addc",
-                "reference": "994556ca78eab3c11415702870b6388e8472addc",
+                "url": "https://api.github.com/repos/getkirby/kirby/zipball/938fe98951cace6c77aab744779bf4e0799ad705",
+                "reference": "938fe98951cace6c77aab744779bf4e0799ad705",
                 "shasum": ""
             },
             "require": {
@@ -299,9 +299,9 @@
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
                 "ext-simplexml": "*",
-                "filp/whoops": "2.17.0",
+                "filp/whoops": "2.18.0",
                 "getkirby/composer-installer": "^1.2.1",
-                "laminas/laminas-escaper": "2.15.0",
+                "laminas/laminas-escaper": "2.16.0",
                 "michelf/php-smartypants": "1.8.1",
                 "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
                 "phpmailer/phpmailer": "6.9.3",
@@ -371,7 +371,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-01-30T11:02:53+00:00"
+            "time": "2025-03-25T11:15:09+00:00"
         },
         {
             "name": "getkirby/composer-installer",
@@ -422,16 +422,16 @@
         },
         {
             "name": "laminas/laminas-escaper",
-            "version": "2.15.0",
+            "version": "2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-escaper.git",
-                "reference": "c612b0488ae486284c39885efca494c180f16351"
+                "reference": "9cf1f5317ca65b4fd5c6a3c2855e24a187b288c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/c612b0488ae486284c39885efca494c180f16351",
-                "reference": "c612b0488ae486284c39885efca494c180f16351",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/9cf1f5317ca65b4fd5c6a3c2855e24a187b288c8",
+                "reference": "9cf1f5317ca65b4fd5c6a3c2855e24a187b288c8",
                 "shasum": ""
             },
             "require": {
@@ -443,12 +443,11 @@
                 "zendframework/zend-escaper": "*"
             },
             "require-dev": {
-                "infection/infection": "^0.27.11",
+                "infection/infection": "^0.29.8",
                 "laminas/laminas-coding-standard": "~3.0.1",
-                "maglnet/composer-require-checker": "^3.8.0",
-                "phpunit/phpunit": "^9.6.22",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.26.1"
+                "phpunit/phpunit": "^10.5.45",
+                "psalm/plugin-phpunit": "^0.19.2",
+                "vimeo/psalm": "^6.6.2"
             },
             "type": "library",
             "autoload": {
@@ -480,7 +479,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-12-17T19:39:54+00:00"
+            "time": "2025-02-17T12:40:19+00:00"
         },
         {
             "name": "league/color-extractor",

@@ -3,7 +3,7 @@
 	"description": "Manage redirects and track 404s right from the Kirby CMS Panel",
 	"license": "MIT",
 	"type": "kirby-plugin",
-	"version": "5.4.1",
+	"version": "5.5.0",
 	"homepage": "https://distantnative.com/retour-for-kirby/",
 	"authors": [
 		{
