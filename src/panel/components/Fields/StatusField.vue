@@ -24,9 +24,9 @@ export default {
 	extends: "k-select-field",
 	mixins: [color],
 	mounted() {
-        if (!this.value && this.default) {
-            this.$emit('input', this.default);
-        }
-    }
+		if (!this.value && this.default) {
+			this.$emit("input", this.default);
+		}
+	},
 };
 </script>
