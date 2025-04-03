@@ -124,16 +124,4 @@ class Redirects extends Collection
 			fn (Redirect $route) => $route->toRoute()
 		);
 	}
-
-	/**
-	 * Updates existing redirect
-	 *
-	 * @param string $id ID of exisiting redirect
-	 */
-	public function update(string $id, array $data): self
-	{
-		$redirect = new Redirect($data);
-		$this->set($id, $redirect);
-		return $this;
-	}
 }
