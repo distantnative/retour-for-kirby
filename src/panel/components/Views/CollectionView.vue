@@ -18,7 +18,7 @@
 				:autofocus="true"
 				:placeholder="$t('filter') + ' …'"
 				:value="q"
-				class="k-models-section-search k-input"
+				class="k-input"
 				@input="
 					q = $event;
 					pagination.page = 1;
@@ -207,9 +207,8 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 }
-.k-retour-collection-view .k-models-section-search.k-input {
+.k-retour-collection-view .k-search-input {
 	min-height: auto;
 	height: var(--height-sm);
-	margin-bottom: 0;
 }
 </style>
