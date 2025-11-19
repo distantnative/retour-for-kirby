@@ -1,4 +1,5 @@
 {
+	"name": "distantnative/retour-for-kirby",
 	"scripts": {
 		"dev": "kirbyup src/panel/index.js --watch",
 		"build": "kirbyup src/panel/index.js",
@@ -8,12 +9,12 @@
 		"docs:preview": "vitepress preview docs"
 	},
 	"devDependencies": {
-		"eslint": "^9.27.0",
-		"eslint-config-prettier": "^10.1.5",
+		"eslint": "^9.39.1",
+		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-vue": "^9.32.0",
-		"kirbyup": "^3.3.0",
-		"prettier": "^3.5.3",
-		"vitepress": "^1.6.3"
+		"kirbyup": "^3.4.1",
+		"prettier": "^3.6.2",
+		"vitepress": "^1.6.4"
 	},
 	"browserslist": "> 2%"
 }
