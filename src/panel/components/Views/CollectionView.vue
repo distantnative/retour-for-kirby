@@ -210,5 +210,7 @@ export default {
 .k-retour-collection-view .k-search-input {
 	min-height: auto;
 	height: var(--height-sm);
+	--input-color-border: transparent;
+	--input-color-back: light-dark(var(--color-gray-300), var(--color-gray-950));
 }
 </style>
