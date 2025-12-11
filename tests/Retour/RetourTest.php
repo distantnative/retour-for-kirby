@@ -3,15 +3,11 @@
 namespace Kirby\Retour;
 
 use Kirby\Cms\App;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Retour
- */
+#[CoversClass(Retour::class)]
 class RetourTest extends TestCase
 {
-	/**
-	 * @covers ::__construct
-	 */
 	public function testConstruct(): void
 	{
 		$app = $this->kirby->clone([
@@ -24,9 +20,6 @@ class RetourTest extends TestCase
 		$this->assertSame(3, $redirects->count());
 	}
 
-	/**
-	 * @covers ::config
-	 */
 	public function testConfig(): void
 	{
 		$app = $this->kirby->clone([
@@ -39,9 +32,6 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(Config::class, $config);
 	}
 
-	/**
-	 * @covers ::hasLog
-	 */
 	public function testHasLog(): void
 	{
 		$retour = Retour::instance();
@@ -53,9 +43,6 @@ class RetourTest extends TestCase
 		$this->assertFalse($retour->hasLog());
 	}
 
-	/**
-	 * @covers ::ignore
-	 */
 	public function testIgnore(): void
 	{
 		// no ignore
@@ -94,9 +81,6 @@ class RetourTest extends TestCase
 		$this->assertTrue($retour->ignore($path));
 	}
 
-	/**
-	 * @covers ::instance
-	 */
 	public function testInstance(): void
 	{
 		$app    = App::instance();
@@ -114,18 +98,12 @@ class RetourTest extends TestCase
 		$this->assertSame($app, $retour->kirby());
 	}
 
-	/**
-	 * @covers ::kirby
-	 */
 	public function testKirby(): void
 	{
 		$kirby = Retour::instance()->kirby();
 		$this->assertInstanceOf(App::class, $kirby);
 	}
 
-	/**
-	 * @covers ::log
-	 */
 	public function testLog(): void
 	{
 		$app = $this->kirby->clone([
@@ -138,9 +116,6 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(Log::class, $log);
 	}
 
-	/**
-	 * @covers ::log
-	 */
 	public function testLogDisabled(): void
 	{
 		$app = $this->kirby->clone([
@@ -154,9 +129,6 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(LogDisabled::class, $log);
 	}
 
-	/**
-	 * @covers ::option
-	 */
 	public function testOption()
 	{
 		$app = $this->kirby->clone([
@@ -170,9 +142,6 @@ class RetourTest extends TestCase
 		$this->assertSame('simpson', $retour->option('homer', 'simpson'));
 	}
 
-	/**
-	 * @covers ::redirects
-	 */
 	public function testRedirects(): void
 	{
 		$app = $this->kirby->clone([
@@ -185,9 +154,6 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(Redirects::class, $redirects);
 	}
 
-	/**
-	 * @covers ::site
-	 */
 	public function testSite(): void
 	{
 		$site = Retour::instance()->site();

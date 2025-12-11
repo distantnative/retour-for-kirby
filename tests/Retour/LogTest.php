@@ -4,14 +4,16 @@ namespace Kirby\Retour;
 
 use Closure;
 use Kirby\Filesystem\F;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Log
- */
+#[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
-	protected function log(string|Closure $file = null, array $options = [])
-	{
+	protected function log(
+		string|Closure|null $file = null,
+		array $options = []
+	): Log {
 		$file ??= __DIR__ . '/tmp/test.sqlite';
 		$app    = $this->kirby->clone([
 			'options' => array_merge($options, [
@@ -23,10 +25,6 @@ class LogTest extends TestCase
 		return new Log($retour);
 	}
 
-	/**
-	 * @covers ::add
-	 * @covers ::table
-	 */
 	public function testAdd(): void
 	{
 		$log = $this->log();
@@ -50,9 +48,7 @@ class LogTest extends TestCase
 		$this->assertSame($redirect, $results->first()['redirect']);
 	}
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
+	#[DoesNotPerformAssertions]
 	public function testDisabled(): void
 	{
 		$log = new LogDisabled();
@@ -61,9 +57,6 @@ class LogTest extends TestCase
 		$log->redirect('foo', '2020-01-01', '2020-31-12');
 	}
 
-	/**
-	 * @covers ::fails
-	 */
 	public function testFails(): void
 	{
 		$log = $this->log();
@@ -85,9 +78,6 @@ class LogTest extends TestCase
 		$this->assertSame(2, $fail['hits']);
 	}
 
-	/**
-	 * @covers ::__construct
-	 */
 	public function testFile(): void
 	{
 		$file = __DIR__ . '/tmp/log/test.sqlite';
@@ -96,11 +86,6 @@ class LogTest extends TestCase
 		$this->assertTrue(F::exists($file));
 	}
 
-	/**
-	 * @covers ::first
-	 * @covers ::last
-	 * @covers ::single
-	 */
 	public function testFirstLast(): void
 	{
 		$log = $this->log();
@@ -115,9 +100,6 @@ class LogTest extends TestCase
 		$this->assertSame($log->first(), $log->last());
 	}
 
-	/**
-	 * @covers ::flush
-	 */
 	public function testFlush(): void
 	{
 		$log = $this->log();
@@ -130,9 +112,6 @@ class LogTest extends TestCase
 		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
 	}
 
-	/**
-	 * @covers ::purge
-	 */
 	public function testPurge(): void
 	{
 		$file = __DIR__ . '/tmp/test.sqlite';
@@ -158,18 +137,12 @@ class LogTest extends TestCase
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
 	}
 
-	/**
-	 * @covers ::purge
-	 */
 	public function testPurgeDactivated(): void
 	{
 		$log = $this->log();
 		$this->assertTrue($log->purge());
 	}
 
-	/**
-	 * @covers ::redirect
-	 */
 	public function testRedirect(): void
 	{
 		$log = $this->log();
@@ -205,9 +178,6 @@ class LogTest extends TestCase
 		$this->assertSame(2, $redirect['hits']);
 	}
 
-	/**
-	 * @covers ::remove
-	 */
 	public function testRemove(): void
 	{
 		$log = $this->log();
@@ -226,9 +196,6 @@ class LogTest extends TestCase
 		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
 	}
 
-	/**
-	 * @covers ::resolve
-	 */
 	public function testResolve(): void
 	{
 		$log = $this->log();
@@ -247,18 +214,12 @@ class LogTest extends TestCase
 		$this->assertSame(1, count($log->fails('2020-01-01', '2020-12-31')));
 	}
 
-	/**
-	 * @covers ::retour
-	 */
 	public function testRetour(): void
 	{
 		$log = $this->log();
 		$this->assertInstanceOf(Retour::class, $log->retour());
 	}
 
-	/**
-	 * @covers ::stats
-	 */
 	public function testStats(): void
 	{
 		$file = __DIR__ . '/fixtures/sample.sqlite';

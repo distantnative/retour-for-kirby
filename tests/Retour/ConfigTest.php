@@ -2,16 +2,12 @@
 
 namespace Kirby\Retour;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Config
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+use PSpell\Config;
+
+#[CoversClass(Config::class)]
 class ConfigTest extends TestCase
 {
-	/**
-	 * @covers  ::__construct
-	 * @covers ::data
-	 * @covers ::read
-	 */
 	public function testData(): void
 	{
 		$app = $this->kirby->clone([
@@ -25,9 +21,6 @@ class ConfigTest extends TestCase
 		$this->assertCount(3, $config->data('redirects'));
 	}
 
-	/**
-	 * @covers ::file
-	 */
 	public function testFile(): void
 	{
 		$config = Retour::instance()->config();
@@ -50,9 +43,6 @@ class ConfigTest extends TestCase
 		$this->assertSame($file, $config->file());
 	}
 
-	/**
-	 * @covers ::retour
-	 */
 	public function testRetour(): void
 	{
 		$retour  = Retour::instance();
@@ -61,9 +51,6 @@ class ConfigTest extends TestCase
 		$this->assertSame($retour, $config->retour());
 	}
 
-	/**
-	 * @covers ::write
-	 */
 	public function testWrite(): void
 	{
 		$app = $this->kirby->clone([

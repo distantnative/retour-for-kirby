@@ -6,15 +6,11 @@ use Closure;
 use Kirby\Cms\Page;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Http\Route;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Redirect
- */
+#[CoversClass(Redirect::class)]
 class RedirectTest extends TestCase
 {
-	/**
-	 * @covers ::__construct
-	 */
 	public function testConstructValidation(): void
 	{
 		$this->expectExceptionMessage('Route requires path');
@@ -22,9 +18,6 @@ class RedirectTest extends TestCase
 		new Redirect([]);
 	}
 
-	/**
-	 * @covers ::id
-	 */
 	public function testId(): void
 	{
 		$redirect = new Redirect(['from' => 'foo']);
@@ -34,9 +27,6 @@ class RedirectTest extends TestCase
 		$this->assertSame('foobar', $redirect->id());
 	}
 
-	/**
-	 * @covers ::isActive
-	 */
 	public function testIsActive(): void
 	{
 		$redirect = new Redirect(['from' => 'foo']);
@@ -52,9 +42,6 @@ class RedirectTest extends TestCase
 		$this->assertTrue($redirect->isActive());
 	}
 
-	/**
-	 * @covers ::priority
-	 */
 	public function testPriority(): void
 	{
 		$redirect = new Redirect(['from' => 'foo']);
@@ -76,9 +63,6 @@ class RedirectTest extends TestCase
 		$this->assertTrue($redirect->priority());
 	}
 
-	/**
-	 * @covers ::status
-	 */
 	public function testStatus(): void
 	{
 		$redirect = new Redirect(['from' => 'foo']);
@@ -94,10 +78,6 @@ class RedirectTest extends TestCase
 		$this->assertSame(300, $redirect->status());
 	}
 
-	/**
-	 * @covers ::__construct
-	 * @covers ::toArray
-	 */
 	public function testToArray(): void
 	{
 		$redirect = new Redirect([
@@ -119,9 +99,6 @@ class RedirectTest extends TestCase
 		$this->assertSame($expected, $redirect->toArray());
 	}
 
-	/**
-	 * @covers ::toPath
-	 */
 	public function testToPath(): void
 	{
 		$path = Redirect::toPath('foo');
@@ -139,9 +116,6 @@ class RedirectTest extends TestCase
 		$this->assertSame('foo/bar/homer/simpson', $path);
 	}
 
-	/**
-	 * @covers ::toRoute
-	 */
 	public function testToRoute(): void
 	{
 		$redirect = new Redirect([
@@ -156,9 +130,6 @@ class RedirectTest extends TestCase
 		$this->assertInstanceOf(Closure::class, $route['action']);
 	}
 
-	/**
-	 * @covers ::toRoute
-	 */
 	public function testToRouteDisabled(): void
 	{
 		$redirect = new Redirect([
@@ -170,9 +141,6 @@ class RedirectTest extends TestCase
 		$this->assertFalse($redirect->toRoute());
 	}
 
-	/**
-	 * @covers ::toRoute
-	 */
 	public function testRouteResolve(): void
 	{
 		$app = $this->kirby->clone([

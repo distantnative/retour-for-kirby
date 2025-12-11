@@ -2,9 +2,9 @@
 
 namespace Kirby\Retour;
 
-/**
- * @coversNothing
- */
+use PHPUnit\Framework\Attributes\CoversNothing;
+
+#[CoversNothing]
 class RoutesTest extends TestCase
 {
 	public function testExtension(): void

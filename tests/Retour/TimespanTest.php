@@ -2,14 +2,11 @@
 
 namespace Kirby\Retour;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Timespan
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(Timespan::class)]
 class TimespanTest extends TestCase
 {
-	/**
-	 * @covers ::label
-	 */
 	public function testLabel(): void
 	{
 		$this->assertSame('1 January 2023', Timespan::label([
@@ -49,9 +46,6 @@ class TimespanTest extends TestCase
 		]));
 	}
 
-	/**
-	 * @covers ::unit
-	 */
 	public function testUnit(): void
 	{
 		$this->assertSame('day', Timespan::unit([

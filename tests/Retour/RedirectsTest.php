@@ -5,15 +5,11 @@ namespace Kirby\Retour;
 use Kirby\Exception\DuplicateException;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \Kirby\Retour\Redirects
- */
+#[CoversClass(Redirects::class)]
 class RedirectsTest extends TestCase
 {
-	/**
-	 * @covers ::create
-	 */
 	public function testCreate(): void
 	{
 		$redirects = Retour::instance()->redirects();
@@ -23,9 +19,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame('foo', $redirects->first()->from());
 	}
 
-	/**
-	 * @covers ::create
-	 */
 	public function testCreateDuplicate(): void
 	{
 		$redirects = Retour::instance()->redirects();
@@ -38,9 +31,6 @@ class RedirectsTest extends TestCase
 		$redirects->create(['from' => 'foo']);
 	}
 
-	/**
-	 * @covers ::create
-	 */
 	public function testCreateWithoutValidParameters(): void
 	{
 		$redirects = Retour::instance()->redirects();
@@ -48,10 +38,6 @@ class RedirectsTest extends TestCase
 		$redirects->create([]);
 	}
 
-	/**
-	 * @covers ::__construct
-	 * @covers ::factory
-	 */
 	public function testFactory(): void
 	{
 		$retour    = Retour::instance();
@@ -61,9 +47,6 @@ class RedirectsTest extends TestCase
 		$this->assertInstanceOf(Redirect::class, $redirects->first());
 	}
 
-	/**
-	 * @covers ::retour
-	 */
 	public function testRetour(): void
 	{
 		$retour    = Retour::instance();
@@ -72,9 +55,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame($retour, $redirects->retour());
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSave(): void
 	{
 		$file = __DIR__ . '/tmp/redirects.yml';
@@ -120,9 +100,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame($expected, $config->data('redirects'));
 	}
 
-	/**
-	 * @covers ::toArray
-	 */
 	public function testToArray(): void
 	{
 		$retour    = Retour::instance();
@@ -132,9 +109,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame($expected, $redirects->toArray());
 	}
 
-	/**
-	 * @covers ::toData
-	 */
 	public function testToData(): void
 	{
 		$app = $this->kirby->clone([
@@ -161,9 +135,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame($last, $data[0]['last']);
 	}
 
-	/**
-	 * @covers ::toData
-	 */
 	public function testToDataNoLog(): void
 	{
 		$app = $this->kirby->clone([
@@ -180,9 +151,6 @@ class RedirectsTest extends TestCase
 		);
 	}
 
-	/**
-	 * @covers ::toRoutes
-	 */
 	public function testToRoutes(): void
 	{
 		$retour    = Retour::instance();
@@ -198,9 +166,6 @@ class RedirectsTest extends TestCase
 		$this->assertSame(0, count($routes));
 	}
 
-	/**
-	 * @covers ::update
-	 */
 	public function testUpdate(): void
 	{
 		$redirects = Retour::instance()->redirects();
