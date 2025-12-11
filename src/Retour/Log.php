@@ -123,14 +123,19 @@ class Log
 	/**
 	 * Remove database records and reset index
 	 */
-	public function flush(): bool
+	public function flush(string $mode = 'all'): bool
 	{
-		$table = $this->table()->delete();
-		$index = $this->database->sqlite_sequence()->delete([
-			'name' => 'records'
-		]);
+		$table = match ($mode) {
+			'all'      => $this->table()->delete(),
+			'failures' => $this->table()->delete('redirect IS NULL AND wasResolved IS NULL')
+		};
+
+		if ($mode === 'all') {
+			$this->database->sqlite_sequence()->delete(['name' => 'records']);
+		}
+
 		$vacuum = $this->database->execute('VACUUM');
-		return $table && $index && $vacuum;
+		return $table && $vacuum;
 	}
 
 	/**
