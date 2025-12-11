@@ -26,7 +26,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 		// set autofocus if specific column cell was passed
 		if ($column = $this->kirby()->request()->get('column')) {
-			foreach ($fields as $name => $field) {
+			foreach (array_keys($fields) as $name) {
 				$fields[$name]['autofocus'] = $name === $column;
 			}
 		}
@@ -85,7 +85,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 		$creator  = $this->userField('creator');
 		$modifier = $this->userField('modifier');
 
-		if (empty($modifier) === true) {
+		if ($modifier === []) {
 			$modifier = $creator;
 		}
 

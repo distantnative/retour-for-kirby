@@ -143,9 +143,8 @@ class Timespan
 
 		$data['unit']  = static::unit($data);
 		$data['label'] = static::label($data);
-		$data += static::checks($data);
 
-		return $data;
+		return $data + static::checks($data);
 	}
 
 	public static function query(): array

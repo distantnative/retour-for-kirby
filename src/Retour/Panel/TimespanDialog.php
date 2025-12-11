@@ -42,8 +42,7 @@ class TimespanDialog
 
 	public function load(): array
 	{
-		$retour      = Retour::instance();
-		$selection   = Timespan::selection($retour);
+		$selection   = Timespan::selection();
 		[$min, $max] = $this->limits();
 
 		return [

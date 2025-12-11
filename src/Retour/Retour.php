@@ -59,12 +59,7 @@ class Retour
 		$route  = new Route($path, 'GET', fn () => null);
 		$ignore = $this->option('ignore', []);
 		$ignore = $route->regex(implode('|', $ignore));
-
-		if (preg_match('!^(' . $ignore . ')$!i', $path) === 1) {
-			return true;
-		}
-
-		return false;
+		return preg_match('!^(' . $ignore . ')$!i', $path) === 1;
 	}
 
 	/**
