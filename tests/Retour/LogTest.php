@@ -229,7 +229,7 @@ class LogTest extends TestCase
 		$stats = $log->stats('year', '2019-01-01', '2019-12-31');
 		$this->assertSame(12, count($stats));
 		$this->assertSame('2019-12', $stats[11]['date']);
-		$this->assertSame(303, $stats[11]['failed']);
+		$this->assertSame(235, $stats[11]['failed']);
 		$this->assertSame(68, $stats[11]['resolved']);
 		$this->assertSame(1021, $stats[11]['redirected']);
 
@@ -237,7 +237,7 @@ class LogTest extends TestCase
 		$stats = $log->stats('month', '2019-11-01', '2019-11-30');
 		$this->assertSame(30, count($stats));
 		$this->assertSame('2019-11-30', $stats[29]['date']);
-		$this->assertSame(19, $stats[29]['failed']);
+		$this->assertSame(16, $stats[29]['failed']);
 		$this->assertSame(3, $stats[29]['resolved']);
 		$this->assertSame(33, $stats[29]['redirected']);
 
@@ -245,7 +245,7 @@ class LogTest extends TestCase
 		$stats = $log->stats('week', '2019-11-04', '2019-11-10');
 		$this->assertSame(7, count($stats));
 		$this->assertSame('2019-11-10', $stats[6]['date']);
-		$this->assertSame(17, $stats[6]['failed']);
+		$this->assertSame(14, $stats[6]['failed']);
 		$this->assertSame(3, $stats[6]['resolved']);
 		$this->assertSame(30, $stats[6]['redirected']);
 

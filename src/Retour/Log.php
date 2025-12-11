@@ -85,12 +85,12 @@ class Log
                 path,
                 referrer,
                 MAX(date) AS last,
-                COUNT(date) AS hits
+                COUNT(*) AS hits
             ')
 			->where('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
-			->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $from])
-			->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $to])
+			->andWhere('date > :start', ['start' => $from])
+			->andWhere('date < :end', ['end' => $to])
 			->group('path, referrer')
 			->fetch('array')
 			->all();
@@ -148,7 +148,7 @@ class Log
 			/** @var \Kirby\Database\Query $table */
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
 
-			return $table->delete('strftime("%s", date) < strftime("%s", :cutoff)');
+			return $table->delete('date < :cutoff');
 		}
 
 		return true;
@@ -175,8 +175,8 @@ class Log
                 MAX(date) AS last
             ')
 			->where(['redirect' => $path])
-			->andWhere('strftime("%s", date) > strftime("%s", :start)', ['start' => $from])
-			->andWhere('strftime("%s", date) < strftime("%s", :end)', ['end' => $to])
+			->andWhere('date > :start', ['start' => $from])
+			->andWhere('date < :end', ['end' => $to])
 			->fetch('array')
 			->first();
 
@@ -254,16 +254,16 @@ class Log
 		$data = $this->database->query('
             SELECT
                 strftime(:group, date) AS date,
-                COUNT(redirect) AS redirected,
-                COUNT(wasResolved) - COUNT(wasResolved + redirect) AS resolved,
-                COUNT(path) - COUNT(wasResolved + redirect) - COUNT(redirect) AS failed
+				SUM(CASE WHEN redirect IS NOT NULL THEN 1 END) AS redirected,
+				SUM(CASE WHEN wasResolved IS NOT NULL AND redirect IS NULL THEN 1 END) AS resolved,
+				SUM(CASE WHEN redirect IS NULL AND wasResolved IS NULL THEN 1 END) AS failed
             FROM
                 records
             WHERE
-                strftime("%s", date) >= strftime("%s", :from)
+                date >= :from
             AND
-                strftime("%s", date) <= strftime("%s", :to)
-            GROUP BY
+                date <= :to
+			GROUP BY
                 strftime(:group, date)
             ORDER BY
                 strftime(:group, date)
