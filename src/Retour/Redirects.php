@@ -124,4 +124,13 @@ class Redirects extends Collection
 			fn (Redirect $route) => $route->toRoute()
 		);
 	}
+
+	/**
+	 * Updates a redirect
+	 */
+	public function update(string|object $key, $data = null): static
+	{
+		$redirect = new Redirect($data);
+		return parent::update($key, $redirect);
+	}
 }
