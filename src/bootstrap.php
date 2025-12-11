@@ -1,6 +1,7 @@
 <?php
 
 $dir = __DIR__ . '/Retour';
+
 load([
 	'Kirby\\Retour\\Config'      => $dir . '/Config.php',
 	'Kirby\\Retour\\LogDisabled' => $dir . '/LogDisabled.php',

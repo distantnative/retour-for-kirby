@@ -68,6 +68,14 @@ class Log
 	}
 
 	/**
+	 * @since 5.6.0
+	 */
+	public function database(): Database
+	{
+		return $this->database();
+	}
+
+	/**
 	 * Returns all logged 404s
 	 *
 	 * @param string $from date sting (yyyy-mm-dd)

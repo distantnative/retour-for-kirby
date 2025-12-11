@@ -22,12 +22,13 @@ if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~4.0 || ~5.0') === false) {
 }
 
 // load classes
-require_once 'src/bootstrap.php';
+require_once __DIR__ . '/src/bootstrap.php';
 
 // register the plugin
 Kirby::plugin('distantnative/retour', [
-	'areas'        => require_once 'src/extensions/areas.php',
-	'hooks'        => require_once 'src/extensions/hooks.php',
-	'routes'       => require_once 'src/extensions/routes.php',
-	'translations' => require_once 'src/extensions/i18n.php'
+	'areas'        => require_once __DIR__ . '/src/extensions/areas.php',
+	'commands'     => require_once __DIR__ . '/src/extensions/commands.php',
+	'hooks'        => require_once __DIR__ . '/src/extensions/hooks.php',
+	'routes'       => require_once __DIR__ . '/src/extensions/routes.php',
+	'translations' => require_once __DIR__ . '/src/extensions/i18n.php'
 ]);
