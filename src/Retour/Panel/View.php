@@ -47,8 +47,11 @@ class View
 
 		// if log feature is supported...
 		if ($retour->hasLog() === true) {
-			// purge log entries that should be auomatically deleted
-			$retour->log()->purge();
+			// run garbage collection with a chance of 10%;
+			if (mt_rand(1, 10000) <= 0.1 * 10000) {
+				// purge log entries that should be automatically deleted
+				$retour->log()->purge();
+			}
 
 			// get all data for 404 failures
 			/** @var array */

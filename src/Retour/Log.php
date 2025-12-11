@@ -121,7 +121,8 @@ class Log
 		$index = $this->database->sqlite_sequence()->delete([
 			'name' => 'records'
 		]);
-		return $table && $index;
+		$vacuum = $this->database->execute('VACUUM');
+		return $table && $index && $vacuum;
 	}
 
 	/**
@@ -148,7 +149,9 @@ class Log
 			/** @var \Kirby\Database\Query $table */
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
 
-			return $table->delete('date < :cutoff');
+			$delete = $table->delete('date < :cutoff');
+			$vacuum = $this->database->execute('VACUUM');
+			return $delete && $vacuum;
 		}
 
 		return true;
