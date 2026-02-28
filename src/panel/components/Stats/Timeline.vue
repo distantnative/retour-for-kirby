@@ -50,12 +50,27 @@ export default {
 			return [1, 2, 3, 4, 5].map((x) => {
 				let tick = x * span;
 
-				if (tick >= 1000) {
+				if (tick >= 1000000) {
+					tick = Math.floor(tick / 100000) / 10 + "M";
+				} else if (tick >= 1000) {
 					tick = Math.floor(tick / 100) / 10 + "k";
 				}
 
 				return tick;
 			});
+		},
+		bounds() {
+			return this.data.map((segment) =>
+				segment.areas.map((_, area) => {
+					const stack = segment.areas
+						.slice(0, area)
+						.reduce((i, x) => (i += x.data), 0);
+					return {
+						path: stack + segment.areas[area].data,
+						mask: stack,
+					};
+				}),
+			);
 		},
 		format() {
 			return (
@@ -66,14 +81,6 @@ export default {
 					year: "MMM",
 					months: "MMM YY",
 				}[this.timespan.unit] ?? "D MMM"
-			);
-		},
-		subunit() {
-			return (
-				{
-					day: "hour",
-					year: "month",
-				}[this.timespan.unit] ?? "day"
 			);
 		},
 		max() {
@@ -91,47 +98,49 @@ export default {
 
 			return 5;
 		},
+		subunit() {
+			return (
+				{
+					day: "hour",
+					year: "month",
+				}[this.timespan.unit] ?? "day"
+			);
+		},
+		today() {
+			return this.$library.dayjs();
+		},
 	},
 	methods: {
-		bounds(segment, area) {
-			const stack = segment.areas
-				.slice(0, area)
-				.reduce((i, x) => (i += x.data), 0);
-
-			return {
-				path: stack + segment.areas[area].data,
-				mask: stack,
-			};
-		},
 		clip(segment, area) {
-			let current = this.bounds(this.data[segment], area);
-			let next = { path: 0, mask: 0 };
+			const current = this.bounds[segment][area];
+			const next = this.bounds[segment + 1]?.[area] ?? {
+				path: 0,
+				mask: 0,
+			};
 
-			if (this.data[segment + 1]) {
-				next = this.bounds(this.data[segment + 1], area);
-			}
-
-			return `--p0: ${current.path / this.max}; --p1: ${
-				next.path / this.max
-			}; --m0: ${current.mask / this.max}; --m1: ${next.mask / this.max};`;
+			return `
+				--p0: ${current.path / this.max};
+				--p1: ${next.path / this.max};
+				--m0: ${current.mask / this.max};
+				--m1: ${next.mask / this.max};
+			`;
 		},
 		color(segment, area) {
 			const next = this.data[segment + 1];
 
-			if (next) {
-				const date = this.$library.dayjs(next.label);
-				const today = this.$library.dayjs();
-
-				if (date.isAfter(today, this.subunit)) {
-					return "transparent";
-				}
+			if (
+				next &&
+				this.$library.dayjs(next.label).isAfter(this.today, this.subunit)
+			) {
+				return "transparent";
 			}
 
 			return area.color;
 		},
 		isCurrent(segment) {
-			const today = this.$library.dayjs();
-			return this.$library.dayjs(segment.label).isSame(today, this.subunit);
+			return this.$library
+				.dayjs(segment.label)
+				.isSame(this.today, this.subunit);
 		},
 		label(segment) {
 			return this.$library.dayjs(segment.label).format(this.format);
@@ -156,7 +165,7 @@ export default {
 
 <style>
 .chart-areas {
-	overflow-x: scroll;
+	overflow-x: auto;
 	overflow-y: hidden;
 	padding-block-start: var(--spacing-8);
 	padding-inline: var(--spacing-3);
@@ -262,7 +271,8 @@ export default {
 		100% calc(100% * (1 - var(--m1))),
 		0% calc(100% * (1 - var(--m0)))
 	);
-	transition: clip-path 0.5s;
+	will-change: clip-path;
+	transition: clip-path 0.3s ease-out;
 }
 .chart-areas tfoot {
 	margin-top: var(--spacing-2);
