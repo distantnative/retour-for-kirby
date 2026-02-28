@@ -72,7 +72,7 @@ class Log
 	 */
 	public function database(): Database
 	{
-		return $this->database();
+		return $this->database;
 	}
 
 	/**
