@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "Ano",
 	"retour.stats.mode.month": "Mês",
 	"retour.stats.mode.week": "Semana",
-	"retour.stats.mode.day": "Dia",
-	"retour.system": "Sistema",
-	"retour.system.support": "Apoie o desenvolvimento",
-	"retour.system.failures": "Falhas registradas",
-	"retour.system.redirects": "Redirecionamentos bem-sucedidos",
-	"retour.system.deleteAfter": "Excluir registros após",
-	"retour.system.deleteAfter.months": "{count} meses",
-	"retour.system.docs": "Aprenda mais sobre as opções na <a href='{docs}' target='_blank'>documentação</a>."
+	"retour.stats.mode.day": "Dia"
 }
