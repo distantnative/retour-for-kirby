@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\Str;
 
@@ -10,8 +11,9 @@ if (php_sapi_name() !== 'cli') die();
 // Bootstrap
 require __DIR__ . '/../tests/bootstrap.php';
 
-$retour = Retour::instance();
-$retour->log()->flush();
+$app    = new App(['roots' => ['index' => __DIR__ . '/../../../../']]);
+$retour = Retour::instance($app);
+$retour->log()->flush('all');
 
 $redirects = [
     'leistungen/(:all)',
@@ -35,15 +37,18 @@ $start = strtotime('-25 month');
 $end   = strtotime('today');
 
 for ($i=0; $i < 50000; $i++) {
-    $time = rand($start, $end);
+    $time     = rand($start, $end);
+    $redirect = rand(0, 9) > 5 ? $redirects[array_rand($redirects)] : null;
+
     $retour->log()->add([
         'date'     => date('Y-m-d H:i:s', $time),
         'path'     => $path = Str::random(10),
-        'redirect' => rand(0, 9) > 5 ? $redirects[array_rand($redirects)] : null,
+        'redirect' => $redirect,
         'referrer' => rand(0, 9) > 7 ? $referrers[array_rand($referrers)] : null
     ]);
 
-    if (rand(0, 15) > 12) {
+    // only resolve failure records (no redirect set)
+    if ($redirect === null && rand(0, 15) > 12) {
         $retour->log()->resolve($path);
     }
 }
