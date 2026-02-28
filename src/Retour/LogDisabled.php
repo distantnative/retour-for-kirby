@@ -7,12 +7,6 @@ namespace Kirby\Retour;
  * to safely make calls to the log instance that will
  * be ignored.
  *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- *
  * @codeCoverageIgnore
  */
 class LogDisabled

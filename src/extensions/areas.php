@@ -3,16 +3,6 @@
 use Kirby\Panel\Panel;
 use Kirby\Retour\Panel\View;
 
-/**
- * Sets up Panel area
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- */
-
 return [
 	'retour' => fn () => [
 		'label' => t('view.retour'),

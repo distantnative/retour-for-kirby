@@ -3,16 +3,6 @@
 use Kirby\Retour\Panel\TimespanDialog;
 use Kirby\Retour\Retour;
 
-/**
- * Fiber dialogs for all Panel tabs
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- */
-
 return [
 	'retour.timespan' => [
 		'pattern' => 'retour/timespan',

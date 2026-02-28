@@ -6,17 +6,6 @@ use Kirby\Http\Route;
 use Kirby\Http\Router;
 use Throwable;
 
-/**
- * Sets up route hook to intercept
- * 404s for redirecting and logging
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- */
-
 return [
 	'route:after' => function (
 		Route $route,

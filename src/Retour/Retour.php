@@ -7,12 +7,6 @@ use Kirby\Http\Route;
 
 /**
  * Main plugin class responsible for general tasks
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
  */
 class Retour
 {

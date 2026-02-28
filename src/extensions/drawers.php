@@ -4,16 +4,6 @@ use Kirby\Retour\Panel\FailureResolveDrawer;
 use Kirby\Retour\Panel\RedirectCreateDrawer;
 use Kirby\Retour\Panel\RedirectEditDrawer;
 
-/**
- * Fiber drawers for all Panel tabs
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- */
-
 return [
 	'retour.redirect.create' => [
 		'pattern' => 'retour/redirects/create',

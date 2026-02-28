@@ -12,12 +12,6 @@ use Kirby\Toolkit\Date;
 /**
  * Reads and writes to the database log
  * for all 404 requests or successful redirects
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
  */
 class Log
 {

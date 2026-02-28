@@ -13,12 +13,6 @@ use Kirby\Toolkit\Str;
 /**
  * Redirect
  * Single redirect with its properties
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
  */
 class Redirect extends Obj
 {

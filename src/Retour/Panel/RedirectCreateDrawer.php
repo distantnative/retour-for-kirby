@@ -8,13 +8,6 @@ use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\I18n;
 
-/**
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
- */
 class RedirectCreateDrawer
 {
 	protected function data(): array

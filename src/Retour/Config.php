@@ -8,12 +8,6 @@ use Throwable;
 
 /**
  * Handles reading from/writing to the config file
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
- * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
- * @license   https://opensource.org/licenses/MIT
  */
 class Config
 {
