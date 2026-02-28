@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "Jaar",
 	"retour.stats.mode.month": "Maand",
 	"retour.stats.mode.week": "Week",
-	"retour.stats.mode.day": "Dag",
-	"retour.system": "Systeem",
-	"retour.system.support": "Ondersteun ontwikkeling",
-	"retour.system.failures": "Gelogde mislukte omleidingen",
-	"retour.system.redirects": "Succesvol omgeleid",
-	"retour.system.deleteAfter": "Logs verwijderen na",
-	"retour.system.deleteAfter.months": "{count} maanden",
-	"retour.system.docs": "Lees meer over opties <a href='{docs}' target='_blank'>in de documentatie</a>."
+	"retour.stats.mode.day": "Dag"
 }
