@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "Yıl",
 	"retour.stats.mode.month": "Ay",
 	"retour.stats.mode.week": "Hafta",
-	"retour.stats.mode.day": "Gün",
-	"retour.system": "Sistem",
-	"retour.system.support": "Geliştirmeyi destekle",
-	"retour.system.failures": "Başarısız günlük kayıtları",
-	"retour.system.redirects": "Başarıyla yönlendirildi",
-	"retour.system.deleteAfter": "Günlükleri silme sıklığı",
-	"retour.system.deleteAfter.months": "{count} ay",
-	"retour.system.docs": "<a href='{docs}' target='_blank'>Dokümanlardaki</a> seçenekler hakkında daha fazla bilgi edinin."
+	"retour.stats.mode.day": "Gün"
 }
