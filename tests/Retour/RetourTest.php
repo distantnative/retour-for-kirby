@@ -129,7 +129,7 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(LogDisabled::class, $log);
 	}
 
-	public function testOption()
+	public function testOption(): void
 	{
 		$app = $this->kirby->clone([
 			'options' => [

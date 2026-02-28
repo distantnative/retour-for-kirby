@@ -110,7 +110,8 @@ class RedirectTest extends TestCase
 		$path = Redirect::toPath('foo/$1/homer/$2', ['bar', 'simpson']);
 		$this->assertSame('foo/bar/homer/simpson', $path);
 
-		$route = new Route('', '', function () {});
+		$route = new Route('', '', function () {
+		});
 		$args = $route->parse('foo/(:any)/homer/(:all)', 'foo/bar/homer/simpson');
 		$path = Redirect::toPath('foo/$1/homer/$2', $args);
 		$this->assertSame('foo/bar/homer/simpson', $path);

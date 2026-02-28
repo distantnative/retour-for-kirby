@@ -3,7 +3,6 @@
 namespace Kirby\Retour;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PSpell\Config;
 
 #[CoversClass(Config::class)]
 class ConfigTest extends TestCase

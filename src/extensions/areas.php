@@ -14,7 +14,7 @@ use Kirby\Retour\Panel\View;
  */
 
 return [
-	'retour' => fn() => [
+	'retour' => fn () => [
 		'label' => t('view.retour'),
 		'icon'  => 'shuffle',
 		'menu'  => true,
@@ -26,7 +26,7 @@ return [
 			],
 			[
 				'pattern' => 'retour/(:any)',
-				'action'  => fn(string $tab) => View::tab($tab)
+				'action'  => fn (string $tab) => View::tab($tab)
 			]
 		],
 		'dialogs' => require __DIR__ . '/dialogs.php',

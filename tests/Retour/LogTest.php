@@ -3,6 +3,7 @@
 namespace Kirby\Retour;
 
 use Closure;
+use Kirby\Database\Database;
 use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
@@ -100,6 +101,12 @@ class LogTest extends TestCase
 		$this->assertSame($log->first(), $log->last());
 	}
 
+	public function testDatabase(): void
+	{
+		$log = $this->log();
+		$this->assertInstanceOf(Database::class, $log->database());
+	}
+
 	public function testFlush(): void
 	{
 		$log = $this->log();
@@ -110,6 +117,24 @@ class LogTest extends TestCase
 
 		$this->assertTrue($log->flush());
 		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
+	}
+
+	public function testFlushFailures(): void
+	{
+		$log = $this->log();
+
+		// Add a 404 failure and a successful redirect entry
+		$log->add(['path' => 'not-found']);
+		$log->add(['path' => 'old', 'redirect' => 'old']);
+		$this->assertSame(2, $log->table()->fetch('array')->all()->count());
+
+		// Flushing failures should remove only the 404, not the redirect
+		$this->assertTrue($log->flush('failures'));
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+
+		// The remaining entry must be the redirect, not the failure
+		$remaining = $log->table()->fetch('array')->all()->first();
+		$this->assertSame('old', $remaining['redirect']);
 	}
 
 	public function testPurge(): void
@@ -190,7 +215,7 @@ class LogTest extends TestCase
 		$log->add(['path' => 'bar']);
 
 		$this->assertSame(5, $log->table()->fetch('array')->all()->count());
-		$this->assertTrue($log->remove('foo', 'bar'));
+		$this->assertTrue($log->remove('foo'));
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('bar'));
 		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
