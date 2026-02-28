@@ -33,7 +33,6 @@ class View
 				[
 					'name'  => 'redirects',
 					'label' => I18n::translate('retour.redirects'),
-					'badge' => count($redirects),
 					'link'  => 'retour/redirects'
 				]
 			]
@@ -54,7 +53,6 @@ class View
 			$props['tabs'][] = [
 				'name'  => 'failures',
 				'label' => I18n::translate('retour.failures'),
-				'badge' => count($failures),
 				'link'  => 'retour/failures'
 			];
 

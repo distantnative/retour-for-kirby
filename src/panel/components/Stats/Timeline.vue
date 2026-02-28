@@ -1,5 +1,5 @@
 <template>
-	<div class="chart-areas">
+	<div :data-subunit="subunit" class="chart-areas">
 		<table>
 			<thead>
 				<tr>
@@ -12,7 +12,7 @@
 				<tr
 					v-for="(segment, segmentIndex) in data"
 					:key="segmentIndex"
-					@dblclick="zoom(segment)"
+					@click="zoom(segment)"
 				>
 					<td
 						v-for="(area, areaIndex) in segment.areas"
@@ -29,7 +29,7 @@
 					v-for="segment in data"
 					:key="segment.label"
 					:data-current="isCurrent(segment)"
-					@dblclick="zoom(segment)"
+					@click="zoom(segment)"
 				>
 					<td>{{ label(segment) }}</td>
 				</tr>
@@ -137,7 +137,12 @@ export default {
 			return this.$library.dayjs(segment.label).format(this.format);
 		},
 		zoom(segment) {
+			if (this.subunit === "hour") {
+				return;
+			}
+
 			const date = this.$library.dayjs(segment.label);
+
 			this.$reload({
 				query: {
 					from: date.startOf(this.subunit).format("YYYY-MM-DD"),
@@ -152,7 +157,9 @@ export default {
 <style>
 .chart-areas {
 	overflow-x: scroll;
-	padding-block: var(--spacing-6);
+	overflow-y: hidden;
+	padding-block-start: var(--spacing-8);
+	padding-inline: var(--spacing-3);
 }
 
 .chart-areas table {
@@ -176,12 +183,12 @@ export default {
 	display: flex;
 	height: var(--height);
 	flex-direction: column-reverse;
-	padding-right: 0.75rem;
+	padding-right: var(--spacing-3);
 }
 .chart-areas th {
 	flex: 1;
-	transform: translateY(calc(-1 * 0.75rem / 2));
-	font-size: 0.75rem;
+	transform: translateY(calc(-1 * var(--spacing-3) / 2));
+	font-size: var(--text-xs);
 	font-weight: normal;
 	text-align: right;
 	color: var(--color-text-dimmed);
@@ -194,8 +201,9 @@ export default {
 	);
 
 	height: var(--height);
-	background-image: var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x),
-		var(--grid-x), var(--grid-x);
+	background-image:
+		var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x),
+		var(--grid-x);
 	background-size:
 		1px 1px,
 		3px 1px,
@@ -212,8 +220,7 @@ export default {
 		center 80%,
 		center 100%;
 }
-.chart-areas tbody,
-.chart-areas tfoot {
+.chart-areas :where(tbody, tfoot) {
 	width: 100%;
 	display: flex;
 	justify-content: stretch;
@@ -226,16 +233,17 @@ export default {
 	background-repeat: repeat-y;
 	background-position: right;
 }
-.chart-areas tbody tr,
-.chart-areas tfoot tr {
+.chart-areas :where(tbody, tfoot) tr {
 	position: relative;
 	display: flex;
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: 0;
 }
-.chart-areas tbody tr:last-child,
-.chart-areas tfoot tr:last-child {
+.chart-areas:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
+	cursor: pointer;
+}
+.chart-areas :where(tbody, tfoot) tr:last-child {
 	width: 0;
 	flex-grow: 0;
 	white-space: nowrap;
@@ -257,19 +265,14 @@ export default {
 	transition: clip-path 0.5s;
 }
 .chart-areas tfoot {
-	margin-top: 0.5rem;
-	font-size: 0.75rem;
+	margin-top: var(--spacing-2);
+	font-size: var(--text-xs);
 	color: var(--color-text-light);
 	text-align: center;
 }
 
-.chart-areas tfoot[data-less] tr {
+.chart-areas tfoot[data-less] tr:not(:nth-child(3n + 1), :last-child) {
 	display: none;
-}
-
-.chart-areas tfoot[data-less] tr:nth-child(3n + 1),
-.chart-areas tfoot[data-less] tr:last-child {
-	display: block;
 }
 
 .chart-areas tfoot td {
@@ -278,5 +281,11 @@ export default {
 .chart-areas tfoot [data-current] {
 	color: #fff;
 	font-weight: bold;
+}
+
+@container (min-width: 40rem) {
+	.chart-areas {
+		padding-inline-start: var(--spacing-12);
+	}
 }
 </style>

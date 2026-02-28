@@ -4,7 +4,11 @@
 
 		<figcaption>
 			<template v-for="(segment, index) in data">
-				<k-icon :key="'icon-' + segment.label" :style="'--color:' + segment.color" :type="icons[index]" />
+				<k-icon
+					:key="'icon-' + segment.label"
+					:style="'--color:' + segment.color"
+					:type="icons[index]"
+				/>
 				<span :key="'count-' + segment.label">
 					{{ new Intl.NumberFormat().format(segment.data) }}
 				</span>
@@ -51,11 +55,12 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-block: var(--spacing-6);
+	container-type: inline-size;
 }
+
 .chart-pie > .graph {
 	width: 100%;
-	padding-bottom: 100%;
+	aspect-ratio: 1/1;
 	opacity: 0.85;
 	background: var(--color-gray-800);
 	background-image: conic-gradient(from -90deg, var(--gradient));
@@ -66,7 +71,7 @@ export default {
 .chart-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
-	column-gap: 0.5ch;
+	column-gap: 0.4ch;
 	row-gap: var(--spacing-3);
 }
 .chart-pie figcaption :nth-child(3n + 2) {
@@ -75,5 +80,14 @@ export default {
 }
 .chart-pie figcaption .k-icon {
 	color: var(--color);
+}
+
+@container (min-width: 18rem) {
+	.chart-pie figcaption {
+		grid-template-columns: repeat(9, auto);
+	}
+	.chart-pie figcaption .k-icon:not(:first-child) {
+		margin-inline-start: var(--spacing-4);
+	}
 }
 </style>

@@ -27,12 +27,6 @@ export default {
 	flex-grow: 1;
 	margin-bottom: 0;
 }
-.k-retour-tabs .k-tab-button:nth-child(1) .k-tabs-badge {
-	--theme-color-back: var(--color-blue-300);
-}
-.k-retour-tabs .k-tab-button:nth-child(2) .k-tabs-badge {
-	--theme-color-back: var(--color-red-300);
-}
 
 .k-retour-tabs > .k-button-group {
 	flex-wrap: nowrap;

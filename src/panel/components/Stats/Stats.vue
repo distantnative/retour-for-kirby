@@ -63,7 +63,7 @@ export default {
 
 <style>
 .k-retour-stats {
-	padding: var(--spacing-6);
+	padding: var(--spacing-3) var(--spacing-3) var(--spacing-8) var(--spacing-6);
 	color: var(--color-white);
 	background: light-dark(
 		var(--color-gray-900),
@@ -73,19 +73,19 @@ export default {
 	margin-bottom: var(--spacing-6);
 }
 
-@container (max-width: 42rem) {
+@container (max-width: 40rem) {
 	.k-retour-stats {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		padding-block: var(--spacing-6);
 	}
 }
 
-@container (min-width: 42rem) {
+@container (min-width: 40rem) {
 	.k-retour-stats {
 		display: grid;
-		grid-template-columns: 1fr 3fr;
-		gap: 2rem;
+		align-items: center;
+		grid-template-columns: 16rem auto;
 	}
 }
 </style>
