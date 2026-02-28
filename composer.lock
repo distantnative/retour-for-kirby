@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6503c1a589fb27f79c9f7e1df8b8530a",
+    "content-hash": "5e5d2c5e4c6465af9d68cddaa96b6e8d",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -268,16 +268,16 @@
         },
         {
             "name": "getkirby/cms",
-            "version": "5.2.0",
+            "version": "5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkirby/kirby.git",
-                "reference": "442466caa38fa35a73e5535f3d36aebc51c8e6eb"
+                "reference": "0ccfcabfbc86fc84127e876c249a75b7a15f1964"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkirby/kirby/zipball/442466caa38fa35a73e5535f3d36aebc51c8e6eb",
-                "reference": "442466caa38fa35a73e5535f3d36aebc51c8e6eb",
+                "url": "https://api.github.com/repos/getkirby/kirby/zipball/0ccfcabfbc86fc84127e876c249a75b7a15f1964",
+                "reference": "0ccfcabfbc86fc84127e876c249a75b7a15f1964",
                 "shasum": ""
             },
             "require": {
@@ -300,7 +300,7 @@
                 "laminas/laminas-escaper": "2.18.0",
                 "michelf/php-smartypants": "1.8.1",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-                "phpmailer/phpmailer": "7.0.1",
+                "phpmailer/phpmailer": "7.0.2",
                 "symfony/polyfill-intl-idn": "1.33.0",
                 "symfony/polyfill-mbstring": "1.33.0",
                 "symfony/yaml": "7.4.1"
@@ -364,7 +364,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-12-09T11:44:17+00:00"
+            "time": "2026-02-16T19:34:35+00:00"
         },
         {
             "name": "getkirby/composer-installer",
@@ -591,16 +591,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v7.0.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "360ae911ce62e25e11249f6140fa58939f556ebe"
+                "reference": "ebf1655bd5b99b3f97e1a3ec0a69e5f4cd7ea088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/360ae911ce62e25e11249f6140fa58939f556ebe",
-                "reference": "360ae911ce62e25e11249f6140fa58939f556ebe",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/ebf1655bd5b99b3f97e1a3ec0a69e5f4cd7ea088",
+                "reference": "ebf1655bd5b99b3f97e1a3ec0a69e5f4cd7ea088",
                 "shasum": ""
             },
             "require": {
@@ -661,7 +661,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v7.0.1"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v7.0.2"
             },
             "funding": [
                 {
@@ -669,7 +669,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-25T07:18:09+00:00"
+            "time": "2026-01-09T18:02:33+00:00"
         },
         {
             "name": "psr/log",
