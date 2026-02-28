@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "An",
 	"retour.stats.mode.month": "Mois",
 	"retour.stats.mode.week": "Semaine",
-	"retour.stats.mode.day": "Jour",
-	"retour.system": "Système",
-	"retour.system.support": "Soutenir le développement",
-	"retour.system.failures": "Échecs détectés",
-	"retour.system.redirects": "Redirigées avec succès",
-	"retour.system.deleteAfter": "Supprimer l'historique après",
-	"retour.system.deleteAfter.months": "{count} mois",
-	"retour.system.docs": "Retrouvez toutes les options <a href='{docs}' target='_blank'>dans la documentation</a>."
+	"retour.stats.mode.day": "Jour"
 }
