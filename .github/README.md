@@ -1,6 +1,6 @@
 ![Retour for Kirby](https://distantnative.com/retour-for-kirby/ogimage.png)
 
-[![Version](https://img.shields.io/badge/version-5.5.0-8dbae7.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
+[![Version](https://img.shields.io/badge/version-5.6.0-8dbae7.svg?style=for-the-badge)](https://github.com/distantnative/retour-for-kirby/releases)
 [![Dependency](https://img.shields.io/badge/kirby-4.3.1_%2F_5.x-f0d575.svg?style=for-the-badge)](https://getkirby.com/)
 [![Donate](https://img.shields.io/badge/support-give_back-bdde7a.svg?style=for-the-badge)](https://paypal.me/distantnative)
 
