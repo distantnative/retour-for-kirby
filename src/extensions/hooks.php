@@ -11,7 +11,7 @@ return [
 		Route $route,
 		string $path,
 		string $method,
-		$result,
+		mixed $result,
 		bool $final
 	) {
 		if (

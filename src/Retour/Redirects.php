@@ -121,9 +121,8 @@ class Redirects extends Collection
 
 	/**
 	 * Updates a redirect
-	 * @param null|mixed $data
 	 */
-	public function update(string|object $key, $data = null): static
+	public function update(string|object $key, mixed $data = null): static
 	{
 		$redirect = new Redirect($data);
 		return parent::update($key, $redirect);

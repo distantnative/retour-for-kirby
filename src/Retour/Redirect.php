@@ -80,7 +80,7 @@ class Redirect extends Obj
 	 */
 	public function status(): int|null
 	{
-		if (in_array($this->status ?? null, [null, 'disabled']) == true) {
+		if (in_array($this->status ?? null, [null, 'disabled']) === true) {
 			return null;
 		}
 

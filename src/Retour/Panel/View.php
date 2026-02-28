@@ -85,7 +85,8 @@ class View
 					0
 				),
 				'deleteAfter' => $retour->option('deleteAfter', '-')
-			]
+			],
+			default => []
 		};
 
 		return $props;

@@ -10,9 +10,8 @@ use Kirby\Http\Route;
  */
 class Retour
 {
-	public static $instance;
+	public static self|null $instance = null;
 	protected Config $config;
-
 	protected App $kirby;
 
 	/**

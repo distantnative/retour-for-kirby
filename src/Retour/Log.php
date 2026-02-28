@@ -119,9 +119,10 @@ class Log
 	 */
 	public function flush(string $mode = 'all'): bool
 	{
-		$table = match ($mode) {
+		$deleted = match ($mode) {
 			'all'      => $this->table()->delete(),
-			'failures' => $this->table()->delete('redirect IS NULL AND wasResolved IS NULL')
+			'failures' => $this->table()->delete('redirect IS NULL AND wasResolved IS NULL'),
+			default    => false
 		};
 
 		if ($mode === 'all') {
@@ -129,7 +130,7 @@ class Log
 		}
 
 		$vacuum = $this->database->execute('VACUUM');
-		return $table && $vacuum;
+		return $deleted && $vacuum;
 	}
 
 	/**
@@ -150,7 +151,12 @@ class Log
 
 		if ($limit !== false) {
 			// Get cutoff date by subtracting limit from today
-			$time   = strtotime('-' . $limit . ' month');
+			$time = strtotime('-' . $limit . ' month');
+
+			if ($time === false) {
+				return false;
+			}
+
 			$cutoff = date('Y-m-d 00:00:00', $time);
 
 			/** @var \Kirby\Database\Query $table */
@@ -178,7 +184,7 @@ class Log
 		$to   .= ' 23:59:59';
 
 		// Run query
-		/** @var array */
+		/** @var array|false */
 		$data = $this->table()
 			->select('
                 COUNT(*) AS hits,
@@ -191,8 +197,8 @@ class Log
 			->first();
 
 		return [
-			'hits' => (int)$data['hits'],
-			'last' => $data['last']
+			'hits' => (int)($data['hits'] ?? 0),
+			'last' => $data['last'] ?? null
 		];
 	}
 

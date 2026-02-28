@@ -47,7 +47,7 @@ class Config
 			$file = $this->file();
 			return $this->data = Data::read($file);
 		} catch (Throwable) {
-			return $this->data =  [];
+			return $this->data = [];
 		}
 	}
 

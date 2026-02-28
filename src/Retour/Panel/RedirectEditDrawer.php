@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Exception\NotFoundException;
 use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
 
@@ -44,7 +45,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 	protected function redirect(): Redirect
 	{
-		return $this->redirects()->get($this->id);
+		return $this->redirects()->get($this->id) ?? throw new NotFoundException('Redirect not found');
 	}
 
 	public function submit(): bool
