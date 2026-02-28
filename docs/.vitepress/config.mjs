@@ -17,10 +17,6 @@ export default defineConfig({
 				text: "Changelog",
 				link: "https://github.com/distantnative/retour-for-kirby/releases",
 			},
-			{
-				text: "Donate",
-				link: "https://paypal.me/distantnative",
-			},
 		],
 
 		search: {
@@ -56,13 +52,7 @@ export default defineConfig({
 			},
 			{
 				text: "Support development",
-				items: [
-					{ text: "How to contribute", link: "/contribute" },
-					{
-						text: "Donate",
-						link: "https://paypal.me/distantnative",
-					},
-				],
+				items: [{ text: "How to contribute", link: "/contribute" }],
 			},
 		],
 
@@ -73,7 +63,7 @@ export default defineConfig({
 			},
 			{
 				icon: "mastodon",
-				link: "https://chaos.social/@distantnative",
+				link: "https://mastodon.social/@distantnative",
 			},
 		],
 

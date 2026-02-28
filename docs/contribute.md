@@ -11,7 +11,3 @@ Please report any bug via [GitHub issues](https://github.com/distantnative/retou
 ::: tip Translate Retour
 Help translating the Retour UI to more languages. Check out the [translations docs](/i18n).
 :::
-
-::: warning Pay it forward
-Retour is offered as a free plugin. If you want to give something back, you can [send a donation](https://paypal.me/distantnative) of your choice.
-:::
