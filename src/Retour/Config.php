@@ -30,9 +30,8 @@ class Config
 
 	public function file(): string
 	{
-		$retour  = $this->retour();
-		$default = $retour->kirby()->root('config') . '/retour.yml';
-		$path    = $retour->option('config', $default);
+		$default = $this->retour->kirby()->root('config') . '/retour.yml';
+		$path    = $this->retour->option('config', $default);
 
 		if (is_callable($path) === true) {
 			$path = $path();
@@ -51,16 +50,12 @@ class Config
 		}
 	}
 
-	public function retour(): Retour
-	{
-		return $this->retour;
-	}
-
 	public function write(
 		string|array $key,
 		mixed $value = null
 	): array {
 		$data = $this->data;
+
 		if (is_array($key) === true) {
 			$data = array_merge($data, $key);
 		} else {

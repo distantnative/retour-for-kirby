@@ -153,6 +153,13 @@ class RetourTest extends TestCase
 		$this->assertInstanceOf(Redirects::class, $redirects);
 	}
 
+	public function testReset(): void
+	{
+		$retour = Retour::instance();
+		Retour::reset();
+		$this->assertNotSame($retour, Retour::instance());
+	}
+
 	public function testSite(): void
 	{
 		$site = Retour::instance()->site();

@@ -6,7 +6,6 @@ use DateInterval;
 use DateTime;
 use Kirby\Cms\App;
 use Kirby\Panel\Panel;
-use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
 use Kirby\Toolkit\I18n;

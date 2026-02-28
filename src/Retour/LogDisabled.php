@@ -14,8 +14,8 @@ class LogDisabled
 	/**
 	 * Magic caller that blocks any call to the instance
 	 */
-	public function __call(string $name, array $args): bool
+	public function __call(string $name, array $args): mixed
 	{
-		return false;
+		return null;
 	}
 }

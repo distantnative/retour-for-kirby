@@ -10,8 +10,8 @@ use Kirby\Http\Route;
  */
 class Retour
 {
-	public static self|null $instance = null;
 	protected Config $config;
+	protected static self|null $instance = null;
 	protected App $kirby;
 
 	/**
@@ -48,11 +48,16 @@ class Retour
 
 	public function ignore(string $path): bool
 	{
+		$patterns = $this->option('ignore', []);
+
+		if ($patterns === []) {
+			return false;
+		}
+
 		// temporary route for regex matching
-		$route  = new Route($path, 'GET', fn () => null);
-		$ignore = $this->option('ignore', []);
-		$ignore = $route->regex(implode('|', $ignore));
-		return preg_match('!^(' . $ignore . ')$!i', $path) === 1;
+		$route   = new Route($path, 'GET', fn () => null);
+		$pattern = $route->regex(implode('|', $patterns));
+		return preg_match('!^(' . $pattern . ')$!i', $path) === 1;
 	}
 
 	/**
@@ -93,7 +98,7 @@ class Retour
 	 */
 	public function option(string $key, mixed $default = null): mixed
 	{
-		return $this->kirby()->option('distantnative.retour.' . $key, $default);
+		return $this->kirby->option('distantnative.retour.' . $key, $default);
 	}
 
 	/**
@@ -102,6 +107,11 @@ class Retour
 	public function redirects(): Redirects
 	{
 		return $this->redirects;
+	}
+
+	public static function reset(): void
+	{
+		self::$instance = null;
 	}
 
 	/**
@@ -116,8 +126,8 @@ class Retour
 		}
 
 		if ($site === true) {
-			$url = (string)kirby()->url();
-			return preg_replace('$^(http(s)?\:\/\/(www\.)?)$', '', $url) . '/';
+			$url = (string)$this->kirby->url();
+			return preg_replace('!^https?://(www\.)?!', '', $url) . '/';
 		}
 
 		return false;

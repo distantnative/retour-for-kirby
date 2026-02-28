@@ -42,14 +42,6 @@ class ConfigTest extends TestCase
 		$this->assertSame($file, $config->file());
 	}
 
-	public function testRetour(): void
-	{
-		$retour  = Retour::instance();
-		$config  = $retour->config();
-		$this->assertInstanceOf(Retour::class, $config->retour());
-		$this->assertSame($retour, $config->retour());
-	}
-
 	public function testWrite(): void
 	{
 		$app = $this->kirby->clone([

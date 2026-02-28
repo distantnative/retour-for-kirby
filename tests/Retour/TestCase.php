@@ -30,6 +30,6 @@ class TestCase extends BaseTestCase
 	public function tearDown(): void
 	{
 		Dir::remove($this->tmp);
-		Retour::$instance = null;
+		Retour::reset();
 	}
 }

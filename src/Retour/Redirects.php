@@ -12,9 +12,6 @@ use Kirby\Exception\DuplicateException;
  */
 class Redirects extends Collection
 {
-	/**
-	 * @param array $redirects Array of redirects
-	 */
 	public function __construct(
 		protected Retour $retour,
 		array $redirects
@@ -63,7 +60,7 @@ class Redirects extends Collection
 	 */
 	public function save(): void
 	{
-		$config = $this->retour()->config();
+		$config = $this->retour->config();
 		$config->write('redirects', $this->toArray());
 	}
 
@@ -83,7 +80,7 @@ class Redirects extends Collection
 	 */
 	public function toData(string $from, string $to): array
 	{
-		$retour = $this->retour();
+		$retour = $this->retour;
 
 		// If logging is disabled, return without data
 		if ($retour->hasLog() === false) {
@@ -92,11 +89,10 @@ class Redirects extends Collection
 
 		return $this->toArray(function (Redirect $redirect) use ($retour, $from, $to): array {
 			$data = $redirect->toArray();
-			/** @var array */
-			[
-				'hits' => $data['hits'],
-				'last' => $data['last']
-			]  = $retour->log()->redirect($data['from'], $from, $to);
+
+			if ($log = $retour->log()->redirect($data['from'], $from, $to)) {
+				['hits' => $data['hits'], 'last' => $data['last']] = $log;
+			}
 			return $data;
 		});
 	}
@@ -106,7 +102,7 @@ class Redirects extends Collection
 	 */
 	public function toRoutes(bool $priority = false): array
 	{
-		// Filter: no routes for disabled redirects
+		// Filter: only active redirects with matching priority
 		$redirects = $this->filter(
 			fn (Redirect $redirect): bool =>
 				$redirect->isActive() === true &&

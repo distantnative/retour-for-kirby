@@ -72,8 +72,8 @@ class Log
 	/**
 	 * Returns all logged 404s
 	 *
-	 * @param string $from date sting (yyyy-mm-dd)
-	 * @param string $to date sting (yyyy-mm-dd)
+	 * @param string $from date string (yyyy-mm-dd)
+	 * @param string $to date string (yyyy-mm-dd)
 	 */
 	public function fails(string $from, string $to): array
 	{
@@ -113,7 +113,6 @@ class Log
 		return $this->single('date ASC');
 	}
 
-
 	/**
 	 * Remove database records and reset index
 	 */
@@ -147,7 +146,7 @@ class Log
 	public function purge(): bool
 	{
 		// Get limit (in months) from option
-		$limit = $this->retour()->option('deleteAfter', false);
+		$limit = $this->retour->option('deleteAfter', false);
 
 		if ($limit !== false) {
 			// Get cutoff date by subtracting limit from today
@@ -174,8 +173,8 @@ class Log
 	 * Returns all records for a redirect
 	 *
 	 * @param string $path redirect path
-	 * @param string $from date sting (yyyy-mm-dd)
-	 * @param string $to date sting (yyyy-mm-dd)
+	 * @param string $from date string (yyyy-mm-dd)
+	 * @param string $to date string (yyyy-mm-dd)
 	 */
 	public function redirect(string $path, string $from, string $to): array
 	{
@@ -207,9 +206,7 @@ class Log
 	 */
 	public function remove(string $path): bool
 	{
-		return $this->table()->delete(
-			'path = "' . $this->database->escape($path) . '"'
-		);
+		return $this->table()->delete(['path' => $path]);
 	}
 
 	/**
@@ -221,14 +218,6 @@ class Log
 			['wasResolved' => 1],
 			['path' => $path]
 		);
-	}
-
-	/**
-	 * Returns the Plugin instance
-	 */
-	public function retour(): Retour
-	{
-		return $this->retour;
 	}
 
 	protected function single(string $sort): array
@@ -251,8 +240,8 @@ class Log
 	 * Returns stats data for specified timeframe and unit
 	 *
 	 * @param string $unit timeframe unit (year, month, ...)
-	 * @param string $from date sting (yyyy-mm-dd)
-	 * @param string $to date sting (yyyy-mm-dd)
+	 * @param string $from date string (yyyy-mm-dd)
+	 * @param string $to date string (yyyy-mm-dd)
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{
@@ -263,24 +252,27 @@ class Log
 			'step'      => new DateInterval('P1D')
 		];
 
-		switch ($unit) {
-			case 'day':
-				// Add time to dates to capture full days
-				$from .= ' 00:00:00';
-				$to   .= ' 23:59:59';
-
-				$use['group_sql'] = '%Y-%m-%d %H';
-				$use['group_php'] = 'Y-m-d H';
-				$use['step']      = new DateInterval('PT1H');
-				break;
-
-			case 'year':
-			case 'months':
-				$use['group_sql'] = '%Y-%m';
-				$use['group_php'] = 'Y-m';
-				$use['step']      = new DateInterval('P1M');
-				break;
+		if ($unit === 'day') {
+			// Add time to dates to capture full days
+			$from .= ' 00:00:00';
+			$to   .= ' 23:59:59';
 		}
+
+		$overrides = match ($unit) {
+			'day' => [
+				'group_sql' => '%Y-%m-%d %H',
+				'group_php' => 'Y-m-d H',
+				'step'      => new DateInterval('PT1H'),
+			],
+			'year', 'months' => [
+				'group_sql' => '%Y-%m',
+				'group_php' => 'Y-m',
+				'step'      => new DateInterval('P1M'),
+			],
+			default => [],
+		};
+
+		$use = array_merge($use, $overrides);
 
 		// Get data from database
 		$data = $this->database->query('
@@ -324,7 +316,6 @@ class Log
 		) {
 			$step = $i->format($use['group_php']);
 
-
 			if (($entry['date'] ?? null) === $step) {
 				$result[] = $entry;
 				$entry    = array_shift($data);
@@ -337,7 +328,6 @@ class Log
 				];
 			}
 		}
-
 
 		return $result;
 	}

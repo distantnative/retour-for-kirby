@@ -48,7 +48,6 @@ class View
 			}
 
 			// get all data for 404 failures
-			/** @var array */
 			$failures = $retour->log()->fails($from, $to);
 
 			// add additional tabs
@@ -63,7 +62,7 @@ class View
 			$props['stats'] = $retour->log()->stats($unit, $from, $to);
 		}
 
-		// add tab=specific data, e.g. for table rows
+		// add tab-specific data, e.g. for table rows
 		$props['data'] = match ($tab) {
 			'redirects' => $redirects,
 			'failures'  => $failures,

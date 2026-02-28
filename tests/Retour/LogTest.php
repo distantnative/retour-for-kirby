@@ -239,12 +239,6 @@ class LogTest extends TestCase
 		$this->assertSame(1, count($log->fails('2020-01-01', '2020-12-31')));
 	}
 
-	public function testRetour(): void
-	{
-		$log = $this->log();
-		$this->assertInstanceOf(Retour::class, $log->retour());
-	}
-
 	public function testStats(): void
 	{
 		$file = __DIR__ . '/fixtures/sample.sqlite';
