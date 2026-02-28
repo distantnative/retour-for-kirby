@@ -20,10 +20,7 @@ class View
 		$timespan = Timespan::props();
 		['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
-		// get all data for redirects
-		// and fallback for failures
-		$redirects = $retour->redirects()->toData($from, $to);
-		$failures  = [];
+		$failures = [];
 
 		// props for minimal Panel view
 		$props = [
@@ -62,7 +59,7 @@ class View
 
 		// add tab-specific data, e.g. for table rows
 		$props['data'] = match ($tab) {
-			'redirects' => $redirects,
+			'redirects' => $retour->redirects()->toData($from, $to),
 			'failures'  => $failures,
 			default     => []
 		};
