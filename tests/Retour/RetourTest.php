@@ -8,18 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Retour::class)]
 class RetourTest extends TestCase
 {
-	public function testConstruct(): void
-	{
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => __DIR__ . '/fixtures/redirects.yml'
-			]
-		]);
-
-		$redirects = Retour::instance($app)->redirects();
-		$this->assertSame(3, $redirects->count());
-	}
-
 	public function testConfig(): void
 	{
 		$app = $this->kirby->clone([
@@ -30,6 +18,17 @@ class RetourTest extends TestCase
 
 		$config = Retour::instance($app)->config();
 		$this->assertInstanceOf(Config::class, $config);
+	}
+	public function testConstruct(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => __DIR__ . '/fixtures/redirects.yml'
+			]
+		]);
+
+		$redirects = Retour::instance($app)->redirects();
+		$this->assertSame(3, $redirects->count());
 	}
 
 	public function testHasLog(): void

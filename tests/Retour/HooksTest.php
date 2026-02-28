@@ -20,30 +20,6 @@ class HooksTest extends TestCase
 		return new Route('', '', fn () => null);
 	}
 
-	public function testSkipsNonFinalRoutes(): void
-	{
-		$app = $this->kirby->clone([
-			'options' => ['distantnative.retour.logs' => false]
-		]);
-		Retour::instance($app);
-
-		// $final = false → hook should not process the route
-		$result = ($this->hook())($this->route(), 'some/path', 'GET', null, false);
-		$this->assertNull($result);
-	}
-
-	public function testSkipsNonEmptyResult(): void
-	{
-		$app = $this->kirby->clone([
-			'options' => ['distantnative.retour.logs' => false]
-		]);
-		Retour::instance($app);
-
-		// result is already set → hook should not interfere
-		$result = ($this->hook())($this->route(), 'some/path', 'GET', 'existing', true);
-		$this->assertNull($result);
-	}
-
 	public function testIgnoredPathIsSkipped(): void
 	{
 		$app = $this->kirby->clone([
@@ -76,21 +52,6 @@ class HooksTest extends TestCase
 		$this->assertSame($beforeCount + 1, $afterCount);
 	}
 
-	public function testSkips404LoggingWhenDisabled(): void
-	{
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.logs'     => false,
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite',
-			]
-		]);
-		Retour::instance($app);
-
-		// With logging disabled the hook must not throw and must not log
-		$result = ($this->hook())($this->route(), 'some/missing-page', 'GET', null, true);
-		$this->assertNull($result);
-	}
-
 	public function testMatchesNonPriorityRedirect(): void
 	{
 		$app = $this->kirby->clone([
@@ -115,5 +76,44 @@ class HooksTest extends TestCase
 
 		$result = ($this->hook())($this->route(), 'old-path', 'GET', null, true);
 		$this->assertInstanceOf(\Kirby\Cms\Page::class, $result);
+	}
+
+	public function testSkips404LoggingWhenDisabled(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs'     => false,
+				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite',
+			]
+		]);
+		Retour::instance($app);
+
+		// With logging disabled the hook must not throw and must not log
+		$result = ($this->hook())($this->route(), 'some/missing-page', 'GET', null, true);
+		$this->assertNull($result);
+	}
+
+	public function testSkipsNonEmptyResult(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => ['distantnative.retour.logs' => false]
+		]);
+		Retour::instance($app);
+
+		// result is already set → hook should not interfere
+		$result = ($this->hook())($this->route(), 'some/path', 'GET', 'existing', true);
+		$this->assertNull($result);
+	}
+
+	public function testSkipsNonFinalRoutes(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => ['distantnative.retour.logs' => false]
+		]);
+		Retour::instance($app);
+
+		// $final = false → hook should not process the route
+		$result = ($this->hook())($this->route(), 'some/path', 'GET', null, false);
+		$this->assertNull($result);
 	}
 }

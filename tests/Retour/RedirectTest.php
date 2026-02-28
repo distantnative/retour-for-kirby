@@ -63,6 +63,38 @@ class RedirectTest extends TestCase
 		$this->assertTrue($redirect->priority());
 	}
 
+	public function testRouteResolve(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'site' => [
+				'children' => [
+					[
+						'slug'  => 'projects',
+						'children' => [
+							[
+								'slug' => 'project-a'
+							]
+						]
+					]
+				]
+			],
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'projects/project-a',
+			'status' => 200
+		]);
+
+		$route = $redirect->toRoute();
+		$this->assertInstanceOf(Page::class, $route['action']());
+	}
+
 	public function testStatus(): void
 	{
 		$redirect = new Redirect(['from' => 'foo']);
@@ -140,37 +172,5 @@ class RedirectTest extends TestCase
 		]);
 
 		$this->assertFalse($redirect->toRoute());
-	}
-
-	public function testRouteResolve(): void
-	{
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.logs' => false
-			],
-			'site' => [
-				'children' => [
-					[
-						'slug'  => 'projects',
-						'children' => [
-							[
-								'slug' => 'project-a'
-							]
-						]
-					]
-				]
-			],
-		]);
-
-		Retour::instance($app);
-
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects/project-a',
-			'status' => 200
-		]);
-
-		$route = $redirect->toRoute();
-		$this->assertInstanceOf(Page::class, $route['action']());
 	}
 }

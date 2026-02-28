@@ -10,6 +10,47 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Redirects::class)]
 class RedirectsTest extends TestCase
 {
+	protected function data(): array
+	{
+		return [
+			['from' => 'foo', 'to' => 'bar', 'status' => 307],
+			['from' => 'homer', 'to' => 'simpson', 'status' => 'disabled', 'priority' => true],
+			['from' => 'berlin', 'to' => 'caracas', 'status' => 200]
+		];
+	}
+
+	protected function expected(): array
+	{
+		return [
+			[
+				'from'     => 'foo',
+				'to'       => 'bar',
+				'status'   => 307,
+				'priority' => false,
+				'comment'  => null,
+				'creator'  => null,
+				'modifier' => null,
+			],
+			[
+				'from'     => 'homer',
+				'to'       => 'simpson',
+				'status'   => null,
+				'priority' => true,
+				'comment'  => null,
+				'creator'  => null,
+				'modifier' => null,
+			],
+			[
+				'from'     => 'berlin',
+				'to'       => 'caracas',
+				'status'   => 200,
+				'priority' => false,
+				'comment'  => null,
+				'creator'  => null,
+				'modifier' => null,
+			]
+		];
+	}
 	public function testCreate(): void
 	{
 		$redirects = Retour::instance()->redirects();
@@ -180,47 +221,5 @@ class RedirectsTest extends TestCase
 		$redirects->update('foo', ['from' => 'bar']);
 		$this->assertSame(1, $redirects->count());
 		$this->assertSame('bar', $redirects->first()->from());
-	}
-
-	protected function data(): array
-	{
-		return [
-			['from' => 'foo', 'to' => 'bar', 'status' => 307],
-			['from' => 'homer', 'to' => 'simpson', 'status' => 'disabled', 'priority' => true],
-			['from' => 'berlin', 'to' => 'caracas', 'status' => 200]
-		];
-	}
-
-	protected function expected(): array
-	{
-		return [
-			[
-				'from'     => 'foo',
-				'to'       => 'bar',
-				'status'   => 307,
-				'priority' => false,
-				'comment'  => null,
-				'creator'  => null,
-				'modifier' => null,
-			],
-			[
-				'from'     => 'homer',
-				'to'       => 'simpson',
-				'status'   => null,
-				'priority' => true,
-				'comment'  => null,
-				'creator'  => null,
-				'modifier' => null,
-			],
-			[
-				'from'     => 'berlin',
-				'to'       => 'caracas',
-				'status'   => 200,
-				'priority' => false,
-				'comment'  => null,
-				'creator'  => null,
-				'modifier' => null,
-			]
-		];
 	}
 }

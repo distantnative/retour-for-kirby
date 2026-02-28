@@ -26,10 +26,6 @@
 		"kirby-cms-path": false
 	},
 	"scripts": {
-		"ci": [
-			"@fix",
-			"@test"
-		],
 		"fix": "php-cs-fixer fix",
 		"test": "phpunit --stderr"
 	},

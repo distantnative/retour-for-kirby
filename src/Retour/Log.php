@@ -231,6 +231,22 @@ class Log
 		return $this->retour;
 	}
 
+	protected function single(string $sort): array
+	{
+		/** @var array|false */
+		$result = $this->table()
+			->select('date')
+			->order($sort)
+			->fetch('array')
+			->first();
+
+		if ($result === false) {
+			return [];
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Returns stats data for specified timeframe and unit
 	 *
@@ -332,21 +348,5 @@ class Log
 	public function table(): Query
 	{
 		return $this->database->records();
-	}
-
-	protected function single(string $sort): array
-	{
-		/** @var array|false */
-		$result = $this->table()
-			->select('date')
-			->order($sort)
-			->fetch('array')
-			->first();
-
-		if ($result === false) {
-			return [];
-		}
-
-		return $result;
 	}
 }

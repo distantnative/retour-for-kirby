@@ -1,14 +1,16 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
     ->exclude('node_modules')
+    ->exclude('vendor')
     ->in(__DIR__);
 
-$config = new PhpCsFixer\Config();
-return $config
+return (new Config())
     ->setRules([
-        '@PSR1' => true,
-        '@PSR2' => true,
+        '@PSR12' => true,
         'align_multiline_comment' => ['comment_type' => 'phpdocs_like'],
         'array_indentation' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -19,7 +21,7 @@ return $config
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => ['space' => 'single'],
         'dir_constant' => true,
-        'function_typehint_space' => true,
+        'get_class_to_class_keyword' => true,
         'include' => true,
         'logical_operators' => true,
         'lowercase_cast' => true,
@@ -39,10 +41,25 @@ return $config
         'no_leading_namespace_whitespace' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
         'no_unneeded_control_parentheses' => true,
+        'no_superfluous_phpdoc_tags' => true,
         'no_unused_imports' => true,
+        'no_useless_concat_operator' => true,
         'no_useless_return' => true,
+        'ordered_class_elements' => [
+            'order' => [
+                'use_trait',
+                'case',
+                'constant_public',
+                'constant_protected',
+                'constant_private',
+                'property_public',
+                'property_protected',
+                'property_private',
+                'method',
+            ],
+            'sort_algorithm' => 'alpha',
+        ],
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
-        'phpdoc_add_missing_param_annotation' => ['only_untyped' => true],
         'phpdoc_align' => ['align' => 'left'],
         'phpdoc_indent' => true,
         'phpdoc_scalar' => true,
@@ -50,7 +67,9 @@ return $config
         'short_scalar_cast' => true,
         'single_line_comment_style' => true,
         'single_quote' => true,
+        'type_declaration_spaces' => true,
         'ternary_to_null_coalescing' => true,
+        'trailing_comma_in_multiline' => false,
         'whitespace_after_comma_in_array' => true
     ])
     ->setIndent("\t")

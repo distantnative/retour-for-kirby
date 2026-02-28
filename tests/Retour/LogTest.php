@@ -49,6 +49,12 @@ class LogTest extends TestCase
 		$this->assertSame($redirect, $results->first()['redirect']);
 	}
 
+	public function testDatabase(): void
+	{
+		$log = $this->log();
+		$this->assertInstanceOf(Database::class, $log->database());
+	}
+
 	#[DoesNotPerformAssertions]
 	public function testDisabled(): void
 	{
@@ -99,12 +105,6 @@ class LogTest extends TestCase
 		$this->assertTrue(isset($log->first()['date']));
 		$this->assertTrue(isset($log->last()['date']));
 		$this->assertSame($log->first(), $log->last());
-	}
-
-	public function testDatabase(): void
-	{
-		$log = $this->log();
-		$this->assertInstanceOf(Database::class, $log->database());
 	}
 
 	public function testFlush(): void

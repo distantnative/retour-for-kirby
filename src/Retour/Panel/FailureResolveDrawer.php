@@ -20,13 +20,6 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		$this->path = urldecode($path);
 	}
 
-	protected function value(): array
-	{
-		return parent::value() + [
-			'from' => str_replace("\x1D", '/', $this->path)
-		];
-	}
-
 	public function submit(): bool|array
 	{
 		$redirects = $this->redirects();
@@ -50,5 +43,12 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 	protected function title(): string
 	{
 		return I18n::translate('retour.failures.resolve');
+	}
+
+	protected function value(): array
+	{
+		return parent::value() + [
+			'from' => str_replace("\x1D", '/', $this->path)
+		];
 	}
 }

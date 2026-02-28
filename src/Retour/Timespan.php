@@ -43,7 +43,7 @@ class Timespan
 			return false;
 		}
 
-		return $to< $last || $to < $today;
+		return $to < $last || $to < $today;
 	}
 
 	protected static function hasPrev(
@@ -85,15 +85,6 @@ class Timespan
 		);
 	}
 
-	public static function limits(): array
-	{
-		$retour = Retour::instance();
-		return [
-			$retour->log()->first()['date'] ?? null,
-			$retour->log()->last()['date'] ?? null
-		];
-	}
-
 	public static function label(array $data): string
 	{
 		$unit = $data['unit'];
@@ -127,6 +118,15 @@ class Timespan
 		}
 
 		return $from->format('j') . ' ' . static::month($from) . ' ' . $from->format('Y') . ' - ' . $to->format('j') . ' ' . static::month($to) . ' ' . $to->format('Y');
+	}
+
+	public static function limits(): array
+	{
+		$retour = Retour::instance();
+		return [
+			$retour->log()->first()['date'] ?? null,
+			$retour->log()->last()['date'] ?? null
+		];
 	}
 
 	protected static function month(Date $date): string|null

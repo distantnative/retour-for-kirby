@@ -11,6 +11,13 @@ class TestCase extends BaseTestCase
 	protected $kirby;
 	protected $tmp = __DIR__ . '/tmp';
 
+	protected function app(array $options = []): App
+	{
+		return $this->kirby->clone([
+			'options' => $options
+		]);
+	}
+
 	public function setUp(): void
 	{
 		$this->kirby = new App([
@@ -24,12 +31,5 @@ class TestCase extends BaseTestCase
 	{
 		Dir::remove($this->tmp);
 		Retour::$instance = null;
-	}
-
-	protected function app(array $options = []): App
-	{
-		return $this->kirby->clone([
-			'options' => $options
-		]);
 	}
 }

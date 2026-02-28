@@ -17,16 +17,16 @@ use Kirby\Http\Route;
 class Retour
 {
 	public static $instance;
+	protected Config $config;
 
 	protected App $kirby;
-	protected Config $config;
-	protected Redirects $redirects;
 
 	/**
 	 * Instance for accessing the log database
 	 * or a mockup for when this feature is disabled
 	 */
 	protected Log|LogDisabled|null $log = null;
+	protected Redirects $redirects;
 
 	public function __construct(App|null $kirby = null)
 	{

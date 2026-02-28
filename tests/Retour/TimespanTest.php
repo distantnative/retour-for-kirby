@@ -9,80 +9,29 @@ use ReflectionMethod;
 #[CoversClass(Timespan::class)]
 class TimespanTest extends TestCase
 {
-	/**
-	 * Calls a protected static method on Timespan via reflection
-	 */
-	private function ts(string $method, mixed ...$args): mixed
+	public function testChecks(): void
 	{
-		$method = new ReflectionMethod(Timespan::class, $method);
-		return $method->invoke(null, ...$args);
-	}
+		$data = [
+			'from'  => '2023-01-01',
+			'to'    => '2023-01-31',
+			'first' => '2023-01-01',
+			'last'  => '2023-12-31',
+		];
 
-	public function testLabel(): void
-	{
-		$this->assertSame('1 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-01',
-			'unit' => 'day'
-		]));
+		$checks = $this->ts('checks', $data);
 
-		$this->assertSame('January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-02-03',
-			'unit' => 'month'
-		]));
+		$this->assertArrayHasKey('hasAll', $checks);
+		$this->assertArrayHasKey('hasNext', $checks);
+		$this->assertArrayHasKey('hasPrev', $checks);
+		$this->assertArrayHasKey('isAll', $checks);
+		$this->assertArrayHasKey('isCurrent', $checks);
 
-		$this->assertSame('2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-31',
-			'unit' => 'year'
-		]));
+		// first and last both exist → hasAll is true
+		$this->assertTrue($checks['hasAll']);
 
-		$this->assertSame('1 - 15 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-15',
-			'unit' => 'days'
-		]));
-
-		$this->assertSame('1 January - 15 March 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
-
-		$this->assertSame('1 January 2022 - 15 March 2023', Timespan::label([
-			'from' => '2022-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
-	}
-
-	public function testUnit(): void
-	{
-		$this->assertSame('day', Timespan::unit([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-01',
-		]));
-
-		$this->assertSame('days', Timespan::unit([
-			'from' => '2023-01-01',
-			'to'   => '2023-02-03',
-		]));
-
-		$this->assertSame('month', Timespan::unit([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-31',
-		]));
-
-		$this->assertSame('months', Timespan::unit([
-			'from' => '2023-01-01',
-			'to'   => '2023-03-31',
-		]));
-
-		$this->assertSame('year', Timespan::unit([
-			'from' => '2023-01-01',
-			'to'   => '2023-12-31',
-		]));
+		// no first/last → hasAll is false
+		$noChecks = $this->ts('checks', array_merge($data, ['first' => null, 'last' => null]));
+		$this->assertFalse($noChecks['hasAll']);
 	}
 
 	public function testHasNext(): void
@@ -178,28 +127,78 @@ class TimespanTest extends TestCase
 		$this->assertTrue($this->ts('isCurrent', $today, $today, $today));
 	}
 
-	public function testChecks(): void
+	public function testLabel(): void
 	{
-		$data = [
-			'from'  => '2023-01-01',
-			'to'    => '2023-01-31',
-			'first' => '2023-01-01',
-			'last'  => '2023-12-31',
-		];
+		$this->assertSame('1 January 2023', Timespan::label([
+			'from' => '2023-01-01',
+			'to'   => '2023-01-01',
+			'unit' => 'day'
+		]));
 
-		$checks = $this->ts('checks', $data);
+		$this->assertSame('January 2023', Timespan::label([
+			'from' => '2023-01-01',
+			'to'   => '2023-02-03',
+			'unit' => 'month'
+		]));
 
-		$this->assertArrayHasKey('hasAll', $checks);
-		$this->assertArrayHasKey('hasNext', $checks);
-		$this->assertArrayHasKey('hasPrev', $checks);
-		$this->assertArrayHasKey('isAll', $checks);
-		$this->assertArrayHasKey('isCurrent', $checks);
+		$this->assertSame('2023', Timespan::label([
+			'from' => '2023-01-01',
+			'to'   => '2023-01-31',
+			'unit' => 'year'
+		]));
 
-		// first and last both exist → hasAll is true
-		$this->assertTrue($checks['hasAll']);
+		$this->assertSame('1 - 15 January 2023', Timespan::label([
+			'from' => '2023-01-01',
+			'to'   => '2023-01-15',
+			'unit' => 'days'
+		]));
 
-		// no first/last → hasAll is false
-		$noChecks = $this->ts('checks', array_merge($data, ['first' => null, 'last' => null]));
-		$this->assertFalse($noChecks['hasAll']);
+		$this->assertSame('1 January - 15 March 2023', Timespan::label([
+			'from' => '2023-01-01',
+			'to'   => '2023-03-15',
+			'unit' => 'months'
+		]));
+
+		$this->assertSame('1 January 2022 - 15 March 2023', Timespan::label([
+			'from' => '2022-01-01',
+			'to'   => '2023-03-15',
+			'unit' => 'months'
+		]));
+	}
+
+	public function testUnit(): void
+	{
+		$this->assertSame('day', Timespan::unit([
+			'from' => '2023-01-01',
+			'to'   => '2023-01-01',
+		]));
+
+		$this->assertSame('days', Timespan::unit([
+			'from' => '2023-01-01',
+			'to'   => '2023-02-03',
+		]));
+
+		$this->assertSame('month', Timespan::unit([
+			'from' => '2023-01-01',
+			'to'   => '2023-01-31',
+		]));
+
+		$this->assertSame('months', Timespan::unit([
+			'from' => '2023-01-01',
+			'to'   => '2023-03-31',
+		]));
+
+		$this->assertSame('year', Timespan::unit([
+			'from' => '2023-01-01',
+			'to'   => '2023-12-31',
+		]));
+	}
+	/**
+	 * Calls a protected static method on Timespan via reflection
+	 */
+	private function ts(string $method, mixed ...$args): mixed
+	{
+		$method = new ReflectionMethod(Timespan::class, $method);
+		return $method->invoke(null, ...$args);
 	}
 }
