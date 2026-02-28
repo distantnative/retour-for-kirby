@@ -40,7 +40,7 @@ export default {
 <style>
 .k-retour-view .k-header:has(+ .k-retour-stats) {
 	margin-bottom: 0;
-	border-bottom: none;
+	border-bottom-color: var(--panel-color-back);
 }
 
 @container (max-width: 30rem) {
