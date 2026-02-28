@@ -9,6 +9,24 @@
 import Pie from "./Pie.vue";
 import Timeline from "./Timeline.vue";
 
+const series = [
+	{
+		key: "redirected",
+		color: "var(--color-blue-650)",
+		label: "retour.stats.redirected",
+	},
+	{
+		key: "resolved",
+		color: "var(--color-gray-250)",
+		label: "retour.stats.resolved",
+	},
+	{
+		key: "failed",
+		color: "var(--color-red-650)",
+		label: "retour.stats.failed",
+	},
+];
+
 export default {
 	components: {
 		Pie,
@@ -22,40 +40,18 @@ export default {
 		areas() {
 			return this.data.map((entry) => ({
 				label: entry.date,
-				areas: [
-					{
-						data: entry.redirected,
-						color: "var(--color-blue-600)",
-					},
-					{
-						data: entry.resolved,
-						color: "var(--color-gray-300)",
-					},
-					{
-						data: entry.failed,
-						color: "var(--color-red-600)",
-					},
-				],
+				areas: series.map(({ key, color }) => ({
+					data: entry[key],
+					color,
+				})),
 			}));
 		},
 		pie() {
-			return [
-				{
-					data: this.data.reduce((i, x) => (i += x.redirected), 0),
-					color: "var(--color-blue-600)",
-					label: this.$t("retour.stats.redirected"),
-				},
-				{
-					data: this.data.reduce((i, x) => (i += x.resolved), 0),
-					color: "var(--color-gray-300)",
-					label: this.$t("retour.stats.resolved"),
-				},
-				{
-					data: this.data.reduce((i, x) => (i += x.failed), 0),
-					color: "var(--color-red-600)",
-					label: this.$t("retour.stats.failed"),
-				},
-			];
+			return series.map(({ key, color, label }) => ({
+				data: this.data.reduce((i, x) => (i += x[key]), 0),
+				color,
+				label: this.$t(label),
+			}));
 		},
 	},
 };
