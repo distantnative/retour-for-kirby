@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "Year",
 	"retour.stats.mode.month": "Month",
 	"retour.stats.mode.week": "Week",
-	"retour.stats.mode.day": "Day",
-	"retour.system": "System",
-	"retour.system.support": "Support development",
-	"retour.system.failures": "Logged failures",
-	"retour.system.redirects": "Successfully redirected",
-	"retour.system.deleteAfter": "Delete logs after",
-	"retour.system.deleteAfter.months": "{count} months",
-	"retour.system.docs": "Learn more about options <a href='{docs}' target='_blank'>in the docs</a>."
+	"retour.stats.mode.day": "Day"
 }

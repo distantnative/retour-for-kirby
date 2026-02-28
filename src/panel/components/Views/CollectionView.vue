@@ -1,17 +1,6 @@
 <template>
 	<k-retour-view v-bind="$props" class="k-retour-collection-view">
 		<template #buttons>
-			<k-button
-				v-if="!stats"
-				icon="heart"
-				link="https://paypal.me/distantnative"
-				size="sm"
-				theme="positive"
-				variant="filled"
-			>
-				{{ $t("retour.system.support") }}
-			</k-button>
-
 			<k-search-input
 				v-if="searching"
 				ref="search"

@@ -58,12 +58,6 @@ class View
 				'badge' => count($failures),
 				'link'  => 'retour/failures'
 			];
-			$props['tabs'][] = [
-				'name'  => 'system',
-				'label' => I18n::translate('retour.system'),
-				'badge' => false,
-				'link'  => 'retour/system'
-			];
 
 			// get statistics data for current timeframe
 			$props['stats'] = $retour->log()->stats($unit, $from, $to);
@@ -73,20 +67,7 @@ class View
 		$props['data'] = match ($tab) {
 			'redirects' => $redirects,
 			'failures'  => $failures,
-			'system'    => [
-				'redirects' => array_reduce(
-					$redirects,
-					fn ($c, $i) => $c + $i['hits'],
-					0
-				),
-				'failures' => array_reduce(
-					$failures,
-					fn ($c, $i) => $c + $i['hits'],
-					0
-				),
-				'deleteAfter' => $retour->option('deleteAfter', '-')
-			],
-			default => []
+			default     => []
 		};
 
 		return $props;

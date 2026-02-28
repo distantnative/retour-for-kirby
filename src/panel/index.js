@@ -2,7 +2,6 @@
 import View from "./components/Views/View.vue";
 import RedirectsView from "./components/Views/RedirectsView.vue";
 import FailuresView from "./components/Views/FailuresView.vue";
-import SystemView from "./components/Views/SystemView.vue";
 
 // Components
 import Stats from "./components/Stats/Stats.vue";
@@ -32,7 +31,6 @@ panel.plugin("distantnative/retour", {
 		"k-retour-view": View,
 		"k-retour-redirects-view": RedirectsView,
 		"k-retour-failures-view": FailuresView,
-		"k-retour-system-view": SystemView,
 	},
 	fields: {
 		"retour-status": StatusField,
