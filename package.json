@@ -3,18 +3,14 @@
 	"scripts": {
 		"dev": "kirbyup src/panel/index.js --watch",
 		"build": "kirbyup src/panel/index.js",
-		"lint": "eslint --ext js,vue src/panel",
-		"docs:dev": "vitepress dev docs",
-		"docs:build": "vitepress build docs",
-		"docs:preview": "vitepress preview docs"
+		"lint": "eslint --ext js,vue src/panel"
 	},
 	"devDependencies": {
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-vue": "^9.32.0",
 		"kirbyup": "^3.4.1",
-		"prettier": "^3.8.1",
-		"vitepress": "^1.6.4"
+		"prettier": "^3.8.1"
 	},
 	"browserslist": "> 2%"
 }
