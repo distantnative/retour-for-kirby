@@ -3,12 +3,12 @@
 		<div class="graph" :style="'--gradient: ' + gradient" />
 
 		<figcaption>
-			<template v-for="(segment, index) in data" :key="segment.label">
-				<k-icon :style="'--color:' + segment.color" :type="icons[index]" />
-				<span>
+			<template v-for="(segment, index) in data">
+				<k-icon :key="'icon-' + segment.label" :style="'--color:' + segment.color" :type="icons[index]" />
+				<span :key="'count-' + segment.label">
 					{{ new Intl.NumberFormat().format(segment.data) }}
 				</span>
-				<span>
+				<span :key="'label-' + segment.label">
 					{{ segment.label }}
 				</span>
 			</template>

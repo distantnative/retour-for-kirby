@@ -13,7 +13,7 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-vue": "^9.32.0",
 		"kirbyup": "^3.4.1",
-		"prettier": "^3.7.4",
+		"prettier": "^3.8.1",
 		"vitepress": "^1.6.4"
 	},
 	"browserslist": "> 2%"
