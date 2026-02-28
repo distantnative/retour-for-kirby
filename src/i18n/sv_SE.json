@@ -41,12 +41,5 @@
 	"retour.stats.mode.year": "År",
 	"retour.stats.mode.month": "Månad",
 	"retour.stats.mode.week": "Vecka",
-	"retour.stats.mode.day": "Dag",
-	"retour.system": "System",
-	"retour.system.support": "Stöd utvecklingen",
-	"retour.system.failures": "Loggade misslyckanden",
-	"retour.system.redirects": "Lyckade omdirigeringar",
-	"retour.system.deleteAfter": "Radera loggar efter",
-	"retour.system.deleteAfter.months": "{count} månader",
-	"retour.system.docs": "Läs mer om plugininställningarna i <a href='{docs}' target='_blank'>i dokumentationen</a>."
+	"retour.stats.mode.day": "Dag"
 }
