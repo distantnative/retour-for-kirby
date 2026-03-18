@@ -34,6 +34,8 @@
 	"retour.timespan.to.label": "Till",
 	"retour.timespan.set.label": "Ställ in anpassad",
 	"retour.timespan.today.label": "Hoppa till idag",
+	"retour.timespan.previous.label": "Föregående",
+	"retour.timespan.next.label": "Nästa",
 	"retour.stats.redirected": "omdirigerad",
 	"retour.stats.resolved": "löst",
 	"retour.stats.failed": "misslyckad",
