@@ -34,6 +34,8 @@
 	"retour.timespan.to.label": "Tot",
 	"retour.timespan.set.label": "Stel aangepast in",
 	"retour.timespan.today.label": "Spring naar vandaag",
+	"retour.timespan.previous.label": "Vorige",
+	"retour.timespan.next.label": "Volgende",
 	"retour.stats.redirected": "omgeleid",
 	"retour.stats.resolved": "opgelost",
 	"retour.stats.failed": "mislukt",

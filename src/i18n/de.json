@@ -34,6 +34,8 @@
 	"retour.timespan.to.label": "Bis",
 	"retour.timespan.set.label": "Anpassen",
 	"retour.timespan.today.label": "Heute",
+	"retour.timespan.previous.label": "Vorherige",
+	"retour.timespan.next.label": "Nächste",
 	"retour.stats.redirected": "weitergeleitet",
 	"retour.stats.resolved": "behoben",
 	"retour.stats.failed": "gescheitert",
