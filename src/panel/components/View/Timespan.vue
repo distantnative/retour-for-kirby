@@ -16,10 +16,12 @@
 			size="sm"
 			variant="filled"
 			:disabled="!timespan.hasPrev || timespan.isAll"
+			:title="$t('retour.timespan.previous.label')"
 			@click="navigate('subtract')"
 		/>
 		<k-button
 			:disabled="!timespan.hasNext || timespan.isAll"
+			:title="$t('retour.timespan.next.label')"
 			icon="angle-right"
 			size="sm"
 			variant="filled"

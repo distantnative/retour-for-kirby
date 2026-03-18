@@ -34,6 +34,8 @@
 	"retour.timespan.to.label": "To",
 	"retour.timespan.set.label": "Set custom",
 	"retour.timespan.today.label": "Jump to today",
+	"retour.timespan.previous.label": "Previous",
+	"retour.timespan.next.label": "Next",
 	"retour.stats.redirected": "redirected",
 	"retour.stats.resolved": "resolved",
 	"retour.stats.failed": "failed",
