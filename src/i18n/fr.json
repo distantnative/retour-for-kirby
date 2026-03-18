@@ -34,6 +34,8 @@
 	"retour.timespan.to.label": "Vers",
 	"retour.timespan.set.label": "Personnalisée",
 	"retour.timespan.today.label": "Aujourd’hui",
+	"retour.timespan.previous.label": "Précédent",
+	"retour.timespan.next.label": "Suivant",
 	"retour.stats.redirected": "Redirigée(s)",
 	"retour.stats.resolved": "Résolue(s)",
 	"retour.stats.failed": "Échec(s)",
