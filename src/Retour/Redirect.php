@@ -108,6 +108,10 @@ class Redirect extends Obj
 				}
 			}
 
+			if ($retour->option('preserveQuery', false) === true) {
+				$to = static::withQuery($to, Url::query());
+			}
+
 			Response::go($to, $code);
 		}
 		// @codeCoverageIgnoreEnd
@@ -190,5 +194,18 @@ class Redirect extends Obj
 				return $redirect->resolve($placeholders);
 			}
 		];
+	}
+
+	/**
+	 * Appends a query string to the destination URL,
+	 * merging it with an existing query string if present
+	 */
+	public static function withQuery(string $to, string $query): string
+	{
+		if ($query === '') {
+			return $to;
+		}
+
+		return $to . (str_contains($to, '?') ? '&' : '?') . $query;
 	}
 }

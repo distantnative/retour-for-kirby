@@ -102,6 +102,41 @@ class RedirectTest extends TestCase
 		$this->assertInstanceOf(Page::class, $redirect->resolve(['project-a']));
 	}
 
+	public function testResolvePreserveQueryUnaffectedForNonRedirectStatus(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs'          => false,
+				'distantnative.retour.preserveQuery' => true
+			],
+			'server' => [
+				'REQUEST_URI' => '/foo?gclid=abc'
+			],
+			'site' => [
+				'children' => [
+					[
+						'slug'     => 'projects',
+						'children' => [
+							['slug' => 'project-a']
+						]
+					]
+				]
+			],
+		]);
+
+		Retour::instance($app);
+
+		// status 200 never reaches the redirect branch, so the
+		// preserveQuery option has no effect here
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'projects/project-a',
+			'status' => 200
+		]);
+
+		$this->assertInstanceOf(Page::class, $redirect->resolve([]));
+	}
+
 	public function testRouteResolve(): void
 	{
 		$app = $this->kirby->clone([
@@ -211,5 +246,20 @@ class RedirectTest extends TestCase
 		]);
 
 		$this->assertNull($redirect->toRoute());
+	}
+
+	public function testWithQuery(): void
+	{
+		// option off / empty query: target is left untouched
+		$to = Redirect::withQuery('/bar', '');
+		$this->assertSame('/bar', $to);
+
+		// clean target: query string is appended with `?`
+		$to = Redirect::withQuery('/bar', 'gclid=abc');
+		$this->assertSame('/bar?gclid=abc', $to);
+
+		// target with its own query string: merged with `&`
+		$to = Redirect::withQuery('/bar?foo=1', 'gclid=abc');
+		$this->assertSame('/bar?foo=1&gclid=abc', $to);
 	}
 }
