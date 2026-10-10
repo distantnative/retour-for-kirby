@@ -33,6 +33,10 @@ The following config options are available:
   // set default HTTP status code the redirect will respond with
   // Default: `null` (which disables the redirect)
   'status' => 308,
+
+  // forward the query string of the original request 
+  // (e.g. to preserve ad/campaign tracking)
+  'preserveQuery' => false,
 ]
 ```
 
