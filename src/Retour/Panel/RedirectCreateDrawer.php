@@ -7,6 +7,7 @@ use Kirby\Panel\Controller\DrawerController;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
+use Kirby\Toolkit\HtmlString;
 use Kirby\Toolkit\I18n;
 
 class RedirectCreateDrawer extends DrawerController
@@ -37,7 +38,7 @@ class RedirectCreateDrawer extends DrawerController
 				'before'   => Retour::instance()->site(),
 				'counter'  => false,
 				'required' => true,
-				'help'     => I18n::template('retour.redirects.from.help', [
+				'help'     => HtmlString::translate('retour.redirects.from.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#path'
 				])
 			],
@@ -52,7 +53,7 @@ class RedirectCreateDrawer extends DrawerController
 				'label'    => I18n::translate('retour.redirects.status'),
 				'options'  => $codes,
 				'width'    => '1/2',
-				'help'     => I18n::template('retour.redirects.status.help', [
+				'help'     => HtmlString::translate('retour.redirects.status.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#status'
 				])
 			],
