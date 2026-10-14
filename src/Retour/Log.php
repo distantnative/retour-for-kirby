@@ -202,6 +202,45 @@ class Log
 	}
 
 	/**
+	 * Returns hits and last hit of all redirects in one query,
+	 * keyed by redirect path; redirects without hits are missing
+	 *
+	 * @param $from date string (yyyy-mm-dd)
+	 * @param $to date string (yyyy-mm-dd)
+	 * @return array<string, array{hits: int, last: string}>
+	 */
+	public function redirects(string $from, string $to): array
+	{
+		// Add time to dates to capture full days
+		$from .= ' 00:00:00';
+		$to   .= ' 23:59:59';
+
+		$data = $this->table()
+			->select('
+                redirect,
+                COUNT(*) AS hits,
+                MAX(date) AS last
+            ')
+			->where('redirect IS NOT NULL')
+			->andWhere('date >= :start', ['start' => $from])
+			->andWhere('date <= :end', ['end' => $to])
+			->group('redirect')
+			->fetch('array')
+			->all();
+
+		$redirects = [];
+
+		foreach ($data as $entry) {
+			$redirects[$entry['redirect']] = [
+				'hits' => (int)$entry['hits'],
+				'last' => $entry['last']
+			];
+		}
+
+		return $redirects;
+	}
+
+	/**
 	 * Remove an entry from the database
 	 */
 	public function remove(string $path): bool
