@@ -9,14 +9,18 @@
 </template>
 
 <script>
-import color from "../../mixins/color.js";
+import { color } from "../../helpers/status";
 
 export default {
-	mixins: [color],
 	props: {
 		value: Number,
 		row: Object,
 		column: Object,
+	},
+	computed: {
+		color() {
+			return color(this.value);
+		},
 	},
 };
 </script>

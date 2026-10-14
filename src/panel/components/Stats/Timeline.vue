@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import { axis, bounds, clip, max } from "../../helpers/chart";
+import { format, subunit } from "../../helpers/unit";
+
 export default {
 	props: {
 		data: Array,
@@ -46,65 +49,19 @@ export default {
 	},
 	computed: {
 		axisY() {
-			const span = this.max / 5;
-			return [1, 2, 3, 4, 5].map((x) => {
-				let tick = x * span;
-
-				if (tick >= 1000000) {
-					tick = Math.floor(tick / 100000) / 10 + "M";
-				} else if (tick >= 1000) {
-					tick = Math.floor(tick / 100) / 10 + "k";
-				}
-
-				return tick;
-			});
+			return axis(this.max);
 		},
 		bounds() {
-			return this.data.map((segment) =>
-				segment.areas.map((_, area) => {
-					const stack = segment.areas
-						.slice(0, area)
-						.reduce((i, x) => (i += x.data), 0);
-					return {
-						path: stack + segment.areas[area].data,
-						mask: stack,
-					};
-				}),
-			);
+			return bounds(this.data);
 		},
 		format() {
-			return (
-				{
-					day: "HH",
-					week: "ddd",
-					month: "D",
-					year: "MMM",
-					months: "MMM YY",
-				}[this.timespan.unit] ?? "D MMM"
-			);
+			return format(this.timespan.unit);
 		},
 		max() {
-			let max = Math.max(
-				...this.data.map((segment) => {
-					return segment.areas.reduce((i, x) => (i += x.data), 0);
-				}),
-			);
-
-			if (max > 0) {
-				const digits = max.toString().length;
-				const next = Math.pow(10, digits) / 4;
-				return Math.ceil((max * 1.1) / next) * next;
-			}
-
-			return 5;
+			return max(this.data);
 		},
 		subunit() {
-			return (
-				{
-					day: "hour",
-					year: "month",
-				}[this.timespan.unit] ?? "day"
-			);
+			return subunit(this.timespan.unit);
 		},
 		today() {
 			return this.$library.dayjs();
@@ -112,18 +69,11 @@ export default {
 	},
 	methods: {
 		clip(segment, area) {
-			const current = this.bounds[segment][area];
-			const next = this.bounds[segment + 1]?.[area] ?? {
-				path: 0,
-				mask: 0,
-			};
-
-			return `
-				--p0: ${current.path / this.max};
-				--p1: ${next.path / this.max};
-				--m0: ${current.mask / this.max};
-				--m1: ${next.mask / this.max};
-			`;
+			return clip(
+				this.bounds[segment][area],
+				this.bounds[segment + 1]?.[area],
+				this.max,
+			);
 		},
 		color(segment, area) {
 			const next = this.data[segment + 1];

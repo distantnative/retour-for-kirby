@@ -19,11 +19,15 @@
 </template>
 
 <script>
-import color from "../../mixins/color.js";
+import { color } from "../../helpers/status";
 
 export default {
 	extends: "k-select-field",
-	mixins: [color],
 	emits: ["input"],
+	computed: {
+		color() {
+			return color(this.value);
+		},
+	},
 };
 </script>

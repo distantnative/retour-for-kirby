@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { pie } from "../../helpers/chart";
+
 export default {
 	props: {
 		data: Array,
@@ -27,31 +29,8 @@ export default {
 	icons: ["shuffle", "check-double", "cloud-off"],
 	formatter: new Intl.NumberFormat(),
 	computed: {
-		total() {
-			return this.data.reduce((i, x) => (i += x.data), 0);
-		},
 		styles() {
-			if (this.total === 0) {
-				return {
-					"--pie-c0": "transparent",
-					"--pie-c1": "transparent",
-					"--pie-c2": "transparent",
-					"--pie-a0": "0deg",
-					"--pie-a1": "0deg",
-				};
-			}
-
-			const deg = this.total / 180;
-			const a0 = this.data[0].data / deg;
-			const a1 = a0 + this.data[1].data / deg;
-
-			return {
-				"--pie-c0": this.data[0].color,
-				"--pie-c1": this.data[1].color,
-				"--pie-c2": this.data[2].color,
-				"--pie-a0": `${a0}deg`,
-				"--pie-a1": `${a1}deg`,
-			};
+			return pie(this.data);
 		},
 	},
 };
