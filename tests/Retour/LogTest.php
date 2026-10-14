@@ -231,6 +231,23 @@ class LogTest extends TestCase
 		$this->assertSame('2020-12-31 23:59:59', $redirect['last']);
 	}
 
+	public function testRedirects(): void
+	{
+		$log = $this->log();
+		$this->assertSame([], $log->redirects('2020-01-01', '2020-12-31'));
+
+		$log->add(['date' => '2020-01-01 07:30:00', 'path' => 'foo', 'redirect' => 'foo']);
+		$log->add(['date' => $last = '2020-01-31 16:30:00', 'path' => 'foo', 'redirect' => 'foo']);
+		$log->add(['date' => '2020-02-01 10:00:00', 'path' => 'homer/simpson', 'redirect' => '(:any)/simpson']);
+		$log->add(['date' => '2020-01-31 16:30:00', 'path' => 'foo']);
+		$log->add(['date' => '2021-01-31 16:30:00', 'path' => 'foo', 'redirect' => 'foo']);
+
+		$this->assertSame([
+			'(:any)/simpson' => ['hits' => 1, 'last' => '2020-02-01 10:00:00'],
+			'foo'            => ['hits' => 2, 'last' => $last],
+		], $log->redirects('2020-01-01', '2020-12-31'));
+	}
+
 	public function testRemove(): void
 	{
 		$log = $this->log();

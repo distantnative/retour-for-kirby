@@ -87,12 +87,13 @@ class Redirects extends Collection
 			return $this->toArray();
 		}
 
-		return $this->toArray(function (Redirect $redirect) use ($retour, $from, $to): array {
-			$data = $redirect->toArray();
+		// get hits of all redirects at once
+		$hits = $retour->log()->redirects($from, $to);
 
-			if ($log = $retour->log()->redirect($data['from'], $from, $to)) {
-				['hits' => $data['hits'], 'last' => $data['last']] = $log;
-			}
+		return $this->toArray(function (Redirect $redirect) use ($hits): array {
+			$data         = $redirect->toArray();
+			$data['hits'] = $hits[$data['from']]['hits'] ?? 0;
+			$data['last'] = $hits[$data['from']]['last'] ?? null;
 			return $data;
 		});
 	}
