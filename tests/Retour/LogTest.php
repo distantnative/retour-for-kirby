@@ -85,6 +85,20 @@ class LogTest extends TestCase
 		$this->assertSame(2, $fail['hits']);
 	}
 
+	public function testFailsIncludesBoundaries(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2019-12-31 23:59:59', 'path' => 'before']);
+		$log->add(['date' => '2020-01-01 00:00:00', 'path' => 'first']);
+		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'last']);
+		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'after']);
+
+		$paths = array_column($log->fails('2020-01-01', '2020-12-31'), 'path');
+		sort($paths);
+		$this->assertSame(['first', 'last'], $paths);
+	}
+
 	public function testFile(): void
 	{
 		$file = __DIR__ . '/tmp/log/test.sqlite';
@@ -201,6 +215,20 @@ class LogTest extends TestCase
 		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
 		$this->assertSame($last, $redirect['last']);
 		$this->assertSame(2, $redirect['hits']);
+	}
+
+	public function testRedirectIncludesBoundaries(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2019-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
+		$log->add(['date' => '2020-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
+		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
+		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
+
+		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
+		$this->assertSame(2, $redirect['hits']);
+		$this->assertSame('2020-12-31 23:59:59', $redirect['last']);
 	}
 
 	public function testRemove(): void
