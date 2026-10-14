@@ -6,8 +6,7 @@ use Kirby\Retour\Retour;
 return [
 	'retour.timespan' => [
 		'pattern' => 'retour/timespan',
-		'load'   => fn () => (new TimespanDialog())->load(),
-		'submit' => fn () => (new TimespanDialog())->submit()
+		'action'  => TimespanDialog::class
 	],
 
 	'retour.redirect.delete' => [

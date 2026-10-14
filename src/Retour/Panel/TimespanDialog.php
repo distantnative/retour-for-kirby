@@ -4,13 +4,13 @@ namespace Kirby\Retour\Panel;
 
 use DateInterval;
 use DateTime;
-use Kirby\Cms\App;
-use Kirby\Panel\Panel;
+use Kirby\Panel\Controller\DialogController;
+use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
 use Kirby\Toolkit\I18n;
 
-class TimespanDialog
+class TimespanDialog extends DialogController
 {
 	public function date(
 		DateTime|string|null $date,
@@ -32,47 +32,43 @@ class TimespanDialog
 		return [$min, $max];
 	}
 
-	public function load(): array
+	public function load(): FormDialog
 	{
 		$selection   = Timespan::selection();
 		[$min, $max] = $this->limits();
 
-		return [
-			'component' => 'k-form-dialog',
-			'props'     => [
-				'size'   => 'small',
-				'fields' => [
-					'from' => [
-						'type'     => 'date',
-						'label'    => t('retour.timespan.from.label'),
-						'required' => true,
-						'time'     => false,
-						'min'      => $min,
-						'max'      => $max
-					],
-					'to' => [
-						'type'     => 'date',
-						'label'    => t('retour.timespan.to.label'),
-						'required' => true,
-						'time'     => false,
-						'min'      => $min,
-						'max'      => $max
-					]
+		return new FormDialog(
+			size: 'small',
+			fields: [
+				'from' => [
+					'type'     => 'date',
+					'label'    => I18n::translate('retour.timespan.from.label'),
+					'required' => true,
+					'time'     => false,
+					'min'      => $min,
+					'max'      => $max
 				],
-				'value' => [
-					'from' => $this->date($selection['from']),
-					'to'   => $this->date($selection['to'])
-				],
-				'submitButton' => [
-					'text' => I18n::translate('change')
+				'to' => [
+					'type'     => 'date',
+					'label'    => I18n::translate('retour.timespan.to.label'),
+					'required' => true,
+					'time'     => false,
+					'min'      => $min,
+					'max'      => $max
 				]
+			],
+			value: [
+				'from' => $this->date($selection['from']),
+				'to'   => $this->date($selection['to'])
+			],
+			submitButton: [
+				'text' => I18n::translate('change')
 			]
-		];
+		);
 	}
 
 	public function submit(): array
 	{
-		$kirby   = App::instance();
 		$data    = Timespan::query();
 		$from    = Date::optional($data['from']);
 		$to      = Date::optional($data['to']);
@@ -81,13 +77,13 @@ class TimespanDialog
 			$to = $from;
 		}
 
-		$kirby->session()->set('retour', [
+		$this->kirby->session()->set('retour', [
 			'from' => $from->format('Y-m-d'),
 			'to'   => $to->format('Y-m-d')
 		]);
 
 		return [
-			'redirect' => Panel::referrer()
+			'redirect' => $this->kirby->panel()->referrer()
 		];
 	}
 }
