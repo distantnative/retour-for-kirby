@@ -174,12 +174,29 @@ class LogTest extends TestCase
 
 		$this->assertTrue($log->purge());
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+		$this->assertContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
 	public function testPurgeDactivated(): void
 	{
 		$log = $this->log();
 		$this->assertTrue($log->purge());
+	}
+
+	public function testPurgeWithoutOutdatedRecords(): void
+	{
+		$log = $this->log(options: [
+			'distantnative.retour.deleteAfter' => 6
+		]);
+
+		$log->add([
+			'date' => date('Y-m-d H:i:s', strtotime('-3 month')),
+			'path' => 'foo'
+		]);
+
+		$this->assertTrue($log->purge());
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
 	public function testRedirect(): void
