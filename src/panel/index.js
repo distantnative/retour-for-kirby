@@ -18,7 +18,7 @@ import StatusFieldPreview from "./components/Previews/StatusFieldPreview.vue";
 import StatusField from "./components/Fields/StatusField.vue";
 import UsersField from "./components/Fields/UsersField.vue";
 
-panel.plugin("distantnative/retour", {
+window.panel.plugin("distantnative/retour", {
 	components: {
 		"k-count-field-preview": CountFieldPreview,
 		"k-path-field-preview": PathFieldPreview,

@@ -281,14 +281,14 @@ export default {
 	text-align: center;
 }
 
-.chart-areas tfoot[data-less] tr:not(:nth-child(3n + 1), :last-child) {
+.chart-areas tfoot[data-less="true"] tr:not(:nth-child(3n + 1), :last-child) {
 	display: none;
 }
 
 .chart-areas tfoot td {
 	transform: translateX(-50%);
 }
-.chart-areas tfoot [data-current] {
+.chart-areas tfoot [data-current="true"] {
 	color: #fff;
 	font-weight: bold;
 }

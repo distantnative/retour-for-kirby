@@ -3,16 +3,15 @@
 		<div class="graph" :style="styles" />
 
 		<figcaption>
-			<template v-for="(segment, index) in data">
+			<template v-for="(segment, index) in data" :key="segment.label">
 				<k-icon
-					:key="'icon-' + segment.label"
 					:style="'--color:' + segment.color"
 					:type="$options.icons[index]"
 				/>
-				<span :key="'count-' + segment.label">
+				<span>
 					{{ $options.formatter.format(segment.data) }}
 				</span>
-				<span :key="'label-' + segment.label">
+				<span>
 					{{ segment.label }}
 				</span>
 			</template>

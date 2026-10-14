@@ -4,7 +4,7 @@
 			:to="link"
 			:title="`${column.label}: ${value}`"
 			target="_blank"
-			@click.native.stop
+			@click.stop
 		>
 			<span>{{ value }}</span>
 		</k-link>

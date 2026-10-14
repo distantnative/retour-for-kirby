@@ -3,6 +3,7 @@
 		v-bind="$props"
 		:input="id"
 		:class="['k-select-field', $attrs.class]"
+		:style="$attrs.style"
 	>
 		<k-input
 			v-bind="$props"
@@ -23,5 +24,6 @@ import color from "../../mixins/color.js";
 export default {
 	extends: "k-select-field",
 	mixins: [color],
+	emits: ["input"],
 };
 </script>

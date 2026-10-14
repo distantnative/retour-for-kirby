@@ -12,7 +12,7 @@
 					q = $event;
 					pagination.page = 1;
 				"
-				@keydown.native.esc="toggleSearch(true)"
+				@keydown.esc="toggleSearch(true)"
 			/>
 
 			<k-button
