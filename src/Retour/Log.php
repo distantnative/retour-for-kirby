@@ -162,6 +162,13 @@ class Log
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
 
 			$delete = $table->delete('date < :cutoff');
+
+			// only rebuild the database file
+			// when records have been deleted
+			if ($this->database->affected() === 0) {
+				return $delete;
+			}
+
 			$vacuum = $this->database->execute('VACUUM');
 			return $delete && $vacuum;
 		}
