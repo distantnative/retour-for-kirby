@@ -5,6 +5,7 @@ namespace Kirby\Retour\Panel;
 use Kirby\Http\Header;
 use Kirby\Panel\Controller\DrawerController;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
+use Kirby\Panel\Ui\Item\UserItem;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\HtmlString;
@@ -72,19 +73,17 @@ class RedirectCreateDrawer extends DrawerController
 				'help'     => I18n::translate('retour.redirects.comment.help')
 			],
 			'creator' => [
-				'type'     => 'users',
+				'type'     => 'retour-users',
 				'label'    => I18n::translate('retour.redirects.creator'),
 				'empty'    => I18n::translate('retour.redirects.creator.empty'),
-				'disabled' => true,
 			]
 		];
 
 		if ($this instanceof RedirectEditDrawer) {
 			$fields['modifier'] = [
-				'type'     => 'users',
+				'type'     => 'retour-users',
 				'label'    => I18n::translate('retour.redirects.modifier'),
 				'empty'    => I18n::translate('retour.redirects.creator.empty'),
-				'disabled' => true,
 			];
 		}
 
@@ -122,10 +121,25 @@ class RedirectCreateDrawer extends DrawerController
 		return I18n::translate('add');
 	}
 
+	/**
+	 * Returns the item props for the user
+	 * to be displayed in a `retour-users` field
+	 */
+	protected function user(string|null $id): array
+	{
+		if ($id !== null) {
+			if ($user = $this->kirby->user($id)) {
+				return [(new UserItem($user))->props()];
+			}
+		}
+
+		return [];
+	}
+
 	protected function value(): array
 	{
 		return [
-			'creator' => [$this->kirby->user()?->panel()->pickerData()],
+			'creator' => $this->user($this->kirby->user()?->id()),
 			'status'  => Retour::instance()->option('status')
 		];
 	}

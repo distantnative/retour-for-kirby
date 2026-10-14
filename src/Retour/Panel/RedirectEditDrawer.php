@@ -62,21 +62,10 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 		return true;
 	}
 
-	protected function userField(string $field): array
-	{
-		if ($user = $this->redirect()->$field()) {
-			if ($user = $this->kirby->user($user)) {
-				return [$user->panel()->pickerData()];
-			}
-		}
-
-		return [];
-	}
-
 	protected function value(): array
 	{
-		$creator  = $this->userField('creator');
-		$modifier = $this->userField('modifier');
+		$creator  = $this->user($this->redirect()->creator());
+		$modifier = $this->user($this->redirect()->modifier());
 
 		if ($modifier === []) {
 			$modifier = $creator;

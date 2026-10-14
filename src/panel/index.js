@@ -16,6 +16,7 @@ import StatusFieldPreview from "./components/Previews/StatusFieldPreview.vue";
 
 // Fields
 import StatusField from "./components/Fields/StatusField.vue";
+import UsersField from "./components/Fields/UsersField.vue";
 
 panel.plugin("distantnative/retour", {
 	components: {
@@ -34,6 +35,7 @@ panel.plugin("distantnative/retour", {
 	},
 	fields: {
 		"retour-status": StatusField,
+		"retour-users": UsersField,
 	},
 	icons: {
 		"circle-focus":
