@@ -152,7 +152,7 @@ export default {
 
 			const date = this.$library.dayjs(segment.label);
 
-			this.$reload({
+			this.$panel.reload({
 				query: {
 					from: date.startOf(this.subunit).format("YYYY-MM-DD"),
 					to: date.endOf(this.subunit).format("YYYY-MM-DD"),

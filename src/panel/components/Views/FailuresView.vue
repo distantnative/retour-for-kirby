@@ -15,7 +15,7 @@ export default {
 				{
 					icon: "trash",
 					text: this.$t("retour.failures.clear"),
-					click: () => this.$dialog("retour/failures/flush"),
+					click: () => this.$panel.dialog.open("retour/failures/flush"),
 				},
 			];
 		},
@@ -60,13 +60,17 @@ export default {
 					text: this.$t("retour.failures.resolve"),
 					icon: "add",
 					click: () =>
-						this.$drawer(`retour/failures/${this.id(failure.path)}/resolve`),
+						this.$panel.drawer.open(
+							`retour/failures/${this.id(failure.path)}/resolve`,
+						),
 				},
 				{
 					text: this.$t("remove"),
 					icon: "trash",
 					click: () =>
-						this.$dialog(`retour/failures/${this.id(failure.path)}/delete`),
+						this.$panel.dialog.open(
+							`retour/failures/${this.id(failure.path)}/delete`,
+						),
 				},
 			];
 		},

@@ -14,7 +14,7 @@ export default {
 				{
 					icon: "add",
 					text: this.$t("add"),
-					click: () => this.$drawer("retour/redirects/create"),
+					click: () => this.$panel.drawer.open("retour/redirects/create"),
 				},
 			];
 		},
@@ -57,7 +57,7 @@ export default {
 	},
 	methods: {
 		onCell({ row, columnIndex }) {
-			this.$drawer(`retour/redirects/${this.id(row.from)}/edit`, {
+			this.$panel.drawer.open(`retour/redirects/${this.id(row.from)}/edit`, {
 				query: {
 					column: columnIndex,
 				},
@@ -69,13 +69,17 @@ export default {
 					text: this.$t("edit"),
 					icon: "edit",
 					click: () =>
-						this.$drawer(`retour/redirects/${this.id(redirect.from)}/edit`),
+						this.$panel.drawer.open(
+							`retour/redirects/${this.id(redirect.from)}/edit`,
+						),
 				},
 				{
 					text: this.$t("remove"),
 					icon: "trash",
 					click: () =>
-						this.$dialog(`retour/redirects/${this.id(redirect.from)}/delete`),
+						this.$panel.dialog.open(
+							`retour/redirects/${this.id(redirect.from)}/delete`,
+						),
 				},
 			];
 		},

@@ -59,7 +59,7 @@ export default {
 				{
 					text: this.$t("retour.timespan.set.label"),
 					icon: "calendar",
-					click: () => this.$dialog("retour/timespan"),
+					click: () => this.$panel.dialog.open("retour/timespan"),
 				},
 			].filter(Boolean);
 		},
@@ -113,7 +113,7 @@ export default {
 			});
 		},
 		update({ from, to }) {
-			this.$reload({
+			this.$panel.reload({
 				query: {
 					from: from.format("YYYY-MM-DD"),
 					to: to.format("YYYY-MM-DD"),
