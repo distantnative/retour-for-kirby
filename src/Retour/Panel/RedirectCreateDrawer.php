@@ -2,17 +2,18 @@
 
 namespace Kirby\Retour\Panel;
 
-use Kirby\Cms\App;
 use Kirby\Http\Header;
+use Kirby\Panel\Controller\DrawerController;
+use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\I18n;
 
-class RedirectCreateDrawer
+class RedirectCreateDrawer extends DrawerController
 {
 	protected function data(): array
 	{
-		return $this->kirby()->request()->get([
+		return $this->request->get([
 			'from',
 			'to',
 			'status',
@@ -89,22 +90,14 @@ class RedirectCreateDrawer
 		return $fields;
 	}
 
-	protected function kirby(): App
+	public function load(): FormDrawer
 	{
-		return App::instance();
-	}
-
-	public function load(): array
-	{
-		return [
-			'component' => 'k-form-drawer',
-			'props' => [
-				'title'  => $this->title(),
-				'icon'   => 'add',
-				'fields' => $this->fields(),
-				'value'  => $this->value()
-			]
-		];
+		return new FormDrawer(
+			title: $this->title(),
+			icon: 'add',
+			fields: $this->fields(),
+			value: $this->value()
+		);
 	}
 
 	protected function redirects(): Redirects
@@ -117,7 +110,7 @@ class RedirectCreateDrawer
 		$redirects = $this->redirects();
 		$redirects->create([
 			...$this->data(),
-			'creator' => $this->kirby()->user()?->email(),
+			'creator' => $this->kirby->user()?->email(),
 		]);
 		$redirects->save();
 		return true;
@@ -131,7 +124,7 @@ class RedirectCreateDrawer
 	protected function value(): array
 	{
 		return [
-			'creator' => [$this->kirby()->user()?->panel()->pickerData()],
+			'creator' => [$this->kirby->user()?->panel()->pickerData()],
 			'status'  => Retour::instance()->option('status')
 		];
 	}

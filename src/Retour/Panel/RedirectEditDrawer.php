@@ -3,6 +3,7 @@
 namespace Kirby\Retour\Panel;
 
 use Kirby\Exception\NotFoundException;
+use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirect;
 use Kirby\Toolkit\I18n;
 
@@ -11,36 +12,34 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	public function __construct(
 		protected string $id
 	) {
+		parent::__construct();
 		$this->id = urldecode($id);
 	}
 
-	public function load(): array
+	public function load(): FormDrawer
 	{
 		$fields = $this->fields();
 
 		// set autofocus if specific column cell was passed
-		if ($column = $this->kirby()->request()->get('column')) {
+		if ($column = $this->request->get('column')) {
 			foreach (array_keys($fields) as $name) {
 				$fields[$name]['autofocus'] = $name === $column;
 			}
 		}
 
-		return [
-			'component' => 'k-form-drawer',
-			'props' => [
-				'fields'  => $fields,
-				'icon'    => 'shuffle',
-				'title'   => $this->redirect()->from(),
-				'value'   => $this->value(),
-				'options' => [
-					[
-						'icon'   => 'trash',
-						'title'  => I18n::translate('remove'),
-						'dialog' => 'retour/redirects/' . urlencode($this->id) . '/delete'
-					]
+		return new FormDrawer(
+			fields: $fields,
+			icon: 'shuffle',
+			title: $this->redirect()->from(),
+			value: $this->value(),
+			options: [
+				[
+					'icon'   => 'trash',
+					'title'  => I18n::translate('remove'),
+					'dialog' => 'retour/redirects/' . urlencode($this->id) . '/delete'
 				]
 			]
-		];
+		);
 	}
 
 	protected function redirect(): Redirect
@@ -55,7 +54,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 		$redirect  = new Redirect([
 			...$data,
 			'creator'  => $this->redirect()->creator(),
-			'modifier' => $this->kirby()->user()?->email(),
+			'modifier' => $this->kirby->user()?->email(),
 		]);
 
 		$redirects->set($this->id, $redirect);
@@ -66,7 +65,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	protected function userField(string $field): array
 	{
 		if ($user = $this->redirect()->$field()) {
-			if ($user = $this->kirby()->user($user)) {
+			if ($user = $this->kirby->user($user)) {
 				return [$user->panel()->pickerData()];
 			}
 		}

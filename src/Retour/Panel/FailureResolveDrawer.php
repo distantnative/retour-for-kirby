@@ -10,6 +10,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 	public function __construct(
 		protected string $path
 	) {
+		parent::__construct();
 		$this->path = urldecode($path);
 	}
 
@@ -19,7 +20,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		$input     = $this->data();
 
 		$redirects->create([
-			'creator' => $this->kirby()->user()?->email(),
+			'creator' => $this->kirby->user()?->email(),
 			...$input
 		]);
 
