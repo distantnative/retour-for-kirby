@@ -16,7 +16,7 @@ return [
 			],
 			[
 				'pattern' => 'retour/(:any)',
-				'action'  => fn (string $tab) => View::tab($tab)
+				'action'  => View::class
 			]
 		],
 		'dialogs' => require __DIR__ . '/dialogs.php',

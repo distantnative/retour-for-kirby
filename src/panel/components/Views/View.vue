@@ -24,6 +24,7 @@
 <script>
 export const props = {
 	props: {
+		buttons: Array,
 		data: [Object, Array],
 		stats: [Boolean, Array],
 		tab: String,

@@ -2,19 +2,45 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Panel\Controller\ViewController;
+use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\I18n;
 
 /**
- * Handles (Fiber) Panel view requests
+ * Handles Panel view requests for the Retour tabs
  */
-class View
+class View extends ViewController
 {
+	public function __construct(
+		protected string $tab
+	) {
+		parent::__construct();
+	}
+
+	/**
+	 * Returns the view for the tab
+	 */
+	public function load(): ViewComponent
+	{
+		return new ViewComponent(
+			...$this->props(),
+			component: 'k-retour-' . $this->tab . '-view',
+			title: I18n::translate('view.retour'),
+			breadcrumb: [
+				[
+					'label' => I18n::translate('retour.' . $this->tab),
+					'link'  => 'retour/' . $this->tab,
+				]
+			]
+		);
+	}
+
 	/**
 	 * Returns all props for the Panel view
 	 */
-	public static function props(string $tab): array
+	public function props(): array
 	{
 		$retour   = Retour::instance();
 		$timespan = Timespan::props();
@@ -23,7 +49,7 @@ class View
 		// props for minimal Panel view
 		$props = [
 			'timespan' => $timespan,
-			'tab'      => $tab,
+			'tab'      => $this->tab,
 			'tabs'     => [
 				[
 					'name'  => 'redirects',
@@ -53,30 +79,12 @@ class View
 		}
 
 		// add tab-specific data, e.g. for table rows
-		$props['data'] = match ($tab) {
+		$props['data'] = match ($this->tab) {
 			'redirects' => $retour->redirects()->toData($from, $to),
 			'failures'  => $retour->log()->fails($from, $to) ?? [],
 			default     => []
 		};
 
 		return $props;
-	}
-
-	/**
-	 * Returns the Fiber view definition for a tab
-	 */
-	public static function tab(string $tab): array
-	{
-		return [
-			'component'  => 'k-retour-' . $tab . '-view',
-			'title'      => I18n::translate('view.retour'),
-			'breadcrumb' => [
-				[
-					'label' => I18n::translate('retour.' . $tab),
-					'link'  => 'retour/' . $tab,
-				]
-			],
-			'props' => static::props($tab)
-		];
 	}
 }
