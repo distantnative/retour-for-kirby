@@ -10,6 +10,8 @@ load([
 	'Kirby\\Retour\\Redirects'   => $dir . '/Redirects.php',
 	'Kirby\\Retour\\Timespan'    => $dir . '/Timespan.php',
 
+	'Kirby\\Retour\\Commands\\Indices' => $dir . '/Commands/Indices.php',
+
 	'Kirby\\Retour\\Panel\\TimespanDialog' => $dir . '/Panel/TimespanDialog.php',
 	'Kirby\\Retour\\Panel\\RedirectCreateDrawer' => $dir . '/Panel/RedirectCreateDrawer.php',
 	'Kirby\\Retour\\Panel\\RedirectEditDrawer' => $dir . '/Panel/RedirectEditDrawer.php',
