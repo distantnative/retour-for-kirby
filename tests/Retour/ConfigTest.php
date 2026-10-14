@@ -23,11 +23,11 @@ class ConfigTest extends TestCase
 	public function testFile(): void
 	{
 		$config = Retour::instance()->config();
-		$this->assertSame(__DIR__ . '/tmp/site/config/retour.yml', $config->file());
+		$this->assertSame($this->tmp . '/site/config/retour.yml', $config->file());
 
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => $file = __DIR__ . '/tmp/meow.json'
+				'distantnative.retour.config' => $file = $this->tmp . '/meow.json'
 			]
 		]);
 		$config = Retour::instance($app)->config();
@@ -46,7 +46,7 @@ class ConfigTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => $file = __DIR__ . '/tmp/test.yml'
+				'distantnative.retour.config' => $file = $this->tmp . '/test.yml'
 			]
 		]);
 		$config = Retour::instance($app)->config();

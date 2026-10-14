@@ -15,7 +15,7 @@ class LogTest extends TestCase
 		string|Closure|null $file = null,
 		array $options = []
 	): Log {
-		$file ??= __DIR__ . '/tmp/test.sqlite';
+		$file ??= $this->tmp . '/test.sqlite';
 		$app    = $this->kirby->clone([
 			'options' => array_merge($options, [
 				'distantnative.retour.database' => $file
@@ -101,7 +101,7 @@ class LogTest extends TestCase
 
 	public function testFile(): void
 	{
-		$file = __DIR__ . '/tmp/log/test.sqlite';
+		$file = $this->tmp . '/log/test.sqlite';
 		$this->assertFalse(F::exists($file));
 		$this->log(fn (): string => $file);
 		$this->assertTrue(F::exists($file));
@@ -168,7 +168,7 @@ class LogTest extends TestCase
 
 	public function testPurge(): void
 	{
-		$file = __DIR__ . '/tmp/test.sqlite';
+		$file = $this->tmp . '/test.sqlite';
 		$log  = $this->log($file, [
 			'distantnative.retour.deleteAfter' => 6
 		]);

@@ -11,7 +11,6 @@ use Kirby\Http\Route;
 class Retour
 {
 	protected Config $config;
-	protected static self|null $instance = null;
 	protected App $kirby;
 
 	/**
@@ -20,6 +19,8 @@ class Retour
 	 */
 	protected Log|LogDisabled|null $log = null;
 	protected Redirects $redirects;
+
+	protected static self|null $instance = null;
 
 	public function __construct(App|null $kirby = null)
 	{

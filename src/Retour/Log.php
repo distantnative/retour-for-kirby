@@ -72,8 +72,8 @@ class Log
 	/**
 	 * Returns all logged 404s
 	 *
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
+	 * @param $from date string (yyyy-mm-dd)
+	 * @param $to date string (yyyy-mm-dd)
 	 */
 	public function fails(string $from, string $to): array
 	{
@@ -158,7 +158,7 @@ class Log
 
 			$cutoff = date('Y-m-d 00:00:00', $time);
 
-			/** @var \Kirby\Database\Query $table */
+			/** @var Query $table */
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
 
 			$delete = $table->delete('date < :cutoff');
@@ -179,9 +179,9 @@ class Log
 	/**
 	 * Returns all records for a redirect
 	 *
-	 * @param string $path redirect path
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
+	 * @param $path redirect path
+	 * @param $from date string (yyyy-mm-dd)
+	 * @param $to date string (yyyy-mm-dd)
 	 */
 	public function redirect(string $path, string $from, string $to): array
 	{
@@ -285,9 +285,9 @@ class Log
 	/**
 	 * Returns stats data for specified timeframe and unit
 	 *
-	 * @param string $unit timeframe unit (year, month, ...)
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
+	 * @param $unit timeframe unit (year, month, ...)
+	 * @param $from date string (yyyy-mm-dd)
+	 * @param $to date string (yyyy-mm-dd)
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{

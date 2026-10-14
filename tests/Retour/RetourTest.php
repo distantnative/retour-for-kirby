@@ -12,13 +12,14 @@ class RetourTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => __DIR__ . '/tmp/retour.yml'
+				'distantnative.retour.config' => $this->tmp . '/retour.yml'
 			]
 		]);
 
 		$config = Retour::instance($app)->config();
 		$this->assertInstanceOf(Config::class, $config);
 	}
+
 	public function testConstruct(): void
 	{
 		$app = $this->kirby->clone([
@@ -89,7 +90,7 @@ class RetourTest extends TestCase
 
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => __DIR__ . '/tmp/retour.yml'
+				'distantnative.retour.config' => $this->tmp . '/retour.yml'
 			]
 		]);
 		$retour = Retour::instance($app);
@@ -107,7 +108,7 @@ class RetourTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite'
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite'
 			]
 		]);
 
@@ -120,7 +121,7 @@ class RetourTest extends TestCase
 		$app = $this->kirby->clone([
 			'options' => [
 				'distantnative.retour.logs'     => false,
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite'
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite'
 			]
 		]);
 
@@ -145,7 +146,7 @@ class RetourTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => __DIR__ . '/tmp/retour.yml'
+				'distantnative.retour.config' => $this->tmp . '/retour.yml'
 			]
 		]);
 

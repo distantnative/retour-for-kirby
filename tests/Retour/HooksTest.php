@@ -3,6 +3,7 @@
 namespace Kirby\Retour;
 
 use Closure;
+use Kirby\Cms\Page;
 use Kirby\Http\Route;
 use PHPUnit\Framework\Attributes\CoversNothing;
 
@@ -39,7 +40,7 @@ class HooksTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite',
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
 			]
 		]);
 		$retour = Retour::instance($app);
@@ -57,7 +58,7 @@ class HooksTest extends TestCase
 		$app = $this->kirby->clone([
 			'options' => [
 				'distantnative.retour.logs'   => false,
-				'distantnative.retour.config' => __DIR__ . '/tmp/retour.yml',
+				'distantnative.retour.config' => $this->tmp . '/retour.yml',
 			],
 			'site' => [
 				'children' => [
@@ -75,7 +76,7 @@ class HooksTest extends TestCase
 		]));
 
 		$result = ($this->hook())($this->route(), 'old-path', 'GET', null, true);
-		$this->assertInstanceOf(\Kirby\Cms\Page::class, $result);
+		$this->assertInstanceOf(Page::class, $result);
 	}
 
 	public function testSkips404LoggingWhenDisabled(): void
@@ -83,7 +84,7 @@ class HooksTest extends TestCase
 		$app = $this->kirby->clone([
 			'options' => [
 				'distantnative.retour.logs'     => false,
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite',
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
 			]
 		]);
 		Retour::instance($app);

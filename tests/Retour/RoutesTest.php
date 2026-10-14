@@ -13,7 +13,7 @@ class RoutesTest extends TestCase
 
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => __DIR__ . '/tmp/test.yml',
+				'distantnative.retour.config' => $this->tmp . '/test.yml',
 				'distantnative.retour.logs'   => false
 			]
 		]);

@@ -193,6 +193,7 @@ class TimespanTest extends TestCase
 			'to'   => '2023-12-31',
 		]));
 	}
+
 	/**
 	 * Calls a protected static method on Timespan via reflection
 	 */

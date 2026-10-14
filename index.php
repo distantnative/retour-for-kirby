@@ -6,10 +6,7 @@
  * Easily add and manage redirects from the
  * Kirby Panel and track 404 errors
  *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
  * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
 

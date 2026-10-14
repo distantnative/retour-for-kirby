@@ -51,6 +51,7 @@ class RedirectsTest extends TestCase
 			]
 		];
 	}
+
 	public function testCreate(): void
 	{
 		$redirects = Retour::instance()->redirects();
@@ -98,7 +99,7 @@ class RedirectsTest extends TestCase
 
 	public function testSave(): void
 	{
-		$file = __DIR__ . '/tmp/redirects.yml';
+		$file = $this->tmp . '/redirects.yml';
 		$this->assertFalse(F::exists($file));
 
 
@@ -154,7 +155,7 @@ class RedirectsTest extends TestCase
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.database' => __DIR__ . '/tmp/test.sqlite'
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite'
 			]
 		]);
 

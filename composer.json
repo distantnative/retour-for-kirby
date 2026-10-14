@@ -32,8 +32,8 @@
 		"kirby-cms-path": false
 	},
 	"scripts": {
-		"fix": "php-cs-fixer fix",
-		"test": "phpunit --stderr"
+		"fix": "cpx getkirby/php-cs:^0.2 fix",
+		"test": "cpx brianium/paratest:7.20.0"
 	},
 	"minimum-stability": "beta",
 	"prefer-stable": true,
