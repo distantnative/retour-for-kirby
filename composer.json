@@ -12,9 +12,12 @@
 		}
 	],
 	"require": {
-		"php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-		"getkirby/cms": "^4.3.1 || ^5.0",
+		"php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+		"getkirby/cms": "^6.0",
 		"getkirby/composer-installer": "^1.1"
+	},
+	"require-dev": {
+		"getkirby/cms": "dev-v6/develop as 6.0.0-beta.1"
 	},
 	"autoload-dev": {
 		"psr-4": {
@@ -24,7 +27,7 @@
 	"extra": {
 		"installer-name": "retour",
 		"kirby": {
-			"compatible": "^4.3.1 || ^5.0"
+			"compatible": "^6.0"
 		},
 		"kirby-cms-path": false
 	},
@@ -32,6 +35,8 @@
 		"fix": "php-cs-fixer fix",
 		"test": "phpunit --stderr"
 	},
+	"minimum-stability": "beta",
+	"prefer-stable": true,
 	"config": {
 		"allow-plugins": {
 			"getkirby/composer-installer": true
