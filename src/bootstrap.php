@@ -11,7 +11,6 @@ load([
 	'Kirby\\Retour\\Timespan'    => $dir . '/Timespan.php',
 
 	'Kirby\\Retour\\Panel\\TimespanDialog' => $dir . '/Panel/TimespanDialog.php',
-	'Kirby\\Retour\\Panel\\RedirectDrawer' => $dir . '/Panel/RedirectDrawer.php',
 	'Kirby\\Retour\\Panel\\RedirectCreateDrawer' => $dir . '/Panel/RedirectCreateDrawer.php',
 	'Kirby\\Retour\\Panel\\RedirectEditDrawer' => $dir . '/Panel/RedirectEditDrawer.php',
 	'Kirby\\Retour\\Panel\\FailureResolveDrawer' => $dir . '/Panel/FailureResolveDrawer.php',
