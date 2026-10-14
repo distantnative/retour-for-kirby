@@ -284,9 +284,11 @@ class Log
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{
-		// Define parts depending on unit
+		// Define parts depending on unit,
+		// grouping by the start of the date string
+		// is faster than formatting each date
 		$use = [
-			'group_sql' => '%Y-%m-%d',
+			'length'    => 10,
 			'group_php' => 'Y-m-d',
 			'step'      => new DateInterval('P1D')
 		];
@@ -299,12 +301,12 @@ class Log
 
 		$overrides = match ($unit) {
 			'day' => [
-				'group_sql' => '%Y-%m-%d %H',
+				'length'    => 13,
 				'group_php' => 'Y-m-d H',
 				'step'      => new DateInterval('PT1H'),
 			],
 			'year', 'months' => [
-				'group_sql' => '%Y-%m',
+				'length'    => 7,
 				'group_php' => 'Y-m',
 				'step'      => new DateInterval('P1M'),
 			],
@@ -316,7 +318,7 @@ class Log
 		// Get data from database
 		$data = $this->database->query('
             SELECT
-                strftime(:group, date) AS date,
+                substr(date, 1, :length) AS date,
 				SUM(CASE WHEN redirect IS NOT NULL THEN 1 END) AS redirected,
 				SUM(CASE WHEN wasResolved IS NOT NULL AND redirect IS NULL THEN 1 END) AS resolved,
 				SUM(CASE WHEN redirect IS NULL AND wasResolved IS NULL THEN 1 END) AS failed
@@ -327,13 +329,13 @@ class Log
             AND
                 date <= :to
 			GROUP BY
-                strftime(:group, date)
+                substr(date, 1, :length)
             ORDER BY
-                strftime(:group, date)
+                substr(date, 1, :length)
         ', [
-			'from'  => $from,
-			'to'    => Date::optional($to)->add($use['step'])->format('Y-m-d'),
-			'group' => $use['group_sql']
+			'from'   => $from,
+			'to'     => Date::optional($to)->add($use['step'])->format('Y-m-d'),
+			'length' => $use['length']
 		], [
 			'fetch' => 'array'
 		]);
