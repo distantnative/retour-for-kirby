@@ -91,8 +91,8 @@ class Log
             ')
 			->where('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
-			->andWhere('date > :start', ['start' => $from])
-			->andWhere('date < :end', ['end' => $to])
+			->andWhere('date >= :start', ['start' => $from])
+			->andWhere('date <= :end', ['end' => $to])
 			->group('path, referrer')
 			->fetch('array')
 			->all();
@@ -190,8 +190,8 @@ class Log
                 MAX(date) AS last
             ')
 			->where(['redirect' => $path])
-			->andWhere('date > :start', ['start' => $from])
-			->andWhere('date < :end', ['end' => $to])
+			->andWhere('date >= :start', ['start' => $from])
+			->andWhere('date <= :end', ['end' => $to])
 			->fetch('array')
 			->first();
 
