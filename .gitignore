@@ -5,6 +5,9 @@
 /node_modules
 /vendor
 
+# Development build of kirbyup
+/index.dev.js
+
 # Cache and temporary files
 /.cache
 /.php-cs-fixer.cache

@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"allowJs": true,
+		"isolatedModules": true,
+		"lib": ["ESNext", "DOM"],
+		"types": ["kirby-types/panel-globals"]
+	},
+	"include": ["src/panel/**/*.ts"]
+}
