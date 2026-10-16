@@ -53,6 +53,7 @@ class View extends ViewController
 				[
 					'name'  => 'redirects',
 					'label' => $this->i18n('retour.redirects'),
+					'icon'  => 'redirect',
 					'link'  => 'retour/redirects'
 				]
 			]
@@ -70,6 +71,7 @@ class View extends ViewController
 			$props['tabs'][] = [
 				'name'  => 'failures',
 				'label' => $this->i18n('retour.failures'),
+				'icon'  => 'url-broken',
 				'link'  => 'retour/failures'
 			];
 

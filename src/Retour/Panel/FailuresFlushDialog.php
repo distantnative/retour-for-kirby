@@ -35,7 +35,7 @@ class FailuresFlushDialog extends DialogController
 				'mode' => 'all'
 			],
 			submitButton: [
-				'icon'  => 'trash',
+				'icon'  => 'clear',
 				'text'  => $this->i18n('retour.failures.clear'),
 				'theme' => 'negative'
 			]

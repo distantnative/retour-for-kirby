@@ -38,7 +38,7 @@ class FailureIgnoreDialog extends DialogController
 				'pattern' => $this->path
 			],
 			submitButton: [
-				'icon' => 'hidden',
+				'icon' => 'muted',
 				'text' => $this->i18n('retour.failures.ignore')
 			]
 		);
