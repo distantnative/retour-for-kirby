@@ -58,6 +58,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The labels of the timeline are dimmed again, so the current day stands out
 - In right-to-left Panel languages, the timeline is no longer mirrored
 - Screen readers skip the timeline chart, which they used to read as a table of axis numbers and empty cells
+- On timespans with more than 31 days or months, the timeline labels sit under their columns again
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
