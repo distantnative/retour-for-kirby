@@ -9,6 +9,7 @@ The following config options are available:
 
 'distantnative.retour' => [
   // En-/disable all logging (true/false)
+  // (when disabled, the failures tab and all stats are hidden)
   'logs' => true,
 
   // Array of paths to ignore as failures (can include placeholder wildcards or regular expressions)
@@ -16,23 +17,27 @@ The following config options are available:
   'ignore' => [],
 
   // Number of months after which logs should be deleted automatically
+  // (checked from time to time when the Retour view is opened in the Panel)
   'deleteAfter' => false,
 
-  // Absolut path for location of redirects config
+  // Absolute path for location of redirects config
+  // (or a closure returning the path)
   // Default: site/config/retour.yml
   // (allows for yml and json files/formats)
   'config' => ...,
 
-  // Absolut path for location of database
-  // Default: $kirby->root('logs) + /retour/log.sqlite
+  // Absolute path for location of database
+  // (or a closure returning the path)
+  // Default: $kirby->root('logs') . '/retour/log.sqlite'
   'database' => ...,
 
-  // set your own string as prefix in the Panel dialog
-  // (disable completely by setting to `false`)
-  'site' => 'my.short.domain'
+  // Prefix shown in front of the path field in the Panel
+  // Default: `true` (your site's domain)
+  // (set your own string or disable completely by setting to `false`)
+  'site' => 'my.short.domain',
 
-  // set default HTTP status code the redirect will respond with
-  // Default: `null` (which disables the redirect)
+  // HTTP status code preselected when adding a new redirect
+  // Default: `null` (new redirects start as disabled)
   'status' => 308,
 
   // forward the query string of the original request
@@ -63,7 +68,7 @@ If the target already has a query string of its own, the forwarded parameters ar
 
 ## Permissions
 
-Moreover, Retour obeys to the following user blueprint permissions:
+To hide Retour from users of a certain role, disable access to its Panel area in the user blueprint:
 
 ```yaml
 title: Editor

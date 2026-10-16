@@ -4,7 +4,7 @@ Retour allows you to track requests to your site that Kirby didn't serve, e.g. a
 
 ## Selected timespan
 
-When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occured during the selected timespan are shown. But it also applies to the count column in the redirects tab or the overall numbers in the system tab.
+When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occurred during the selected timespan are shown. But it also applies to the hits column in the `Routes` tab.
 
 You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a day or any custom interval:
 
@@ -44,8 +44,10 @@ location ~ ^/(wp-admin|wp-login\.php|xmlrpc\.php|\.env) {
 
 ## Clearing logs
 
-Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table:
+Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table. You can clear the complete log or only the failures, which keeps the hits stats of your redirects:
 
 ![Clear the log](/clear.png)
 
-Or automatically via the `distantnative.retour.deleteAfter` option.
+Or automatically via the [`deleteAfter` option](/options#config), which removes all entries older than the given number of months. Retour checks for outdated entries from time to time when someone opens it in the Panel.
+
+To remove a single failure from the log, choose `Remove` in the options of its table row.
