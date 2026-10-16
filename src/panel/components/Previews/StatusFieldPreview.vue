@@ -3,7 +3,7 @@
 		:title="`${column.label}: ${value}`"
 		class="k-text k-status-field-preview"
 	>
-		<k-icon type="circle-filled" :style="'color: ' + color" />
+		<k-icon :color="color" type="circle-filled" />
 		<code>{{ value }}</code>
 	</div>
 </template>
