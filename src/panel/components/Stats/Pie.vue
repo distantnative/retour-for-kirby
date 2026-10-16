@@ -9,7 +9,7 @@
 					:type="$options.icons[index]"
 				/>
 				<span>
-					{{ $options.formatter.format(segment.data) }}
+					{{ formatter.format(segment.data) }}
 				</span>
 				<span>
 					{{ segment.label }}
@@ -27,8 +27,10 @@ export default {
 		data: Array,
 	},
 	icons: ["redirect", "url", "url-broken"],
-	formatter: new Intl.NumberFormat(),
 	computed: {
+		formatter() {
+			return new Intl.NumberFormat(this.$library.dayjs.locale());
+		},
 		styles() {
 			return pie(this.data);
 		},
