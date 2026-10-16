@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { toRaw } from "vue";
 import { props as View } from "./View.vue";
 
 export default {
@@ -107,9 +108,10 @@ export default {
 		},
 		filteredItems() {
 			if (!this.q) {
-				return this.data;
+				return this.sortedItems;
 			}
 
+			// the index is sorted already, typing doesn't sort again
 			return this.$helper.array
 				.search(this.searchIndex, this.q)
 				.map((entry) => entry.row);
@@ -126,16 +128,21 @@ export default {
 			return Math.max(1, Math.min(this.pagination.page, pages));
 		},
 		paginatedItems() {
-			return this.sortedItems.slice(
+			return this.filteredItems.slice(
 				this.index - 1,
 				this.pagination.limit * this.page,
 			);
 		},
+		rows() {
+			// rows are only replaced on reload, never changed,
+			// so they don't need a reactive proxy each
+			return toRaw(this.data);
+		},
 		searchIndex() {
-			// once per data change, not on every keystroke
+			// once per data or sort change, not on every keystroke
 			const keys = this.searchable;
 
-			return this.data.map((row) => ({
+			return this.sortedItems.map((row) => ({
 				row,
 				text: keys
 					.map((key) => row[key])
@@ -151,12 +158,12 @@ export default {
 				// sortBy() sorts in place, a shallow copy is
 				// enough to keep the original order intact
 				return this.$helper.array.sortBy(
-					[...this.filteredItems],
+					[...this.rows],
 					`${this.sortBy} ${this.sortDirection}`,
 				);
 			}
 
-			return this.filteredItems;
+			return this.rows;
 		},
 	},
 	watch: {
