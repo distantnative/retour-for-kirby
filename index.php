@@ -10,12 +10,16 @@
  * @license   https://opensource.org/licenses/MIT
  */
 
-use Composer\Semver\Semver;
 use Kirby\Cms\App as Kirby;
 use Kirby\Retour\Commands\Seed;
 use Kirby\Retour\Retour;
 
-if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~6.0') === false) {
+$version = Kirby::version() ?? '0.0.0';
+
+if (
+	version_compare($version, '6.0.0-dev', '<') === true ||
+	version_compare($version, '7.0.0-dev', '>=') === true
+) {
 	throw new Exception('Retour requires Kirby 6');
 }
 
