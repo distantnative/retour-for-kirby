@@ -6,7 +6,7 @@ You manage all your redirects in the `Routes` tab of Retour's Panel view.
 
 To create a new redirect, click on the `Add` button above the table. A drawer opens in which you can enter all the required details. By clicking on any table row or selecting the dropdown option, you can edit an existing route - or delete it:
 
-![Edit a redirect](/edit.png)
+![Edit a redirect](/edit.webp)
 
 ### Path
 
