@@ -51,7 +51,7 @@ export default {
 		},
 		pie() {
 			return series.map(({ key, color, icon, label }) => ({
-				data: this.data.reduce((i, x) => (i += x[key]), 0),
+				data: this.data.reduce((total, entry) => total + entry[key], 0),
 				color,
 				icon,
 				label: this.$t(label),
