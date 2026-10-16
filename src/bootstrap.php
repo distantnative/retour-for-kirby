@@ -4,6 +4,7 @@ load([
 	'Kirby\\Retour\\Config'    => 'Config.php',
 	'Kirby\\Retour\\Ignores'   => 'Ignores.php',
 	'Kirby\\Retour\\Log'       => 'Log.php',
+	'Kirby\\Retour\\Log\\Migrations' => 'Log/Migrations.php',
 	'Kirby\\Retour\\Pattern'   => 'Pattern.php',
 	'Kirby\\Retour\\Redirect'  => 'Redirect.php',
 	'Kirby\\Retour\\Redirects' => 'Redirects.php',

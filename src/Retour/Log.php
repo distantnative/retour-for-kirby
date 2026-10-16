@@ -11,6 +11,7 @@ use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use Kirby\Retour\Log\Migrations;
 use Kirby\Toolkit\Str;
 use PDO;
 use Throwable;
@@ -26,32 +27,6 @@ class Log
 	 * as bots can request arbitrarily long URLs
 	 */
 	protected const MAX_LENGTH = 1024;
-
-	/**
-	 * Schema changes by database version (`PRAGMA user_version`),
-	 * applied in order to new logs and logs of earlier versions
-	 */
-	protected const MIGRATIONS = [
-		1 => [
-			'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date TEXT NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
-			'CREATE INDEX IF NOT EXISTS idx_date ON records (date)',
-			// only for redirect hits, failures don't need it
-			'DROP INDEX IF EXISTS idx_redirect_date',
-			'CREATE INDEX idx_redirect_date ON records (redirect, date) WHERE redirect IS NOT NULL',
-			// unused indices of earlier versions
-			'DROP INDEX IF EXISTS idx_fails',
-			'DROP INDEX IF EXISTS idx_path',
-		]
-	];
-
-	/**
-	 * Index statistics of a large log, so that the query planner
-	 * picks the right indices before the log has grown
-	 */
-	protected const STATISTICS = [
-		'idx_date'          => '1000000 1',
-		'idx_redirect_date' => '400000 8000 1'
-	];
 
 	protected Database $database;
 
@@ -188,47 +163,12 @@ class Log
 	}
 
 	/**
-	 * Brings the database up to date by applying all pending
-	 * migrations, each in its own transaction; a failed one
-	 * is rolled back and tried again the next time
+	 * Creates the log database or brings
+	 * one of an earlier version up to date
 	 */
 	public function migrate(): bool
 	{
-		$connection = $this->database->connection();
-		$current    = (int)$connection->query('PRAGMA user_version')->fetchColumn();
-		$migrated   = false;
-
-		foreach (static::MIGRATIONS as $version => $statements) {
-			if ($version <= $current) {
-				continue;
-			}
-
-			$connection->beginTransaction();
-
-			try {
-				foreach ($statements as $statement) {
-					$connection->exec($statement);
-				}
-
-				$this->statistics();
-				$connection->exec('PRAGMA user_version = ' . $version);
-				$connection->commit();
-			} catch (Throwable) {
-				$connection->rollBack();
-				return false;
-			}
-
-			$migrated = true;
-		}
-
-		if ($migrated === true) {
-			// load the new statistics and give the
-			// space of dropped indices back if significant
-			$connection->exec('ANALYZE sqlite_schema');
-			$this->reclaim();
-		}
-
-		return true;
+		return (new Migrations($this))->run();
 	}
 
 	/**
@@ -262,7 +202,7 @@ class Log
 	 * otherwise new records reuse the free space and the rebuild
 	 * (which locks the log and takes long for large logs) isn't worth it
 	 */
-	protected function reclaim(): bool
+	public function reclaim(): bool
 	{
 		$connection = $this->database->connection();
 		$pages      = (int)$connection->query('PRAGMA page_count')->fetchColumn();
@@ -385,24 +325,6 @@ class Log
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Replaces the index statistics with the ones of a large log
-	 */
-	protected function statistics(): void
-	{
-		$connection = $this->database->connection();
-
-		// creates the statistics table without analyzing the records
-		$connection->exec('ANALYZE sqlite_schema');
-		$connection->exec("DELETE FROM sqlite_stat1 WHERE tbl = 'records'");
-
-		$insert = $connection->prepare("INSERT INTO sqlite_stat1 (tbl, idx, stat) VALUES ('records', ?, ?)");
-
-		foreach (static::STATISTICS as $index => $stat) {
-			$insert->execute([$index, $stat]);
-		}
 	}
 
 	/**

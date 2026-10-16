@@ -6,7 +6,7 @@ use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Router;
 use Kirby\Panel\Redirect;
-use Kirby\Retour\LogTest;
+use Kirby\Retour\Log\MigrationsTest;
 use Kirby\Retour\Retour;
 use Kirby\Retour\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -38,7 +38,7 @@ class ViewTest extends TestCase
 
 	public function testLoadMigratesLog(): void
 	{
-		LogTest::legacy($this->tmp . '/log.sqlite');
+		MigrationsTest::legacy($this->tmp . '/log.sqlite');
 
 		$this->view('redirects')->load();
 
