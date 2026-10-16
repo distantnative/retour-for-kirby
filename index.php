@@ -32,6 +32,16 @@ Kirby::plugin('distantnative/retour', [
 		'retour:seed'    => Seed::class
 	],
 	'hooks'        => require_once __DIR__ . '/src/extensions/hooks.php',
+	'options'      => [
+		'config'        => fn () => Kirby::instance()->root('config') . '/retour.yml',
+		'database'      => fn () => Kirby::instance()->root('logs') . '/retour/log.sqlite',
+		'deleteAfter'   => false,
+		'ignore'        => [],
+		'logs'          => true,
+		'preserveQuery' => false,
+		'site'          => true,
+		'status'        => null
+	],
 	'routes'       => fn (): array => Retour::instance()->redirects()->toRoutes(true),
 	'translations' => require_once __DIR__ . '/src/extensions/i18n.php'
 ]);

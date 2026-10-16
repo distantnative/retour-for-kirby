@@ -45,6 +45,15 @@ class ConfigTest extends TestCase
 		]);
 		$config = Retour::instance($app)->config();
 		$this->assertSame($file, $config->file());
+
+		// paths that happen to be function names are not called
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => 'phpversion'
+			]
+		]);
+		$config = Retour::instance($app)->config();
+		$this->assertSame('phpversion', $config->file());
 	}
 
 	public function testReadInvalidFile(): void

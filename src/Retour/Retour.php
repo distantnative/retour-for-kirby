@@ -39,7 +39,7 @@ class Retour
 	 */
 	public function hasLog(): bool
 	{
-		return $this->option('logs', true) !== false;
+		return $this->option('logs') !== false;
 	}
 
 	/**
@@ -93,9 +93,9 @@ class Retour
 	/**
 	 * Returns a plugin option value
 	 */
-	public function option(string $key, mixed $default = null): mixed
+	public function option(string $key): mixed
 	{
-		return $this->kirby->option('distantnative.retour.' . $key, $default);
+		return $this->kirby->option('distantnative.retour.' . $key);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Retour
 	 */
 	public function site(): string|false
 	{
-		$site = $this->option('site', true);
+		$site = $this->option('site');
 
 		if (is_string($site) === true) {
 			return $site . '/';

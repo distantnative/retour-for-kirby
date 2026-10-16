@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour;
 
+use Closure;
 use Kirby\Data\Data;
 use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
@@ -59,14 +60,13 @@ class Config
 
 	public function file(): string
 	{
-		$default = $this->retour->kirby()->root('config') . '/retour.yml';
-		$path    = $this->retour->option('config', $default);
+		$file = $this->retour->option('config');
 
-		if (is_callable($path) === true) {
-			$path = $path();
+		if ($file instanceof Closure) {
+			$file = $file();
 		}
 
-		return $path;
+		return $file;
 	}
 
 	/**

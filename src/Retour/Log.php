@@ -31,11 +31,9 @@ class Log
 		protected Retour $retour
 	) {
 		// get path to database file
-		$default = $retour->kirby()->root('logs') . '/retour/log.sqlite';
-		$file    = $retour->option('database', $default);
+		$file = $retour->option('database');
 
-		// support callbacks for database file option
-		if (is_callable($file) === true) {
+		if ($file instanceof Closure) {
 			$file = $file();
 		}
 
@@ -167,7 +165,7 @@ class Log
 	public function purge(): bool
 	{
 		// Get limit (in months) from option
-		$limit = $this->retour->option('deleteAfter', false);
+		$limit = $this->retour->option('deleteAfter');
 
 		if ($limit !== false) {
 			// Get cutoff date by subtracting limit from today
