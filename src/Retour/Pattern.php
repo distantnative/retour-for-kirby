@@ -10,19 +10,9 @@ use Kirby\Http\Route;
  */
 class Pattern
 {
-	/**
-	 * Regular expressions by flags and pattern, as the same
-	 * patterns get matched against many paths (e.g. when
-	 * removing the failures of newly ignored paths)
-	 */
 	protected static array $regexes = [];
 
-	/**
-	 * Checks if Kirby's router matches the pattern as plain
-	 * text, which it does for patterns without placeholders
-	 * or groups (ignored paths are always regular expressions)
-	 */
-	public static function isLiteral(string $pattern): bool
+	public static function hasPlaceholder(string $pattern): bool
 	{
 		return str_contains($pattern, '(') === false;
 	}
@@ -36,9 +26,7 @@ class Pattern
 	}
 
 	/**
-	 * Checks if the path matches the pattern; invalid patterns
-	 * never match and don't emit warnings, as they must not
-	 * break the handling of every 404
+	 * Checks if the path matches the pattern
 	 */
 	public static function matches(
 		string $pattern,
@@ -50,13 +38,14 @@ class Pattern
 	}
 
 	/**
-	 * Returns the anchored regular expression for the
-	 * pattern the same way Kirby's router builds it,
-	 * but also anchoring alternatives like `foo|bar`
+	 * Returns the anchored regular expression for the pattern
 	 */
-	public static function regex(string $pattern, string $flags = 'u'): string
-	{
-		$route = new Route('', 'GET', fn () => null);
-		return '#^(?:' . $route->regex(trim($pattern, '/')) . ')$#' . $flags;
+	public static function regex(
+		string $pattern,
+		string $flags = 'u'
+	): string {
+		$route   = new Route('', 'GET', fn () => null);
+		$pattern = trim($pattern, '/');
+		return '#^(?:' . $route->regex($pattern) . ')$#' . $flags;
 	}
 }
