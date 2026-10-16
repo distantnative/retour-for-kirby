@@ -226,5 +226,6 @@ export default {
 	--input-color-back: var(--button-filled-color-back);
 	--input-color-border: transparent;
 	--input-height: var(--height-sm);
+	--input-padding: var(--spacing-1) var(--spacing-2);
 }
 </style>
