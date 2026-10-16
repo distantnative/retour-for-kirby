@@ -2,6 +2,8 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Exception\LogicException;
+use Kirby\Filesystem\F;
 use Kirby\Http\Router;
 use Kirby\Panel\Redirect;
 use Kirby\Retour\Retour;
@@ -31,6 +33,16 @@ class ViewTest extends TestCase
 		} catch (Redirect $redirect) {
 			$this->assertStringEndsWith('/panel/retour/redirects', $redirect->location());
 		}
+	}
+
+	public function testLoadWithUnreadableConfig(): void
+	{
+		F::write($this->tmp . '/retour.yml', "redirects:\n\t- from: foo\n");
+
+		$this->expectException(LogicException::class);
+		$this->expectExceptionMessage('Retour: The config file could not be read');
+
+		$this->view('redirects')->load();
 	}
 
 	public function testPattern(): void
