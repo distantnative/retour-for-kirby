@@ -95,15 +95,15 @@ export default {
 			return {};
 		},
 		filteredItems() {
-			let items = this.data;
-
-			if (this.q) {
-				items = items.filter((item) =>
-					JSON.stringify(item).toLowerCase().includes(this.q.toLowerCase()),
-				);
+			if (!this.q) {
+				return this.data;
 			}
 
-			return items;
+			const q = this.q.toLowerCase();
+
+			return this.data.filter((_, index) =>
+				this.searchIndex[index].includes(q),
+			);
 		},
 		index() {
 			return (this.pagination.page - 1) * this.pagination.limit + 1;
@@ -114,10 +114,17 @@ export default {
 				this.pagination.limit * this.pagination.page,
 			);
 		},
+		searchIndex() {
+			// stringify each item once per data change,
+			// not again on every keystroke
+			return this.data.map((item) => JSON.stringify(item).toLowerCase());
+		},
 		sortedItems() {
 			if (this.sortBy) {
+				// sortBy() sorts in place, a shallow copy is
+				// enough to keep the original order intact
 				return this.$helper.array.sortBy(
-					this.$helper.object.clone(this.filteredItems),
+					[...this.filteredItems],
 					`${this.sortBy} ${this.sortDirection}`,
 				);
 			}
