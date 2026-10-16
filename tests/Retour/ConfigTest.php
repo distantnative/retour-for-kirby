@@ -12,6 +12,94 @@ use Symfony\Component\Yaml\Exception\ParseException;
 #[CoversClass(Config::class)]
 class ConfigTest extends TestCase
 {
+	protected const string VALID = "redirects:\n  - from: foo\n    to: bar\n";
+
+	protected function config(string $file, array $options = []): Config
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => $file,
+				...$options
+			]
+		]);
+
+		return Retour::instance($app)->config();
+	}
+
+	protected function entry(string $file): array|null
+	{
+		return Retour::instance()->kirby()->cache('distantnative.retour')->get('config-' . md5($file));
+	}
+
+	public function testCache(): void
+	{
+		F::write($file = $this->tmp . '/retour.yml', static::VALID);
+		$config = $this->config($file);
+		$entry  = $this->entry($file);
+
+		$this->assertSame(hash('xxh128', static::VALID), $entry['hash']);
+		$this->assertSame($config->data(), $entry['data']);
+
+		// unchanged contents are not parsed again
+		$cache = Retour::instance()->kirby()->cache('distantnative.retour');
+		$cache->set('config-' . md5($file), [...$entry, 'data' => ['cached' => true]]);
+		$this->assertSame(['cached' => true], $config->read());
+	}
+
+	public function testCacheDisabled(): void
+	{
+		F::write($file = $this->tmp . '/retour.yml', static::VALID);
+		$config = $this->config($file, ['distantnative.retour.cache' => false]);
+
+		$this->assertSame('bar', $config->data('redirects')[0]['to']);
+		$this->assertNull($this->entry($file));
+	}
+
+	public function testCacheExternalEdit(): void
+	{
+		F::write($file = $this->tmp . '/retour.yml', static::VALID);
+		$config = $this->config($file);
+		$mtime  = filemtime($file);
+
+		// same size and modification time, but different contents
+		F::write($file, str_replace('bar', 'baz', static::VALID));
+		touch($file, $mtime);
+
+		$this->assertSame('baz', $config->read()['redirects'][0]['to']);
+	}
+
+	public function testCacheInvalidFile(): void
+	{
+		F::write($file = $this->tmp . '/retour.yml', static::VALID);
+		$config = $this->config($file);
+
+		// failed reads are not cached
+		F::write($file, "redirects:\n  - from: foo\n    to: [bar\n");
+
+		for ($i = 0; $i < 2; $i++) {
+			$this->assertSame([], $config->read());
+			$this->assertInstanceOf(LogicException::class, $config->error());
+		}
+
+		$this->assertSame(hash('xxh128', static::VALID), $this->entry($file)['hash']);
+
+		F::write($file, static::VALID);
+		$this->assertSame('bar', $config->read()['redirects'][0]['to']);
+		$this->assertNull($config->error());
+	}
+
+	public function testCacheWrite(): void
+	{
+		F::write($file = $this->tmp . '/retour.yml', static::VALID);
+		$config = $this->config($file);
+		$config->write('ignore', ['foo']);
+
+		$data = $config->read();
+		$this->assertSame(['foo'], $data['ignore']);
+		$this->assertSame('bar', $data['redirects'][0]['to']);
+		$this->assertSame($data, $this->entry($file)['data']);
+	}
+
 	public function testData(): void
 	{
 		$app = $this->kirby->clone([

@@ -30,6 +30,7 @@ Kirby::plugin('distantnative/retour', [
 	],
 	'hooks'        => require __DIR__ . '/src/extensions/hooks.php',
 	'options'      => [
+		'cache'         => true,
 		'config'        => fn () => Kirby::instance()->root('config') . '/retour.yml',
 		'database'      => fn () => Kirby::instance()->root('logs') . '/retour/log.sqlite',
 		'deleteAfter'   => false,
