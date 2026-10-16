@@ -4,6 +4,7 @@ namespace Kirby\Retour;
 
 use Kirby\Exception\DuplicateException;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -218,9 +219,64 @@ class RedirectsTest extends TestCase
 		$this->assertSame(1, $redirects->count());
 		$this->assertSame('foo', $redirects->first()->from());
 
-		// updating existing
+		// updating existing, re-keyed by the new path
 		$redirects->update('foo', ['from' => 'bar']);
 		$this->assertSame(1, $redirects->count());
 		$this->assertSame('bar', $redirects->first()->from());
+		$this->assertSame(['bar'], $redirects->keys());
+		$this->assertSame('bar', $redirects->get('bar')->from());
+	}
+
+	public function testUpdateDuplicate(): void
+	{
+		$redirects = Redirects::factory(Retour::instance(), $this->data());
+
+		try {
+			$redirects->update('foo', ['from' => 'homer']);
+			$this->fail('Updating to an existing path must fail');
+		} catch (DuplicateException) {
+			$this->assertSame(['foo', 'homer', 'berlin'], $redirects->keys());
+			$this->assertSame('bar', $redirects->get('foo')->to());
+			$this->assertSame('simpson', $redirects->get('homer')->to());
+		}
+	}
+
+	public function testUpdateKeepsPosition(): void
+	{
+		$redirects = Redirects::factory(Retour::instance(), $this->data());
+
+		$redirects->update('homer', ['from' => 'marge', 'to' => 'simpson']);
+		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
+
+		// same path with a Redirect object
+		$redirects->update('marge', new Redirect(['from' => 'marge', 'to' => 'bouvier']));
+		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
+		$this->assertSame('bouvier', $redirects->get('marge')->to());
+
+		// the Redirect object as key
+		$redirects->update(new Redirect(['from' => 'berlin', 'to' => 'tokyo']));
+		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
+		$this->assertSame('tokyo', $redirects->get('berlin')->to());
+	}
+
+	public function testUpdateNotFound(): void
+	{
+		$redirects = Redirects::factory(Retour::instance(), $this->data());
+
+		$this->expectException(NotFoundException::class);
+		$redirects->update('missing', ['from' => 'missing']);
+	}
+
+	public function testUpdateNumericId(): void
+	{
+		$redirects = Redirects::factory(Retour::instance(), [
+			['from' => '404'],
+			['from' => 'foo']
+		]);
+
+		$redirects->update('404', ['from' => '410']);
+		$this->assertSame(2, $redirects->count());
+		$this->assertFalse($redirects->has('404'));
+		$this->assertSame('410', $redirects->first()->from());
 	}
 }
