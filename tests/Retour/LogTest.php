@@ -50,6 +50,39 @@ class LogTest extends TestCase
 		$this->assertSame($redirect, $results->first()['redirect']);
 	}
 
+	public function testAddTruncatesLongValues(): void
+	{
+		$log = $this->log();
+
+		$log->add([
+			'path'     => str_repeat('a', 5000),
+			'referrer' => str_repeat('ä', 5000)
+		]);
+
+		$record = $log->table()->fetch('array')->first();
+		$this->assertSame(str_repeat('a', 1024), $record['path']);
+		$this->assertSame(str_repeat('ä', 1024), $record['referrer']);
+	}
+
+	public function testAddTruncatesReferrerHeader(): void
+	{
+		$log = $this->log();
+
+		$_SERVER['HTTP_REFERER'] = 'https://example.com/' . str_repeat('a', 5000);
+
+		try {
+			$log->add(['path' => 'foo']);
+		} finally {
+			unset($_SERVER['HTTP_REFERER']);
+		}
+
+		$log->add(['path' => 'bar']);
+
+		$records = $log->table()->fetch('array')->all();
+		$this->assertSame(1024, strlen($records->first()['referrer']));
+		$this->assertNull($records->last()['referrer']);
+	}
+
 	public function testDatabase(): void
 	{
 		$log = $this->log();
