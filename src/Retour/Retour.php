@@ -5,7 +5,8 @@ namespace Kirby\Retour;
 use Kirby\Cms\App;
 
 /**
- * Main plugin class responsible for general tasks
+ * Main plugin class giving access to the
+ * config, redirects, ignored paths and log
  */
 class Retour
 {
@@ -22,7 +23,6 @@ class Retour
 		$this->kirby  = $kirby ?? App::instance();
 		$this->config = new Config($this);
 
-		// initialize redirects
 		$this->redirects = Redirects::factory(
 			$this,
 			$this->config->data('redirects') ?? []
@@ -34,9 +34,6 @@ class Retour
 		return $this->config;
 	}
 
-	/**
-	 * Returns if log feature is activated
-	 */
 	public function hasLog(): bool
 	{
 		return $this->option('logs') !== false;
@@ -50,16 +47,14 @@ class Retour
 		return $this->ignores()->matches($path);
 	}
 
-	/**
-	 * Returns the Ignores instance
-	 */
 	public function ignores(): Ignores
 	{
 		return $this->ignores ??= new Ignores($this);
 	}
 
 	/**
-	 * Returns the singleton plugin instance
+	 * Returns the singleton instance,
+	 * a new one for a different app instance
 	 */
 	public static function instance(App|null $kirby = null): self
 	{
@@ -90,17 +85,11 @@ class Retour
 		return $this->log ??= new Log($this);
 	}
 
-	/**
-	 * Returns a plugin option value
-	 */
 	public function option(string $key): mixed
 	{
 		return $this->kirby->option('distantnative.retour.' . $key);
 	}
 
-	/**
-	 * Returns the Redirects instance
-	 */
 	public function redirects(): Redirects
 	{
 		return $this->redirects;
@@ -112,7 +101,8 @@ class Retour
 	}
 
 	/**
-	 * Returns domain for site
+	 * Returns the prefix in front of paths in the Panel
+	 * or `false` if disabled
 	 */
 	public function site(): string|false
 	{

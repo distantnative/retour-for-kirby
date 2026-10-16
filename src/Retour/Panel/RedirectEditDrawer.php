@@ -6,6 +6,9 @@ use Kirby\Exception\NotFoundException;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirect;
 
+/**
+ * Drawer to edit a redirect
+ */
 class RedirectEditDrawer extends RedirectCreateDrawer
 {
 	public function __construct(

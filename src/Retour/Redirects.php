@@ -10,8 +10,8 @@ use Kirby\Exception\NotFoundException;
 use Kirby\Http\Header;
 
 /**
- * Redirects
- * Collection of all configured redirect routes
+ * Collection of all configured redirects;
+ * their order defines the precedence of the routes
  */
 class Redirects extends Collection
 {
@@ -23,7 +23,10 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Creates new redirect
+	 * Adds a new redirect with the highest precedence
+	 *
+	 * @throws DuplicateException If a redirect with the same path exists
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */
 	public function create(array $data): self
 	{
@@ -40,8 +43,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Takes a config array and turns it into
-	 * a collection of redirect objects
+	 * Creates the collection from the config data
 	 */
 	public static function factory(Retour $retour, array $config): self
 	{
@@ -55,9 +57,6 @@ class Redirects extends Collection
 		return $redirects;
 	}
 
-	/**
-	 * Writes collection to config file
-	 */
 	public function save(): void
 	{
 		$config = $this->retour->config();
@@ -65,8 +64,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Turns collection into array, by default turning
-	 * Redirect objects into array as well
+	 * Returns a list of the redirects as arrays (or mapped by `$map`)
 	 */
 	public function toArray(Closure|null $map = null): array
 	{
@@ -82,7 +80,6 @@ class Redirects extends Collection
 	{
 		$log = $this->retour->log();
 
-		// If logging is disabled, return without data
 		if ($log === null) {
 			return $this->toArray();
 		}
@@ -99,26 +96,24 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Returns routes config for all active redirects
+	 * Returns the routes of all active redirects
+	 * with or without priority over pages
 	 */
 	public function toRoutes(bool $priority = false): array
 	{
-		// Filter: only active redirects with matching priority
 		$redirects = $this->filter(
 			fn (Redirect $redirect): bool =>
 				$redirect->isActive() === true &&
 				$redirect->priority() === $priority
 		);
 
-		// create route array for each redirect
 		return $redirects->toArray(
 			fn (Redirect $route) => $route->toRoute()
 		);
 	}
 
 	/**
-	 * Replaces a redirect while keeping its position,
-	 * as the order defines the precedence of the routes
+	 * Replaces a redirect while keeping its position
 	 *
 	 * @param string|Redirect $key ID of the redirect to replace
 	 * @param array|Redirect $data

@@ -106,8 +106,8 @@ class Seed extends Command
 	}
 
 	/**
-	 * Returns sorted timestamps, more recent ones are
-	 * more likely as if the site's traffic grew over time
+	 * Returns sorted timestamps; recent ones are
+	 * more likely, simulating growing traffic
 	 */
 	protected static function dates(
 		Randomizer $random,

@@ -19,9 +19,6 @@ class View extends ViewController
 		parent::__construct();
 	}
 
-	/**
-	 * Returns the view for the tab
-	 */
 	public function load(): ViewComponent
 	{
 		if ($error = Retour::instance()->config()->error()) {
@@ -49,16 +46,12 @@ class View extends ViewController
 		);
 	}
 
-	/**
-	 * Returns all props for the Panel view
-	 */
 	public function props(): array
 	{
 		$retour   = Retour::instance();
 		$timespan = Timespan::props();
 		['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
-		// props for minimal Panel view
 		$props = [
 			'timespan' => $timespan,
 			'tab'      => $this->tab,
@@ -74,15 +67,12 @@ class View extends ViewController
 
 		$log = $retour->log();
 
-		// if log feature is supported...
 		if ($log !== null) {
-			// run garbage collection with a chance of 10%;
+			// purge outdated entries on every 10th view on average
 			if (random_int(1, 10) === 1) {
-				// purge log entries that should be automatically deleted
 				$log->purge();
 			}
 
-			// add additional tabs
 			$props['tabs'][] = [
 				'name'  => 'failures',
 				'label' => $this->i18n('retour.failures'),
@@ -90,7 +80,6 @@ class View extends ViewController
 				'link'  => 'retour/failures'
 			];
 
-			// get statistics data for current timeframe
 			$props['stats'] = $log->stats($unit, $from, $to);
 		}
 

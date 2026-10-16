@@ -38,9 +38,6 @@ class Ignores
 		return $this->set([...$this->custom(), $pattern]);
 	}
 
-	/**
-	 * Returns all patterns
-	 */
 	public function all(): array
 	{
 		return [...$this->config(), ...$this->custom()];
