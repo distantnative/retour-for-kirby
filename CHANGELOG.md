@@ -56,6 +56,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The totals next to the pie chart are formatted in the Panel's language instead of the browser's
 - The timeline keeps highlighting the right hour, day or month when the Panel stays open past midnight, and labels the hours correctly on days when daylight saving time begins or ends
 - The labels of the timeline are dimmed again, so the current day stands out
+- In right-to-left Panel languages, the timeline is no longer mirrored
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
