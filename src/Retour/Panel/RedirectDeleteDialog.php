@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Exception\NotFoundException;
 use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\RemoveDialog;
 use Kirby\Retour\Retour;
@@ -28,6 +29,13 @@ class RedirectDeleteDialog extends DialogController
 	public function submit(): bool
 	{
 		$redirects = Retour::instance()->redirects();
+
+		if ($redirects->has($this->id) === false) {
+			throw new NotFoundException(
+				message: 'Redirect not found'
+			);
+		}
+
 		$redirects->remove($this->id);
 		$redirects->save();
 

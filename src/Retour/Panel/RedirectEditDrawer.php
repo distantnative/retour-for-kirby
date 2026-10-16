@@ -49,14 +49,11 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	public function submit(): bool
 	{
 		$redirects = $this->redirects();
-		$data      = $this->data();
-		$redirect  = new Redirect([
-			...$data,
+		$redirects->update($this->id, [
+			...$this->data(),
 			'creator'  => $this->redirect()->creator(),
 			'modifier' => $this->kirby->user()?->email(),
 		]);
-
-		$redirects->set($this->id, $redirect);
 		$redirects->save();
 		return true;
 	}

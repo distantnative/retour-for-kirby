@@ -5,6 +5,7 @@ namespace Kirby\Retour;
 use Closure;
 use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
+use Kirby\Exception\NotFoundException;
 
 /**
  * Redirects
@@ -117,11 +118,48 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Updates a redirect
+	 * Replaces a redirect while keeping its position,
+	 * as the order defines the precedence of the routes
+	 *
+	 * @param string|Redirect $key ID of the redirect to replace
+	 * @param array|Redirect $data
+	 * @throws NotFoundException If the redirect doesn't exist
+	 * @throws DuplicateException If another redirect already has the new ID
 	 */
 	public function update(string|object $key, mixed $data = null): static
 	{
-		$redirect = new Redirect($data);
-		return parent::update($key, $redirect);
+		if (is_object($key) === true) {
+			return $this->update($key->id(), $key);
+		}
+
+		$redirect = $data instanceof Redirect ? $data : new Redirect($data);
+		$id       = $redirect->id();
+
+		if ($this->has($key) === false) {
+			throw new NotFoundException(
+				message: 'Redirect not found'
+			);
+		}
+
+		if ($id !== $key && $this->has($id) === true) {
+			throw new DuplicateException(
+				message: 'Redirect with ID already exists'
+			);
+		}
+
+		$data = [];
+
+		foreach ($this->data as $current => $item) {
+			// numeric IDs become integer array keys
+			if ((string)$current === $key) {
+				$current = $id;
+				$item    = $redirect;
+			}
+
+			$data[$current] = $item;
+		}
+
+		$this->data = $data;
+		return $this;
 	}
 }
