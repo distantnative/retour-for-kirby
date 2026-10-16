@@ -321,6 +321,28 @@ class LogTest extends TestCase
 		$this->assertSame(['foo', 'wp-old'], $paths);
 	}
 
+	public function testRemoveFailuresMany(): void
+	{
+		$log = $this->log();
+		$db  = $log->database()->connection();
+
+		// more paths than SQLite allows bound parameters
+		$db->beginTransaction();
+
+		for ($i = 0; $i < 2000; $i++) {
+			$log->add(['path' => 'foo-' . $i]);
+		}
+
+		$db->commit();
+		$log->add(['path' => 'bar']);
+
+		$this->assertTrue($log->removeFailures(
+			fn (string $path) => str_starts_with($path, 'foo-')
+		));
+
+		$this->assertSame(['bar'], array_column($log->fails('2000-01-01', '2099-12-31'), 'path'));
+	}
+
 	public function testResolve(): void
 	{
 		$log = $this->log();

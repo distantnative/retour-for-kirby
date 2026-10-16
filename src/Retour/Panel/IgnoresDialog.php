@@ -83,6 +83,7 @@ class IgnoresDialog extends DialogController
 	{
 		$retour   = Retour::instance();
 		$ignores  = $retour->ignores();
+		$saved    = $ignores->custom();
 		$patterns = Str::split($this->request->get('patterns') ?? []);
 
 		if (Str::toType($this->request->get('common') ?? false, 'bool') === true) {
@@ -91,10 +92,14 @@ class IgnoresDialog extends DialogController
 
 		$patterns = $ignores->set($patterns);
 
-		// remove failures for newly added patterns
-		$retour->log()?->removeFailures(
-			fn (string $path) => $ignores->matches($path, $patterns)
-		);
+		// failures of saved patterns have been removed before
+		$added = array_values(array_diff($patterns, $saved));
+
+		if ($added !== []) {
+			$retour->log()?->removeFailures(
+				fn (string $path) => $ignores->matches($path, $added)
+			);
+		}
 
 		return true;
 	}

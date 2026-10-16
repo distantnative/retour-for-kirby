@@ -11,6 +11,7 @@ use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use Kirby\Toolkit\Str;
+use Throwable;
 
 /**
  * Reads and writes to the database log
@@ -236,19 +237,31 @@ class Log
 			->all()
 			->toArray(fn (array $record) => $record['path']);
 
-		$paths = array_values(array_filter($paths, $filter));
+		$paths = array_filter($paths, $filter);
 
-		// delete in chunks to stay below
-		// the SQLite limit for bound parameters
-		foreach (array_chunk($paths, 500) as $chunk) {
-			$deleted = $this->table()
-				->where('redirect IS NULL')
-				->andWhere('path', 'in', $chunk)
-				->delete();
+		if ($paths === []) {
+			return true;
+		}
 
-			if ($deleted === false) {
-				return false;
+		// collect the paths in a temporary table to delete
+		// their records in a single pass over the log
+		$db = $this->database->connection();
+		$db->beginTransaction();
+
+		try {
+			$db->exec('CREATE TEMP TABLE retour_remove (path TEXT PRIMARY KEY)');
+			$insert = $db->prepare('INSERT INTO temp.retour_remove (path) VALUES (?)');
+
+			foreach ($paths as $path) {
+				$insert->execute([$path]);
 			}
+
+			$db->exec('DELETE FROM records WHERE redirect IS NULL AND path IN (SELECT path FROM temp.retour_remove)');
+			$db->exec('DROP TABLE temp.retour_remove');
+			$db->commit();
+		} catch (Throwable) {
+			$db->rollBack();
+			return false;
 		}
 
 		return true;
