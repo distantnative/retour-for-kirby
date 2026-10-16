@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Cms\App;
 use PHPUnit\Framework\Attributes\CoversNothing;
 
 #[CoversNothing]
@@ -9,7 +10,7 @@ class RoutesTest extends TestCase
 {
 	public function testExtension(): void
 	{
-		$extension = require dirname(__DIR__, 2) . '/src/extensions/routes.php';
+		$extension = App::plugin('distantnative/retour')->extends()['routes'];
 
 		$app = $this->kirby->clone([
 			'options' => [
