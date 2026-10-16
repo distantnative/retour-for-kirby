@@ -85,7 +85,7 @@ export default {
 }
 .chart-pie figcaption :nth-child(3n + 2) {
 	padding-inline-start: var(--spacing-2);
-	text-align: right;
+	text-align: end;
 }
 .chart-pie figcaption .k-icon {
 	color: var(--color);
