@@ -11,6 +11,7 @@ use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use Kirby\Toolkit\Str;
 
 /**
  * Reads and writes to the database log
@@ -18,6 +19,12 @@ use Kirby\Filesystem\F;
  */
 class Log
 {
+	/**
+	 * Maximum length of logged paths and referrers,
+	 * as bots can request arbitrarily long URLs
+	 */
+	protected const MAX_LENGTH = 1024;
+
 	protected Database $database;
 
 	public function __construct(
@@ -56,10 +63,16 @@ class Log
 	 */
 	public function add(array $props): int|false
 	{
+		$referrer = $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null;
+
+		if ($referrer !== null) {
+			$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
+		}
+
 		return $this->table()->insert([
 			'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
-			'path'     => $props['path'],
-			'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
+			'path'     => Str::substr($props['path'], 0, static::MAX_LENGTH),
+			'referrer' => $referrer,
 			'redirect' => $props['redirect'] ?? null
 		]);
 	}
