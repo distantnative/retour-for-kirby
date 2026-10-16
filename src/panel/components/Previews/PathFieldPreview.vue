@@ -22,13 +22,10 @@ export default {
 		value: [String, Object],
 	},
 	computed: {
-		isExternal() {
-			return this.value && this.value.startsWith("http");
-		},
 		link() {
-			return this.isExternal
-				? this.value
-				: window.panel.urls.site + "/" + this.value;
+			// an absolute site URL keeps every path on the site
+			const site = new URL(this.$panel.urls.site, window.location.origin);
+			return this.$helper.url.makeAbsolute(this.value, site);
 		},
 	},
 };
