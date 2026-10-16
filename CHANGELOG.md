@@ -42,6 +42,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - One invalid pattern in the `ignore` option no longer stops all other patterns from working
 - Requests that come in while redirects are being saved no longer see an empty config file, and saving keeps concurrent changes to other settings in `retour.yml`
 - Very long paths and referrers (e.g. from bots) are cut off at 1024 characters in the log
+- Filtering a table without matches shows "No results" instead of saying that there are no redirects or failures at all
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
