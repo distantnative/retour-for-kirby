@@ -15,27 +15,20 @@ export type Segment = {
 
 /**
  * Returns the five labels of the y-axis,
- * shortening thousands and millions
+ * shortened in the given locale
  *
  * @example
- * axis(5000) // => ["1k", "2k", "3k", "4k", "5k"]
+ * axis(5000, "en") // => ["1K", "2K", "3K", "4K", "5K"]
  */
-export function axis(max: number): string[] {
+export function axis(max: number, locale?: string): string[] {
 	const span = max / 5;
-
-	return [1, 2, 3, 4, 5].map((x) => {
-		const tick = x * span;
-
-		if (tick >= 1000000) {
-			return tick / 1000000 + "M";
-		}
-
-		if (tick >= 1000) {
-			return tick / 1000 + "k";
-		}
-
-		return String(tick);
+	const formatter = new Intl.NumberFormat(locale, {
+		notation: "compact",
+		// would otherwise round to two significant digits (1.3K)
+		maximumFractionDigits: 2,
 	});
+
+	return [1, 2, 3, 4, 5].map((x) => formatter.format(x * span));
 }
 
 /**

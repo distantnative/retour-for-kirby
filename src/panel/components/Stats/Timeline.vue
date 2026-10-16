@@ -49,7 +49,7 @@ export default {
 	},
 	computed: {
 		axisY() {
-			return axis(this.max);
+			return axis(this.max, this.$library.dayjs.locale());
 		},
 		bounds() {
 			return bounds(this.data);
@@ -126,7 +126,7 @@ export default {
 	overflow-x: auto;
 	overflow-y: hidden;
 	padding-block-start: var(--spacing-8);
-	padding-inline: var(--spacing-3);
+	padding-inline: var(--spacing-12) var(--spacing-3);
 }
 
 .k-retour-timeline table {
@@ -158,6 +158,7 @@ export default {
 	font-size: var(--text-xs);
 	font-weight: normal;
 	text-align: right;
+	white-space: nowrap;
 	color: var(--color-gray-500);
 }
 .k-retour-timeline tbody {
@@ -250,11 +251,5 @@ export default {
 .k-retour-timeline tfoot [data-current="true"] {
 	color: var(--color-white);
 	font-weight: bold;
-}
-
-@container (min-width: 40rem) {
-	.k-retour-timeline {
-		padding-inline-start: var(--spacing-12);
-	}
 }
 </style>
