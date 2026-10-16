@@ -225,6 +225,26 @@ class RedirectTest extends TestCase
 		$this->assertSame('https://example.com/projects/project-a.json', $response->header('Location'));
 	}
 
+	public function testResolveRedirectMailto(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			]
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'contact',
+			'to'     => 'mailto:info@example.com',
+			'status' => 302
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame('mailto:info@example.com', $response->header('Location'));
+	}
+
 	public function testResolveRedirectPreserveQuery(): void
 	{
 		$app = $this->kirby->clone([
@@ -256,6 +276,34 @@ class RedirectTest extends TestCase
 		$response = $redirect->resolve([]);
 		$this->assertSame(302, $response->code());
 		$this->assertSame('https://example.com/projects?gclid=abc', $response->header('Location'));
+	}
+
+	public function testResolveRedirectPreserveQueryUnchanged(): void
+	{
+		$query = '_gl=1*abc*_ga*MTIz&utm.source=x&flag&a%20b=c+d';
+		$app   = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs'          => false,
+				'distantnative.retour.preserveQuery' => true
+			],
+			'urls' => [
+				'index' => 'https://example.com'
+			],
+			'server' => [
+				'REQUEST_URI' => '/foo?' . $query
+			]
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'https://exämple.com/target',
+			'status' => 301
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame('https://xn--exmple-cua.com/target?' . $query, $response->header('Location'));
 	}
 
 	public function testResolveRedirectWithoutPage(): void
