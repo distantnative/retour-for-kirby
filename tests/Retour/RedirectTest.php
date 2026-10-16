@@ -386,6 +386,21 @@ class RedirectTest extends TestCase
 
 		$redirect = new Redirect(['from' => 'foo', 'status' => 300]);
 		$this->assertSame(300, $redirect->status());
+
+		// empty value from the Panel
+		$redirect = new Redirect(['from' => 'foo', 'status' => '']);
+		$this->assertSame(null, $redirect->status());
+		$this->assertFalse($redirect->isActive());
+
+		$redirect = new Redirect(['from' => 'foo', 'status' => '301']);
+		$this->assertSame(301, $redirect->status());
+
+		// hand-edited config files
+		$redirect = new Redirect(['from' => 'foo', 'status' => false]);
+		$this->assertSame(null, $redirect->status());
+
+		$redirect = new Redirect(['from' => 'foo', 'status' => 0]);
+		$this->assertSame(null, $redirect->status());
 	}
 
 	public function testToArray(): void

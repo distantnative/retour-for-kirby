@@ -144,7 +144,9 @@ class Redirect extends Obj
 	 */
 	public function status(): int|null
 	{
-		if (in_array($this->status, [null, 'disabled']) === true) {
+		// the Panel sends an empty string for no status,
+		// hand-edited config files might use `false` or `0`
+		if (in_array($this->status, [null, '', false, 0, 'disabled'], true) === true) {
 			return null;
 		}
 

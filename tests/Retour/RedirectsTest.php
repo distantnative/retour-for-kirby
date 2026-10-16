@@ -7,6 +7,7 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(Redirects::class)]
 class RedirectsTest extends TestCase
@@ -72,6 +73,56 @@ class RedirectsTest extends TestCase
 
 		$this->expectException(DuplicateException::class);
 		$redirects->create(['from' => 'foo']);
+	}
+
+	public static function invalidProvider(): array
+	{
+		return [
+			'pattern'      => [['from' => 'foo(', 'status' => 301], 'Invalid path pattern: foo('],
+			'pattern #'    => [['from' => 'foo#(:any)'], 'Invalid path pattern: foo#(:any)'],
+			'status "0"'   => [['from' => 'foo', 'status' => '0'], 'Invalid status code: 0'],
+			'status text'  => [['from' => 'foo', 'status' => 'abc'], 'Invalid status code: 0'],
+			'status 999'   => [['from' => 'foo', 'status' => '999'], 'Invalid status code: 999'],
+			'status array' => [['from' => 'foo', 'status' => ['301']], 'Invalid status code: 1'],
+		];
+	}
+
+	#[DataProvider('invalidProvider')]
+	public function testCreateInvalid(array $data, string $message): void
+	{
+		$redirects = Retour::instance()->redirects();
+
+		try {
+			$redirects->create($data);
+			$this->fail('Invalid redirects must be rejected');
+		} catch (InvalidArgumentException $e) {
+			$this->assertSame($message, $e->getMessage());
+			$this->assertSame(0, $redirects->count());
+		}
+	}
+
+	public function testCreatePlainTextPattern(): void
+	{
+		$redirects = Retour::instance()->redirects();
+
+		// matched as plain text by Kirby's router
+		foreach (['*.html', 'old/[draft', 'foo)'] as $from) {
+			$redirects->create(['from' => $from, 'status' => 301]);
+			$this->assertSame($from, $redirects->first()->from());
+		}
+
+		$this->assertSame(3, $redirects->count());
+	}
+
+	public function testCreateValidStatus(): void
+	{
+		$redirects = Retour::instance()->redirects();
+
+		foreach (['301', 302, '', null, 'disabled', '410'] as $i => $status) {
+			$redirects->create(['from' => 'foo-' . $i, 'status' => $status]);
+		}
+
+		$this->assertSame(6, $redirects->count());
 	}
 
 	public function testCreateWithoutValidParameters(): void
@@ -238,6 +289,20 @@ class RedirectsTest extends TestCase
 			$this->assertSame(['foo', 'homer', 'berlin'], $redirects->keys());
 			$this->assertSame('bar', $redirects->get('foo')->to());
 			$this->assertSame('simpson', $redirects->get('homer')->to());
+		}
+	}
+
+	#[DataProvider('invalidProvider')]
+	public function testUpdateInvalid(array $data, string $message): void
+	{
+		$redirects = Redirects::factory(Retour::instance(), $this->data());
+
+		try {
+			$redirects->update('foo', $data);
+			$this->fail('Invalid redirects must be rejected');
+		} catch (InvalidArgumentException $e) {
+			$this->assertSame($message, $e->getMessage());
+			$this->assertSame($this->expected(), $redirects->toArray());
 		}
 	}
 

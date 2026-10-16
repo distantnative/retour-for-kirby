@@ -18,6 +18,16 @@ class Pattern
 	protected static array $regexes = [];
 
 	/**
+	 * Checks if Kirby's router matches the pattern as plain
+	 * text, which it does for patterns without placeholders
+	 * or groups (ignored paths are always regular expressions)
+	 */
+	public static function isLiteral(string $pattern): bool
+	{
+		return str_contains($pattern, '(') === false;
+	}
+
+	/**
 	 * Checks if the pattern compiles to a valid regular expression
 	 */
 	public static function isValid(string $pattern): bool
