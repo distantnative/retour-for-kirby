@@ -57,6 +57,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The timeline keeps highlighting the right hour, day or month when the Panel stays open past midnight, and labels the hours correctly on days when daylight saving time begins or ends
 - The labels of the timeline are dimmed again, so the current day stands out
 - In right-to-left Panel languages, the timeline is no longer mirrored
+- Screen readers skip the timeline chart, which they used to read as a table of axis numbers and empty cells
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
