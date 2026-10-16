@@ -4,12 +4,13 @@ namespace Kirby\Retour;
 
 use Closure;
 use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
-use Kirby\Toolkit\Date;
 
 /**
  * Reads and writes to the database log
@@ -341,12 +342,6 @@ class Log
 			'step'      => new DateInterval('P1D')
 		];
 
-		if ($unit === 'day') {
-			// Add time to dates to capture full days
-			$from .= ' 00:00:00';
-			$to   .= ' 23:59:59';
-		}
-
 		$overrides = match ($unit) {
 			'day' => [
 				'length'    => 13,
@@ -381,8 +376,9 @@ class Log
             ORDER BY
                 substr(date, 1, :length)
         ', [
-			'from'   => $from,
-			'to'     => Date::optional($to)->add($use['step'])->format('Y-m-d'),
+			// Add time to dates to capture full days
+			'from'   => $from . ' 00:00:00',
+			'to'     => $to . ' 23:59:59',
 			'length' => $use['length']
 		], [
 			'fetch' => 'array'
@@ -395,27 +391,32 @@ class Log
 			'redirected' => (int)$entry['redirected'],
 		]);
 
+		$data = array_column($data, null, 'date');
+
+		// Iterate the date strings of all steps (in UTC to not skip
+		// or repeat hours when daylight saving time begins or ends)
+		$utc  = new DateTimeZone('UTC');
+		$date = new DateTimeImmutable($from, $utc);
+		$last = new DateTimeImmutable($to . ' 23:59:59', $utc);
+		$last = $last->format($use['group_php']);
+
+		// Start months on their first day, as adding
+		// a month to e.g. January 31 skips February
+		if ($use['group_php'] === 'Y-m') {
+			$date = $date->modify('first day of this month');
+		}
+
 		$result = [];
-		$entry  = array_shift($data);
 
-		for (
-			$i = Date::optional($from);
-			$i <= Date::optional($to);
-			$i->add($use['step'])
-		) {
-			$step = $i->format($use['group_php']);
+		while (($step = $date->format($use['group_php'])) <= $last) {
+			$result[] = $data[$step] ?? [
+				'date'       => $step,
+				'failed'     => 0,
+				'resolved'   => 0,
+				'redirected' => 0,
+			];
 
-			if (($entry['date'] ?? null) === $step) {
-				$result[] = $entry;
-				$entry    = array_shift($data);
-			} else {
-				$result[] = [
-					'date'       => $step,
-					'failed'     => 0,
-					'resolved'   => 0,
-					'redirected' => 0,
-				];
-			}
+			$date = $date->add($use['step']);
 		}
 
 		return $result;

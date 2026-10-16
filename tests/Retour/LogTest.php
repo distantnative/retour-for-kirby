@@ -391,5 +391,66 @@ class LogTest extends TestCase
 		$this->assertSame(0, $stats[6]['failed']);
 		$this->assertSame(0, $stats[6]['resolved']);
 		$this->assertSame(4, $stats[6]['redirected']);
+
+	}
+
+	public function testStatsDaylightSavingTime(): void
+	{
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$log = $this->log();
+
+			// clocks go forward
+			$stats = $log->stats('day', '2024-03-31', '2024-03-31');
+			$this->assertCount(24, $stats);
+			$this->assertSame('2024-03-31 02', $stats[2]['date']);
+
+			// clocks go back
+			$stats = $log->stats('day', '2024-10-27', '2024-10-27');
+			$this->assertCount(24, $stats);
+			$this->assertSame('2024-10-27 23', $stats[23]['date']);
+		} finally {
+			date_default_timezone_set($timezone);
+		}
+	}
+
+	public function testStatsMonths(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2024-01-30 23:59:59', 'path' => 'before']);
+		$log->add(['date' => '2024-01-31 00:00:00', 'path' => 'jan']);
+		$log->add(['date' => '2024-02-15 10:00:00', 'path' => 'feb']);
+		$log->add(['date' => '2024-03-10 10:00:00', 'path' => 'mar']);
+		$log->add(['date' => '2024-03-11 10:00:00', 'path' => 'mar', 'redirect' => 'mar']);
+		$log->add(['date' => '2024-04-01 00:00:00', 'path' => 'apr']);
+		$log->add(['date' => '2024-04-25 23:59:59', 'path' => 'apr']);
+		$log->add(['date' => '2024-04-26 00:00:00', 'path' => 'after']);
+
+		$stats = $log->stats('months', '2024-01-31', '2024-04-25');
+
+		$this->assertSame(['2024-01', '2024-02', '2024-03', '2024-04'], array_column($stats, 'date'));
+		$this->assertSame([1, 1, 1, 2], array_column($stats, 'failed'));
+		$this->assertSame([0, 0, 1, 0], array_column($stats, 'redirected'));
+
+		// same total as the failures table
+		$fails = $log->fails('2024-01-31', '2024-04-25');
+		$this->assertSame(array_sum(array_column($fails, 'hits')), array_sum(array_column($stats, 'failed')));
+	}
+
+	public function testStatsUpperBound(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2024-01-10 23:59:59', 'path' => 'last']);
+		$log->add(['date' => '2024-01-11 00:00:00', 'path' => 'after']);
+		$log->add(['date' => '2024-02-01 00:00:00', 'path' => 'after']);
+
+		foreach (['days', 'month', 'months'] as $unit) {
+			$stats = $log->stats($unit, '2024-01-01', '2024-01-10');
+			$this->assertSame(1, array_sum(array_column($stats, 'failed')), $unit);
+		}
 	}
 }
