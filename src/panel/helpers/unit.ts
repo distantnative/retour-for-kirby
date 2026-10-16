@@ -12,7 +12,6 @@ export function daysIntoWeek(day: number, firstWeekday: number): number {
  */
 export function format(unit: string): string {
 	const formats: Record<string, string> = {
-		day: "HH",
 		week: "ddd",
 		month: "D",
 		year: "MMM",

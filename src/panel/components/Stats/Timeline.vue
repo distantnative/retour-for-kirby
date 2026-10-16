@@ -63,9 +63,6 @@ export default {
 		subunit() {
 			return subunit(this.timespan.unit);
 		},
-		today() {
-			return this.$library.dayjs();
-		},
 	},
 	methods: {
 		clip(segment, area) {
@@ -78,22 +75,31 @@ export default {
 		color(segment, area) {
 			const next = this.data[segment + 1];
 
-			if (
-				next &&
-				this.$library.dayjs(next.label).isAfter(this.today, this.subunit)
-			) {
+			if (next && next.label > this.now(next.label)) {
 				return "transparent";
 			}
 
 			return area.color;
 		},
 		isCurrent(segment) {
-			return this.$library
-				.dayjs(segment.label)
-				.isSame(this.today, this.subunit);
+			return segment.label === this.now(segment.label);
 		},
 		label(segment) {
+			// parsing hours would skip or repeat one on DST changes
+			if (this.subunit === "hour") {
+				return segment.label.slice(-2);
+			}
+
 			return this.$library.dayjs(segment.label).format(this.format);
+		},
+		now(label) {
+			// in the format of the label (month, day or hour) to compare
+			// both as strings; not cached, as the view stays mounted
+			// across reloads and can be open past midnight
+			return this.$library
+				.dayjs()
+				.format("YYYY-MM-DD HH")
+				.slice(0, label.length);
 		},
 		zoom(segment) {
 			if (this.subunit === "hour") {
