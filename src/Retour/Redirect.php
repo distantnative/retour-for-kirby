@@ -188,11 +188,14 @@ class Redirect
 			$response = $page ?? new Response('', 'text/html', $code);
 		}
 
-		// only now, as redirects to deleted pages count as failures
-		$retour->log()?->add([
-			'path'     => Url::path(),
-			'redirect' => $this->from
-		]);
+		// only now, as redirects to deleted pages count as failures;
+		// HEAD requests (e.g. by uptime monitors) would inflate the stats
+		if ($kirby->request()->method() !== 'HEAD') {
+			$retour->log()?->add([
+				'path'     => Url::path(),
+				'redirect' => $this->from
+			]);
+		}
 
 		return $response;
 	}
