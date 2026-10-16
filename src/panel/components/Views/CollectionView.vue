@@ -77,6 +77,7 @@ export default {
 		return {
 			searching: false,
 			q: null,
+			sortBy: null,
 			sortDirection: "asc",
 			pagination: {
 				page: 1,
