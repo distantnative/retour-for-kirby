@@ -1,5 +1,5 @@
 <template>
-	<div :title="title" class="k-count-preview-field">
+	<div :title="title" class="k-count-field-preview">
 		<template v-if="value > 0">
 			{{ hits }}
 			<k-icon type="history" />
@@ -38,16 +38,16 @@ export default {
 </script>
 
 <style>
-.k-count-preview-field {
+.k-count-field-preview {
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: space-between;
 	padding-inline: var(--spacing-2);
 }
-.k-count-preview-field p {
+.k-count-field-preview p {
 	color: var(--color-gray-400);
 }
-.k-count-preview-field .k-icon {
+.k-count-field-preview .k-icon {
 	--icon-color: var(--color-gray-400);
 	transform: scale(0.8);
 }
