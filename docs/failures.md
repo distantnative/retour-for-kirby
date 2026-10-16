@@ -24,6 +24,24 @@ The `Ignored` button above the failures table lists all ignored paths, where you
 
 Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`.
 
+### Block at the server level
+
+Ignoring a path only keeps it out of the failures log. The request still reaches Kirby, which renders your error page for it. For paths that bots hit a lot, it's better to block them in your web server so they never reach PHP at all.
+
+**Apache:** add this to your `.htaccess`, right after `RewriteEngine on`:
+
+```apache
+RewriteRule ^(wp-admin|wp-login\.php|xmlrpc\.php|\.env) - [F]
+```
+
+**nginx:** add this to your `server` block, before any other `location` blocks:
+
+```nginx
+location ~ ^/(wp-admin|wp-login\.php|xmlrpc\.php|\.env) {
+  return 403;
+}
+```
+
 ## Clearing logs
 
 Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table:
