@@ -14,10 +14,7 @@
 </template>
 
 <script>
-/**
- * Read-only list of users (e.g. creator of a redirect),
- * receives the item props for each user as value
- */
+/** Read-only list of users, e.g. the creator of a redirect */
 export default {
 	inheritAttrs: false,
 	props: {

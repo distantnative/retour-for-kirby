@@ -1,20 +1,16 @@
-// Views
 import View from "./components/Views/View.vue";
 import RedirectsView from "./components/Views/RedirectsView.vue";
 import FailuresView from "./components/Views/FailuresView.vue";
 
-// Components
 import Stats from "./components/Stats/Stats.vue";
 import Tabs from "./components/View/Tabs.vue";
 import Timespan from "./components/View/Timespan.vue";
 
-// Table previews
 import CountFieldPreview from "./components/Previews/CountFieldPreview.vue";
 import PathFieldPreview from "./components/Previews/PathFieldPreview.vue";
 import PriorityFieldPreview from "./components/Previews/PriorityFieldPreview.vue";
 import StatusFieldPreview from "./components/Previews/StatusFieldPreview.vue";
 
-// Fields
 import StatusField from "./components/Fields/StatusField.vue";
 import UsersField from "./components/Fields/UsersField.vue";
 
