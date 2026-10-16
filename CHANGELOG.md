@@ -69,6 +69,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Clearing the log or purging old entries only rebuilds the database file when at least a fifth of it is free space, so the log isn't locked as long on large sites
 - Smaller log database: the index for redirect hits no longer includes failures
 - Filtering large tables in the Panel is much faster and uses far less memory (e.g. 40 ms instead of 530 ms and 12 MB instead of 115 MB at 100,000 failures)
+- The timeline needs less graphics memory: its areas no longer each get their own compositing layer
 
 ### Housekeeping
 - New `kirby retour:seed` command that fills the log with dummy data for testing.

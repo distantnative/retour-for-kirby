@@ -229,7 +229,6 @@ export default {
 		100% calc(100% * (1 - var(--m1))),
 		0% calc(100% * (1 - var(--m0)))
 	);
-	will-change: clip-path;
 	transition: clip-path 0.3s ease-out;
 }
 .chart-areas tfoot {
