@@ -44,7 +44,7 @@ class FailuresFlushDialog extends DialogController
 
 	public function submit(): bool
 	{
-		$mode = $this->request->get('mode');
+		$mode = $this->request->get('mode') ?? '';
 		return Retour::instance()->log()->flush($mode) === true;
 	}
 }

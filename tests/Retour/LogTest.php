@@ -4,6 +4,7 @@ namespace Kirby\Retour;
 
 use Closure;
 use Kirby\Database\Database;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
@@ -149,6 +150,21 @@ class LogTest extends TestCase
 		// The remaining entry must be the redirect, not the failure
 		$remaining = $log->table()->fetch('array')->all()->first();
 		$this->assertSame('old', $remaining['redirect']);
+	}
+
+	public function testFlushInvalidMode(): void
+	{
+		$log = $this->log();
+		$log->add(['path' => 'foo']);
+
+		try {
+			$log->flush('foo');
+			$this->fail('Unknown modes must be rejected');
+		} catch (InvalidArgumentException $e) {
+			$this->assertSame('Invalid flush mode: foo', $e->getMessage());
+			$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+			$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+		}
 	}
 
 	public function testIndices(): void
