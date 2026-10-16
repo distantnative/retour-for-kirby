@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Genegeerde paden",
 	"retour.failures.ignores.help": "Verzoeken naar deze paden worden niet gelogd als mislukte omleidingen.",
 	"retour.failures.ignores.common": "Veelvoorkomende scannerpaden toevoegen",
-	"retour.failures.ignores.common.help": "Paden waarop bots naar kwetsbaarheden zoeken, bijv. wp-login.php, wp-admin, xmlrpc.php of .env",
+	"retour.failures.ignores.common.help": "Paden waarop bots naar kwetsbaarheden zoeken, bijv. {paths}",
 	"retour.failures.ignores.config": "Ook genegeerd via de configuratie",
 	"retour.timespan.from.label": "Van",
 	"retour.timespan.to.label": "Tot",

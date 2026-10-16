@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Caminhos ignorados",
 	"retour.failures.ignores.help": "As requisições para estes caminhos não são registradas como falhas.",
 	"retour.failures.ignores.common": "Adicionar caminhos comuns de scanners",
-	"retour.failures.ignores.common.help": "Caminhos que bots sondam em busca de vulnerabilidades, por exemplo wp-login.php, wp-admin, xmlrpc.php ou .env",
+	"retour.failures.ignores.common.help": "Caminhos que bots sondam em busca de vulnerabilidades, por exemplo {paths}",
 	"retour.failures.ignores.config": "Também ignorados via configuração",
 	"retour.timespan.from.label": "De",
 	"retour.timespan.to.label": "Até",

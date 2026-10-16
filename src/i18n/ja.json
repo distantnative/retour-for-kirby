@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "無視するパス",
 	"retour.failures.ignores.help": "これらのパスへのリクエストはエラーとして記録されません。",
 	"retour.failures.ignores.common": "よくあるスキャナーのパスを追加",
-	"retour.failures.ignores.common.help": "ボットが脆弱性を探るパス（例：wp-login.php、wp-admin、xmlrpc.php、.env）",
+	"retour.failures.ignores.common.help": "ボットが脆弱性を探るパス（例：{paths}）",
 	"retour.failures.ignores.config": "設定でも無視されているパス",
 	"retour.timespan.from.label": "開始日",
 	"retour.timespan.to.label": "終了日",

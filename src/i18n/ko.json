@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "무시할 경로",
 	"retour.failures.ignores.help": "이 경로에 대한 요청은 오류로 기록되지 않습니다.",
 	"retour.failures.ignores.common": "일반적인 스캐너 경로 추가",
-	"retour.failures.ignores.common.help": "봇이 취약점을 찾기 위해 탐색하는 경로(예: wp-login.php, wp-admin, xmlrpc.php, .env)",
+	"retour.failures.ignores.common.help": "봇이 취약점을 찾기 위해 탐색하는 경로(예: {paths})",
 	"retour.failures.ignores.config": "설정에서도 무시되는 경로",
 	"retour.timespan.from.label": "시작일",
 	"retour.timespan.to.label": "종료일",
