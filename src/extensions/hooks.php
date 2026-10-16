@@ -20,11 +20,6 @@ return [
 		) {
 			$retour = Retour::instance();
 
-			// Skip ignored paths
-			if ($retour->ignore($path) === true) {
-				return $result;
-			}
-
 			try {
 				// find non-priority redirect route for current path
 				// and call if possible
@@ -32,8 +27,11 @@ return [
 				$router = new Router($routes);
 				return $router->call($path, $method);
 			} catch (Throwable) {
-				// log 404 if feature enabled
-				if ($retour->hasLog() === true) {
+				// log 404 if feature enabled and path not ignored
+				if (
+					$retour->hasLog() === true &&
+					$retour->ignore($path) === false
+				) {
 					$retour->log()->add(['path' => $path]);
 				}
 			}

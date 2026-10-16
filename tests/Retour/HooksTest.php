@@ -21,19 +21,50 @@ class HooksTest extends TestCase
 		return new Route('', '', fn () => null);
 	}
 
-	public function testIgnoredPathIsSkipped(): void
+	public function testIgnoredPathIsNotLogged(): void
 	{
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.ignore' => ['api/(:any)'],
-				'distantnative.retour.logs'   => false,
+				'distantnative.retour.ignore'   => ['api/(:any)'],
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
 			]
 		]);
-		Retour::instance($app);
+		$retour = Retour::instance($app);
 
-		// Ignored paths should pass through without being logged
 		$result = ($this->hook())($this->route(), 'api/users', 'GET', null, true);
 		$this->assertNull($result);
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+	}
+
+	public function testIgnoredPathIsRedirected(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.ignore'   => ['wp-(:all)'],
+				'distantnative.retour.config'   => $this->tmp . '/retour.yml',
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'target']
+				]
+			]
+		]);
+
+		$retour = Retour::instance($app);
+		$retour->redirects()->prepend(new Redirect([
+			'from'   => 'wp-content/(:all)',
+			'to'     => 'target',
+			'status' => 200
+		]));
+
+		$result = ($this->hook())($this->route(), 'wp-content/uploads/foo.jpg', 'GET', null, true);
+		$this->assertInstanceOf(Page::class, $result);
+		$this->assertSame('target', $result->id());
+
+		// logged as hit of the redirect, not as failure
+		$this->assertSame(1, $retour->log()->redirect('wp-content/(:all)', '2000-01-01', '2099-12-31')['hits']);
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
 	}
 
 	public function testLogsFailedRouteAs404(): void
