@@ -16,6 +16,14 @@ Every table row offers the option (behind the three dots to the right) to create
 
 Once you save that new route, all failure entries for that path will also be marked as resolved in the stats.
 
+## Ignore failures
+
+Bots and scanners request lots of paths that will never exist on your site, like `wp-login.php` or `.env`. To keep them out of your log, choose `Ignore` in the options of the table row. Before confirming, you can turn the path into a pattern with [placeholders](/redirects#path), e.g. `wp-admin(:all)`, to ignore a whole group of paths at once. Requests to ignored paths won't be logged anymore and all existing failures matching the pattern get removed from the log.
+
+The `Ignored` button above the failures table lists all ignored paths, where you can also remove them again or add new ones. They are stored alongside your redirects in `site/config/retour.yml`.
+
+Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`.
+
 ## Clearing logs
 
 Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table:

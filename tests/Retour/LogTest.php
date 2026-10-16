@@ -298,6 +298,29 @@ class LogTest extends TestCase
 		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
 	}
 
+	public function testRemoveFailures(): void
+	{
+		$log = $this->log();
+		$this->assertTrue($log->removeFailures(fn () => true));
+
+		$log->add(['path' => 'wp-admin/setup.php']);
+		$log->add(['path' => 'wp-admin/setup.php']);
+		$log->add(['path' => 'wp-login.php']);
+		$log->add(['path' => 'foo']);
+		$log->add(['path' => 'wp-old', 'redirect' => 'wp-old']);
+
+		$this->assertTrue($log->removeFailures(
+			fn (string $path) => str_starts_with($path, 'wp-')
+		));
+
+		// keeps other failures and hits of redirects
+		$paths = $log->table()->select('path')->fetch('array')->all()->toArray(
+			fn (array $record) => $record['path']
+		);
+		sort($paths);
+		$this->assertSame(['foo', 'wp-old'], $paths);
+	}
+
 	public function testResolve(): void
 	{
 		$log = $this->log();

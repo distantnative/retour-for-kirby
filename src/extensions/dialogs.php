@@ -2,7 +2,9 @@
 
 use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Panel\Ui\Dialog\RemoveDialog;
+use Kirby\Retour\Panel\FailureIgnoreDialog;
 use Kirby\Retour\Panel\Id;
+use Kirby\Retour\Panel\IgnoresDialog;
 use Kirby\Retour\Panel\TimespanDialog;
 use Kirby\Retour\Retour;
 
@@ -31,6 +33,16 @@ return [
 			text: t('field.structure.delete.confirm')
 		),
 		'submit' => fn (string $path) => Retour::instance()->log()->remove(Id::toPath($path))
+	],
+
+	'retour.failure.ignore' => [
+		'pattern' => 'retour/failures/(:any)/ignore',
+		'action'  => FailureIgnoreDialog::class
+	],
+
+	'retour.failures.ignores' => [
+		'pattern' => 'retour/failures/ignores',
+		'action'  => IgnoresDialog::class
 	],
 
 	'retour.failures.flush' => [

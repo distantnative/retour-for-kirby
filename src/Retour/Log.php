@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour;
 
+use Closure;
 use DateInterval;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
@@ -253,6 +254,40 @@ class Log
 	public function remove(string $path): bool
 	{
 		return $this->table()->delete(['path' => $path]);
+	}
+
+	/**
+	 * Removes all failures whose path passes the filter,
+	 * e.g. when ignoring these paths from now on
+	 *
+	 * @param Closure(string $path): bool $filter
+	 */
+	public function removeFailures(Closure $filter): bool
+	{
+		$paths = $this->table()
+			->select('path')
+			->distinct()
+			->where('redirect IS NULL')
+			->fetch('array')
+			->all()
+			->toArray(fn (array $record) => $record['path']);
+
+		$paths = array_values(array_filter($paths, $filter));
+
+		// delete in chunks to stay below
+		// the SQLite limit for bound parameters
+		foreach (array_chunk($paths, 500) as $chunk) {
+			$deleted = $this->table()
+				->where('redirect IS NULL')
+				->andWhere('path', 'in', $chunk)
+				->delete();
+
+			if ($deleted === false) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

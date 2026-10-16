@@ -12,6 +12,7 @@ The following config options are available:
   'logs' => true,
 
   // Array of paths to ignore as failures (can include placeholder wildcards or regular expressions)
+  // in addition to the ones ignored via the Panel
   'ignore' => [],
 
   // Number of months after which logs should be deleted automatically
