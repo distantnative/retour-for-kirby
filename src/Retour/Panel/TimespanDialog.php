@@ -68,18 +68,16 @@ class TimespanDialog extends DialogController
 
 	public function submit(): array
 	{
-		$data    = Timespan::query();
-		$from    = Date::optional($data['from']);
-		$to      = Date::optional($data['to']);
+		$data = Timespan::query();
 
-		if ($to->isBefore($from) === true) {
-			$to = $from;
+		// the date fields submit their values with a time
+		foreach ($data as $key => $value) {
+			if (is_string($value) === true) {
+				$data[$key] = $this->date($value, 'Y-m-d');
+			}
 		}
 
-		$this->kirby->session()->set('retour', [
-			'from' => $from->format('Y-m-d'),
-			'to'   => $to->format('Y-m-d')
-		]);
+		Timespan::set($data);
 
 		return [
 			'redirect' => $this->kirby->panel()->referrer()
