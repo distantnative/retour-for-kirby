@@ -34,7 +34,7 @@ The following config options are available:
   // Default: `null` (which disables the redirect)
   'status' => 308,
 
-  // forward the query string of the original request 
+  // forward the query string of the original request
   // (e.g. to preserve ad/campaign tracking)
   'preserveQuery' => false,
 ]

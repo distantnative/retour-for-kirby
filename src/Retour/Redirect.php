@@ -206,6 +206,16 @@ class Redirect extends Obj
 			return $to;
 		}
 
-		return $to . (str_contains($to, '?') ? '&' : '?') . $query;
+		// keep the fragment at the end, otherwise
+		// the query string would become part of it
+		[$url, $fragment] = array_pad(explode('#', $to, 2), 2, null);
+
+		$url .= (str_contains($url, '?') ? '&' : '?') . $query;
+
+		if ($fragment !== null) {
+			$url .= '#' . $fragment;
+		}
+
+		return $url;
 	}
 }
