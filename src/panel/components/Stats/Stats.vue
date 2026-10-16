@@ -13,16 +13,19 @@ const series = [
 	{
 		key: "redirected",
 		color: "var(--color-blue-650)",
+		icon: "redirect",
 		label: "retour.stats.redirected",
 	},
 	{
 		key: "resolved",
 		color: "var(--color-gray-250)",
+		icon: "url",
 		label: "retour.stats.resolved",
 	},
 	{
 		key: "failed",
 		color: "var(--color-red-650)",
+		icon: "url-broken",
 		label: "retour.stats.failed",
 	},
 ];
@@ -47,9 +50,10 @@ export default {
 			}));
 		},
 		pie() {
-			return series.map(({ key, color, label }) => ({
+			return series.map(({ key, color, icon, label }) => ({
 				data: this.data.reduce((i, x) => (i += x[key]), 0),
 				color,
+				icon,
 				label: this.$t(label),
 			}));
 		},

@@ -1,13 +1,10 @@
 <template>
-	<figure class="chart-pie">
-		<div class="graph" :style="styles" />
+	<figure class="k-retour-pie">
+		<div class="k-retour-pie-graph" :style="styles" />
 
 		<figcaption>
-			<template v-for="(segment, index) in data" :key="segment.label">
-				<k-icon
-					:style="'--color:' + segment.color"
-					:type="$options.icons[index]"
-				/>
+			<template v-for="segment in data" :key="segment.label">
+				<k-icon :color="segment.color" :type="segment.icon" />
 				<span>
 					{{ formatter.format(segment.data) }}
 				</span>
@@ -26,7 +23,6 @@ export default {
 	props: {
 		data: Array,
 	},
-	icons: ["redirect", "url", "url-broken"],
 	computed: {
 		formatter() {
 			return new Intl.NumberFormat(this.$library.dayjs.locale());
@@ -50,14 +46,14 @@ export default {
 	initial-value: 0deg;
 }
 
-.chart-pie {
+.k-retour-pie {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	container-type: inline-size;
 }
 
-.chart-pie > .graph {
+.k-retour-pie-graph {
 	width: 100%;
 	aspect-ratio: 1/1;
 	opacity: 0.85;
@@ -77,25 +73,22 @@ export default {
 		--pie-a1 0.3s ease-out;
 }
 
-.chart-pie figcaption {
+.k-retour-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
 	column-gap: 0.4ch;
 	row-gap: var(--spacing-3);
 }
-.chart-pie figcaption :nth-child(3n + 2) {
+.k-retour-pie figcaption :nth-child(3n + 2) {
 	padding-inline-start: var(--spacing-2);
 	text-align: end;
 }
-.chart-pie figcaption .k-icon {
-	color: var(--color);
-}
 
 @container (min-width: 18rem) {
-	.chart-pie figcaption {
+	.k-retour-pie figcaption {
 		grid-template-columns: repeat(9, auto);
 	}
-	.chart-pie figcaption .k-icon:not(:first-child) {
+	.k-retour-pie figcaption .k-icon:not(:first-child) {
 		margin-inline-start: var(--spacing-4);
 	}
 }

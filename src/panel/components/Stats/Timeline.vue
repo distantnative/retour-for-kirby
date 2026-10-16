@@ -1,5 +1,5 @@
 <template>
-	<div :data-subunit="subunit" class="chart-areas">
+	<div :data-subunit="subunit" class="k-retour-timeline">
 		<table aria-hidden="true">
 			<thead>
 				<tr>
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style>
-.chart-areas {
+.k-retour-timeline {
 	/* the clip paths and the y-axis are positioned physically */
 	direction: ltr;
 	overflow-x: auto;
@@ -129,7 +129,7 @@ export default {
 	padding-inline: var(--spacing-3);
 }
 
-.chart-areas table {
+.k-retour-timeline table {
 	--height: 250px;
 
 	position: relative;
@@ -140,19 +140,19 @@ export default {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-.chart-areas thead {
+.k-retour-timeline thead {
 	position: absolute;
 	top: 0;
 	right: calc(100%);
 	height: var(--height);
 }
-.chart-areas thead tr {
+.k-retour-timeline thead tr {
 	display: flex;
 	height: var(--height);
 	flex-direction: column-reverse;
 	padding-right: var(--spacing-3);
 }
-.chart-areas th {
+.k-retour-timeline th {
 	flex: 1;
 	transform: translateY(calc(-1 * var(--spacing-3) / 2));
 	font-size: var(--text-xs);
@@ -160,7 +160,7 @@ export default {
 	text-align: right;
 	color: var(--color-gray-500);
 }
-.chart-areas tbody {
+.k-retour-timeline tbody {
 	--grid-x: linear-gradient(
 		to right,
 		var(--color-gray-800) 33%,
@@ -187,20 +187,20 @@ export default {
 		center 80%,
 		center 100%;
 }
-.chart-areas :where(tbody, tfoot) {
+.k-retour-timeline :where(tbody, tfoot) {
 	width: 100%;
 	display: flex;
 	justify-content: stretch;
 	align-items: stretch;
 	flex-direction: row;
 }
-.chart-areas tbody tr:not(:nth-last-child(2)) {
+.k-retour-timeline tbody tr:not(:nth-last-child(2)) {
 	background-image: linear-gradient(var(--color-gray-800) 33%, transparent 0%);
 	background-size: 1px 3px;
 	background-repeat: repeat-y;
 	background-position: right;
 }
-.chart-areas :where(tbody, tfoot) tr {
+.k-retour-timeline :where(tbody, tfoot) tr {
 	position: relative;
 	display: flex;
 	flex-grow: 1;
@@ -209,13 +209,13 @@ export default {
 	/* keeps the labels from widening their columns */
 	width: 0;
 }
-.chart-areas:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
+.k-retour-timeline:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
 	cursor: pointer;
 }
-.chart-areas :where(tbody, tfoot) tr:last-child {
+.k-retour-timeline :where(tbody, tfoot) tr:last-child {
 	flex-grow: 0;
 }
-.chart-areas tbody td {
+.k-retour-timeline tbody td {
 	background: var(--color);
 	opacity: 0.85;
 	position: absolute;
@@ -231,7 +231,7 @@ export default {
 	);
 	transition: clip-path 0.3s ease-out;
 }
-.chart-areas tfoot {
+.k-retour-timeline tfoot {
 	margin-top: var(--spacing-2);
 	font-size: var(--text-xs);
 	color: var(--color-gray-500);
@@ -239,21 +239,21 @@ export default {
 }
 
 /* every third label, counted from the last one to not overlap it */
-.chart-areas tfoot[data-less="true"] tr:not(:nth-last-child(3n + 1)) td {
+.k-retour-timeline tfoot[data-less="true"] tr:not(:nth-last-child(3n + 1)) td {
 	visibility: hidden;
 }
 
-.chart-areas tfoot td {
+.k-retour-timeline tfoot td {
 	transform: translateX(-50%);
 	white-space: nowrap;
 }
-.chart-areas tfoot [data-current="true"] {
+.k-retour-timeline tfoot [data-current="true"] {
 	color: var(--color-white);
 	font-weight: bold;
 }
 
 @container (min-width: 40rem) {
-	.chart-areas {
+	.k-retour-timeline {
 		padding-inline-start: var(--spacing-12);
 	}
 }
