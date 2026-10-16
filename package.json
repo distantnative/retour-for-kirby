@@ -1,5 +1,7 @@
 {
 	"name": "distantnative/retour-for-kirby",
+	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "kirbyup src/panel/index.ts --watch",
 		"build": "kirbyup src/panel/index.ts",
