@@ -31,6 +31,22 @@ class HooksTest extends TestCase
 		], 'result');
 	}
 
+	public function testHeadRequestIsNotLoggedAsFailure(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
+			]
+		]);
+		$retour = Retour::instance($app);
+
+		$this->assertNull($this->apply($app, 'missing', 'HEAD'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+
+		$this->assertNull($this->apply($app, 'missing'));
+		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31'));
+	}
+
 	public function testIgnoredPathIsNotLogged(): void
 	{
 		$app = $this->kirby->clone([
@@ -123,6 +139,9 @@ class HooksTest extends TestCase
 	public function testMatchesNonPriorityRedirectForHeadRequest(): void
 	{
 		$app = $this->kirby->clone([
+			'request' => [
+				'method' => 'HEAD'
+			],
 			'options' => [
 				'distantnative.retour.config'   => $this->tmp . '/retour.yml',
 				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
@@ -144,7 +163,10 @@ class HooksTest extends TestCase
 		$result = $this->apply($app, 'old-path', 'HEAD');
 		$this->assertInstanceOf(Response::class, $result);
 		$this->assertSame(301, $result->code());
+
+		// neither logged as failure nor as hit
 		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->redirects('2000-01-01', '2099-12-31'));
 	}
 
 	public function testSkips404LoggingWhenDisabled(): void

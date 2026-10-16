@@ -23,7 +23,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - A `retour.yml` that can't be parsed is no longer replaced with an empty list on the next save in the Panel. Redirects are turned off until it's fixed, and the Panel shows the error.
 - Saving a redirect with an invalid path pattern or status code fails with an error message instead of breaking routing for every request
 - Redirects now also apply to ignored paths; ignoring a path only stops its failures from being logged
-- HEAD requests (e.g. from link checkers and uptime monitors) are now redirected as well and count as hits
+- HEAD requests (e.g. from link checkers and uptime monitors) are now redirected as well; they aren't logged, so they don't inflate the stats
 - Redirects no longer show draft pages, or pages inside drafts, to visitors and don't redirect to them
 - Redirect targets that aren't pages, e.g. `downloads/file.pdf`, are now resolved against the site URL. Before, browsers resolved them relative to the requested path, which broke nested paths and sites in a subfolder.
 - Redirects to a page that has been deleted (e.g. a `page://…` UUID target) now show the error page and are logged as failure, instead of sending visitors to an invalid URL
