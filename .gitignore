@@ -5,7 +5,7 @@
 /node_modules
 /vendor
 
-# Development build of kirbyup
+# Written by the kirbyup dev server
 /index.dev.js
 
 # Cache and temporary files

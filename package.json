@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "kirbyup src/panel/index.ts --watch",
+		"dev": "kirbyup dev src/panel/index.ts",
 		"build": "kirbyup src/panel/index.ts",
 		"lint": "eslint src/panel",
 		"test": "npm run test:unit && npm run test:types",
