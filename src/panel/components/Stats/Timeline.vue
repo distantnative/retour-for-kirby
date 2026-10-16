@@ -1,6 +1,6 @@
 <template>
 	<div :data-subunit="subunit" class="chart-areas">
-		<table>
+		<table aria-hidden="true">
 			<thead>
 				<tr>
 					<th v-for="tick in axisY" :key="tick">
