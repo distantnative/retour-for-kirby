@@ -8,7 +8,6 @@
 	"retour.redirects.from.help": "Nutze <a href='{docs}' target='_blank'>Platzhalter</a> für dynamische Weiterleitungen.",
 	"retour.redirects.to": "Weiterleiten zu",
 	"retour.redirects.to.help": "Relativer Pfad oder absolute URL. Freilassen, damit die Anfrage mit dem Statuscode endet.",
-	"retour.redirects.status": "Status",
 	"retour.redirects.status.help": "Erfahre mehr über <a href='{docs}' target='_blank'>HTTP-Statuscodes</a> und wann du welchen verwenden solltest.",
 	"retour.redirects.priority": "Hat Priorität?",
 	"retour.redirects.priority.abbr": "Prio",
@@ -39,15 +38,10 @@
 	"retour.timespan.from.label": "Von",
 	"retour.timespan.to.label": "Bis",
 	"retour.timespan.set.label": "Anpassen",
-	"retour.timespan.today.label": "Heute",
 	"retour.timespan.previous.label": "Vorherige",
 	"retour.timespan.next.label": "Nächste",
 	"retour.stats.redirected": "weitergeleitet",
 	"retour.stats.resolved": "behoben",
 	"retour.stats.failed": "gescheitert",
-	"retour.stats.mode.all": "Gesamt",
-	"retour.stats.mode.year": "Jahr",
-	"retour.stats.mode.month": "Monat",
-	"retour.stats.mode.week": "Woche",
-	"retour.stats.mode.day": "Tag"
+	"retour.stats.mode.all": "Gesamt"
 }

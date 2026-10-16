@@ -8,7 +8,6 @@
 	"retour.redirects.from.help": "Lägg till <a href='{docs}' target='_blank'>platshållare</a> för dynamiska omdirigeringar.",
 	"retour.redirects.to": "Omdirigera till",
 	"retour.redirects.to.help": "Relativ sökväg eller absolut URL. Om du lämnar fältet tomt kommer förfrågan att avslutas med statuskod.",
-	"retour.redirects.status": "Status",
 	"retour.redirects.status.help": "Lär dig om <a href='{docs}' target='_blank'>HTTP-statuskoder</a> och hur de ska användas.",
 	"retour.redirects.priority": "Prioriterad?",
 	"retour.redirects.priority.abbr": "Prio",
@@ -39,15 +38,10 @@
 	"retour.timespan.from.label": "Från",
 	"retour.timespan.to.label": "Till",
 	"retour.timespan.set.label": "Ställ in anpassad",
-	"retour.timespan.today.label": "Hoppa till idag",
 	"retour.timespan.previous.label": "Föregående",
 	"retour.timespan.next.label": "Nästa",
 	"retour.stats.redirected": "omdirigerade",
 	"retour.stats.resolved": "lösta",
 	"retour.stats.failed": "misslyckade",
-	"retour.stats.mode.all": "Alla",
-	"retour.stats.mode.year": "År",
-	"retour.stats.mode.month": "Månad",
-	"retour.stats.mode.week": "Vecka",
-	"retour.stats.mode.day": "Dag"
+	"retour.stats.mode.all": "Alla"
 }

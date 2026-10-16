@@ -44,7 +44,7 @@ export default {
 					}
 
 					return {
-						text: this.$t("retour.stats.mode." + unit),
+						text: this.$t(unit === "all" ? "retour.stats.mode.all" : unit),
 						icon: this.icon(unit),
 						current: this.isCurrentUnit(unit),
 						click: () => this.set(unit),
@@ -52,7 +52,7 @@ export default {
 				}),
 				"-",
 				{
-					text: this.$t("retour.timespan.today.label"),
+					text: this.$t("today"),
 					icon: "merge",
 					click: () => this.set("today"),
 				},

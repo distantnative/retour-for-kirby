@@ -8,7 +8,6 @@
 	"retour.redirects.from.help": "Añada <a href='{docs}' target='_blank'>marcadores de posición</a> para redirecciones dinámicas.",
 	"retour.redirects.to": "Redirigir a",
 	"retour.redirects.to.help": "Ruta relativa o URL absoluta. Déjelo vacío para que la solicitud termine con el código de estado.",
-	"retour.redirects.status": "Estado",
 	"retour.redirects.status.help": "Obtenga información sobre los <a href='{docs}' target='_blank'>códigos de estado HTTP</a> y cuándo utilizar cada uno.",
 	"retour.redirects.priority": "¿Tiene prioridad?",
 	"retour.redirects.priority.abbr": "Prio",
@@ -39,15 +38,10 @@
 	"retour.timespan.from.label": "Desde",
 	"retour.timespan.to.label": "Hasta",
 	"retour.timespan.set.label": "Personalizar",
-	"retour.timespan.today.label": "Ir a hoy",
 	"retour.timespan.previous.label": "Anterior",
 	"retour.timespan.next.label": "Siguiente",
 	"retour.stats.redirected": "redirigidos",
 	"retour.stats.resolved": "resueltos",
 	"retour.stats.failed": "fallidos",
-	"retour.stats.mode.all": "Todo",
-	"retour.stats.mode.year": "Año",
-	"retour.stats.mode.month": "Mes",
-	"retour.stats.mode.week": "Semana",
-	"retour.stats.mode.day": "Día"
+	"retour.stats.mode.all": "Todo"
 }

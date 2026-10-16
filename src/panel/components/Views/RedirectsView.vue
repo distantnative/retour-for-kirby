@@ -32,7 +32,7 @@ export default {
 					width: "7/20",
 				},
 				status: {
-					label: this.$t("retour.redirects.status"),
+					label: this.$t("status"),
 					type: "status",
 					width: "1/10",
 				},
