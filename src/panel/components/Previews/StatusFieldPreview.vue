@@ -27,11 +27,8 @@ export default {
 
 <style>
 .k-status-field-preview {
-	--code-inline-color-back: var(--color-blue-200);
-	--code-inline-color-border: var(--color-blue-400);
-
 	display: flex;
 	gap: var(--spacing-2);
-	padding-inline: var(--spacing-2);
+	padding-inline: var(--table-cell-padding);
 }
 </style>

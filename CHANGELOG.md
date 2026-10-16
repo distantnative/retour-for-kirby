@@ -63,6 +63,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Fixed the links of some logged paths and referrers in the tables
 - Screen readers announce the priority icon in the redirects table
 - Hit counts are formatted in the Panel's language, and the tooltip shows the date of the last hit in a readable format
+- Table cells line up with their column headers, and the dimmed dashes and icons in the tables are readable in light and dark mode
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
