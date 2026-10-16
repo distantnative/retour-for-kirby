@@ -2,9 +2,13 @@
 
 ## Requirements
 
-Retour 5 requires Kirby 4 or 5.
+| Kirby | Retour |
+| ----- | ------ |
+| 6     | 6 (requires PHP 8.3+) |
+| 4, 5  | [<Badge type="info" text="v5.7.0" />](https://github.com/distantnative/retour-for-kirby/releases/tag/5.7.0)\* |
+| 3     | [<Badge type="info" text="v4.5.0" />](https://github.com/distantnative/retour-for-kirby/releases/tag/4.5.0)\* |
 
-For Kirby 3, you can use [<Badge type="info" text="v4.4.2" />](https://github.com/distantnative/retour-for-kirby/releases/tag/4.4.2) (although without further support or development).
+\* without further support or development
 
 ## Install
 
