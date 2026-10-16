@@ -23,6 +23,5 @@
 		"typescript-eslint": "^8.71.2",
 		"vitest": "^5.0.4",
 		"vue-tsc": "^3.3.13"
-	},
-	"browserslist": "> 2%"
+	}
 }
