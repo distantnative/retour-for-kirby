@@ -50,6 +50,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Table columns can be sorted with the keyboard
 - Only clickable table cells show a pointer cursor
 - Without logging, the redirects table no longer shows an empty hits column
+- Clicking a month in the timeline of a longer timespan zooms into the whole month instead of its first day, and the current month is highlighted
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
