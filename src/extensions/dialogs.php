@@ -2,6 +2,7 @@
 
 use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Panel\Ui\Dialog\RemoveDialog;
+use Kirby\Retour\Panel\Id;
 use Kirby\Retour\Panel\TimespanDialog;
 use Kirby\Retour\Retour;
 
@@ -29,7 +30,7 @@ return [
 		'load'    => fn () => new RemoveDialog(
 			text: t('field.structure.delete.confirm')
 		),
-		'submit' => fn (string $path) => Retour::instance()->log()->remove(urldecode($path))
+		'submit' => fn (string $path) => Retour::instance()->log()->remove(Id::toPath($path))
 	],
 
 	'retour.failures.flush' => [

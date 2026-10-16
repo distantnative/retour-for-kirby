@@ -11,7 +11,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		protected string $path
 	) {
 		parent::__construct();
-		$this->path = urldecode($path);
+		$this->path = Id::toPath($path);
 	}
 
 	public function submit(): bool|array
@@ -42,7 +42,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 	protected function value(): array
 	{
 		return parent::value() + [
-			'from' => str_replace("\x1D", '/', $this->path)
+			'from' => $this->path
 		];
 	}
 }

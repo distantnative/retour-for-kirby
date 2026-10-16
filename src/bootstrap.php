@@ -13,6 +13,7 @@ load([
 	'Kirby\\Retour\\Commands\\Indices' => $dir . '/Commands/Indices.php',
 	'Kirby\\Retour\\Commands\\Seed'    => $dir . '/Commands/Seed.php',
 
+	'Kirby\\Retour\\Panel\\Id'             => $dir . '/Panel/Id.php',
 	'Kirby\\Retour\\Panel\\TimespanDialog' => $dir . '/Panel/TimespanDialog.php',
 	'Kirby\\Retour\\Panel\\RedirectCreateDrawer' => $dir . '/Panel/RedirectCreateDrawer.php',
 	'Kirby\\Retour\\Panel\\RedirectEditDrawer' => $dir . '/Panel/RedirectEditDrawer.php',
