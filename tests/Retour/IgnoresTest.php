@@ -3,6 +3,7 @@
 namespace Kirby\Retour;
 
 use Kirby\Data\Data;
+use Kirby\Exception\InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Ignores::class)]
@@ -26,6 +27,21 @@ class IgnoresTest extends TestCase
 
 		// no duplicates
 		$this->assertSame(['foo', 'bar/(:all)'], $ignores->add('foo'));
+	}
+
+	public function testAddInvalid(): void
+	{
+		$ignores = $this->ignores();
+		$ignores->add('foo');
+
+		try {
+			$ignores->add('foo(');
+			$this->fail('Invalid patterns must be rejected');
+		} catch (InvalidArgumentException $e) {
+			$this->assertSame('Invalid pattern: foo(', $e->getMessage());
+			$this->assertSame(['foo'], $ignores->custom());
+			$this->assertSame(['foo'], Data::read($this->tmp . '/retour.yml')['ignore']);
+		}
 	}
 
 	public function testAll(): void
@@ -111,6 +127,56 @@ class IgnoresTest extends TestCase
 		$this->assertFalse($ignores->matches('foo', []));
 	}
 
+	public function testMatchesAlternatives(): void
+	{
+		$ignores = $this->ignores();
+
+		$this->assertTrue($ignores->matches('foo', ['foo|bar']));
+		$this->assertTrue($ignores->matches('bar', ['foo|bar']));
+		$this->assertFalse($ignores->matches('foobaz', ['foo|bar']));
+		$this->assertFalse($ignores->matches('xyzbar', ['foo|bar']));
+	}
+
+	public function testMatchesCaseInsensitive(): void
+	{
+		$ignores = $this->ignores();
+		$this->assertTrue($ignores->matches('WP-Login.php', Ignores::COMMON));
+	}
+
+	public function testMatchesInvalidEntries(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignore' => ['wp-(:all)', null, '', ['foo']]
+		]);
+
+		$this->assertTrue($ignores->matches('wp-admin'));
+		$this->assertFalse($ignores->matches('foo'));
+		$this->assertFalse($ignores->matches(''));
+	}
+
+	public function testMatchesInvalidPattern(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignore' => ['foo(', 'bar']
+		]);
+
+		$this->assertFalse($ignores->matches('foo('));
+		$this->assertFalse($ignores->matches('foo'));
+		$this->assertTrue($ignores->matches('bar'));
+	}
+
+	public function testMatchesOptionalPlaceholder(): void
+	{
+		$ignores  = $this->ignores();
+		$patterns = ['foo/(:any?)', 'bar'];
+
+		$this->assertTrue($ignores->matches('foo', $patterns));
+		$this->assertTrue($ignores->matches('foo/baz', $patterns));
+		$this->assertTrue($ignores->matches('bar', $patterns));
+		$this->assertFalse($ignores->matches('foobar', $patterns));
+		$this->assertFalse($ignores->matches('bar/baz', $patterns));
+	}
+
 	public function testSet(): void
 	{
 		$ignores = $this->ignores();
@@ -119,5 +185,15 @@ class IgnoresTest extends TestCase
 		$this->assertSame(['bar', 'baz'], $ignores->set(['bar', '', ' baz ', 'bar']));
 		$this->assertSame(['bar', 'baz'], $ignores->custom());
 		$this->assertSame([], $ignores->set([]));
+	}
+
+	public function testSetInvalid(): void
+	{
+		$ignores = $this->ignores();
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid pattern: (:any)/[');
+
+		$ignores->set(['bar', '(:any)/[']);
 	}
 }
