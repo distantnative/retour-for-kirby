@@ -5,11 +5,10 @@ namespace Kirby\Retour;
 use Closure;
 use Kirby\Database\Database;
 use Kirby\Exception\InvalidArgumentException;
-use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
-use PDO;
+use Kirby\Retour\Log\Migrations;
+use Kirby\Retour\Log\MigrationsTest;
 use PHPUnit\Framework\Attributes\CoversClass;
-use ReflectionClassConstant;
 
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
@@ -27,27 +26,6 @@ class LogTest extends TestCase
 		}
 
 		$connection->commit();
-	}
-
-	protected static function latest(): int
-	{
-		return max(array_keys((new ReflectionClassConstant(Log::class, 'MIGRATIONS'))->getValue()));
-	}
-
-	/**
-	 * Creates a log database like earlier versions
-	 * of the plugin did (full and unused indices)
-	 */
-	public static function legacy(string $file): void
-	{
-		Dir::make(dirname($file));
-
-		$connection = new PDO('sqlite:' . $file);
-		$connection->exec('CREATE TABLE records (id integer PRIMARY KEY AUTOINCREMENT NOT NULL, date text NOT NULL, path text NOT NULL, referrer text, redirect text, wasResolved integer)');
-		$connection->exec('CREATE INDEX idx_redirect_date ON records (redirect, date)');
-		$connection->exec('CREATE INDEX idx_path ON records (path)');
-		$connection->exec('CREATE INDEX idx_fails ON records (redirect, wasResolved)');
-		$connection->exec("INSERT INTO records (date, path, redirect) VALUES ('2025-01-01 10:00:00', 'foo', NULL), ('2025-01-02 10:00:00', 'bar', 'baz')");
 	}
 
 	protected function log(
@@ -75,22 +53,6 @@ class LogTest extends TestCase
 		return [
 			'total' => (int)$connection->query('PRAGMA page_count')->fetchColumn(),
 			'free'  => (int)$connection->query('PRAGMA freelist_count')->fetchColumn()
-		];
-	}
-
-	/**
-	 * Returns the schema version, indices
-	 * and index statistics of the log
-	 */
-	protected function schema(Log $log): array
-	{
-		$connection = $log->database()->connection();
-		$analyzed   = $connection->query("SELECT name FROM sqlite_master WHERE name = 'sqlite_stat1'")->fetchColumn();
-
-		return [
-			'version'    => (int)$connection->query('PRAGMA user_version')->fetchColumn(),
-			'indices'    => $connection->query("SELECT name, sql FROM sqlite_master WHERE type = 'index' ORDER BY name")->fetchAll(PDO::FETCH_KEY_PAIR),
-			'statistics' => $analyzed === false ? [] : $connection->query("SELECT idx, stat FROM sqlite_stat1 WHERE tbl = 'records' ORDER BY idx")->fetchAll(PDO::FETCH_KEY_PAIR)
 		];
 	}
 
@@ -285,67 +247,14 @@ class LogTest extends TestCase
 		);
 	}
 
-	public function testMigrateLegacyLog(): void
+	public function testMigrate(): void
 	{
-		static::legacy($file = $this->tmp . '/test.sqlite');
+		MigrationsTest::legacy($file = $this->tmp . '/test.sqlite');
 
-		// existing logs are migrated when opening the Panel view
 		$log = $this->log($file);
-		$this->assertSame(0, $this->schema($log)['version']);
+		$this->assertSame(0, (new Migrations($log))->version());
 		$this->assertTrue($log->migrate());
-
-		$schema = $this->schema($log);
-		$this->assertSame(static::latest(), $schema['version']);
-		$this->assertSame(['idx_date', 'idx_redirect_date'], array_keys($schema['indices']));
-		$this->assertStringEndsWith('WHERE redirect IS NOT NULL', $schema['indices']['idx_redirect_date']);
-		$this->assertSame(['idx_date' => '1000000 1', 'idx_redirect_date' => '400000 8000 1'], $schema['statistics']);
-
-		// records are kept
-		$this->assertSame(['bar', 'foo'], $log->table()->select('path')->order('path ASC')->fetch('array')->all()->pluck('path'));
-
-		// nothing left to do
-		$this->assertTrue($log->migrate());
-		$this->assertSame($schema, $this->schema($log));
-	}
-
-	public function testMigrateNewLog(): void
-	{
-		$log    = $this->log();
-		$schema = $this->schema($log);
-
-		$this->assertSame(static::latest(), $schema['version']);
-		$this->assertSame(['idx_date', 'idx_redirect_date'], array_keys($schema['indices']));
-		$this->assertStringEndsWith('WHERE redirect IS NOT NULL', $schema['indices']['idx_redirect_date']);
-		$this->assertSame(['idx_date' => '1000000 1', 'idx_redirect_date' => '400000 8000 1'], $schema['statistics']);
-	}
-
-	public function testMigrateRollsBackFailedMigration(): void
-	{
-		$retour = Retour::instance($this->app([
-			'distantnative.retour.database' => $this->tmp . '/test.sqlite'
-		]));
-
-		$log = new class ($retour) extends Log {
-			protected const MIGRATIONS = parent::MIGRATIONS + [
-				99 => [
-					'CREATE INDEX idx_test ON records (path)',
-					'NOT VALID SQL'
-				]
-			];
-		};
-
-		// the earlier migrations are applied, the failed one rolled back
-		$schema = $this->schema($log);
-		$this->assertSame(static::latest(), $schema['version']);
-		$this->assertArrayNotHasKey('idx_test', $schema['indices']);
-		$this->assertFalse($log->migrate());
-	}
-
-	public function testMigrations(): void
-	{
-		// versions must be consecutive, starting with 1
-		$versions = array_keys((new ReflectionClassConstant(Log::class, 'MIGRATIONS'))->getValue());
-		$this->assertSame(range(1, count($versions)), $versions);
+		$this->assertSame([], (new Migrations($log))->pending());
 	}
 
 	public function testPurge(): void
