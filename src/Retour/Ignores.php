@@ -3,6 +3,7 @@
 namespace Kirby\Retour;
 
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Toolkit\A;
 
 /**
  * Paths that should not be logged as failures,
@@ -48,7 +49,7 @@ class Ignores
 	 */
 	public function config(): array
 	{
-		return $this->retour->option('ignore');
+		return A::wrap($this->retour->option('ignore'));
 	}
 
 	/**
