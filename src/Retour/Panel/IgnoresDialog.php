@@ -92,7 +92,7 @@ class IgnoresDialog extends DialogController
 		$patterns = $ignores->set($patterns);
 
 		// remove failures for newly added patterns
-		$retour->log()->removeFailures(
+		$retour->log()?->removeFailures(
 			fn (string $path) => $ignores->matches($path, $patterns)
 		);
 

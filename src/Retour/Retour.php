@@ -12,12 +12,7 @@ class Retour
 	protected Config $config;
 	protected Ignores|null $ignores = null;
 	protected App $kirby;
-
-	/**
-	 * Instance for accessing the log database
-	 * or a mockup for when this feature is disabled
-	 */
-	protected Log|LogDisabled|null $log = null;
+	protected Log|null $log = null;
 	protected Redirects $redirects;
 
 	protected static self|null $instance = null;
@@ -84,13 +79,12 @@ class Retour
 	}
 
 	/**
-	 * Returns a log instance
+	 * Returns the log or `null` if logging is disabled
 	 */
-	public function log(): Log|LogDisabled
+	public function log(): Log|null
 	{
-		// log feature disabled, return dummy class
 		if ($this->hasLog() === false) {
-			return $this->log ??= new LogDisabled();
+			return null;
 		}
 
 		return $this->log ??= new Log($this);

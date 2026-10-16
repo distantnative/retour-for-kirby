@@ -7,7 +7,6 @@ use Kirby\Database\Database;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
@@ -87,15 +86,6 @@ class LogTest extends TestCase
 	{
 		$log = $this->log();
 		$this->assertInstanceOf(Database::class, $log->database());
-	}
-
-	#[DoesNotPerformAssertions]
-	public function testDisabled(): void
-	{
-		$log = new LogDisabled();
-		$log->add(['path' => 'foo']);
-		$log->first();
-		$log->redirect('foo', '2020-01-01', '2020-31-12');
 	}
 
 	public function testFails(): void

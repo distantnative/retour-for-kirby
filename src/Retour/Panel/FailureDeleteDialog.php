@@ -27,6 +27,6 @@ class FailureDeleteDialog extends DialogController
 
 	public function submit(): bool
 	{
-		return Retour::instance()->log()->remove($this->path) === true;
+		return Retour::instance()->log()?->remove($this->path) === true;
 	}
 }

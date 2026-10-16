@@ -5,7 +5,6 @@ $dir = __DIR__ . '/Retour';
 load([
 	'Kirby\\Retour\\Config'      => $dir . '/Config.php',
 	'Kirby\\Retour\\Ignores'     => $dir . '/Ignores.php',
-	'Kirby\\Retour\\LogDisabled' => $dir . '/LogDisabled.php',
 	'Kirby\\Retour\\Log'         => $dir . '/Log.php',
 	'Kirby\\Retour\\Pattern'     => $dir . '/Pattern.php',
 	'Kirby\\Retour\\Redirect'    => $dir . '/Redirect.php',

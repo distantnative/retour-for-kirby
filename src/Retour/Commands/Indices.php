@@ -14,15 +14,14 @@ class Indices extends Command
 {
 	public static function command(CLI $cli): void
 	{
-		$kirby  = $cli->kirby();
-		$retour = Retour::instance($kirby);
+		$log = Retour::instance($cli->kirby())->log();
 
-		if ($retour->hasLog() === false) {
+		if ($log === null) {
 			$cli->out('Logging is disabled, no database to update.');
 			return;
 		}
 
-		$db = $retour->log()->database();
+		$db = $log->database();
 		$cli->out('Adding indices to ' . $db->name() . ' ...');
 
 		$indices = [

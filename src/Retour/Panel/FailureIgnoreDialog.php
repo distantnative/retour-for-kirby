@@ -56,7 +56,7 @@ class FailureIgnoreDialog extends DialogController
 		$ignores = $retour->ignores();
 		$ignores->add($pattern);
 
-		$retour->log()->removeFailures(
+		$retour->log()?->removeFailures(
 			fn (string $path) => $ignores->matches($path, [$pattern])
 		);
 

@@ -72,12 +72,14 @@ class View extends ViewController
 			]
 		];
 
+		$log = $retour->log();
+
 		// if log feature is supported...
-		if ($retour->hasLog() === true) {
+		if ($log !== null) {
 			// run garbage collection with a chance of 10%;
 			if (mt_rand(1, 10000) <= 0.1 * 10000) {
 				// purge log entries that should be automatically deleted
-				$retour->log()->purge();
+				$log->purge();
 			}
 
 			// add additional tabs
@@ -89,13 +91,13 @@ class View extends ViewController
 			];
 
 			// get statistics data for current timeframe
-			$props['stats'] = $retour->log()->stats($unit, $from, $to);
+			$props['stats'] = $log->stats($unit, $from, $to);
 		}
 
 		// add tab-specific data, e.g. for table rows
 		$props['data'] = match ($this->tab) {
 			'redirects' => $retour->redirects()->toData($from, $to),
-			'failures'  => $retour->log()->fails($from, $to) ?? [],
+			'failures'  => $log?->fails($from, $to) ?? [],
 			default     => []
 		};
 

@@ -25,8 +25,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 
 		$redirects->save();
 
-		$log = Retour::instance()->log();
-		$log->resolve($this->path);
+		Retour::instance()->log()?->resolve($this->path);
 
 		return [
 			'redirect' => 'retour/redirects'

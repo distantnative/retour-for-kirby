@@ -41,8 +41,9 @@ class Seed extends Command
 	public static function command(CLI $cli): void
 	{
 		$retour = Retour::instance($cli->kirby());
+		$log    = $retour->log();
 
-		if ($retour->hasLog() === false) {
+		if ($log === null) {
 			$cli->out('Logging is disabled, no database to seed.');
 			return;
 		}
@@ -64,7 +65,6 @@ class Seed extends Command
 			$random->pickArrayKeys($failures, intdiv(count($failures), 5))
 		));
 
-		$log = $retour->log();
 		$log->flush('all');
 
 		$db     = $log->database()->connection();
