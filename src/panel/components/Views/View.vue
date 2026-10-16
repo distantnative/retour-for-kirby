@@ -25,8 +25,8 @@
 export const props = {
 	props: {
 		buttons: Array,
-		data: [Object, Array],
-		stats: [Boolean, Array],
+		data: Array,
+		stats: Array,
 		tab: String,
 		tabs: Array,
 		timespan: Object,
