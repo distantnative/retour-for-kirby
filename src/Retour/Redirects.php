@@ -188,7 +188,7 @@ class Redirects extends Collection
 		$from = $redirect->from();
 
 		if (
-			Pattern::hasPlaceholder($from) === false &&
+			Pattern::hasPlaceholder($from) === true &&
 			Pattern::isValid($from) === false
 		) {
 			throw new InvalidArgumentException(

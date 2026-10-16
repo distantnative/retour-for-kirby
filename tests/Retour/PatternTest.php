@@ -9,12 +9,12 @@ class PatternTest extends TestCase
 {
 	public function testHasPlaceholder(): void
 	{
-		$this->assertTrue(Pattern::hasPlaceholder('foo/bar'));
-		$this->assertTrue(Pattern::hasPlaceholder('*.html'));
-		$this->assertTrue(Pattern::hasPlaceholder('foo)'));
+		$this->assertTrue(Pattern::hasPlaceholder('foo/(:any)'));
+		$this->assertTrue(Pattern::hasPlaceholder('foo('));
 
-		$this->assertFalse(Pattern::hasPlaceholder('foo/(:any)'));
-		$this->assertFalse(Pattern::hasPlaceholder('foo('));
+		$this->assertFalse(Pattern::hasPlaceholder('foo/bar'));
+		$this->assertFalse(Pattern::hasPlaceholder('*.html'));
+		$this->assertFalse(Pattern::hasPlaceholder('foo)'));
 	}
 
 	public function testIsValid(): void
