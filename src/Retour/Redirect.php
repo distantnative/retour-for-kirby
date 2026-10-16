@@ -6,6 +6,7 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Url;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
+use Kirby\Http\Idn;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
@@ -63,6 +64,28 @@ class Redirect extends Obj
 	public function isActive(): bool
 	{
 		return $this->status() !== null;
+	}
+
+	/**
+	 * Encodes an internationalized domain of the URL without
+	 * rebuilding the whole URL like `Response::redirect()` does,
+	 * which would re-encode the query string
+	 */
+	protected static function location(string $url): string
+	{
+		$host = parse_url($url, PHP_URL_HOST);
+
+		if (is_string($host) === false || $host === '') {
+			return $url;
+		}
+
+		$encoded = Idn::encode($host);
+
+		if ($encoded === false || $encoded === $host) {
+			return $url;
+		}
+
+		return substr_replace($url, $encoded, strpos($url, $host), strlen($host));
 	}
 
 	/**
@@ -124,7 +147,10 @@ class Redirect extends Obj
 				$to = static::withQuery($to);
 			}
 
-			return Response::redirect($to, $code);
+			return new Response([
+				'code'    => $code,
+				'headers' => ['Location' => static::location($to)]
+			]);
 		}
 
 		// Set the right response code
