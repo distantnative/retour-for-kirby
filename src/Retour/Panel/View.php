@@ -3,6 +3,7 @@
 namespace Kirby\Retour\Panel;
 
 use Kirby\Panel\Controller\ViewController;
+use Kirby\Panel\Panel;
 use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
@@ -23,6 +24,14 @@ class View extends ViewController
 	 */
 	public function load(): ViewComponent
 	{
+		// failures are only available with logging enabled
+		if (
+			$this->tab === 'failures' &&
+			Retour::instance()->hasLog() === false
+		) {
+			Panel::go('retour/redirects');
+		}
+
 		return new ViewComponent(
 			...$this->props(),
 			component: 'k-retour-' . $this->tab . '-view',

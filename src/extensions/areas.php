@@ -15,7 +15,7 @@ return [
 				'action'  => fn () => Panel::go('retour/redirects')
 			],
 			[
-				'pattern' => 'retour/(:any)',
+				'pattern' => 'retour/(redirects|failures)',
 				'action'  => View::class
 			]
 		],
