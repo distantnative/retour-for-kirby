@@ -29,6 +29,7 @@ export function format(unit: string): string {
 export function subunit(unit: string): "day" | "hour" | "month" {
 	const subunits: Record<string, "hour" | "month"> = {
 		day: "hour",
+		months: "month",
 		year: "month",
 	};
 
