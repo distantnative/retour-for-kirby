@@ -14,6 +14,16 @@ use Kirby\Retour\Retour;
  */
 class RedirectCreateDrawer extends DrawerController
 {
+	/**
+	 * Returns the UUID (or ID) of the current user,
+	 * which unlike the email address never changes
+	 */
+	protected function author(): string|null
+	{
+		$user = $this->kirby->user();
+		return $user?->uuid()?->toString() ?? $user?->id();
+	}
+
 	protected function data(): array
 	{
 		return $this->request->get([
@@ -100,7 +110,7 @@ class RedirectCreateDrawer extends DrawerController
 	{
 		$this->redirects()->create([
 			...$this->data(),
-			'creator' => $this->kirby->user()?->email(),
+			'creator' => $this->author(),
 		]);
 
 		return true;
@@ -129,7 +139,7 @@ class RedirectCreateDrawer extends DrawerController
 	protected function value(): array
 	{
 		return [
-			'creator' => $this->user($this->kirby->user()?->id()),
+			'creator' => $this->user($this->author()),
 			'status'  => Retour::instance()->option('status')
 		];
 	}

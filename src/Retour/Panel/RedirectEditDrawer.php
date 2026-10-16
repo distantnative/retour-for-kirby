@@ -67,7 +67,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	{
 		$this->redirects()->update($this->redirect->id(), [
 			...$this->data(),
-			'modifier' => $this->kirby->user()?->email(),
+			'modifier' => $this->author(),
 		]);
 
 		return true;
