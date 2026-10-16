@@ -151,6 +151,21 @@ class LogTest extends TestCase
 		$this->assertSame('old', $remaining['redirect']);
 	}
 
+	public function testIndices(): void
+	{
+		$log     = $this->log();
+		$indices = $log->database()->query(
+			'SELECT name FROM sqlite_master WHERE type = :type ORDER BY name',
+			['type' => 'index'],
+			['fetch' => 'array']
+		);
+
+		$this->assertSame(
+			['idx_date', 'idx_redirect_date'],
+			array_column($indices->toArray(), 'name')
+		);
+	}
+
 	public function testPurge(): void
 	{
 		$file = __DIR__ . '/tmp/test.sqlite';
