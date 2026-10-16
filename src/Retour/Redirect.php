@@ -5,6 +5,7 @@ namespace Kirby\Retour;
 use Kirby\Cms\Page;
 use Kirby\Cms\Url;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Idn;
 use Kirby\Http\Response;
@@ -101,8 +102,9 @@ class Redirect extends Obj
 	 * Resolves the redirect action for the router
 	 *
 	 * @param array<int, string> $placeholders
+	 * @return Page|Response|null `null` if the target page or file doesn't exist anymore
 	 */
-	public function resolve(array $placeholders): Page|Response
+	public function resolve(array $placeholders): Page|Response|null
 	{
 		$retour    = Retour::instance();
 		$kirby     = $retour->kirby();
@@ -122,12 +124,6 @@ class Redirect extends Obj
 			$page = null;
 		}
 
-		// Add log entry
-		$retour->log()->add([
-			'path'     => Url::path(),
-			'redirect' => $this->from()
-		]);
-
 		// Redirects
 		if ($code >= 300 && $code < 400) {
 			if ($page) {
@@ -138,31 +134,40 @@ class Redirect extends Obj
 					$to .= '.' . $extension;
 				}
 			} else {
-				// resolve paths (and UUIDs) against the site URL,
-				// e.g. for sites in a subfolder; absolute URLs are kept
-				$to = Url::to($to);
+				try {
+					// resolve paths (and UUIDs) against the site URL,
+					// e.g. for sites in a subfolder; absolute URLs are kept
+					$to = Url::to($to);
+				} catch (NotFoundException) {
+					// the target page or file has been deleted,
+					// so the request is handled as failure
+					return null;
+				}
 			}
 
 			if ($retour->option('preserveQuery', false) === true) {
 				$to = static::withQuery($to);
 			}
 
-			return new Response([
+			$response = new Response([
 				'code'    => $code,
 				'headers' => ['Location' => static::location($to)]
 			]);
+		} else {
+			// Set the right response code
+			$kirby->response()->code($code);
+
+			// Return page for other codes or
+			// deliver HTTP status code without body
+			$response = $page ?? new Response('', 'text/html', $code);
 		}
 
-		// Set the right response code
-		$kirby->response()->code($code);
+		$retour->log()->add([
+			'path'     => Url::path(),
+			'redirect' => $this->from()
+		]);
 
-		// Return page for other codes
-		if ($page) {
-			return $page;
-		}
-
-		// Deliver HTTP status code without body
-		return new Response('', 'text/html', $code);
+		return $response;
 	}
 
 	/**
