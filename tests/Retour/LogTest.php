@@ -29,13 +29,15 @@ class LogTest extends TestCase
 	public function testAdd(): void
 	{
 		$log = $this->log();
-		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
 
-		$log->add([
+		// a single statement
+		$this->assertTrue($log->add([
 			'date'     => $date = '2020-01-01 07:30:00',
 			'path'     => $path = 'foo',
 			'redirect' => $redirect = 'foo'
-		]);
+		]));
+		$this->assertCount(1, $log->database()->trace());
+
 		$log->add([
 			'date'     => '2020-01-31 16:30:00',
 			'path'     => 'homer/simpson',

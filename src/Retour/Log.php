@@ -47,7 +47,10 @@ class Log
 		]);
 	}
 
-	public function add(array $props): int|false
+	/**
+	 * Returns whether the record has been stored
+	 */
+	public function add(array $props): bool
 	{
 		$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
 
@@ -55,12 +58,17 @@ class Log
 			$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
 		}
 
-		return $this->table()->insert([
-			'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
-			'path'     => Str::substr($props['path'], 0, static::MAX_LENGTH),
-			'referrer' => $referrer,
-			'redirect' => $props['redirect'] ?? null
-		]);
+		// unlike the query builder, a plain statement doesn't need
+		// to look up the table schema first (on every request)
+		return $this->database->execute(
+			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
+			[
+				'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
+				'path'     => Str::substr($props['path'], 0, static::MAX_LENGTH),
+				'referrer' => $referrer,
+				'redirect' => $props['redirect'] ?? null
+			]
+		);
 	}
 
 	/**
