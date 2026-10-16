@@ -1,6 +1,6 @@
 <template>
-	<div class="k-priority-field-preview">
-		<k-icon v-if="value" type="bolt" :title="column.label" />
+	<div :title="value ? column.label : null" class="k-priority-field-preview">
+		<k-icon v-if="value" :alt="column.label" type="bolt" />
 		<p v-else>–</p>
 	</div>
 </template>
