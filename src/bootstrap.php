@@ -7,6 +7,7 @@ load([
 	'Kirby\\Retour\\Ignores'     => $dir . '/Ignores.php',
 	'Kirby\\Retour\\LogDisabled' => $dir . '/LogDisabled.php',
 	'Kirby\\Retour\\Log'         => $dir . '/Log.php',
+	'Kirby\\Retour\\Pattern'     => $dir . '/Pattern.php',
 	'Kirby\\Retour\\Redirect'    => $dir . '/Redirect.php',
 	'Kirby\\Retour\\Redirects'   => $dir . '/Redirects.php',
 	'Kirby\\Retour\\Timespan'    => $dir . '/Timespan.php',

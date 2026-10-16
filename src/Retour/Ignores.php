@@ -2,7 +2,7 @@
 
 namespace Kirby\Retour;
 
-use Kirby\Http\Route;
+use Kirby\Exception\InvalidArgumentException;
 
 /**
  * Paths that should not be logged as failures,
@@ -70,24 +70,39 @@ class Ignores
 	{
 		$patterns ??= $this->all();
 
-		if ($patterns === []) {
-			return false;
+		foreach ($patterns as $pattern) {
+			// skip invalid entries (e.g. from the `ignore` option
+			// or empty list items in the config file)
+			if (is_string($pattern) === false || $pattern === '') {
+				continue;
+			}
+
+			if (Pattern::matches($pattern, $path, 'iu') === true) {
+				return true;
+			}
 		}
 
-		// temporary route for regex matching
-		$route   = new Route($path, 'GET', fn () => null);
-		$pattern = $route->regex(implode('|', $patterns));
-		return preg_match('!^(' . $pattern . ')$!i', $path) === 1;
+		return false;
 	}
 
 	/**
 	 * Replaces the patterns managed in the Panel
+	 *
+	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
 	public function set(array $patterns): array
 	{
 		$patterns = array_map(trim(...), $patterns);
 		$patterns = array_filter($patterns, fn ($pattern) => $pattern !== '');
 		$patterns = array_values(array_unique($patterns));
+
+		foreach ($patterns as $pattern) {
+			if (Pattern::isValid($pattern) === false) {
+				throw new InvalidArgumentException(
+					message: 'Invalid pattern: ' . $pattern
+				);
+			}
+		}
 
 		$this->retour->config()->write('ignore', $patterns);
 
