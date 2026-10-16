@@ -18,4 +18,4 @@ The tab and all stats are only shown when the [`logs` option](/options#config) i
 
 ## The Panel view is slow
 
-With a large log, loading the stats can take a while. If your log database was created with a Retour version before 5.7, run `kirby retour:indices` once to update its indices. To keep the log small in the future, [clear it](/failures#clearing-logs) from time to time or set the [`deleteAfter` option](/options#config).
+With a large log, loading the stats can take a while. After updating from an earlier version, the first visit also updates the log database once. To keep the log small in the future, [clear it](/failures#clearing-logs) from time to time or set the [`deleteAfter` option](/options#config).
