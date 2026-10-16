@@ -4,18 +4,19 @@
 		:class="['k-retour-collection-view', $options.class]"
 	>
 		<template #buttons>
-			<k-search-input
+			<k-input
 				v-if="searching"
 				:aria-label="$t('filter')"
 				:autofocus="true"
 				:placeholder="$t('filter') + ' …'"
 				:value="q"
-				class="k-input"
+				class="k-retour-search"
+				type="search"
 				@input="
 					q = $event;
 					pagination.page = 1;
 				"
-				@keydown.esc="toggleSearch(true)"
+				@keydown.esc.stop="toggleSearch(true)"
 			/>
 
 			<k-button
@@ -219,10 +220,9 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 }
-.k-retour-collection-view .k-search-input {
-	min-height: auto;
-	height: var(--height-sm);
+.k-retour-search.k-input {
+	--input-color-back: var(--button-filled-color-back);
 	--input-color-border: transparent;
-	--input-color-back: light-dark(var(--color-gray-300), var(--color-gray-950));
+	--input-height: var(--height-sm);
 }
 </style>
