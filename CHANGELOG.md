@@ -60,6 +60,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Screen readers skip the timeline chart, which they used to read as a table of axis numbers and empty cells
 - On timespans with more than 31 days or months, the timeline labels sit under their columns again
 - The y-axis of the timeline is formatted in the Panel's language (e.g. "1,5 Mio." in German)
+- Fixed the links of some logged paths and referrers in the tables
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
