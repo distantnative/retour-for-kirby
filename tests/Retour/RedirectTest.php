@@ -21,11 +21,24 @@ class RedirectTest extends TestCase
 		$this->assertSame('404', $redirect->id());
 	}
 
+	public function testConstructPathZero(): void
+	{
+		$this->assertSame('0', (new Redirect(['from' => '0']))->from());
+		$this->assertSame('0', (new Redirect(['from' => 0]))->from());
+	}
+
 	public function testConstructValidation(): void
 	{
 		$this->expectExceptionMessage('Route requires path');
 		$this->expectException(InvalidArgumentException::class);
 		new Redirect([]);
+	}
+
+	public function testConstructValidationEmptyPath(): void
+	{
+		$this->expectExceptionMessage('Route requires path');
+		$this->expectException(InvalidArgumentException::class);
+		new Redirect(['from' => '']);
 	}
 
 	public function testId(): void

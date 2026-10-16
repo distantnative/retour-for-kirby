@@ -26,7 +26,7 @@ class Redirect
 
 	public function __construct(array $data)
 	{
-		if (empty($data['from'] ?? null) === true) {
+		if (in_array($data['from'] ?? null, [null, ''], true) === true) {
 			throw new InvalidArgumentException(
 				message: 'Route requires path: ' . json_encode($data)
 			);
