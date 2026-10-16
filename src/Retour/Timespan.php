@@ -2,7 +2,9 @@
 
 namespace Kirby\Retour;
 
+use DateTimeImmutable;
 use Kirby\Cms\App;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Date;
 use Kirby\Toolkit\I18n;
 
@@ -29,6 +31,26 @@ class Timespan
 			'isAll'     => static::isAll($from, $to, $first, $last),
 			'isCurrent' => static::isCurrent($from, $to, $today),
 		];
+	}
+
+	/**
+	 * Returns the date if it is a valid `YYYY-MM-DD` string
+	 */
+	protected static function date(mixed $date): string|null
+	{
+		if (is_string($date) === false) {
+			return null;
+		}
+
+		$parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $date);
+
+		// the round trip rejects overflowing dates (e.g. Feb 30)
+		// as well as years with more or less than four digits
+		if ($parsed === false || $parsed->format('Y-m-d') !== $date) {
+			return null;
+		}
+
+		return $date;
 	}
 
 	protected static function hasNext(
@@ -154,6 +176,33 @@ class Timespan
 		return I18n::translate('months.' . $month);
 	}
 
+	/**
+	 * Returns the timespan with valid dates (and `to` not
+	 * before `from`) or `null` if any of the dates is invalid
+	 */
+	protected static function normalize(mixed $data): array|null
+	{
+		if (is_array($data) === false) {
+			return null;
+		}
+
+		$from = static::date($data['from'] ?? null);
+		$to   = static::date($data['to'] ?? null);
+
+		if ($from === null || $to === null) {
+			return null;
+		}
+
+		if ($to < $from) {
+			$to = $from;
+		}
+
+		return [
+			'from' => $from,
+			'to'   => $to
+		];
+	}
+
 	public static function props(): array
 	{
 		$data = static::selection();
@@ -172,31 +221,36 @@ class Timespan
 
 	public static function selection(): array
 	{
-		$data = static::query();
+		$query = static::normalize(static::query());
 
-		if ($data['from'] !== null && $data['to']  !== null) {
-			// get timespan from query parameters
-			static::set($data);
-
-		} else {
-			// otherwise try to get from session
-			$data = App::instance()->session()->get('retour');
+		// get timespan from valid query parameters
+		if ($query !== null) {
+			return static::set($query);
 		}
 
-		// if no data exists, use current month
-		if ($data === null) {
-			$data = [
-				'from' => date('Y-m-01'),
-				'to'   => date('Y-m-t')
-			];
-		}
+		// otherwise try to get from session
+		$session = App::instance()->session()->get('retour');
 
-		return $data;
+		// if no valid data exists, use current month
+		return static::normalize($session) ?? [
+			'from' => date('Y-m-01'),
+			'to'   => date('Y-m-t')
+		];
 	}
 
-	public static function set(array $data): void
+	/**
+	 * Stores the timespan in the session
+	 *
+	 * @throws InvalidArgumentException If a date is not a valid `YYYY-MM-DD` string
+	 */
+	public static function set(array $data): array
 	{
+		$data = static::normalize($data) ?? throw new InvalidArgumentException(
+			message: 'The timespan requires valid dates in the format YYYY-MM-DD'
+		);
+
 		App::instance()->session()->set('retour', $data);
+		return $data;
 	}
 
 	/**

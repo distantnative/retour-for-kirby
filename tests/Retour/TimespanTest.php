@@ -2,8 +2,11 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Cms\App;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Date;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionMethod;
 
 #[CoversClass(Timespan::class)]
@@ -164,6 +167,103 @@ class TimespanTest extends TestCase
 			'to'   => '2023-03-15',
 			'unit' => 'months'
 		]));
+	}
+
+	public function testSelection(): void
+	{
+		$this->kirby->clone([
+			'request' => [
+				'query' => [
+					'from' => '2024-01-01',
+					'to'   => '2024-01-31'
+				]
+			]
+		]);
+
+		$expected = ['from' => '2024-01-01', 'to' => '2024-01-31'];
+		$this->assertSame($expected, Timespan::selection());
+		$this->assertSame($expected, App::instance()->session()->get('retour'));
+	}
+
+	public function testSelectionDefault(): void
+	{
+		$this->assertSame([
+			'from' => date('Y-m-01'),
+			'to'   => date('Y-m-t')
+		], Timespan::selection());
+	}
+
+	public function testSelectionIgnoresInvalidQuery(): void
+	{
+		$app = $this->kirby->clone([
+			'request' => [
+				'query' => [
+					'from' => 'x',
+					'to'   => '2024-01-31'
+				]
+			]
+		]);
+
+		$stored = ['from' => '2023-05-01', 'to' => '2023-05-31'];
+		$app->session()->set('retour', $stored);
+
+		$this->assertSame($stored, Timespan::selection());
+		$this->assertSame($stored, $app->session()->get('retour'));
+	}
+
+	public function testSelectionIgnoresInvalidSession(): void
+	{
+		$this->kirby->session()->set('retour', [
+			'from' => '-200000-01-01',
+			'to'   => '2024-01-31'
+		]);
+
+		$this->assertSame([
+			'from' => date('Y-m-01'),
+			'to'   => date('Y-m-t')
+		], Timespan::selection());
+	}
+
+	public function testSet(): void
+	{
+		$data = Timespan::set(['from' => '2024-02-01', 'to' => '2024-02-29']);
+		$this->assertSame(['from' => '2024-02-01', 'to' => '2024-02-29'], $data);
+		$this->assertSame($data, $this->kirby->session()->get('retour'));
+
+		// `to` before `from`
+		$data = Timespan::set(['from' => '2024-02-10', 'to' => '2024-02-01']);
+		$this->assertSame(['from' => '2024-02-10', 'to' => '2024-02-10'], $data);
+		$this->assertSame($data, $this->kirby->session()->get('retour'));
+	}
+
+	public static function invalidProvider(): array
+	{
+		return [
+			'strings'        => [['from' => 'x', 'to' => 'y']],
+			'arrays'         => [['from' => ['2024-01-01'], 'to' => '2024-01-31']],
+			'missing'        => [['from' => '2024-01-01']],
+			'null'           => [['from' => null, 'to' => '2024-01-31']],
+			'negative year'  => [['from' => '-200000-01-01', 'to' => '2024-01-31']],
+			'five-digit year' => [['from' => '2024-01-01', 'to' => '20000-01-01']],
+			'two-digit year' => [['from' => '24-01-01', 'to' => '2024-01-31']],
+			'overflow'       => [['from' => '2024-02-30', 'to' => '2024-03-31']],
+			'no padding'     => [['from' => '2024-1-1', 'to' => '2024-01-31']],
+			'with time'      => [['from' => '2024-01-01 00:00:00', 'to' => '2024-01-31']],
+		];
+	}
+
+	#[DataProvider('invalidProvider')]
+	public function testSetInvalid(array $data): void
+	{
+		$stored = ['from' => '2023-05-01', 'to' => '2023-05-31'];
+		$this->kirby->session()->set('retour', $stored);
+
+		try {
+			Timespan::set($data);
+			$this->fail('Invalid dates must be rejected');
+		} catch (InvalidArgumentException) {
+			$this->assertSame($stored, $this->kirby->session()->get('retour'));
+		}
 	}
 
 	public function testUnit(): void

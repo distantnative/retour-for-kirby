@@ -35,5 +35,9 @@ class TestCase extends BaseTestCase
 	{
 		Dir::remove($this->tmp);
 		Retour::reset();
+
+		// the session token is stored in the cookie global,
+		// the next test would try to resume the session
+		unset($_COOKIE['kirby_session']);
 	}
 }
