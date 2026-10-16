@@ -109,7 +109,7 @@ class Redirect extends Obj
 			}
 
 			if ($retour->option('preserveQuery', false) === true) {
-				$to = static::withQuery($to, Url::query());
+				$to = static::withQuery($to);
 			}
 
 			Response::go($to, $code);
@@ -197,11 +197,18 @@ class Redirect extends Obj
 	}
 
 	/**
-	 * Appends a query string to the destination URL,
-	 * merging it with an existing query string if present
+	 * Appends the query string of the current request to the
+	 * destination URL, merging it with an existing query string
+	 * if present. The query string is passed on as sent, as
+	 * re-encoding it would break tracking parameters like
+	 * Google's `_gl=1*abc*_ga*…`
 	 */
-	public static function withQuery(string $to, string $query): string
+	public static function withQuery(string $to): string
 	{
+		$kirby = Retour::instance()->kirby();
+		$uri   = $kirby->environment()->get('REQUEST_URI') ?? '';
+		$query = Str::after($uri, '?');
+
 		if ($query === '') {
 			return $to;
 		}

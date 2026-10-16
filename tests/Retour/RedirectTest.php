@@ -250,23 +250,55 @@ class RedirectTest extends TestCase
 
 	public function testWithQuery(): void
 	{
-		// option off / empty query: target is left untouched
-		$to = Redirect::withQuery('/bar', '');
+		// request without query string: target is left untouched
+		$app = $this->kirby->clone([
+			'server' => [
+				'REQUEST_URI' => '/foo'
+			]
+		]);
+
+		Retour::instance($app);
+
+		$to = Redirect::withQuery('/bar');
 		$this->assertSame('/bar', $to);
 
+		$app = $this->kirby->clone([
+			'server' => [
+				'REQUEST_URI' => '/foo?gclid=abc'
+			]
+		]);
+
+		Retour::instance($app);
+
 		// clean target: query string is appended with `?`
-		$to = Redirect::withQuery('/bar', 'gclid=abc');
+		$to = Redirect::withQuery('/bar');
 		$this->assertSame('/bar?gclid=abc', $to);
 
 		// target with its own query string: merged with `&`
-		$to = Redirect::withQuery('/bar?foo=1', 'gclid=abc');
+		$to = Redirect::withQuery('/bar?foo=1');
 		$this->assertSame('/bar?foo=1&gclid=abc', $to);
 
 		// target with fragment: query string goes before it
-		$to = Redirect::withQuery('/bar#section', 'gclid=abc');
+		$to = Redirect::withQuery('/bar#section');
 		$this->assertSame('/bar?gclid=abc#section', $to);
 
-		$to = Redirect::withQuery('https://example.com/bar?foo=1#section', 'gclid=abc');
+		$to = Redirect::withQuery('https://example.com/bar?foo=1#section');
 		$this->assertSame('https://example.com/bar?foo=1&gclid=abc#section', $to);
+	}
+
+	public function testWithQueryUnchanged(): void
+	{
+		// query string is passed on as sent, not re-encoded
+		$query = '_gl=1*abc*_ga*MTIz&utm.source=x&flag&a%20b=c+d&x[]=1';
+		$app   = $this->kirby->clone([
+			'server' => [
+				'REQUEST_URI' => '/foo?' . $query
+			]
+		]);
+
+		Retour::instance($app);
+
+		$to = Redirect::withQuery('/bar');
+		$this->assertSame('/bar?' . $query, $to);
 	}
 }
