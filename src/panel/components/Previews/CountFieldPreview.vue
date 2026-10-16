@@ -39,16 +39,16 @@ export default {
 
 <style>
 .k-count-field-preview {
+	--icon-color: var(--color-text-dimmed);
+	--icon-size: 14px;
+
 	display: flex;
 	flex-direction: row-reverse;
+	align-items: center;
 	justify-content: space-between;
-	padding-inline: var(--spacing-2);
+	padding-inline: var(--table-cell-padding);
 }
 .k-count-field-preview p {
-	color: var(--color-gray-400);
-}
-.k-count-field-preview .k-icon {
-	--icon-color: var(--color-gray-400);
-	transform: scale(0.8);
+	color: var(--color-text-dimmed);
 }
 </style>

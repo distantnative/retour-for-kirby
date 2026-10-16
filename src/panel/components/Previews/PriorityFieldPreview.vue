@@ -17,13 +17,12 @@ export default {
 
 <style>
 .k-priority-field-preview {
+	--icon-size: 14px;
+
 	display: flex;
 	justify-content: center;
 }
 .k-priority-field-preview p {
-	color: var(--color-gray-400);
-}
-.k-priority-field-preview .k-icon {
-	transform: scale(0.8);
+	color: var(--color-text-dimmed);
 }
 </style>
