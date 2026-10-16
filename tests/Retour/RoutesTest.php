@@ -111,4 +111,35 @@ class RoutesTest extends TestCase
 		$this->assertSame(['fallback' => 1, 'priority' => 1], $fails);
 		$this->assertSame([], $log->redirects('2000-01-01', '2099-12-31'));
 	}
+
+	public function testRenderRedirectsWithStatus200ToMissingPage(): void
+	{
+		Data::write($file = $this->tmp . '/retour.yml', [
+			'redirects' => [
+				['from' => 'priority', 'to' => 'missing', 'status' => 200, 'priority' => true],
+				['from' => 'fallback', 'to' => 'missing', 'status' => 200]
+			]
+		]);
+
+		Retour::reset();
+
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config'   => $file,
+				'distantnative.retour.database' => $this->tmp . '/log.sqlite'
+			]
+		]);
+
+		foreach (['priority', 'fallback'] as $path) {
+			$this->assertSame(404, $app->render($path)->code(), $path);
+		}
+
+		// logged once as failure each, not as redirect hit
+		$log   = Retour::instance($app)->log();
+		$fails = array_column($log->fails('2000-01-01', '2099-12-31'), 'hits', 'path');
+		ksort($fails);
+
+		$this->assertSame(['fallback' => 1, 'priority' => 1], $fails);
+		$this->assertSame([], $log->redirects('2000-01-01', '2099-12-31'));
+	}
 }

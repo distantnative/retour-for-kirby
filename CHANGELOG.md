@@ -27,6 +27,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Redirects no longer show draft pages, or pages inside drafts, to visitors and don't redirect to them
 - Redirect targets that aren't pages, e.g. `downloads/file.pdf`, are now resolved against the site URL. Before, browsers resolved them relative to the requested path, which broke nested paths and sites in a subfolder.
 - Redirects to a page that has been deleted (e.g. a `page://…` UUID target) now show the error page and are logged as failure, instead of sending visitors to an invalid URL
+- Redirects with status `200` to a page that doesn't exist or is a draft now show the error page and are logged as failure, instead of answering with an empty page
 - Redirects to a content representation of the home page (e.g. `home.rss`) work now
 - Query strings are passed on exactly as they are, both a target's own query string and the one forwarded by `preserveQuery`. They used to be re-encoded, which broke parameters like Google's `_gl` linker.
 - Redirects to `mailto:` links work now; they used to end in an error
