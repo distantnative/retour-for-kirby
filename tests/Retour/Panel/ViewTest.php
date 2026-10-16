@@ -6,6 +6,7 @@ use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Router;
 use Kirby\Panel\Redirect;
+use Kirby\Retour\LogTest;
 use Kirby\Retour\Retour;
 use Kirby\Retour\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,6 +34,16 @@ class ViewTest extends TestCase
 		} catch (Redirect $redirect) {
 			$this->assertStringEndsWith('/panel/retour/redirects', $redirect->location());
 		}
+	}
+
+	public function testLoadMigratesLog(): void
+	{
+		LogTest::legacy($this->tmp . '/log.sqlite');
+
+		$this->view('redirects')->load();
+
+		$version = Retour::instance()->log()->database()->connection()->query('PRAGMA user_version')->fetchColumn();
+		$this->assertGreaterThan(0, (int)$version);
 	}
 
 	public function testLoadWithUnreadableConfig(): void

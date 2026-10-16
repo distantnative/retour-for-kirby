@@ -70,8 +70,4 @@ Or, if you installed the plugin via composer, run:
 composer update distantnative/retour-for-kirby
 ```
 
-If your log database was created with a Retour version before 5.7, run this [Kirby CLI](https://github.com/getkirby/cli) command once afterwards. It updates the database indices, which keeps the Panel fast with large logs:
-
-```bash
-kirby retour:indices
-```
+Retour updates log databases of earlier versions automatically the first time you open its Panel view afterwards. With a large log, this can take a few seconds once.

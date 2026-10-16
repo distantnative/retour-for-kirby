@@ -10,8 +10,7 @@ load([
 	'Kirby\\Retour\\Retour'    => 'Retour.php',
 	'Kirby\\Retour\\Timespan'  => 'Timespan.php',
 
-	'Kirby\\Retour\\Commands\\Indices' => 'Commands/Indices.php',
-	'Kirby\\Retour\\Commands\\Seed'    => 'Commands/Seed.php',
+	'Kirby\\Retour\\Commands\\Seed' => 'Commands/Seed.php',
 
 	'Kirby\\Retour\\Panel\\FailureDeleteDialog'  => 'Panel/FailureDeleteDialog.php',
 	'Kirby\\Retour\\Panel\\FailureIgnoreDialog'  => 'Panel/FailureIgnoreDialog.php',

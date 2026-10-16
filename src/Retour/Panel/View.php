@@ -48,7 +48,12 @@ class View extends ViewController
 
 	public function props(): array
 	{
-		$retour   = Retour::instance();
+		$retour = Retour::instance();
+		$log    = $retour->log();
+
+		// update logs created by earlier versions
+		$log?->migrate();
+
 		$timespan = Timespan::props();
 		['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
@@ -64,8 +69,6 @@ class View extends ViewController
 				]
 			]
 		];
-
-		$log = $retour->log();
 
 		if ($log !== null) {
 			// purge outdated entries on every 10th view on average

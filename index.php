@@ -12,7 +12,6 @@
 
 use Composer\Semver\Semver;
 use Kirby\Cms\App as Kirby;
-use Kirby\Retour\Commands\Indices;
 use Kirby\Retour\Commands\Seed;
 use Kirby\Retour\Retour;
 
@@ -25,8 +24,7 @@ require_once __DIR__ . '/src/bootstrap.php';
 Kirby::plugin('distantnative/retour', [
 	'areas'        => require __DIR__ . '/src/extensions/areas.php',
 	'commands'     => [
-		'retour:indices' => Indices::class,
-		'retour:seed'    => Seed::class
+		'retour:seed' => Seed::class
 	],
 	'hooks'        => require __DIR__ . '/src/extensions/hooks.php',
 	'options'      => [
