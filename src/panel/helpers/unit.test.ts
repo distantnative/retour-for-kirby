@@ -1,5 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { format, subunit } from "./unit";
+import { daysIntoWeek, format, subunit } from "./unit";
+
+describe("unit.daysIntoWeek()", () => {
+	const cases: { day: number; first: number; expected: number }[] = [
+		{ day: 0, first: 0, expected: 0 },
+		{ day: 6, first: 0, expected: 6 },
+		{ day: 1, first: 1, expected: 0 },
+		{ day: 3, first: 1, expected: 2 },
+		{ day: 0, first: 1, expected: 6 },
+		{ day: 6, first: 6, expected: 0 },
+		{ day: 5, first: 6, expected: 6 },
+	];
+
+	it.each(cases)(
+		"returns $expected for day $day with weeks starting on $first",
+		({ day, first, expected }) => {
+			expect(daysIntoWeek(day, first)).toBe(expected);
+		},
+	);
+});
 
 describe("unit.format()", () => {
 	const cases: { unit: string; expected: string }[] = [

@@ -331,7 +331,7 @@ class Log
 	 * Counts redirected, resolved and failed requests
 	 * per hour, day or month of the timespan
 	 *
-	 * @param $unit `day`, `days`, `month`, `months` or `year`
+	 * @param $unit `day`, `days`, `week`, `month`, `months` or `year`
 	 * @param $from date string (yyyy-mm-dd)
 	 * @param $to date string (yyyy-mm-dd)
 	 */

@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "weitergeleitet",
 	"retour.stats.resolved": "behoben",
 	"retour.stats.failed": "gescheitert",
-	"retour.stats.mode.all": "Gesamt"
+	"retour.stats.mode.all": "Gesamt",
+	"retour.stats.mode.week": "Woche"
 }

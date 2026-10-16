@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "omgeleid",
 	"retour.stats.resolved": "opgelost",
 	"retour.stats.failed": "mislukt",
-	"retour.stats.mode.all": "Alles"
+	"retour.stats.mode.all": "Alles",
+	"retour.stats.mode.week": "Week"
 }

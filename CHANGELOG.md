@@ -16,6 +16,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Ignore failures from the Panel: every failure has a new "Ignore" option that adds its path, or a pattern based on it, to the ignored paths and removes its failures from the log
 - New "Ignored" button on the failures tab to manage the ignored paths. It also lists the ones from the `ignore` option and adds common scanner paths (`wp-*`, `xmlrpc.php`, `.env`, `.git/…`) in one go.
 - New `ignoreIps` option: requests from these IP addresses or ranges (e.g. `192.0.2.0/24`) aren't logged at all, e.g. the ones of your hosting provider's security scanner. Redirects still apply to them.
+- New "Week" timespan to view the stats, failures and hits of a single week. Weeks start on the same day as the calendar in the Panel's date fields.
 - New `cache` option: the parsed redirects config is cached until the file changes. On by default; set it to `false` or pass Kirby cache options, e.g. `['type' => 'apcu']`.
 - New translations: Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America)
 - New icons in the Panel: a redirect icon for Retour in the menu, icons for the redirects and failures tabs and more fitting icons in the stats, tables, drawers and dialogs

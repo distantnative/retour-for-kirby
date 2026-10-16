@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "redirecionados",
 	"retour.stats.resolved": "resolvidos",
 	"retour.stats.failed": "falharam",
-	"retour.stats.mode.all": "Todos"
+	"retour.stats.mode.all": "Todos",
+	"retour.stats.mode.week": "Semana"
 }
