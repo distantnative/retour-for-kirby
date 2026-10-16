@@ -64,7 +64,7 @@ class HooksTest extends TestCase
 		$this->assertSame('target', $result->id());
 
 		// logged as hit of the redirect, not as failure
-		$this->assertSame(1, $retour->log()->redirect('wp-content/(:all)', '2000-01-01', '2099-12-31')['hits']);
+		$this->assertSame(1, $retour->log()->redirects('2000-01-01', '2099-12-31')['wp-content/(:all)']['hits']);
 		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
 	}
 

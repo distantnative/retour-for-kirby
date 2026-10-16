@@ -9,7 +9,6 @@ use DateTimeZone;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
-use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use Kirby\Toolkit\Str;
 
@@ -39,12 +38,6 @@ class Log
 
 		// make sure database is in place
 		if (F::exists($file) === false) {
-			$dir = dirname($file);
-
-			if (is_dir($dir) === false) {
-				Dir::make($dir);
-			}
-
 			// copy empty database file into place
 			F::copy(dirname(__DIR__, 2) . '/assets/retour.sqlite', $file);
 		}
@@ -61,7 +54,7 @@ class Log
 	 */
 	public function add(array $props): int|false
 	{
-		$referrer = $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null;
+		$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
 
 		if ($referrer !== null) {
 			$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
@@ -73,6 +66,19 @@ class Log
 			'referrer' => $referrer,
 			'redirect' => $props['redirect'] ?? null
 		]);
+	}
+
+	/**
+	 * Returns a query for the records of full days from `$from` to `$to`
+	 *
+	 * @param $from date string (yyyy-mm-dd)
+	 * @param $to date string (yyyy-mm-dd)
+	 */
+	protected function between(string $from, string $to): Query
+	{
+		return $this->table()
+			->where('date >= :start', ['start' => $from . ' 00:00:00'])
+			->andWhere('date <= :end', ['end' => $to . ' 23:59:59']);
 	}
 
 	/**
@@ -91,22 +97,16 @@ class Log
 	 */
 	public function fails(string $from, string $to): array
 	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
-
 		// Run query
-		$fails = $this->table()
+		$fails = $this->between($from, $to)
 			->select('
                 path,
                 referrer,
                 MAX(date) AS last,
                 COUNT(*) AS hits
             ')
-			->where('redirect IS NULL')
+			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
 			->group('path, referrer')
 			->fetch('array')
 			->all();
@@ -196,38 +196,6 @@ class Log
 	}
 
 	/**
-	 * Returns all records for a redirect
-	 *
-	 * @param $path redirect path
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
-	 */
-	public function redirect(string $path, string $from, string $to): array
-	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
-
-		// Run query
-		/** @var array|false */
-		$data = $this->table()
-			->select('
-                COUNT(*) AS hits,
-                MAX(date) AS last
-            ')
-			->where(['redirect' => $path])
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
-			->fetch('array')
-			->first();
-
-		return [
-			'hits' => (int)($data['hits'] ?? 0),
-			'last' => $data['last'] ?? null
-		];
-	}
-
-	/**
 	 * Returns hits and last hit of all redirects in one query,
 	 * keyed by redirect path; redirects without hits are missing
 	 *
@@ -237,19 +205,13 @@ class Log
 	 */
 	public function redirects(string $from, string $to): array
 	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
-
-		$data = $this->table()
+		$data = $this->between($from, $to)
 			->select('
                 redirect,
                 COUNT(*) AS hits,
                 MAX(date) AS last
             ')
-			->where('redirect IS NOT NULL')
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
+			->andWhere('redirect IS NOT NULL')
 			->group('redirect')
 			->fetch('array')
 			->all();
