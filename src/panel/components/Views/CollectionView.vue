@@ -3,7 +3,7 @@
 		<template #buttons>
 			<k-search-input
 				v-if="searching"
-				ref="search"
+				:aria-label="$t('filter')"
 				:autofocus="true"
 				:placeholder="$t('filter') + ' …'"
 				:value="q"
@@ -16,11 +16,12 @@
 			/>
 
 			<k-button
+				ref="filter"
 				:title="$t('filter')"
 				icon="filter"
 				size="sm"
 				variant="filled"
-				@click="toggleSearch"
+				@click="toggleSearch()"
 			/>
 			<k-button
 				v-for="(button, key) in buttons"
@@ -172,9 +173,11 @@ export default {
 			this.q = null;
 			this.searching = !this.searching;
 
-			if (this.searching) {
+			// the input focuses itself, but when it's gone,
+			// the focus would fall back to the document
+			if (this.searching === false) {
 				await this.$nextTick();
-				this.$refs.search.focus();
+				this.$refs.filter.focus();
 			}
 		},
 	},
