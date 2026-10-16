@@ -5,7 +5,9 @@ namespace Kirby\Retour;
 use Closure;
 use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Exception\NotFoundException;
+use Kirby\Http\Header;
 
 /**
  * Redirects
@@ -30,6 +32,8 @@ class Redirects extends Collection
 		if ($this->has($redirect->id()) === true) {
 			throw new DuplicateException('Redirect with ID already exists');
 		}
+
+		static::validate($redirect);
 
 		$this->prepend($redirect->id(), $redirect);
 		return $this;
@@ -125,6 +129,7 @@ class Redirects extends Collection
 	 * @param array|Redirect $data
 	 * @throws NotFoundException If the redirect doesn't exist
 	 * @throws DuplicateException If another redirect already has the new ID
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */
 	public function update(string|object $key, mixed $data = null): static
 	{
@@ -147,6 +152,8 @@ class Redirects extends Collection
 			);
 		}
 
+		static::validate($redirect);
+
 		$data = [];
 
 		foreach ($this->data as $current => $item) {
@@ -161,5 +168,36 @@ class Redirects extends Collection
 
 		$this->data = $data;
 		return $this;
+	}
+
+	/**
+	 * Ensures that the redirect can be routed when saving it;
+	 * an invalid path pattern would break routing for every request
+	 *
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
+	 */
+	protected static function validate(Redirect $redirect): void
+	{
+		$from = $redirect->from();
+
+		if (
+			Pattern::isLiteral($from) === false &&
+			Pattern::isValid($from) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid path pattern: ' . $from
+			);
+		}
+
+		$status = $redirect->status();
+
+		if (
+			$status !== null &&
+			array_key_exists('_' . $status, Header::$codes) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid status code: ' . $status
+			);
+		}
 	}
 }
