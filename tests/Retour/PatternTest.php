@@ -7,14 +7,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Pattern::class)]
 class PatternTest extends TestCase
 {
-	public function testIsLiteral(): void
+	public function testHasPlaceholder(): void
 	{
-		$this->assertTrue(Pattern::isLiteral('foo/bar'));
-		$this->assertTrue(Pattern::isLiteral('*.html'));
-		$this->assertTrue(Pattern::isLiteral('foo)'));
+		$this->assertTrue(Pattern::hasPlaceholder('foo/bar'));
+		$this->assertTrue(Pattern::hasPlaceholder('*.html'));
+		$this->assertTrue(Pattern::hasPlaceholder('foo)'));
 
-		$this->assertFalse(Pattern::isLiteral('foo/(:any)'));
-		$this->assertFalse(Pattern::isLiteral('foo('));
+		$this->assertFalse(Pattern::hasPlaceholder('foo/(:any)'));
+		$this->assertFalse(Pattern::hasPlaceholder('foo('));
 	}
 
 	public function testIsValid(): void
