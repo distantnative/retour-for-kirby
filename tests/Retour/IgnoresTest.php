@@ -87,6 +87,16 @@ class IgnoresTest extends TestCase
 		}
 	}
 
+	public function testConfigSinglePattern(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignore' => 'wp-(:all)'
+		]);
+
+		$this->assertSame(['wp-(:all)'], $ignores->config());
+		$this->assertTrue($ignores->matches('wp-admin'));
+	}
+
 	public function testCustomInConfigFile(): void
 	{
 		$retour = Retour::instance($this->app([
