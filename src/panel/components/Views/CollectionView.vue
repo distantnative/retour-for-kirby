@@ -134,27 +134,10 @@ export default {
 	},
 	methods: {
 		id(path) {
-			/**
-			 * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
-			 *
-			 * Depending on the settings, the webserver might not always handle
-			 * escaped forward-slashes in the way, which this plugin expects it to.
-			 *
-			 * This specifically results in a 404 when trying to edit a redirect-entry,
-			 * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
-			 * Server. The problem occurs in relation to nginx.
-			 *
-			 * Many hosting solutions do not allow customers to change such
-			 * settings for the web-server, and so another solution is required.
-			 *
-			 * So, in order to remedy this problem, we replace forward-slash with the
-			 * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
-			 * Hex: 1D). By using a non-visible chracter we ensure that the id
-			 * generation from redirect pattern is always unique.
-			 *
-			 * Note that this fix include changes to two parts of the plug-in
-			 * code-base. In this file, and in src/classes/Redirect.php
-			 */
+			// webservers often don't handle encoded slashes (see
+			// https://github.com/distantnative/retour-for-kirby/issues/300),
+			// so "/" is swapped for the invisible GROUP SEPARATOR (\x1D);
+			// mirrors `Redirect::id()` in src/Retour/Redirect.php
 			return encodeURIComponent(path.replace(/\//g, "\x1D"));
 		},
 		onCell() {},

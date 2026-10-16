@@ -23,8 +23,6 @@ class Timespan
 		$last  = Date::optional($data['last']);
 
 		return [
-			// either has more data in the future
-			// or today is in the future
 			'hasAll'    => $first && $last,
 			'hasNext'   => static::hasNext($to, $today, $last),
 			'hasPrev'   => static::hasPrev($from, $first),
@@ -53,6 +51,9 @@ class Timespan
 		return $date;
 	}
 
+	/**
+	 * Whether the log has newer entries or today is after the timespan
+	 */
 	protected static function hasNext(
 		Date $to,
 		Date $today,

@@ -9,6 +9,9 @@ use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
 
+/**
+ * Dialog to pick the date range of the log views
+ */
 class TimespanDialog extends DialogController
 {
 	protected function date(

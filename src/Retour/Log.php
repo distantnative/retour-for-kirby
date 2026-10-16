@@ -29,29 +29,22 @@ class Log
 	public function __construct(
 		protected Retour $retour
 	) {
-		// get path to database file
 		$file = $retour->option('database');
 
 		if ($file instanceof Closure) {
 			$file = $file();
 		}
 
-		// make sure database is in place
 		if (F::exists($file) === false) {
-			// copy empty database file into place
 			F::copy(dirname(__DIR__, 2) . '/assets/retour.sqlite', $file);
 		}
 
-		// connect to database
 		$this->database = new Database([
 			'type'     => 'sqlite',
 			'database' => $file
 		]);
 	}
 
-	/**
-	 * Create a new record entry in database
-	 */
 	public function add(array $props): int|false
 	{
 		$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
@@ -90,14 +83,13 @@ class Log
 	}
 
 	/**
-	 * Returns all logged 404s
+	 * Returns unresolved failures grouped by path and referrer
 	 *
 	 * @param $from date string (yyyy-mm-dd)
 	 * @param $to date string (yyyy-mm-dd)
 	 */
 	public function fails(string $from, string $to): array
 	{
-		// Run query
 		$fails = $this->between($from, $to)
 			->select('
                 path,
@@ -119,16 +111,13 @@ class Log
 		]);
 	}
 
-	/**
-	 * Returns the first log entry
-	 */
 	public function first(): array
 	{
 		return $this->single('date ASC');
 	}
 
 	/**
-	 * Remove database records and reset index
+	 * Deletes all records (and resets the ids) or only unresolved failures
 	 *
 	 * @param $mode `all` or `failures`
 	 * @throws InvalidArgumentException If the mode is unknown
@@ -151,24 +140,19 @@ class Log
 		return $deleted && $vacuum;
 	}
 
-	/**
-	 * Returns the last log entry
-	 */
 	public function last(): array
 	{
 		return $this->single('date DESC');
 	}
 
 	/**
-	 * Deletes outdated logs based on config option
+	 * Deletes entries older than the `deleteAfter` option (in months)
 	 */
 	public function purge(): bool
 	{
-		// Get limit (in months) from option
 		$limit = $this->retour->option('deleteAfter');
 
 		if ($limit !== false) {
-			// Get cutoff date by subtracting limit from today
 			$time = strtotime('-' . $limit . ' month');
 
 			if ($time === false) {
@@ -229,7 +213,7 @@ class Log
 	}
 
 	/**
-	 * Remove an entry from the database
+	 * Deletes all records of the path
 	 */
 	public function remove(string $path): bool
 	{
@@ -270,9 +254,6 @@ class Log
 		return true;
 	}
 
-	/**
-	 * Mark all records for a given path as resolved
-	 */
 	public function resolve(string $path): bool
 	{
 		return $this->table()->update(
@@ -298,9 +279,10 @@ class Log
 	}
 
 	/**
-	 * Returns stats data for specified timeframe and unit
+	 * Counts redirected, resolved and failed requests
+	 * per hour, day or month of the timespan
 	 *
-	 * @param $unit timeframe unit (year, month, ...)
+	 * @param $unit `day`, `days`, `month`, `months` or `year`
 	 * @param $from date string (yyyy-mm-dd)
 	 * @param $to date string (yyyy-mm-dd)
 	 */
@@ -331,7 +313,6 @@ class Log
 
 		$use = array_merge($use, $overrides);
 
-		// Get data from database
 		$data = $this->database->query('
             SELECT
                 substr(date, 1, :length) AS date,
@@ -349,7 +330,6 @@ class Log
             ORDER BY
                 substr(date, 1, :length)
         ', [
-			// Add time to dates to capture full days
 			'from'   => $from . ' 00:00:00',
 			'to'     => $to . ' 23:59:59',
 			'length' => $use['length']
@@ -395,9 +375,6 @@ class Log
 		return $result;
 	}
 
-	/**
-	 * Returns the database table object
-	 */
 	public function table(): Query
 	{
 		return $this->database->records();

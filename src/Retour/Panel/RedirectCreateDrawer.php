@@ -9,6 +9,9 @@ use Kirby\Panel\Ui\Item\UserItem;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 
+/**
+ * Drawer to create a redirect; base for the edit and resolve drawers
+ */
 class RedirectCreateDrawer extends DrawerController
 {
 	protected function data(): array

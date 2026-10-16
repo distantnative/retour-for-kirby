@@ -19,8 +19,8 @@ return [
 		$retour = Retour::instance();
 
 		try {
-			// find non-priority redirect route for current path
-			// and call if possible
+			// redirects without priority only
+			// apply if no page or route matched
 			$result = Router::execute(
 				$path,
 				$method,
@@ -34,7 +34,6 @@ return [
 			return $result;
 		}
 
-		// log 404 if feature enabled and path not ignored
 		$log = $retour->log();
 
 		if (

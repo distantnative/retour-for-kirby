@@ -12,7 +12,6 @@ use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
 
 /**
- * Redirect
  * Single redirect with its properties
  */
 class Redirect
@@ -25,9 +24,6 @@ class Redirect
 	protected int|null $status;
 	protected string|null $to;
 
-	/**
-	 * Class constructor, validates data
-	 */
 	public function __construct(array $data)
 	{
 		if (empty($data['from'] ?? null) === true) {
@@ -61,31 +57,13 @@ class Redirect
 	}
 
 	/**
-	 * Use redirect pattern as id for object
+	 * Returns the path pattern as id; webservers often don't handle encoded
+	 * slashes (https://github.com/distantnative/retour-for-kirby/issues/300),
+	 * so "/" is swapped for the invisible GROUP SEPARATOR (\x1D); reverted in
+	 * `Panel\Id::toPath()`, mirrored in src/panel/components/Views/CollectionView.vue
 	 */
 	public function id(): string
 	{
-		/**
-		 * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
-		 *
-		 * Depending on the settings, the webserver might not always handle
-		 * escaped forward-slashes in the way, which this plugin expects it to.
-		 *
-		 * This specifically results in a 404 when trying to edit a redirect-entry,
-		 * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
-		 * Server. The problem occurs in relation to nginx.
-		 *
-		 * Many hosting solutions do not allow customers to change such
-		 * settings for the web-server, and so another solution is required.
-		 *
-		 * So, in order to remedy this problem, we replace forward-slash with the
-		 * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
-		 * Hex: 1D). By using a non-visible chracter we ensure that the id
-		 * generation from redirect pattern is always unique.
-		 *
-		 * Note that this fix include changes to two parts of the plug-in
-		 * code-base. In this file, and in src/panel/components/Tabs/RedirectsTab.vue
-		 */
 		return str_replace('/', "\x1D", $this->from);
 	}
 
@@ -125,8 +103,7 @@ class Redirect
 	}
 
 	/**
-	 * Returns the integer HTTP status code or `null` if disabled;
-	 * the Panel sends an empty string for no status,
+	 * The Panel sends an empty string for no status,
 	 * hand-edited config files might use `false` or `0`
 	 */
 	protected static function normalizeStatus(mixed $status): int|null
@@ -172,7 +149,6 @@ class Redirect
 			$page = null;
 		}
 
-		// Redirects
 		if ($code >= 300 && $code < 400) {
 			if ($page) {
 				$to = $page->url();
@@ -208,14 +184,11 @@ class Redirect
 				'headers' => ['Location' => static::location($to)]
 			]);
 		} else {
-			// Set the right response code
 			$kirby->response()->code($code);
-
-			// Return page for other codes or
-			// deliver HTTP status code without body
 			$response = $page ?? new Response('', 'text/html', $code);
 		}
 
+		// only now, as redirects to deleted pages count as failures
 		$retour->log()?->add([
 			'path'     => Url::path(),
 			'redirect' => $this->from
@@ -225,7 +198,7 @@ class Redirect
 	}
 
 	/**
-	 * Returns the integer HTTP status code
+	 * Returns the HTTP status code or `null` if disabled
 	 */
 	public function status(): int|null
 	{
@@ -271,9 +244,6 @@ class Redirect
 		return $path;
 	}
 
-	/**
-	 * Return route definition for Router
-	 */
 	public function toRoute(): array
 	{
 		// the router binds `$this` of the action to the route

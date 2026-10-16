@@ -16,15 +16,12 @@ use Kirby\Retour\Commands\Indices;
 use Kirby\Retour\Commands\Seed;
 use Kirby\Retour\Retour;
 
-// validate Kirby version
 if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~6.0') === false) {
 	throw new Exception('Retour requires Kirby 6');
 }
 
-// load classes
 require_once __DIR__ . '/src/bootstrap.php';
 
-// register the plugin
 Kirby::plugin('distantnative/retour', [
 	'areas'        => require __DIR__ . '/src/extensions/areas.php',
 	'commands'     => [
