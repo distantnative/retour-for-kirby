@@ -27,13 +27,7 @@
 				variant="filled"
 				@click="toggleSearch()"
 			/>
-			<k-button
-				v-for="(button, key) in buttons"
-				v-bind="button"
-				:key="key"
-				size="sm"
-				variant="filled"
-			/>
+			<k-view-buttons :buttons="buttons" />
 		</template>
 
 		<k-empty
@@ -95,9 +89,6 @@ export default {
 		};
 	},
 	computed: {
-		buttons() {
-			return [];
-		},
 		columns() {
 			return {};
 		},

@@ -15,6 +15,33 @@ use Throwable;
 #[CoversClass(View::class)]
 class ViewTest extends TestCase
 {
+	public function testButtons(): void
+	{
+		$buttons = $this->view('redirects')->buttons()->render();
+		$this->assertCount(1, $buttons);
+		$this->assertSame('retour/redirects/create', $buttons[0]['props']['drawer']);
+
+		$buttons = $this->view('failures')->buttons()->render();
+		$this->assertCount(2, $buttons);
+		$this->assertSame('retour/failures/ignores', $buttons[0]['props']['dialog']);
+		$this->assertSame('retour/failures/flush', $buttons[1]['props']['dialog']);
+	}
+
+	public function testButtonsFromConfig(): void
+	{
+		$view = $this->view('failures', [
+			'panel' => [
+				'viewButtons' => [
+					'retour.failures' => ['flush']
+				]
+			]
+		]);
+
+		$buttons = $view->buttons()->render();
+		$this->assertCount(1, $buttons);
+		$this->assertSame('retour/failures/flush', $buttons[0]['props']['dialog']);
+	}
+
 	public function testLoad(): void
 	{
 		$view = $this->view('failures')->load();
@@ -82,11 +109,20 @@ class ViewTest extends TestCase
 
 	protected function view(string $tab, array $options = []): View
 	{
-		Retour::instance($this->app([
-			'distantnative.retour.config'   => $this->tmp . '/retour.yml',
-			'distantnative.retour.database' => $this->tmp . '/log.sqlite',
-			...$options
-		]));
+		// view buttons are only collected from the areas of a logged-in user
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config'   => $this->tmp . '/retour.yml',
+				'distantnative.retour.database' => $this->tmp . '/log.sqlite',
+				...$options
+			],
+			'users' => [
+				['email' => 'admin@getkirby.com', 'role' => 'admin']
+			]
+		]);
+
+		$app->impersonate('admin@getkirby.com');
+		Retour::instance($app);
 
 		return new View($tab);
 	}

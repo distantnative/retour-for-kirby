@@ -10,20 +10,6 @@ export default {
 		};
 	},
 	computed: {
-		buttons() {
-			return [
-				{
-					icon: "muted",
-					text: this.$t("retour.failures.ignored"),
-					dialog: "retour/failures/ignores",
-				},
-				{
-					icon: "clear",
-					text: this.$t("retour.failures.clear"),
-					dialog: "retour/failures/flush",
-				},
-			];
-		},
 		columns() {
 			return {
 				path: {

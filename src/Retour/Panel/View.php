@@ -4,6 +4,7 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Panel\Controller\ViewController;
 use Kirby\Panel\Panel;
+use Kirby\Panel\Ui\Button\ViewButtons;
 use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
@@ -17,6 +18,16 @@ class View extends ViewController
 		protected string $tab
 	) {
 		parent::__construct();
+	}
+
+	public function buttons(): ViewButtons
+	{
+		$defaults = match ($this->tab) {
+			'redirects' => ['create'],
+			'failures'  => ['ignores', 'flush']
+		};
+
+		return ViewButtons::view('retour.' . $this->tab)->defaults(...$defaults);
 	}
 
 	public function load(): ViewComponent
@@ -36,6 +47,7 @@ class View extends ViewController
 		return new ViewComponent(
 			...$this->props(),
 			component: 'k-retour-' . $this->tab . '-view',
+			buttons: $this->buttons(),
 			title: $this->i18n('view.retour'),
 			breadcrumb: [
 				[
