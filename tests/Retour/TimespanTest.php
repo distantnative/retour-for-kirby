@@ -246,6 +246,8 @@ class TimespanTest extends TestCase
 			'negative year'  => [['from' => '-200000-01-01', 'to' => '2024-01-31']],
 			'five-digit year' => [['from' => '2024-01-01', 'to' => '20000-01-01']],
 			'two-digit year' => [['from' => '24-01-01', 'to' => '2024-01-31']],
+			'too early'      => [['from' => '2018-12-31', 'to' => '2024-01-31']],
+			'too late'       => [['from' => '2024-01-01', 'to' => '2100-01-01']],
 			'overflow'       => [['from' => '2024-02-30', 'to' => '2024-03-31']],
 			'no padding'     => [['from' => '2024-1-1', 'to' => '2024-01-31']],
 			'with time'      => [['from' => '2024-01-01 00:00:00', 'to' => '2024-01-31']],
@@ -264,6 +266,12 @@ class TimespanTest extends TestCase
 		} catch (InvalidArgumentException) {
 			$this->assertSame($stored, $this->kirby->session()->get('retour'));
 		}
+	}
+
+	public function testSetLimits(): void
+	{
+		$data = ['from' => '2019-01-01', 'to' => '2099-12-31'];
+		$this->assertSame($data, Timespan::set($data));
 	}
 
 	public function testUnit(): void

@@ -48,6 +48,13 @@ class Timespan
 			return null;
 		}
 
+		// there are no logs from before Retour existed, and as the
+		// stats have an entry per month, timespans like 0000–9999
+		// would create ~120k of them
+		if ($date < '2019-01-01' || $date > '2099-12-31') {
+			return null;
+		}
+
 		return $date;
 	}
 
