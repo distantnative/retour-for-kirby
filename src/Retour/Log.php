@@ -6,6 +6,7 @@ use Closure;
 use DateInterval;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use Kirby\Toolkit\Date;
@@ -116,13 +117,18 @@ class Log
 
 	/**
 	 * Remove database records and reset index
+	 *
+	 * @param $mode `all` or `failures`
+	 * @throws InvalidArgumentException If the mode is unknown
 	 */
 	public function flush(string $mode = 'all'): bool
 	{
 		$deleted = match ($mode) {
 			'all'      => $this->table()->delete(),
 			'failures' => $this->table()->delete('redirect IS NULL AND wasResolved IS NULL'),
-			default    => false
+			default    => throw new InvalidArgumentException(
+				message: 'Invalid flush mode: ' . $mode
+			)
 		};
 
 		if ($mode === 'all') {
