@@ -38,13 +38,7 @@ export default defineConfig({
 					{ text: "Getting started", link: "/quickstart" },
 					{ text: "Redirects", link: "/redirects" },
 					{ text: "404 tracking", link: "/failures" },
-				],
-			},
-			{
-				text: "Configuration",
-				items: [
 					{ text: "Options", link: "/options" },
-					{ text: "Translations", link: "/i18n" },
 				],
 			},
 			{
@@ -60,9 +54,17 @@ export default defineConfig({
 			},
 			{
 				text: "Support development",
-				items: [{ text: "How to contribute", link: "/contribute" }],
+				items: [
+					{ text: "How to contribute", link: "/contribute" },
+					{ text: "Translations", link: "/i18n" },
+				],
 			},
 		],
+
+		editLink: {
+			pattern:
+				"https://github.com/distantnative/retour-for-kirby/edit/dev/docs/:path",
+		},
 
 		socialLinks: [
 			{
