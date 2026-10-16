@@ -125,8 +125,7 @@ class RetourTest extends TestCase
 			]
 		]);
 
-		$log = Retour::instance($app)->log();
-		$this->assertInstanceOf(LogDisabled::class, $log);
+		$this->assertNull(Retour::instance($app)->log());
 	}
 
 	public function testOption(): void

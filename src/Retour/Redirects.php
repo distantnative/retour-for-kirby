@@ -85,15 +85,15 @@ class Redirects extends Collection
 	 */
 	public function toData(string $from, string $to): array
 	{
-		$retour = $this->retour;
+		$log = $this->retour->log();
 
 		// If logging is disabled, return without data
-		if ($retour->hasLog() === false) {
+		if ($log === null) {
 			return $this->toArray();
 		}
 
 		// get hits of all redirects at once
-		$hits = $retour->log()->redirects($from, $to);
+		$hits = $log->redirects($from, $to);
 
 		return $this->toArray(function (Redirect $redirect) use ($hits): array {
 			$data         = $redirect->toArray();

@@ -168,7 +168,7 @@ class Redirect extends Obj
 			$response = $page ?? new Response('', 'text/html', $code);
 		}
 
-		$retour->log()->add([
+		$retour->log()?->add([
 			'path'     => Url::path(),
 			'redirect' => $this->from()
 		]);

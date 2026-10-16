@@ -35,11 +35,13 @@ return [
 			}
 
 			// log 404 if feature enabled and path not ignored
+			$log = $retour->log();
+
 			if (
-				$retour->hasLog() === true &&
+				$log !== null &&
 				$retour->ignore($path) === false
 			) {
-				$retour->log()->add(['path' => $path]);
+				$log->add(['path' => $path]);
 			}
 		}
 	}

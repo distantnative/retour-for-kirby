@@ -162,10 +162,11 @@ class Timespan
 	public static function limits(Retour|null $retour = null): array
 	{
 		$retour ??= Retour::instance();
+		$log      = $retour->log();
 
 		return [
-			$retour->log()->first()['date'] ?? null,
-			$retour->log()->last()['date'] ?? null
+			$log?->first()['date'] ?? null,
+			$log?->last()['date'] ?? null
 		];
 	}
 
