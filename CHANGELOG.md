@@ -8,6 +8,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 
 - Requires Kirby 6 and PHP 8.3 or newer
 - The `kirby retour:indices` command has been removed. Logs of earlier versions are now updated automatically the first time you open Retour in the Panel: unused indices are dropped and the index for redirect hits gets smaller.
+- Log entries older than 12 months are now deleted automatically (the `deleteAfter` option defaults to `12`). Set it to `false` to keep them forever.
 - The PHP API has changed significantly. If your code uses Retour's classes directly, check it against the new version.
 
 ### Features

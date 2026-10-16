@@ -282,10 +282,24 @@ class LogTest extends TestCase
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
 	}
 
-	public function testPurgeDactivated(): void
+	public function testPurgeDeactivated(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => false]);
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-24 month')), 'path' => 'foo']);
+
+		$this->assertTrue($log->purge());
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+	}
+
+	public function testPurgeDefault(): void
 	{
 		$log = $this->log();
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-13 month')), 'path' => 'foo']);
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-11 month')), 'path' => 'bar']);
+
+		// entries are kept for 12 months by default
 		$this->assertTrue($log->purge());
+		$this->assertSame(['bar'], $log->table()->select('path')->fetch('array')->all()->pluck('path'));
 	}
 
 	public function testPurgeKeepsInsignificantFreeSpace(): void

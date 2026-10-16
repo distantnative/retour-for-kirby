@@ -147,7 +147,7 @@ class RetourTest extends TestCase
 
 		$this->assertSame($this->tmp . '/site/config/retour.yml', $retour->option('config')());
 		$this->assertSame($this->tmp . '/site/logs/retour/log.sqlite', $retour->option('database')());
-		$this->assertFalse($retour->option('deleteAfter'));
+		$this->assertSame(12, $retour->option('deleteAfter'));
 		$this->assertSame([], $retour->option('ignore'));
 		$this->assertTrue($retour->option('logs'));
 		$this->assertFalse($retour->option('preserveQuery'));
