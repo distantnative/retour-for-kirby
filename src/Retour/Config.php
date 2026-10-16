@@ -104,6 +104,37 @@ class Config
 	}
 
 	/**
+	 * Parses the contents, cached by their hash, as the config file
+	 * is read on every request and parsing many redirects is slow
+	 *
+	 * @throws LogicException If the contents cannot be parsed
+	 */
+	protected function parse(string $contents, string $file): array
+	{
+		$cache = $this->retour->kirby()->cache('distantnative.retour');
+		$key   = 'config-' . md5($file);
+		$hash  = hash('xxh128', $contents);
+		$entry = $cache->get($key);
+
+		if (
+			($entry['hash'] ?? null) === $hash &&
+			is_array($entry['data'] ?? null) === true
+		) {
+			return $entry['data'];
+		}
+
+		// throws before anything gets cached
+		$data = static::decode($contents, $file);
+
+		$cache->set($key, [
+			'hash' => $hash,
+			'data' => $data
+		]);
+
+		return $data;
+	}
+
+	/**
 	 * Reads the config file; if it cannot be read, the site keeps
 	 * running without redirects, but the file won't be overwritten
 	 */
@@ -117,7 +148,7 @@ class Config
 		}
 
 		try {
-			return $this->data = static::decode(static::load($file), $file);
+			return $this->data = $this->parse(static::load($file), $file);
 		} catch (LogicException $error) {
 			$this->error = $error;
 			return $this->data = [];

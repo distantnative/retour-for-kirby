@@ -26,6 +26,11 @@ The following config options are available (shown with their default values):
   // (allows for yml and json files/formats)
   'config' => fn () => kirby()->root('config') . '/retour.yml',
 
+  // Cache the parsed redirects config, which is read on every request,
+  // until the file changes (`false` to disable or an array of
+  // Kirby cache options, e.g. `['type' => 'apcu']`)
+  'cache' => true,
+
   // Absolute path for location of database
   // (or a closure returning the path)
   'database' => fn () => kirby()->root('logs') . '/retour/log.sqlite',
