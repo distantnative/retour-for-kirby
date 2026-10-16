@@ -19,6 +19,7 @@ return [
 				'action'  => View::class
 			]
 		],
+		'buttons' => require __DIR__ . '/buttons.php',
 		'dialogs' => require __DIR__ . '/dialogs.php',
 		'drawers' => require __DIR__ . '/drawers.php'
 	]

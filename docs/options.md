@@ -74,6 +74,21 @@ With the `preserveQuery` option enabled, Retour forwards the query string unchan
 
 If the target already has a query string of its own, the forwarded parameters are added to it. The option applies to all redirects with a `3xx` status code. Other status codes don't send the visitor to a new URL, so their query string stays untouched anyway.
 
+## Buttons
+
+The buttons above the tables are Kirby view buttons: `create` on the redirects tab, `ignores` and `flush` on the failures tab. To reorder or hide them, list the ones you want in the [`panel.viewButtons` option](https://getkirby.com/docs/reference/system/options/panel):
+
+```php
+// site/config/config.php
+
+'panel' => [
+  'viewButtons' => [
+    // hide the "Clear log" button
+    'retour.failures' => ['ignores']
+  ]
+]
+```
+
 ## Permissions
 
 To hide Retour from users of a certain role, disable access to its Panel area in the user blueprint:

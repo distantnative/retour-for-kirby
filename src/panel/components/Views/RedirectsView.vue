@@ -5,15 +5,6 @@ export default {
 	extends: CollectionView,
 	class: "k-retour-redirects-view",
 	computed: {
-		buttons() {
-			return [
-				{
-					icon: "add",
-					text: this.$t("add"),
-					drawer: "retour/redirects/create",
-				},
-			];
-		},
 		columns() {
 			const columns = {
 				from: {

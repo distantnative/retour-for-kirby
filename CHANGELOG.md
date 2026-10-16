@@ -20,6 +20,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - New translations: Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America). All others have been completed.
 - New and more fitting icons throughout the Panel
 - Clicking the empty redirects table opens the drawer to add a redirect
+- The buttons above the tables can be reordered or hidden with Kirby's `panel.viewButtons` option
 
 ### Fixes
 
