@@ -12,7 +12,6 @@
 
 use Kirby\Cms\App as Kirby;
 use Kirby\Retour\Commands\Seed;
-use Kirby\Retour\Retour;
 
 $version = Kirby::version() ?? '0.0.0';
 
@@ -43,6 +42,6 @@ Kirby::plugin('distantnative/retour', [
 		'site'          => true,
 		'status'        => null
 	],
-	'routes'       => fn (Kirby $kirby): array => Retour::instance($kirby)->redirects()->toRoutes(true),
+	'routes'       => require __DIR__ . '/src/extensions/routes.php',
 	'translations' => require __DIR__ . '/src/extensions/i18n.php'
 ]);

@@ -66,6 +66,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 ### Performance
 
 - The redirects config isn't parsed on every request anymore (see the new `cache` option)
+- Panel, API and media requests no longer load the redirects (1.3 ms less per request with 1,000 redirects)
 - Logging a request and ignoring a path each take a single database statement
 - Stats count each hour, day or month with an indexed range query
 - Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time

@@ -2,42 +2,30 @@
 
 namespace Kirby\Retour;
 
-use Kirby\Cms\App;
 use Kirby\Data\Data;
 use PHPUnit\Framework\Attributes\CoversNothing;
+use ReflectionProperty;
 
 #[CoversNothing]
 class RoutesTest extends TestCase
 {
-	public function testExtension(): void
+	public function testLoadsRedirectsOnlyWhenReached(): void
 	{
-		$extension = App::plugin('distantnative/retour')->extends()['routes'];
+		$instance = new ReflectionProperty(Retour::class, 'instance');
+		Retour::reset();
 
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => $this->tmp . '/test.yml',
+				'distantnative.retour.config' => $this->tmp . '/retour.yml',
 				'distantnative.retour.logs'   => false
 			]
 		]);
 
-		$this->assertSame(0, count($extension($app)));
+		$app->call('api/system');
+		$this->assertNull($instance->getValue());
 
-		$retour = Retour::instance($app);
-		$retour->redirects()->prepend(new Redirect([
-			'from' => 'foo',
-			'to'   => 'bar'
-		]));
-
-		$this->assertSame(0, count($extension($app)));
-
-		$retour->redirects()->prepend(new Redirect([
-			'from'     => 'foo',
-			'to'       => 'bar',
-			'priority' => true,
-			'status'   => 307
-		]));
-
-		$this->assertSame(1, count($extension($app)));
+		$app->call('missing');
+		$this->assertSame($app, $instance->getValue()->kirby());
 	}
 
 	public function testRenderFromIgnoredIp(): void
