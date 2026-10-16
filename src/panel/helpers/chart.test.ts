@@ -11,15 +11,33 @@ describe("chart.axis()", () => {
 	const cases: { max: number; expected: string[] }[] = [
 		{ max: 5, expected: ["1", "2", "3", "4", "5"] },
 		{ max: 75, expected: ["15", "30", "45", "60", "75"] },
-		{ max: 5000, expected: ["1k", "2k", "3k", "4k", "5k"] },
-		{ max: 7500, expected: ["1.5k", "3k", "4.5k", "6k", "7.5k"] },
-		{ max: 1250, expected: ["250", "500", "750", "1k", "1.25k"] },
-		{ max: 2500000, expected: ["500k", "1M", "1.5M", "2M", "2.5M"] },
-		{ max: 1250000, expected: ["250k", "500k", "750k", "1M", "1.25M"] },
+		{ max: 5000, expected: ["1K", "2K", "3K", "4K", "5K"] },
+		{ max: 7500, expected: ["1.5K", "3K", "4.5K", "6K", "7.5K"] },
+		{ max: 1250, expected: ["250", "500", "750", "1K", "1.25K"] },
+		{ max: 2500000, expected: ["500K", "1M", "1.5M", "2M", "2.5M"] },
+		{ max: 1250000, expected: ["250K", "500K", "750K", "1M", "1.25M"] },
 	];
 
 	it.each(cases)("returns ticks for $max", ({ max, expected }) => {
-		expect(axis(max)).toStrictEqual(expected);
+		expect(axis(max, "en")).toStrictEqual(expected);
+	});
+
+	it("formats ticks in the given locale", () => {
+		// German doesn't shorten thousands
+		expect(axis(1250, "de")).toStrictEqual([
+			"250",
+			"500",
+			"750",
+			"1000",
+			"1250",
+		]);
+		expect(axis(1250000, "de")).toStrictEqual([
+			"250.000",
+			"500.000",
+			"750.000",
+			"1\u00a0Mio.",
+			"1,25\u00a0Mio.",
+		]);
 	});
 });
 
