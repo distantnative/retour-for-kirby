@@ -19,7 +19,7 @@ The following config options are available (shown with their default values):
   // Number of months after which logs should be deleted automatically
   // (checked from time to time when the Retour view is opened in the Panel;
   // `false` keeps them forever)
-  'deleteAfter' => false,
+  'deleteAfter' => 12,
 
   // Absolute path for location of redirects config
   // (or a closure returning the path)
