@@ -14,6 +14,8 @@ The tab and all stats are only shown when the [`logs` option](/options#config) i
 
 - If a page exists at the path, the redirect only applies with the [`Has priority`](/redirects#has-priority) option enabled.
 - Make sure the redirect doesn't have the `disabled` status.
+- The target page needs to be published: redirects never show drafts to visitors.
+- If the target page has been deleted, the redirect responds with a 404 and the request shows up in the failures.
 - Browsers cache permanent redirects (`301`, `308`). Test changes in a private window.
 
 ## All redirects stopped working
