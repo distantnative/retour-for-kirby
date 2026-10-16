@@ -32,12 +32,30 @@ class RedirectEditDrawerTest extends TestCase
 
 		Retour::instance($app);
 
-		return new RedirectEditDrawer(urlencode(str_replace('/', "\x1D", $id)));
+		return RedirectEditDrawer::factory(urlencode(str_replace('/', "\x1D", $id)));
 	}
 
 	protected function redirects(): array
 	{
 		return Data::read($this->tmp . '/retour.yml')['redirects'];
+	}
+
+	public function testFactoryNotFound(): void
+	{
+		$this->expectException(NotFoundException::class);
+		$this->drawer('missing', [
+			'from' => 'missing'
+		]);
+	}
+
+	public function testLoad(): void
+	{
+		$drawer = $this->drawer('homer/simpson')->load();
+
+		$this->assertSame('homer/simpson', $drawer->title);
+		$this->assertArrayHasKey('modifier', $drawer->fields);
+		$this->assertSame('retour/redirects/homer%1Dsimpson/delete', $drawer->options[0]['dialog']);
+		$this->assertSame('marge', $drawer->value['to']);
 	}
 
 	public function testSubmit(): void
@@ -86,15 +104,5 @@ class RedirectEditDrawerTest extends TestCase
 		$redirect = $this->redirects()[0];
 		$this->assertSame('baz', $redirect['to']);
 		$this->assertSame('homer@simpson.com', $redirect['creator']);
-	}
-
-	public function testSubmitNotFound(): void
-	{
-		$drawer = $this->drawer('missing', [
-			'from' => 'missing'
-		]);
-
-		$this->expectException(NotFoundException::class);
-		$drawer->submit();
 	}
 }

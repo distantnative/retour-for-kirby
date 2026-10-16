@@ -10,20 +10,16 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 		protected string $path
 	) {
 		parent::__construct();
-		$this->path = Id::toPath($path);
 	}
 
-	public function submit(): bool|array
+	public static function factory(string $id): static
 	{
-		$redirects = $this->redirects();
-		$input     = $this->data();
+		return new static(path: Id::toPath($id));
+	}
 
-		$redirects->create([
-			'creator' => $this->kirby->user()?->email(),
-			...$input
-		]);
-
-		$redirects->save();
+	public function submit(): array
+	{
+		parent::submit();
 
 		Retour::instance()->log()?->resolve($this->path);
 

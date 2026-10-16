@@ -3,7 +3,7 @@
 namespace Kirby\Retour\Panel;
 
 use DateInterval;
-use DateTime;
+use DateTimeInterface;
 use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Timespan;
@@ -11,24 +11,21 @@ use Kirby\Toolkit\Date;
 
 class TimespanDialog extends DialogController
 {
-	public function date(
-		DateTime|string|null $date,
+	protected function date(
+		DateTimeInterface|string|null $date,
 		string $format = 'Y-m-d H:i:s'
 	): string|null {
-		if (is_string($date) === true) {
-			$date = Date::optional($date);
-		}
-
-		return $date?->format($format);
+		return Date::optional($date)?->format($format);
 	}
 
-	public function limits(): array
+	protected function limits(): array
 	{
-		[$limit] = Timespan::limits();
-		$min     = $this->date($limit);
-		$day     = DateInterval::createFromDateString('1 day');
-		$max     = $this->date(Date::now()->add($day));
-		return [$min, $max];
+		[$first] = Timespan::limits();
+
+		return [
+			$this->date($first),
+			$this->date(Date::now()->add(new DateInterval('P1D')))
+		];
 	}
 
 	public function load(): FormDialog

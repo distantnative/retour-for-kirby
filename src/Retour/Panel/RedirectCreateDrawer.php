@@ -29,7 +29,7 @@ class RedirectCreateDrawer extends DrawerController
 			'value' => ltrim($code, '_')
 		], array_keys(Header::$codes));
 
-		$fields = [
+		return [
 			'from' => [
 				'type'     => 'text',
 				'label'    => $this->i18n('retour.redirects.from'),
@@ -76,16 +76,6 @@ class RedirectCreateDrawer extends DrawerController
 				'empty'    => $this->i18n('retour.redirects.creator.empty'),
 			]
 		];
-
-		if ($this instanceof RedirectEditDrawer) {
-			$fields['modifier'] = [
-				'type'     => 'retour-users',
-				'label'    => $this->i18n('retour.redirects.modifier'),
-				'empty'    => $this->i18n('retour.redirects.creator.empty'),
-			];
-		}
-
-		return $fields;
 	}
 
 	public function load(): FormDrawer

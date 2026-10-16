@@ -9,10 +9,29 @@ use Kirby\Retour\Redirect;
 class RedirectEditDrawer extends RedirectCreateDrawer
 {
 	public function __construct(
-		protected string $id
+		protected Redirect $redirect
 	) {
 		parent::__construct();
-		$this->id = urldecode($id);
+	}
+
+	/**
+	 * @throws NotFoundException If the redirect doesn't exist
+	 */
+	public static function factory(string $id): static
+	{
+		return new static(redirect: Id::toRedirect($id));
+	}
+
+	protected function fields(): array
+	{
+		return [
+			...parent::fields(),
+			'modifier' => [
+				'type'  => 'retour-users',
+				'label' => $this->i18n('retour.redirects.modifier'),
+				'empty' => $this->i18n('retour.redirects.creator.empty'),
+			]
+		];
 	}
 
 	public function load(): FormDrawer
@@ -29,29 +48,24 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 		return new FormDrawer(
 			fields: $fields,
 			icon: 'redirect',
-			title: $this->redirect()->from(),
+			title: $this->redirect->from(),
 			value: $this->value(),
 			options: [
 				[
 					'icon'   => 'trash',
 					'title'  => $this->i18n('remove'),
-					'dialog' => 'retour/redirects/' . urlencode($this->id) . '/delete'
+					'dialog' => 'retour/redirects/' . urlencode($this->redirect->id()) . '/delete'
 				]
 			]
 		);
 	}
 
-	protected function redirect(): Redirect
-	{
-		return $this->redirects()->get($this->id) ?? throw new NotFoundException('Redirect not found');
-	}
-
 	public function submit(): bool
 	{
 		$redirects = $this->redirects();
-		$redirects->update($this->id, [
+		$redirects->update($this->redirect->id(), [
 			...$this->data(),
-			'creator'  => $this->redirect()->creator(),
+			'creator'  => $this->redirect->creator(),
 			'modifier' => $this->kirby->user()?->email(),
 		]);
 		$redirects->save();
@@ -60,15 +74,15 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 	protected function value(): array
 	{
-		$creator  = $this->user($this->redirect()->creator());
-		$modifier = $this->user($this->redirect()->modifier());
+		$creator  = $this->user($this->redirect->creator());
+		$modifier = $this->user($this->redirect->modifier());
 
 		if ($modifier === []) {
 			$modifier = $creator;
 		}
 
 		return [
-			...$this->redirect()->toArray(),
+			...$this->redirect->toArray(),
 			'creator'  => $creator,
 			'modifier' => $modifier,
 		];
