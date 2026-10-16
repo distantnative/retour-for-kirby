@@ -35,6 +35,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Missing targets (a deleted page, or a `200` redirect to a missing page or draft) show the error page and are logged as failure
 - Redirects to `mailto:` links and to content representations of the home page (e.g. `home.rss`) work
 - Query strings are passed on exactly as they are instead of being re-encoded, which broke parameters like Google's `_gl`
+- The creator and last editor of a redirect are stored by their user UUID, so they're still shown after an email address changes
 
 #### Logging
 

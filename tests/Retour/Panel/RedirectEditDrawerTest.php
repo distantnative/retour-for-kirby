@@ -17,7 +17,7 @@ class RedirectEditDrawerTest extends TestCase
 		Data::write($this->tmp . '/retour.yml', [
 			'redirects' => [
 				['from' => 'foo', 'to' => 'bar', 'status' => 301, 'creator' => 'homer@simpson.com'],
-				['from' => 'homer/simpson', 'to' => 'marge', 'status' => 302]
+				['from' => 'homer/simpson', 'to' => 'marge', 'status' => 302, 'creator' => 'user://marge']
 			]
 		]);
 
@@ -27,9 +27,14 @@ class RedirectEditDrawerTest extends TestCase
 		])->clone([
 			'request' => [
 				'body' => $body
+			],
+			'users' => [
+				['id' => 'homer', 'email' => 'homer@simpson.com'],
+				['id' => 'marge', 'email' => 'marge@simpson.com']
 			]
 		]);
 
+		$app->impersonate('marge@simpson.com');
 		Retour::instance($app);
 
 		return RedirectEditDrawer::factory(urlencode(str_replace('/', "\x1D", $id)));
@@ -56,6 +61,13 @@ class RedirectEditDrawerTest extends TestCase
 		$this->assertArrayHasKey('modifier', $drawer->fields);
 		$this->assertSame('retour/redirects/homer%1Dsimpson/delete', $drawer->options[0]['dialog']);
 		$this->assertSame('marge', $drawer->value['to']);
+		$this->assertSame('marge@simpson.com', (string)$drawer->value['creator'][0]['text']);
+	}
+
+	public function testLoadCreatorByEmail(): void
+	{
+		$drawer = $this->drawer('foo')->load();
+		$this->assertSame('homer@simpson.com', (string)$drawer->value['creator'][0]['text']);
 	}
 
 	public function testSubmit(): void
@@ -104,5 +116,6 @@ class RedirectEditDrawerTest extends TestCase
 		$redirect = $this->redirects()[0];
 		$this->assertSame('baz', $redirect['to']);
 		$this->assertSame('homer@simpson.com', $redirect['creator']);
+		$this->assertSame('user://marge', $redirect['modifier']);
 	}
 }
