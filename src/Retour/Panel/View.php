@@ -77,7 +77,7 @@ class View extends ViewController
 		// if log feature is supported...
 		if ($log !== null) {
 			// run garbage collection with a chance of 10%;
-			if (mt_rand(1, 10000) <= 0.1 * 10000) {
+			if (random_int(1, 10) === 1) {
 				// purge log entries that should be automatically deleted
 				$log->purge();
 			}

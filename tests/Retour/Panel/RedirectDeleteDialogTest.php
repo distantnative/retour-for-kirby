@@ -25,7 +25,7 @@ class RedirectDeleteDialogTest extends TestCase
 			'distantnative.retour.logs'   => false
 		]));
 
-		return new RedirectDeleteDialog(urlencode(str_replace('/', "\x1D", $id)));
+		return RedirectDeleteDialog::factory(urlencode(str_replace('/', "\x1D", $id)));
 	}
 
 	protected function paths(): array
@@ -34,21 +34,19 @@ class RedirectDeleteDialogTest extends TestCase
 		return array_column($data['redirects'], 'from');
 	}
 
-	public function testSubmit(): void
+	public function testFactoryNotFound(): void
 	{
-		$this->assertTrue($this->dialog('homer/simpson')->submit());
-		$this->assertSame(['foo'], $this->paths());
-	}
-
-	public function testSubmitNotFound(): void
-	{
-		$dialog = $this->dialog('missing');
-
 		try {
-			$dialog->submit();
+			$this->dialog('missing');
 			$this->fail('Removing a missing redirect must fail');
 		} catch (NotFoundException) {
 			$this->assertSame(['foo', 'homer/simpson'], $this->paths());
 		}
+	}
+
+	public function testSubmit(): void
+	{
+		$this->assertTrue($this->dialog('homer/simpson')->submit());
+		$this->assertSame(['foo'], $this->paths());
 	}
 }
