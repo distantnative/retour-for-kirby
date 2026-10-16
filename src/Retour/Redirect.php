@@ -90,6 +90,15 @@ class Redirect extends Obj
 		$page      = $kirby->page($path);
 		$code      = $this->status();
 
+		// drafts (and pages inside drafts) must not be
+		// rendered for or redirected to by visitors
+		if (
+			$page?->isDraft() === true ||
+			$page?->parents()->findBy('status', 'draft') !== null
+		) {
+			$page = null;
+		}
+
 		// Add log entry
 		$retour->log()->add([
 			'path'     => Url::path(),

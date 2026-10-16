@@ -103,6 +103,47 @@ class RedirectTest extends TestCase
 		$this->assertInstanceOf(Page::class, $redirect->resolve(['project-a']));
 	}
 
+	public function testResolveDraft(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'public']
+				],
+				'drafts' => [
+					[
+						'slug'     => 'secret',
+						'content'  => ['uuid' => 'secret'],
+						'children' => [
+							['slug' => 'child']
+						]
+					]
+				]
+			],
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'old/(:all)',
+			'to'     => '$1',
+			'status' => 200
+		]);
+
+		$this->assertInstanceOf(Page::class, $redirect->resolve(['public']));
+
+		// drafts and their children are treated as not found
+		foreach (['secret', 'secret/child', 'page://secret'] as $path) {
+			$response = $redirect->resolve([$path]);
+			$this->assertInstanceOf(Response::class, $response, $path);
+			$this->assertSame(200, $response->code(), $path);
+			$this->assertSame('', $response->body(), $path);
+		}
+	}
+
 	public function testResolvePreserveQueryUnaffectedForNonRedirectStatus(): void
 	{
 		$app = $this->kirby->clone([
