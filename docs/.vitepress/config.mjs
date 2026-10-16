@@ -8,7 +8,15 @@ export default defineConfig({
 	base: "/retour-for-kirby/",
 	appearance: false,
 	cleanUrls: true,
-	head: [["link", { rel: "og:image", href: "/retour-for-kirby/ogimage.png" }]],
+	head: [
+		[
+			"meta",
+			{
+				property: "og:image",
+				content: "https://distantnative.com/retour-for-kirby/ogimage.png",
+			},
+		],
+	],
 	themeConfig: {
 		nav: [
 			{ text: "Home", link: "/" },

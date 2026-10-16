@@ -10,7 +10,15 @@ To create a new redirect, click on the `Add` button above the table. A drawer op
 
 The URL segment after your site's domain, which you would like to catch and redirect.
 It can be a static path, e.g. `team`, or you can use placeholders to define dynamic redirects, e.g. `blog/(:all)`.
-Dynamic redirects use [Kirby's route patterns](https://getkirby.com/docs/guide/routing#patterns) as placholder.
+Dynamic redirects use [Kirby's route patterns](https://getkirby.com/docs/guide/routing#patterns) as placeholders:
+
+| Placeholder   | Matches                                          |
+| ------------- | ------------------------------------------------ |
+| `(:any)`      | A single path segment (no `/`)                   |
+| `(:all)`      | Everything, including further segments (`a/b/c`) |
+| `(:num)`      | Numbers, e.g. `42`                               |
+| `(:alpha)`    | Letters only                                     |
+| `(:alphanum)` | Letters and digits                               |
 
 ### Redirect to
 
@@ -33,7 +41,7 @@ blog/(:any)/(:all)     =>  notes/$1/entries/$2
 
 ### Status
 
-The [HTTP status code](https://httpstatuses.com/) the redirect will respond with.
+The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) the redirect will respond with.
 
 - Only status codes in the `3xx` range will actually redirect the request to the new location (URL in browser actually changes). The query string of the original request, e.g. `?utm_source=newsletter`, is dropped unless you enable the [`preserveQuery` option](/options#query-strings).
 - All other status code options either return the target page at the specified path (URL stays the same); or the browser request fails with the selected HTTP status code (empty `Redirect to` field).
@@ -47,7 +55,7 @@ If the priority flag is activated, the redirect route will overrule any existing
 
 A simple text field to leave notes for yourself and others, e.g. why this redirect is necessary.
 
-### Created by
+### Created by / Last modified by
 
 Retour automatically adds the current user as context information, e.g. when working in a team.
 
