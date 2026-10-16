@@ -8,7 +8,6 @@ use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
-use Kirby\Toolkit\I18n;
 
 class TimespanDialog extends DialogController
 {
@@ -42,7 +41,7 @@ class TimespanDialog extends DialogController
 			fields: [
 				'from' => [
 					'type'     => 'date',
-					'label'    => I18n::translate('retour.timespan.from.label'),
+					'label'    => $this->i18n('retour.timespan.from.label'),
 					'required' => true,
 					'time'     => false,
 					'min'      => $min,
@@ -50,7 +49,7 @@ class TimespanDialog extends DialogController
 				],
 				'to' => [
 					'type'     => 'date',
-					'label'    => I18n::translate('retour.timespan.to.label'),
+					'label'    => $this->i18n('retour.timespan.to.label'),
 					'required' => true,
 					'time'     => false,
 					'min'      => $min,
@@ -62,7 +61,7 @@ class TimespanDialog extends DialogController
 				'to'   => $this->date($selection['to'])
 			],
 			submitButton: [
-				'text' => I18n::translate('change')
+				'text' => $this->i18n('change')
 			]
 		);
 	}

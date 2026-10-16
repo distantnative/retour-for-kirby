@@ -5,8 +5,6 @@ namespace Kirby\Retour\Panel;
 use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Retour;
-use Kirby\Toolkit\HtmlString;
-use Kirby\Toolkit\I18n;
 
 /**
  * Adds the path of a failure (or a pattern based on it)
@@ -27,11 +25,11 @@ class FailureIgnoreDialog extends DialogController
 			fields: [
 				'pattern' => [
 					'type'     => 'text',
-					'label'    => I18n::translate('retour.failures.path'),
+					'label'    => $this->i18n('retour.failures.path'),
 					'before'   => Retour::instance()->site(),
 					'counter'  => false,
 					'required' => true,
-					'help'     => HtmlString::translate('retour.failures.ignore.help', [
+					'help'     => $this->i18nHtml('retour.failures.ignore.help', [
 						'docs' => 'https://distantnative.com/retour-for-kirby/redirects#path'
 					])
 				]
@@ -41,7 +39,7 @@ class FailureIgnoreDialog extends DialogController
 			],
 			submitButton: [
 				'icon' => 'hidden',
-				'text' => I18n::translate('retour.failures.ignore')
+				'text' => $this->i18n('retour.failures.ignore')
 			]
 		);
 	}
