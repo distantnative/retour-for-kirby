@@ -82,5 +82,5 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Translations are no longer managed on Transifex. To contribute, open a pull request against the JSON files in `src/i18n` on the `dev` branch.
 - Redirects return a Kirby response instead of ending the PHP script
 - The Panel code uses Kirby 6's view, dialog and drawer controllers and Vue 3; its logic lives in tested TypeScript helpers
-- Upgraded tooling: kirbyup 4, ESLint 9, TypeScript, getkirby/php-cs and ParaTest
+- Upgraded tooling: kirbyup 4, ESLint 10, TypeScript, getkirby/php-cs and ParaTest
 - Much larger test suite
