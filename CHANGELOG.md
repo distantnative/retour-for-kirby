@@ -62,6 +62,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The y-axis of the timeline is formatted in the Panel's language (e.g. "1,5 Mio." in German)
 - Fixed the links of some logged paths and referrers in the tables
 - Screen readers announce the priority icon in the redirects table
+- Hit counts are formatted in the Panel's language, and the tooltip shows the date of the last hit in a readable format
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance

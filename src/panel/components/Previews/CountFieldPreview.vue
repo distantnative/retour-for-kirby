@@ -1,8 +1,8 @@
 <template>
 	<div :title="title" class="k-count-preview-field">
-		<template v-if="row.hits > 0">
-			{{ row.hits }}
-			<k-icon :title="title" type="history" />
+		<template v-if="value > 0">
+			{{ hits }}
+			<k-icon type="history" />
 		</template>
 		<p v-else>–</p>
 	</div>
@@ -13,10 +13,25 @@ export default {
 	inheritAttrs: false,
 	props: {
 		row: Object,
+		value: Number,
 	},
 	computed: {
+		hits() {
+			return new Intl.NumberFormat(this.$library.dayjs.locale()).format(
+				this.value,
+			);
+		},
+		last() {
+			if (this.row.last) {
+				return this.$library
+					.dayjs(this.row.last)
+					.format("D MMM YYYY, HH:mm:ss");
+			}
+
+			return "–";
+		},
 		title() {
-			return this.$t("retour.hits.last") + ": " + (this.row.last ?? "-");
+			return this.$t("retour.hits.last") + ": " + this.last;
 		},
 	},
 };
