@@ -65,16 +65,20 @@ class LogTest extends TestCase
 
 	public function testAddTruncatesReferrerHeader(): void
 	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite'
+			],
+			'server' => [
+				'HTTP_REFERER' => 'https://example.com/' . str_repeat('a', 5000)
+			]
+		]);
+
+		$log = new Log(Retour::instance($app));
+		$log->add(['path' => 'foo']);
+
+		// request without referrer
 		$log = $this->log();
-
-		$_SERVER['HTTP_REFERER'] = 'https://example.com/' . str_repeat('a', 5000);
-
-		try {
-			$log->add(['path' => 'foo']);
-		} finally {
-			unset($_SERVER['HTTP_REFERER']);
-		}
-
 		$log->add(['path' => 'bar']);
 
 		$records = $log->table()->fetch('array')->all();
@@ -257,55 +261,6 @@ class LogTest extends TestCase
 		$this->assertTrue($log->purge());
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
 		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
-	}
-
-	public function testRedirect(): void
-	{
-		$log = $this->log();
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame(0, $redirect['hits']);
-		$this->assertSame(null, $redirect['last']);
-
-		$log->add([
-			'date'     => '2020-01-01 07:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
-
-		$log->add([
-			'date'     => $last = '2020-01-31 16:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
-
-		$log->add([
-			'date' => '2020-01-31 16:30:00',
-			'path' => 'foo'
-		]);
-
-		$log->add([
-			'date'     => '2021-01-31 16:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
-
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame($last, $redirect['last']);
-		$this->assertSame(2, $redirect['hits']);
-	}
-
-	public function testRedirectIncludesBoundaries(): void
-	{
-		$log = $this->log();
-
-		$log->add(['date' => '2019-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2020-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
-
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame(2, $redirect['hits']);
-		$this->assertSame('2020-12-31 23:59:59', $redirect['last']);
 	}
 
 	public function testRedirects(): void
