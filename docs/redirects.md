@@ -46,7 +46,7 @@ blog/(:any)/(:all)     =>  notes/$1/entries/$2
 The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) the redirect will respond with.
 
 - Only status codes in the `3xx` range will actually redirect the request to the new location (URL in browser actually changes). The query string of the original request, e.g. `?utm_source=newsletter`, is dropped unless you enable the [`preserveQuery` option](/options#query-strings).
-- All other status code options either return the target page at the specified path (URL stays the same); or the browser request fails with the selected HTTP status code (empty `Redirect to` field).
+- All other status code options either return the target page at the specified path (URL stays the same); or the browser request fails with the selected HTTP status code (empty `Redirect to` field). With status `200` and no page to show, Kirby's error page is shown instead, as an empty page would look like a successful request.
 - If you select the `disabled` option, the redirect is ignored/inactive.
 
 ### Has priority

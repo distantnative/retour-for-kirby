@@ -128,7 +128,7 @@ class Redirect
 	 * Resolves the redirect action for the router
 	 *
 	 * @param array<int, string> $placeholders
-	 * @return Page|Response|null `null` if the target page or file doesn't exist anymore
+	 * @return Page|Response|null `null` if the target page or file doesn't exist (anymore)
 	 */
 	public function resolve(array $placeholders): Page|Response|null
 	{
@@ -184,6 +184,13 @@ class Redirect
 				'headers' => ['Location' => static::location($to)]
 			]);
 		} else {
+			// an empty page would look like a successful request,
+			// so it's handled as failure (other codes like `410`
+			// can be meant to answer without a page)
+			if ($page === null && $code === 200) {
+				return null;
+			}
+
 			$kirby->response()->code($code);
 			$response = $page ?? new Response('', 'text/html', $code);
 		}

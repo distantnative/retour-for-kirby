@@ -159,10 +159,7 @@ class RedirectTest extends TestCase
 
 		// drafts and their children are treated as not found
 		foreach (['secret', 'secret/child', 'page://secret'] as $path) {
-			$response = $redirect->resolve([$path]);
-			$this->assertInstanceOf(Response::class, $response, $path);
-			$this->assertSame(200, $response->code(), $path);
-			$this->assertSame('', $response->body(), $path);
+			$this->assertNull($redirect->resolve([$path]), $path);
 		}
 	}
 
@@ -420,6 +417,26 @@ class RedirectTest extends TestCase
 		$this->assertSame(410, $response->code());
 		$this->assertSame('', $response->body());
 		$this->assertNull($response->header('Location'));
+	}
+
+	public function testResolveWithoutPageStatus200(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			]
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'does-not-exist',
+			'status' => 200
+		]);
+
+		// handled as failure, which shows the error page
+		$this->assertNull($redirect->resolve([]));
 	}
 
 	public function testRouteResolve(): void
