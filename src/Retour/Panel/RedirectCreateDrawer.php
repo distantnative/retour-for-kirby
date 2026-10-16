@@ -8,8 +8,6 @@ use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Panel\Ui\Item\UserItem;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
-use Kirby\Toolkit\HtmlString;
-use Kirby\Toolkit\I18n;
 
 class RedirectCreateDrawer extends DrawerController
 {
@@ -34,56 +32,56 @@ class RedirectCreateDrawer extends DrawerController
 		$fields = [
 			'from' => [
 				'type'     => 'text',
-				'label'    => I18n::translate('retour.redirects.from'),
+				'label'    => $this->i18n('retour.redirects.from'),
 				'icon'     => 'bookmark',
 				'before'   => Retour::instance()->site(),
 				'counter'  => false,
 				'required' => true,
-				'help'     => HtmlString::translate('retour.redirects.from.help', [
+				'help'     => $this->i18nHtml('retour.redirects.from.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#path'
 				])
 			],
 			'to' => [
 				'type'     => 'link',
-				'label'    => I18n::translate('retour.redirects.to'),
+				'label'    => $this->i18n('retour.redirects.to'),
 				'options'  => ['url', 'page', 'custom'],
-				'help'     => I18n::translate('retour.redirects.to.help')
+				'help'     => $this->i18n('retour.redirects.to.help')
 			],
 			'status' => [
 				'type'     => 'retour-status',
-				'label'    => I18n::translate('status'),
+				'label'    => $this->i18n('status'),
 				'options'  => $codes,
 				'width'    => '1/2',
-				'help'     => HtmlString::translate('retour.redirects.status.help', [
+				'help'     => $this->i18nHtml('retour.redirects.status.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#status'
 				])
 			],
 			'priority' => [
 				'type'     => 'toggle',
-				'label'    => I18n::translate('retour.redirects.priority'),
+				'label'    => $this->i18n('retour.redirects.priority'),
 				'icon'     => 'bolt',
 				'width'    => '1/2',
-				'help'     => I18n::translate('retour.redirects.priority.help')
+				'help'     => $this->i18n('retour.redirects.priority.help')
 			],
 			'comment' => [
 				'type'     => 'textarea',
-				'label'    => I18n::translate('retour.redirects.comment'),
+				'label'    => $this->i18n('retour.redirects.comment'),
 				'icon'     => 'chat',
 				'buttons'  => false,
-				'help'     => I18n::translate('retour.redirects.comment.help')
+				'help'     => $this->i18n('retour.redirects.comment.help')
 			],
 			'creator' => [
 				'type'     => 'retour-users',
-				'label'    => I18n::translate('retour.redirects.creator'),
-				'empty'    => I18n::translate('retour.redirects.creator.empty'),
+				'label'    => $this->i18n('retour.redirects.creator'),
+				'empty'    => $this->i18n('retour.redirects.creator.empty'),
 			]
 		];
 
 		if ($this instanceof RedirectEditDrawer) {
 			$fields['modifier'] = [
 				'type'     => 'retour-users',
-				'label'    => I18n::translate('retour.redirects.modifier'),
-				'empty'    => I18n::translate('retour.redirects.creator.empty'),
+				'label'    => $this->i18n('retour.redirects.modifier'),
+				'empty'    => $this->i18n('retour.redirects.creator.empty'),
 			];
 		}
 
@@ -118,7 +116,7 @@ class RedirectCreateDrawer extends DrawerController
 
 	protected function title(): string
 	{
-		return I18n::translate('add');
+		return $this->i18n('add');
 	}
 
 	/**

@@ -6,7 +6,6 @@ use Kirby\Panel\Controller\ViewController;
 use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
-use Kirby\Toolkit\I18n;
 
 /**
  * Handles Panel view requests for the Retour tabs
@@ -27,10 +26,10 @@ class View extends ViewController
 		return new ViewComponent(
 			...$this->props(),
 			component: 'k-retour-' . $this->tab . '-view',
-			title: I18n::translate('view.retour'),
+			title: $this->i18n('view.retour'),
 			breadcrumb: [
 				[
-					'label' => I18n::translate('retour.' . $this->tab),
+					'label' => $this->i18n('retour.' . $this->tab),
 					'link'  => 'retour/' . $this->tab,
 				]
 			]
@@ -53,7 +52,7 @@ class View extends ViewController
 			'tabs'     => [
 				[
 					'name'  => 'redirects',
-					'label' => I18n::translate('retour.redirects'),
+					'label' => $this->i18n('retour.redirects'),
 					'link'  => 'retour/redirects'
 				]
 			]
@@ -70,7 +69,7 @@ class View extends ViewController
 			// add additional tabs
 			$props['tabs'][] = [
 				'name'  => 'failures',
-				'label' => I18n::translate('retour.failures'),
+				'label' => $this->i18n('retour.failures'),
 				'link'  => 'retour/failures'
 			];
 

@@ -8,7 +8,6 @@ use Kirby\Retour\Ignores;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\Escape;
 use Kirby\Toolkit\HtmlString;
-use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 
 /**
@@ -23,8 +22,8 @@ class IgnoresDialog extends DialogController
 		$fields  = [
 			'patterns' => [
 				'type'   => 'tags',
-				'label'  => I18n::translate('retour.failures.ignores'),
-				'help'   => I18n::translate('retour.failures.ignores.help'),
+				'label'  => $this->i18n('retour.failures.ignores'),
+				'help'   => $this->i18n('retour.failures.ignores.help'),
 				'layout' => 'list',
 				'theme'  => 'light'
 			]
@@ -35,8 +34,8 @@ class IgnoresDialog extends DialogController
 		if (array_diff(Ignores::COMMON, $ignores->custom()) !== []) {
 			$fields['common'] = [
 				'type'  => 'toggle',
-				'label' => I18n::translate('retour.failures.ignores.common'),
-				'help'  => I18n::translate('retour.failures.ignores.common.help')
+				'label' => $this->i18n('retour.failures.ignores.common'),
+				'help'  => $this->i18n('retour.failures.ignores.common.help')
 			];
 		}
 
@@ -46,7 +45,7 @@ class IgnoresDialog extends DialogController
 		if ($config !== []) {
 			$fields['config'] = [
 				'type'  => 'info',
-				'label' => I18n::translate('retour.failures.ignores.config'),
+				'label' => $this->i18n('retour.failures.ignores.config'),
 				'text'  => new HtmlString(implode(', ', array_map(
 					fn (string $pattern) => '<code>' . Escape::html($pattern) . '</code>',
 					$config
@@ -65,7 +64,7 @@ class IgnoresDialog extends DialogController
 				'patterns' => Retour::instance()->ignores()->custom()
 			],
 			submitButton: [
-				'text' => I18n::translate('save')
+				'text' => $this->i18n('save')
 			]
 		);
 	}

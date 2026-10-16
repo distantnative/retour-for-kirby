@@ -3,7 +3,6 @@
 namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Retour;
-use Kirby\Toolkit\I18n;
 
 class FailureResolveDrawer extends RedirectCreateDrawer
 {
@@ -36,7 +35,7 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 
 	protected function title(): string
 	{
-		return I18n::translate('retour.failures.resolve');
+		return $this->i18n('retour.failures.resolve');
 	}
 
 	protected function value(): array
