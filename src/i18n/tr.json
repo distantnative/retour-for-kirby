@@ -8,7 +8,6 @@
 	"retour.redirects.from.help": "Dinamik yönlendirmeler için <a href='{docs}' target='_blank'>yer tutucular</a> ekleyin.",
 	"retour.redirects.to": "Adresine yönlendir",
 	"retour.redirects.to.help": "Site içi veya tam bir adres girin. İsteğin durum kodu ile tamamlanması için boş bırakın.",
-	"retour.redirects.status": "Durum",
 	"retour.redirects.status.help": "<a href='{docs}' target='_blank'>HTTP durum kodları</a> ve hangisini ne zaman kullanılacağı hakkında bilgi edinin.",
 	"retour.redirects.priority": "Önceliği var mı?",
 	"retour.redirects.priority.abbr": "Öncelik",
@@ -39,15 +38,10 @@
 	"retour.timespan.from.label": "Başlangıç",
 	"retour.timespan.to.label": "Bitiş",
 	"retour.timespan.set.label": "Özel aralık belirle",
-	"retour.timespan.today.label": "Bugüne git",
 	"retour.timespan.previous.label": "Önceki",
 	"retour.timespan.next.label": "Sonraki",
 	"retour.stats.redirected": "Yönlendirildi",
 	"retour.stats.resolved": "Çözümlendi",
 	"retour.stats.failed": "Başarısız",
-	"retour.stats.mode.all": "Tümü",
-	"retour.stats.mode.year": "Yıl",
-	"retour.stats.mode.month": "Ay",
-	"retour.stats.mode.week": "Hafta",
-	"retour.stats.mode.day": "Gün"
+	"retour.stats.mode.all": "Tümü"
 }

@@ -51,7 +51,7 @@ class RedirectCreateDrawer extends DrawerController
 			],
 			'status' => [
 				'type'     => 'retour-status',
-				'label'    => I18n::translate('retour.redirects.status'),
+				'label'    => I18n::translate('status'),
 				'options'  => $codes,
 				'width'    => '1/2',
 				'help'     => HtmlString::translate('retour.redirects.status.help', [
