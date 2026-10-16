@@ -11,6 +11,7 @@ use Kirby\Database\Query;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use Kirby\Toolkit\Str;
+use PDO;
 use Throwable;
 
 /**
@@ -301,88 +302,59 @@ class Log
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{
-		// Define parts depending on unit,
-		// grouping by the start of the date string
-		// is faster than formatting each date
-		$use = [
-			'length'    => 10,
-			'group_php' => 'Y-m-d',
-			'step'      => new DateInterval('P1D')
-		];
-
-		$overrides = match ($unit) {
-			'day' => [
-				'length'    => 13,
-				'group_php' => 'Y-m-d H',
-				'step'      => new DateInterval('PT1H'),
-			],
-			'year', 'months' => [
-				'length'    => 7,
-				'group_php' => 'Y-m',
-				'step'      => new DateInterval('P1M'),
-			],
-			default => [],
+		[$format, $step] = match ($unit) {
+			'day'            => ['Y-m-d H', new DateInterval('PT1H')],
+			'year', 'months' => ['Y-m', new DateInterval('P1M')],
+			default          => ['Y-m-d', new DateInterval('P1D')]
 		};
 
-		$use = array_merge($use, $overrides);
+		// counting each step with a range query on the date index
+		// is faster than grouping all records by a part of their date
+		$query = $this->database->connection()->prepare('
+			SELECT
+				COUNT(redirect) AS redirected,
+				SUM(redirect IS NULL AND wasResolved IS NOT NULL) AS resolved,
+				SUM(redirect IS NULL AND wasResolved IS NULL) AS failed
+			FROM records
+			WHERE date >= :start AND date < :end
+		');
 
-		$data = $this->database->query('
-            SELECT
-                substr(date, 1, :length) AS date,
-				SUM(CASE WHEN redirect IS NOT NULL THEN 1 END) AS redirected,
-				SUM(CASE WHEN wasResolved IS NOT NULL AND redirect IS NULL THEN 1 END) AS resolved,
-				SUM(CASE WHEN redirect IS NULL AND wasResolved IS NULL THEN 1 END) AS failed
-            FROM
-                records
-            WHERE
-                date >= :from
-            AND
-                date <= :to
-			GROUP BY
-                substr(date, 1, :length)
-            ORDER BY
-                substr(date, 1, :length)
-        ', [
-			'from'   => $from . ' 00:00:00',
-			'to'     => $to . ' 23:59:59',
-			'length' => $use['length']
-		], [
-			'fetch' => 'array'
-		]);
-
-		$data = $data->toArray(fn (array $entry) => [
-			'date'       => (string)$entry['date'],
-			'failed'     => (int)$entry['failed'],
-			'resolved'   => (int)$entry['resolved'],
-			'redirected' => (int)$entry['redirected'],
-		]);
-
-		$data = array_column($data, null, 'date');
-
-		// Iterate the date strings of all steps (in UTC to not skip
-		// or repeat hours when daylight saving time begins or ends)
+		// Iterate all steps (in UTC to not skip or repeat
+		// hours when daylight saving time begins or ends)
 		$utc  = new DateTimeZone('UTC');
 		$date = new DateTimeImmutable($from, $utc);
 		$last = new DateTimeImmutable($to . ' 23:59:59', $utc);
-		$last = $last->format($use['group_php']);
+		$min  = $date->format('Y-m-d H:i:s');
+		$max  = $last->modify('+1 second')->format('Y-m-d H:i:s');
+		$last = $last->format($format);
 
 		// Start months on their first day, as adding
 		// a month to e.g. January 31 skips February
-		if ($use['group_php'] === 'Y-m') {
+		if ($format === 'Y-m') {
 			$date = $date->modify('first day of this month');
 		}
 
 		$result = [];
 
-		while (($step = $date->format($use['group_php'])) <= $last) {
-			$result[] = $data[$step] ?? [
-				'date'       => $step,
-				'failed'     => 0,
-				'resolved'   => 0,
-				'redirected' => 0,
+		while (($label = $date->format($format)) <= $last) {
+			$next = $date->add($step);
+
+			// the first and last step only cover the timespan
+			$query->execute([
+				'start' => max($date->format('Y-m-d H:i:s'), $min),
+				'end'   => min($next->format('Y-m-d H:i:s'), $max)
+			]);
+
+			$counts = $query->fetch(PDO::FETCH_ASSOC);
+
+			$result[] = [
+				'date'       => $label,
+				'failed'     => (int)$counts['failed'],
+				'resolved'   => (int)$counts['resolved'],
+				'redirected' => (int)$counts['redirected'],
 			];
 
-			$date = $date->add($use['step']);
+			$date = $next;
 		}
 
 		return $result;
