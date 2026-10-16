@@ -16,6 +16,10 @@ The tab and all stats are only shown when the [`logs` option](/options#config) i
 - Make sure the redirect doesn't have the `disabled` status.
 - Browsers cache permanent redirects (`301`, `308`). Test changes in a private window.
 
+## All redirects stopped working
+
+If Retour can't read `/site/config/retour.yml`, e.g. because of a syntax error after editing it by hand, your site keeps running without redirects. The Retour view in the Panel shows the error, including the line to fix. Until then, Retour won't save any changes to the file, so nothing gets overwritten.
+
 ## The Panel view is slow
 
 With a large log, loading the stats can take a while. After updating from an earlier version, the first visit also updates the log database once. To keep the log small in the future, [clear it](/failures#clearing-logs) from time to time or set the [`deleteAfter` option](/options#config).
