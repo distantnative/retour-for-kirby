@@ -27,11 +27,11 @@ export function axis(max: number): string[] {
 		const tick = x * span;
 
 		if (tick >= 1000000) {
-			return Math.floor(tick / 100000) / 10 + "M";
+			return tick / 1000000 + "M";
 		}
 
 		if (tick >= 1000) {
-			return Math.floor(tick / 100) / 10 + "k";
+			return tick / 1000 + "k";
 		}
 
 		return String(tick);
@@ -77,7 +77,8 @@ export function clip(
 /**
  * Returns the top of the y-axis: the highest stack
  * plus some headroom, rounded to a quarter of its
- * order of magnitude
+ * order of magnitude, or at least to a multiple of 5
+ * so that all five ticks are whole numbers
  *
  * @example
  * max([{ label: "2025-01", areas: [{ color: "red", data: 900 }] }]) // => 1000
@@ -87,7 +88,7 @@ export function max(segments: Segment[]): number {
 
 	if (highest > 0) {
 		const digits = highest.toString().length;
-		const step = Math.pow(10, digits) / 4;
+		const step = Math.max(Math.pow(10, digits) / 4, 5);
 		return Math.ceil((highest * 1.1) / step) * step;
 	}
 

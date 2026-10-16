@@ -13,7 +13,9 @@ describe("chart.axis()", () => {
 		{ max: 75, expected: ["15", "30", "45", "60", "75"] },
 		{ max: 5000, expected: ["1k", "2k", "3k", "4k", "5k"] },
 		{ max: 7500, expected: ["1.5k", "3k", "4.5k", "6k", "7.5k"] },
+		{ max: 1250, expected: ["250", "500", "750", "1k", "1.25k"] },
 		{ max: 2500000, expected: ["500k", "1M", "1.5M", "2M", "2.5M"] },
+		{ max: 1250000, expected: ["250k", "500k", "750k", "1M", "1.25M"] },
 	];
 
 	it.each(cases)("returns ticks for $max", ({ max, expected }) => {
@@ -61,6 +63,8 @@ describe("chart.max()", () => {
 		{ name: "falls back without segments", segments: [], expected: 5 },
 		{ name: "falls back without data", segments: [segment(0, 0)], expected: 5 },
 		{ name: "rounds single digits", segments: [segment(3)], expected: 5 },
+		{ name: "rounds low single digits", segments: [segment(1)], expected: 5 },
+		{ name: "rounds high single digits", segments: [segment(5)], expected: 10 },
 		{ name: "rounds double digits", segments: [segment(50)], expected: 75 },
 		{
 			name: "uses the highest stack",
@@ -71,6 +75,12 @@ describe("chart.max()", () => {
 
 	it.each(cases)("$name", ({ segments, expected }) => {
 		expect(max(segments)).toBe(expected);
+	});
+
+	it("divides the axis into whole numbers", () => {
+		for (let highest = 1; highest <= 1000; highest++) {
+			expect(max([segment(highest)]) % 5).toBe(0);
+		}
 	});
 });
 

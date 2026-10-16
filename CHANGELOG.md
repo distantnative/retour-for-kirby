@@ -52,6 +52,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Without logging, the redirects table no longer shows an empty hits column
 - Clicking a month in the timeline of a longer timespan zooms into the whole month instead of its first day, and the current month is highlighted
 - Previous and next on a custom timespan move by its own length (e.g. from 10–20 March to 21–31 March) instead of by a single day or month
+- The y-axis of the timeline shows exact ticks (1.25k instead of 1.2k) and whole numbers for small counts
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
