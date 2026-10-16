@@ -2,7 +2,15 @@
 
 Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. You find them in the `Failures` tab of Retour's Panel view. This is valuable information for you to know where something might not be working correctly. You can see where your users fail.
 
-## Selected timespan
+## Stats and timespan
+
+Above the tables in both tabs, Retour shows stats for all logged requests. The pie chart shows how they split up, the timeline how they are spread over time:
+
+- **Redirected:** requests handled by one of your redirects
+- **Resolved:** failures that you later turned into a redirect via [`Add as redirect`](#add-as-redirect)
+- **Failed:** failures that are still open
+
+Depending on the timespan, the timeline shows hours, days or months. Click on a day or month to zoom in on it.
 
 When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occurred during the selected timespan are shown. But it also applies to the hits column in the `Routes` tab.
 
@@ -44,7 +52,7 @@ location ~ ^/(wp-admin|wp-login\.php|xmlrpc\.php|\.env) {
 
 ## Clearing logs
 
-Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table. You can clear the complete log or only the failures, which keeps the hits stats of your redirects:
+Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table. You can clear the complete log or only the open failures, which keeps the redirected and resolved stats:
 
 ![Clear the log](/clear.png)
 
