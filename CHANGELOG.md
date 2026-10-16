@@ -20,6 +20,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - New `cache` option: the parsed redirects config is cached until the file changes. On by default; set it to `false` or pass Kirby cache options, e.g. `['type' => 'apcu']`.
 - New translations: Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America)
 - New icons in the Panel: a redirect icon for Retour in the menu, icons for the redirects and failures tabs and more fitting icons in the stats, tables, drawers and dialogs
+- Clicking the empty redirects table opens the drawer to add a redirect
 
 ### Fixes
 
