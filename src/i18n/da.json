@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Ignorerede stier",
 	"retour.failures.ignores.help": "Forespørgsler til disse stier logges ikke som fejl.",
 	"retour.failures.ignores.common": "Tilføj almindelige scanner-stier",
-	"retour.failures.ignores.common.help": "Stier, som bots afsøger for sårbarheder, f.eks. wp-login.php, wp-admin, xmlrpc.php eller .env",
+	"retour.failures.ignores.common.help": "Stier, som bots afsøger for sårbarheder, f.eks. {paths}",
 	"retour.failures.ignores.config": "Også ignoreret via konfigurationen",
 	"retour.timespan.from.label": "Fra",
 	"retour.timespan.to.label": "Til",

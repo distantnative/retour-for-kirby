@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Yoksayılan yollar",
 	"retour.failures.ignores.help": "Bu yollara yapılan istekler başarısız olarak kaydedilmez.",
 	"retour.failures.ignores.common": "Yaygın tarama botu yollarını ekle",
-	"retour.failures.ignores.common.help": "Botların güvenlik açığı aradığı yollar, ör. wp-login.php, wp-admin, xmlrpc.php veya .env",
+	"retour.failures.ignores.common.help": "Botların güvenlik açığı aradığı yollar, ör. {paths}",
 	"retour.failures.ignores.config": "Yapılandırma ile de yoksayılanlar",
 	"retour.timespan.from.label": "Başlangıç",
 	"retour.timespan.to.label": "Bitiş",

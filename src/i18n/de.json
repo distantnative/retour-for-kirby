@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Ignorierte Pfade",
 	"retour.failures.ignores.help": "Anfragen an diese Pfade werden nicht als Fehler geloggt.",
 	"retour.failures.ignores.common": "Häufige Scanner-Pfade hinzufügen",
-	"retour.failures.ignores.common.help": "Pfade, die Bots nach Sicherheitslücken absuchen, z. B. wp-login.php, wp-admin, xmlrpc.php oder .env",
+	"retour.failures.ignores.common.help": "Pfade, die Bots nach Sicherheitslücken absuchen, z. B. {paths}",
 	"retour.failures.ignores.config": "Zusätzlich über die Config ignoriert",
 	"retour.timespan.from.label": "Von",
 	"retour.timespan.to.label": "Bis",

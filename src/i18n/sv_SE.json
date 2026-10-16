@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Ignorerade sökvägar",
 	"retour.failures.ignores.help": "Förfrågningar till dessa sökvägar loggas inte som misslyckanden.",
 	"retour.failures.ignores.common": "Lägg till vanliga skannersökvägar",
-	"retour.failures.ignores.common.help": "Sökvägar där botar letar efter sårbarheter, t.ex. wp-login.php, wp-admin, xmlrpc.php eller .env",
+	"retour.failures.ignores.common.help": "Sökvägar där botar letar efter sårbarheter, t.ex. {paths}",
 	"retour.failures.ignores.config": "Ignoreras även via konfigurationen",
 	"retour.timespan.from.label": "Från",
 	"retour.timespan.to.label": "Till",

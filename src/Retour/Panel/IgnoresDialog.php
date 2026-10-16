@@ -16,6 +16,17 @@ use Kirby\Toolkit\Str;
  */
 class IgnoresDialog extends DialogController
 {
+	/**
+	 * Renders the paths as a comma-separated list of code elements
+	 */
+	protected function code(array $paths): HtmlString
+	{
+		return new HtmlString(implode(', ', array_map(
+			fn (string $path) => '<code>' . Escape::html($path) . '</code>',
+			$paths
+		)));
+	}
+
 	public function fields(): array
 	{
 		$ignores = Retour::instance()->ignores();
@@ -35,7 +46,9 @@ class IgnoresDialog extends DialogController
 			$fields['common'] = [
 				'type'  => 'toggle',
 				'label' => $this->i18n('retour.failures.ignores.common'),
-				'help'  => $this->i18n('retour.failures.ignores.common.help')
+				'help'  => $this->i18nHtml('retour.failures.ignores.common.help', [
+					'paths' => $this->code(['wp-login.php', 'wp-admin', 'xmlrpc.php', '.env'])
+				])
 			];
 		}
 
@@ -46,10 +59,7 @@ class IgnoresDialog extends DialogController
 			$fields['config'] = [
 				'type'  => 'info',
 				'label' => $this->i18n('retour.failures.ignores.config'),
-				'text'  => new HtmlString(implode(', ', array_map(
-					fn (string $pattern) => '<code>' . Escape::html($pattern) . '</code>',
-					$config
-				)))
+				'text'  => $this->code($config)
 			];
 		}
 

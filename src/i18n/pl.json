@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Ignorowane ścieżki",
 	"retour.failures.ignores.help": "Żądania do tych ścieżek nie są rejestrowane jako błędy.",
 	"retour.failures.ignores.common": "Dodaj typowe ścieżki skanerów",
-	"retour.failures.ignores.common.help": "Ścieżki, które boty sprawdzają w poszukiwaniu luk, np. wp-login.php, wp-admin, xmlrpc.php lub .env",
+	"retour.failures.ignores.common.help": "Ścieżki, które boty sprawdzają w poszukiwaniu luk, np. {paths}",
 	"retour.failures.ignores.config": "Ignorowane również przez konfigurację",
 	"retour.timespan.from.label": "Od",
 	"retour.timespan.to.label": "Do",

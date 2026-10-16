@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Percorsi ignorati",
 	"retour.failures.ignores.help": "Le richieste a questi percorsi non vengono registrate come errori.",
 	"retour.failures.ignores.common": "Aggiungi percorsi comuni degli scanner",
-	"retour.failures.ignores.common.help": "Percorsi che i bot sondano alla ricerca di vulnerabilità, ad es. wp-login.php, wp-admin, xmlrpc.php o .env",
+	"retour.failures.ignores.common.help": "Percorsi che i bot sondano alla ricerca di vulnerabilità, ad es. {paths}",
 	"retour.failures.ignores.config": "Ignorati anche tramite la configurazione",
 	"retour.timespan.from.label": "Da",
 	"retour.timespan.to.label": "A",

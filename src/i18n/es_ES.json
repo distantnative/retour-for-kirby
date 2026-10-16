@@ -33,7 +33,7 @@
 	"retour.failures.ignores": "Rutas ignoradas",
 	"retour.failures.ignores.help": "Las solicitudes a estas rutas no se registran como fallos.",
 	"retour.failures.ignores.common": "Añadir rutas habituales de escáneres",
-	"retour.failures.ignores.common.help": "Rutas que los bots rastrean en busca de vulnerabilidades, p. ej. wp-login.php, wp-admin, xmlrpc.php o .env",
+	"retour.failures.ignores.common.help": "Rutas que los bots rastrean en busca de vulnerabilidades, p. ej. {paths}",
 	"retour.failures.ignores.config": "También ignoradas mediante la configuración",
 	"retour.timespan.from.label": "Desde",
 	"retour.timespan.to.label": "Hasta",
