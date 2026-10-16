@@ -6,7 +6,7 @@ use Kirby\Retour\Panel\View;
 return [
 	'retour' => fn () => [
 		'label' => t('view.retour'),
-		'icon'  => 'shuffle',
+		'icon'  => 'redirect',
 		'menu'  => true,
 		'link'  => 'retour/redirects',
 		'views' => [
