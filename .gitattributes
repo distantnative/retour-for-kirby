@@ -8,8 +8,8 @@ src/panel/ export-ignore
 
 # Development files
 .editorconfig export-ignore
-.eslintrc.js export-ignore
 composer.lock export-ignore
+eslint.config.mjs export-ignore
 package-lock.json export-ignore
 package.json export-ignore
 tsconfig.json export-ignore
