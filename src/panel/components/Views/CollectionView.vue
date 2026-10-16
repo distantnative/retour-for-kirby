@@ -32,7 +32,11 @@
 		</template>
 
 		<!-- Empty state -->
-		<k-empty v-if="filteredItems.length === 0" v-bind="empty" layout="table" />
+		<k-empty
+			v-if="filteredItems.length === 0"
+			v-bind="q ? { icon: 'search', text: $t('search.results.none') } : empty"
+			layout="table"
+		/>
 
 		<!-- Table -->
 		<k-table
