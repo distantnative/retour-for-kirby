@@ -43,6 +43,7 @@ return [
 		if (
 			$log !== null &&
 			$method !== 'HEAD' &&
+			$retour->ignoreVisitor() === false &&
 			$retour->ignore($path) === false
 		) {
 			$log->add(['path' => $path]);

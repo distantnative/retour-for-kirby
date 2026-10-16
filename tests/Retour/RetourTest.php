@@ -81,6 +81,26 @@ class RetourTest extends TestCase
 		$this->assertTrue($retour->ignore($path));
 	}
 
+	public function testIgnoreVisitor(): void
+	{
+		$app    = $this->app();
+		$retour = Retour::instance($app);
+
+		$app->visitor()->ip('192.0.2.1');
+		$this->assertFalse($retour->ignoreVisitor());
+
+		$app = $this->app([
+			'distantnative.retour.ignoreIps' => ['192.0.2.1']
+		]);
+		$retour = Retour::instance($app);
+
+		$app->visitor()->ip('192.0.2.1');
+		$this->assertTrue($retour->ignoreVisitor());
+
+		$app->visitor()->ip('192.0.2.2');
+		$this->assertFalse($retour->ignoreVisitor());
+	}
+
 	public function testInstance(): void
 	{
 		$app    = App::instance();
