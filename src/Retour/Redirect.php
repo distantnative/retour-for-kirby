@@ -131,6 +131,12 @@ class Redirect extends Obj
 
 				// support for content representations
 				if (empty($extension) === false) {
+					// the home page's URL is the site URL, but its
+					// representations are only reachable via its slug
+					if ($page->isHomePage() === true) {
+						$to .= '/' . $page->slug();
+					}
+
 					$to .= '.' . $extension;
 				}
 			} else {

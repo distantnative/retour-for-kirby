@@ -190,6 +190,7 @@ class RedirectTest extends TestCase
 			],
 			'site' => [
 				'children' => [
+					['slug' => 'home'],
 					[
 						'slug'     => 'projects',
 						'children' => [
@@ -223,6 +224,16 @@ class RedirectTest extends TestCase
 		$response = $redirect->resolve([]);
 		$this->assertSame(307, $response->code());
 		$this->assertSame('https://example.com/projects/project-a.json', $response->header('Location'));
+
+		// content representation of the home page
+		$redirect = new Redirect([
+			'from'   => 'feed',
+			'to'     => 'home.rss',
+			'status' => 301
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame('https://example.com/home.rss', $response->header('Location'));
 	}
 
 	public function testResolveRedirectMailto(): void
