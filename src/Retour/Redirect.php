@@ -3,10 +3,10 @@
 namespace Kirby\Retour;
 
 use Kirby\Cms\Page;
+use Kirby\Cms\Url;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Response;
-use Kirby\Http\Url;
 use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
 
@@ -114,6 +114,10 @@ class Redirect extends Obj
 				if (empty($extension) === false) {
 					$to .= '.' . $extension;
 				}
+			} else {
+				// resolve paths (and UUIDs) against the site URL,
+				// e.g. for sites in a subfolder; absolute URLs are kept
+				$to = Url::to($to);
 			}
 
 			if ($retour->option('preserveQuery', false) === true) {

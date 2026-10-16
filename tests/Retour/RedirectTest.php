@@ -258,6 +258,66 @@ class RedirectTest extends TestCase
 		$this->assertSame('https://example.com/projects?gclid=abc', $response->header('Location'));
 	}
 
+	public function testResolveRedirectWithoutPage(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'urls' => [
+				'index' => 'https://example.com/sub'
+			]
+		]);
+
+		Retour::instance($app);
+
+		$targets = [
+			'downloads/file.pdf'              => 'https://example.com/sub/downloads/file.pdf',
+			'/downloads/file.pdf'             => 'https://example.com/sub/downloads/file.pdf',
+			''                                => 'https://example.com/sub',
+			'https://getkirby.com/docs?a=1#b' => 'https://getkirby.com/docs?a=1#b',
+		];
+
+		foreach ($targets as $to => $expected) {
+			$redirect = new Redirect([
+				'from'   => 'foo',
+				'to'     => $to,
+				'status' => 301
+			]);
+
+			$response = $redirect->resolve([]);
+			$this->assertSame(301, $response->code(), $to);
+			$this->assertSame($expected, $response->header('Location'), $to);
+		}
+	}
+
+	public function testResolveRedirectWithoutPagePreserveQuery(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs'          => false,
+				'distantnative.retour.preserveQuery' => true
+			],
+			'urls' => [
+				'index' => 'https://example.com/sub'
+			],
+			'server' => [
+				'REQUEST_URI' => '/sub/foo?gclid=abc'
+			]
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'downloads/file.pdf',
+			'status' => 302
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame('https://example.com/sub/downloads/file.pdf?gclid=abc', $response->header('Location'));
+	}
+
 	public function testResolveWithoutPage(): void
 	{
 		$app = $this->kirby->clone([
