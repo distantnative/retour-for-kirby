@@ -41,6 +41,26 @@ The following config options are available:
 ]
 ```
 
+## Query strings
+
+By default, redirects send visitors to the exact target you entered and drop the query string of the original request. If you run ads or campaigns, this means tracking parameters like `gclid`, `fbclid` or `utm_*` get lost on the way.
+
+With the `preserveQuery` option enabled, Retour forwards the query string unchanged to the redirect target:
+
+```php
+// site/config/config.php
+
+'distantnative.retour' => [
+  'preserveQuery' => true
+]
+```
+
+```
+/old-page?utm_source=newsletter  =>  /new-page?utm_source=newsletter
+```
+
+If the target already has a query string of its own, the forwarded parameters are added to it. The option applies to all redirects with a `3xx` status code. Other status codes don't send the visitor to a new URL, so their query string stays untouched anyway.
+
 ## Permissions
 
 Moreover, Retour obeys to the following user blueprint permissions:

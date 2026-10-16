@@ -35,7 +35,7 @@ blog/(:any)/(:all)     =>  notes/$1/entries/$2
 
 The [HTTP status code](https://httpstatuses.com/) the redirect will respond with.
 
-- Only status codes in the `3xx` range will actually redirect the request to the new location (URL in browser actually changes).
+- Only status codes in the `3xx` range will actually redirect the request to the new location (URL in browser actually changes). The query string of the original request, e.g. `?utm_source=newsletter`, is dropped unless you enable the [`preserveQuery` option](/options#query-strings).
 - All other status code options either return the target page at the specified path (URL stays the same); or the browser request fails with the selected HTTP status code (empty `Redirect to` field).
 - If you select the `disabled` option, the redirect is ignored/inactive.
 
