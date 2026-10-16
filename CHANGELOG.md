@@ -48,6 +48,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Deleting the last row on a table page, or switching to a timespan with fewer rows, no longer leaves an empty table without pagination
 - Table columns can be sorted with the keyboard
 - Only clickable table cells show a pointer cursor
+- Without logging, the redirects table no longer shows an empty hits column
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance

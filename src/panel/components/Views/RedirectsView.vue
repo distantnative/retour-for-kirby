@@ -15,7 +15,7 @@ export default {
 			];
 		},
 		columns() {
-			return {
+			const columns = {
 				from: {
 					label: this.$t("retour.redirects.from"),
 					type: "path",
@@ -37,12 +37,18 @@ export default {
 					type: "priority",
 					width: "1/10",
 				},
-				hits: {
+			};
+
+			// hits are only counted with logs enabled
+			if (this.stats) {
+				columns.hits = {
 					label: this.$t("retour.hits"),
 					width: "1/10",
 					type: "count",
-				},
-			};
+				};
+			}
+
+			return columns;
 		},
 		empty() {
 			return {
