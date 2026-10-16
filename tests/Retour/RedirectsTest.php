@@ -141,14 +141,6 @@ class RedirectsTest extends TestCase
 		$this->assertInstanceOf(Redirect::class, $redirects->first());
 	}
 
-	public function testRetour(): void
-	{
-		$retour    = Retour::instance();
-		$redirects = Redirects::factory($retour, []);
-		$this->assertInstanceOf(Retour::class, $redirects->retour());
-		$this->assertSame($retour, $redirects->retour());
-	}
-
 	public function testSave(): void
 	{
 		$file = $this->tmp . '/redirects.yml';

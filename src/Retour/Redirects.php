@@ -55,11 +55,6 @@ class Redirects extends Collection
 		return $redirects;
 	}
 
-	public function retour(): Retour
-	{
-		return $this->retour;
-	}
-
 	/**
 	 * Writes collection to config file
 	 */

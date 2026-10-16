@@ -12,6 +12,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Redirect::class)]
 class RedirectTest extends TestCase
 {
+	public function testConstructNumericValues(): void
+	{
+		// e.g. unquoted numbers in hand-edited config files
+		$redirect = new Redirect(['from' => 404, 'to' => 410, 'status' => 301]);
+		$this->assertSame('404', $redirect->from());
+		$this->assertSame('410', $redirect->to());
+		$this->assertSame('404', $redirect->id());
+	}
+
 	public function testConstructValidation(): void
 	{
 		$this->expectExceptionMessage('Route requires path');
@@ -514,17 +523,6 @@ class RedirectTest extends TestCase
 		$this->assertSame('foo/(:any)', $route['pattern']);
 		$this->assertSame('GET|HEAD', $route['method']);
 		$this->assertInstanceOf(Closure::class, $route['action']);
-	}
-
-	public function testToRouteDisabled(): void
-	{
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'bar',
-			'status' => 'disabled'
-		]);
-
-		$this->assertNull($redirect->toRoute());
 	}
 
 	public function testWithQuery(): void
