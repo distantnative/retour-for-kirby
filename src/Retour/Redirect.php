@@ -9,25 +9,55 @@ use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Idn;
 use Kirby\Http\Response;
-use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
 
 /**
  * Redirect
  * Single redirect with its properties
  */
-class Redirect extends Obj
+class Redirect
 {
+	protected string|null $comment;
+	protected string|null $creator;
+	protected string $from;
+	protected string|null $modifier;
+	protected bool $priority;
+	protected int|null $status;
+	protected string|null $to;
+
 	/**
 	 * Class constructor, validates data
 	 */
-	public function __construct(array $data = [])
+	public function __construct(array $data)
 	{
 		if (empty($data['from'] ?? null) === true) {
-			throw new InvalidArgumentException('Route requires path: ' . json_encode($data));
+			throw new InvalidArgumentException(
+				message: 'Route requires path: ' . json_encode($data)
+			);
 		}
 
-		parent::__construct($data);
+		$this->from     = $data['from'];
+		$this->to       = $data['to'] ?? null;
+		$this->status   = static::normalizeStatus($data['status'] ?? null);
+		$this->priority = Str::toType($data['priority'] ?? 'false', 'bool') === true;
+		$this->comment  = $data['comment'] ?? null;
+		$this->creator  = $data['creator'] ?? null;
+		$this->modifier = $data['modifier'] ?? null;
+	}
+
+	public function comment(): string|null
+	{
+		return $this->comment;
+	}
+
+	public function creator(): string|null
+	{
+		return $this->creator;
+	}
+
+	public function from(): string
+	{
+		return $this->from;
 	}
 
 	/**
@@ -56,7 +86,7 @@ class Redirect extends Obj
 		 * Note that this fix include changes to two parts of the plug-in
 		 * code-base. In this file, and in src/panel/components/Tabs/RedirectsTab.vue
 		 */
-		return str_replace('/', "\x1D", $this->from());
+		return str_replace('/', "\x1D", $this->from);
 	}
 
 	/**
@@ -64,7 +94,7 @@ class Redirect extends Obj
 	 */
 	public function isActive(): bool
 	{
-		return $this->status() !== null;
+		return $this->status !== null;
 	}
 
 	/**
@@ -89,13 +119,32 @@ class Redirect extends Obj
 		return substr_replace($url, $encoded, strpos($url, $host), strlen($host));
 	}
 
+	public function modifier(): string|null
+	{
+		return $this->modifier;
+	}
+
+	/**
+	 * Returns the integer HTTP status code or `null` if disabled;
+	 * the Panel sends an empty string for no status,
+	 * hand-edited config files might use `false` or `0`
+	 */
+	protected static function normalizeStatus(mixed $status): int|null
+	{
+		if (in_array($status, [null, '', false, 0, 'disabled'], true) === true) {
+			return null;
+		}
+
+		return (int)$status;
+	}
+
 	/**
 	 * Returns whether the route takes priority
 	 * over actual pages
 	 */
 	public function priority(): bool
 	{
-		return Str::toType($this->priority ?? 'false', 'bool') === true;
+		return $this->priority;
 	}
 
 	/**
@@ -108,12 +157,11 @@ class Redirect extends Obj
 	{
 		$retour    = Retour::instance();
 		$kirby     = $retour->kirby();
-		$to        = $this->to() ?? '/';
-		$to        = static::toPath($to, $placeholders);
+		$to        = static::toPath($this->to ?? '/', $placeholders);
 		$extension = F::extension($to);
 		$path      = Str::beforeEnd($to, '.' . $extension);
 		$page      = $kirby->page($path);
-		$code      = $this->status();
+		$code      = $this->status;
 
 		// drafts (and pages inside drafts) must not be
 		// rendered for or redirected to by visitors
@@ -170,7 +218,7 @@ class Redirect extends Obj
 
 		$retour->log()?->add([
 			'path'     => Url::path(),
-			'redirect' => $this->from()
+			'redirect' => $this->from
 		]);
 
 		return $response;
@@ -181,25 +229,24 @@ class Redirect extends Obj
 	 */
 	public function status(): int|null
 	{
-		// the Panel sends an empty string for no status,
-		// hand-edited config files might use `false` or `0`
-		if (in_array($this->status, [null, '', false, 0, 'disabled'], true) === true) {
-			return null;
-		}
+		return $this->status;
+	}
 
-		return (int)$this->status;
+	public function to(): string|null
+	{
+		return $this->to;
 	}
 
 	public function toArray(): array
 	{
 		return [
-			'from'     => $this->from(),
-			'to'       => $this->to(),
-			'status'   => $this->status(),
-			'priority' => $this->priority(),
-			'comment'  => $this->comment(),
-			'creator'  => $this->creator(),
-			'modifier' => $this->modifier(),
+			'from'     => $this->from,
+			'to'       => $this->to,
+			'status'   => $this->status,
+			'priority' => $this->priority,
+			'comment'  => $this->comment,
+			'creator'  => $this->creator,
+			'modifier' => $this->modifier,
 		];
 	}
 
@@ -227,20 +274,15 @@ class Redirect extends Obj
 	/**
 	 * Return route definition for Router
 	 */
-	public function toRoute(): array|null
+	public function toRoute(): array
 	{
-		if ($this->isActive() === false) {
-			return null;
-		}
-
+		// the router binds `$this` of the action to the route
 		$redirect = $this;
 
 		return [
-			'pattern' => trim($this->from(), '/'),
+			'pattern' => trim($this->from, '/'),
 			'method'  => 'GET|HEAD',
-			'action'  => function (...$placeholders) use ($redirect) {
-				return $redirect->resolve($placeholders);
-			}
+			'action'  => fn (...$placeholders) => $redirect->resolve($placeholders)
 		];
 	}
 
