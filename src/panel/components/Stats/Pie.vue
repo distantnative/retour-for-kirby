@@ -26,7 +26,7 @@ export default {
 	props: {
 		data: Array,
 	},
-	icons: ["shuffle", "check-double", "cloud-off"],
+	icons: ["redirect", "url", "url-broken"],
 	formatter: new Intl.NumberFormat(),
 	computed: {
 		styles() {

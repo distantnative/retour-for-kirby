@@ -13,12 +13,12 @@ export default {
 		buttons() {
 			return [
 				{
-					icon: "hidden",
+					icon: "muted",
 					text: this.$t("retour.failures.ignored"),
 					click: () => this.$panel.dialog.open("retour/failures/ignores"),
 				},
 				{
-					icon: "trash",
+					icon: "clear",
 					text: this.$t("retour.failures.clear"),
 					click: () => this.$panel.dialog.open("retour/failures/flush"),
 				},
@@ -53,7 +53,7 @@ export default {
 		},
 		empty() {
 			return {
-				icon: "cloud-off",
+				icon: "url-broken",
 				text: this.$t("retour.failures.empty"),
 			};
 		},
@@ -71,7 +71,7 @@ export default {
 				},
 				{
 					text: this.$t("retour.failures.ignore"),
-					icon: "hidden",
+					icon: "muted",
 					click: () =>
 						this.$panel.dialog.open(
 							`retour/failures/${this.id(failure.path)}/ignore`,

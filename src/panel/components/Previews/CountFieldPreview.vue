@@ -2,7 +2,7 @@
 	<div :title="title" class="k-count-preview-field">
 		<template v-if="row.hits > 0">
 			{{ row.hits }}
-			<k-icon :title="title" type="clock" />
+			<k-icon :title="title" type="history" />
 		</template>
 		<p v-else>–</p>
 	</div>

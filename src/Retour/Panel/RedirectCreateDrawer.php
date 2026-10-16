@@ -33,7 +33,7 @@ class RedirectCreateDrawer extends DrawerController
 			'from' => [
 				'type'     => 'text',
 				'label'    => $this->i18n('retour.redirects.from'),
-				'icon'     => 'bookmark',
+				'icon'     => 'pin',
 				'before'   => Retour::instance()->site(),
 				'counter'  => false,
 				'required' => true,
@@ -66,7 +66,7 @@ class RedirectCreateDrawer extends DrawerController
 			'comment' => [
 				'type'     => 'textarea',
 				'label'    => $this->i18n('retour.redirects.comment'),
-				'icon'     => 'chat',
+				'icon'     => 'note',
 				'buttons'  => false,
 				'help'     => $this->i18n('retour.redirects.comment.help')
 			],

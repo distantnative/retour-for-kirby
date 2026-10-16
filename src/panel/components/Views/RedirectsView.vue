@@ -50,7 +50,7 @@ export default {
 		},
 		empty() {
 			return {
-				icon: "shuffle",
+				icon: "redirect",
 				text: this.$t("retour.redirects.empty"),
 			};
 		},

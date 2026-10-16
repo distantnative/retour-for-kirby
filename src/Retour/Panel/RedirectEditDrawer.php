@@ -28,7 +28,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 		return new FormDrawer(
 			fields: $fields,
-			icon: 'shuffle',
+			icon: 'redirect',
 			title: $this->redirect()->from(),
 			value: $this->value(),
 			options: [
