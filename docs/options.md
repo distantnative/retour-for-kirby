@@ -2,7 +2,7 @@
 
 ## Config
 
-The following config options are available:
+The following config options are available (shown with their default values):
 
 ```php
 // site/config/config.php
@@ -17,28 +17,27 @@ The following config options are available:
   'ignore' => [],
 
   // Number of months after which logs should be deleted automatically
-  // (checked from time to time when the Retour view is opened in the Panel)
+  // (checked from time to time when the Retour view is opened in the Panel;
+  // `false` keeps them forever)
   'deleteAfter' => false,
 
   // Absolute path for location of redirects config
   // (or a closure returning the path)
-  // Default: site/config/retour.yml
   // (allows for yml and json files/formats)
-  'config' => ...,
+  'config' => fn () => kirby()->root('config') . '/retour.yml',
 
   // Absolute path for location of database
   // (or a closure returning the path)
-  // Default: $kirby->root('logs') . '/retour/log.sqlite'
-  'database' => ...,
+  'database' => fn () => kirby()->root('logs') . '/retour/log.sqlite',
 
-  // Prefix shown in front of the path field in the Panel
-  // Default: `true` (your site's domain)
-  // (set your own string or disable completely by setting to `false`)
-  'site' => 'my.short.domain',
+  // Prefix shown in front of the path field in the Panel:
+  // `true` uses your site's domain, a string your own
+  // prefix (e.g. 'my.short.domain') and `false` disables it
+  'site' => true,
 
-  // HTTP status code preselected when adding a new redirect
-  // Default: `null` (new redirects start as disabled)
-  'status' => 308,
+  // HTTP status code preselected when adding a new redirect (e.g. 308),
+  // `null` means new redirects start as disabled
+  'status' => null,
 
   // forward the query string of the original request
   // (e.g. to preserve ad/campaign tracking)

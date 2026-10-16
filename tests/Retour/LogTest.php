@@ -131,6 +131,12 @@ class LogTest extends TestCase
 		$this->assertTrue(F::exists($file));
 	}
 
+	public function testFileDefault(): void
+	{
+		$log = new Log(Retour::instance());
+		$this->assertSame($this->tmp . '/site/logs/retour/log.sqlite', $log->database()->name());
+	}
+
 	public function testFirstLast(): void
 	{
 		$log = $this->log();

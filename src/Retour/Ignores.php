@@ -51,7 +51,7 @@ class Ignores
 	 */
 	public function config(): array
 	{
-		return $this->retour->option('ignore', []);
+		return $this->retour->option('ignore');
 	}
 
 	/**

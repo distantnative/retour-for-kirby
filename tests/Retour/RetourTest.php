@@ -138,7 +138,48 @@ class RetourTest extends TestCase
 
 		$retour = Retour::instance($app);
 		$this->assertSame('bar', $retour->option('foo'));
-		$this->assertSame('simpson', $retour->option('homer', 'simpson'));
+		$this->assertNull($retour->option('homer'));
+	}
+
+	public function testOptionDefaults(): void
+	{
+		$retour = Retour::instance();
+
+		$this->assertSame($this->tmp . '/site/config/retour.yml', $retour->option('config')());
+		$this->assertSame($this->tmp . '/site/logs/retour/log.sqlite', $retour->option('database')());
+		$this->assertFalse($retour->option('deleteAfter'));
+		$this->assertSame([], $retour->option('ignore'));
+		$this->assertTrue($retour->option('logs'));
+		$this->assertFalse($retour->option('preserveQuery'));
+		$this->assertTrue($retour->option('site'));
+		$this->assertNull($retour->option('status'));
+	}
+
+	public function testOptionOverrides(): void
+	{
+		// flat option keys
+		$retour = Retour::instance($this->app([
+			'distantnative.retour.logs'   => false,
+			'distantnative.retour.ignore' => ['foo'],
+			'distantnative.retour.status' => 301
+		]));
+
+		$this->assertFalse($retour->option('logs'));
+		$this->assertSame(['foo'], $retour->option('ignore'));
+		$this->assertSame(301, $retour->option('status'));
+		$this->assertFalse($retour->option('preserveQuery'));
+
+		// nested plugin options
+		$retour = Retour::instance($this->app([
+			'distantnative.retour' => [
+				'logs'   => false,
+				'ignore' => ['bar']
+			]
+		]));
+
+		$this->assertFalse($retour->option('logs'));
+		$this->assertSame(['bar'], $retour->option('ignore'));
+		$this->assertTrue($retour->option('site'));
 	}
 
 	public function testRedirects(): void

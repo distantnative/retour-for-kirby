@@ -151,7 +151,7 @@ class Redirect extends Obj
 				}
 			}
 
-			if ($retour->option('preserveQuery', false) === true) {
+			if ($retour->option('preserveQuery') === true) {
 				$to = static::withQuery($to);
 			}
 
