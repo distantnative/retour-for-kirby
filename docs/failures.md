@@ -1,6 +1,6 @@
-# Monitor what ended nowhere: `Failures` tab
+# 404 tracking
 
-Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. This is valuable information for you to know where something might not be working correctly. You can see where your users fail.
+Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. You find them in the `Failures` tab of Retour's Panel view. This is valuable information for you to know where something might not be working correctly. You can see where your users fail.
 
 ## Selected timespan
 

@@ -1,4 +1,6 @@
-# Manage your redirects: `Routes` tab
+# Redirects
+
+You manage all your redirects in the `Routes` tab of Retour's Panel view.
 
 ## Add/edit a redirect
 
