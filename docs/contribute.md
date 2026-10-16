@@ -21,7 +21,7 @@ composer install
 npm install
 ```
 
-To build the Panel code while you work on it:
+To work on the Panel code, start the development server:
 
 ```bash
 npm run dev
