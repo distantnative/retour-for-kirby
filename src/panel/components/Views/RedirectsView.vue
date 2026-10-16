@@ -10,7 +10,7 @@ export default {
 				{
 					icon: "add",
 					text: this.$t("add"),
-					click: () => this.$panel.drawer.open("retour/redirects/create"),
+					drawer: "retour/redirects/create",
 				},
 			];
 		},
@@ -75,18 +75,12 @@ export default {
 				{
 					text: this.$t("edit"),
 					icon: "edit",
-					click: () =>
-						this.$panel.drawer.open(
-							`retour/redirects/${this.id(redirect.from)}/edit`,
-						),
+					drawer: `retour/redirects/${this.id(redirect.from)}/edit`,
 				},
 				{
 					text: this.$t("remove"),
 					icon: "trash",
-					click: () =>
-						this.$panel.dialog.open(
-							`retour/redirects/${this.id(redirect.from)}/delete`,
-						),
+					dialog: `retour/redirects/${this.id(redirect.from)}/delete`,
 				},
 			];
 		},

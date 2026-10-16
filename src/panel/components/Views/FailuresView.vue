@@ -15,12 +15,12 @@ export default {
 				{
 					icon: "muted",
 					text: this.$t("retour.failures.ignored"),
-					click: () => this.$panel.dialog.open("retour/failures/ignores"),
+					dialog: "retour/failures/ignores",
 				},
 				{
 					icon: "clear",
 					text: this.$t("retour.failures.clear"),
-					click: () => this.$panel.dialog.open("retour/failures/flush"),
+					dialog: "retour/failures/flush",
 				},
 			];
 		},
@@ -64,26 +64,17 @@ export default {
 				{
 					text: this.$t("retour.failures.resolve"),
 					icon: "add",
-					click: () =>
-						this.$panel.drawer.open(
-							`retour/failures/${this.id(failure.path)}/resolve`,
-						),
+					drawer: `retour/failures/${this.id(failure.path)}/resolve`,
 				},
 				{
 					text: this.$t("retour.failures.ignore"),
 					icon: "muted",
-					click: () =>
-						this.$panel.dialog.open(
-							`retour/failures/${this.id(failure.path)}/ignore`,
-						),
+					dialog: `retour/failures/${this.id(failure.path)}/ignore`,
 				},
 				{
 					text: this.$t("remove"),
 					icon: "trash",
-					click: () =>
-						this.$panel.dialog.open(
-							`retour/failures/${this.id(failure.path)}/delete`,
-						),
+					dialog: `retour/failures/${this.id(failure.path)}/delete`,
 				},
 			];
 		},
