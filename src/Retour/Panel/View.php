@@ -20,8 +20,6 @@ class View
 		$timespan = Timespan::props();
 		['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
-		$failures = [];
-
 		// props for minimal Panel view
 		$props = [
 			'timespan' => $timespan,
@@ -43,9 +41,6 @@ class View
 				$retour->log()->purge();
 			}
 
-			// get all data for 404 failures
-			$failures = $retour->log()->fails($from, $to);
-
 			// add additional tabs
 			$props['tabs'][] = [
 				'name'  => 'failures',
@@ -60,7 +55,7 @@ class View
 		// add tab-specific data, e.g. for table rows
 		$props['data'] = match ($tab) {
 			'redirects' => $retour->redirects()->toData($from, $to),
-			'failures'  => $failures,
+			'failures'  => $retour->log()->fails($from, $to) ?? [],
 			default     => []
 		};
 
