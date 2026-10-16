@@ -125,9 +125,6 @@ export function pie(slices: Area[]): Record<string, string> {
 	};
 }
 
-/**
- * Returns the sum of all data values
- */
 export function sum(items: { data: number }[]): number {
 	return items.reduce((total, item) => total + item.data, 0);
 }
