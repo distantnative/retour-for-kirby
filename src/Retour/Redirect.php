@@ -196,8 +196,12 @@ class Redirect
 		}
 
 		// only now, as redirects to deleted pages count as failures;
-		// HEAD requests (e.g. by uptime monitors) would inflate the stats
-		if ($kirby->request()->method() !== 'HEAD') {
+		// HEAD requests (e.g. by uptime monitors) would inflate the stats,
+		// requests from ignored IP addresses aren't logged at all
+		if (
+			$kirby->request()->method() !== 'HEAD' &&
+			$retour->ignoreVisitor() === false
+		) {
 			$retour->log()?->add([
 				'path'     => Url::path(),
 				'redirect' => $this->from

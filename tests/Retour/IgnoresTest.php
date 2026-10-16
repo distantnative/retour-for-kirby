@@ -121,6 +121,19 @@ class IgnoresTest extends TestCase
 		$this->assertTrue($retour->ignore('bar'));
 	}
 
+	public function testIps(): void
+	{
+		$this->assertSame([], $this->ignores()->ips());
+
+		// single address
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => '192.0.2.1'
+		]);
+
+		$this->assertSame(['192.0.2.1'], $ignores->ips());
+		$this->assertTrue($ignores->matchesIp('192.0.2.1'));
+	}
+
 	public function testMatches(): void
 	{
 		$ignores = $this->ignores([
@@ -173,6 +186,104 @@ class IgnoresTest extends TestCase
 		$this->assertFalse($ignores->matches('foo('));
 		$this->assertFalse($ignores->matches('foo'));
 		$this->assertTrue($ignores->matches('bar'));
+	}
+
+	public function testMatchesIp(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => [
+				'192.0.2.1',
+				'198.51.100.0/24',
+				'2001:db8::1',
+				'2001:db8:abcd::/48'
+			]
+		]);
+
+		foreach ([
+			'192.0.2.1',
+			'198.51.100.0',
+			'198.51.100.255',
+			'2001:db8::1',
+			'2001:0DB8:0000:0000:0000:0000:0000:0001',
+			'2001:db8:abcd:12::1',
+			// IPv4 address mapped to IPv6
+			'::ffff:192.0.2.1'
+		] as $ip) {
+			$this->assertTrue($ignores->matchesIp($ip), $ip);
+		}
+
+		foreach ([
+			'192.0.2.2',
+			'198.51.101.0',
+			'2001:db8::2',
+			'2001:db8:abce::1',
+			'::ffff:192.0.2.2',
+			'foo',
+			'',
+			null
+		] as $ip) {
+			$this->assertFalse($ignores->matchesIp($ip), (string)$ip);
+		}
+	}
+
+	public function testMatchesIpInvalidEntries(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => [
+				null,
+				'',
+				'foo',
+				['192.0.2.1'],
+				'192.0.2.1/',
+				'192.0.2.1/x',
+				'192.0.2.1/-1',
+				'192.0.2.1/33',
+				'2001:db8::1/129',
+				' 198.51.100.1 '
+			]
+		]);
+
+		$this->assertFalse($ignores->matchesIp('192.0.2.1'));
+		$this->assertFalse($ignores->matchesIp('2001:db8::1'));
+		$this->assertTrue($ignores->matchesIp('198.51.100.1'));
+	}
+
+	public function testMatchesIpPrefixLength(): void
+	{
+		// not on a byte boundary
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => ['10.0.16.0/20', '2001:db8::/33']
+		]);
+
+		$this->assertFalse($ignores->matchesIp('10.0.15.255'));
+		$this->assertTrue($ignores->matchesIp('10.0.16.0'));
+		$this->assertTrue($ignores->matchesIp('10.0.31.255'));
+		$this->assertFalse($ignores->matchesIp('10.0.32.0'));
+		$this->assertTrue($ignores->matchesIp('2001:db8:7fff::1'));
+		$this->assertFalse($ignores->matchesIp('2001:db8:8000::'));
+
+		// all addresses of one IP version
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => ['0.0.0.0/0']
+		]);
+
+		$this->assertTrue($ignores->matchesIp('203.0.113.9'));
+		$this->assertFalse($ignores->matchesIp('2001:db8::1'));
+
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => ['::/0']
+		]);
+
+		$this->assertTrue($ignores->matchesIp('2001:db8::1'));
+		$this->assertFalse($ignores->matchesIp('203.0.113.9'));
+
+		// single address
+		$ignores = $this->ignores([
+			'distantnative.retour.ignoreIps' => ['192.0.2.1/32']
+		]);
+
+		$this->assertTrue($ignores->matchesIp('192.0.2.1'));
+		$this->assertFalse($ignores->matchesIp('192.0.2.0'));
 	}
 
 	public function testMatchesOptionalPlaceholder(): void

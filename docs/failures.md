@@ -40,6 +40,26 @@ The `Ignored` button above the failures table lists all ignored paths, where you
 
 Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`.
 
+### Ignore by IP address
+
+Some visitors cause lots of failures on purpose, e.g. the security scanner of your hosting provider or your own office while you test the site. Add their IP addresses to the [`ignoreIps` option](/options#config) to keep all their requests out of the log:
+
+```php
+// site/config/config.php
+
+'distantnative.retour' => [
+  'ignoreIps' => [
+    '192.0.2.10',      // a single address
+    '198.51.100.0/24', // a range in CIDR notation
+    '2001:db8::/32'    // IPv6 works as well
+  ]
+]
+```
+
+Requests from these addresses are neither logged as failures nor counted as hits of your redirects. Redirects still apply to them. Retour doesn't store IP addresses, so failures logged before you added an address stay in the log until you [clear it](#clearing-logs).
+
+Retour uses the IP address the request reaches PHP with. If your site runs behind a proxy or CDN, e.g. Cloudflare, that's the address of the proxy, unless your web server passes on the visitor's address (e.g. with `mod_remoteip` for Apache or the `real_ip` module for nginx).
+
 ### Block at the server level
 
 Ignoring a path only keeps it out of the failures log. The request still reaches Kirby, which renders your error page for it. For paths that bots hit a lot, it's better to block them in your web server so they never reach PHP at all.

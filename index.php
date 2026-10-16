@@ -37,6 +37,7 @@ Kirby::plugin('distantnative/retour', [
 		'database'      => fn () => Kirby::instance()->root('logs') . '/retour/log.sqlite',
 		'deleteAfter'   => 12,
 		'ignore'        => [],
+		'ignoreIps'     => [],
 		'logs'          => true,
 		'preserveQuery' => false,
 		'site'          => true,

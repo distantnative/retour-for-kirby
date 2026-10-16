@@ -16,6 +16,10 @@ The following config options are available (shown with their default values):
   // in addition to the ones ignored via the Panel
   'ignore' => [],
 
+  // Array of IP addresses or ranges (e.g. '192.0.2.0/24') whose requests
+  // aren't logged at all, neither as failures nor as redirect hits
+  'ignoreIps' => [],
+
   // Number of months after which logs should be deleted automatically
   // (checked from time to time when the Retour view is opened in the Panel;
   // `false` keeps them forever)

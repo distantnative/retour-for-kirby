@@ -40,6 +40,42 @@ class RoutesTest extends TestCase
 		$this->assertSame(1, count($extension($app)));
 	}
 
+	public function testRenderFromIgnoredIp(): void
+	{
+		Data::write($file = $this->tmp . '/retour.yml', [
+			'redirects' => [
+				['from' => 'priority', 'to' => 'target', 'status' => 301, 'priority' => true],
+				['from' => 'fallback', 'to' => 'target', 'status' => 301]
+			]
+		]);
+
+		Retour::reset();
+
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config'    => $file,
+				'distantnative.retour.database'  => $this->tmp . '/log.sqlite',
+				'distantnative.retour.ignoreIps' => ['192.0.2.1']
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'target']
+				]
+			]
+		]);
+
+		$app->visitor()->ip('192.0.2.1');
+
+		// still redirected, but neither logged as hit nor as failure
+		$this->assertSame(301, $app->render('priority')->code());
+		$this->assertSame(301, $app->render('fallback')->code());
+		$this->assertSame(404, $app->render('missing')->code());
+
+		$log = Retour::instance($app)->log();
+		$this->assertSame([], $log->redirects('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $log->fails('2000-01-01', '2099-12-31'));
+	}
+
 	public function testRenderRedirects(): void
 	{
 		// plugin routes are registered when the app is created

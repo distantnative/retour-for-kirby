@@ -53,6 +53,15 @@ class Retour
 	}
 
 	/**
+	 * Returns if requests from the visitor's IP address
+	 * should not be logged, neither as failure nor as redirect hit
+	 */
+	public function ignoreVisitor(): bool
+	{
+		return $this->ignores()->matchesIp($this->kirby->visitor()->ip());
+	}
+
+	/**
 	 * Returns the singleton instance,
 	 * a new one for a different app instance
 	 */

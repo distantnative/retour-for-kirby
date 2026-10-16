@@ -47,6 +47,25 @@ class HooksTest extends TestCase
 		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31'));
 	}
 
+	public function testIgnoredIpIsNotLogged(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.ignoreIps' => ['192.0.2.0/24'],
+				'distantnative.retour.database'  => $this->tmp . '/test.sqlite',
+			]
+		]);
+		$retour = Retour::instance($app);
+
+		$app->visitor()->ip('192.0.2.1');
+		$this->assertNull($this->apply($app, 'missing'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+
+		$app->visitor()->ip('198.51.100.1');
+		$this->assertNull($this->apply($app, 'missing'));
+		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31'));
+	}
+
 	public function testIgnoredPathIsNotLogged(): void
 	{
 		$app = $this->kirby->clone([
