@@ -146,8 +146,7 @@ class Log
 			$this->database->sqlite_sequence()->delete(['name' => 'records']);
 		}
 
-		$vacuum = $this->database->execute('VACUUM');
-		return $deleted && $vacuum;
+		return $deleted && $this->reclaim();
 	}
 
 	public function last(): array
@@ -174,19 +173,30 @@ class Log
 			/** @var Query $table */
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
 
-			$delete = $table->delete('date < :cutoff');
-
-			// only rebuild the database file
-			// when records have been deleted
-			if ($this->database->affected() === 0) {
-				return $delete;
-			}
-
-			$vacuum = $this->database->execute('VACUUM');
-			return $delete && $vacuum;
+			return $table->delete('date < :cutoff') && $this->reclaim();
 		}
 
 		return true;
+	}
+
+	/**
+	 * Gives free space back to the file system by rebuilding the
+	 * database file, but only if it's a significant part of the file;
+	 * otherwise new records reuse the free space and the rebuild
+	 * (which locks the log and takes long for large logs) isn't worth it
+	 */
+	protected function reclaim(): bool
+	{
+		$connection = $this->database->connection();
+		$pages      = (int)$connection->query('PRAGMA page_count')->fetchColumn();
+		$free       = (int)$connection->query('PRAGMA freelist_count')->fetchColumn();
+
+		// less than a fifth of the file is free
+		if ($free === 0 || $free < $pages / 5) {
+			return true;
+		}
+
+		return $this->database->execute('VACUUM');
 	}
 
 	/**
