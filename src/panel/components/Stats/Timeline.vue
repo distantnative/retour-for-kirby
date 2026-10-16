@@ -206,14 +206,14 @@ export default {
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: 0;
+	/* keeps the labels from widening their columns */
+	width: 0;
 }
 .chart-areas:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
 	cursor: pointer;
 }
 .chart-areas :where(tbody, tfoot) tr:last-child {
-	width: 0;
 	flex-grow: 0;
-	white-space: nowrap;
 }
 .chart-areas tbody td {
 	background: var(--color);
@@ -238,12 +238,14 @@ export default {
 	text-align: center;
 }
 
-.chart-areas tfoot[data-less="true"] tr:not(:nth-child(3n + 1), :last-child) {
-	display: none;
+/* every third label, counted from the last one to not overlap it */
+.chart-areas tfoot[data-less="true"] tr:not(:nth-last-child(3n + 1)) td {
+	visibility: hidden;
 }
 
 .chart-areas tfoot td {
 	transform: translateX(-50%);
+	white-space: nowrap;
 }
 .chart-areas tfoot [data-current="true"] {
 	color: var(--color-white);
