@@ -25,15 +25,21 @@ return [
 				// and call if possible
 				$routes = $retour->redirects()->toRoutes(false);
 				$router = new Router($routes);
-				return $router->call($path, $method);
+				$result = $router->call($path, $method);
 			} catch (Throwable) {
-				// log 404 if feature enabled and path not ignored
-				if (
-					$retour->hasLog() === true &&
-					$retour->ignore($path) === false
-				) {
-					$retour->log()->add(['path' => $path]);
-				}
+				$result = null;
+			}
+
+			if ($result !== null) {
+				return $result;
+			}
+
+			// log 404 if feature enabled and path not ignored
+			if (
+				$retour->hasLog() === true &&
+				$retour->ignore($path) === false
+			) {
+				$retour->log()->add(['path' => $path]);
 			}
 		}
 	}
