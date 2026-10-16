@@ -156,7 +156,7 @@ export default {
 	font-size: var(--text-xs);
 	font-weight: normal;
 	text-align: right;
-	color: var(--color-text-dimmed);
+	color: var(--color-gray-500);
 }
 .chart-areas tbody {
 	--grid-x: linear-gradient(
@@ -233,7 +233,7 @@ export default {
 .chart-areas tfoot {
 	margin-top: var(--spacing-2);
 	font-size: var(--text-xs);
-	color: var(--color-text-light);
+	color: var(--color-gray-500);
 	text-align: center;
 }
 
@@ -245,7 +245,7 @@ export default {
 	transform: translateX(-50%);
 }
 .chart-areas tfoot [data-current="true"] {
-	color: #fff;
+	color: var(--color-white);
 	font-weight: bold;
 }
 
