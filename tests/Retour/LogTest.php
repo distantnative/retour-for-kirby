@@ -11,6 +11,21 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
+	protected function fill(Log $log, int $count, string $time): void
+	{
+		$date       = date('Y-m-d H:i:s', strtotime($time));
+		$connection = $log->database()->connection();
+		$insert     = $connection->prepare('INSERT INTO records (date, path) VALUES (?, ?)');
+
+		$connection->beginTransaction();
+
+		for ($i = 0; $i < $count; $i++) {
+			$insert->execute([$date, 'path/' . $i . '/' . str_repeat('x', 100)]);
+		}
+
+		$connection->commit();
+	}
+
 	protected function log(
 		string|Closure|null $file = null,
 		array $options = []
@@ -24,6 +39,19 @@ class LogTest extends TestCase
 
 		$retour = Retour::instance($app);
 		return new Log($retour);
+	}
+
+	/**
+	 * Returns the total and free pages of the database file
+	 */
+	protected function pages(Log $log): array
+	{
+		$connection = $log->database()->connection();
+
+		return [
+			'total' => (int)$connection->query('PRAGMA page_count')->fetchColumn(),
+			'free'  => (int)$connection->query('PRAGMA freelist_count')->fetchColumn()
+		];
 	}
 
 	public function testAdd(): void
@@ -240,13 +268,42 @@ class LogTest extends TestCase
 
 		$this->assertTrue($log->purge());
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
-		$this->assertContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
 	public function testPurgeDactivated(): void
 	{
 		$log = $this->log();
 		$this->assertTrue($log->purge());
+	}
+
+	public function testPurgeKeepsInsignificantFreeSpace(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 100, '-12 month');
+		$this->fill($log, 2000, '-1 month');
+		$before = $this->pages($log);
+
+		$this->assertTrue($log->purge());
+
+		// new records reuse the free pages
+		$after = $this->pages($log);
+		$this->assertGreaterThan(0, $after['free']);
+		$this->assertSame($before['total'], $after['total']);
+		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+	}
+
+	public function testPurgeReclaimsSignificantFreeSpace(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 2000, '-12 month');
+		$this->fill($log, 500, '-1 month');
+		$before = $this->pages($log);
+
+		$this->assertTrue($log->purge());
+
+		$after = $this->pages($log);
+		$this->assertSame(0, $after['free']);
+		$this->assertLessThan($before['total'] / 2, $after['total']);
 	}
 
 	public function testPurgeWithoutOutdatedRecords(): void
