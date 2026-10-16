@@ -16,7 +16,7 @@
 				>
 					<td
 						v-for="(area, areaIndex) in segment.areas"
-						:key="segmentIndex + '_' + areaIndex"
+						:key="areaIndex"
 						:style="`--color: ${color(segmentIndex, area)}; ${clip(
 							segmentIndex,
 							areaIndex,
@@ -143,7 +143,7 @@ export default {
 .k-retour-timeline thead {
 	position: absolute;
 	top: 0;
-	right: calc(100%);
+	right: 100%;
 	height: var(--height);
 }
 .k-retour-timeline thead tr {

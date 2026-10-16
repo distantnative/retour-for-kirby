@@ -66,10 +66,7 @@ export default {
 	padding-block: var(--spacing-3) var(--spacing-8);
 	padding-inline: var(--spacing-6) var(--spacing-3);
 	color: var(--color-white);
-	background: light-dark(
-		var(--color-gray-900),
-		var(--color-gray-950, var(--color-gray-900))
-	);
+	background: light-dark(var(--color-gray-900), var(--color-gray-950));
 	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
