@@ -1,5 +1,8 @@
 <template>
-	<k-retour-view v-bind="$props" class="k-retour-collection-view">
+	<k-retour-view
+		v-bind="$props"
+		:class="['k-retour-collection-view', $options.class]"
+	>
 		<template #buttons>
 			<k-search-input
 				v-if="searching"
@@ -208,9 +211,6 @@ export default {
 </script>
 
 <style>
-.k-retour-collection-view .k-table-column {
-	cursor: pointer;
-}
 .k-retour-collection-view th.k-table-column {
 	padding: 0;
 }

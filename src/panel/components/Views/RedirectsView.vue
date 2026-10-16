@@ -3,6 +3,7 @@ import CollectionView from "./CollectionView.vue";
 
 export default {
 	extends: CollectionView,
+	class: "k-retour-redirects-view",
 	computed: {
 		buttons() {
 			return [
@@ -85,3 +86,9 @@ export default {
 	},
 };
 </script>
+
+<style>
+.k-retour-redirects-view td.k-table-column {
+	cursor: pointer;
+}
+</style>
