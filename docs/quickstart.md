@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Retour 5 requires Kirby 4.
+Retour 5 requires Kirby 4 or 5.
 
 For Kirby 3, you can use [<Badge type="info" text="v4.4.2" />](https://github.com/distantnative/retour-for-kirby/releases/tag/4.4.2) (although without further support or development).
 
