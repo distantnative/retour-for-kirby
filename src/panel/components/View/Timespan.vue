@@ -102,6 +102,17 @@ export default {
 			const from = this.$library.dayjs(this.timespan.from);
 			const to = this.$library.dayjs(this.timespan.to);
 
+			// custom ranges move by their own length
+			if (unit === "days" || unit === "months") {
+				const step = unit === "days" ? "day" : "month";
+				const length = to.startOf(step).diff(from.startOf(step), step) + 1;
+
+				return this.update({
+					from: from[method](length, step).startOf(step),
+					to: to[method](length, step).endOf(step),
+				});
+			}
+
 			this.update({
 				from: this.startOf(from[method](1, unit), unit),
 				to: this.endOf(to[method](1, unit), unit),
