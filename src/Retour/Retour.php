@@ -50,10 +50,9 @@ class Retour
 	 */
 	public static function instance(App|null $kirby = null): self
 	{
-		if (
-			self::$instance !== null &&
-			($kirby === null || self::$instance->kirby() === $kirby)
-		) {
+		$kirby ??= App::instance();
+
+		if (self::$instance?->kirby() === $kirby) {
 			return self::$instance;
 		}
 
