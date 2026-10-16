@@ -16,9 +16,11 @@ Depending on the timespan, the timeline shows hours, days or months. Click on a 
 
 When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occurred during the selected timespan are shown. But it also applies to the hits column in the `Routes` tab.
 
-You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a day or any custom interval:
+You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a week, a day or any custom interval:
 
 ![Change timespan](/timespan.webp)
+
+Weeks start on the same day as the calendar of Kirby's date fields: it depends on the Panel language of the user, or on Kirby's [`date.weekday`](https://getkirby.com/docs/reference/system/options/date#first-day-of-the-week) option.
 
 ## Add as redirect
 

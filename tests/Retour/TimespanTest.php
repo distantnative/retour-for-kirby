@@ -150,6 +150,12 @@ class TimespanTest extends TestCase
 			'unit' => 'year'
 		]));
 
+		$this->assertSame('30 January - 5 February 2023', Timespan::label([
+			'from' => '2023-01-30',
+			'to'   => '2023-02-05',
+			'unit' => 'week'
+		]));
+
 		$this->assertSame('1 - 15 January 2023', Timespan::label([
 			'from' => '2023-01-01',
 			'to'   => '2023-01-15',
@@ -300,6 +306,67 @@ class TimespanTest extends TestCase
 			'from' => '2023-01-01',
 			'to'   => '2023-12-31',
 		]));
+	}
+
+	public static function unitWeekProvider(): array
+	{
+		return [
+			// English (US) weeks start on Sunday
+			[null, '2023-01-01', '2023-01-07', 'week'],
+			[null, '2023-01-02', '2023-01-08', 'days'],
+
+			// across months and years
+			[1, '2023-01-30', '2023-02-05', 'week'],
+			[1, '2024-12-30', '2025-01-05', 'week'],
+
+			// seven days that don't start on the first weekday
+			[1, '2023-01-01', '2023-01-07', 'days'],
+			[6, '2023-01-02', '2023-01-08', 'days'],
+
+			// more or less than seven days
+			[1, '2023-01-02', '2023-01-07', 'days'],
+			[1, '2023-01-02', '2023-01-09', 'days'],
+		];
+	}
+
+	#[DataProvider('unitWeekProvider')]
+	public function testUnitWeek(
+		int|null $weekday,
+		string $from,
+		string $to,
+		string $expected
+	): void {
+		// weeks start on the same day as in the Panel's calendar
+		$this->app(['date.weekday' => $weekday]);
+
+		$this->assertSame($expected, Timespan::unit([
+			'from' => $from,
+			'to'   => $to,
+		]));
+	}
+
+	public function testUnitWeekDaylightSavingTime(): void
+	{
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$this->app(['date.weekday' => 0]);
+
+			// clocks go forward
+			$this->assertSame('week', Timespan::unit([
+				'from' => '2023-03-26',
+				'to'   => '2023-04-01',
+			]));
+
+			// clocks go back
+			$this->assertSame('week', Timespan::unit([
+				'from' => '2023-10-29',
+				'to'   => '2023-11-04',
+			]));
+		} finally {
+			date_default_timezone_set($timezone);
+		}
 	}
 
 	/**

@@ -1,4 +1,12 @@
 /**
+ * Returns how many days a weekday (0 = Sunday … 6 = Saturday)
+ * lies after the first day of the week
+ */
+export function daysIntoWeek(day: number, firstWeekday: number): number {
+	return (day - firstWeekday + 7) % 7;
+}
+
+/**
  * Returns the dayjs format for the timeline labels
  * of a timespan unit
  */

@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { daysIntoWeek } from "../../helpers/unit";
+
 export default {
 	props: {
 		timespan: Object,
@@ -44,7 +46,7 @@ export default {
 					}
 
 					return {
-						text: this.$t(unit === "all" ? "retour.stats.mode.all" : unit),
+						text: this.label(unit),
 						icon: this.icon(unit),
 						current: this.isCurrentUnit(unit),
 						click: () => this.set(unit),
@@ -64,10 +66,17 @@ export default {
 			].filter(Boolean);
 		},
 		units() {
-			return ["all", "year", "month", "day"];
+			return ["all", "year", "month", "week", "day"];
 		},
 	},
 	methods: {
+		endOf(date, unit) {
+			if (unit === "week") {
+				return this.startOf(date, unit).add(6, "day");
+			}
+
+			return date.endOf(unit);
+		},
 		icon(unit) {
 			if (this.isCurrentUnit(unit) === true) {
 				return this.timespan.isCurrent ? "circle-focus" : "circle-nested";
@@ -80,14 +89,22 @@ export default {
 				unit === this.timespan.unit || (unit === "all" && this.timespan.isAll)
 			);
 		},
+		label(unit) {
+			// Kirby has no translations for these units
+			if (unit === "all" || unit === "week") {
+				return this.$t(`retour.stats.mode.${unit}`);
+			}
+
+			return this.$t(unit);
+		},
 		navigate(method) {
 			const unit = this.timespan.unit;
 			const from = this.$library.dayjs(this.timespan.from);
 			const to = this.$library.dayjs(this.timespan.to);
 
 			this.update({
-				from: from[method](1, unit).startOf(unit),
-				to: to[method](1, unit).endOf(unit),
+				from: this.startOf(from[method](1, unit), unit),
+				to: this.endOf(to[method](1, unit), unit),
 			});
 		},
 		set(unit) {
@@ -108,9 +125,19 @@ export default {
 			}
 
 			this.update({
-				from: date.startOf(unit),
-				to: date.endOf(unit),
+				from: this.startOf(date, unit),
+				to: this.endOf(date, unit),
 			});
+		},
+		startOf(date, unit) {
+			// dayjs starts weeks on Sunday, the Panel's calendar
+			// on the first weekday of the user's language
+			if (unit === "week") {
+				const weekday = this.$panel.translation.weekday;
+				return date.subtract(daysIntoWeek(date.day(), weekday), "day");
+			}
+
+			return date.startOf(unit);
 		},
 		update({ from, to }) {
 			this.$panel.reload({

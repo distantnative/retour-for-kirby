@@ -59,6 +59,16 @@ class Timespan
 	}
 
 	/**
+	 * Returns the first day of the week (0 = Sunday … 6 = Saturday)
+	 * for the Panel language, as used by the Panel's calendar
+	 */
+	protected static function firstWeekday(): int
+	{
+		$locale = App::instance()->translation()->locale();
+		return Date::firstWeekday($locale);
+	}
+
+	/**
 	 * Whether the log has newer entries or today is after the timespan
 	 */
 	protected static function hasNext(
@@ -132,6 +142,8 @@ class Timespan
 		if ($unit === 'year') {
 			return $from->format('Y');
 		}
+
+		// weeks and custom ranges show their first and last day
 
 		// within same month
 		if ($from->format('Y-m') === $to->format('Y-m')) {
@@ -273,6 +285,13 @@ class Timespan
 		// full units
 		if ($from->format('Y-m-d') === $to->format('Y-m-d')) {
 			return 'day';
+		}
+
+		if (
+			(int)$from->format('w') === static::firstWeekday() &&
+			$from->diff($to)->days === 6
+		) {
+			return 'week';
 		}
 
 		if (

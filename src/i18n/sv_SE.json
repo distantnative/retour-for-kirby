@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "omdirigerade",
 	"retour.stats.resolved": "lösta",
 	"retour.stats.failed": "misslyckade",
-	"retour.stats.mode.all": "Alla"
+	"retour.stats.mode.all": "Alla",
+	"retour.stats.mode.week": "Vecka"
 }

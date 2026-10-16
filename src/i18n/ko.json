@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "리디렉션",
 	"retour.stats.resolved": "해결",
 	"retour.stats.failed": "실패",
-	"retour.stats.mode.all": "전체"
+	"retour.stats.mode.all": "전체",
+	"retour.stats.mode.week": "주"
 }

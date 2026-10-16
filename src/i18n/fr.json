@@ -43,5 +43,6 @@
 	"retour.stats.redirected": "Redirigée(s)",
 	"retour.stats.resolved": "Résolue(s)",
 	"retour.stats.failed": "Échec(s)",
-	"retour.stats.mode.all": "Tout"
+	"retour.stats.mode.all": "Tout",
+	"retour.stats.mode.week": "Semaine"
 }
