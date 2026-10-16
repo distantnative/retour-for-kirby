@@ -154,7 +154,7 @@ class Redirect
 				$to = $page->url();
 
 				// support for content representations
-				if (empty($extension) === false) {
+				if ($extension !== '') {
 					// the home page's URL is the site URL, but its
 					// representations are only reachable via its slug
 					if ($page->isHomePage() === true) {

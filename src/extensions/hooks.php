@@ -12,7 +12,11 @@ return [
 		mixed $result,
 		bool $final
 	) {
-		if ($final === false || empty($result) === false) {
+		// only for requests that Kirby would answer with a 404
+		if (
+			$final === false ||
+			in_array($result, [null, false, '', []], true) === false
+		) {
 			return null;
 		}
 
