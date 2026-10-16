@@ -35,6 +35,8 @@
 	"retour.failures.ignored": "Ignored",
 	"retour.failures.ignores": "Ignored paths",
 	"retour.failures.ignores.help": "Requests to these paths aren't logged as failures.",
+	"retour.failures.ignores.common": "Add common scanner paths",
+	"retour.failures.ignores.common.help": "Paths that bots probe for vulnerabilities, e.g. wp-login.php, wp-admin, xmlrpc.php or .env",
 	"retour.failures.ignores.config": "Also ignored via config",
 	"retour.timespan.from.label": "From",
 	"retour.timespan.to.label": "To",

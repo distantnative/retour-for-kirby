@@ -11,6 +11,20 @@ use Kirby\Http\Route;
  */
 class Ignores
 {
+	/**
+	 * Paths that bots commonly probe for vulnerabilities,
+	 * mostly of WordPress installations
+	 */
+	public const COMMON = [
+		'wp-(:all)',
+		'(:all)/wp-(:all)',
+		'xmlrpc.php',
+		'(:all)/xmlrpc.php',
+		'.env',
+		'(:all)/.env',
+		'.git/(:all)'
+	];
+
 	public function __construct(
 		protected Retour $retour
 	) {

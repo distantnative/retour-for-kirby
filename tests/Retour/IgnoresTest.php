@@ -40,6 +40,37 @@ class IgnoresTest extends TestCase
 		$this->assertSame(['bar'], $ignores->custom());
 	}
 
+	public function testCommon(): void
+	{
+		$ignores = $this->ignores();
+
+		foreach ([
+			'wp-login.php',
+			'wp-admin',
+			'wp-admin/setup-config.php',
+			'wp-content/plugins/foo/readme.txt',
+			'wp-config.php.backup',
+			'blog/wp-login.php',
+			'wordpress/wp-admin/install.php',
+			'xmlrpc.php',
+			'blog/xmlrpc.php',
+			'.env',
+			'api/.env',
+			'.git/config'
+		] as $path) {
+			$this->assertTrue($ignores->matches($path, Ignores::COMMON), $path);
+		}
+
+		foreach ([
+			'blog',
+			'blog/how-wordpress-works',
+			'environment',
+			'git/config'
+		] as $path) {
+			$this->assertFalse($ignores->matches($path, Ignores::COMMON), $path);
+		}
+	}
+
 	public function testCustomInConfigFile(): void
 	{
 		$retour = Retour::instance($this->app([

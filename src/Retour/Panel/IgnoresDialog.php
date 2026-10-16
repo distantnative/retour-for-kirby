@@ -4,6 +4,7 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\FormDialog;
+use Kirby\Retour\Ignores;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\Escape;
 use Kirby\Toolkit\HtmlString;
@@ -18,7 +19,8 @@ class IgnoresDialog extends DialogController
 {
 	public function fields(): array
 	{
-		$fields = [
+		$ignores = Retour::instance()->ignores();
+		$fields  = [
 			'patterns' => [
 				'type'   => 'tags',
 				'label'  => I18n::translate('retour.failures.ignores'),
@@ -28,8 +30,18 @@ class IgnoresDialog extends DialogController
 			]
 		];
 
+		// offer the common paths as long as
+		// not all of them have been added yet
+		if (array_diff(Ignores::COMMON, $ignores->custom()) !== []) {
+			$fields['common'] = [
+				'type'  => 'toggle',
+				'label' => I18n::translate('retour.failures.ignores.common'),
+				'help'  => I18n::translate('retour.failures.ignores.common.help')
+			];
+		}
+
 		// patterns from the config can only be changed there
-		$config = Retour::instance()->ignores()->config();
+		$config = $ignores->config();
 
 		if ($config !== []) {
 			$fields['config'] = [
@@ -63,6 +75,11 @@ class IgnoresDialog extends DialogController
 		$retour   = Retour::instance();
 		$ignores  = $retour->ignores();
 		$patterns = Str::split($this->request->get('patterns') ?? []);
+
+		if (Str::toType($this->request->get('common') ?? false, 'bool') === true) {
+			$patterns = [...$patterns, ...Ignores::COMMON];
+		}
+
 		$patterns = $ignores->set($patterns);
 
 		// remove failures for newly added patterns
