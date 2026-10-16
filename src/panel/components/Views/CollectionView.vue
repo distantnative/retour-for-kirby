@@ -105,11 +105,9 @@ export default {
 				return this.data;
 			}
 
-			const q = this.q.toLowerCase();
-
-			return this.data.filter((_, index) =>
-				this.searchIndex[index].includes(q),
-			);
+			return this.$helper.array
+				.search(this.searchIndex, this.q)
+				.map((entry) => entry.row);
 		},
 		index() {
 			return (this.pagination.page - 1) * this.pagination.limit + 1;
@@ -121,9 +119,19 @@ export default {
 			);
 		},
 		searchIndex() {
-			// stringify each item once per data change,
-			// not again on every keystroke
-			return this.data.map((item) => JSON.stringify(item).toLowerCase());
+			// once per data change, not on every keystroke
+			const keys = this.searchable;
+
+			return this.data.map((row) => ({
+				row,
+				text: keys
+					.map((key) => row[key])
+					.filter((value) => ["string", "number"].includes(typeof value))
+					.join("\n"),
+			}));
+		},
+		searchable() {
+			return Object.keys(this.columns);
 		},
 		sortedItems() {
 			if (this.sortBy) {
