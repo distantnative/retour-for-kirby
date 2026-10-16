@@ -13,13 +13,13 @@
 
 <script>
 export default {
+	inheritAttrs: false,
 	props: {
 		column: {
 			type: Object,
 			default: () => ({}),
 		},
-		field: Object,
-		value: [String, Object],
+		value: String,
 	},
 	computed: {
 		link() {

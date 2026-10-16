@@ -12,9 +12,9 @@
 import { color } from "../../helpers/status";
 
 export default {
+	inheritAttrs: false,
 	props: {
 		value: Number,
-		row: Object,
 		column: Object,
 	},
 	computed: {
