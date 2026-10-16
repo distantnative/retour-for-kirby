@@ -54,6 +54,7 @@ export default {
 			return {
 				icon: "redirect",
 				text: this.$t("retour.redirects.empty"),
+				onClick: () => this.$panel.drawer.open("retour/redirects/create"),
 			};
 		},
 		searchable() {
