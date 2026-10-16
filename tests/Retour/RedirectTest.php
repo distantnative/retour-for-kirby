@@ -261,5 +261,12 @@ class RedirectTest extends TestCase
 		// target with its own query string: merged with `&`
 		$to = Redirect::withQuery('/bar?foo=1', 'gclid=abc');
 		$this->assertSame('/bar?foo=1&gclid=abc', $to);
+
+		// target with fragment: query string goes before it
+		$to = Redirect::withQuery('/bar#section', 'gclid=abc');
+		$this->assertSame('/bar?gclid=abc#section', $to);
+
+		$to = Redirect::withQuery('https://example.com/bar?foo=1#section', 'gclid=abc');
+		$this->assertSame('https://example.com/bar?foo=1&gclid=abc#section', $to);
 	}
 }
