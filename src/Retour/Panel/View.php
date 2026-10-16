@@ -24,6 +24,10 @@ class View extends ViewController
 	 */
 	public function load(): ViewComponent
 	{
+		if ($error = Retour::instance()->config()->error()) {
+			throw $error;
+		}
+
 		// failures are only available with logging enabled
 		if (
 			$this->tab === 'failures' &&
