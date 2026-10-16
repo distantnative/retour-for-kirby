@@ -198,6 +198,7 @@ class Redirect extends Obj
 
 		return [
 			'pattern' => trim($this->from(), '/'),
+			'method'  => 'GET|HEAD',
 			'action'  => function (...$placeholders) use ($redirect) {
 				return $redirect->resolve($placeholders);
 			}

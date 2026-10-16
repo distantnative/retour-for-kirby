@@ -438,6 +438,7 @@ class RedirectTest extends TestCase
 		$route = $redirect->toRoute();
 
 		$this->assertSame('foo/(:any)', $route['pattern']);
+		$this->assertSame('GET|HEAD', $route['method']);
 		$this->assertInstanceOf(Closure::class, $route['action']);
 	}
 

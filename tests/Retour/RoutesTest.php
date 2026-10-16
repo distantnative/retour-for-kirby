@@ -70,9 +70,11 @@ class RoutesTest extends TestCase
 		// priority redirects are plugin routes, the others
 		// are resolved in the `route:after` hook
 		foreach (['priority' => 301, 'fallback' => 308] as $path => $code) {
-			$response = $app->render($path, 'GET');
-			$this->assertSame($code, $response->code(), $path);
-			$this->assertSame('https://example.com/target', $response->header('Location'), $path);
+			foreach (['GET', 'HEAD'] as $method) {
+				$response = $app->render($path, $method);
+				$this->assertSame($code, $response->code(), $method . ' ' . $path);
+				$this->assertSame('https://example.com/target', $response->header('Location'), $method . ' ' . $path);
+			}
 		}
 	}
 }
