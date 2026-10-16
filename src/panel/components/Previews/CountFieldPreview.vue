@@ -46,6 +46,7 @@ export default {
 	flex-direction: row-reverse;
 	align-items: center;
 	justify-content: space-between;
+	gap: var(--spacing-2);
 	padding-inline: var(--table-cell-padding);
 }
 .k-count-field-preview p {

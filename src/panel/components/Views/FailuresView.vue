@@ -46,7 +46,7 @@ export default {
 				hits: {
 					label: this.$t("retour.hits"),
 					type: "count",
-					width: "1/16",
+					width: "1/10",
 					align: "right",
 				},
 			};
