@@ -36,14 +36,12 @@
 			/>
 		</template>
 
-		<!-- Empty state -->
 		<k-empty
 			v-if="filteredItems.length === 0"
 			v-bind="q ? { icon: 'search', text: $t('search.results.none') } : empty"
 			layout="table"
 		/>
 
-		<!-- Table -->
 		<k-table
 			v-else
 			:columns="columns"
@@ -174,10 +172,7 @@ export default {
 	},
 	methods: {
 		id(path) {
-			// webservers often don't handle encoded slashes (see
-			// https://github.com/distantnative/retour-for-kirby/issues/300),
-			// so "/" is swapped for the invisible GROUP SEPARATOR (\x1D);
-			// mirrors `Redirect::id()` in src/Retour/Redirect.php
+			// see Redirect::id()
 			return encodeURIComponent(path.replace(/\//g, "\x1D"));
 		},
 		onCell() {},
