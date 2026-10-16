@@ -70,6 +70,40 @@ class Config
 	}
 
 	/**
+	 * Reads the file under a shared lock, as `F::update()`
+	 * empties the file before writing the new contents
+	 *
+	 * @throws LogicException If the file cannot be read
+	 */
+	protected static function load(string $file): string
+	{
+		$handle = @fopen($file, 'r');
+
+		if ($handle === false) {
+			throw new LogicException(
+				message: 'Retour: The config file could not be read: ' . $file
+			);
+		}
+
+		try {
+			flock($handle, LOCK_SH);
+			$contents = stream_get_contents($handle);
+		} finally {
+			fclose($handle);
+		}
+
+		if ($contents === false) {
+			// @codeCoverageIgnoreStart
+			throw new LogicException(
+				message: 'Retour: The config file could not be read: ' . $file
+			);
+			// @codeCoverageIgnoreEnd
+		}
+
+		return $contents;
+	}
+
+	/**
 	 * Reads the config file; if it cannot be read, the site keeps
 	 * running without redirects, but the file won't be overwritten
 	 */
@@ -83,13 +117,9 @@ class Config
 		}
 
 		try {
-			return $this->data = Data::read($file);
-		} catch (Throwable $error) {
-			$this->error = new LogicException(
-				message: 'Retour: The config file could not be read: ' . $error->getMessage(),
-				previous: $error
-			);
-
+			return $this->data = static::decode(static::load($file), $file);
+		} catch (LogicException $error) {
+			$this->error = $error;
 			return $this->data = [];
 		}
 	}

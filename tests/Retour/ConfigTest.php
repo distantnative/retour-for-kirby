@@ -103,6 +103,30 @@ class ConfigTest extends TestCase
 		$this->assertSame([], $config->data());
 	}
 
+	public function testReadUnreadableFile(): void
+	{
+		if (function_exists('posix_getuid') === true && posix_getuid() === 0) {
+			$this->markTestSkipped('Root can read any file');
+		}
+
+		F::write($file = $this->tmp . '/retour.yml', "redirects: []\n");
+		chmod($file, 0000);
+
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => $file
+			]
+		]);
+
+		try {
+			$config = Retour::instance($app)->config();
+			$this->assertSame([], $config->data());
+			$this->assertInstanceOf(LogicException::class, $config->error());
+		} finally {
+			chmod($file, 0644);
+		}
+	}
+
 	public function testWrite(): void
 	{
 		$app = $this->kirby->clone([
