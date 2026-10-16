@@ -5,6 +5,7 @@ namespace Kirby\Retour;
 use Closure;
 use Kirby\Cms\Page;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Http\Response;
 use Kirby\Http\Route;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -135,6 +136,108 @@ class RedirectTest extends TestCase
 		]);
 
 		$this->assertInstanceOf(Page::class, $redirect->resolve([]));
+	}
+
+	public function testResolveRedirect(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'urls' => [
+				'index' => 'https://example.com'
+			],
+			'site' => [
+				'children' => [
+					[
+						'slug'     => 'projects',
+						'children' => [
+							['slug' => 'project-a']
+						]
+					]
+				]
+			],
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'projects/project-a',
+			'status' => 301
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertInstanceOf(Response::class, $response);
+		$this->assertSame(301, $response->code());
+		$this->assertSame('https://example.com/projects/project-a', $response->header('Location'));
+
+		// content representation of the page
+		$redirect = new Redirect([
+			'from'   => 'foo.json',
+			'to'     => 'projects/project-a.json',
+			'status' => 307
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame(307, $response->code());
+		$this->assertSame('https://example.com/projects/project-a.json', $response->header('Location'));
+	}
+
+	public function testResolveRedirectPreserveQuery(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs'          => false,
+				'distantnative.retour.preserveQuery' => true
+			],
+			'urls' => [
+				'index' => 'https://example.com'
+			],
+			'server' => [
+				'REQUEST_URI' => '/foo?gclid=abc'
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'projects']
+				]
+			],
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'projects',
+			'status' => 302
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertSame(302, $response->code());
+		$this->assertSame('https://example.com/projects?gclid=abc', $response->header('Location'));
+	}
+
+	public function testResolveWithoutPage(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			]
+		]);
+
+		Retour::instance($app);
+
+		$redirect = new Redirect([
+			'from'   => 'foo',
+			'to'     => 'does-not-exist',
+			'status' => 410
+		]);
+
+		$response = $redirect->resolve([]);
+		$this->assertInstanceOf(Response::class, $response);
+		$this->assertSame(410, $response->code());
+		$this->assertSame('', $response->body());
+		$this->assertNull($response->header('Location'));
 	}
 
 	public function testRouteResolve(): void

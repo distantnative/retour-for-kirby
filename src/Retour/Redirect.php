@@ -2,9 +2,9 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Cms\Page;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
-use Kirby\Http\Header;
 use Kirby\Http\Response;
 use Kirby\Http\Url;
 use Kirby\Toolkit\Obj;
@@ -79,7 +79,7 @@ class Redirect extends Obj
 	 *
 	 * @param array<int, string> $placeholders
 	 */
-	public function resolve(array $placeholders): mixed
+	public function resolve(array $placeholders): Page|Response
 	{
 		$retour    = Retour::instance();
 		$kirby     = $retour->kirby();
@@ -97,7 +97,6 @@ class Redirect extends Obj
 		]);
 
 		// Redirects
-		// @codeCoverageIgnoreStart
 		if ($code >= 300 && $code < 400) {
 			if ($page) {
 				$to = $page->url();
@@ -112,9 +111,8 @@ class Redirect extends Obj
 				$to = static::withQuery($to);
 			}
 
-			Response::go($to, $code);
+			return Response::redirect($to, $code);
 		}
-		// @codeCoverageIgnoreEnd
 
 		// Set the right response code
 		$kirby->response()->code($code);
@@ -124,11 +122,8 @@ class Redirect extends Obj
 			return $page;
 		}
 
-		// Deliver HTTP status code and die
-		// @codeCoverageIgnoreStart
-		Header::status($code);
-		die();
-		// @codeCoverageIgnoreEnd
+		// Deliver HTTP status code without body
+		return new Response('', 'text/html', $code);
 	}
 
 	/**
