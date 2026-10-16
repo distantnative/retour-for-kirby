@@ -14,7 +14,7 @@ class Pattern
 
 	public static function hasPlaceholder(string $pattern): bool
 	{
-		return str_contains($pattern, '(') === false;
+		return str_contains($pattern, '(') === true;
 	}
 
 	/**
