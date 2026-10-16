@@ -22,7 +22,6 @@ describe("unit.daysIntoWeek()", () => {
 
 describe("unit.format()", () => {
 	const cases: { unit: string; expected: string }[] = [
-		{ unit: "day", expected: "HH" },
 		{ unit: "week", expected: "ddd" },
 		{ unit: "month", expected: "D" },
 		{ unit: "year", expected: "MMM" },

@@ -54,6 +54,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Previous and next on a custom timespan move by its own length (e.g. from 10–20 March to 21–31 March) instead of by a single day or month
 - The y-axis of the timeline shows exact ticks (1.25k instead of 1.2k) and whole numbers for small counts
 - The totals next to the pie chart are formatted in the Panel's language instead of the browser's
+- The timeline keeps highlighting the right hour, day or month when the Panel stays open past midnight, and labels the hours correctly on days when daylight saving time begins or ends
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
