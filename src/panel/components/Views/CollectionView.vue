@@ -64,8 +64,9 @@
 
 		<footer class="k-bar k-collection-footer">
 			<k-pagination
-				v-bind="pagination"
 				:details="true"
+				:limit="pagination.limit"
+				:page="page"
 				:total="filteredItems.length"
 				@paginate="pagination.page = $event.page"
 			/>
@@ -110,12 +111,20 @@ export default {
 				.map((entry) => entry.row);
 		},
 		index() {
-			return (this.pagination.page - 1) * this.pagination.limit + 1;
+			return (this.page - 1) * this.pagination.limit + 1;
+		},
+		page() {
+			// the view keeps its page across reloads, e.g. after
+			// deleting a row or for a timespan with fewer rows
+			const pages = Math.ceil(
+				this.filteredItems.length / this.pagination.limit,
+			);
+			return Math.max(1, Math.min(this.pagination.page, pages));
 		},
 		paginatedItems() {
 			return this.sortedItems.slice(
 				this.index - 1,
-				this.pagination.limit * this.pagination.page,
+				this.pagination.limit * this.page,
 			);
 		},
 		searchIndex() {
@@ -144,6 +153,12 @@ export default {
 			}
 
 			return this.filteredItems;
+		},
+	},
+	watch: {
+		page(page) {
+			// don't jump back to the old page when rows grow again
+			this.pagination.page = page;
 		},
 	},
 	methods: {
