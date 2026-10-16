@@ -4,6 +4,7 @@ namespace Kirby\Retour;
 
 use Closure;
 use Kirby\Cms\Page;
+use Kirby\Http\Response;
 use Kirby\Http\Route;
 use PHPUnit\Framework\Attributes\CoversNothing;
 
@@ -108,6 +109,33 @@ class HooksTest extends TestCase
 
 		$result = ($this->hook())($this->route(), 'old-path', 'GET', null, true);
 		$this->assertInstanceOf(Page::class, $result);
+	}
+
+	public function testMatchesNonPriorityRedirectForHeadRequest(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config'   => $this->tmp . '/retour.yml',
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite',
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'target']
+				]
+			]
+		]);
+
+		$retour = Retour::instance($app);
+		$retour->redirects()->prepend(new Redirect([
+			'from'   => 'old-path',
+			'to'     => 'target',
+			'status' => 301
+		]));
+
+		$result = ($this->hook())($this->route(), 'old-path', 'HEAD', null, true);
+		$this->assertInstanceOf(Response::class, $result);
+		$this->assertSame(301, $result->code());
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
 	}
 
 	public function testSkips404LoggingWhenDisabled(): void
