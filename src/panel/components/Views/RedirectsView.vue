@@ -49,6 +49,10 @@ export default {
 				text: this.$t("retour.redirects.empty"),
 			};
 		},
+		searchable() {
+			// the comment isn't shown, but helps to find a redirect
+			return [...Object.keys(this.columns), "comment"];
+		},
 	},
 	methods: {
 		onCell({ row, columnIndex }) {

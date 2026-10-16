@@ -44,6 +44,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Very long paths and referrers (e.g. from bots) are cut off at 1024 characters in the log
 - Filtering a table without matches shows "No results" instead of saying that there are no redirects or failures at all
 - The filter button closes the search field with one click, also with a search term entered, and keeps the focus
+- Filtering a table only searches the values shown in it (and the comment of a redirect); terms like "path" or "null" no longer match every row
 - Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
 
 ### Performance
