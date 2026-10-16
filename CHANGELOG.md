@@ -7,80 +7,73 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 ### Breaking changes
 
 - Requires Kirby 6 and PHP 8.3 or newer
-- The `kirby retour:indices` command has been removed. Logs of earlier versions are now updated automatically the first time you open Retour in the Panel: unused indices are dropped and the index for redirect hits gets smaller.
-- Log entries older than 12 months are now deleted automatically (the `deleteAfter` option defaults to `12`). Set it to `false` to keep them forever.
+- The `kirby retour:indices` command has been removed. Logs of earlier versions are updated automatically the first time you open Retour in the Panel.
+- Log entries older than 12 months are deleted automatically (`deleteAfter` defaults to `12`; set it to `false` to keep them)
 - The PHP API has changed significantly. If your code uses Retour's classes directly, check it against the new version.
 
 ### Features
 
-- Ignore failures from the Panel: every failure has a new "Ignore" option that adds its path, or a pattern based on it, to the ignored paths and removes its failures from the log
-- New "Ignored" button on the failures tab to manage the ignored paths. It also lists the ones from the `ignore` option and adds common scanner paths (`wp-*`, `xmlrpc.php`, `.env`, `.git/…`) in one go.
-- New `ignoreIps` option: requests from these IP addresses or ranges (e.g. `192.0.2.0/24`) aren't logged at all, e.g. the ones of your hosting provider's security scanner. Redirects still apply to them.
-- New "Week" timespan to view the stats, failures and hits of a single week. Weeks start on the same day as the calendar in the Panel's date fields.
+- Ignore failures from the Panel: the new "Ignore" option adds a failure's path, or a pattern based on it, to the ignored paths and removes its failures from the log. The new "Ignored" button manages these paths, lists the ones from the `ignore` option and adds common scanner paths (`wp-*`, `xmlrpc.php`, `.env`, `.git/…`) in one go.
+- New `ignoreIps` option: requests from these IP addresses or ranges (e.g. `192.0.2.0/24`), such as your host's security scanner, aren't logged. Redirects still apply to them.
+- New "Week" timespan, starting on the same weekday as the calendar in the Panel's date fields
 - New `cache` option: the parsed redirects config is cached until the file changes. On by default; set it to `false` or pass Kirby cache options, e.g. `['type' => 'apcu']`.
-- New translations: Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America)
-- New icons in the Panel: a redirect icon for Retour in the menu, icons for the redirects and failures tabs and more fitting icons in the stats, tables, drawers and dialogs
+- New translations: Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America). All others have been completed.
+- New and more fitting icons throughout the Panel
 - Clicking the empty redirects table opens the drawer to add a redirect
 
 ### Fixes
 
-- A `retour.yml` that can't be parsed is no longer replaced with an empty list on the next save in the Panel. Redirects are turned off until it's fixed, and the Panel shows the error.
-- Saving a redirect with an invalid path pattern or status code fails with an error message instead of breaking routing for every request
-- Redirects now also apply to ignored paths; ignoring a path only stops its failures from being logged
-- HEAD requests (e.g. from link checkers and uptime monitors) are now redirected as well; they aren't logged, so they don't inflate the stats
-- Redirects no longer show draft pages, or pages inside drafts, to visitors and don't redirect to them
-- Redirect targets that aren't pages, e.g. `downloads/file.pdf`, are now resolved against the site URL. Before, browsers resolved them relative to the requested path, which broke nested paths and sites in a subfolder.
-- Redirects to a page that has been deleted (e.g. a `page://…` UUID target) now show the error page and are logged as failure, instead of sending visitors to an invalid URL
-- Redirects with status `200` to a page that doesn't exist or is a draft now show the error page and are logged as failure, instead of answering with an empty page
-- Redirects to a content representation of the home page (e.g. `home.rss`) work now
-- Query strings are passed on exactly as they are, both a target's own query string and the one forwarded by `preserveQuery`. They used to be re-encoded, which broke parameters like Google's `_gl` linker.
-- Redirects to `mailto:` links work now; they used to end in an error
-- Changing the path of a redirect to one that another redirect already uses is rejected instead of creating a duplicate
-- Removing or resolving a failure now also works for paths with slashes
-- Stats: custom timespans over several months show every month (one starting on January 31 skipped February), the chart only counts records inside the selected timespan, and the hours of a single day are no longer skipped or doubled when daylight saving time begins or ends
-- Invalid dates for the timespan no longer break the Retour view, and an end date before the start date is corrected
-- Unknown Retour tab URLs (e.g. `/panel/retour/foo`) show the Panel's not-found view
-- One invalid pattern in the `ignore` option no longer stops all other patterns from working
-- Requests that come in while redirects are being saved no longer see an empty config file, and saving keeps concurrent changes to other settings in `retour.yml`
-- Very long paths and referrers (e.g. from bots) are cut off at 1024 characters in the log
-- Filtering a table without matches shows "No results" instead of saying that there are no redirects or failures at all
-- The filter button closes the search field with one click, also with a search term entered, and keeps the focus
-- Filtering a table only searches the values shown in it (and the comment of a redirect); terms like "path" or "null" no longer match every row
-- Deleting the last row on a table page, or switching to a timespan with fewer rows, no longer leaves an empty table without pagination
-- Table columns can be sorted with the keyboard
-- Only clickable table cells show a pointer cursor
+#### Redirects
+
+- A `retour.yml` that can't be parsed is no longer replaced with an empty list on the next save. Redirects are off until it's fixed, and the Panel shows the error.
+- Saving rejects invalid path patterns, invalid status codes and paths another redirect already uses, instead of breaking routing or creating duplicates
+- While redirects are saved, other requests no longer see an empty config file, and concurrent changes to other settings in `retour.yml` are kept
+- Redirects also apply to ignored paths and to HEAD requests (which aren't logged)
+- Redirects no longer show or target draft pages, or pages inside drafts
+- Targets that aren't pages (e.g. `downloads/file.pdf`) are resolved against the site URL instead of the requested path
+- Missing targets (a deleted page, or a `200` redirect to a missing page or draft) show the error page and are logged as failure
+- Redirects to `mailto:` links and to content representations of the home page (e.g. `home.rss`) work
+- Query strings are passed on exactly as they are instead of being re-encoded, which broke parameters like Google's `_gl`
+
+#### Logging
+
+- One invalid pattern in the `ignore` option no longer stops the others from working
+- Very long paths and referrers are cut off at 1024 characters
+- Removing or resolving a failure works for paths with slashes
+
+#### Stats
+
+- Custom timespans over several months show every month, and the chart only counts records inside the timespan
+- Previous and next on a custom timespan move by its own length, and clicking a month in the timeline zooms into the whole month
+- Invalid timespan dates no longer break the view, and an end date before the start date is corrected
+- The timeline handles daylight saving time, keeps highlighting the current hour, day or month past midnight and is no longer mirrored in right-to-left languages
+- The timeline labels are dimmed again and sit under their columns; the y-axis shows exact ticks and whole numbers for small counts
+- Numbers in the stats and tables are formatted in the Panel's language
+
+#### Panel
+
+- Filtering a table only searches the values shown (and a redirect's comment) and shows "No results" without matches. The filter button closes the field in one click and keeps the focus.
+- Deleting the last rows of a page or switching timespans no longer leaves an empty table without pagination
+- Table cells line up with their headers, dimmed dashes and icons are readable in light and dark mode, and only clickable cells show a pointer cursor
 - Without logging, the redirects table no longer shows an empty hits column
-- Clicking a month in the timeline of a longer timespan zooms into the whole month instead of its first day, and the current month is highlighted
-- Previous and next on a custom timespan move by its own length (e.g. from 10–20 March to 21–31 March) instead of by a single day or month
-- The y-axis of the timeline shows exact ticks (1.25k instead of 1.2k) and whole numbers for small counts
-- The totals next to the pie chart are formatted in the Panel's language instead of the browser's
-- The timeline keeps highlighting the right hour, day or month when the Panel stays open past midnight, and labels the hours correctly on days when daylight saving time begins or ends
-- The labels of the timeline are dimmed again, so the current day stands out
-- In right-to-left Panel languages, the timeline is no longer mirrored
-- Screen readers skip the timeline chart, which they used to read as a table of axis numbers and empty cells
-- On timespans with more than 31 days or months, the timeline labels sit under their columns again
-- The y-axis of the timeline is formatted in the Panel's language (e.g. "1,5 Mio." in German)
+- The tooltip of a hit count shows the date of the last hit in a readable format
 - Fixed the links of some logged paths and referrers in the tables
-- Screen readers announce the priority icon in the redirects table
-- Hit counts are formatted in the Panel's language, and the tooltip shows the date of the last hit in a readable format
-- Table cells line up with their column headers, and the dimmed dashes and icons in the tables are readable in light and dark mode
-- Translations have been completed and cleaned up; shared strings now come from Kirby's own translations
+- Table columns can be sorted with the keyboard; screen readers skip the timeline chart and announce the priority icon
+- Unknown Retour tab URLs show the Panel's not-found view
 
 ### Performance
 
 - The redirects config isn't parsed on every request anymore (see the new `cache` option)
-- Logging a failure or redirect hit takes one database statement instead of first looking up the table schema
-- Faster stats: each hour, day or month is counted with an indexed range query
-- Ignoring a path removes its existing failures in a single statement
-- Clearing the log or purging old entries only rebuilds the database file when at least a fifth of it is free space, so the log isn't locked as long on large sites
+- Logging a request and ignoring a path each take a single database statement
+- Stats count each hour, day or month with an indexed range query
+- Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time
 - Smaller log database: the index for redirect hits no longer includes failures
-- Filtering large tables in the Panel is much faster and uses far less memory (e.g. 40 ms instead of 530 ms and 12 MB instead of 115 MB at 100,000 failures)
-- The timeline needs less graphics memory: its areas no longer each get their own compositing layer
+- Filtering large tables in the Panel is much faster and lighter (40 ms instead of 530 ms at 100,000 failures)
 
 ### Housekeeping
-- New `kirby retour:seed` command that fills the log with dummy data for testing.
+
+- New `kirby retour:seed` command that fills the log with dummy data for testing
 - Translations are no longer managed on Transifex. To contribute, open a pull request against the JSON files in `src/i18n` on the `dev` branch.
 - Redirects return a Kirby response instead of ending the PHP script
-- The Panel code uses Kirby 6's view, dialog and drawer controllers and Vue 3; its logic lives in tested TypeScript helpers
-- Upgraded tooling: kirbyup 4, ESLint 10, TypeScript, getkirby/php-cs and ParaTest
-- Much larger test suite
+- The Panel code uses Kirby 6's view, dialog and drawer controllers and Vue 3
+- Upgraded tooling (kirbyup 4, ESLint 10, TypeScript, getkirby/php-cs, ParaTest) and a much larger test suite
