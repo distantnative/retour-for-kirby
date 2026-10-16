@@ -20,7 +20,7 @@ class RoutesTest extends TestCase
 			]
 		]);
 
-		$this->assertSame(0, count($extension()));
+		$this->assertSame(0, count($extension($app)));
 
 		$retour = Retour::instance($app);
 		$retour->redirects()->prepend(new Redirect([
@@ -28,7 +28,7 @@ class RoutesTest extends TestCase
 			'to'   => 'bar'
 		]));
 
-		$this->assertSame(0, count($extension()));
+		$this->assertSame(0, count($extension($app)));
 
 		$retour->redirects()->prepend(new Redirect([
 			'from'     => 'foo',
@@ -37,7 +37,7 @@ class RoutesTest extends TestCase
 			'status'   => 307
 		]));
 
-		$this->assertSame(1, count($extension()));
+		$this->assertSame(1, count($extension($app)));
 	}
 
 	public function testRenderRedirects(): void

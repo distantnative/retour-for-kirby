@@ -1,16 +1,13 @@
 <?php
 
+use Kirby\Data\Data;
 use Kirby\Filesystem\Dir;
-use Kirby\Filesystem\F;
 
 $translations = [];
-$root = dirname(__DIR__) . '/i18n';
+$root         = dirname(__DIR__) . '/i18n';
 
 foreach (Dir::files($root) as $file) {
-	$locale = basename($file, '.json');
-	if ($content = F::read($root . '/' . $file)) {
-		$translations[$locale] = json_decode($content, true);
-	}
+	$translations[basename($file, '.json')] = Data::read($root . '/' . $file);
 }
 
 return $translations;
