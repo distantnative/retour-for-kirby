@@ -482,6 +482,12 @@ class RedirectTest extends TestCase
 
 		$redirect = new Redirect(['from' => 'foo', 'status' => 0]);
 		$this->assertSame(null, $redirect->status());
+
+		$redirect = new Redirect(['from' => 'foo', 'status' => '0']);
+		$this->assertSame(null, $redirect->status());
+
+		$redirect = new Redirect(['from' => 'foo', 'status' => true]);
+		$this->assertSame(null, $redirect->status());
 	}
 
 	public function testToArray(): void

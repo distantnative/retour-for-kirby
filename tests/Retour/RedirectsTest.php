@@ -80,7 +80,6 @@ class RedirectsTest extends TestCase
 		return [
 			'pattern'      => [['from' => 'foo(', 'status' => 301], 'Invalid path pattern: foo('],
 			'pattern #'    => [['from' => 'foo#(:any)'], 'Invalid path pattern: foo#(:any)'],
-			'status "0"'   => [['from' => 'foo', 'status' => '0'], 'Invalid status code: 0'],
 			'status text'  => [['from' => 'foo', 'status' => 'abc'], 'Invalid status code: 0'],
 			'status 999'   => [['from' => 'foo', 'status' => '999'], 'Invalid status code: 999'],
 			'status array' => [['from' => 'foo', 'status' => ['301']], 'Invalid status code: 1'],

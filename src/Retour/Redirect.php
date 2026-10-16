@@ -104,11 +104,11 @@ class Redirect
 
 	/**
 	 * The Panel sends an empty string for no status,
-	 * hand-edited config files might use `false` or `0`
+	 * hand-edited config files might use `false`, `true` or `0`
 	 */
 	protected static function normalizeStatus(mixed $status): int|null
 	{
-		if (in_array($status, [null, '', false, 0, 'disabled'], true) === true) {
+		if (in_array($status, [null, '', false, true, 0, '0', 'disabled'], true) === true) {
 			return null;
 		}
 
