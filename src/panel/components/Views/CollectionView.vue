@@ -49,13 +49,13 @@
 			@header="onHeader"
 		>
 			<template #header="{ columnIndex, label }">
-				<span>
+				<button type="button">
 					{{ label }}
 					<k-icon
 						v-if="columnIndex === sortBy"
 						:type="sortDirection === 'asc' ? 'angle-up' : 'angle-down'"
 					/>
-				</span>
+				</button>
 			</template>
 			<template #options="{ row }">
 				<k-options-dropdown :options="options(row)" />
@@ -211,9 +211,11 @@ export default {
 .k-retour-collection-view .k-table-column {
 	cursor: pointer;
 }
-.k-retour-collection-view th.k-table-column > span {
-	display: inline-flex;
-	width: 100%;
+.k-retour-collection-view th.k-table-column {
+	padding: 0;
+}
+.k-retour-collection-view th.k-table-column > button {
+	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
