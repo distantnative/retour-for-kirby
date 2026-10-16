@@ -12,6 +12,9 @@
 
 use Composer\Semver\Semver;
 use Kirby\Cms\App as Kirby;
+use Kirby\Retour\Commands\Indices;
+use Kirby\Retour\Commands\Seed;
+use Kirby\Retour\Retour;
 
 // validate Kirby version
 if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~6.0') === false) {
@@ -24,8 +27,11 @@ require_once __DIR__ . '/src/bootstrap.php';
 // register the plugin
 Kirby::plugin('distantnative/retour', [
 	'areas'        => require_once __DIR__ . '/src/extensions/areas.php',
-	'commands'     => require_once __DIR__ . '/src/extensions/commands.php',
+	'commands'     => [
+		'retour:indices' => Indices::class,
+		'retour:seed'    => Seed::class
+	],
 	'hooks'        => require_once __DIR__ . '/src/extensions/hooks.php',
-	'routes'       => require_once __DIR__ . '/src/extensions/routes.php',
+	'routes'       => fn (): array => Retour::instance()->redirects()->toRoutes(true),
 	'translations' => require_once __DIR__ . '/src/extensions/i18n.php'
 ]);

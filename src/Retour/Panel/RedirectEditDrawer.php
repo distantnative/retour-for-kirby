@@ -5,7 +5,6 @@ namespace Kirby\Retour\Panel;
 use Kirby\Exception\NotFoundException;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirect;
-use Kirby\Toolkit\I18n;
 
 class RedirectEditDrawer extends RedirectCreateDrawer
 {
@@ -35,7 +34,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 			options: [
 				[
 					'icon'   => 'trash',
-					'title'  => I18n::translate('remove'),
+					'title'  => $this->i18n('remove'),
 					'dialog' => 'retour/redirects/' . urlencode($this->id) . '/delete'
 				]
 			]
