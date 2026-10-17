@@ -64,6 +64,19 @@ class TimespanTest extends TestCase
 		$this->assertFalse($noChecks['hasAll']);
 	}
 
+	public function testChecksOnLastDay(): void
+	{
+		$checks = $this->ts('checks', [
+			'from'  => date('Y-m-d'),
+			'to'    => date('Y-m-d'),
+			'first' => '2023-01-01 10:00:00',
+			'last'  => date('Y-m-d H:i:s'),
+		]);
+
+		$this->assertTrue($checks['isCurrent']);
+		$this->assertFalse($checks['hasNext']);
+	}
+
 	public function testHasNext(): void
 	{
 		$to    = Date::optional('2023-01-15');
