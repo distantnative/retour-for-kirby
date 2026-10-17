@@ -3,12 +3,15 @@
 namespace Kirby\Retour;
 
 use Closure;
-use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
+use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\LogicException;
+use Kirby\Exception\NotFoundException;
+use Kirby\Http\Header;
+use Kirby\Toolkit\Collection;
 
 /**
- * Redirects
- * Collection of all configured redirect routes
+ * The order of the redirects defines the precedence of their routes
  */
 class Redirects extends Collection
 {
@@ -16,112 +19,185 @@ class Redirects extends Collection
 		protected Retour $retour,
 		array $redirects
 	) {
-		parent::__construct($redirects);
+		parent::__construct($redirects, caseSensitive: true);
 	}
 
 	/**
-	 * Creates new redirect
+	 * Applies the change to the stored redirects, so concurrent changes aren't lost
+	 *
+	 * @throws LogicException If the config file could not be read or written
 	 */
-	public function create(array $data): self
+	protected function commit(Closure $change): void
 	{
-		$redirect = new Redirect($data);
-
-		if ($this->has($redirect->id()) === true) {
-			throw new DuplicateException('Redirect with ID already exists');
-		}
-
-		$this->prepend($redirect->id(), $redirect);
-		return $this;
-	}
-
-	/**
-	 * Takes a config array and turns it into
-	 * a collection of redirect objects
-	 */
-	public static function factory(Retour $retour, array $config): self
-	{
-		$redirects = new self($retour, []);
-
-		foreach ($config as $data) {
-			$redirect = new Redirect($data);
-			$redirects->append($redirect->id(), $redirect);
-		}
-
-		return $redirects;
-	}
-
-	public function retour(): Retour
-	{
-		return $this->retour;
-	}
-
-	/**
-	 * Writes collection to config file
-	 */
-	public function save(): void
-	{
-		$config = $this->retour->config();
-		$config->write('redirects', $this->toArray());
-	}
-
-	/**
-	 * Turns collection into array, by default turning
-	 * Redirect objects into array as well
-	 */
-	public function toArray(Closure|null $map = null): array
-	{
-		$map ??= fn (Redirect $redirect) => $redirect->toArray();
-		$array = parent::toArray($map);
-		return array_values($array);
-	}
-
-	/**
-	 * Returns redirects data combined with log data
-	 */
-	public function toData(string $from, string $to): array
-	{
-		$retour = $this->retour;
-
-		// If logging is disabled, return without data
-		if ($retour->hasLog() === false) {
-			return $this->toArray();
-		}
-
-		// get hits of all redirects at once
-		$hits = $retour->log()->redirects($from, $to);
-
-		return $this->toArray(function (Redirect $redirect) use ($hits): array {
-			$data         = $redirect->toArray();
-			$data['hits'] = $hits[$data['from']]['hits'] ?? 0;
-			$data['last'] = $hits[$data['from']]['last'] ?? null;
+		$this->retour->config()->update(function (array $data) use ($change): array {
+			$this->data = static::factory($this->retour, $data['redirects'] ?? [])->data;
+			$change();
+			$data['redirects'] = $this->toArray();
 			return $data;
 		});
 	}
 
 	/**
-	 * Returns routes config for all active redirects
+	 * Adds a new redirect with the highest precedence
+	 *
+	 * @throws DuplicateException If a redirect with the same path exists
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */
-	public function toRoutes(bool $priority = false): array
+	public function create(array $data): Redirect
 	{
-		// Filter: only active redirects with matching priority
-		$redirects = $this->filter(
-			fn (Redirect $redirect): bool =>
-				$redirect->isActive() === true &&
-				$redirect->priority() === $priority
-		);
+		$redirect = Redirect::factory($data);
 
-		// create route array for each redirect
-		return $redirects->toArray(
-			fn (Redirect $route) => $route->toRoute()
-		);
+		static::validate($redirect);
+
+		$this->commit(function () use ($redirect) {
+			if ($this->has($redirect->id()) === true) {
+				throw new DuplicateException(
+					message: 'Redirect with ID already exists'
+				);
+			}
+
+			$this->prepend($redirect->id(), $redirect);
+		});
+
+		return $redirect;
+	}
+
+	public function delete(string $id): bool
+	{
+		$this->commit(fn () => $this->remove($id));
+		return true;
+	}
+
+	public static function factory(Retour $retour, array $config): self
+	{
+		$redirects = new self($retour, []);
+
+		foreach ($config as $data) {
+			$redirect = Redirect::factory($data);
+			$redirects->data[$redirect->id()] = $redirect;
+		}
+
+		return $redirects;
+	}
+
+	public function toArray(Closure|null $map = null): array
+	{
+		return $this->values($map ?? fn (Redirect $redirect) => $redirect->toArray());
 	}
 
 	/**
-	 * Updates a redirect
+	 * Redirects with their hits from the log
 	 */
-	public function update(string|object $key, mixed $data = null): static
+	public function toData(string $from, string $to): array
 	{
-		$redirect = new Redirect($data);
-		return parent::update($key, $redirect);
+		$hits = $this->retour->log()?->redirects($from, $to);
+
+		if ($hits !== null) {
+			return $this->toArray(fn (Redirect $redirect): array => [
+				...$redirect->toArray(),
+				'hits' => $hits[$redirect->from()]['hits'] ?? 0,
+				'last' => $hits[$redirect->from()]['last'] ?? null
+			]);
+		}
+
+		return $this->toArray();
+	}
+
+	/**
+	 * Only the routes that can match the path, as the
+	 * router compares paths without `(` as plain strings
+	 */
+	public function toRoutes(string $path, bool $priority = false): array
+	{
+		$path   = trim($path, '/');
+		$routes = [];
+
+		foreach ($this->data as $redirect) {
+			if (
+				$redirect->isActive() === true &&
+				$redirect->priority() === $priority &&
+				(
+					Pattern::hasPlaceholder($redirect->from()) === true ||
+					trim($redirect->from(), '/') === $path
+				)
+			) {
+				$routes[] = $redirect->toRoute();
+			}
+		}
+
+		return $routes;
+	}
+
+	/**
+	 * Keeps the position of the redirect
+	 *
+	 * @throws NotFoundException If the redirect doesn't exist
+	 * @throws DuplicateException If another redirect already has the new path
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
+	 */
+	public function update(string $id, array $data): Redirect
+	{
+		$redirect = null;
+
+		$this->commit(function () use ($id, $data, &$redirect) {
+			$current  = $this->get($id) ?? throw new NotFoundException(
+				message: 'Redirect not found'
+			);
+			$redirect = Redirect::factory([...$current->toArray(), ...$data]);
+
+			if ($redirect->id() !== $id && $this->has($redirect->id()) === true) {
+				throw new DuplicateException(
+					message: 'Redirect with ID already exists'
+				);
+			}
+
+			static::validate($redirect);
+
+			$redirects = [];
+
+			foreach ($this->data as $key => $item) {
+				// numeric IDs become integer array keys
+				if ((string)$key === $id) {
+					$key  = $redirect->id();
+					$item = $redirect;
+				}
+
+				$redirects[$key] = $item;
+			}
+
+			$this->data = $redirects;
+		});
+
+		return $redirect;
+	}
+
+	/**
+	 * An invalid path pattern would break routing for every request
+	 *
+	 * @throws InvalidArgumentException If the path pattern or status code is invalid
+	 */
+	protected static function validate(Redirect $redirect): void
+	{
+		$from = $redirect->from();
+
+		if (
+			Pattern::hasPlaceholder($from) === true &&
+			Pattern::isValid($from) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid path pattern: ' . $from
+			);
+		}
+
+		$status = $redirect->status();
+
+		if (
+			$status !== null &&
+			array_key_exists('_' . $status, Header::$codes) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid status code: ' . $status
+			);
+		}
 	}
 }

@@ -2,19 +2,29 @@
 
 namespace Kirby\Retour\Panel;
 
-use Kirby\Cms\App;
 use Kirby\Http\Header;
-use Kirby\Retour\Redirects;
+use Kirby\Panel\Controller\DrawerController;
+use Kirby\Panel\Ui\Drawer\FormDrawer;
+use Kirby\Panel\Ui\Item\UserItem;
 use Kirby\Retour\Retour;
-use Kirby\Toolkit\I18n;
 
-class RedirectCreateDrawer
+class RedirectCreateDrawer extends DrawerController
 {
+	/**
+	 * UUID (or ID), which unlike the email address never changes
+	 */
+	protected function author(): string|null
+	{
+		$user = $this->kirby->user();
+		return $user?->uuid()?->toString() ?? $user?->id();
+	}
+
 	protected function data(): array
 	{
-		return $this->kirby()->request()->get([
+		return $this->request->get([
 			'from',
 			'to',
+			'language',
 			'status',
 			'priority',
 			'comment'
@@ -28,110 +38,111 @@ class RedirectCreateDrawer
 			'value' => ltrim($code, '_')
 		], array_keys(Header::$codes));
 
-		$fields = [
+		return [
 			'from' => [
 				'type'     => 'text',
-				'label'    => I18n::translate('retour.redirects.from'),
-				'icon'     => 'bookmark',
+				'label'    => $this->i18n('retour.redirects.from'),
+				'icon'     => 'pin',
 				'before'   => Retour::instance()->site(),
 				'counter'  => false,
 				'required' => true,
-				'help'     => I18n::template('retour.redirects.from.help', [
+				'help'     => $this->i18nHtml('retour.redirects.from.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#path'
 				])
 			],
 			'to' => [
 				'type'     => 'link',
-				'label'    => I18n::translate('retour.redirects.to'),
+				'label'    => $this->i18n('retour.redirects.to'),
 				'options'  => ['url', 'page', 'custom'],
-				'help'     => I18n::translate('retour.redirects.to.help')
+				'width'    => $this->kirby->multilang() === true ? '2/3' : '1/1',
+				'help'     => $this->i18n('retour.redirects.to.help')
 			],
+			...($this->kirby->multilang() === true ? [
+				'language' => [
+					'type'        => 'select',
+					'label'       => $this->i18n('language'),
+					'icon'        => 'translate',
+					'options'     => $this->kirby->languages()->values(fn ($language) => [
+						'text'  => $language->name(),
+						'value' => $language->code()
+					]),
+					'placeholder' => $this->i18n('retour.redirects.language.placeholder'),
+					'width'       => '1/3',
+					'help'        => $this->i18n('retour.redirects.language.help')
+				]
+			] : []),
 			'status' => [
 				'type'     => 'retour-status',
-				'label'    => I18n::translate('retour.redirects.status'),
+				'label'    => $this->i18n('status'),
 				'options'  => $codes,
 				'width'    => '1/2',
-				'help'     => I18n::template('retour.redirects.status.help', [
+				'help'     => $this->i18nHtml('retour.redirects.status.help', [
 					'docs' => 'https://distantnative.com/retour-for-kirby/redirects#status'
 				])
 			],
 			'priority' => [
 				'type'     => 'toggle',
-				'label'    => I18n::translate('retour.redirects.priority'),
+				'label'    => $this->i18n('retour.redirects.priority'),
 				'icon'     => 'bolt',
 				'width'    => '1/2',
-				'help'     => I18n::translate('retour.redirects.priority.help')
+				'help'     => $this->i18n('retour.redirects.priority.help')
 			],
 			'comment' => [
 				'type'     => 'textarea',
-				'label'    => I18n::translate('retour.redirects.comment'),
-				'icon'     => 'chat',
+				'label'    => $this->i18n('retour.redirects.comment'),
+				'icon'     => 'note',
 				'buttons'  => false,
-				'help'     => I18n::translate('retour.redirects.comment.help')
+				'help'     => $this->i18n('retour.redirects.comment.help')
 			],
 			'creator' => [
-				'type'     => 'users',
-				'label'    => I18n::translate('retour.redirects.creator'),
-				'empty'    => I18n::translate('retour.redirects.creator.empty'),
-				'disabled' => true,
-			]
-		];
-
-		if ($this instanceof RedirectEditDrawer) {
-			$fields['modifier'] = [
-				'type'     => 'users',
-				'label'    => I18n::translate('retour.redirects.modifier'),
-				'empty'    => I18n::translate('retour.redirects.creator.empty'),
-				'disabled' => true,
-			];
-		}
-
-		return $fields;
-	}
-
-	protected function kirby(): App
-	{
-		return App::instance();
-	}
-
-	public function load(): array
-	{
-		return [
-			'component' => 'k-form-drawer',
-			'props' => [
-				'title'  => $this->title(),
-				'icon'   => 'add',
-				'fields' => $this->fields(),
-				'value'  => $this->value()
+				'type'     => 'retour-users',
+				'label'    => $this->i18n('retour.redirects.creator'),
+				'empty'    => $this->i18n('retour.redirects.creator.empty'),
 			]
 		];
 	}
 
-	protected function redirects(): Redirects
+	public function load(): FormDrawer
 	{
-		return Retour::instance()->redirects();
+		return new FormDrawer(
+			title: $this->title(),
+			icon: 'add',
+			fields: $this->fields(),
+			value: $this->value()
+		);
 	}
 
 	public function submit(): bool|array
 	{
-		$redirects = $this->redirects();
-		$redirects->create([
+		Retour::instance()->redirects()->create([
 			...$this->data(),
-			'creator' => $this->kirby()->user()?->email(),
+			'creator' => $this->author(),
 		]);
-		$redirects->save();
+
 		return true;
 	}
 
 	protected function title(): string
 	{
-		return I18n::translate('add');
+		return $this->i18n('add');
+	}
+
+	/**
+	 * Props for a `retour-users` field
+	 */
+	protected function user(string|null $id): array
+	{
+		if ($id !== null && $user = $this->kirby->user($id)) {
+			return [(new UserItem($user))->props()];
+		}
+
+		return [];
 	}
 
 	protected function value(): array
 	{
 		return [
-			'creator' => [$this->kirby()->user()?->panel()->pickerData()],
+			'creator' => $this->user($this->author()),
 			'status'  => Retour::instance()->option('status')
 		];
 	}

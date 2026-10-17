@@ -1,25 +1,101 @@
-# Monitor what ended nowhere: `Failures` tab
+# 404 tracking
 
-Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. This is valuable information for you to know where something might not be working correctly. You can see where your users fail.
+Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. You find them in the `Failures` tab of Retour's Panel view. This shows you where visitors of your site end up nowhere, e.g. because of a broken link.
 
-## Selected timespan
+![Failures tab](/failures.webp)
 
-When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occured during the selected timespan are shown. But it also applies to the count column in the redirects tab or the overall numbers in the system tab.
+## Stats and timespan
 
-You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a day or any custom interval:
+Above the tables in both tabs, Retour shows stats for all logged requests. The half ring shows their total and how they split up, the timeline how they are spread over time:
 
-![Change timespan](/timespan.png)
+- **Redirected:** requests handled by one of your redirects
+- **Resolved:** failures that you later turned into a redirect via [`Add as redirect`](#add-as-redirect)
+- **Failed:** failures that are still open
+
+Retour doesn't log `HEAD` requests, e.g. from uptime monitors, so they don't inflate the stats.
+
+Depending on the timespan, the timeline shows hours, days or months. Click on a day or month to zoom in on it.
+
+When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occurred during the selected timespan are shown. But it also applies to the hits column in the `Routes` tab.
+
+You can change the selected timespan in the header: step to the previous or next one, also with the arrow keys, or choose the whole log, a year, a month, a week, a day or any custom interval from the menu. `Today` jumps to the current year, month, week or day:
+
+![Change timespan](/timespan.webp)
+
+Weeks start on the same day as the calendar of Kirby's date fields: it depends on the Panel language of the user, or on Kirby's [`date.weekday`](https://getkirby.com/docs/reference/system/options/date#first-day-of-the-week) option.
+
+## Sort and filter
+
+The failures with the most hits come first. Click a table header to sort by that column instead, click it again to reverse the order and a third time to get back to the most hits first. The filter button above the table finds failures by their path or referrer.
 
 ## Add as redirect
 
 Every table row offers the option (behind the three dots to the right) to create a new redirect based on the failed request, which will be pre-filled with the path to prevent any more failures in the future.
 
+![Options of a failure](/failure-options.webp)
+
 Once you save that new route, all failure entries for that path will also be marked as resolved in the stats.
+
+## Ignore failures
+
+Bots and scanners request lots of paths that will never exist on your site, like `wp-login.php` or `.env`. To keep them out of your log, choose `Ignore` in the options of the table row. Before confirming, you can turn the path into a pattern with [placeholders](/redirects#path), e.g. `wp-admin(:all)`, to ignore a whole group of paths at once. Requests to ignored paths won't be logged anymore and all existing failures matching the pattern get removed from the log. Ignored paths match regardless of upper and lower case.
+
+![Ignore a failure](/ignore.webp)
+
+The `Ignored` button above the failures table lists all ignored paths, where you can also remove them again or add new ones. With one click, you can add a preset of paths that bots commonly probe for vulnerabilities, e.g. `wp-login.php`, `wp-admin`, `xmlrpc.php` or `.env`. All ignored paths are stored alongside your redirects in `site/config/retour.yml`.
+
+![Ignored paths](/ignores.webp)
+
+Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`. The `Ignored` dialog lists them as well, but they can only be changed in the config.
+
+### Ignore by IP address
+
+Some failures don't come from real visitors, e.g. from the security scanner of your hosting provider or your own office while you test the site. Add their IP addresses to the [`ignoreIps` option](/options#config) to keep all their requests out of the log:
+
+```php
+// site/config/config.php
+
+'distantnative.retour' => [
+  'ignoreIps' => [
+    '192.0.2.10',      // a single address
+    '198.51.100.0/24', // a range in CIDR notation
+    '2001:db8::/32'    // IPv6 works as well
+  ]
+]
+```
+
+Requests from these addresses are neither logged as failures nor counted as hits of your redirects. Redirects still apply to them. Retour doesn't store IP addresses, so failures logged before you added an address stay in the log until you [clear it](#clearing-logs).
+
+Retour uses the IP address the request reaches PHP with. If your site runs behind a proxy or CDN, e.g. Cloudflare, that's the address of the proxy, unless your web server passes on the visitor's address (e.g. with `mod_remoteip` for Apache or the `real_ip` module for nginx).
+
+### Block at the server level
+
+Ignoring a path only keeps it out of the failures log. The request still reaches Kirby, which renders your error page for it. For paths that bots hit a lot, it's better to block them in your web server so they never reach PHP at all.
+
+**Apache:** add this to your `.htaccess`, right after `RewriteEngine on`:
+
+```apache
+RewriteRule ^(wp-admin|wp-login\.php|xmlrpc\.php|\.env) - [F]
+```
+
+**nginx:** add this to your `server` block, before any other `location` blocks:
+
+```nginx
+location ~ ^/(wp-admin|wp-login\.php|xmlrpc\.php|\.env) {
+  return 403;
+}
+```
 
 ## Clearing logs
 
-Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table:
+Depending on your use case, you might want to clear the logs from time to time. This can be either done manually by clicking the button above the failures table. You can clear the complete log or only the open failures, which keeps the redirected and resolved stats:
 
-![Clear the log](/clear.png)
+![Clear the log](/clear.webp)
 
-Or automatically via the `distantnative.retour.deleteAfter` option.
+Or automatically via the [`deleteAfter` option](/options#config), which removes all entries older than the given number of months (by default 12). Retour deletes outdated entries from time to time while logging requests and when someone opens it in the Panel.
+
+To remove a single failure from the log, choose `Remove` in the options of its table row.
+
+### Log size
+
+Retour only logs failed requests and redirects, each takes about 90 bytes. A site with 10,000 of them a day ends up with a log of about 320 MB after a year. On high-traffic sites, set a lower [`deleteAfter`](/options#config) or [ignore](#ignore-failures) the paths that bots scan to keep it smaller.

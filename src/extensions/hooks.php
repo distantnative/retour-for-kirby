@@ -2,41 +2,46 @@
 
 namespace Kirby\Retour;
 
-use Kirby\Http\Route;
 use Kirby\Http\Router;
 use Throwable;
 
 return [
 	'route:after' => function (
-		Route $route,
 		string $path,
 		string $method,
 		mixed $result,
 		bool $final
 	) {
+		// only for requests that Kirby would answer with a 404
 		if (
-			$final === true &&
-			empty($result) === true
+			$final === false ||
+			in_array($result, [null, false, '', []], true) === false
 		) {
-			$retour = Retour::instance();
-
-			// Skip ignored paths
-			if ($retour->ignore($path) === true) {
-				return $result;
-			}
-
-			try {
-				// find non-priority redirect route for current path
-				// and call if possible
-				$routes = $retour->redirects()->toRoutes(false);
-				$router = new Router($routes);
-				return $router->call($path, $method);
-			} catch (Throwable) {
-				// log 404 if feature enabled
-				if ($retour->hasLog() === true) {
-					$retour->log()->add(['path' => $path]);
-				}
-			}
+			return null;
 		}
+
+		$retour = Retour::instance();
+
+		try {
+			$result = Router::execute(
+				$path,
+				$method,
+				$retour->redirects()->toRoutes($path, priority: false)
+			);
+		} catch (Throwable) {
+			$result = null;
+		}
+
+		if (
+			$result === null &&
+			$method !== 'HEAD' &&
+			$retour->hasLog() === true &&
+			$retour->ignores()->matchesVisitor() === false &&
+			$retour->ignores()->matches($path) === false
+		) {
+			$retour->log()->add(['path' => $path]);
+		}
+
+		return $result;
 	}
 ];

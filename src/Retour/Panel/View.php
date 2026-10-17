@@ -2,81 +2,205 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Panel\Controller\ViewController;
+use Kirby\Panel\Panel;
+use Kirby\Panel\Ui\Button\ViewButtons;
+use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
-use Kirby\Toolkit\I18n;
+use Kirby\Toolkit\Collection;
+use Kirby\Toolkit\Str;
 
-/**
- * Handles (Fiber) Panel view requests
- */
-class View
+class View extends ViewController
 {
-	/**
-	 * Returns all props for the Panel view
-	 */
-	public static function props(string $tab): array
+	public function __construct(
+		protected string $tab
+	) {
+		parent::__construct();
+	}
+
+	public function buttons(): ViewButtons
 	{
-		$retour   = Retour::instance();
+		$defaults = match ($this->tab) {
+			'redirects' => ['create'],
+			'failures'  => ['ignores', 'flush']
+		};
+
+		return ViewButtons::view('retour.' . $this->tab)->defaults(...$defaults);
+	}
+
+	/**
+	 * No `id`, as a path has a row per referrer
+	 */
+	protected function failure(array $failure): array
+	{
+		$id = Id::encode($failure['path']);
+
+		return [
+			...$failure,
+			'options' => [
+				[
+					'icon'   => 'add',
+					'text'   => $this->i18n('retour.failures.resolve'),
+					'drawer' => 'retour/failures/' . $id . '/resolve'
+				],
+				[
+					'icon'   => 'muted',
+					'text'   => $this->i18n('retour.failures.ignore'),
+					'dialog' => 'retour/failures/' . $id . '/ignore'
+				],
+				[
+					'icon'   => 'trash',
+					'text'   => $this->i18n('remove'),
+					'dialog' => 'retour/failures/' . $id . '/delete'
+				]
+			]
+		];
+	}
+
+	public function load(): ViewComponent
+	{
+		if ($error = Retour::instance()->config()->error()) {
+			throw $error;
+		}
+
+		if (
+			$this->tab === 'failures' &&
+			Retour::instance()->hasLog() === false
+		) {
+			Panel::go('retour/redirects');
+		}
+
+		return new ViewComponent(
+			...$this->props(),
+			component: 'k-retour-' . $this->tab . '-view',
+			buttons: $this->buttons(),
+			title: $this->i18n('view.retour'),
+			breadcrumb: [
+				[
+					'label' => $this->i18n('retour.' . $this->tab),
+					'link'  => 'retour/' . $this->tab,
+				]
+			]
+		);
+	}
+
+	public function props(): array
+	{
+		$log = Retour::instance()->log();
+
+		// upgrade logs of earlier versions
+		$log?->migrate();
+
 		$timespan = Timespan::props();
 		['from' => $from, 'to' => $to, 'unit' => $unit] = $timespan;
 
-		// props for minimal Panel view
 		$props = [
 			'timespan' => $timespan,
-			'tab'      => $tab,
+			'tab'      => $this->tab,
 			'tabs'     => [
 				[
 					'name'  => 'redirects',
-					'label' => I18n::translate('retour.redirects'),
+					'label' => $this->i18n('retour.redirects'),
+					'icon'  => 'redirect',
 					'link'  => 'retour/redirects'
 				]
 			]
 		];
 
-		// if log feature is supported...
-		if ($retour->hasLog() === true) {
-			// run garbage collection with a chance of 10%;
-			if (mt_rand(1, 10000) <= 0.1 * 10000) {
-				// purge log entries that should be automatically deleted
-				$retour->log()->purge();
+		if ($log !== null) {
+			if (random_int(1, 10) === 1) {
+				$log->purge();
 			}
 
-			// add additional tabs
 			$props['tabs'][] = [
 				'name'  => 'failures',
-				'label' => I18n::translate('retour.failures'),
+				'label' => $this->i18n('retour.failures'),
+				'icon'  => 'url-broken',
 				'link'  => 'retour/failures'
 			];
 
-			// get statistics data for current timeframe
-			$props['stats'] = $retour->log()->stats($unit, $from, $to);
+			$props['stats'] = $log->stats($unit, $from, $to);
 		}
 
-		// add tab-specific data, e.g. for table rows
-		$props['data'] = match ($tab) {
-			'redirects' => $retour->redirects()->toData($from, $to),
-			'failures'  => $retour->log()->fails($from, $to) ?? [],
-			default     => []
+		$sortBy     = $this->query('sortBy');
+		$searchterm = $this->query('searchterm');
+		$page       = (int)$this->request->get('page', 1);
+
+		$rows = match ($this->tab) {
+			'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page)->map($this->redirect(...)),
+			'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)->map($this->failure(...))
 		};
 
-		return $props;
+		return [
+			...$props,
+			'data'       => $rows->values(),
+			'pagination' => $rows->pagination()->toArray(),
+			'searchterm' => $searchterm,
+			'sortBy'     => $sortBy
+		];
+	}
+
+	protected function query(string $key): string|null
+	{
+		$value = trim($this->request->get($key, ''));
+		return $value !== '' ? $value : null;
+	}
+
+	protected function redirect(array $redirect): array
+	{
+		$id = Id::encode($redirect['from']);
+
+		return [
+			...$redirect,
+			'id'      => $id,
+			'options' => [
+				[
+					'icon'   => 'edit',
+					'text'   => $this->i18n('edit'),
+					'drawer' => 'retour/redirects/' . $id . '/edit'
+				],
+				[
+					'icon'   => 'trash',
+					'text'   => $this->i18n('remove'),
+					'dialog' => 'retour/redirects/' . $id . '/delete'
+				]
+			]
+		];
 	}
 
 	/**
-	 * Returns the Fiber view definition for a tab
+	 * Unsorted, they keep their order of precedence
 	 */
-	public static function tab(string $tab): array
-	{
-		return [
-			'component'  => 'k-retour-' . $tab . '-view',
-			'title'      => I18n::translate('view.retour'),
-			'breadcrumb' => [
-				[
-					'label' => I18n::translate('retour.' . $tab),
-					'link'  => 'retour/' . $tab,
-				]
-			],
-			'props' => static::props($tab)
-		];
+	protected function redirects(
+		string $from,
+		string $to,
+		string|null $sortBy,
+		string|null $searchterm,
+		int $page
+	): Collection {
+		$redirects = new Collection(Retour::instance()->redirects()->toData($from, $to));
+
+		// the table skips empty cells
+		$redirects = $redirects->map(fn (array $redirect): array => [
+			...$redirect,
+			'status' => $redirect['status'] ?? 'disabled'
+		]);
+
+		if ($searchterm !== null) {
+			$redirects = $redirects->filter(
+				fn (array $redirect): bool => Str::contains(
+					implode("\n", [$redirect['from'], $redirect['to'], $redirect['status'], $redirect['comment']]),
+					$searchterm,
+					true
+				)
+			);
+		}
+
+		if ($sortBy !== null) {
+			$redirects = $redirects->sort(...Str::split($sortBy, ' '));
+		}
+
+		return $redirects->paginate(50, $page);
 	}
 }

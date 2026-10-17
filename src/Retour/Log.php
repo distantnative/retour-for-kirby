@@ -2,63 +2,101 @@
 
 namespace Kirby\Retour;
 
+use Closure;
 use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
 use Kirby\Database\Database;
 use Kirby\Database\Query;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
-use Kirby\Toolkit\Date;
+use Kirby\Retour\Log\Migrations;
+use Kirby\Toolkit\Collection;
+use Kirby\Toolkit\Str;
+use PDO;
+use Throwable;
 
 /**
- * Reads and writes to the database log
- * for all 404 requests or successful redirects
+ * Stores failures and redirect hits with integer dates (see `timestamp()`);
+ * `$from` and `$to` params are `yyyy-mm-dd`
  */
 class Log
 {
+	/**
+	 * For paths and referrers, as bots can request arbitrarily long URLs
+	 */
+	protected const MAX_LENGTH = 1024;
+
 	protected Database $database;
 
 	public function __construct(
 		protected Retour $retour
 	) {
-		// get path to database file
-		$default = $retour->kirby()->root('logs') . '/retour/log.sqlite';
-		$file    = $retour->option('database', $default);
+		$file = $retour->option('database');
 
-		// support callbacks for database file option
-		if (is_callable($file) === true) {
+		if ($file instanceof Closure) {
 			$file = $file();
 		}
 
-		// make sure database is in place
-		if (F::exists($file) === false) {
-			$dir = dirname($file);
+		$new = F::exists($file) === false;
 
-			if (is_dir($dir) === false) {
-				Dir::make($dir);
-			}
-
-			// copy empty database file into place
-			F::copy(dirname(__DIR__, 2) . '/assets/retour.sqlite', $file);
+		if ($new === true) {
+			Dir::make(dirname($file));
 		}
 
-		// connect to database
 		$this->database = new Database([
 			'type'     => 'sqlite',
 			'database' => $file
 		]);
+
+		if ($new === true) {
+			$this->migrate();
+		}
 	}
 
 	/**
-	 * Create a new record entry in database
+	 * Stores a failure (`path`, `referrer`) or a `redirect` hit
 	 */
-	public function add(array $props): int|false
+	public function add(array $props): bool
 	{
-		return $this->table()->insert([
-			'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
-			'path'     => $props['path'],
-			'referrer' => $props['referrer'] ?? $_SERVER['HTTP_REFERER'] ?? null,
-			'redirect' => $props['redirect'] ?? null
-		]);
+		$redirect = $props['redirect'] ?? null;
+		$path     = null;
+		$referrer = null;
+
+		if ($redirect === null) {
+			$path     = Str::substr($props['path'], 0, static::MAX_LENGTH);
+			$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
+
+			if ($referrer !== null) {
+				$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
+			}
+		}
+
+		// a plain statement skips the query builder's schema lookup on every request
+		$added = $this->database->execute(
+			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
+			[
+				'date'     => static::timestamp($props['date'] ?? date('Y-m-d H:i:s')),
+				'path'     => $path,
+				'referrer' => $referrer,
+				'redirect' => $redirect
+			]
+		);
+
+		// keeps the log from growing if nobody opens the Panel; 10,000 records take < 0.1 s
+		if ($added === true && $this->database->lastId() % 1000 === 0) {
+			$this->purge(limit: 10000);
+		}
+
+		return $added;
+	}
+
+	protected function between(string $from, string $to, string $column = 'date'): Query
+	{
+		return $this->table()
+			->where($column . ' >= :start', ['start' => static::timestamp($from)])
+			->andWhere($column . ' <= :end', ['end' => static::timestamp($to . ' 23:59:59')]);
 	}
 
 	/**
@@ -70,169 +108,168 @@ class Log
 	}
 
 	/**
-	 * Returns all logged 404s
+	 * Unresolved failures, grouped by path and referrer
 	 *
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
+	 * @param $sortBy `path`, `referrer`, `last` or `hits` with `asc` or `desc`
+	 * @throws InvalidArgumentException If the sorting is invalid
 	 */
-	public function fails(string $from, string $to): array
-	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
+	public function fails(
+		string $from,
+		string $to,
+		string|null $sortBy = null,
+		string|null $searchterm = null,
+		int $page = 1,
+		int $limit = 50
+	): Collection {
+		$sortBy ??= 'hits desc';
 
-		// Run query
-		$fails = $this->table()
+		[$column, $direction] = Str::split(strtolower($sortBy), ' ') + [1 => 'asc'];
+
+		if (
+			in_array($column, ['path', 'referrer', 'last', 'hits'], true) === false ||
+			in_array($direction, ['asc', 'desc'], true) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid sorting: ' . $sortBy
+			);
+		}
+
+		// idx_date is faster for up to a month; for longer timespans, `+date`
+		// keeps SQLite on idx_failures, which has the failures grouped already
+		$days = (new DateTimeImmutable($from))->diff(new DateTimeImmutable($to))->days;
+
+		$query = $this->between($from, $to, $days < 31 ? 'date' : '+date')
 			->select('
                 path,
                 referrer,
-                MAX(date) AS last,
+                datetime(MAX(date), \'unixepoch\') AS last,
                 COUNT(*) AS hits
             ')
-			->where('redirect IS NULL')
+			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
 			->group('path, referrer')
+			// tie-breakers keep pages stable, as many failures share their hits;
+			// sorted by path, one direction for both lets SQLite read idx_failures in order
+			->order(match ($column) {
+				'path'  => 'path ' . $direction . ', referrer ' . $direction,
+				default => $column . ' ' . $direction . ', path, referrer'
+			})
 			->fetch('array')
-			->all();
+			->fail();
 
-		return $fails->toArray(fn (array $entry) => [
-			'path'     => $entry['path'],
-			'referrer' => $entry['referrer'],
-			'last'     => $entry['last'],
-			'hits'     => (int)$entry['hits'],
+		if ($searchterm !== null) {
+			$query->andWhere(
+				"(path LIKE :searchterm ESCAPE '\\' OR referrer LIKE :searchterm ESCAPE '\\')",
+				['searchterm' => '%' . addcslashes($searchterm, '%_\\') . '%']
+			);
+		}
+
+		return $query->page($page, $limit)->map(fn (array $fail): array => [
+			...$fail,
+			'hits' => (int)$fail['hits']
 		]);
 	}
 
-	/**
-	 * Returns the first log entry
-	 */
 	public function first(): array
 	{
 		return $this->single('date ASC');
 	}
 
 	/**
-	 * Remove database records and reset index
+	 * @param $mode `all` (also resets the ids) or `failures` (unresolved only)
+	 * @throws InvalidArgumentException If the mode is unknown
 	 */
 	public function flush(string $mode = 'all'): bool
 	{
 		$deleted = match ($mode) {
 			'all'      => $this->table()->delete(),
 			'failures' => $this->table()->delete('redirect IS NULL AND wasResolved IS NULL'),
-			default    => false
+			default    => throw new InvalidArgumentException(
+				message: 'Invalid flush mode: ' . $mode
+			)
 		};
 
 		if ($mode === 'all') {
 			$this->database->sqlite_sequence()->delete(['name' => 'records']);
 		}
 
-		$vacuum = $this->database->execute('VACUUM');
-		return $deleted && $vacuum;
+		return $deleted && $this->reclaim();
 	}
 
-	/**
-	 * Returns the last log entry
-	 */
 	public function last(): array
 	{
 		return $this->single('date DESC');
 	}
 
-	/**
-	 * Deletes outdated logs based on config option
-	 */
-	public function purge(): bool
+	public function migrate(): bool
 	{
-		// Get limit (in months) from option
-		$limit = $this->retour->option('deleteAfter', false);
+		return (new Migrations($this))->run();
+	}
 
-		if ($limit !== false) {
-			// Get cutoff date by subtracting limit from today
-			$time = strtotime('-' . $limit . ' month');
+	/**
+	 * Deletes records older than `deleteAfter` months; with a limit, only
+	 * that many and without rebuilding the file, e.g. while logging
+	 */
+	public function purge(int|null $limit = null): bool
+	{
+		$months = $this->retour->option('deleteAfter');
 
-			if ($time === false) {
-				return false;
-			}
+		if ($months === false) {
+			return true;
+		}
 
-			$cutoff = date('Y-m-d 00:00:00', $time);
+		$time = strtotime('-' . $months . ' month');
 
-			/** @var \Kirby\Database\Query $table */
-			$table = $this->table()->bindings(['cutoff' => $cutoff]);
+		if ($time === false) {
+			return false;
+		}
 
-			$delete = $table->delete('date < :cutoff');
+		$cutoff = static::timestamp(date('Y-m-d', $time));
 
-			// only rebuild the database file
-			// when records have been deleted
-			if ($this->database->affected() === 0) {
-				return $delete;
-			}
+		if ($limit !== null) {
+			return $this->database->execute(
+				'DELETE FROM records WHERE id IN (SELECT id FROM records WHERE date < :cutoff LIMIT :limit)',
+				['cutoff' => $cutoff, 'limit' => $limit]
+			);
+		}
 
-			$vacuum = $this->database->execute('VACUUM');
-			return $delete && $vacuum;
+		return $this->table()->where('date < :cutoff', ['cutoff' => $cutoff])->delete() && $this->reclaim();
+	}
+
+	/**
+	 * Rebuilds the file only if a fifth is free, otherwise new records
+	 * reuse the space and the slow, locking rebuild isn't worth it
+	 */
+	public function reclaim(): bool
+	{
+		$connection = $this->database->connection();
+		$pages      = (int)$connection->query('PRAGMA page_count')->fetchColumn();
+		$free       = (int)$connection->query('PRAGMA freelist_count')->fetchColumn();
+
+		if ($free > 0 && $free >= $pages / 5) {
+			return $this->database->execute('VACUUM');
 		}
 
 		return true;
 	}
 
 	/**
-	 * Returns all records for a redirect
+	 * Redirects without hits are missing
 	 *
-	 * @param string $path redirect path
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
-	 */
-	public function redirect(string $path, string $from, string $to): array
-	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
-
-		// Run query
-		/** @var array|false */
-		$data = $this->table()
-			->select('
-                COUNT(*) AS hits,
-                MAX(date) AS last
-            ')
-			->where(['redirect' => $path])
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
-			->fetch('array')
-			->first();
-
-		return [
-			'hits' => (int)($data['hits'] ?? 0),
-			'last' => $data['last'] ?? null
-		];
-	}
-
-	/**
-	 * Returns hits and last hit of all redirects in one query,
-	 * keyed by redirect path; redirects without hits are missing
-	 *
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
 	 * @return array<string, array{hits: int, last: string}>
 	 */
 	public function redirects(string $from, string $to): array
 	{
-		// Add time to dates to capture full days
-		$from .= ' 00:00:00';
-		$to   .= ' 23:59:59';
-
-		$data = $this->table()
+		$data = $this->between($from, $to)
 			->select('
                 redirect,
                 COUNT(*) AS hits,
-                MAX(date) AS last
+                datetime(MAX(date), \'unixepoch\') AS last
             ')
-			->where('redirect IS NOT NULL')
-			->andWhere('date >= :start', ['start' => $from])
-			->andWhere('date <= :end', ['end' => $to])
+			->andWhere('redirect IS NOT NULL')
 			->group('redirect')
 			->fetch('array')
+			->fail()
 			->all();
 
 		$redirects = [];
@@ -248,22 +285,65 @@ class Log
 	}
 
 	/**
-	 * Remove an entry from the database
+	 * Deletes only failures, redirect hits stay for the stats
 	 */
 	public function remove(string $path): bool
 	{
-		return $this->table()->delete(['path' => $path]);
+		return $this->table()
+			->where(['path' => $path])
+			->andWhere('redirect IS NULL')
+			->delete();
 	}
 
 	/**
-	 * Mark all records for a given path as resolved
+	 * @param Closure(string $path): bool $filter
 	 */
+	public function removeFailures(Closure $filter): bool
+	{
+		$paths = $this->table()
+			->select('path')
+			->distinct()
+			->where('redirect IS NULL')
+			->fetch('array')
+			->fail()
+			->all()
+			->pluck('path');
+
+		$paths = array_filter($paths, $filter);
+
+		if ($paths === []) {
+			return true;
+		}
+
+		// a temporary table lets one pass over the log delete all paths
+		$db = $this->database->connection();
+		$db->beginTransaction();
+
+		try {
+			$db->exec('CREATE TEMP TABLE retour_remove (path TEXT PRIMARY KEY)');
+			$insert = $db->prepare('INSERT INTO temp.retour_remove (path) VALUES (?)');
+
+			foreach ($paths as $path) {
+				$insert->execute([$path]);
+			}
+
+			$db->exec('DELETE FROM records WHERE redirect IS NULL AND path IN (SELECT path FROM temp.retour_remove)');
+			$db->exec('DROP TABLE temp.retour_remove');
+			$db->commit();
+		} catch (Throwable) {
+			$db->rollBack();
+			return false;
+		}
+
+		return true;
+	}
+
 	public function resolve(string $path): bool
 	{
-		return $this->table()->update(
-			['wasResolved' => 1],
-			['path' => $path]
-		);
+		return $this->table()
+			->where(['path' => $path])
+			->andWhere('redirect IS NULL')
+			->update(['wasResolved' => 1]);
 	}
 
 	protected function single(string $sort): array
@@ -275,116 +355,84 @@ class Log
 			->fetch('array')
 			->first();
 
-		if ($result === false) {
-			return [];
+		if ($result !== false) {
+			return ['date' => gmdate('Y-m-d H:i:s', (int)$result['date'])];
 		}
 
-		return $result;
+		return [];
 	}
 
 	/**
-	 * Returns stats data for specified timeframe and unit
-	 *
-	 * @param string $unit timeframe unit (year, month, ...)
-	 * @param string $from date string (yyyy-mm-dd)
-	 * @param string $to date string (yyyy-mm-dd)
+	 * @param $unit `day`, `days`, `week`, `month`, `months` or `year`
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{
-		// Define parts depending on unit,
-		// grouping by the start of the date string
-		// is faster than formatting each date
-		$use = [
-			'length'    => 10,
-			'group_php' => 'Y-m-d',
-			'step'      => new DateInterval('P1D')
-		];
-
-		if ($unit === 'day') {
-			// Add time to dates to capture full days
-			$from .= ' 00:00:00';
-			$to   .= ' 23:59:59';
-		}
-
-		$overrides = match ($unit) {
-			'day' => [
-				'length'    => 13,
-				'group_php' => 'Y-m-d H',
-				'step'      => new DateInterval('PT1H'),
-			],
-			'year', 'months' => [
-				'length'    => 7,
-				'group_php' => 'Y-m',
-				'step'      => new DateInterval('P1M'),
-			],
-			default => [],
+		[$format, $step] = match ($unit) {
+			'day'            => ['Y-m-d H', new DateInterval('PT1H')],
+			'year', 'months' => ['Y-m', new DateInterval('P1M')],
+			default          => ['Y-m-d', new DateInterval('P1D')]
 		};
 
-		$use = array_merge($use, $overrides);
+		// a range query per step beats grouping all records by a date part
+		$query = $this->database->connection()->prepare('
+			SELECT
+				COUNT(redirect) AS redirected,
+				SUM(redirect IS NULL AND wasResolved IS NOT NULL) AS resolved,
+				SUM(redirect IS NULL AND wasResolved IS NULL) AS failed
+			FROM records
+			WHERE date >= :start AND date < :end
+		');
 
-		// Get data from database
-		$data = $this->database->query('
-            SELECT
-                substr(date, 1, :length) AS date,
-				SUM(CASE WHEN redirect IS NOT NULL THEN 1 END) AS redirected,
-				SUM(CASE WHEN wasResolved IS NOT NULL AND redirect IS NULL THEN 1 END) AS resolved,
-				SUM(CASE WHEN redirect IS NULL AND wasResolved IS NULL THEN 1 END) AS failed
-            FROM
-                records
-            WHERE
-                date >= :from
-            AND
-                date <= :to
-			GROUP BY
-                substr(date, 1, :length)
-            ORDER BY
-                substr(date, 1, :length)
-        ', [
-			'from'   => $from,
-			'to'     => Date::optional($to)->add($use['step'])->format('Y-m-d'),
-			'length' => $use['length']
-		], [
-			'fetch' => 'array'
-		]);
+		// UTC, to not skip or repeat hours when daylight saving time changes
+		$utc  = new DateTimeZone('UTC');
+		$date = new DateTimeImmutable($from, $utc);
+		$last = new DateTimeImmutable($to . ' 23:59:59', $utc);
+		$min  = $date->getTimestamp();
+		$max  = $last->getTimestamp() + 1;
+		$last = $last->format($format);
 
-		$data = $data->toArray(fn (array $entry) => [
-			'date'       => (string)$entry['date'],
-			'failed'     => (int)$entry['failed'],
-			'resolved'   => (int)$entry['resolved'],
-			'redirected' => (int)$entry['redirected'],
-		]);
+		// adding a month to e.g. January 31 would skip February
+		if ($format === 'Y-m') {
+			$date = $date->modify('first day of this month');
+		}
 
 		$result = [];
-		$entry  = array_shift($data);
 
-		for (
-			$i = Date::optional($from);
-			$i <= Date::optional($to);
-			$i->add($use['step'])
-		) {
-			$step = $i->format($use['group_php']);
+		while (($label = $date->format($format)) <= $last) {
+			$next = $date->add($step);
 
-			if (($entry['date'] ?? null) === $step) {
-				$result[] = $entry;
-				$entry    = array_shift($data);
-			} else {
-				$result[] = [
-					'date'       => $step,
-					'failed'     => 0,
-					'resolved'   => 0,
-					'redirected' => 0,
-				];
-			}
+			// the first and last step only cover the timespan
+			$query->execute([
+				'start' => max($date->getTimestamp(), $min),
+				'end'   => min($next->getTimestamp(), $max)
+			]);
+
+			$counts = $query->fetch(PDO::FETCH_ASSOC);
+
+			$result[] = [
+				'date'       => $label,
+				'failed'     => (int)$counts['failed'],
+				'resolved'   => (int)$counts['resolved'],
+				'redirected' => (int)$counts['redirected'],
+			];
+
+			$date = $next;
 		}
 
 		return $result;
 	}
 
-	/**
-	 * Returns the database table object
-	 */
 	public function table(): Query
 	{
 		return $this->database->records();
+	}
+
+	/**
+	 * Seconds since 1970 of the local time as if it was UTC, which keeps
+	 * the local time like the text of earlier versions in less space
+	 */
+	public static function timestamp(string $date): int
+	{
+		return (new DateTimeImmutable($date, new DateTimeZone('UTC')))->getTimestamp();
 	}
 }

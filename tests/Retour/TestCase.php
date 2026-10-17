@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 class TestCase extends BaseTestCase
 {
 	protected $kirby;
-	protected $tmp = __DIR__ . '/tmp';
+	protected $tmp;
 
 	protected function app(array $options = []): App
 	{
@@ -20,6 +20,10 @@ class TestCase extends BaseTestCase
 
 	public function setUp(): void
 	{
+		// separate folder for each ParaTest process
+		// so parallel tests don't remove each other's files
+		$this->tmp = __DIR__ . '/tmp/' . (getenv('TEST_TOKEN') ?: '0');
+
 		$this->kirby = new App([
 			'roots' => [
 				'index' => $this->tmp
@@ -31,5 +35,9 @@ class TestCase extends BaseTestCase
 	{
 		Dir::remove($this->tmp);
 		Retour::reset();
+
+		// the session token is stored in the cookie global,
+		// the next test would try to resume the session
+		unset($_COOKIE['kirby_session']);
 	}
 }

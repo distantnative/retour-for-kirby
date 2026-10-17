@@ -2,13 +2,43 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Cms\App;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Date;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionMethod;
 
 #[CoversClass(Timespan::class)]
 class TimespanTest extends TestCase
 {
+	public static function aroundProvider(): array
+	{
+		return [
+			['2023-05-17', 'day', 1, '2023-05-17', '2023-05-17'],
+			// a Wednesday, weeks starting on Monday or Sunday
+			['2023-05-17', 'week', 1, '2023-05-15', '2023-05-21'],
+			['2023-05-17', 'week', 0, '2023-05-14', '2023-05-20'],
+			// the first weekday itself and across years
+			['2023-05-15', 'week', 1, '2023-05-15', '2023-05-21'],
+			['2023-01-01', 'week', 1, '2022-12-26', '2023-01-01'],
+			['2024-02-17', 'month', 1, '2024-02-01', '2024-02-29'],
+			['2023-05-17', 'year', 1, '2023-01-01', '2023-12-31'],
+		];
+	}
+
+	#[DataProvider('aroundProvider')]
+	public function testAround(
+		string $date,
+		string $unit,
+		int $weekday,
+		string $from,
+		string $to
+	): void {
+		$this->app(['date.weekday' => $weekday]);
+		$this->assertSame(['from' => $from, 'to' => $to], Timespan::around($date, $unit));
+	}
+
 	public function testChecks(): void
 	{
 		$data = [
@@ -32,6 +62,19 @@ class TimespanTest extends TestCase
 		// no first/last → hasAll is false
 		$noChecks = $this->ts('checks', array_merge($data, ['first' => null, 'last' => null]));
 		$this->assertFalse($noChecks['hasAll']);
+	}
+
+	public function testChecksOnLastDay(): void
+	{
+		$checks = $this->ts('checks', [
+			'from'  => date('Y-m-d'),
+			'to'    => date('Y-m-d'),
+			'first' => '2023-01-01 10:00:00',
+			'last'  => date('Y-m-d H:i:s'),
+		]);
+
+		$this->assertTrue($checks['isCurrent']);
+		$this->assertFalse($checks['hasNext']);
 	}
 
 	public function testHasNext(): void
@@ -127,43 +170,200 @@ class TimespanTest extends TestCase
 		$this->assertTrue($this->ts('isCurrent', $today, $today, $today));
 	}
 
-	public function testLabel(): void
+	public static function propsProvider(): array
 	{
-		$this->assertSame('1 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-01',
-			'unit' => 'day'
-		]));
+		return [
+			'a month' => [
+				'2023-05-01', '2023-05-31',
+				['from' => '2023-04-01', 'to' => '2023-04-30'],
+				['from' => '2023-06-01', 'to' => '2023-06-30']
+			],
+			'nothing logged before' => [
+				'2023-01-01', '2023-01-31',
+				null,
+				['from' => '2023-02-01', 'to' => '2023-02-28']
+			],
+			'all of the log' => [
+				'2023-01-02', '2023-08-30',
+				null,
+				null
+			],
+		];
+	}
 
-		$this->assertSame('January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-02-03',
-			'unit' => 'month'
-		]));
+	#[DataProvider('propsProvider')]
+	public function testProps(
+		string $from,
+		string $to,
+		array|null $prev,
+		array|null $next
+	): void {
+		$app = $this->kirby->clone([
+			'options' => [
+				'date.weekday'                  => 1,
+				'distantnative.retour.database' => $this->tmp . '/log.sqlite'
+			],
+			'request' => ['query' => ['from' => $from, 'to' => $to]]
+		]);
 
-		$this->assertSame('2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-31',
-			'unit' => 'year'
-		]));
+		$log = Retour::instance($app)->log();
+		$log->add(['date' => '2023-01-02 10:00:00', 'path' => 'foo']);
+		$log->add(['date' => '2023-08-30 10:00:00', 'path' => 'foo']);
 
-		$this->assertSame('1 - 15 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-15',
-			'unit' => 'days'
-		]));
+		$props = Timespan::props();
+		$this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $props['now']);
+		$this->assertSame($prev, $props['prev']);
+		$this->assertSame($next, $props['next']);
+		$this->assertSame(['from' => '2023-01-02', 'to' => '2023-08-30'], $props['units']['all']);
+	}
 
-		$this->assertSame('1 January - 15 March 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
+	public function testSelection(): void
+	{
+		$this->kirby->clone([
+			'request' => [
+				'query' => [
+					'from' => '2024-01-01',
+					'to'   => '2024-01-31'
+				]
+			]
+		]);
 
-		$this->assertSame('1 January 2022 - 15 March 2023', Timespan::label([
-			'from' => '2022-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
+		$expected = ['from' => '2024-01-01', 'to' => '2024-01-31'];
+		$this->assertSame($expected, Timespan::selection());
+		$this->assertSame($expected, App::instance()->session()->get('retour'));
+	}
+
+	public function testSelectionDefault(): void
+	{
+		$this->assertSame([
+			'from' => date('Y-m-01'),
+			'to'   => date('Y-m-t')
+		], Timespan::selection());
+	}
+
+	public function testSelectionIgnoresInvalidQuery(): void
+	{
+		$app = $this->kirby->clone([
+			'request' => [
+				'query' => [
+					'from' => 'x',
+					'to'   => '2024-01-31'
+				]
+			]
+		]);
+
+		$stored = ['from' => '2023-05-01', 'to' => '2023-05-31'];
+		$app->session()->set('retour', $stored);
+
+		$this->assertSame($stored, Timespan::selection());
+		$this->assertSame($stored, $app->session()->get('retour'));
+	}
+
+	public function testSelectionIgnoresInvalidSession(): void
+	{
+		$this->kirby->session()->set('retour', [
+			'from' => '-200000-01-01',
+			'to'   => '2024-01-31'
+		]);
+
+		$this->assertSame([
+			'from' => date('Y-m-01'),
+			'to'   => date('Y-m-t')
+		], Timespan::selection());
+	}
+
+	public function testSet(): void
+	{
+		$data = Timespan::set(['from' => '2024-02-01', 'to' => '2024-02-29']);
+		$this->assertSame(['from' => '2024-02-01', 'to' => '2024-02-29'], $data);
+		$this->assertSame($data, $this->kirby->session()->get('retour'));
+
+		// `to` before `from`
+		$data = Timespan::set(['from' => '2024-02-10', 'to' => '2024-02-01']);
+		$this->assertSame(['from' => '2024-02-10', 'to' => '2024-02-10'], $data);
+		$this->assertSame($data, $this->kirby->session()->get('retour'));
+	}
+
+	public static function invalidProvider(): array
+	{
+		return [
+			'strings'        => [['from' => 'x', 'to' => 'y']],
+			'arrays'         => [['from' => ['2024-01-01'], 'to' => '2024-01-31']],
+			'missing'        => [['from' => '2024-01-01']],
+			'null'           => [['from' => null, 'to' => '2024-01-31']],
+			'negative year'  => [['from' => '-200000-01-01', 'to' => '2024-01-31']],
+			'five-digit year' => [['from' => '2024-01-01', 'to' => '20000-01-01']],
+			'two-digit year' => [['from' => '24-01-01', 'to' => '2024-01-31']],
+			'too early'      => [['from' => '2018-12-31', 'to' => '2024-01-31']],
+			'overflow'       => [['from' => '2024-02-30', 'to' => '2024-03-31']],
+			'no padding'     => [['from' => '2024-1-1', 'to' => '2024-01-31']],
+			'with time'      => [['from' => '2024-01-01 00:00:00', 'to' => '2024-01-31']],
+		];
+	}
+
+	#[DataProvider('invalidProvider')]
+	public function testSetInvalid(array $data): void
+	{
+		$stored = ['from' => '2023-05-01', 'to' => '2023-05-31'];
+		$this->kirby->session()->set('retour', $stored);
+
+		try {
+			Timespan::set($data);
+			$this->fail('Invalid dates must be rejected');
+		} catch (InvalidArgumentException) {
+			$this->assertSame($stored, $this->kirby->session()->get('retour'));
+		}
+	}
+
+	public function testSetLimits(): void
+	{
+		$max  = date('Y-m-d', strtotime('+1 year'));
+		$data = ['from' => '2019-01-01', 'to' => $max];
+		$this->assertSame($data, Timespan::set($data));
+
+		// a year from today at the latest
+		$data = Timespan::set(['from' => '2024-01-01', 'to' => '9999-12-31']);
+		$this->assertSame(['from' => '2024-01-01', 'to' => $max], $data);
+
+		$data = Timespan::set(['from' => '2099-01-01', 'to' => '2099-12-31']);
+		$this->assertSame(['from' => $max, 'to' => $max], $data);
+	}
+
+	public static function stepProvider(): array
+	{
+		return [
+			// the previous or next unit
+			['2023-05-17', '2023-05-17', 'day', -1, '2023-05-16', '2023-05-16'],
+			['2023-05-15', '2023-05-21', 'week', 1, '2023-05-22', '2023-05-28'],
+			['2023-01-01', '2023-01-31', 'month', 1, '2023-02-01', '2023-02-28'],
+			['2023-03-01', '2023-03-31', 'month', -1, '2023-02-01', '2023-02-28'],
+			['2023-01-01', '2023-12-31', 'year', -1, '2022-01-01', '2022-12-31'],
+
+			// custom ranges by their own length
+			['2023-01-10', '2023-01-24', 'days', 1, '2023-01-25', '2023-02-08'],
+			['2023-01-10', '2023-01-24', 'days', -1, '2022-12-26', '2023-01-09'],
+
+			// … in whole months
+			['2023-01-20', '2023-03-10', 'months', 1, '2023-04-01', '2023-06-30'],
+			['2023-11-01', '2024-01-31', 'months', -1, '2023-08-01', '2023-10-31'],
+		];
+	}
+
+	#[DataProvider('stepProvider')]
+	public function testStep(
+		string $from,
+		string $to,
+		string $unit,
+		int $direction,
+		string $expectedFrom,
+		string $expectedTo
+	): void {
+		$this->app(['date.weekday' => 1]);
+
+		$this->assertSame(
+			['from' => $expectedFrom, 'to' => $expectedTo],
+			Timespan::step(['from' => $from, 'to' => $to, 'unit' => $unit], $direction)
+		);
 	}
 
 	public function testUnit(): void
@@ -193,6 +393,100 @@ class TimespanTest extends TestCase
 			'to'   => '2023-12-31',
 		]));
 	}
+
+	public function testUnits(): void
+	{
+		$this->app(['date.weekday' => 1]);
+
+		$today = date('Y-m-d');
+		$data  = [
+			'from'   => '2023-05-17',
+			'to'     => '2023-05-17',
+			'unit'   => 'day',
+			'hasAll' => true,
+			'first'  => '2023-01-02 10:00:00',
+			'last'   => '2023-08-30 10:00:00'
+		];
+
+		$units = $this->ts('units', $data);
+		$this->assertSame(['from' => '2023-01-02', 'to' => '2023-08-30'], $units['all']);
+
+		// other units around the start of the timespan
+		$this->assertSame(['from' => '2023-01-01', 'to' => '2023-12-31'], $units['year']);
+		$this->assertSame(['from' => '2023-05-01', 'to' => '2023-05-31'], $units['month']);
+		$this->assertSame(['from' => '2023-05-15', 'to' => '2023-05-21'], $units['week']);
+
+		// the current unit again around today
+		$this->assertSame(['from' => $today, 'to' => $today], $units['day']);
+		$this->assertSame(['from' => $today, 'to' => $today], $units['today']);
+
+		// custom ranges go to today's month, no logs to all
+		$units = $this->ts('units', [...$data, 'unit' => 'months', 'hasAll' => false]);
+		$this->assertSame(Timespan::around($today, 'month'), $units['today']);
+		$this->assertNull($units['all']);
+	}
+
+	public static function unitWeekProvider(): array
+	{
+		return [
+			// English (US) weeks start on Sunday
+			[null, '2023-01-01', '2023-01-07', 'week'],
+			[null, '2023-01-02', '2023-01-08', 'days'],
+
+			// across months and years
+			[1, '2023-01-30', '2023-02-05', 'week'],
+			[1, '2024-12-30', '2025-01-05', 'week'],
+
+			// seven days that don't start on the first weekday
+			[1, '2023-01-01', '2023-01-07', 'days'],
+			[6, '2023-01-02', '2023-01-08', 'days'],
+
+			// more or less than seven days
+			[1, '2023-01-02', '2023-01-07', 'days'],
+			[1, '2023-01-02', '2023-01-09', 'days'],
+		];
+	}
+
+	#[DataProvider('unitWeekProvider')]
+	public function testUnitWeek(
+		int|null $weekday,
+		string $from,
+		string $to,
+		string $expected
+	): void {
+		// weeks start on the same day as in the Panel's calendar
+		$this->app(['date.weekday' => $weekday]);
+
+		$this->assertSame($expected, Timespan::unit([
+			'from' => $from,
+			'to'   => $to,
+		]));
+	}
+
+	public function testUnitWeekDaylightSavingTime(): void
+	{
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$this->app(['date.weekday' => 0]);
+
+			// clocks go forward
+			$this->assertSame('week', Timespan::unit([
+				'from' => '2023-03-26',
+				'to'   => '2023-04-01',
+			]));
+
+			// clocks go back
+			$this->assertSame('week', Timespan::unit([
+				'from' => '2023-10-29',
+				'to'   => '2023-11-04',
+			]));
+		} finally {
+			date_default_timezone_set($timezone);
+		}
+	}
+
 	/**
 	 * Calls a protected static method on Timespan via reflection
 	 */

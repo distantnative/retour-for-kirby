@@ -4,7 +4,7 @@
 			:to="link"
 			:title="`${column.label}: ${value}`"
 			target="_blank"
-			@click.native.stop
+			@click.stop
 		>
 			<span>{{ value }}</span>
 		</k-link>
@@ -13,22 +13,24 @@
 
 <script>
 export default {
+	inheritAttrs: false,
 	props: {
 		column: {
 			type: Object,
 			default: () => ({}),
 		},
-		field: Object,
-		value: [String, Object],
+		value: String,
 	},
 	computed: {
-		isExternal() {
-			return this.value && this.value.startsWith("http");
-		},
 		link() {
-			return this.isExternal
-				? this.value
-				: window.panel.urls.site + "/" + this.value;
+			// URLs of any scheme as they are, `makeAbsolute()` only knows http(s)
+			if (this.value.includes("://")) {
+				return this.value;
+			}
+
+			// an absolute site URL keeps every path on the site
+			const site = new URL(this.$panel.urls.site, window.location.origin);
+			return this.$helper.url.makeAbsolute(this.value, site);
 		},
 	},
 };

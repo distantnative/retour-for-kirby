@@ -4,18 +4,37 @@ namespace Kirby\Retour;
 
 use Closure;
 use Kirby\Database\Database;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
+use Kirby\Retour\Log\Migrations;
+use Kirby\Retour\Log\MigrationsTest;
+use PDO;
+use PDOException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 #[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
+	protected function fill(Log $log, int $count, string $time): void
+	{
+		$date       = Log::timestamp(date('Y-m-d H:i:s', strtotime($time)));
+		$connection = $log->database()->connection();
+		$insert     = $connection->prepare('INSERT INTO records (date, path) VALUES (?, ?)');
+
+		$connection->beginTransaction();
+
+		for ($i = 0; $i < $count; $i++) {
+			$insert->execute([$date, 'path/' . $i . '/' . str_repeat('x', 100)]);
+		}
+
+		$connection->commit();
+	}
+
 	protected function log(
 		string|Closure|null $file = null,
 		array $options = []
 	): Log {
-		$file ??= __DIR__ . '/tmp/test.sqlite';
+		$file ??= $this->tmp . '/test.sqlite';
 		$app    = $this->kirby->clone([
 			'options' => array_merge($options, [
 				'distantnative.retour.database' => $file
@@ -26,27 +45,95 @@ class LogTest extends TestCase
 		return new Log($retour);
 	}
 
+	/**
+	 * Returns the total and free pages of the database file
+	 */
+	protected function pages(Log $log): array
+	{
+		$connection = $log->database()->connection();
+
+		return [
+			'total' => (int)$connection->query('PRAGMA page_count')->fetchColumn(),
+			'free'  => (int)$connection->query('PRAGMA freelist_count')->fetchColumn()
+		];
+	}
+
+	/**
+	 * Returns how SQLite runs the last query of the log
+	 */
+	protected function plan(Log $log): string
+	{
+		$trace = $log->database()->trace();
+		$query = end($trace);
+		$plan  = $log->database()->connection()->prepare('EXPLAIN QUERY PLAN ' . $query['query']);
+		$plan->execute($query['bindings']);
+
+		return implode("\n", $plan->fetchAll(PDO::FETCH_COLUMN, 3));
+	}
+
 	public function testAdd(): void
 	{
 		$log = $this->log();
-		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
 
-		$log->add([
+		// a single statement
+		$this->assertTrue($log->add([
 			'date'     => $date = '2020-01-01 07:30:00',
-			'path'     => $path = 'foo',
-			'redirect' => $redirect = 'foo'
-		]);
+			'path'     => 'foo',
+			'referrer' => 'https://example.com'
+		]));
+		$this->assertCount(1, $log->database()->trace());
+
+		// redirect hits only count for their redirect
 		$log->add([
 			'date'     => '2020-01-31 16:30:00',
 			'path'     => 'homer/simpson',
+			'referrer' => 'https://example.com',
 			'redirect' => '(:any)/simpson'
 		]);
 
-		$results = $log->table()->fetch('array')->all();
-		$this->assertSame(2, $results->count());
-		$this->assertSame($date, $results->first()['date']);
-		$this->assertSame($path, $results->first()['path']);
-		$this->assertSame($redirect, $results->first()['redirect']);
+		$results = $log->table()->select('path, referrer, redirect')->fetch('array')->all();
+		$this->assertSame($date, $log->first()['date']);
+		$this->assertSame([
+			['path' => 'foo', 'referrer' => 'https://example.com', 'redirect' => null],
+			['path' => null, 'referrer' => null, 'redirect' => '(:any)/simpson']
+		], $results->values());
+	}
+
+	public function testAddTruncatesLongValues(): void
+	{
+		$log = $this->log();
+
+		$log->add([
+			'path'     => str_repeat('a', 5000),
+			'referrer' => str_repeat('ä', 5000)
+		]);
+
+		$record = $log->table()->fetch('array')->first();
+		$this->assertSame(str_repeat('a', 1024), $record['path']);
+		$this->assertSame(str_repeat('ä', 1024), $record['referrer']);
+	}
+
+	public function testAddTruncatesReferrerHeader(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.database' => $this->tmp . '/test.sqlite'
+			],
+			'server' => [
+				'HTTP_REFERER' => 'https://example.com/' . str_repeat('a', 5000)
+			]
+		]);
+
+		$log = new Log(Retour::instance($app));
+		$log->add(['path' => 'foo']);
+
+		// request without referrer
+		$log = $this->log();
+		$log->add(['path' => 'bar']);
+
+		$records = $log->table()->fetch('array')->all();
+		$this->assertSame(1024, strlen($records->first()['referrer']));
+		$this->assertNull($records->last()['referrer']);
 	}
 
 	public function testDatabase(): void
@@ -55,19 +142,10 @@ class LogTest extends TestCase
 		$this->assertInstanceOf(Database::class, $log->database());
 	}
 
-	#[DoesNotPerformAssertions]
-	public function testDisabled(): void
-	{
-		$log = new LogDisabled();
-		$log->add(['path' => 'foo']);
-		$log->first();
-		$log->redirect('foo', '2020-01-01', '2020-31-12');
-	}
-
 	public function testFails(): void
 	{
 		$log = $this->log();
-		$this->assertSame([], $log->fails('2020-01-01', '2020-12-31'));
+		$this->assertSame([], $log->fails('2020-01-01', '2020-12-31')->values());
 
 		$log->add([
 			'date' => '2020-01-01 07:30:00',
@@ -79,7 +157,7 @@ class LogTest extends TestCase
 			'path' => $path = 'foo'
 		]);
 
-		$fail = $log->fails('2020-01-01', '2020-12-31')[0];
+		$fail = $log->fails('2020-01-01', '2020-12-31')->values()[0];
 		$this->assertSame($path, $fail['path']);
 		$this->assertSame($date, $fail['last']);
 		$this->assertSame(2, $fail['hits']);
@@ -94,17 +172,99 @@ class LogTest extends TestCase
 		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'last']);
 		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'after']);
 
-		$paths = array_column($log->fails('2020-01-01', '2020-12-31'), 'path');
+		$paths = array_column($log->fails('2020-01-01', '2020-12-31')->values(), 'path');
 		sort($paths);
 		$this->assertSame(['first', 'last'], $paths);
 	}
 
+	public function testFailsPage(): void
+	{
+		$log = $this->log();
+
+		// grouped by path and referrer
+		for ($i = 1; $i <= 25; $i++) {
+			$log->add(['path' => 'foo/' . $i, 'referrer' => 'a']);
+			$log->add(['path' => 'foo/' . $i, 'referrer' => 'b']);
+		}
+
+		$fails = $log->fails('2000-01-01', '2099-12-31', 'path asc', page: 3, limit: 20);
+		$this->assertSame(50, $fails->pagination()->total());
+		$this->assertSame(3, $fails->pagination()->page());
+		$this->assertCount(10, $fails);
+		$this->assertSame(['foo/5', 'a'], [$fails->first()['path'], $fails->first()['referrer']]);
+
+		$fails = $log->fails('2000-01-01', '2099-12-31');
+		$this->assertSame(50, $fails->pagination()->limit());
+	}
+
+	public function testFailsSearchterm(): void
+	{
+		$log = $this->log();
+		$log->add(['path' => 'wp-login.php']);
+		$log->add(['path' => 'blog', 'referrer' => 'https://WP.example.com']);
+		$log->add(['path' => '100%']);
+		$log->add(['path' => 'foo_bar']);
+		$log->add(['path' => 'foobar']);
+
+		$search = fn (string $term) => $log->fails('2000-01-01', '2099-12-31', 'path asc', $term)->pluck('path');
+
+		// path and referrer, case-insensitive
+		$this->assertSame(['blog', 'wp-login.php'], $search('wp'));
+
+		// wildcards of LIKE are matched literally
+		$this->assertSame(['100%'], $search('%'));
+		$this->assertSame(['foo_bar'], $search('o_b'));
+		$this->assertSame([], $search('\\'));
+	}
+
+	public function testFailsSortBy(): void
+	{
+		$log = $this->log();
+		$log->add(['date' => '2020-01-01 10:00:00', 'path' => 'b', 'referrer' => 'y']);
+		$log->add(['date' => '2020-01-02 10:00:00', 'path' => 'b', 'referrer' => 'x']);
+		$log->add(['date' => '2020-01-03 10:00:00', 'path' => 'a']);
+		$log->add(['date' => '2020-01-04 10:00:00', 'path' => 'a']);
+		$log->add(['date' => '2020-01-05 10:00:00', 'path' => 'c', 'referrer' => 'z']);
+
+		$fails = fn (string|null $sortBy) => array_map(
+			fn (array $fail) => $fail['path'] . $fail['referrer'],
+			$log->fails('2020-01-01', '2020-12-31', $sortBy)->values()
+		);
+
+		// most hits first, the same hits by path and referrer
+		$this->assertSame(['a', 'bx', 'by', 'cz'], $fails(null));
+		$this->assertSame(['bx', 'by', 'cz', 'a'], $fails('hits asc'));
+		$this->assertSame(['cz', 'by', 'bx', 'a'], $fails('path DESC'));
+		$this->assertSame(['a', 'bx', 'by', 'cz'], $fails('referrer'));
+		$this->assertSame(['cz', 'a', 'bx', 'by'], $fails('last desc'));
+	}
+
+	public function testFailsSortByInvalid(): void
+	{
+		$log = $this->log();
+
+		foreach (['date', 'hits up', 'hits; DROP TABLE records'] as $sortBy) {
+			try {
+				$log->fails('2020-01-01', '2020-12-31', $sortBy);
+				$this->fail('Invalid sorting must be rejected: ' . $sortBy);
+			} catch (InvalidArgumentException $e) {
+				$this->assertSame('Invalid sorting: ' . $sortBy, $e->getMessage());
+			}
+		}
+	}
+
 	public function testFile(): void
 	{
-		$file = __DIR__ . '/tmp/log/test.sqlite';
+		$file = $this->tmp . '/log/test.sqlite';
 		$this->assertFalse(F::exists($file));
 		$this->log(fn (): string => $file);
 		$this->assertTrue(F::exists($file));
+	}
+
+	public function testFileDefault(): void
+	{
+		$log = new Log(Retour::instance());
+		$this->assertSame($this->tmp . '/site/logs/retour/log.sqlite', $log->database()->name());
 	}
 
 	public function testFirstLast(): void
@@ -151,6 +311,21 @@ class LogTest extends TestCase
 		$this->assertSame('old', $remaining['redirect']);
 	}
 
+	public function testFlushInvalidMode(): void
+	{
+		$log = $this->log();
+		$log->add(['path' => 'foo']);
+
+		try {
+			$log->flush('foo');
+			$this->fail('Unknown modes must be rejected');
+		} catch (InvalidArgumentException $e) {
+			$this->assertSame('Invalid flush mode: foo', $e->getMessage());
+			$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+			$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+		}
+	}
+
 	public function testIndices(): void
 	{
 		$log     = $this->log();
@@ -161,14 +336,49 @@ class LogTest extends TestCase
 		);
 
 		$this->assertSame(
-			['idx_date', 'idx_redirect_date'],
+			['idx_date', 'idx_failures', 'idx_redirect_date'],
 			array_column($indices->toArray(), 'name')
 		);
 	}
 
+	public function testIndicesForFailures(): void
+	{
+		$log = $this->log();
+
+		$log->fails('2020-01-01', '2020-12-31');
+		$this->assertSame("SCAN records USING INDEX idx_failures\nUSE TEMP B-TREE FOR ORDER BY", $this->plan($log));
+
+		// up to a month
+		$log->fails('2020-01-01', '2020-01-31');
+		$this->assertSame("SEARCH records USING INDEX idx_date (date>? AND date<?)\nUSE TEMP B-TREE FOR GROUP BY\nUSE TEMP B-TREE FOR ORDER BY", $this->plan($log));
+
+		$log->fails('2020-01-01', '2020-02-01');
+		$this->assertStringStartsWith('SCAN records USING INDEX idx_failures', $this->plan($log));
+
+		// in the order of the index
+		$log->fails('2020-01-01', '2020-12-31', 'path desc');
+		$this->assertSame('SCAN records USING INDEX idx_failures', $this->plan($log));
+
+		$log->remove('foo');
+		$this->assertSame('SEARCH records USING INDEX idx_failures (path=?)', $this->plan($log));
+
+		$log->resolve('foo');
+		$this->assertSame('SEARCH records USING INDEX idx_failures (path=?)', $this->plan($log));
+	}
+
+	public function testMigrate(): void
+	{
+		MigrationsTest::legacy($file = $this->tmp . '/test.sqlite');
+
+		$log = $this->log($file);
+		$this->assertSame(0, (new Migrations($log))->version());
+		$this->assertTrue($log->migrate());
+		$this->assertSame([], (new Migrations($log))->pending());
+	}
+
 	public function testPurge(): void
 	{
-		$file = __DIR__ . '/tmp/test.sqlite';
+		$file = $this->tmp . '/test.sqlite';
 		$log  = $this->log($file, [
 			'distantnative.retour.deleteAfter' => 6
 		]);
@@ -189,13 +399,85 @@ class LogTest extends TestCase
 
 		$this->assertTrue($log->purge());
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
-		$this->assertContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
-	public function testPurgeDactivated(): void
+	public function testPurgeDeactivated(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => false]);
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-24 month')), 'path' => 'foo']);
+
+		$this->assertTrue($log->purge());
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+	}
+
+	public function testPurgeDefault(): void
 	{
 		$log = $this->log();
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-13 month')), 'path' => 'foo']);
+		$log->add(['date' => date('Y-m-d H:i:s', strtotime('-11 month')), 'path' => 'bar']);
+
+		// entries are kept for 12 months by default
 		$this->assertTrue($log->purge());
+		$this->assertSame(['bar'], $log->table()->select('path')->fetch('array')->all()->pluck('path'));
+	}
+
+	public function testPurgeKeepsInsignificantFreeSpace(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 100, '-12 month');
+		$this->fill($log, 2000, '-1 month');
+		$before = $this->pages($log);
+
+		$this->assertTrue($log->purge());
+
+		// new records reuse the free pages
+		$after = $this->pages($log);
+		$this->assertGreaterThan(0, $after['free']);
+		$this->assertSame($before['total'], $after['total']);
+		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+	}
+
+	public function testPurgeLimit(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 5, '-12 month');
+		$this->fill($log, 1, '-1 month');
+
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertSame(3, $log->table()->fetch('array')->all()->count());
+		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+	}
+
+	public function testPurgeReclaimsSignificantFreeSpace(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 2000, '-12 month');
+		$this->fill($log, 500, '-1 month');
+		$before = $this->pages($log);
+
+		$this->assertTrue($log->purge());
+
+		$after = $this->pages($log);
+		$this->assertSame(0, $after['free']);
+		$this->assertLessThan($before['total'] / 2, $after['total']);
+	}
+
+	public function testPurgeWhileLogging(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 998, '-12 month');
+
+		// the 999th record doesn't purge
+		$log->add(['path' => 'foo']);
+		$this->assertSame(999, $log->table()->fetch('array')->all()->count());
+
+		// the 1,000th does
+		$log->add(['path' => 'foo']);
+		$this->assertSame(['foo', 'foo'], $log->table()->select('path')->fetch('array')->all()->pluck('path'));
 	}
 
 	public function testPurgeWithoutOutdatedRecords(): void
@@ -214,53 +496,30 @@ class LogTest extends TestCase
 		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
-	public function testRedirect(): void
+	public function testReadErrors(): void
 	{
+		// loads core's table list before the lock, or the query fails with "Invalid table"
 		$log = $this->log();
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame(0, $redirect['hits']);
-		$this->assertSame(null, $redirect['last']);
+		$log->table();
+		$log->database()->connection()->setAttribute(PDO::ATTR_TIMEOUT, 0);
 
-		$log->add([
-			'date'     => '2020-01-01 07:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
+		$lock = new PDO('sqlite:' . $this->tmp . '/test.sqlite');
+		$lock->exec('BEGIN EXCLUSIVE');
 
-		$log->add([
-			'date'     => $last = '2020-01-31 16:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
+		$reads = [
+			fn () => $log->fails('2020-01-01', '2020-12-31'),
+			fn () => $log->redirects('2020-01-01', '2020-12-31'),
+			fn () => $log->removeFailures(fn () => true),
+		];
 
-		$log->add([
-			'date' => '2020-01-31 16:30:00',
-			'path' => 'foo'
-		]);
-
-		$log->add([
-			'date'     => '2021-01-31 16:30:00',
-			'path'     => 'foo',
-			'redirect' => 'foo'
-		]);
-
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame($last, $redirect['last']);
-		$this->assertSame(2, $redirect['hits']);
-	}
-
-	public function testRedirectIncludesBoundaries(): void
-	{
-		$log = $this->log();
-
-		$log->add(['date' => '2019-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2020-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'foo', 'redirect' => 'foo']);
-		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'foo', 'redirect' => 'foo']);
-
-		$redirect = $log->redirect('foo', '2020-01-01', '2020-12-31');
-		$this->assertSame(2, $redirect['hits']);
-		$this->assertSame('2020-12-31 23:59:59', $redirect['last']);
+		foreach ($reads as $read) {
+			try {
+				$read();
+				$this->fail('The failed query did not throw');
+			} catch (PDOException $e) {
+				$this->assertStringContainsString('database is locked', $e->getMessage());
+			}
+		}
 	}
 
 	public function testRedirects(): void
@@ -289,13 +548,63 @@ class LogTest extends TestCase
 		$log->add(['path' => 'foo']);
 		$log->add(['path' => 'foo', 'referrer' => 'bar']);
 		$log->add(['path' => 'foo', 'referrer' => 'homer simpson']);
+		$log->add(['path' => 'foo', 'redirect' => 'foo']);
 		$log->add(['path' => 'bar']);
 
-		$this->assertSame(5, $log->table()->fetch('array')->all()->count());
+		$this->assertSame(6, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('foo'));
-		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+		$this->assertSame(2, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('bar'));
-		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
+
+		// the redirect hit stays
+		$records = $log->table()->fetch('array')->all();
+		$this->assertSame(1, $records->count());
+		$this->assertSame('foo', $records->first()['redirect']);
+	}
+
+	public function testRemoveFailures(): void
+	{
+		$log = $this->log();
+		$this->assertTrue($log->removeFailures(fn () => true));
+
+		$log->add(['path' => 'wp-admin/setup.php']);
+		$log->add(['path' => 'wp-admin/setup.php']);
+		$log->add(['path' => 'wp-login.php']);
+		$log->add(['path' => 'foo']);
+		$log->add(['redirect' => 'wp-old']);
+
+		$this->assertTrue($log->removeFailures(
+			fn (string $path) => str_starts_with($path, 'wp-')
+		));
+
+		// keeps other failures and hits of redirects
+		$records = $log->table()->select('path, redirect')->fetch('array')->all();
+		$this->assertSame([
+			['path' => 'foo', 'redirect' => null],
+			['path' => null, 'redirect' => 'wp-old']
+		], $records->values());
+	}
+
+	public function testRemoveFailuresMany(): void
+	{
+		$log = $this->log();
+		$db  = $log->database()->connection();
+
+		// more paths than SQLite allows bound parameters
+		$db->beginTransaction();
+
+		for ($i = 0; $i < 2000; $i++) {
+			$log->add(['path' => 'foo-' . $i]);
+		}
+
+		$db->commit();
+		$log->add(['path' => 'bar']);
+
+		$this->assertTrue($log->removeFailures(
+			fn (string $path) => str_starts_with($path, 'foo-')
+		));
+
+		$this->assertSame(['bar'], array_column($log->fails('2000-01-01', '2099-12-31')->values(), 'path'));
 	}
 
 	public function testResolve(): void
@@ -318,8 +627,10 @@ class LogTest extends TestCase
 
 	public function testStats(): void
 	{
-		$file = __DIR__ . '/fixtures/sample.sqlite';
-		$log  = $this->log($file);
+		// a log of an earlier version with dates as text
+		F::copy(__DIR__ . '/fixtures/sample.sqlite', $file = $this->tmp . '/sample.sqlite');
+		$log = $this->log($file);
+		$log->migrate();
 
 		// Year
 		$stats = $log->stats('year', '2019-01-01', '2019-12-31');
@@ -352,5 +663,83 @@ class LogTest extends TestCase
 		$this->assertSame(0, $stats[6]['failed']);
 		$this->assertSame(0, $stats[6]['resolved']);
 		$this->assertSame(4, $stats[6]['redirected']);
+
+	}
+
+	public function testStatsDaylightSavingTime(): void
+	{
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$log = $this->log();
+
+			// clocks go forward
+			$stats = $log->stats('day', '2024-03-31', '2024-03-31');
+			$this->assertCount(24, $stats);
+			$this->assertSame('2024-03-31 02', $stats[2]['date']);
+
+			// clocks go back
+			$stats = $log->stats('day', '2024-10-27', '2024-10-27');
+			$this->assertCount(24, $stats);
+			$this->assertSame('2024-10-27 23', $stats[23]['date']);
+		} finally {
+			date_default_timezone_set($timezone);
+		}
+	}
+
+	public function testStatsMonths(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2024-01-30 23:59:59', 'path' => 'before']);
+		$log->add(['date' => '2024-01-31 00:00:00', 'path' => 'jan']);
+		$log->add(['date' => '2024-02-15 10:00:00', 'path' => 'feb']);
+		$log->add(['date' => '2024-03-10 10:00:00', 'path' => 'mar']);
+		$log->add(['date' => '2024-03-11 10:00:00', 'path' => 'mar', 'redirect' => 'mar']);
+		$log->add(['date' => '2024-04-01 00:00:00', 'path' => 'apr']);
+		$log->add(['date' => '2024-04-25 23:59:59', 'path' => 'apr']);
+		$log->add(['date' => '2024-04-26 00:00:00', 'path' => 'after']);
+
+		$stats = $log->stats('months', '2024-01-31', '2024-04-25');
+
+		$this->assertSame(['2024-01', '2024-02', '2024-03', '2024-04'], array_column($stats, 'date'));
+		$this->assertSame([1, 1, 1, 2], array_column($stats, 'failed'));
+		$this->assertSame([0, 0, 1, 0], array_column($stats, 'redirected'));
+
+		// same total as the failures table
+		$fails = $log->fails('2024-01-31', '2024-04-25')->values();
+		$this->assertSame(array_sum(array_column($fails, 'hits')), array_sum(array_column($stats, 'failed')));
+	}
+
+	public function testStatsUpperBound(): void
+	{
+		$log = $this->log();
+
+		$log->add(['date' => '2024-01-10 23:59:59', 'path' => 'last']);
+		$log->add(['date' => '2024-01-11 00:00:00', 'path' => 'after']);
+		$log->add(['date' => '2024-02-01 00:00:00', 'path' => 'after']);
+
+		foreach (['days', 'month', 'months'] as $unit) {
+			$stats = $log->stats($unit, '2024-01-01', '2024-01-10');
+			$this->assertSame(1, array_sum(array_column($stats, 'failed')), $unit);
+		}
+	}
+
+	public function testTimestamp(): void
+	{
+		$this->assertSame(1577863800, Log::timestamp('2020-01-01 07:30:00'));
+		$this->assertSame(1577836800, Log::timestamp('2020-01-01'));
+
+		// the local time as if it was UTC, no matter the timezone
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$this->assertSame(1577863800, Log::timestamp('2020-01-01 07:30:00'));
+			$this->assertSame('2020-01-01 07:30:00', gmdate('Y-m-d H:i:s', Log::timestamp('2020-01-01 07:30:00')));
+		} finally {
+			date_default_timezone_set($timezone);
+		}
 	}
 }

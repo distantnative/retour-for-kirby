@@ -8,7 +8,23 @@ export default defineConfig({
 	base: "/retour-for-kirby/",
 	appearance: false,
 	cleanUrls: true,
-	head: [["link", { rel: "og:image", href: "/retour-for-kirby/ogimage.png" }]],
+	markdown: {
+		image: {
+			lazyLoad: true,
+		},
+	},
+	sitemap: {
+		hostname: "https://distantnative.com/retour-for-kirby/",
+	},
+	head: [
+		[
+			"meta",
+			{
+				property: "og:image",
+				content: "https://distantnative.com/retour-for-kirby/ogimage.png",
+			},
+		],
+	],
 	themeConfig: {
 		nav: [
 			{ text: "Home", link: "/" },
@@ -18,6 +34,8 @@ export default defineConfig({
 				link: "https://github.com/distantnative/retour-for-kirby/releases",
 			},
 		],
+
+		outline: [2, 3],
 
 		search: {
 			provider: "local",
@@ -30,13 +48,7 @@ export default defineConfig({
 					{ text: "Getting started", link: "/quickstart" },
 					{ text: "Redirects", link: "/redirects" },
 					{ text: "404 tracking", link: "/failures" },
-				],
-			},
-			{
-				text: "Configuration",
-				items: [
 					{ text: "Options", link: "/options" },
-					{ text: "Translations", link: "/i18n" },
 				],
 			},
 			{
@@ -52,9 +64,17 @@ export default defineConfig({
 			},
 			{
 				text: "Support development",
-				items: [{ text: "How to contribute", link: "/contribute" }],
+				items: [
+					{ text: "How to contribute", link: "/contribute" },
+					{ text: "Translations", link: "/i18n" },
+				],
 			},
 		],
+
+		editLink: {
+			pattern:
+				"https://github.com/distantnative/retour-for-kirby/edit/dev/docs/:path",
+		},
 
 		socialLinks: [
 			{

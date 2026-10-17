@@ -2,162 +2,248 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Cms\Page;
+use Kirby\Cms\Url;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\F;
-use Kirby\Http\Header;
+use Kirby\Http\Idn;
 use Kirby\Http\Response;
-use Kirby\Http\Url;
-use Kirby\Toolkit\Obj;
 use Kirby\Toolkit\Str;
 
-/**
- * Redirect
- * Single redirect with its properties
- */
-class Redirect extends Obj
+class Redirect
 {
 	/**
-	 * Class constructor, validates data
+	 * @throws InvalidArgumentException If the path is empty
 	 */
-	public function __construct(array $data = [])
-	{
-		if (empty($data['from'] ?? null) === true) {
-			throw new InvalidArgumentException('Route requires path: ' . json_encode($data));
+	public function __construct(
+		protected string $from,
+		protected string|null $to = null,
+		protected string|null $language = null,
+		protected int|null $status = null,
+		protected bool $priority = false,
+		protected string|null $comment = null,
+		protected string|null $creator = null,
+		protected string|null $modifier = null
+	) {
+		if ($from === '') {
+			throw new InvalidArgumentException(
+				message: 'Route requires path'
+			);
 		}
+	}
 
-		parent::__construct($data);
+	public function comment(): string|null
+	{
+		return $this->comment;
+	}
+
+	public function creator(): string|null
+	{
+		return $this->creator;
 	}
 
 	/**
-	 * Use redirect pattern as id for object
+	 * Config and form data can have numbers as strings
+	 * (or paths as numbers), `"true"` for priority
+	 * and an empty string for no language
+	 *
+	 * @throws InvalidArgumentException If the path is missing
 	 */
+	public static function factory(array $data): static
+	{
+		return new static(
+			from: $data['from'] ?? '',
+			to: $data['to'] ?? null,
+			language: ($data['language'] ?? null) ?: null,
+			status: static::normalizeStatus($data['status'] ?? null),
+			priority: filter_var($data['priority'] ?? false, FILTER_VALIDATE_BOOLEAN),
+			comment: $data['comment'] ?? null,
+			creator: $data['creator'] ?? null,
+			modifier: $data['modifier'] ?? null
+		);
+	}
+
+	public function from(): string
+	{
+		return $this->from;
+	}
+
 	public function id(): string
 	{
-		/**
-		 * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
-		 *
-		 * Depending on the settings, the webserver might not always handle
-		 * escaped forward-slashes in the way, which this plugin expects it to.
-		 *
-		 * This specifically results in a 404 when trying to edit a redirect-entry,
-		 * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
-		 * Server. The problem occurs in relation to nginx.
-		 *
-		 * Many hosting solutions do not allow customers to change such
-		 * settings for the web-server, and so another solution is required.
-		 *
-		 * So, in order to remedy this problem, we replace forward-slash with the
-		 * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
-		 * Hex: 1D). By using a non-visible chracter we ensure that the id
-		 * generation from redirect pattern is always unique.
-		 *
-		 * Note that this fix include changes to two parts of the plug-in
-		 * code-base. In this file, and in src/panel/components/Tabs/RedirectsTab.vue
-		 */
-		return str_replace('/', "\x1D", $this->from());
+		return $this->from;
 	}
 
-	/**
-	 * Returns whether the redirect has an active status code
-	 */
 	public function isActive(): bool
 	{
-		return $this->status() !== null;
+		return $this->status !== null;
 	}
 
 	/**
-	 * Returns whether the route takes priority
-	 * over actual pages
+	 * Language of the target page, `null` for the language of the path
+	 */
+	public function language(): string|null
+	{
+		return $this->language;
+	}
+
+	/**
+	 * Encodes an IDN host without rebuilding the URL like
+	 * `Response::redirect()`, which would re-encode the query string
+	 */
+	protected static function location(string $url): string
+	{
+		$host = parse_url($url, PHP_URL_HOST);
+
+		if (is_string($host) === false || $host === '') {
+			return $url;
+		}
+
+		$encoded = Idn::encode($host);
+
+		if ($encoded === false || $encoded === $host) {
+			return $url;
+		}
+
+		return substr_replace($url, $encoded, strpos($url, $host), strlen($host));
+	}
+
+	public function modifier(): string|null
+	{
+		return $this->modifier;
+	}
+
+	/**
+	 * The Panel sends an empty string for no status,
+	 * hand-edited config files might use `false`, `true` or `0`
+	 */
+	protected static function normalizeStatus(mixed $status): int|null
+	{
+		if (in_array($status, [null, '', false, true, 0, '0', 'disabled'], true) === true) {
+			return null;
+		}
+
+		return (int)$status;
+	}
+
+	/**
+	 * Whether the redirect takes priority over pages
 	 */
 	public function priority(): bool
 	{
-		return Str::toType($this->priority ?? 'false', 'bool') === true;
+		return $this->priority;
 	}
 
 	/**
-	 * Resolves the redirect action for the router
-	 *
 	 * @param array<int, string> $placeholders
+	 * @return Page|Response|null `null` if the target page or file doesn't exist (anymore)
 	 */
-	public function resolve(array $placeholders): mixed
+	public function resolve(array $placeholders): Page|Response|null
 	{
-		$retour    = Retour::instance();
-		$kirby     = $retour->kirby();
-		$to        = $this->to() ?? '/';
-		$to        = static::toPath($to, $placeholders);
+		$retour = Retour::instance();
+		$kirby  = $retour->kirby();
+
+		// a deleted language keeps the language of the path
+		if ($this->language !== null && $kirby->language($this->language) !== null) {
+			$kirby->setCurrentTranslation($this->language);
+			$kirby->setCurrentLanguage($this->language);
+		}
+
+		$to        = static::toPath($this->to ?? '', $placeholders);
 		$extension = F::extension($to);
 		$path      = Str::beforeEnd($to, '.' . $extension);
 		$page      = $kirby->page($path);
-		$code      = $this->status();
+		$code      = $this->status;
 
-		// Add log entry
-		$retour->log()->add([
-			'path'     => Url::path(),
-			'redirect' => $this->from()
-		]);
+		// visitors must not get drafts (or pages inside drafts)
+		if (
+			$page?->isDraft() === true ||
+			$page?->parents()->findBy('status', 'draft') !== null
+		) {
+			$page = null;
+		}
 
-		// Redirects
-		// @codeCoverageIgnoreStart
 		if ($code >= 300 && $code < 400) {
 			if ($page) {
 				$to = $page->url();
 
-				// support for content representations
-				if (empty($extension) === false) {
+				if ($extension !== '') {
+					// the home page's representations are only reachable via its slug
+					if ($page->isHomePage() === true) {
+						$to .= '/' . $page->slug();
+					}
+
 					$to .= '.' . $extension;
+				}
+			} else {
+				try {
+					// resolves paths and UUIDs against the site URL (e.g. in a subfolder)
+					$to = Url::to($to);
+				} catch (NotFoundException) {
+					// the target page or file has been deleted, handled as failure
+					return null;
 				}
 			}
 
-			if ($retour->option('preserveQuery', false) === true) {
-				$to = static::withQuery($to, Url::query());
+			if ($retour->option('preserveQuery') === true) {
+				$to = static::withQuery($to);
 			}
 
-			Response::go($to, $code);
+			$response = new Response([
+				'code'    => $code,
+				'headers' => ['Location' => static::location($to)]
+			]);
+		} else {
+			// an empty 200 would look like a success, unlike e.g. an empty `410`
+			if ($page === null && $code === 200) {
+				return null;
+			}
+
+			$kirby->response()->code($code);
+			$response = $page ?? new Response('', 'text/html', $code);
 		}
-		// @codeCoverageIgnoreEnd
 
-		// Set the right response code
-		$kirby->response()->code($code);
-
-		// Return page for other codes
-		if ($page) {
-			return $page;
+		// only now, as redirects to deleted pages count as failures;
+		// HEAD requests (e.g. by uptime monitors) would inflate the stats
+		if (
+			$kirby->request()->method() !== 'HEAD' &&
+			$retour->ignores()->matchesVisitor() === false
+		) {
+			$retour->log()?->add(['redirect' => $this->from]);
 		}
 
-		// Deliver HTTP status code and die
-		// @codeCoverageIgnoreStart
-		Header::status($code);
-		die();
-		// @codeCoverageIgnoreEnd
+		return $response;
 	}
 
 	/**
-	 * Returns the integer HTTP status code
+	 * `null` if disabled
 	 */
 	public function status(): int|null
 	{
-		if (in_array($this->status, [null, 'disabled']) === true) {
-			return null;
-		}
+		return $this->status;
+	}
 
-		return (int)$this->status;
+	public function to(): string|null
+	{
+		return $this->to;
 	}
 
 	public function toArray(): array
 	{
 		return [
-			'from'     => $this->from(),
-			'to'       => $this->to(),
-			'status'   => $this->status(),
-			'priority' => $this->priority(),
-			'comment'  => $this->comment(),
-			'creator'  => $this->creator(),
-			'modifier' => $this->modifier(),
+			'from'     => $this->from,
+			'to'       => $this->to,
+			'language' => $this->language,
+			'status'   => $this->status,
+			'priority' => $this->priority,
+			'comment'  => $this->comment,
+			'creator'  => $this->creator,
+			'modifier' => $this->modifier,
 		];
 	}
 
 	/**
-	 * Replaces placeholders in $path string
+	 * Replaces `$1`, `$2`, … in the path with the placeholders
 	 *
 	 * @param array<int, string> $placeholders
 	 */
@@ -165,7 +251,6 @@ class Redirect extends Obj
 		string $path,
 		array $placeholders = []
 	): string {
-		// Replace alias for home
 		if ($path === '/') {
 			return 'home';
 		}
@@ -177,37 +262,32 @@ class Redirect extends Obj
 		return $path;
 	}
 
-	/**
-	 * Return route definition for Router
-	 */
-	public function toRoute(): array|null
+	public function toRoute(): array
 	{
-		if ($this->isActive() === false) {
-			return null;
-		}
-
+		// the router binds `$this` of the action to the route
 		$redirect = $this;
 
 		return [
-			'pattern' => trim($this->from(), '/'),
-			'action'  => function (...$placeholders) use ($redirect) {
-				return $redirect->resolve($placeholders);
-			}
+			'pattern' => trim($this->from, '/'),
+			'method'  => 'GET|HEAD',
+			'action'  => fn (...$placeholders) => $redirect->resolve($placeholders)
 		];
 	}
 
 	/**
-	 * Appends a query string to the destination URL,
-	 * merging it with an existing query string if present
+	 * Appends the request's query string as sent, as re-encoding it
+	 * would break tracking parameters like Google's `_gl=1*abc*_ga*…`
 	 */
-	public static function withQuery(string $to, string $query): string
+	public static function withQuery(string $to): string
 	{
+		$uri   = Retour::instance()->kirby()->environment()->get('REQUEST_URI') ?? '';
+		$query = Str::after($uri, '?');
+
 		if ($query === '') {
 			return $to;
 		}
 
-		// keep the fragment at the end, otherwise
-		// the query string would become part of it
+		// keep the fragment last, or the query would become part of it
 		[$url, $fragment] = array_pad(explode('#', $to, 2), 2, null);
 
 		$url .= (str_contains($url, '?') ? '&' : '?') . $query;

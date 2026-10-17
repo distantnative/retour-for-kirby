@@ -3,30 +3,25 @@
 namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Retour;
-use Kirby\Toolkit\I18n;
 
 class FailureResolveDrawer extends RedirectCreateDrawer
 {
 	public function __construct(
 		protected string $path
 	) {
-		$this->path = urldecode($path);
+		parent::__construct();
 	}
 
-	public function submit(): bool|array
+	public static function factory(string $id): static
 	{
-		$redirects = $this->redirects();
-		$input     = $this->data();
+		return new static(path: Id::decode($id));
+	}
 
-		$redirects->create([
-			'creator' => $this->kirby()->user()?->email(),
-			...$input
-		]);
+	public function submit(): array
+	{
+		parent::submit();
 
-		$redirects->save();
-
-		$log = Retour::instance()->log();
-		$log->resolve($this->path);
+		Retour::instance()->log()?->resolve($this->path);
 
 		return [
 			'redirect' => 'retour/redirects'
@@ -35,13 +30,13 @@ class FailureResolveDrawer extends RedirectCreateDrawer
 
 	protected function title(): string
 	{
-		return I18n::translate('retour.failures.resolve');
+		return $this->i18n('retour.failures.resolve');
 	}
 
 	protected function value(): array
 	{
 		return parent::value() + [
-			'from' => str_replace("\x1D", '/', $this->path)
+			'from' => $this->path
 		];
 	}
 }

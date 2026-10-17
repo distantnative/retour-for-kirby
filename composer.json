@@ -3,7 +3,7 @@
 	"description": "Manage redirects and track 404s right from the Kirby CMS Panel",
 	"license": "MIT",
 	"type": "kirby-plugin",
-	"version": "5.7.0",
+	"version": "6.0.0-beta.1",
 	"homepage": "https://distantnative.com/retour-for-kirby/",
 	"authors": [
 		{
@@ -12,9 +12,12 @@
 		}
 	],
 	"require": {
-		"php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-		"getkirby/cms": "^4.3.1 || ^5.0",
+		"php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+		"getkirby/cms": "^6.0",
 		"getkirby/composer-installer": "^1.1"
+	},
+	"require-dev": {
+		"getkirby/cms": "dev-v6/develop as 6.0.0-beta.1"
 	},
 	"autoload-dev": {
 		"psr-4": {
@@ -24,14 +27,16 @@
 	"extra": {
 		"installer-name": "retour",
 		"kirby": {
-			"compatible": "^4.3.1 || ^5.0"
+			"compatible": "^6.0"
 		},
 		"kirby-cms-path": false
 	},
 	"scripts": {
-		"fix": "php-cs-fixer fix",
-		"test": "phpunit --stderr"
+		"fix": "cpx getkirby/php-cs:^0.2 fix",
+		"test": "cpx brianium/paratest:7.20.0"
 	},
+	"minimum-stability": "beta",
+	"prefer-stable": true,
 	"config": {
 		"allow-plugins": {
 			"getkirby/composer-installer": true

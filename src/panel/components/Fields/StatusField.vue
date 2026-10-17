@@ -3,6 +3,7 @@
 		v-bind="$props"
 		:input="id"
 		:class="['k-select-field', $attrs.class]"
+		:style="$attrs.style"
 	>
 		<k-input
 			v-bind="$props"
@@ -11,17 +12,20 @@
 			@input="$emit('input', $event)"
 		>
 			<template #before>
-				<k-icon type="circle-filled" :color="color" />
+				<k-icon type="circle-filled" :color="color(value)" />
 			</template>
 		</k-input>
 	</k-field>
 </template>
 
 <script>
-import color from "../../mixins/color.js";
+import { color } from "../../helpers/status";
 
 export default {
 	extends: "k-select-field",
-	mixins: [color],
+	emits: ["input"],
+	methods: {
+		color,
+	},
 };
 </script>

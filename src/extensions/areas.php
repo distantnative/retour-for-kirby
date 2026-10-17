@@ -6,7 +6,7 @@ use Kirby\Retour\Panel\View;
 return [
 	'retour' => fn () => [
 		'label' => t('view.retour'),
-		'icon'  => 'shuffle',
+		'icon'  => 'redirect',
 		'menu'  => true,
 		'link'  => 'retour/redirects',
 		'views' => [
@@ -15,10 +15,11 @@ return [
 				'action'  => fn () => Panel::go('retour/redirects')
 			],
 			[
-				'pattern' => 'retour/(:any)',
-				'action'  => fn (string $tab) => View::tab($tab)
+				'pattern' => 'retour/(redirects|failures)',
+				'action'  => View::class
 			]
 		],
+		'buttons' => require __DIR__ . '/buttons.php',
 		'dialogs' => require __DIR__ . '/dialogs.php',
 		'drawers' => require __DIR__ . '/drawers.php'
 	]

@@ -13,16 +13,19 @@ const series = [
 	{
 		key: "redirected",
 		color: "var(--color-blue-650)",
+		icon: "redirect",
 		label: "retour.stats.redirected",
 	},
 	{
 		key: "resolved",
 		color: "var(--color-gray-250)",
+		icon: "url",
 		label: "retour.stats.resolved",
 	},
 	{
 		key: "failed",
 		color: "var(--color-red-650)",
+		icon: "url-broken",
 		label: "retour.stats.failed",
 	},
 ];
@@ -47,9 +50,10 @@ export default {
 			}));
 		},
 		pie() {
-			return series.map(({ key, color, label }) => ({
-				data: this.data.reduce((i, x) => (i += x[key]), 0),
+			return series.map(({ key, color, icon, label }) => ({
+				data: this.data.reduce((total, entry) => total + entry[key], 0),
 				color,
+				icon,
 				label: this.$t(label),
 			}));
 		},
@@ -59,29 +63,49 @@ export default {
 
 <style>
 .k-retour-stats {
-	padding: var(--spacing-3) var(--spacing-3) var(--spacing-8) var(--spacing-6);
-	color: var(--color-white);
-	background: light-dark(
+	--retour-stats-color-back: light-dark(
 		var(--color-gray-900),
-		var(--color-gray-950, var(--color-gray-900))
+		var(--color-gray-950)
 	);
-	border-radius: var(--rounded-lg);
+
+	color: var(--color-white);
 	margin-bottom: var(--spacing-6);
 }
 
-@container (max-width: 40rem) {
+@container main (max-width: 40rem) {
 	.k-retour-stats {
 		display: flex;
 		flex-direction: column;
-		padding-block: var(--spacing-6);
+		padding: var(--spacing-6) var(--spacing-3) var(--spacing-6) var(--spacing-6);
+		background: var(--retour-stats-color-back);
+		border-radius: var(--rounded-lg);
+	}
+	.k-retour-stats .k-retour-pie-chart {
+		display: none;
 	}
 }
 
-@container (min-width: 40rem) {
+@container main (min-width: 40rem) {
 	.k-retour-stats {
 		display: grid;
-		align-items: center;
-		grid-template-columns: 16rem auto;
+		grid-template-columns: calc(16rem + 2 * var(--spacing-6)) 1fr;
+		gap: var(--spacing-3);
+	}
+	.k-retour-stats > * {
+		background: var(--retour-stats-color-back);
+		border-radius: var(--rounded-lg);
+	}
+	.k-retour-stats > .k-retour-pie {
+		justify-content: center;
+		padding: var(--spacing-6);
+	}
+	/* evens out the space below the ring and below the legend */
+	.k-retour-stats .k-retour-pie figcaption {
+		translate: 0 var(--spacing-2);
+	}
+	.k-retour-stats > .k-retour-timeline {
+		padding-inline: var(--spacing-4) var(--spacing-3);
+		padding-bottom: var(--spacing-4);
 	}
 }
 </style>

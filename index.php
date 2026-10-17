@@ -3,32 +3,42 @@
 /**
  * Retour for Kirby Plugin
  *
- * Easily add and manage redirects from the
- * Kirby Panel and track 404 errors
- *
- * @package   Retour for Kirby
- * @author    Nico Hoffmann <nico@getkirby.com>
  * @link      https://github.com/distantnative/retour-for-kirby
- * @copyright Nico Hoffmann
  * @license   https://opensource.org/licenses/MIT
  */
 
-use Composer\Semver\Semver;
 use Kirby\Cms\App as Kirby;
+use Kirby\Retour\Commands\Seed;
 
-// validate Kirby version
-if (Semver::satisfies(Kirby::version() ?? '0.0.0', '~4.0 || ~5.0') === false) {
-	throw new Exception('Retour requires Kirby 4 or 5');
+$version = Kirby::version() ?? '0.0.0';
+
+if (
+	version_compare($version, '6.0.0-dev', '<') === true ||
+	version_compare($version, '7.0.0-dev', '>=') === true
+) {
+	throw new Exception('Retour requires Kirby 6');
 }
 
-// load classes
 require_once __DIR__ . '/src/bootstrap.php';
 
-// register the plugin
 Kirby::plugin('distantnative/retour', [
-	'areas'        => require_once __DIR__ . '/src/extensions/areas.php',
-	'commands'     => require_once __DIR__ . '/src/extensions/commands.php',
-	'hooks'        => require_once __DIR__ . '/src/extensions/hooks.php',
-	'routes'       => require_once __DIR__ . '/src/extensions/routes.php',
-	'translations' => require_once __DIR__ . '/src/extensions/i18n.php'
+	'areas'        => require __DIR__ . '/src/extensions/areas.php',
+	'commands'     => [
+		'retour:seed' => Seed::class
+	],
+	'hooks'        => require __DIR__ . '/src/extensions/hooks.php',
+	'options'      => [
+		'cache'         => true,
+		'config'        => fn () => Kirby::instance()->root('config') . '/retour.yml',
+		'database'      => fn () => Kirby::instance()->root('logs') . '/retour/log.sqlite',
+		'deleteAfter'   => 12,
+		'ignore'        => [],
+		'ignoreIps'     => [],
+		'logs'          => true,
+		'preserveQuery' => false,
+		'site'          => true,
+		'status'        => null
+	],
+	'routes'       => require __DIR__ . '/src/extensions/routes.php',
+	'translations' => require __DIR__ . '/src/extensions/i18n.php'
 ]);

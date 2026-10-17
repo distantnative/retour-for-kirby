@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"allowJs": true,
+		"isolatedModules": true,
+		"lib": ["ESNext", "DOM"],
+		"types": ["kirby-types/panel-globals"],
+		"paths": {
+			"@test/*": ["./tests/*"]
+		}
+	},
+	"include": ["src/panel/**/*.ts", "tests/panel/**/*.ts", "vitest.config.ts"]
+}

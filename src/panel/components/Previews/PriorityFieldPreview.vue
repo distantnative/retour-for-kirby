@@ -1,12 +1,13 @@
 <template>
-	<div class="k-priority-field-preview">
-		<k-icon v-if="value" type="bolt" :title="column.label" />
+	<div :title="value ? column.label : null" class="k-priority-field-preview">
+		<k-icon v-if="value" :alt="column.label" type="bolt" />
 		<p v-else>–</p>
 	</div>
 </template>
 
 <script>
 export default {
+	inheritAttrs: false,
 	props: {
 		value: Boolean,
 		column: Object,
@@ -16,13 +17,12 @@ export default {
 
 <style>
 .k-priority-field-preview {
+	--icon-size: 14px;
+
 	display: flex;
 	justify-content: center;
 }
 .k-priority-field-preview p {
-	color: var(--color-gray-400);
-}
-.k-priority-field-preview .k-icon {
-	transform: scale(0.8);
+	color: var(--color-text-dimmed);
 }
 </style>

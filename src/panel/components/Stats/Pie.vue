@@ -1,59 +1,38 @@
 <template>
-	<figure class="chart-pie">
-		<div class="graph" :style="styles" />
+	<figure class="k-retour-pie">
+		<div class="k-retour-pie-chart">
+			<div class="k-retour-pie-graph" :style="pie(data)" />
+			<p>
+				<strong>{{ formatter.format(sum(data)) }}</strong>
+				{{ $t("retour.stats.requests") }}
+			</p>
+		</div>
 
 		<figcaption>
-			<template v-for="(segment, index) in data">
-				<k-icon
-					:key="'icon-' + segment.label"
-					:style="'--color:' + segment.color"
-					:type="$options.icons[index]"
-				/>
-				<span :key="'count-' + segment.label">
-					{{ $options.formatter.format(segment.data) }}
-				</span>
-				<span :key="'label-' + segment.label">
-					{{ segment.label }}
-				</span>
-			</template>
+			<p v-for="segment in data" :key="segment.label">
+				<k-icon :color="segment.color" :type="segment.icon" />
+				<span>{{ formatter.format(segment.data) }}</span>
+				<span>{{ segment.label }}</span>
+			</p>
 		</figcaption>
 	</figure>
 </template>
 
 <script>
+import { pie, sum } from "../../helpers/chart";
+
 export default {
 	props: {
 		data: Array,
 	},
-	icons: ["shuffle", "check-double", "cloud-off"],
-	formatter: new Intl.NumberFormat(),
 	computed: {
-		total() {
-			return this.data.reduce((i, x) => (i += x.data), 0);
+		formatter() {
+			return new Intl.NumberFormat(this.$library.dayjs.locale());
 		},
-		styles() {
-			if (this.total === 0) {
-				return {
-					"--pie-c0": "transparent",
-					"--pie-c1": "transparent",
-					"--pie-c2": "transparent",
-					"--pie-a0": "0deg",
-					"--pie-a1": "0deg",
-				};
-			}
-
-			const deg = this.total / 180;
-			const a0 = this.data[0].data / deg;
-			const a1 = a0 + this.data[1].data / deg;
-
-			return {
-				"--pie-c0": this.data[0].color,
-				"--pie-c1": this.data[1].color,
-				"--pie-c2": this.data[2].color,
-				"--pie-a0": `${a0}deg`,
-				"--pie-a1": `${a1}deg`,
-			};
-		},
+	},
+	methods: {
+		pie,
+		sum,
 	},
 };
 </script>
@@ -61,62 +40,109 @@ export default {
 <style>
 @property --pie-a0 {
 	syntax: "<angle>";
-	inherits: false;
+	inherits: true;
 	initial-value: 0deg;
 }
 @property --pie-a1 {
 	syntax: "<angle>";
-	inherits: false;
+	inherits: true;
 	initial-value: 0deg;
 }
 
-.chart-pie {
+.k-retour-pie {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	container-type: inline-size;
 }
 
-.chart-pie > .graph {
-	width: 100%;
+.k-retour-pie-chart {
+	position: relative;
+	align-self: stretch;
+}
+.k-retour-pie-graph {
+	position: relative;
 	aspect-ratio: 1/1;
-	opacity: 0.85;
-	background: var(--color-gray-800);
-	background-image: conic-gradient(
-		from -90deg,
-		var(--pie-c0) 0deg var(--pie-a0),
-		var(--pie-c1) var(--pie-a0) var(--pie-a1),
-		var(--pie-c2) var(--pie-a1) 180deg,
-		transparent 180deg
-	);
+	background-image:
+		radial-gradient(closest-side, rgb(0 0 0 / 0.3) 62%, transparent),
+		conic-gradient(
+			from -90deg,
+			var(--pie-c0) 0deg var(--pie-a0),
+			var(--pie-c1) 0 var(--pie-a1),
+			var(--pie-c2) 0 180deg,
+			transparent 180deg
+		);
 	border-radius: 50%;
 	clip-path: polygon(0% 0%, 0% 50%, 100% 50%, 100% 0%);
+	mask: radial-gradient(closest-side, transparent 62%, #000 calc(62% + 0.5px));
 	margin-bottom: calc(-50% + var(--spacing-6));
 	transition:
 		--pie-a0 0.3s ease-out,
 		--pie-a1 0.3s ease-out;
 }
 
-.chart-pie figcaption {
+/* slice gaps as lines, which unlike gradient gaps have smooth edges */
+.k-retour-pie-graph::before,
+.k-retour-pie-graph::after {
+	content: "";
+	position: absolute;
+	bottom: 50%;
+	left: calc(50% - 1px);
+	width: 2px;
+	height: 50%;
+	background: var(--retour-stats-color-back);
+	transform-origin: bottom;
+	rotate: calc(var(--pie-a0) - 90deg);
+}
+.k-retour-pie-graph::after {
+	rotate: calc(var(--pie-a1) - 90deg);
+}
+
+.k-retour-pie-chart > p {
+	position: absolute;
+	inset-inline: 0;
+	top: 0;
+	aspect-ratio: 2/1;
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+	align-items: center;
+	padding-bottom: var(--spacing-1);
+	font-size: var(--text-xs);
+	line-height: 1.1;
+	color: var(--color-gray-500);
+}
+.k-retour-pie-chart > p strong {
+	font-size: var(--text-3xl);
+	color: var(--color-white);
+}
+
+.k-retour-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
-	column-gap: 0.4ch;
-	row-gap: var(--spacing-3);
+	gap: var(--spacing-3) 0.4ch;
 }
-.chart-pie figcaption :nth-child(3n + 2) {
+.k-retour-pie figcaption p {
+	display: grid;
+	grid-column: 1 / -1;
+	grid-template-columns: subgrid;
+	align-items: center;
+}
+.k-retour-pie figcaption span:first-of-type {
 	padding-inline-start: var(--spacing-2);
-	text-align: right;
-}
-.chart-pie figcaption .k-icon {
-	color: var(--color);
+	text-align: end;
 }
 
 @container (min-width: 18rem) {
-	.chart-pie figcaption {
-		grid-template-columns: repeat(9, auto);
+	.k-retour-pie figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--spacing-3) var(--spacing-4);
 	}
-	.chart-pie figcaption .k-icon:not(:first-child) {
-		margin-inline-start: var(--spacing-4);
+	.k-retour-pie figcaption p {
+		display: flex;
+		gap: 0.4ch;
 	}
 }
 </style>

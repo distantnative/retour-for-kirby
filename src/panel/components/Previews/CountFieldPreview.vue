@@ -1,8 +1,8 @@
 <template>
-	<div :title="title" class="k-count-preview-field">
-		<template v-if="row.hits > 0">
-			{{ row.hits }}
-			<k-icon :title="title" type="clock" />
+	<div :title="title" class="k-count-field-preview">
+		<template v-if="value > 0">
+			{{ hits }}
+			<k-icon type="history" />
 		</template>
 		<p v-else>–</p>
 	</div>
@@ -10,29 +10,41 @@
 
 <script>
 export default {
+	inheritAttrs: false,
 	props: {
 		row: Object,
+		value: Number,
 	},
 	computed: {
+		hits() {
+			return new Intl.NumberFormat(this.$library.dayjs.locale()).format(
+				this.value,
+			);
+		},
 		title() {
-			return this.$t("retour.hits.last") + ": " + (this.row.last ?? "-");
+			const last = this.row.last
+				? this.$library.dayjs(this.row.last).format("D MMM YYYY, HH:mm:ss")
+				: "–";
+
+			return `${this.$t("retour.hits.last")}: ${last}`;
 		},
 	},
 };
 </script>
 
 <style>
-.k-count-preview-field {
+.k-count-field-preview {
+	--icon-color: var(--color-text-dimmed);
+	--icon-size: 14px;
+
 	display: flex;
 	flex-direction: row-reverse;
+	align-items: center;
 	justify-content: space-between;
-	padding-inline: var(--spacing-2);
+	gap: var(--spacing-2);
+	padding-inline: var(--table-cell-padding);
 }
-.k-count-preview-field p {
-	color: var(--color-gray-400);
-}
-.k-count-preview-field .k-icon {
-	--icon-color: var(--color-gray-400);
-	transform: scale(0.8);
+.k-count-field-preview p {
+	color: var(--color-text-dimmed);
 }
 </style>

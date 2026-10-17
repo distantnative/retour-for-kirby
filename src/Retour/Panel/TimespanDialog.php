@@ -2,92 +2,51 @@
 
 namespace Kirby\Retour\Panel;
 
-use DateInterval;
-use DateTime;
-use Kirby\Cms\App;
-use Kirby\Panel\Panel;
+use Kirby\Panel\Controller\DialogController;
+use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Date;
-use Kirby\Toolkit\I18n;
 
-class TimespanDialog
+class TimespanDialog extends DialogController
 {
-	public function date(
-		DateTime|string|null $date,
-		string $format = 'Y-m-d H:i:s'
-	): string|null {
-		if (is_string($date) === true) {
-			$date = Date::optional($date);
-		}
-
-		return $date?->format($format);
+	protected function date(string|null $date): string|null
+	{
+		return Date::optional($date)?->format('Y-m-d H:i:s');
 	}
 
-	public function limits(): array
+	public function load(): FormDialog
 	{
-		[$limit] = Timespan::limits();
-		$min     = $this->date($limit);
-		$day     = DateInterval::createFromDateString('1 day');
-		$max     = $this->date(Date::now()->add($day));
-		return [$min, $max];
-	}
+		$selection = Timespan::selection();
+		$min       = $this->date(Timespan::limits()[0]);
+		$max       = $this->date('+1 day');
 
-	public function load(): array
-	{
-		$selection   = Timespan::selection();
-		[$min, $max] = $this->limits();
-
-		return [
-			'component' => 'k-form-dialog',
-			'props'     => [
-				'size'   => 'small',
-				'fields' => [
-					'from' => [
-						'type'     => 'date',
-						'label'    => t('retour.timespan.from.label'),
-						'required' => true,
-						'time'     => false,
-						'min'      => $min,
-						'max'      => $max
-					],
-					'to' => [
-						'type'     => 'date',
-						'label'    => t('retour.timespan.to.label'),
-						'required' => true,
-						'time'     => false,
-						'min'      => $min,
-						'max'      => $max
-					]
+		return new FormDialog(
+			size: 'small',
+			fields: [
+				'from' => [
+					'type'     => 'date',
+					'label'    => $this->i18n('retour.timespan.from.label'),
+					'required' => true,
+					'time'     => false,
+					'min'      => $min,
+					'max'      => $max
 				],
-				'value' => [
-					'from' => $this->date($selection['from']),
-					'to'   => $this->date($selection['to'])
-				],
-				'submitButton' => [
-					'text' => I18n::translate('change')
+				'to' => [
+					'type'     => 'date',
+					'label'    => $this->i18n('retour.timespan.to.label'),
+					'required' => true,
+					'time'     => false,
+					'min'      => $min,
+					'max'      => $max
 				]
+			],
+			value: [
+				'from' => $this->date($selection['from']),
+				'to'   => $this->date($selection['to'])
+			],
+			submitButton: [
+				'text' => $this->i18n('change')
 			]
-		];
-	}
-
-	public function submit(): array
-	{
-		$kirby   = App::instance();
-		$data    = Timespan::query();
-		$from    = Date::optional($data['from']);
-		$to      = Date::optional($data['to']);
-
-		if ($to->isBefore($from) === true) {
-			$to = $from;
-		}
-
-		$kirby->session()->set('retour', [
-			'from' => $from->format('Y-m-d'),
-			'to'   => $to->format('Y-m-d')
-		]);
-
-		return [
-			'redirect' => Panel::referrer()
-		];
+		);
 	}
 }

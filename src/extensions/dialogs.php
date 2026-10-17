@@ -1,77 +1,40 @@
 <?php
 
+use Kirby\Retour\Panel\FailureDeleteDialog;
+use Kirby\Retour\Panel\FailureIgnoreDialog;
+use Kirby\Retour\Panel\FailuresFlushDialog;
+use Kirby\Retour\Panel\IgnoresDialog;
+use Kirby\Retour\Panel\RedirectDeleteDialog;
 use Kirby\Retour\Panel\TimespanDialog;
-use Kirby\Retour\Retour;
 
 return [
 	'retour.timespan' => [
 		'pattern' => 'retour/timespan',
-		'load'   => fn () => (new TimespanDialog())->load(),
-		'submit' => fn () => (new TimespanDialog())->submit()
+		'action'  => TimespanDialog::class
 	],
 
 	'retour.redirect.delete' => [
 		'pattern' => 'retour/redirects/(:any)/delete',
-		'load' => fn (string $id) => [
-			'component' => 'k-remove-dialog',
-			'props'     => [
-				'text' => t('field.structure.delete.confirm')
-			]
-		],
-		'submit' => function (string $id) {
-			$redirects = Retour::instance()->redirects();
-			$redirects->remove(urldecode($id));
-			$redirects->save();
-			return true;
-		}
+		'action'  => RedirectDeleteDialog::class
 	],
 
 	'retour.failure.delete' => [
 		'pattern' => 'retour/failures/(:any)/delete',
-		'load' => fn () => [
-			'component' => 'k-remove-dialog',
-			'props'     => [
-				'text' => t('field.structure.delete.confirm')
-			]
-		],
-		'submit' => fn (string $path) => Retour::instance()->log()->remove(urldecode($path))
+		'action'  => FailureDeleteDialog::class
+	],
+
+	'retour.failure.ignore' => [
+		'pattern' => 'retour/failures/(:any)/ignore',
+		'action'  => FailureIgnoreDialog::class
+	],
+
+	'retour.failures.ignores' => [
+		'pattern' => 'retour/failures/ignores',
+		'action'  => IgnoresDialog::class
 	],
 
 	'retour.failures.flush' => [
 		'pattern' => 'retour/failures/flush',
-		'load' => fn () => [
-			'component' => 'k-form-dialog',
-			'props'     => [
-				'fields' => [
-					'mode' => [
-						'type'    => 'radio',
-						'label'   => t('retour.failures.clear.confirm'),
-						'help'    => t('retour.failures.clear.help'),
-						'options' => [
-							[
-								'value' => 'all',
-								'text'  => t('retour.failures.clear.mode.all')
-							],
-							[
-								'value' => 'failures',
-								'text'  => t('retour.failures.clear.mode.failures')
-							]
-						]
-					]
-				],
-				'value' => [
-					'mode' => 'all'
-				],
-				'submitButton' => [
-					'icon'  => 'trash',
-					'text'  => t('retour.failures.clear'),
-					'theme' => 'negative'
-				]
-			]
-		],
-		'submit' => function () {
-			$mode = get('mode');
-			return Retour::instance()->log()->flush($mode);
-		}
+		'action'  => FailuresFlushDialog::class
 	]
 ];

@@ -1,68 +1,66 @@
 <template>
-	<k-retour-view v-bind="$props" class="k-retour-collection-view">
+	<k-retour-view
+		v-bind="$props"
+		:class="['k-retour-collection-view', $options.class]"
+	>
 		<template #buttons>
-			<k-search-input
+			<k-input
 				v-if="searching"
-				ref="search"
+				:aria-label="$t('filter')"
 				:autofocus="true"
 				:placeholder="$t('filter') + ' …'"
-				:value="q"
-				class="k-input"
-				@input="
-					q = $event;
-					pagination.page = 1;
-				"
-				@keydown.native.esc="toggleSearch(true)"
+				:value="term"
+				class="k-retour-search"
+				type="search"
+				@input="search"
+				@keydown.esc.stop="term ? search(null) : toggleSearch()"
 			/>
 
 			<k-button
+				ref="filter"
 				:title="$t('filter')"
 				icon="filter"
 				size="sm"
 				variant="filled"
-				@click="toggleSearch"
+				@click="toggleSearch()"
 			/>
-			<k-button
-				v-for="(button, key) in buttons"
-				v-bind="button"
-				:key="key"
-				size="sm"
-				variant="filled"
-			/>
+			<k-view-buttons :buttons="buttons" />
 		</template>
 
-		<!-- Empty state -->
-		<k-empty v-if="filteredItems.length === 0" v-bind="empty" layout="table" />
+		<k-empty
+			v-if="data.length === 0"
+			v-bind="
+				searchterm ? { icon: 'search', text: $t('search.results.none') } : empty
+			"
+			layout="table"
+		/>
 
-		<!-- Table -->
 		<k-table
 			v-else
 			:columns="columns"
-			:index="index"
-			:rows="paginatedItems"
+			:index="pagination.offset + 1"
+			:rows="data"
 			@cell="onCell"
 			@header="onHeader"
 		>
 			<template #header="{ columnIndex, label }">
-				<span>
+				<button type="button">
 					{{ label }}
 					<k-icon
-						v-if="columnIndex === sortBy"
-						:type="sortDirection === 'asc' ? 'angle-up' : 'angle-down'"
+						v-if="columnIndex === sorting[0]"
+						:type="sorting[1] === 'desc' ? 'angle-down' : 'angle-up'"
 					/>
-				</span>
-			</template>
-			<template #options="{ row }">
-				<k-options-dropdown :options="options(row)" />
+				</button>
 			</template>
 		</k-table>
 
 		<footer class="k-bar k-collection-footer">
 			<k-pagination
-				v-bind="pagination"
 				:details="true"
-				:total="filteredItems.length"
-				@paginate="pagination.page = $event.page"
+				:limit="pagination.limit"
+				:page="pagination.page"
+				:total="pagination.total"
+				@paginate="reload({ page: $event.page })"
 			/>
 		</footer>
 	</k-retour-view>
@@ -73,120 +71,76 @@ import { props as View } from "./View.vue";
 
 export default {
 	mixins: [View],
+	props: {
+		pagination: Object,
+		searchterm: String,
+		sortBy: String,
+	},
 	data() {
 		return {
-			searching: false,
-			q: null,
-			sortDirection: "asc",
-			pagination: {
-				page: 1,
-				limit: 20,
-			},
+			searching: Boolean(this.searchterm),
+			term: this.searchterm,
 		};
 	},
 	computed: {
-		buttons() {
-			return [];
-		},
 		columns() {
 			return {};
+		},
+		defaultSortBy() {
+			return null;
 		},
 		empty() {
 			return {};
 		},
-		filteredItems() {
-			if (!this.q) {
-				return this.data;
-			}
-
-			const q = this.q.toLowerCase();
-
-			return this.data.filter((_, index) =>
-				this.searchIndex[index].includes(q),
-			);
-		},
-		index() {
-			return (this.pagination.page - 1) * this.pagination.limit + 1;
-		},
-		paginatedItems() {
-			return this.sortedItems.slice(
-				this.index - 1,
-				this.pagination.limit * this.pagination.page,
-			);
-		},
-		searchIndex() {
-			// stringify each item once per data change,
-			// not again on every keystroke
-			return this.data.map((item) => JSON.stringify(item).toLowerCase());
-		},
-		sortedItems() {
-			if (this.sortBy) {
-				// sortBy() sorts in place, a shallow copy is
-				// enough to keep the original order intact
-				return this.$helper.array.sortBy(
-					[...this.filteredItems],
-					`${this.sortBy} ${this.sortDirection}`,
-				);
-			}
-
-			return this.filteredItems;
+		sorting() {
+			return (this.sortBy ?? this.defaultSortBy)?.split(" ") ?? [];
 		},
 	},
+	created() {
+		this.filter = this.$helper.debounce(
+			() => this.reload({ searchterm: this.term || null }),
+			200,
+		);
+	},
 	methods: {
-		id(path) {
-			/**
-			 * Fix for issue #300 (See https://github.com/distantnative/retour-for-kirby/issues/300):
-			 *
-			 * Depending on the settings, the webserver might not always handle
-			 * escaped forward-slashes in the way, which this plugin expects it to.
-			 *
-			 * This specifically results in a 404 when trying to edit a redirect-entry,
-			 * unless the ```AllowEncodedSlashes NoDecode``` is set for the Apache
-			 * Server. The problem occurs in relation to nginx.
-			 *
-			 * Many hosting solutions do not allow customers to change such
-			 * settings for the web-server, and so another solution is required.
-			 *
-			 * So, in order to remedy this problem, we replace forward-slash with the
-			 * non-visible ascii-characer "GROUP-SEPARATOR" (Oct: 035, Dec: 29,
-			 * Hex: 1D). By using a non-visible chracter we ensure that the id
-			 * generation from redirect pattern is always unique.
-			 *
-			 * Note that this fix include changes to two parts of the plug-in
-			 * code-base. In this file, and in src/classes/Redirect.php
-			 */
-			return encodeURIComponent(path.replace(/\//g, "\x1D"));
-		},
 		onCell() {},
 		onHeader({ columnIndex }) {
-			if (this.sortBy === columnIndex) {
-				if (this.sortDirection === "desc") {
-					columnIndex = null;
-				} else {
-					this.sortDirection = "desc";
-				}
-			} else {
-				this.sortDirection = "asc";
+			const cycle = [
+				...new Set([
+					`${columnIndex} asc`,
+					`${columnIndex} desc`,
+					this.defaultSortBy,
+				]),
+			];
+			const current = cycle.indexOf(this.sortBy ?? this.defaultSortBy);
+			const next = cycle[(current + 1) % cycle.length];
+
+			this.reload({ sortBy: next === this.defaultSortBy ? null : next });
+		},
+		async reload(query) {
+			// core scrolls to the top on every new URL, the table should stay put
+			const scroll = window.scrollY;
+			await this.$panel.reload({ query: { page: null, ...query } });
+			await this.$nextTick();
+
+			window.scrollTo(0, scroll);
+		},
+		search(term) {
+			this.term = term;
+			this.filter();
+		},
+		async toggleSearch() {
+			if (this.searchterm) {
+				this.reload({ searchterm: null });
 			}
 
-			this.sortBy = columnIndex;
-			this.pagination.page = 1;
-		},
-		options() {
-			return [];
-		},
-		async toggleSearch(forgiving = false) {
-			if (forgiving && this.q) {
-				this.q = null;
-				return;
-			}
-
-			this.q = null;
+			this.term = null;
 			this.searching = !this.searching;
 
-			if (this.searching) {
+			// without the input, the focus would fall back to the document
+			if (this.searching === false) {
 				await this.$nextTick();
-				this.$refs.search.focus();
+				this.$refs.filter.focus();
 			}
 		},
 	},
@@ -194,19 +148,18 @@ export default {
 </script>
 
 <style>
-.k-retour-collection-view .k-table-column {
-	cursor: pointer;
+.k-retour-collection-view th.k-table-column {
+	padding: 0;
 }
-.k-retour-collection-view th.k-table-column > span {
-	display: inline-flex;
-	width: 100%;
+.k-retour-collection-view th.k-table-column > button {
+	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
-.k-retour-collection-view .k-search-input {
-	min-height: auto;
-	height: var(--height-sm);
+.k-retour-search.k-input {
+	--input-color-back: var(--button-filled-color-back);
 	--input-color-border: transparent;
-	--input-color-back: light-dark(var(--color-gray-300), var(--color-gray-950));
+	--input-height: var(--height-sm);
+	--input-padding: var(--spacing-1) var(--spacing-2);
 }
 </style>

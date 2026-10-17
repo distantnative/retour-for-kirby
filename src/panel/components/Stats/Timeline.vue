@@ -1,301 +1,227 @@
 <template>
-	<div :data-subunit="subunit" class="chart-areas">
-		<table>
-			<thead>
-				<tr>
-					<th v-for="tick in axisY" :key="tick">
-						{{ tick }}
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr
-					v-for="(segment, segmentIndex) in data"
-					:key="segmentIndex"
-					@click="zoom(segment)"
-				>
-					<td
-						v-for="(area, areaIndex) in segment.areas"
-						:key="segmentIndex + '_' + areaIndex"
-						:style="`--color: ${color(segmentIndex, area)}; ${clip(
-							segmentIndex,
-							areaIndex,
-						)}`"
-					/>
-				</tr>
-			</tbody>
-			<tfoot :data-less="data.length > 31">
-				<tr
-					v-for="segment in data"
+	<div class="k-retour-timeline">
+		<div>
+			<ol aria-hidden="true">
+				<li v-for="tick in axisY" :key="tick">
+					<span>{{ tick }}</span>
+				</li>
+			</ol>
+
+			<div
+				v-for="(area, index) in data[0]?.areas"
+				:key="index"
+				:style="{ backgroundColor: area.color, clipPath: polygon(index) }"
+			/>
+
+			<nav ref="plot" @resize="width = $event.detail.width">
+				<k-link
+					v-for="(segment, index) in data"
 					:key="segment.label"
-					:data-current="isCurrent(segment)"
-					@click="zoom(segment)"
+					:aria-current="isCurrent(segment) ? 'date' : null"
+					:aria-label="title(segment)"
+					:tabindex="isLabeled(index) ? null : -1"
+					:to="link(segment)"
 				>
-					<td>{{ label(segment) }}</td>
-				</tr>
-			</tfoot>
-		</table>
+					<span v-show="isLabeled(index)">{{ label(segment) }}</span>
+				</k-link>
+			</nav>
+		</div>
 	</div>
 </template>
 
 <script>
+import { axis, bounds, max, polygon } from "../../helpers/chart";
+import { format, subunit } from "../../helpers/unit";
+
 export default {
 	props: {
 		data: Array,
 		timespan: Object,
 	},
+	data() {
+		return {
+			width: 0,
+		};
+	},
 	computed: {
 		axisY() {
-			const span = this.max / 5;
-			return [1, 2, 3, 4, 5].map((x) => {
-				let tick = x * span;
-
-				if (tick >= 1000000) {
-					tick = Math.floor(tick / 100000) / 10 + "M";
-				} else if (tick >= 1000) {
-					tick = Math.floor(tick / 100) / 10 + "k";
-				}
-
-				return tick;
-			});
+			return axis(this.max, this.$library.dayjs.locale()).reverse();
 		},
 		bounds() {
-			return this.data.map((segment) =>
-				segment.areas.map((_, area) => {
-					const stack = segment.areas
-						.slice(0, area)
-						.reduce((i, x) => (i += x.data), 0);
-					return {
-						path: stack + segment.areas[area].data,
-						mask: stack,
-					};
-				}),
-			);
+			return bounds(this.data);
 		},
 		format() {
-			return (
-				{
-					day: "HH",
-					week: "ddd",
-					month: "D",
-					year: "MMM",
-					months: "MMM YY",
-				}[this.timespan.unit] ?? "D MMM"
+			return format(this.timespan.unit);
+		},
+		last() {
+			// the areas end today, later segments lie in the future
+			const index = this.data.findLastIndex(
+				(segment) => segment.label <= this.now(segment.label),
 			);
+
+			return Math.max(index, 0);
 		},
 		max() {
-			let max = Math.max(
-				...this.data.map((segment) => {
-					return segment.areas.reduce((i, x) => (i += x.data), 0);
-				}),
+			return max(this.data);
+		},
+		step() {
+			// every nth label so they don't overlap (~8px per character plus some space)
+			const chars = Math.max(
+				...this.data.map((segment) => this.label(segment).length),
 			);
+			const space = this.width / Math.max(this.data.length - 1, 1);
 
-			if (max > 0) {
-				const digits = max.toString().length;
-				const next = Math.pow(10, digits) / 4;
-				return Math.ceil((max * 1.1) / next) * next;
-			}
-
-			return 5;
+			return Math.max(Math.ceil((chars * 8 + 6) / space), 1);
 		},
 		subunit() {
-			return (
-				{
-					day: "hour",
-					year: "month",
-				}[this.timespan.unit] ?? "day"
-			);
-		},
-		today() {
-			return this.$library.dayjs();
+			return subunit(this.timespan.unit);
 		},
 	},
+	mounted() {
+		this.$panel.observers.resize.observe(this.$refs.plot);
+	},
+	beforeUnmount() {
+		this.$panel.observers.resize.unobserve(this.$refs.plot);
+	},
 	methods: {
-		clip(segment, area) {
-			const current = this.bounds[segment][area];
-			const next = this.bounds[segment + 1]?.[area] ?? {
-				path: 0,
-				mask: 0,
-			};
-
-			return `
-				--p0: ${current.path / this.max};
-				--p1: ${next.path / this.max};
-				--m0: ${current.mask / this.max};
-				--m1: ${next.mask / this.max};
-			`;
-		},
-		color(segment, area) {
-			const next = this.data[segment + 1];
-
-			if (
-				next &&
-				this.$library.dayjs(next.label).isAfter(this.today, this.subunit)
-			) {
-				return "transparent";
-			}
-
-			return area.color;
-		},
 		isCurrent(segment) {
-			return this.$library
-				.dayjs(segment.label)
-				.isSame(this.today, this.subunit);
+			return segment.label === this.now(segment.label);
+		},
+		isLabeled(index) {
+			return (this.data.length - 1 - index) % this.step === 0;
 		},
 		label(segment) {
+			// parsing hours would skip or repeat one on DST changes
+			if (this.subunit === "hour") {
+				return segment.label.slice(-2);
+			}
+
 			return this.$library.dayjs(segment.label).format(this.format);
 		},
-		zoom(segment) {
+		link(segment) {
 			if (this.subunit === "hour") {
-				return;
+				return null;
 			}
 
 			const date = this.$library.dayjs(segment.label);
-
-			this.$reload({
-				query: {
-					from: date.startOf(this.subunit).format("YYYY-MM-DD"),
-					to: date.endOf(this.subunit).format("YYYY-MM-DD"),
-				},
+			const query = new URLSearchParams({
+				...this.$panel.view.query,
+				from: date.startOf(this.subunit).format("YYYY-MM-DD"),
+				to: date.endOf(this.subunit).format("YYYY-MM-DD"),
 			});
+			query.delete("page");
+
+			return `/${this.$panel.view.path}?${query}`;
+		},
+		now(label) {
+			// the server's time, like the log's
+			return this.timespan.now.slice(0, label.length);
+		},
+		polygon(area) {
+			// at least 100 points, so the shapes of all timespans animate into each other
+			const points = Math.max(this.data.length, 100);
+			return polygon(this.bounds, area, this.max, this.last, points);
+		},
+		title(segment) {
+			const format = this.subunit === "month" ? "MMMM YYYY" : "D MMMM YYYY";
+			return this.$library.dayjs(segment.label).format(format);
 		},
 	},
 };
 </script>
 
 <style>
-.chart-areas {
-	overflow-x: auto;
-	overflow-y: hidden;
+.k-retour-timeline {
+	/* the clip paths and the y-axis are positioned physically */
+	direction: ltr;
 	padding-block-start: var(--spacing-8);
-	padding-inline: var(--spacing-3);
-}
-
-.chart-areas table {
-	--height: 250px;
-
-	position: relative;
-	width: calc(100% - 3rem);
-	height: var(--height);
-	margin-inline-start: 2rem;
-	margin-inline-end: 1rem;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-.chart-areas thead {
-	position: absolute;
-	top: 0;
-	right: calc(100%);
-	height: var(--height);
-}
-.chart-areas thead tr {
-	display: flex;
-	height: var(--height);
-	flex-direction: column-reverse;
-	padding-right: var(--spacing-3);
-}
-.chart-areas th {
-	flex: 1;
-	transform: translateY(calc(-1 * var(--spacing-3) / 2));
 	font-size: var(--text-xs);
-	font-weight: normal;
-	text-align: right;
-	color: var(--color-text-dimmed);
+	color: var(--color-gray-500);
 }
-.chart-areas tbody {
-	--grid-x: linear-gradient(
-		to right,
-		var(--color-gray-800) 33%,
-		transparent 0%
-	);
+.k-retour-timeline > div {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 250px;
+	margin-inline-end: var(--spacing-4);
+	margin-block-end: calc(var(--spacing-2) + 1em);
+}
 
-	height: var(--height);
-	background-image:
-		var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x),
-		var(--grid-x);
-	background-size:
-		1px 1px,
-		3px 1px,
-		3px 1px,
-		3px 1px,
-		3px 1px,
-		1px 1px;
-	background-repeat: repeat-x;
-	background-position:
-		center 0%,
-		center 20%,
-		center 40%,
-		center 60%,
-		center 80%,
-		center 100%;
+.k-retour-timeline ol {
+	grid-area: 1 / 1 / 2 / 3;
+	display: grid;
+	grid-template-columns: subgrid;
+	grid-template-rows: repeat(5, 1fr);
 }
-.chart-areas :where(tbody, tfoot) {
-	width: 100%;
-	display: flex;
-	justify-content: stretch;
-	align-items: stretch;
-	flex-direction: row;
+.k-retour-timeline li {
+	grid-column: 1 / 3;
+	display: grid;
+	grid-template-columns: subgrid;
 }
-.chart-areas tbody tr:not(:nth-last-child(2)) {
-	background-image: linear-gradient(var(--color-gray-800) 33%, transparent 0%);
-	background-size: 1px 3px;
-	background-repeat: repeat-y;
-	background-position: right;
-}
-.chart-areas :where(tbody, tfoot) tr {
-	position: relative;
-	display: flex;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0;
-}
-.chart-areas:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
-	cursor: pointer;
-}
-.chart-areas :where(tbody, tfoot) tr:last-child {
-	width: 0;
-	flex-grow: 0;
+.k-retour-timeline li span {
+	align-self: start;
+	padding-inline-end: var(--spacing-3);
+	text-align: end;
+	translate: 0 -50%;
 	white-space: nowrap;
 }
-.chart-areas tbody td {
-	background: var(--color);
-	opacity: 0.85;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	clip-path: polygon(
-		0% calc(100% * (1 - var(--p0))),
-		100% calc(100% * (1 - var(--p1))),
-		100% calc(100% * (1 - var(--m1))),
-		0% calc(100% * (1 - var(--m0)))
-	);
-	will-change: clip-path;
+.k-retour-timeline li::after {
+	content: "";
+	background: linear-gradient(
+			to right,
+			var(--color-gray-800) 33%,
+			transparent 0%
+		)
+		top / 3px 1px repeat-x;
+}
+.k-retour-timeline li:first-child::after {
+	background-size: 1px 1px;
+}
+
+/* one shape per area, as adjacent shapes would leave seams */
+.k-retour-timeline > div > div {
+	grid-area: 1 / 2;
+	z-index: 1;
+	background-image: linear-gradient(transparent, rgb(0 0 0 / 0.3));
+	pointer-events: none;
 	transition: clip-path 0.3s ease-out;
 }
-.chart-areas tfoot {
-	margin-top: var(--spacing-2);
-	font-size: var(--text-xs);
-	color: var(--color-text-light);
-	text-align: center;
-}
 
-.chart-areas tfoot[data-less] tr:not(:nth-child(3n + 1), :last-child) {
-	display: none;
+.k-retour-timeline nav {
+	grid-area: 1 / 2;
+	display: flex;
+	background: linear-gradient(
+			to right,
+			var(--color-gray-800) 33%,
+			transparent 0%
+		)
+		bottom / 1px 1px repeat-x;
 }
-
-.chart-areas tfoot td {
-	transform: translateX(-50%);
+.k-retour-timeline .k-link {
+	position: relative;
+	flex: 1 1 0;
+	background: linear-gradient(var(--color-gray-800) 33%, transparent 0%) left /
+		1px 3px repeat-y;
+	outline: 0;
 }
-.chart-areas tfoot [data-current] {
-	color: #fff;
+.k-retour-timeline .k-link:is(:first-child, :last-child) {
+	background: none;
+}
+.k-retour-timeline .k-link:last-child {
+	flex-grow: 0;
+}
+.k-retour-timeline .k-link > span {
+	position: absolute;
+	top: calc(100% + var(--spacing-2));
+	translate: -50%;
+	white-space: nowrap;
+}
+.k-retour-timeline .k-link:focus-visible > span {
+	outline: var(--outline);
+	outline-offset: 2px;
+	border-radius: var(--rounded-xs);
+}
+.k-retour-timeline [aria-current] > span {
+	color: var(--color-white);
 	font-weight: bold;
-}
-
-@container (min-width: 40rem) {
-	.chart-areas {
-		padding-inline-start: var(--spacing-12);
-	}
 }
 </style>

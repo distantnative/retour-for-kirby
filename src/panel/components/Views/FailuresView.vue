@@ -3,22 +3,7 @@ import CollectionView from "./CollectionView.vue";
 
 export default {
 	extends: CollectionView,
-	data() {
-		return {
-			sortBy: "hits",
-			sortDirection: "desc",
-		};
-	},
 	computed: {
-		buttons() {
-			return [
-				{
-					icon: "trash",
-					text: this.$t("retour.failures.clear"),
-					click: () => this.$dialog("retour/failures/flush"),
-				},
-			];
-		},
 		columns() {
 			return {
 				path: {
@@ -41,34 +26,19 @@ export default {
 				hits: {
 					label: this.$t("retour.hits"),
 					type: "count",
-					width: "1/16",
+					width: "1/10",
 					align: "right",
 				},
 			};
 		},
+		defaultSortBy() {
+			return "hits desc";
+		},
 		empty() {
 			return {
-				icon: "cloud-off",
+				icon: "url-broken",
 				text: this.$t("retour.failures.empty"),
 			};
-		},
-	},
-	methods: {
-		options(failure) {
-			return [
-				{
-					text: this.$t("retour.failures.resolve"),
-					icon: "add",
-					click: () =>
-						this.$drawer(`retour/failures/${this.id(failure.path)}/resolve`),
-				},
-				{
-					text: this.$t("remove"),
-					icon: "trash",
-					click: () =>
-						this.$dialog(`retour/failures/${this.id(failure.path)}/delete`),
-				},
-			];
 		},
 	},
 };

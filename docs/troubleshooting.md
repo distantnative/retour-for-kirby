@@ -4,4 +4,24 @@ This plugin is provided "as is" with no guarantees. Use it at your own risk and 
 
 ## PDOException: could not find driver
 
-If you encounter this error message, it most likely means that SQLite is not installed, as mentioned in [this issue](https://github.com/distantnative/retour-for-kirby/issues/160) (with example how to fix).
+If you encounter this error message, it most likely means that SQLite is not installed, as mentioned in [this issue](https://github.com/distantnative/retour-for-kirby/issues/160) (with example how to fix). If you can't install it on your server, disable the [`logs` option](/options#config) to use Retour without the 404 tracking.
+
+## The `Failures` tab is missing
+
+The tab and all stats are only shown when the [`logs` option](/options#config) is enabled. Check that it isn't set to `false` in your config.
+
+## A redirect doesn't work
+
+- If a page exists at the path, the redirect only applies with the [`Has priority`](/redirects#has-priority) option enabled.
+- Make sure the redirect doesn't have the `disabled` status.
+- The target page needs to be published: redirects never lead to drafts, not even when you're logged in to the Panel.
+- If the target page has been deleted, the redirect responds with a 404 and the request shows up in the failures.
+- Browsers cache permanent redirects (`301`, `308`). Test changes in a private window.
+
+## All redirects stopped working
+
+If Retour can't read `/site/config/retour.yml`, e.g. because of a syntax error after editing it by hand, your site keeps running without redirects. The Retour view in the Panel shows the error, including the line to fix. Until then, Retour won't save any changes to the file, so nothing gets overwritten.
+
+## The Panel view is slow
+
+With a large log, loading the stats can take a while. After updating from an earlier version, the first visit also updates the log database once. To keep the log small in the future, [clear it](/failures#clearing-logs) from time to time or set the [`deleteAfter` option](/options#config).
