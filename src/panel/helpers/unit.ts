@@ -1,6 +1,5 @@
 /**
- * Returns the dayjs format for the timeline labels
- * of a timespan unit
+ * Dayjs format of the timeline labels for a timespan unit
  */
 export function format(unit: string): string {
 	const formats: Record<string, string> = {
@@ -14,8 +13,7 @@ export function format(unit: string): string {
 }
 
 /**
- * Returns the unit of a single timeline segment
- * for a timespan unit
+ * Unit of a single timeline segment for a timespan unit
  */
 export function subunit(unit: string): "day" | "hour" | "month" {
 	const subunits: Record<string, "hour" | "month"> = {

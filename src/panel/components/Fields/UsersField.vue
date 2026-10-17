@@ -14,7 +14,7 @@
 </template>
 
 <script>
-/** Read-only list of users, e.g. the creator of a redirect */
+/** Read-only list of users */
 export default {
 	inheritAttrs: false,
 	props: {

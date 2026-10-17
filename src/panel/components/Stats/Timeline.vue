@@ -65,8 +65,7 @@ export default {
 			return max(this.data);
 		},
 		step() {
-			// every nth label, so that they don't overlap (about 8px
-			// per character plus some space), counted from the last one
+			// every nth label so they don't overlap (~8px per character plus some space)
 			const chars = Math.max(
 				...this.data.map((segment) => this.label(segment).length),
 			);
@@ -115,17 +114,16 @@ export default {
 			return `/${this.$panel.view.path}?${query}`;
 		},
 		now(label) {
-			// in the format of the label (month, day or hour) to compare
-			// both as strings; not cached, as the view stays mounted
-			// across reloads and can be open past midnight
+			// cut to the label's format to compare as strings; not cached, as the
+			// view stays mounted across reloads and can be open past midnight
 			return this.$library
 				.dayjs()
 				.format("YYYY-MM-DD HH")
 				.slice(0, label.length);
 		},
 		polygon(area) {
-			// the same number of points for all timespans of up to 100
-			// hours, days or months, so their shapes animate into each other
+			// the same number of points for up to 100 segments,
+			// so the shapes of all timespans animate into each other
 			const points = Math.max(this.data.length, 100);
 			return polygon(this.bounds, area, this.max, this.last, points);
 		},
@@ -187,8 +185,7 @@ export default {
 	background-size: 1px 1px;
 }
 
-/* one shape per area across all segments, as adjacent
-   shapes would leave seams between them */
+/* one shape per area, as adjacent shapes would leave seams */
 .k-retour-timeline > div > div {
 	grid-area: 1 / 2;
 	z-index: 1;
@@ -202,7 +199,6 @@ export default {
 .k-retour-timeline nav {
 	grid-area: 1 / 2;
 	display: flex;
-	/* bottom line */
 	background: linear-gradient(
 			to right,
 			var(--color-gray-800) 33%,

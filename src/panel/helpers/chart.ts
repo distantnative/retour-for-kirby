@@ -14,8 +14,7 @@ export type Segment = {
 };
 
 /**
- * Returns the five labels of the y-axis,
- * shortened in the given locale
+ * The five y-axis labels, shortened in the given locale
  *
  * @example
  * axis(5000, "en") // => ["1K", "2K", "3K", "4K", "5K"]
@@ -32,8 +31,7 @@ export function axis(max: number, locale?: string): string[] {
 }
 
 /**
- * Returns where each stacked area starts (mask)
- * and ends (path) for every segment
+ * Where each stacked area starts (mask) and ends (path) per segment
  */
 export function bounds(segments: Segment[]): Bound[][] {
 	return segments.map((segment) =>
@@ -49,12 +47,8 @@ export function bounds(segments: Segment[]): Bound[][] {
 }
 
 /**
- * Returns the top of the y-axis: five ticks of the smallest
- * nice whole step (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 times a power
- * of ten) that fit the highest stack plus some headroom
- *
- * @example
- * max([{ label: "2025-01", areas: [{ color: "red", data: 100 }] }]) // => 125
+ * Top of the y-axis: five ticks of the smallest nice whole step
+ * that fit the highest stack plus some headroom
  */
 export function max(segments: Segment[]): number {
 	const highest = Math.max(0, ...segments.map((segment) => sum(segment.areas)));
@@ -70,13 +64,8 @@ export function max(segments: Segment[]): number {
 }
 
 /**
- * Returns the clip path of a stacked area across all segments;
- * it ends at the last segment, later ones (and any further
- * points, up to `points`) collapse onto it
- *
- * @example
- * polygon([[{ path: 5, mask: 0 }], [{ path: 10, mask: 0 }]], 0, 10)
- * // => "polygon(0% 50%, 100% 0%, 100% 100%, 0% 100%)"
+ * Clip path of a stacked area across all segments; segments after `last`
+ * (and further points up to `points`) collapse onto it
  */
 export function polygon(
 	bounds: Bound[][],
@@ -101,9 +90,7 @@ export function polygon(
 }
 
 /**
- * Returns the CSS variables for the colors and angles
- * of the three slices of the half ring chart
- * (an empty gray ring without data)
+ * CSS variables for the colors and angles of the half ring's three slices
  */
 export function pie(slices: Area[]): Record<string, string> {
 	const total = sum(slices);

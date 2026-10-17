@@ -58,13 +58,11 @@ export default {
 	container-type: inline-size;
 }
 
-/* the half ring with the total inside */
 .k-retour-pie-chart {
 	position: relative;
 	align-self: stretch;
 }
-/* a half ring, darker towards the inside
-   like the timeline towards the bottom */
+/* darker towards the inside, like the timeline towards the bottom */
 .k-retour-pie-graph {
 	position: relative;
 	width: 100%;
@@ -87,8 +85,7 @@ export default {
 		--pie-a1 0.3s ease-out;
 }
 
-/* the gaps between the slices: lines in the background color,
-   which (unlike gaps in the gradient) have smooth edges */
+/* slice gaps as lines, which unlike gradient gaps have smooth edges */
 .k-retour-pie-graph::before,
 .k-retour-pie-graph::after {
 	content: "";
