@@ -23,11 +23,10 @@ return [
 		$retour = Retour::instance();
 
 		try {
-			// redirects without priority only apply if nothing else matched
 			$result = Router::execute(
 				$path,
 				$method,
-				$retour->redirects()->toRoutes($path, false)
+				$retour->redirects()->toRoutes($path, priority: false)
 			);
 		} catch (Throwable) {
 			$result = null;

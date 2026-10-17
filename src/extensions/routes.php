@@ -11,7 +11,7 @@ return [
 		'pattern' => '(:all)',
 		'method'  => 'GET|HEAD',
 		'action'  => function (string $path) {
-			$router = new Router(Retour::instance()->redirects()->toRoutes($path, true));
+			$router = new Router(Retour::instance()->redirects()->toRoutes($path, priority: true));
 
 			try {
 				$route = $router->find($path, $this->method());
