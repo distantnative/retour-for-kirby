@@ -5,6 +5,7 @@ namespace Kirby\Retour\Panel;
 use Kirby\Exception\NotFoundException;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirect;
+use Kirby\Retour\Retour;
 
 class RedirectEditDrawer extends RedirectCreateDrawer
 {
@@ -62,7 +63,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 	public function submit(): bool
 	{
-		$this->redirects()->update($this->redirect->id(), [
+		Retour::instance()->redirects()->update($this->redirect->id(), [
 			...$this->data(),
 			'modifier' => $this->author(),
 		]);
@@ -72,17 +73,12 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 
 	protected function value(): array
 	{
-		$creator  = $this->user($this->redirect->creator());
-		$modifier = $this->user($this->redirect->modifier());
-
-		if ($modifier === []) {
-			$modifier = $creator;
-		}
+		$creator = $this->user($this->redirect->creator());
 
 		return [
 			...$this->redirect->toArray(),
 			'creator'  => $creator,
-			'modifier' => $modifier,
+			'modifier' => $this->user($this->redirect->modifier()) ?: $creator,
 		];
 	}
 }
