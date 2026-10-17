@@ -2,7 +2,7 @@
 	<k-button-group layout="collapsed" class="k-retour-timespan">
 		<k-button
 			:dropdown="true"
-			:text="timespan.label"
+			:text="text"
 			icon="calendar"
 			size="sm"
 			variant="filled"
@@ -64,6 +64,26 @@ export default {
 					click: () => this.$panel.dialog.open("retour/timespan"),
 				},
 			].filter(Boolean);
+		},
+		text() {
+			const { from, to, unit } = this.timespan;
+
+			// whole months and years only name those, other timespans
+			// their days; `formatRange()` merges what both dates share
+			const options = {
+				day: { day: "numeric", month: "long" },
+				month: { month: "long" },
+				year: {},
+			}[unit] ?? { day: "numeric", month: "short" };
+
+			return new Intl.DateTimeFormat(this.$library.dayjs.locale(), {
+				...options,
+				year: "numeric",
+				// like the Panel's dates, e.g. not Persian ones for `fa`
+				calendar: "gregory",
+				numberingSystem: "latn",
+				timeZone: "UTC",
+			}).formatRange(new Date(from), new Date(to));
 		},
 		units() {
 			return ["all", "year", "month", "week", "day"];

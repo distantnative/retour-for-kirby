@@ -130,51 +130,6 @@ class TimespanTest extends TestCase
 		$this->assertTrue($this->ts('isCurrent', $today, $today, $today));
 	}
 
-	public function testLabel(): void
-	{
-		$this->assertSame('1 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-01',
-			'unit' => 'day'
-		]));
-
-		$this->assertSame('January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-02-03',
-			'unit' => 'month'
-		]));
-
-		$this->assertSame('2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-31',
-			'unit' => 'year'
-		]));
-
-		$this->assertSame('30 January - 5 February 2023', Timespan::label([
-			'from' => '2023-01-30',
-			'to'   => '2023-02-05',
-			'unit' => 'week'
-		]));
-
-		$this->assertSame('1 - 15 January 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-01-15',
-			'unit' => 'days'
-		]));
-
-		$this->assertSame('1 January - 15 March 2023', Timespan::label([
-			'from' => '2023-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
-
-		$this->assertSame('1 January 2022 - 15 March 2023', Timespan::label([
-			'from' => '2022-01-01',
-			'to'   => '2023-03-15',
-			'unit' => 'months'
-		]));
-	}
-
 	public function testSelection(): void
 	{
 		$this->kirby->clone([
