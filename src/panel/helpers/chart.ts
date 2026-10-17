@@ -102,7 +102,8 @@ export function polygon(
 
 /**
  * Returns the CSS variables for the colors and angles
- * of the three slices of the half pie chart
+ * of the three slices of the half ring chart
+ * (an empty gray ring without data)
  */
 export function pie(slices: Area[]): Record<string, string> {
 	const total = sum(slices);
@@ -114,6 +115,7 @@ export function pie(slices: Area[]): Record<string, string> {
 			"--pie-c2": "transparent",
 			"--pie-a0": "0deg",
 			"--pie-a1": "0deg",
+			"background-color": "var(--color-gray-800)",
 		};
 	}
 

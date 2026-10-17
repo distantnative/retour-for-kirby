@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "リダイレクト",
 	"retour.stats.resolved": "解決",
 	"retour.stats.failed": "失敗",
+	"retour.stats.requests": "リクエスト",
 	"retour.stats.mode.all": "すべて",
 	"retour.stats.mode.week": "週"
 }

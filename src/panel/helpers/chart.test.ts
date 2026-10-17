@@ -89,7 +89,7 @@ describe("chart.max()", () => {
 });
 
 describe("chart.pie()", () => {
-	it("returns transparent slices without data", () => {
+	it("returns an empty ring without data", () => {
 		expect(
 			pie([
 				{ color: "blue", data: 0 },
@@ -102,6 +102,7 @@ describe("chart.pie()", () => {
 			"--pie-c2": "transparent",
 			"--pie-a0": "0deg",
 			"--pie-a1": "0deg",
+			"background-color": "var(--color-gray-800)",
 		});
 	});
 

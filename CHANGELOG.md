@@ -22,6 +22,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Clicking the empty redirects table opens the drawer to add a redirect
 - The buttons above the tables can be reordered or hidden with Kirby's `panel.viewButtons` option
 - The days and months of the timeline are links: open them in a new tab, reach them with the keyboard, and screen readers announce their dates
+- The stats show the total number of requests inside a half ring chart, and both charts have a subtle gradient
 
 ### Fixes
 
@@ -53,7 +54,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The timeline labels are dimmed again and sit under their columns; the y-axis shows exact ticks and whole numbers for small counts
 - The timeline no longer shows thin dark lines between its columns on some screen widths
 - The timeline labels no longer overlap on narrow screens or long timespans
-- On narrow screens, the stats show the totals without the pie chart
+- On narrow screens, the stats show the totals without the ring chart
 - Numbers in the stats and tables are formatted in the Panel's language
 
 #### Panel
