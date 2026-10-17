@@ -22,6 +22,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Clicking the empty redirects table opens the drawer to add a redirect
 - The buttons above the tables can be reordered or hidden with Kirby's `panel.viewButtons` option
 - The days and months of the timeline are links: open them in a new tab, reach them with the keyboard, and screen readers announce their dates
+- The previous and next buttons and the units in the timespan menu are links too, e.g. to open the previous month in a new tab
 - The stats show the total number of requests inside a half ring chart, and both charts have a subtle gradient and, on wider screens, their own box
 - The page, sorting and filter of the tables are part of the URL, so reloading, going back or a bookmark keeps them
 
