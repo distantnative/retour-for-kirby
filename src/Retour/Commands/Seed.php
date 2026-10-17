@@ -165,13 +165,9 @@ class Seed extends Command
 
 	protected static function redirects(Retour $retour): array
 	{
-		$redirects = $retour->redirects()->filter(
-			fn (Redirect $redirect): bool => $redirect->isActive()
-		);
-
-		return $redirects->toArray(
-			fn (Redirect $redirect): string => $redirect->from()
-		);
+		return $retour->redirects()
+			->filter(fn (Redirect $redirect): bool => $redirect->isActive())
+			->toArray(fn (Redirect $redirect): string => $redirect->from());
 	}
 
 	protected static function referrers(): array
