@@ -2,6 +2,7 @@
 
 namespace Kirby\Retour\Panel;
 
+use Kirby\Data\Data;
 use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Router;
@@ -9,6 +10,7 @@ use Kirby\Panel\Redirect;
 use Kirby\Retour\Log\MigrationsTest;
 use Kirby\Retour\Retour;
 use Kirby\Retour\TestCase;
+use Kirby\Toolkit\Pagination;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
@@ -107,14 +109,102 @@ class ViewTest extends TestCase
 		}
 	}
 
-	protected function view(string $tab, array $options = []): View
+	public function testPropsFailures(): void
 	{
+		$view = $this->view('failures', query: [
+			'page'       => '2',
+			'searchterm' => ' wp- ',
+			'sortBy'     => 'path desc'
+		]);
+
+		$log = Retour::instance()->log();
+		$log->add(['path' => 'foo']);
+
+		for ($i = 10; $i < 35; $i++) {
+			$log->add(['path' => 'wp-' . $i]);
+		}
+
+		$props = $view->props();
+		$this->assertSame(['wp-14', 'wp-13', 'wp-12', 'wp-11', 'wp-10'], array_column($props['data'], 'path'));
+		$this->assertSame(2, $props['pagination']['page']);
+		$this->assertSame(25, $props['pagination']['total']);
+		$this->assertSame('wp-', $props['searchterm']);
+		$this->assertSame('path desc', $props['sortBy']);
+	}
+
+	public function testPropsOutOfRange(): void
+	{
+		Data::write($this->tmp . '/retour.yml', [
+			'redirects' => [['from' => 'foo', 'status' => 301]]
+		]);
+
+		// like the Panel router, which clamps pages
+		// instead of throwing, e.g. after deleting the last row
+		$validate = Pagination::$validate;
+		Pagination::$validate = false;
+
+		try {
+			$props = $this->view('redirects', query: ['page' => '5'])->props();
+			$this->assertSame(1, $props['pagination']['page']);
+			$this->assertSame(['foo'], array_column($props['data'], 'from'));
+
+			$view = $this->view('failures', query: ['page' => '5']);
+			Retour::instance()->log()->add(['path' => 'bar']);
+
+			$props = $view->props();
+			$this->assertSame(1, $props['pagination']['page']);
+			$this->assertSame(['bar'], array_column($props['data'], 'path'));
+		} finally {
+			Pagination::$validate = $validate;
+		}
+	}
+
+	public function testPropsRedirects(): void
+	{
+		Data::write($this->tmp . '/retour.yml', [
+			'redirects' => [
+				['from' => 'b', 'to' => 'x', 'status' => 301],
+				['from' => 'a', 'to' => 'y', 'status' => 302, 'comment' => 'Old blog'],
+				['from' => 'c', 'to' => 'blog', 'status' => 301],
+				['from' => 'd', 'to' => 'z', 'status' => 410]
+			]
+		]);
+
+		// unsorted in their order of precedence
+		$props = $this->view('redirects')->props();
+		$this->assertSame(['b', 'a', 'c', 'd'], array_column($props['data'], 'from'));
+		$this->assertSame(4, $props['pagination']['total']);
+		$this->assertNull($props['searchterm']);
+		$this->assertNull($props['sortBy']);
+
+		// path, target, status code and comment
+		$props = $this->view('redirects', query: ['searchterm' => 'BLOG', 'sortBy' => 'from desc'])->props();
+		$this->assertSame(['c', 'a'], array_column($props['data'], 'from'));
+		$this->assertSame(2, $props['pagination']['total']);
+
+		$props = $this->view('redirects', query: ['searchterm' => '410'])->props();
+		$this->assertSame(['d'], array_column($props['data'], 'from'));
+
+		// empty parameters are ignored
+		$props = $this->view('redirects', query: ['searchterm' => ' ', 'sortBy' => ''])->props();
+		$this->assertSame(['b', 'a', 'c', 'd'], array_column($props['data'], 'from'));
+		$this->assertNull($props['searchterm']);
+	}
+
+	protected function view(
+		string $tab,
+		array $options = [],
+		array $query = []
+	): View {
 		// view buttons are only collected from the areas of a logged-in user
 		$app = $this->kirby->clone([
 			'options' => [
 				'distantnative.retour.config'   => $this->tmp . '/retour.yml',
 				'distantnative.retour.database' => $this->tmp . '/log.sqlite',
 				...$options
+			],
+			'request' => [
+				'query' => $query
 			],
 			'users' => [
 				['email' => 'admin@getkirby.com', 'role' => 'admin']

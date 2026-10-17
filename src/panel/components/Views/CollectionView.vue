@@ -9,12 +9,12 @@
 				:aria-label="$t('filter')"
 				:autofocus="true"
 				:placeholder="$t('filter') + ' …'"
-				:value="q"
+				:value="term"
 				class="k-retour-search"
 				type="search"
 				@input="
-					q = $event;
-					pagination.page = 1;
+					term = $event;
+					filter();
 				"
 				@keydown.esc.stop="toggleSearch(true)"
 			/>
@@ -31,16 +31,18 @@
 		</template>
 
 		<k-empty
-			v-if="filteredItems.length === 0"
-			v-bind="q ? { icon: 'search', text: $t('search.results.none') } : empty"
+			v-if="data.length === 0"
+			v-bind="
+				searchterm ? { icon: 'search', text: $t('search.results.none') } : empty
+			"
 			layout="table"
 		/>
 
 		<k-table
 			v-else
 			:columns="columns"
-			:index="index"
-			:rows="paginatedItems"
+			:index="pagination.offset + 1"
+			:rows="data"
 			@cell="onCell"
 			@header="onHeader"
 		>
@@ -48,8 +50,8 @@
 				<button type="button">
 					{{ label }}
 					<k-icon
-						v-if="columnIndex === sortBy"
-						:type="sortDirection === 'asc' ? 'angle-up' : 'angle-down'"
+						v-if="columnIndex === sorting[0]"
+						:type="sorting[1] === 'desc' ? 'angle-down' : 'angle-up'"
 					/>
 				</button>
 			</template>
@@ -62,104 +64,49 @@
 			<k-pagination
 				:details="true"
 				:limit="pagination.limit"
-				:page="page"
-				:total="filteredItems.length"
-				@paginate="pagination.page = $event.page"
+				:page="pagination.page"
+				:total="pagination.total"
+				@paginate="reload({ page: $event.page })"
 			/>
 		</footer>
 	</k-retour-view>
 </template>
 
 <script>
-import { toRaw } from "vue";
 import { props as View } from "./View.vue";
 
 export default {
 	mixins: [View],
+	props: {
+		pagination: Object,
+		searchterm: String,
+		sortBy: String,
+	},
 	data() {
 		return {
-			searching: false,
-			q: null,
-			sortBy: null,
-			sortDirection: "asc",
-			pagination: {
-				page: 1,
-				limit: 20,
-			},
+			searching: Boolean(this.searchterm),
+			term: this.searchterm,
 		};
 	},
 	computed: {
 		columns() {
 			return {};
 		},
+		defaultSortBy() {
+			return null;
+		},
 		empty() {
 			return {};
 		},
-		filteredItems() {
-			if (!this.q) {
-				return this.sortedItems;
-			}
-
-			// the index is sorted already, typing doesn't sort again
-			return this.$helper.array
-				.search(this.searchIndex, this.q)
-				.map((entry) => entry.row);
-		},
-		index() {
-			return (this.page - 1) * this.pagination.limit + 1;
-		},
-		page() {
-			// the view keeps its page across reloads, e.g. after
-			// deleting a row or for a timespan with fewer rows
-			const pages = Math.ceil(
-				this.filteredItems.length / this.pagination.limit,
-			);
-			return Math.max(1, Math.min(this.pagination.page, pages));
-		},
-		paginatedItems() {
-			return this.filteredItems.slice(
-				this.index - 1,
-				this.pagination.limit * this.page,
-			);
-		},
-		rows() {
-			// rows are only replaced on reload, never changed,
-			// so they don't need a reactive proxy each
-			return toRaw(this.data);
-		},
-		searchIndex() {
-			// once per data or sort change, not on every keystroke
-			const keys = this.searchable;
-
-			return this.sortedItems.map((row) => ({
-				row,
-				text: keys
-					.map((key) => row[key])
-					.filter((value) => ["string", "number"].includes(typeof value))
-					.join("\n"),
-			}));
-		},
-		searchable() {
-			return Object.keys(this.columns);
-		},
-		sortedItems() {
-			if (this.sortBy) {
-				// sortBy() sorts in place, a shallow copy is
-				// enough to keep the original order intact
-				return this.$helper.array.sortBy(
-					[...this.rows],
-					`${this.sortBy} ${this.sortDirection}`,
-				);
-			}
-
-			return this.rows;
+		sorting() {
+			return (this.sortBy ?? this.defaultSortBy)?.split(" ") ?? [];
 		},
 	},
-	watch: {
-		page(page) {
-			// don't jump back to the old page when rows grow again
-			this.pagination.page = page;
-		},
+	created() {
+		this.filter = this.$helper.debounce(
+			() => this.reload({ searchterm: this.term || null }),
+			200,
+		);
 	},
 	methods: {
 		id(path) {
@@ -168,29 +115,45 @@ export default {
 		},
 		onCell() {},
 		onHeader({ columnIndex }) {
-			if (this.sortBy === columnIndex) {
-				if (this.sortDirection === "desc") {
-					columnIndex = null;
-				} else {
-					this.sortDirection = "desc";
-				}
-			} else {
-				this.sortDirection = "asc";
-			}
+			// ascending, descending, then back to the default order
+			const cycle = [
+				...new Set([
+					`${columnIndex} asc`,
+					`${columnIndex} desc`,
+					this.defaultSortBy,
+				]),
+			];
+			const current = cycle.indexOf(this.sortBy ?? this.defaultSortBy);
+			const next = cycle[(current + 1) % cycle.length];
 
-			this.sortBy = columnIndex;
-			this.pagination.page = 1;
+			this.reload({ sortBy: next === this.defaultSortBy ? null : next });
 		},
 		options() {
 			return [];
 		},
+		async reload(query) {
+			// core scrolls to the top on every new URL,
+			// but the table should stay where it is
+			const scroll = window.scrollY;
+
+			// a new filter or order starts on the first page
+			await this.$panel.reload({ query: { page: null, ...query } });
+			await this.$nextTick();
+
+			window.scrollTo(0, scroll);
+		},
 		async toggleSearch(forgiving = false) {
-			if (forgiving && this.q) {
-				this.q = null;
+			if (forgiving && this.term) {
+				this.term = null;
+				this.filter();
 				return;
 			}
 
-			this.q = null;
+			if (this.searchterm) {
+				this.reload({ searchterm: null });
+			}
+
+			this.term = null;
 			this.searching = !this.searching;
 
 			// the input focuses itself, but when it's gone,

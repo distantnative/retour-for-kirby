@@ -22,6 +22,10 @@ You can change the selected timespan by using the navigation bar: moving between
 
 Weeks start on the same day as the calendar of Kirby's date fields: it depends on the Panel language of the user, or on Kirby's [`date.weekday`](https://getkirby.com/docs/reference/system/options/date#first-day-of-the-week) option.
 
+## Sort and filter
+
+The failures with the most hits come first. Click a table header to sort by that column instead and click it again to reverse the order. The filter button above the table finds failures by their path or referrer.
+
 ## Add as redirect
 
 Every table row offers the option (behind the three dots to the right) to create a new redirect based on the failed request, which will be pre-filled with the path to prevent any more failures in the future.

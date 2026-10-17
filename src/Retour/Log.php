@@ -12,6 +12,7 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use Kirby\Retour\Log\Migrations;
+use Kirby\Toolkit\Collection;
 use Kirby\Toolkit\Str;
 use PDO;
 use Throwable;
@@ -101,17 +102,41 @@ class Log
 	}
 
 	/**
-	 * Returns unresolved failures grouped by path and referrer
+	 * Returns a page of the unresolved failures,
+	 * grouped by path and referrer
 	 *
 	 * @param $from date string (yyyy-mm-dd)
 	 * @param $to date string (yyyy-mm-dd)
+	 * @param $sortBy `path`, `referrer`, `last` or `hits` with
+	 *               `asc` or `desc`; by default `hits desc`
+	 * @param $searchterm only failures whose path or referrer contain it
+	 * @throws InvalidArgumentException If the sorting is invalid
 	 */
-	public function fails(string $from, string $to): array
-	{
+	public function fails(
+		string $from,
+		string $to,
+		string|null $sortBy = null,
+		string|null $searchterm = null,
+		int $page = 1,
+		int $limit = 20
+	): Collection {
+		$sortBy ??= 'hits desc';
+
+		[$column, $direction] = Str::split(strtolower($sortBy), ' ') + [1 => 'asc'];
+
+		if (
+			in_array($column, ['path', 'referrer', 'last', 'hits'], true) === false ||
+			in_array($direction, ['asc', 'desc'], true) === false
+		) {
+			throw new InvalidArgumentException(
+				message: 'Invalid sorting: ' . $sortBy
+			);
+		}
+
 		// `+date` keeps SQLite on idx_failures, which has the failures
 		// grouped by path and referrer already, instead of looking up
 		// every record of the timespan found via idx_date
-		$fails = $this->table()
+		$query = $this->table()
 			->select('
                 path,
                 referrer,
@@ -123,14 +148,25 @@ class Log
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')
-			->fetch('array')
-			->all();
+			// path and referrer as tie-breakers keep the order stable across
+			// pages, as many failures share their hits; sorted by path, both
+			// in the same direction let SQLite read idx_failures in order
+			->order(match ($column) {
+				'path'  => 'path ' . $direction . ', referrer ' . $direction,
+				default => $column . ' ' . $direction . ', path, referrer'
+			})
+			->fetch('array');
 
-		return $fails->toArray(fn (array $entry) => [
-			'path'     => $entry['path'],
-			'referrer' => $entry['referrer'],
-			'last'     => $entry['last'],
-			'hits'     => (int)$entry['hits'],
+		if ($searchterm !== null) {
+			$query->andWhere(
+				"(path LIKE :searchterm ESCAPE '\\' OR referrer LIKE :searchterm ESCAPE '\\')",
+				['searchterm' => '%' . addcslashes($searchterm, '%_\\') . '%']
+			);
+		}
+
+		return $query->page($page, $limit)->map(fn (array $fail): array => [
+			...$fail,
+			'hits' => (int)$fail['hits']
 		]);
 	}
 

@@ -23,6 +23,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The buttons above the tables can be reordered or hidden with Kirby's `panel.viewButtons` option
 - The days and months of the timeline are links: open them in a new tab, reach them with the keyboard, and screen readers announce their dates
 - The stats show the total number of requests inside a half ring chart, and both charts have a subtle gradient
+- The page, sorting and filter of the tables are part of the URL, so reloading, going back or a bookmark keeps them
 
 ### Fixes
 
@@ -61,7 +62,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 
 #### Panel
 
-- Filtering a table only searches the values shown (and a redirect's comment) and shows "No results" without matches. The filter button closes the field in one click and keeps the focus.
+- Filtering a table searches the path and referrer of failures or the path, target, status code and comment of redirects, and shows "No results" without matches. The filter button closes the field in one click and keeps the focus.
 - Deleting the last rows of a page or switching timespans no longer leaves an empty table without pagination
 - Table cells line up with their headers, dimmed dashes and icons are readable in light and dark mode, and only clickable cells show a pointer cursor
 - Without logging, the redirects table no longer shows an empty hits column
@@ -78,8 +79,8 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Stats count each hour, day or month with an indexed range query
 - Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time
 - Smaller log database: the index for redirect hits no longer includes failures
-- A new index for failures: removing, resolving or ignoring failures no longer scans the whole log (0.1 ms instead of 47 ms at 1M records), and the failures of long timespans load 2–4× faster
-- Filtering large tables in the Panel is much faster and lighter (40 ms instead of 530 ms at 100,000 failures)
+- A new index for failures: removing, resolving or ignoring failures no longer scans the whole log (0.1 ms instead of 47 ms at 1M records)
+- The tables are paginated, sorted and filtered on the server. With 1M log records, two years of failures load in 0.3 s instead of 0.7 s, with 4 KB instead of 30 MB of data, and no longer exceed PHP's memory limit (2 MB instead of 300 MB).
 
 ### Housekeeping
 

@@ -51,7 +51,7 @@ class FailureResolveDrawerTest extends TestCase
 		$this->assertSame('foo/bar', $redirects[0]['from']);
 		$this->assertSame(301, $redirects[0]['status']);
 
-		$failures = Retour::instance()->log()->fails('2000-01-01', '2099-12-31');
+		$failures = Retour::instance()->log()->fails('2000-01-01', '2099-12-31')->values();
 		$this->assertSame(['baz'], array_column($failures, 'path'));
 	}
 }
