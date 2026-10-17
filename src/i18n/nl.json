@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Ook genegeerd via de configuratie",
 	"retour.timespan.from.label": "Van",
 	"retour.timespan.to.label": "Tot",
-	"retour.timespan.set.label": "Stel aangepast in",
 	"retour.timespan.previous.label": "Vorige",
 	"retour.timespan.next.label": "Volgende",
 	"retour.stats.redirected": "omgeleid",

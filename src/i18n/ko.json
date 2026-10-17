@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "설정에서도 무시되는 경로",
 	"retour.timespan.from.label": "시작일",
 	"retour.timespan.to.label": "종료일",
-	"retour.timespan.set.label": "기간 지정",
 	"retour.timespan.previous.label": "이전 기간",
 	"retour.timespan.next.label": "다음 기간",
 	"retour.stats.redirected": "리디렉션",

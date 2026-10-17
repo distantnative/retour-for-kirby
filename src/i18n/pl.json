@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Ignorowane również przez konfigurację",
 	"retour.timespan.from.label": "Od",
 	"retour.timespan.to.label": "Do",
-	"retour.timespan.set.label": "Ustaw własny",
 	"retour.timespan.previous.label": "Poprzedni",
 	"retour.timespan.next.label": "Następny",
 	"retour.stats.redirected": "przekierowane",
