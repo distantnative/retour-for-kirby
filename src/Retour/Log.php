@@ -232,10 +232,7 @@ class Log
 			);
 		}
 
-		/** @var Query $table */
-		$table = $this->table()->bindings(['cutoff' => $cutoff]);
-
-		return $table->delete('date < :cutoff') && $this->reclaim();
+		return $this->table()->where('date < :cutoff', ['cutoff' => $cutoff])->delete() && $this->reclaim();
 	}
 
 	/**
@@ -248,11 +245,11 @@ class Log
 		$pages      = (int)$connection->query('PRAGMA page_count')->fetchColumn();
 		$free       = (int)$connection->query('PRAGMA freelist_count')->fetchColumn();
 
-		if ($free === 0 || $free < $pages / 5) {
-			return true;
+		if ($free > 0 && $free >= $pages / 5) {
+			return $this->database->execute('VACUUM');
 		}
 
-		return $this->database->execute('VACUUM');
+		return true;
 	}
 
 	/**
@@ -307,7 +304,7 @@ class Log
 			->where('redirect IS NULL')
 			->fetch('array')
 			->all()
-			->toArray(fn (array $record) => $record['path']);
+			->pluck('path');
 
 		$paths = array_filter($paths, $filter);
 
@@ -355,11 +352,11 @@ class Log
 			->fetch('array')
 			->first();
 
-		if ($result === false) {
-			return [];
+		if ($result !== false) {
+			return ['date' => gmdate('Y-m-d H:i:s', (int)$result['date'])];
 		}
 
-		return ['date' => gmdate('Y-m-d H:i:s', (int)$result['date'])];
+		return [];
 	}
 
 	/**
