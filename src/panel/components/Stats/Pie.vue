@@ -62,7 +62,6 @@ export default {
 }
 .k-retour-pie-graph {
 	position: relative;
-	width: 100%;
 	aspect-ratio: 1/1;
 	background-image:
 		radial-gradient(closest-side, rgb(0 0 0 / 0.3) 62%, transparent),
@@ -115,15 +114,13 @@ export default {
 }
 .k-retour-pie-chart > p strong {
 	font-size: var(--text-3xl);
-	font-weight: var(--font-bold);
 	color: var(--color-white);
 }
 
 .k-retour-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
-	column-gap: 0.4ch;
-	row-gap: var(--spacing-3);
+	gap: var(--spacing-3) 0.4ch;
 }
 .k-retour-pie figcaption p {
 	display: grid;
