@@ -125,6 +125,6 @@ To hide Retour from users of a certain role, disable access to its Panel area in
 title: Editor
 
 permissions:
-  access: // [!code focus]
-    retour: false // [!code focus]
+  access: # [!code focus]
+    retour: false # [!code focus]
 ```
