@@ -16,16 +16,16 @@
 			size="sm"
 			variant="filled"
 			:disabled="!timespan.prev"
+			:link="link(timespan.prev)"
 			:title="$t('retour.timespan.previous.label')"
-			@click="update(timespan.prev)"
 		/>
 		<k-button
 			:disabled="!timespan.next"
+			:link="link(timespan.next)"
 			:title="$t('retour.timespan.next.label')"
 			icon="angle-right"
 			size="sm"
 			variant="filled"
-			@click="update(timespan.next)"
 		/>
 	</k-button-group>
 </template>
@@ -47,14 +47,14 @@ export default {
 						text: this.label(unit),
 						icon: this.icon(unit),
 						current: this.isCurrentUnit(unit),
-						click: () => this.update(this.timespan.units[unit]),
+						link: this.link(this.timespan.units[unit]),
 					};
 				}),
 				"-",
 				{
 					text: this.$t("today"),
 					icon: "merge",
-					click: () => this.update(this.timespan.units.today),
+					link: this.link(this.timespan.units.today),
 				},
 				{
 					text: this.$t("retour.timespan.set.label"),
@@ -108,8 +108,17 @@ export default {
 
 			return this.$t(unit);
 		},
-		update({ from, to }) {
-			this.$panel.reload({ query: { from, to } });
+		link(timespan) {
+			if (timespan) {
+				const query = new URLSearchParams({
+					...this.$panel.view.query,
+					...timespan,
+				});
+
+				return `/${this.$panel.view.path}?${query}`;
+			}
+
+			return null;
 		},
 	},
 };
