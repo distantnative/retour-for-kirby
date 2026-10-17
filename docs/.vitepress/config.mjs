@@ -8,6 +8,14 @@ export default defineConfig({
 	base: "/retour-for-kirby/",
 	appearance: false,
 	cleanUrls: true,
+	markdown: {
+		image: {
+			lazyLoad: true,
+		},
+	},
+	sitemap: {
+		hostname: "https://distantnative.com/retour-for-kirby/",
+	},
 	head: [
 		[
 			"meta",
@@ -26,6 +34,8 @@ export default defineConfig({
 				link: "https://github.com/distantnative/retour-for-kirby/releases",
 			},
 		],
+
+		outline: [2, 3],
 
 		search: {
 			provider: "local",
