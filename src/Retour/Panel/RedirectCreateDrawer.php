@@ -6,7 +6,6 @@ use Kirby\Http\Header;
 use Kirby\Panel\Controller\DrawerController;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Panel\Ui\Item\UserItem;
-use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 
 class RedirectCreateDrawer extends DrawerController
@@ -97,14 +96,9 @@ class RedirectCreateDrawer extends DrawerController
 		);
 	}
 
-	protected function redirects(): Redirects
-	{
-		return Retour::instance()->redirects();
-	}
-
 	public function submit(): bool|array
 	{
-		$this->redirects()->create([
+		Retour::instance()->redirects()->create([
 			...$this->data(),
 			'creator' => $this->author(),
 		]);
@@ -122,10 +116,8 @@ class RedirectCreateDrawer extends DrawerController
 	 */
 	protected function user(string|null $id): array
 	{
-		if ($id !== null) {
-			if ($user = $this->kirby->user($id)) {
-				return [(new UserItem($user))->props()];
-			}
+		if ($id !== null && $user = $this->kirby->user($id)) {
+			return [(new UserItem($user))->props()];
 		}
 
 		return [];
