@@ -22,7 +22,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	 */
 	public static function factory(string $id): static
 	{
-		return new static(redirect: Id::toRedirect($id));
+		return new static(redirect: Id::redirect($id));
 	}
 
 	protected function fields(): array
@@ -57,7 +57,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 				[
 					'icon'   => 'trash',
 					'title'  => $this->i18n('remove'),
-					'dialog' => 'retour/redirects/' . urlencode($this->redirect->id()) . '/delete'
+					'dialog' => 'retour/redirects/' . Id::encode($this->redirect->id()) . '/delete'
 				]
 			]
 		);

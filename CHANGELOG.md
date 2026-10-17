@@ -69,6 +69,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The tooltip of a hit count shows the date of the last hit in a readable format
 - Fixed the links of some logged paths and referrers in the tables
 - Table columns can be sorted with the keyboard, and screen readers announce the priority icon
+- Failures and redirects with `~`, `!`, `*` or `'` in their path can be opened, edited and removed
 - Unknown Retour tab URLs show the Panel's not-found view
 
 ### Performance

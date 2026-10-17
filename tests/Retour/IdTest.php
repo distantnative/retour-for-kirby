@@ -3,34 +3,51 @@
 namespace Kirby\Retour;
 
 use Kirby\Exception\NotFoundException;
+use Kirby\Http\Router;
 use Kirby\Retour\Panel\Id;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Id::class)]
 class IdTest extends TestCase
 {
-	public function testToPath(): void
+	public function testDecodeInvalid(): void
 	{
-		$this->assertSame('foo', Id::toPath('foo'));
-
-		// slashes are replaced in the Panel
-		// with the group separator and the
-		// result is URL encoded
-		$id = rawurlencode(str_replace('/', "\x1D", 'wp-admin/setup config.php'));
-		$this->assertSame('wp-admin/setup config.php', Id::toPath($id));
+		$this->expectException(NotFoundException::class);
+		$this->expectExceptionMessage('Invalid id');
+		Id::decode('foo!');
 	}
 
-	public function testToRedirect(): void
+	public function testEncode(): void
+	{
+		$router = new Router([
+			[
+				'pattern' => 'retour/failures/(:any)/delete',
+				'action'  => fn (string $id) => Id::decode($id)
+			]
+		]);
+
+		// paths with slashes or characters that `(:any)` doesn't accept
+		foreach (['foo', 'wp-admin/setup config.php', '~user/x', "it's!*(x)", 'blog/.*', 'äöü?a=b&c#d', ''] as $path) {
+			$id = Id::encode($path);
+			$this->assertMatchesRegularExpression('/^[a-zA-Z0-9_-]*$/', $id);
+			$this->assertSame($path, Id::decode($id));
+
+			if ($path !== '') {
+				$this->assertSame($path, $router->call('retour/failures/' . $id . '/delete'));
+			}
+		}
+	}
+
+	public function testRedirect(): void
 	{
 		$redirects = Retour::instance($this->app([
 			'distantnative.retour.config' => $this->tmp . '/retour.yml'
 		]))->redirects();
 		$redirects->create(['from' => 'foo/bar']);
 
-		$id = rawurlencode(str_replace('/', "\x1D", 'foo/bar'));
-		$this->assertSame($redirects->first(), Id::toRedirect($id));
+		$this->assertSame($redirects->first(), Id::redirect(Id::encode('foo/bar')));
 
 		$this->expectException(NotFoundException::class);
-		Id::toRedirect('missing');
+		Id::redirect(Id::encode('missing'));
 	}
 }

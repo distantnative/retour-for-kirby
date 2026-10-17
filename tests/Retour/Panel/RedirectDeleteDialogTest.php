@@ -25,7 +25,7 @@ class RedirectDeleteDialogTest extends TestCase
 			'distantnative.retour.logs'   => false
 		]));
 
-		return RedirectDeleteDialog::factory(urlencode(str_replace('/', "\x1D", $id)));
+		return RedirectDeleteDialog::factory(Id::encode($id));
 	}
 
 	protected function paths(): array

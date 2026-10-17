@@ -26,7 +26,7 @@ class FailureIgnoreDialogTest extends TestCase
 		$log->add(['path' => 'wp-admin']);
 		$log->add(['path' => 'foo(']);
 
-		return FailureIgnoreDialog::factory(urlencode($path));
+		return FailureIgnoreDialog::factory(Id::encode($path));
 	}
 
 	protected function failures(): array

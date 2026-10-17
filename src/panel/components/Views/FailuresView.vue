@@ -41,26 +41,5 @@ export default {
 			};
 		},
 	},
-	methods: {
-		options(failure) {
-			return [
-				{
-					text: this.$t("retour.failures.resolve"),
-					icon: "add",
-					drawer: `retour/failures/${this.id(failure.path)}/resolve`,
-				},
-				{
-					text: this.$t("retour.failures.ignore"),
-					icon: "muted",
-					dialog: `retour/failures/${this.id(failure.path)}/ignore`,
-				},
-				{
-					text: this.$t("remove"),
-					icon: "trash",
-					dialog: `retour/failures/${this.id(failure.path)}/delete`,
-				},
-			];
-		},
-	},
 };
 </script>
