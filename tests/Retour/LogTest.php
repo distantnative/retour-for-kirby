@@ -186,14 +186,14 @@ class LogTest extends TestCase
 			$log->add(['path' => 'foo/' . $i, 'referrer' => 'b']);
 		}
 
-		$fails = $log->fails('2000-01-01', '2099-12-31', 'path asc', page: 3);
+		$fails = $log->fails('2000-01-01', '2099-12-31', 'path asc', page: 3, limit: 20);
 		$this->assertSame(50, $fails->pagination()->total());
 		$this->assertSame(3, $fails->pagination()->page());
 		$this->assertCount(10, $fails);
 		$this->assertSame(['foo/5', 'a'], [$fails->first()['path'], $fails->first()['referrer']]);
 
-		$fails = $log->fails('2000-01-01', '2099-12-31', limit: 30);
-		$this->assertCount(30, $fails);
+		$fails = $log->fails('2000-01-01', '2099-12-31');
+		$this->assertSame(50, $fails->pagination()->limit());
 	}
 
 	public function testFailsSearchterm(): void

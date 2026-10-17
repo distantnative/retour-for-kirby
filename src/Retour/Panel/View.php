@@ -202,6 +202,6 @@ class View extends ViewController
 			$redirects = $redirects->sort(...Str::split($sortBy, ' '));
 		}
 
-		return $redirects->paginate(20, $page);
+		return $redirects->paginate(50, $page);
 	}
 }

@@ -25,6 +25,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The previous and next buttons and the units in the timespan menu are links too, e.g. to open the previous month in a new tab
 - The stats show the total number of requests inside a half ring chart, and both charts have a subtle gradient and, on wider screens, their own box
 - The page, sorting and filter of the tables are part of the URL, so reloading, going back or a bookmark keeps them
+- The tables show 50 rows per page instead of 20
 
 ### Fixes
 

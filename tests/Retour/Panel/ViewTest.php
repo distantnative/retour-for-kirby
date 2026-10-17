@@ -120,14 +120,14 @@ class ViewTest extends TestCase
 		$log = Retour::instance()->log();
 		$log->add(['path' => 'foo']);
 
-		for ($i = 10; $i < 35; $i++) {
+		for ($i = 10; $i < 65; $i++) {
 			$log->add(['path' => 'wp-' . $i]);
 		}
 
 		$props = $view->props();
 		$this->assertSame(['wp-14', 'wp-13', 'wp-12', 'wp-11', 'wp-10'], array_column($props['data'], 'path'));
 		$this->assertSame(2, $props['pagination']['page']);
-		$this->assertSame(25, $props['pagination']['total']);
+		$this->assertSame(55, $props['pagination']['total']);
 		$this->assertSame('wp-', $props['searchterm']);
 		$this->assertSame('path desc', $props['sortBy']);
 

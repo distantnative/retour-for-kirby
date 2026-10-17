@@ -121,7 +121,7 @@ class Log
 		string|null $sortBy = null,
 		string|null $searchterm = null,
 		int $page = 1,
-		int $limit = 20
+		int $limit = 50
 	): Collection {
 		$sortBy ??= 'hits desc';
 
