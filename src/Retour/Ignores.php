@@ -118,15 +118,13 @@ class Ignores
 
 	public function matches(string $path, array|null $patterns = null): bool
 	{
-		$patterns ??= [...$this->option(), ...$this->custom()];
-
-		foreach ($patterns as $pattern) {
-			// invalid entries from the `ignore` option or empty items in the config file
-			if (is_string($pattern) === false || $pattern === '') {
-				continue;
-			}
-
-			if (Pattern::matches($pattern, $path, 'iu') === true) {
+		foreach ($patterns ?? [...$this->option(), ...$this->custom()] as $pattern) {
+			// skips invalid entries from the `ignore` option and empty ones in the config file
+			if (
+				is_string($pattern) === true &&
+				$pattern !== '' &&
+				Pattern::matches($pattern, $path, 'iu') === true
+			) {
 				return true;
 			}
 		}
@@ -138,23 +136,11 @@ class Ignores
 	{
 		$entries = $this->ips();
 
-		if ($entries === [] || $ip === null) {
-			return false;
-		}
-
-		$ip = static::binary($ip);
-
-		if ($ip === null) {
-			return false;
-		}
-
-		foreach ($entries as $entry) {
-			if (is_string($entry) === false) {
-				continue;
-			}
-
-			if (static::inRange($ip, trim($entry)) === true) {
-				return true;
+		if ($entries !== [] && $ip !== null && ($ip = static::binary($ip)) !== null) {
+			foreach ($entries as $entry) {
+				if (is_string($entry) === true && static::inRange($ip, trim($entry)) === true) {
+					return true;
+				}
 			}
 		}
 
