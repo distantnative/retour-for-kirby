@@ -41,11 +41,11 @@ class Timespan
 
 	protected static function checks(array $data): array
 	{
-		$today = Date::now();
+		$today = Date::today();
 		$from  = Date::optional($data['from']);
 		$to    = Date::optional($data['to']);
 		$first = Date::optional($data['first']);
-		$last  = Date::optional($data['last']);
+		$last  = Date::optional($data['last'])?->floor('day');
 
 		return [
 			'hasAll'    => $first && $last,
