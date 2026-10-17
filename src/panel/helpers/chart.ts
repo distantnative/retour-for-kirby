@@ -49,24 +49,24 @@ export function bounds(segments: Segment[]): Bound[][] {
 }
 
 /**
- * Returns the top of the y-axis: the highest stack
- * plus some headroom, rounded to a quarter of its
- * order of magnitude, or at least to a multiple of 5
- * so that all five ticks are whole numbers
+ * Returns the top of the y-axis: five ticks of the smallest
+ * nice whole step (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 times a power
+ * of ten) that fit the highest stack plus some headroom
  *
  * @example
- * max([{ label: "2025-01", areas: [{ color: "red", data: 900 }] }]) // => 1000
+ * max([{ label: "2025-01", areas: [{ color: "red", data: 100 }] }]) // => 125
  */
 export function max(segments: Segment[]): number {
-	const highest = Math.max(...segments.map((segment) => sum(segment.areas)));
+	const highest = Math.max(0, ...segments.map((segment) => sum(segment.areas)));
+	const step = Math.max((highest * 1.1) / 5, 1);
+	const magnitude = Math.pow(10, Math.floor(Math.log10(step)));
+	const factor =
+		[1, 1.5, 2, 2.5, 3, 4, 5, 6, 8].find(
+			(factor) =>
+				factor * magnitude >= step && Number.isInteger(factor * magnitude),
+		) ?? 10;
 
-	if (highest > 0) {
-		const digits = highest.toString().length;
-		const step = Math.max(Math.pow(10, digits) / 4, 5);
-		return Math.ceil((highest * 1.1) / step) * step;
-	}
-
-	return 5;
+	return factor * magnitude * 5;
 }
 
 /**
