@@ -11,11 +11,9 @@ use Kirby\Toolkit\Date;
 
 class TimespanDialog extends DialogController
 {
-	protected function date(
-		DateTimeInterface|string|null $date,
-		string $format = 'Y-m-d H:i:s'
-	): string|null {
-		return Date::optional($date)?->format($format);
+	protected function date(DateTimeInterface|string|null $date): string|null
+	{
+		return Date::optional($date)?->format('Y-m-d H:i:s');
 	}
 
 	protected function limits(): array
@@ -61,23 +59,5 @@ class TimespanDialog extends DialogController
 				'text' => $this->i18n('change')
 			]
 		);
-	}
-
-	public function submit(): array
-	{
-		$data = Timespan::query();
-
-		// the date fields submit their values with a time
-		foreach ($data as $key => $value) {
-			if (is_string($value) === true) {
-				$data[$key] = $this->date($value, 'Y-m-d');
-			}
-		}
-
-		Timespan::set($data);
-
-		return [
-			'redirect' => $this->kirby->panel()->referrer()
-		];
 	}
 }

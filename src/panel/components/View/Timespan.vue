@@ -49,7 +49,18 @@ export default {
 					current:
 						this.timespan.isAll === false &&
 						["days", "months"].includes(this.timespan.unit),
-					click: () => this.$panel.dialog.open("retour/timespan"),
+					click: () =>
+						this.$panel.dialog.open("retour/timespan", {
+							on: {
+								// the date fields submit their values with a time
+								submit: ({ from, to }) => {
+									this.$panel.dialog.close();
+									this.$panel.view.open(
+										this.link({ from: from.slice(0, 10), to: to.slice(0, 10) }),
+									);
+								},
+							},
+						}),
 				},
 				"-",
 				{

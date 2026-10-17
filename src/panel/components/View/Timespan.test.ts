@@ -25,9 +25,10 @@ function timespan(props = {}) {
 
 function mount(props = {}) {
 	const $panel = {
-		dialog: { open: vi.fn() },
+		dialog: { close: vi.fn(), open: vi.fn() },
 		view: {
 			path: "retour/failures",
+			open: vi.fn(),
 			query: { page: "3", searchterm: "wp" },
 		},
 	};
@@ -158,6 +159,20 @@ describe("Timespan.vue", () => {
 			dropdown(wrapper)[6].click();
 			expect(wrapper.$panel.dialog.open).toHaveBeenCalledWith(
 				"retour/timespan",
+				{ on: { submit: expect.any(Function) } },
+			);
+		});
+
+		it("links the custom timespan on the first page and keeps the filter", () => {
+			const wrapper = mount();
+			dropdown(wrapper)[6].click();
+
+			const [, { on }] = wrapper.$panel.dialog.open.mock.calls[0];
+			on.submit({ from: "2026-09-28 00:00:00", to: "2026-10-04 00:00:00" });
+
+			expect(wrapper.$panel.dialog.close).toHaveBeenCalled();
+			expect(wrapper.$panel.view.open).toHaveBeenCalledWith(
+				"/retour/failures?searchterm=wp&from=2026-09-28&to=2026-10-04",
 			);
 		});
 
