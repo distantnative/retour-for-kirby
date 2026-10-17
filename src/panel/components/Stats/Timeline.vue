@@ -2,7 +2,7 @@
 	<div class="k-retour-timeline">
 		<div>
 			<ol aria-hidden="true">
-				<li v-for="tick in [...axisY].reverse()" :key="tick">
+				<li v-for="tick in axisY" :key="tick">
 					<span>{{ tick }}</span>
 				</li>
 			</ol>
@@ -45,7 +45,7 @@ export default {
 	},
 	computed: {
 		axisY() {
-			return axis(this.max, this.$library.dayjs.locale());
+			return axis(this.max, this.$library.dayjs.locale()).reverse();
 		},
 		bounds() {
 			return bounds(this.data);
