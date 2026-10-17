@@ -4,7 +4,8 @@
 		class="k-text k-status-field-preview"
 	>
 		<k-icon :color="color" type="circle-filled" />
-		<code>{{ value }}</code>
+		<p v-if="value === 'disabled'">–</p>
+		<template v-else>{{ value }}</template>
 	</div>
 </template>
 
@@ -14,7 +15,7 @@ import { color } from "../../helpers/status";
 export default {
 	inheritAttrs: false,
 	props: {
-		value: Number,
+		value: [Number, String],
 		column: Object,
 	},
 	computed: {
@@ -28,7 +29,12 @@ export default {
 <style>
 .k-status-field-preview {
 	display: flex;
+	align-items: center;
 	gap: var(--spacing-2);
 	padding-inline: var(--table-cell-padding);
+	font-family: var(--font-mono);
+}
+.k-status-field-preview p {
+	color: var(--color-text-dimmed);
 }
 </style>

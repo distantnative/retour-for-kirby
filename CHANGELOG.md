@@ -70,6 +70,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Deleting the last rows of a page or switching timespans no longer leaves an empty table without pagination
 - Table cells line up with their headers, dimmed dashes and icons are readable in light and dark mode, and only clickable cells show a pointer cursor
 - Without logging, the redirects table no longer shows an empty hits column
+- The status column marks disabled redirects with a gray dot, and filtering for `disabled` finds them
 - The tooltip of a hit count shows the date of the last hit in a readable format
 - Fixed the links of some logged paths and referrers in the tables
 - Table columns can be sorted with the keyboard, and screen readers announce the priority icon

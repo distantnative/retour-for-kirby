@@ -196,6 +196,12 @@ class View extends ViewController
 	): Collection {
 		$redirects = new Collection(Retour::instance()->redirects()->toData($from, $to));
 
+		// the table skips empty cells
+		$redirects = $redirects->map(fn (array $redirect): array => [
+			...$redirect,
+			'status' => $redirect['status'] ?? 'disabled'
+		]);
+
 		if ($searchterm !== null) {
 			$redirects = $redirects->filter(
 				fn (array $redirect): bool => Str::contains(
