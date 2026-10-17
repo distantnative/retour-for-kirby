@@ -62,7 +62,6 @@ export default {
 	position: relative;
 	align-self: stretch;
 }
-/* darker towards the inside, like the timeline towards the bottom */
 .k-retour-pie-graph {
 	position: relative;
 	width: 100%;
@@ -102,7 +101,6 @@ export default {
 	rotate: calc(var(--pie-a1) - 90deg);
 }
 
-/* the total inside the half ring */
 .k-retour-pie-chart > p {
 	position: absolute;
 	inset-inline: 0;
@@ -123,7 +121,6 @@ export default {
 	color: var(--color-white);
 }
 
-/* stacked: icons, numbers and labels in aligned columns */
 .k-retour-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
@@ -141,7 +138,6 @@ export default {
 	text-align: end;
 }
 
-/* in a row that wraps between the entries */
 @container (min-width: 18rem) {
 	.k-retour-pie figcaption {
 		display: flex;

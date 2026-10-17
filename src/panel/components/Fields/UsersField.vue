@@ -14,7 +14,6 @@
 </template>
 
 <script>
-/** Read-only list of users */
 export default {
 	inheritAttrs: false,
 	props: {

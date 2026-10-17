@@ -108,7 +108,6 @@ export default {
 	methods: {
 		onCell() {},
 		onHeader({ columnIndex }) {
-			// ascending, descending, then back to the default order
 			const cycle = [
 				...new Set([
 					`${columnIndex} asc`,
@@ -124,8 +123,6 @@ export default {
 		async reload(query) {
 			// core scrolls to the top on every new URL, the table should stay put
 			const scroll = window.scrollY;
-
-			// a new filter or order starts on the first page
 			await this.$panel.reload({ query: { page: null, ...query } });
 			await this.$nextTick();
 
