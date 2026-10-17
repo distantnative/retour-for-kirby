@@ -233,17 +233,30 @@ class RedirectsTest extends TestCase
 
 	public function testToRoutes(): void
 	{
-		$retour    = Retour::instance();
-		$redirects = Redirects::factory($retour, $this->data());
+		$redirects = Redirects::factory(Retour::instance(), [
+			['from' => 'blog/(:any)', 'status' => 301],
+			['from' => '/foo/', 'status' => 301],
+			['from' => 'bar', 'status' => 301],
+			['from' => 'news/(:num)', 'status' => 'disabled'],
+			['from' => 'baz', 'status' => 'disabled'],
+			['from' => 'homer', 'status' => 301, 'priority' => true],
+		]);
 
-		// without priority
-		$routes = $redirects->toRoutes(false);
-		$this->assertSame(2, count($routes));
-		$this->assertSame('foo', $routes[0]['pattern']);
+		$patterns = fn (string $path, bool $priority = false): array =>
+			array_column($redirects->toRoutes($path, $priority), 'pattern');
+
+		// all patterns, but plain paths only for the same path
+		$this->assertSame(['blog/(:any)', 'foo'], $patterns('foo'));
+		$this->assertSame(['blog/(:any)', 'foo'], $patterns('/foo/'));
+		$this->assertSame(['blog/(:any)'], $patterns('Foo'));
+		$this->assertSame(['blog/(:any)'], $patterns('missing'));
+
+		// without disabled redirects
+		$this->assertSame(['blog/(:any)'], $patterns('baz'));
 
 		// with priority
-		$routes = $redirects->toRoutes(true);
-		$this->assertSame(0, count($routes));
+		$this->assertSame(['homer'], $patterns('homer', true));
+		$this->assertSame([], $patterns('foo', true));
 	}
 
 	public function testUpdate(): void

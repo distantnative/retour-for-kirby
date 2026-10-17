@@ -108,17 +108,29 @@ class Redirects extends Collection
 		});
 	}
 
-	public function toRoutes(bool $priority = false): array
+	/**
+	 * Only the routes that can match the path, as the
+	 * router compares paths without `(` as plain strings
+	 */
+	public function toRoutes(string $path, bool $priority = false): array
 	{
-		$redirects = $this->filter(
-			fn (Redirect $redirect): bool =>
-				$redirect->isActive() === true &&
-				$redirect->priority() === $priority
-		);
+		$path   = trim($path, '/');
+		$routes = [];
 
-		return $redirects->toArray(
-			fn (Redirect $route) => $route->toRoute()
-		);
+		foreach ($this->data as $redirect) {
+			if (
+				$redirect->isActive() === true &&
+				$redirect->priority() === $priority &&
+				(
+					Pattern::hasPlaceholder($redirect->from()) === true ||
+					trim($redirect->from(), '/') === $path
+				)
+			) {
+				$routes[] = $redirect->toRoute();
+			}
+		}
+
+		return $routes;
 	}
 
 	/**
