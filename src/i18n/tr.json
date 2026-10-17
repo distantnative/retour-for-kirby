@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "Yönlendirildi",
 	"retour.stats.resolved": "Çözümlendi",
 	"retour.stats.failed": "Başarısız",
+	"retour.stats.requests": "istek",
 	"retour.stats.mode.all": "Tümü",
 	"retour.stats.mode.week": "Hafta"
 }

@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "redirigidos",
 	"retour.stats.resolved": "resueltos",
 	"retour.stats.failed": "fallidos",
+	"retour.stats.requests": "solicitudes",
 	"retour.stats.mode.all": "Todo",
 	"retour.stats.mode.week": "Semana"
 }

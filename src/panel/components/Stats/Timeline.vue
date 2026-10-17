@@ -10,7 +10,7 @@
 			<div
 				v-for="(area, index) in data[0]?.areas"
 				:key="index"
-				:style="{ background: area.color, clipPath: polygon(index) }"
+				:style="{ backgroundColor: area.color, clipPath: polygon(index) }"
 			/>
 
 			<nav ref="plot" @resize="width = $event.detail.width">
@@ -194,7 +194,8 @@ export default {
 .k-retour-timeline > div > div {
 	grid-area: 1 / 2;
 	z-index: 1;
-	opacity: 0.85;
+	/* darker towards the bottom, like the ring towards the inside */
+	background-image: linear-gradient(transparent, rgb(0 0 0 / 0.3));
 	pointer-events: none;
 	transition: clip-path 0.3s ease-out;
 }

@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "redirected",
 	"retour.stats.resolved": "resolved",
 	"retour.stats.failed": "failed",
+	"retour.stats.requests": "requests",
 	"retour.stats.mode.all": "All",
 	"retour.stats.mode.week": "Week"
 }

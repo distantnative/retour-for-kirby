@@ -63,10 +63,15 @@ export default {
 
 <style>
 .k-retour-stats {
+	--retour-stats-color-back: light-dark(
+		var(--color-gray-900),
+		var(--color-gray-950)
+	);
+
 	padding-block: var(--spacing-3) var(--spacing-8);
 	padding-inline: var(--spacing-6) var(--spacing-3);
 	color: var(--color-white);
-	background: light-dark(var(--color-gray-900), var(--color-gray-950));
+	background: var(--retour-stats-color-back);
 	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
@@ -77,7 +82,7 @@ export default {
 		flex-direction: column;
 		padding-block: var(--spacing-6);
 	}
-	.k-retour-stats .k-retour-pie-graph {
+	.k-retour-stats :is(.k-retour-pie-graph, .k-retour-pie > p) {
 		display: none;
 	}
 }

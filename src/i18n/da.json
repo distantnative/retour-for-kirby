@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "omdirigeret",
 	"retour.stats.resolved": "løst",
 	"retour.stats.failed": "mislykket",
+	"retour.stats.requests": "forespørgsler",
 	"retour.stats.mode.all": "Alt",
 	"retour.stats.mode.week": "Uge"
 }

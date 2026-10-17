@@ -43,6 +43,7 @@
 	"retour.stats.redirected": "přesměrováno",
 	"retour.stats.resolved": "vyřešeno",
 	"retour.stats.failed": "selhalo",
+	"retour.stats.requests": "požadavků",
 	"retour.stats.mode.all": "Vše",
 	"retour.stats.mode.week": "Týden"
 }
