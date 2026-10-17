@@ -261,8 +261,7 @@ class Redirect
 	 */
 	public static function withQuery(string $to): string
 	{
-		$kirby = Retour::instance()->kirby();
-		$uri   = $kirby->environment()->get('REQUEST_URI') ?? '';
+		$uri   = Retour::instance()->kirby()->environment()->get('REQUEST_URI') ?? '';
 		$query = Str::after($uri, '?');
 
 		if ($query === '') {

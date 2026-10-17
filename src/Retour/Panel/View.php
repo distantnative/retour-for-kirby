@@ -87,8 +87,7 @@ class View extends ViewController
 
 	public function props(): array
 	{
-		$retour = Retour::instance();
-		$log    = $retour->log();
+		$log = Retour::instance()->log();
 
 		// upgrade logs of earlier versions
 		$log?->migrate();
