@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Yapılandırma ile de yoksayılanlar",
 	"retour.timespan.from.label": "Başlangıç",
 	"retour.timespan.to.label": "Bitiş",
-	"retour.timespan.set.label": "Özel aralık belirle",
 	"retour.timespan.previous.label": "Önceki",
 	"retour.timespan.next.label": "Sonraki",
 	"retour.stats.redirected": "Yönlendirildi",

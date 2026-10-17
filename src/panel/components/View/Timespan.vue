@@ -57,7 +57,7 @@ export default {
 					link: this.link(this.timespan.units.today),
 				},
 				{
-					text: this.$t("retour.timespan.set.label"),
+					text: this.$t("custom"),
 					icon: "calendar",
 					click: () => this.$panel.dialog.open("retour/timespan"),
 				},

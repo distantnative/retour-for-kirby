@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Ignoreras även via konfigurationen",
 	"retour.timespan.from.label": "Från",
 	"retour.timespan.to.label": "Till",
-	"retour.timespan.set.label": "Ställ in anpassad",
 	"retour.timespan.previous.label": "Föregående",
 	"retour.timespan.next.label": "Nästa",
 	"retour.stats.redirected": "omdirigerade",

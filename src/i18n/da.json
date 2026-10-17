@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Også ignoreret via konfigurationen",
 	"retour.timespan.from.label": "Fra",
 	"retour.timespan.to.label": "Til",
-	"retour.timespan.set.label": "Tilpas",
 	"retour.timespan.previous.label": "Forrige",
 	"retour.timespan.next.label": "Næste",
 	"retour.stats.redirected": "omdirigeret",

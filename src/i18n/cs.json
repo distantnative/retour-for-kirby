@@ -37,7 +37,6 @@
 	"retour.failures.ignores.config": "Ignorováno také v konfiguraci",
 	"retour.timespan.from.label": "Od",
 	"retour.timespan.to.label": "Do",
-	"retour.timespan.set.label": "Vlastní rozsah",
 	"retour.timespan.previous.label": "Předchozí",
 	"retour.timespan.next.label": "Další",
 	"retour.stats.redirected": "přesměrováno",
