@@ -92,11 +92,11 @@ class Log
 		return $added;
 	}
 
-	protected function between(string $from, string $to): Query
+	protected function between(string $from, string $to, string $column = 'date'): Query
 	{
 		return $this->table()
-			->where('date >= :start', ['start' => static::timestamp($from)])
-			->andWhere('date <= :end', ['end' => static::timestamp($to . ' 23:59:59')]);
+			->where($column . ' >= :start', ['start' => static::timestamp($from)])
+			->andWhere($column . ' <= :end', ['end' => static::timestamp($to . ' 23:59:59')]);
 	}
 
 	/**
@@ -137,17 +137,14 @@ class Log
 		// idx_date is faster for up to a month; for longer timespans, `+date`
 		// keeps SQLite on idx_failures, which has the failures grouped already
 		$days = (new DateTimeImmutable($from))->diff(new DateTimeImmutable($to))->days;
-		$date = $days < 31 ? 'date' : '+date';
 
-		$query = $this->table()
+		$query = $this->between($from, $to, $days < 31 ? 'date' : '+date')
 			->select('
                 path,
                 referrer,
                 datetime(MAX(date), \'unixepoch\') AS last,
                 COUNT(*) AS hits
             ')
-			->where($date . ' >= :start', ['start' => static::timestamp($from)])
-			->andWhere($date . ' <= :end', ['end' => static::timestamp($to . ' 23:59:59')])
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')
