@@ -131,10 +131,9 @@ class Timespan
 		return $from <= $today && $to >= $today;
 	}
 
-	public static function limits(Retour|null $retour = null): array
+	public static function limits(): array
 	{
-		$retour ??= Retour::instance();
-		$log      = $retour->log();
+		$log = Retour::instance()->log();
 
 		return [
 			$log?->first()['date'] ?? null,
@@ -188,22 +187,16 @@ class Timespan
 		];
 	}
 
-	public static function query(): array
-	{
-		return App::instance()->request()->get(['from', 'to']);
-	}
-
 	public static function selection(): array
 	{
-		$query = static::normalize(static::query());
+		$kirby = App::instance();
+		$query = static::normalize($kirby->request()->get(['from', 'to']));
 
 		if ($query !== null) {
 			return static::set($query);
 		}
 
-		$session = App::instance()->session()->get('retour');
-
-		return static::normalize($session) ?? [
+		return static::normalize($kirby->session()->get('retour')) ?? [
 			'from' => date('Y-m-01'),
 			'to'   => date('Y-m-t')
 		];
