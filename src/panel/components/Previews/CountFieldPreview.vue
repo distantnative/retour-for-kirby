@@ -21,17 +21,12 @@ export default {
 				this.value,
 			);
 		},
-		last() {
-			if (this.row.last) {
-				return this.$library
-					.dayjs(this.row.last)
-					.format("D MMM YYYY, HH:mm:ss");
-			}
-
-			return "–";
-		},
 		title() {
-			return this.$t("retour.hits.last") + ": " + this.last;
+			const last = this.row.last
+				? this.$library.dayjs(this.row.last).format("D MMM YYYY, HH:mm:ss")
+				: "–";
+
+			return `${this.$t("retour.hits.last")}: ${last}`;
 		},
 	},
 };
