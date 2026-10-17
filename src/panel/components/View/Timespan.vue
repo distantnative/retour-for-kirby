@@ -98,26 +98,6 @@ export default {
 		this.$events.off("keydown.right", this.toNext);
 	},
 	methods: {
-		icon(unit) {
-			if (this.isCurrentUnit(unit) === true) {
-				return this.timespan.isCurrent ? "circle-focus" : "circle-nested";
-			}
-
-			return "circle";
-		},
-		isCurrentUnit(unit) {
-			return (
-				unit === this.timespan.unit || (unit === "all" && this.timespan.isAll)
-			);
-		},
-		label(unit) {
-			// Kirby has no translations for these units
-			if (unit === "all" || unit === "week") {
-				return this.$t(`retour.stats.mode.${unit}`);
-			}
-
-			return this.$t(unit);
-		},
 		link(timespan) {
 			if (timespan) {
 				const query = new URLSearchParams({
@@ -142,10 +122,20 @@ export default {
 			}
 		},
 		unit(unit) {
+			const current =
+				unit === this.timespan.unit || (unit === "all" && this.timespan.isAll);
+			let icon = "circle";
+
+			if (current) {
+				icon = this.timespan.isCurrent ? "circle-focus" : "circle-nested";
+			}
+
 			return {
-				text: this.label(unit),
-				icon: this.icon(unit),
-				current: this.isCurrentUnit(unit),
+				text: this.$t(
+					["all", "week"].includes(unit) ? `retour.stats.mode.${unit}` : unit,
+				),
+				icon,
+				current,
 				link: this.link(this.timespan.units[unit]),
 			};
 		},
