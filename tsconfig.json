@@ -9,7 +9,10 @@
 		"allowJs": true,
 		"isolatedModules": true,
 		"lib": ["ESNext", "DOM"],
-		"types": ["kirby-types/panel-globals"]
+		"types": ["kirby-types/panel-globals"],
+		"paths": {
+			"@test/*": ["./tests/*"]
+		}
 	},
-	"include": ["src/panel/**/*.ts"]
+	"include": ["src/panel/**/*.ts", "tests/panel/**/*.ts", "vitest.config.ts"]
 }
