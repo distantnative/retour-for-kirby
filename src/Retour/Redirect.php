@@ -16,29 +16,23 @@ use Kirby\Toolkit\Str;
  */
 class Redirect
 {
-	protected string|null $comment;
-	protected string|null $creator;
-	protected string $from;
-	protected string|null $modifier;
-	protected bool $priority;
-	protected int|null $status;
-	protected string|null $to;
-
-	public function __construct(array $data)
-	{
-		if (in_array($data['from'] ?? null, [null, ''], true) === true) {
+	/**
+	 * @throws InvalidArgumentException If the path is empty
+	 */
+	public function __construct(
+		protected string $from,
+		protected string|null $to = null,
+		protected int|null $status = null,
+		protected bool $priority = false,
+		protected string|null $comment = null,
+		protected string|null $creator = null,
+		protected string|null $modifier = null
+	) {
+		if ($from === '') {
 			throw new InvalidArgumentException(
-				message: 'Route requires path: ' . json_encode($data)
+				message: 'Route requires path'
 			);
 		}
-
-		$this->from     = $data['from'];
-		$this->to       = $data['to'] ?? null;
-		$this->status   = static::normalizeStatus($data['status'] ?? null);
-		$this->priority = Str::toType($data['priority'] ?? 'false', 'bool') === true;
-		$this->comment  = $data['comment'] ?? null;
-		$this->creator  = $data['creator'] ?? null;
-		$this->modifier = $data['modifier'] ?? null;
 	}
 
 	public function comment(): string|null
@@ -49,6 +43,26 @@ class Redirect
 	public function creator(): string|null
 	{
 		return $this->creator;
+	}
+
+	/**
+	 * Creates a redirect from config or form data, which can
+	 * have numbers as strings (or paths as numbers), `"true"`
+	 * for priority and `"disabled"` or `0` for no status code
+	 *
+	 * @throws InvalidArgumentException If the path is missing
+	 */
+	public static function factory(array $data): static
+	{
+		return new static(
+			from: $data['from'] ?? '',
+			to: $data['to'] ?? null,
+			status: static::normalizeStatus($data['status'] ?? null),
+			priority: Str::toType($data['priority'] ?? 'false', 'bool') === true,
+			comment: $data['comment'] ?? null,
+			creator: $data['creator'] ?? null,
+			modifier: $data['modifier'] ?? null
+		);
 	}
 
 	public function from(): string

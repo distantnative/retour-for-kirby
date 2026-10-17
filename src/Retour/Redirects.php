@@ -47,7 +47,7 @@ class Redirects extends Collection
 	 */
 	public function create(array $data): Redirect
 	{
-		$redirect = new Redirect($data);
+		$redirect = Redirect::factory($data);
 
 		static::validate($redirect);
 
@@ -78,7 +78,7 @@ class Redirects extends Collection
 		$redirects = new self($retour, []);
 
 		foreach ($config as $data) {
-			$redirect = new Redirect($data);
+			$redirect = Redirect::factory($data);
 			$redirects->append($redirect->id(), $redirect);
 		}
 
@@ -149,7 +149,7 @@ class Redirects extends Collection
 			$current  = $this->get($id) ?? throw new NotFoundException(
 				message: 'Redirect not found'
 			);
-			$redirect = new Redirect([...$current->toArray(), ...$data]);
+			$redirect = Redirect::factory([...$current->toArray(), ...$data]);
 
 			if ($redirect->id() !== $id && $this->has($redirect->id()) === true) {
 				throw new DuplicateException(

@@ -12,15 +12,14 @@ class Retour
 {
 	protected Config $config;
 	protected Ignores|null $ignores = null;
-	protected App $kirby;
 	protected Log|null $log = null;
 	protected Redirects $redirects;
 
 	protected static self|null $instance = null;
 
-	public function __construct(App|null $kirby = null)
-	{
-		$this->kirby  = $kirby ?? App::instance();
+	public function __construct(
+		protected App $kirby
+	) {
 		$this->config = new Config($this);
 
 		$this->redirects = Redirects::factory(
