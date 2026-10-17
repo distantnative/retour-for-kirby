@@ -9,6 +9,7 @@ use Kirby\Filesystem\F;
 use Kirby\Retour\Log\Migrations;
 use Kirby\Retour\Log\MigrationsTest;
 use PDO;
+use PDOException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Log::class)]
@@ -493,6 +494,32 @@ class LogTest extends TestCase
 		$this->assertTrue($log->purge());
 		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
 		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+	}
+
+	public function testReadErrors(): void
+	{
+		// loads core's table list before the lock, or the query fails with "Invalid table"
+		$log = $this->log();
+		$log->table();
+		$log->database()->connection()->setAttribute(PDO::ATTR_TIMEOUT, 0);
+
+		$lock = new PDO('sqlite:' . $this->tmp . '/test.sqlite');
+		$lock->exec('BEGIN EXCLUSIVE');
+
+		$reads = [
+			fn () => $log->fails('2020-01-01', '2020-12-31'),
+			fn () => $log->redirects('2020-01-01', '2020-12-31'),
+			fn () => $log->removeFailures(fn () => true),
+		];
+
+		foreach ($reads as $read) {
+			try {
+				$read();
+				$this->fail('The failed query did not throw');
+			} catch (PDOException $e) {
+				$this->assertStringContainsString('database is locked', $e->getMessage());
+			}
+		}
 	}
 
 	public function testRedirects(): void
