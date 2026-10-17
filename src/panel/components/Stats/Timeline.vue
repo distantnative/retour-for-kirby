@@ -141,8 +141,6 @@ export default {
 .k-retour-timeline {
 	/* the clip paths and the y-axis are positioned physically */
 	direction: ltr;
-	overflow-x: auto;
-	overflow-y: hidden;
 	padding-block-start: var(--spacing-8);
 	font-size: var(--text-xs);
 	line-height: 1;
