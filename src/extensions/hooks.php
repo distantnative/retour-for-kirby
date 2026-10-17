@@ -27,7 +27,7 @@ return [
 			$result = Router::execute(
 				$path,
 				$method,
-				$retour->redirects()->toRoutes(false)
+				$retour->redirects()->toRoutes($path, false)
 			);
 		} catch (Throwable) {
 			$result = null;
