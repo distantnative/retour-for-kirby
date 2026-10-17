@@ -281,7 +281,6 @@ class TimespanTest extends TestCase
 			'five-digit year' => [['from' => '2024-01-01', 'to' => '20000-01-01']],
 			'two-digit year' => [['from' => '24-01-01', 'to' => '2024-01-31']],
 			'too early'      => [['from' => '2018-12-31', 'to' => '2024-01-31']],
-			'too late'       => [['from' => '2024-01-01', 'to' => '2100-01-01']],
 			'overflow'       => [['from' => '2024-02-30', 'to' => '2024-03-31']],
 			'no padding'     => [['from' => '2024-1-1', 'to' => '2024-01-31']],
 			'with time'      => [['from' => '2024-01-01 00:00:00', 'to' => '2024-01-31']],
@@ -304,8 +303,16 @@ class TimespanTest extends TestCase
 
 	public function testSetLimits(): void
 	{
-		$data = ['from' => '2019-01-01', 'to' => '2099-12-31'];
+		$max  = date('Y-m-d', strtotime('+1 year'));
+		$data = ['from' => '2019-01-01', 'to' => $max];
 		$this->assertSame($data, Timespan::set($data));
+
+		// a year from today at the latest
+		$data = Timespan::set(['from' => '2024-01-01', 'to' => '9999-12-31']);
+		$this->assertSame(['from' => '2024-01-01', 'to' => $max], $data);
+
+		$data = Timespan::set(['from' => '2099-01-01', 'to' => '2099-12-31']);
+		$this->assertSame(['from' => $max, 'to' => $max], $data);
 	}
 
 	public static function stepProvider(): array
