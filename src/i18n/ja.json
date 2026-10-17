@@ -22,7 +22,7 @@
 	"retour.failures.path": "パス",
 	"retour.failures.referrer": "参照元",
 	"retour.failures.resolve": "リダイレクトとして追加",
-	"retour.failures.clear": "ログを消去",
+	"retour.failures.clear": "消去",
 	"retour.failures.clear.confirm": "ログを完全に削除してもよろしいですか？",
 	"retour.failures.clear.help": "エラーのみを削除すると、リダイレクトのヒット数の統計は保持されます。",
 	"retour.failures.clear.mode.all": "ログをすべて消去",

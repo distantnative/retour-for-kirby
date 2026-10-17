@@ -22,7 +22,7 @@
 	"retour.failures.path": "Ścieżka",
 	"retour.failures.referrer": "Źródło",
 	"retour.failures.resolve": "Dodaj jako przekierowanie",
-	"retour.failures.clear": "Wyczyść dziennik",
+	"retour.failures.clear": "Wyczyść",
 	"retour.failures.clear.confirm": "Czy na pewno chcesz trwale usunąć dziennik?",
 	"retour.failures.clear.help": "Usunięcie tylko błędów zachowa statystyki trafień Twoich przekierowań.",
 	"retour.failures.clear.mode.all": "Wyczyść cały dziennik",

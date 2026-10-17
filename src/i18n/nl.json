@@ -22,7 +22,7 @@
 	"retour.failures.path": "Pad",
 	"retour.failures.referrer": "Verwijzer",
 	"retour.failures.resolve": "Toevoegen als omleiding",
-	"retour.failures.clear": "Log wissen",
+	"retour.failures.clear": "Wissen",
 	"retour.failures.clear.confirm": "Weet je zeker dat je het logbestand permanent wilt verwijderen?",
 	"retour.failures.clear.help": "Als je alleen de mislukte omleidingen wist, blijven de hitstatistieken van je omleidingen behouden.",
 	"retour.failures.clear.mode.all": "Volledige log wissen",

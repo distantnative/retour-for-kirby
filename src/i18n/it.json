@@ -22,7 +22,7 @@
 	"retour.failures.path": "Percorso",
 	"retour.failures.referrer": "Provenienza",
 	"retour.failures.resolve": "Aggiungi come reindirizzamento",
-	"retour.failures.clear": "Svuota log",
+	"retour.failures.clear": "Svuota",
 	"retour.failures.clear.confirm": "Vuoi davvero eliminare definitivamente il log?",
 	"retour.failures.clear.help": "Eliminando solo gli errori, le statistiche degli accessi dei tuoi reindirizzamenti vengono mantenute.",
 	"retour.failures.clear.mode.all": "Svuota l'intero log",

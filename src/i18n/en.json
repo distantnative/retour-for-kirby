@@ -22,7 +22,7 @@
 	"retour.failures.path": "Path",
 	"retour.failures.referrer": "Referrer",
 	"retour.failures.resolve": "Add as redirect",
-	"retour.failures.clear": "Clear log",
+	"retour.failures.clear": "Clear",
 	"retour.failures.clear.confirm": "Do you really want to permanently delete the log?",
 	"retour.failures.clear.help": "Deleting only for failures will keep hits stats for your redirects.",
 	"retour.failures.clear.mode.all": "Clear the complete log",
