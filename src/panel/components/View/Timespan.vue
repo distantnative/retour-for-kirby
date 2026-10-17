@@ -38,30 +38,26 @@ export default {
 	computed: {
 		dropdown() {
 			return [
-				...this.units.map((unit) => {
-					if (!this.timespan.units[unit]) {
-						return;
-					}
-
-					return {
-						text: this.label(unit),
-						icon: this.icon(unit),
-						current: this.isCurrentUnit(unit),
-						link: this.link(this.timespan.units[unit]),
-					};
-				}),
+				...(this.timespan.units.all ? [this.unit("all"), "-"] : []),
+				this.unit("year"),
+				this.unit("month"),
+				this.unit("week"),
+				this.unit("day"),
+				{
+					text: this.$t("custom"),
+					icon: "calendar",
+					current:
+						this.timespan.isAll === false &&
+						["days", "months"].includes(this.timespan.unit),
+					click: () => this.$panel.dialog.open("retour/timespan"),
+				},
 				"-",
 				{
 					text: this.$t("today"),
 					icon: "merge",
 					link: this.link(this.timespan.units.today),
 				},
-				{
-					text: this.$t("custom"),
-					icon: "calendar",
-					click: () => this.$panel.dialog.open("retour/timespan"),
-				},
-			].filter(Boolean);
+			];
 		},
 		text() {
 			const { from, to, unit } = this.timespan;
@@ -82,9 +78,6 @@ export default {
 				numberingSystem: "latn",
 				timeZone: "UTC",
 			}).formatRange(new Date(from), new Date(to));
-		},
-		units() {
-			return ["all", "year", "month", "week", "day"];
 		},
 	},
 	methods: {
@@ -119,6 +112,14 @@ export default {
 			}
 
 			return null;
+		},
+		unit(unit) {
+			return {
+				text: this.label(unit),
+				icon: this.icon(unit),
+				current: this.isCurrentUnit(unit),
+				link: this.link(this.timespan.units[unit]),
+			};
 		},
 	},
 };
