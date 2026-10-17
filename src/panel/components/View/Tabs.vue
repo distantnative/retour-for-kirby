@@ -1,5 +1,5 @@
 <template>
-	<div class="k-retour-tabs" :data-end="tabs.length < 2">
+	<div class="k-retour-tabs">
 		<k-tabs :tab="tab" :tabs="tabs" />
 		<k-button-group>
 			<slot />
@@ -20,9 +20,6 @@ export default {
 .k-retour-tabs {
 	margin-bottom: var(--spacing-6);
 }
-.k-retour-tabs[data-end="true"] {
-	justify-content: end;
-}
 .k-retour-tabs .k-tabs {
 	flex-grow: 1;
 	margin-bottom: 0;
@@ -30,6 +27,7 @@ export default {
 
 .k-retour-tabs > .k-button-group {
 	flex-wrap: nowrap;
+	margin-inline-start: auto;
 }
 
 @container (max-width: 30rem) {
@@ -43,7 +41,6 @@ export default {
 @container (min-width: 30rem) {
 	.k-retour-tabs {
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
 	}
 }
