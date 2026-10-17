@@ -160,6 +160,65 @@ class RoutesTest extends TestCase
 		}
 	}
 
+	public static function languageProvider(): array
+	{
+		return [
+			'prefixed default' => [null, ['de/old' => '/de/target', 'en/old' => '/en/target-en']],
+			'default at root'  => ['/', ['old' => '/target', 'en/old' => '/en/target-en']],
+		];
+	}
+
+	/**
+	 * Visitors stay in the language of the path,
+	 * also with priority before Kirby's language routes
+	 */
+	#[DataProvider('languageProvider')]
+	public function testRenderRedirectsInLanguageOfPath(string|null $url, array $paths): void
+	{
+		foreach ([true, false] as $priority) {
+			Data::write($file = $this->tmp . '/retour.yml', [
+				'redirects' => array_map(fn (string $from) => [
+					'from'     => $from,
+					'to'       => 'page://target',
+					'status'   => 301,
+					'priority' => $priority
+				], array_keys($paths))
+			]);
+
+			Retour::reset();
+
+			$app = $this->kirby->clone([
+				'options' => [
+					'distantnative.retour.config' => $file,
+					'distantnative.retour.logs'   => false
+				],
+				'urls' => [
+					'index' => 'https://example.com'
+				],
+				'languages' => [
+					['code' => 'de', 'default' => true, 'url' => $url],
+					['code' => 'en']
+				],
+				'site' => [
+					'children' => [
+						[
+							'slug'         => 'target',
+							'translations' => [
+								['code' => 'de', 'content' => ['uuid' => 'target']],
+								['code' => 'en', 'slug' => 'target-en']
+							]
+						]
+					]
+				]
+			]);
+
+			foreach ($paths as $path => $to) {
+				$response = $app->render($path);
+				$this->assertSame('https://example.com' . $to, $response->header('Location'), $path . ($priority === true ? ' with priority' : ''));
+			}
+		}
+	}
+
 	public function testRenderRedirectsToDeletedPage(): void
 	{
 		Data::write($file = $this->tmp . '/retour.yml', [

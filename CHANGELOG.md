@@ -23,6 +23,7 @@ Retour 6 is rebuilt for Kirby 6: less noise from bots and scanners, a faster and
 
 - A `retour.yml` that can't be parsed is no longer replaced with an empty list on the next save (redirects are off and the Panel shows the error until it's fixed). Saving also rejects invalid path patterns, status codes and duplicate paths, and no longer interferes with requests or changes made at the same time.
 - Redirects answer HEAD requests (without logging them), no longer show or target drafts, resolve targets that aren't pages against the site URL and pass query strings on unchanged. Missing targets show the error page and are logged as failure.
+- Multi-language sites: redirects with priority keep visitors in the language of the path, like the ones without
 - Logging: one invalid `ignore` pattern no longer breaks the others, very long paths and referrers are cut off at 1024 characters, and removing a failure keeps the redirect hits of its path
 - Stats: custom timespans show every month, count only their own records and move by their own length, and the timeline marks the current time by the server's clock and handles daylight saving time, right-to-left languages and narrow screens
 - Tables: failures and redirects with slashes, `~`, `!`, `*` or `'` in their path can be opened, edited, resolved and removed. Filtering, sorting and pagination are more reliable, and numbers and dates follow the Panel's language. Fixed the links of some logged paths and referrers.
