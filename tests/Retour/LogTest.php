@@ -16,7 +16,7 @@ class LogTest extends TestCase
 {
 	protected function fill(Log $log, int $count, string $time): void
 	{
-		$date       = date('Y-m-d H:i:s', strtotime($time));
+		$date       = Log::timestamp(date('Y-m-d H:i:s', strtotime($time)));
 		$connection = $log->database()->connection();
 		$insert     = $connection->prepare('INSERT INTO records (date, path) VALUES (?, ?)');
 
@@ -90,7 +90,7 @@ class LogTest extends TestCase
 
 		$results = $log->table()->fetch('array')->all();
 		$this->assertSame(2, $results->count());
-		$this->assertSame($date, $results->first()['date']);
+		$this->assertSame($date, $log->first()['date']);
 		$this->assertSame($path, $results->first()['path']);
 		$this->assertSame($redirect, $results->first()['redirect']);
 	}
@@ -568,8 +568,10 @@ class LogTest extends TestCase
 
 	public function testStats(): void
 	{
-		$file = __DIR__ . '/fixtures/sample.sqlite';
-		$log  = $this->log($file);
+		// a log of an earlier version with dates as text
+		F::copy(__DIR__ . '/fixtures/sample.sqlite', $file = $this->tmp . '/sample.sqlite');
+		$log = $this->log($file);
+		$log->migrate();
 
 		// Year
 		$stats = $log->stats('year', '2019-01-01', '2019-12-31');
@@ -662,6 +664,23 @@ class LogTest extends TestCase
 		foreach (['days', 'month', 'months'] as $unit) {
 			$stats = $log->stats($unit, '2024-01-01', '2024-01-10');
 			$this->assertSame(1, array_sum(array_column($stats, 'failed')), $unit);
+		}
+	}
+
+	public function testTimestamp(): void
+	{
+		$this->assertSame(1577863800, Log::timestamp('2020-01-01 07:30:00'));
+		$this->assertSame(1577836800, Log::timestamp('2020-01-01'));
+
+		// the local time as if it was UTC, no matter the timezone
+		$timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Berlin');
+
+		try {
+			$this->assertSame(1577863800, Log::timestamp('2020-01-01 07:30:00'));
+			$this->assertSame('2020-01-01 07:30:00', gmdate('Y-m-d H:i:s', Log::timestamp('2020-01-01 07:30:00')));
+		} finally {
+			date_default_timezone_set($timezone);
 		}
 	}
 }

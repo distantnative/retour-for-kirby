@@ -19,7 +19,8 @@ use Throwable;
 
 /**
  * Reads and writes to the database log
- * for all 404 requests or successful redirects
+ * for all 404 requests or successful redirects;
+ * dates are stored as integers (see `timestamp()`)
  */
 class Log
 {
@@ -72,7 +73,7 @@ class Log
 		return $this->database->execute(
 			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
 			[
-				'date'     => $props['date'] ?? date('Y-m-d H:i:s'),
+				'date'     => static::timestamp($props['date'] ?? date('Y-m-d H:i:s')),
 				'path'     => Str::substr($props['path'], 0, static::MAX_LENGTH),
 				'referrer' => $referrer,
 				'redirect' => $props['redirect'] ?? null
@@ -89,8 +90,8 @@ class Log
 	protected function between(string $from, string $to): Query
 	{
 		return $this->table()
-			->where('date >= :start', ['start' => $from . ' 00:00:00'])
-			->andWhere('date <= :end', ['end' => $to . ' 23:59:59']);
+			->where('date >= :start', ['start' => static::timestamp($from)])
+			->andWhere('date <= :end', ['end' => static::timestamp($to . ' 23:59:59')]);
 	}
 
 	/**
@@ -143,11 +144,11 @@ class Log
 			->select('
                 path,
                 referrer,
-                MAX(date) AS last,
+                datetime(MAX(date), \'unixepoch\') AS last,
                 COUNT(*) AS hits
             ')
-			->where($date . ' >= :start', ['start' => $from . ' 00:00:00'])
-			->andWhere($date . ' <= :end', ['end' => $to . ' 23:59:59'])
+			->where($date . ' >= :start', ['start' => static::timestamp($from)])
+			->andWhere($date . ' <= :end', ['end' => static::timestamp($to . ' 23:59:59')])
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')
@@ -229,7 +230,7 @@ class Log
 				return false;
 			}
 
-			$cutoff = date('Y-m-d 00:00:00', $time);
+			$cutoff = static::timestamp(date('Y-m-d', $time));
 
 			/** @var Query $table */
 			$table = $this->table()->bindings(['cutoff' => $cutoff]);
@@ -274,7 +275,7 @@ class Log
 			->select('
                 redirect,
                 COUNT(*) AS hits,
-                MAX(date) AS last
+                datetime(MAX(date), \'unixepoch\') AS last
             ')
 			->andWhere('redirect IS NOT NULL')
 			->group('redirect')
@@ -372,7 +373,7 @@ class Log
 			return [];
 		}
 
-		return $result;
+		return ['date' => gmdate('Y-m-d H:i:s', (int)$result['date'])];
 	}
 
 	/**
@@ -407,8 +408,8 @@ class Log
 		$utc  = new DateTimeZone('UTC');
 		$date = new DateTimeImmutable($from, $utc);
 		$last = new DateTimeImmutable($to . ' 23:59:59', $utc);
-		$min  = $date->format('Y-m-d H:i:s');
-		$max  = $last->modify('+1 second')->format('Y-m-d H:i:s');
+		$min  = $date->getTimestamp();
+		$max  = $last->getTimestamp() + 1;
 		$last = $last->format($format);
 
 		// Start months on their first day, as adding
@@ -424,8 +425,8 @@ class Log
 
 			// the first and last step only cover the timespan
 			$query->execute([
-				'start' => max($date->format('Y-m-d H:i:s'), $min),
-				'end'   => min($next->format('Y-m-d H:i:s'), $max)
+				'start' => max($date->getTimestamp(), $min),
+				'end'   => min($next->getTimestamp(), $max)
 			]);
 
 			$counts = $query->fetch(PDO::FETCH_ASSOC);
@@ -446,5 +447,15 @@ class Log
 	public function table(): Query
 	{
 		return $this->database->records();
+	}
+
+	/**
+	 * Returns the integer stored for a date: the seconds since
+	 * 1970 of its local time as if it was UTC, which keeps the
+	 * local time like the text of earlier versions in less space
+	 */
+	public static function timestamp(string $date): int
+	{
+		return (new DateTimeImmutable($date, new DateTimeZone('UTC')))->getTimestamp();
 	}
 }

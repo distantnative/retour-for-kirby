@@ -4,6 +4,7 @@ namespace Kirby\Retour\Commands;
 
 use Kirby\CLI\CLI;
 use Kirby\CLI\Command;
+use Kirby\Retour\Log;
 use Kirby\Retour\Redirect;
 use Kirby\Retour\Retour;
 use Kirby\Toolkit\Str;
@@ -83,7 +84,7 @@ class Seed extends Command
 			}
 
 			$insert->execute([
-				date('Y-m-d H:i:s', $time),
+				Log::timestamp(date('Y-m-d H:i:s', $time)),
 				$path,
 				$random->nextFloat() < 0.3 ? static::pick($random, $referrers) : null,
 				$redirect,
