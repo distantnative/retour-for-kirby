@@ -27,16 +27,21 @@ class Migrations
 	 */
 	protected const VERSIONS = [
 		1 => [
+			// earlier versions stored dates as text; new logs
+			// start with the same table to share the next steps
 			'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date TEXT NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
-			'CREATE INDEX IF NOT EXISTS idx_date ON records (date)',
+			// dates as integers (see `Log::timestamp()`), which
+			// needs a new table as columns can't change their type
+			'CREATE TABLE records_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date INTEGER NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
+			"INSERT INTO records_new SELECT id, CAST(strftime('%s', date) AS INTEGER), path, referrer, redirect, wasResolved FROM records",
+			// also drops all indices of earlier versions
+			'DROP TABLE records',
+			'ALTER TABLE records_new RENAME TO records',
+			'CREATE INDEX idx_date ON records (date)',
 			// only for redirect hits, failures don't need it
-			'DROP INDEX IF EXISTS idx_redirect_date',
 			'CREATE INDEX idx_redirect_date ON records (redirect, date) WHERE redirect IS NOT NULL',
 			// groups the failures and finds them by path
-			'CREATE INDEX IF NOT EXISTS idx_failures ON records (path, referrer, date, wasResolved) WHERE redirect IS NULL',
-			// unused indices of earlier versions
-			'DROP INDEX IF EXISTS idx_fails',
-			'DROP INDEX IF EXISTS idx_path',
+			'CREATE INDEX idx_failures ON records (path, referrer, date, wasResolved) WHERE redirect IS NULL',
 		]
 	];
 

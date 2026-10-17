@@ -79,7 +79,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Logging a request and ignoring a path each take a single database statement
 - Stats count each hour, day or month with an indexed range query
 - Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time
-- Smaller log database: the index for redirect hits no longer includes failures
+- Smaller log database: dates are stored as numbers and the index for redirect hits no longer includes failures (96 MB instead of 133 MB at 1M records, including the new index for failures)
 - A new index for failures: removing, resolving or ignoring failures no longer scans the whole log (0.1 ms instead of 47 ms at 1M records)
 - The tables are paginated, sorted and filtered on the server. With 1M log records, two years of failures load in 0.3 s instead of 0.7 s, with 4 KB instead of 30 MB of data, and no longer exceed PHP's memory limit (2 MB instead of 300 MB).
 

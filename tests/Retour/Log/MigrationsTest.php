@@ -79,8 +79,15 @@ class MigrationsTest extends TestCase
 		$this->assertStringEndsWith('WHERE redirect IS NOT NULL', $schema['indices']['idx_redirect_date']);
 		$this->assertSame(['idx_date' => '1000000 1', 'idx_redirect_date' => '400000 8000 1'], $schema['statistics']);
 
-		// records are kept
+		// records are kept, their dates as integers
 		$this->assertSame(['bar', 'foo'], $log->table()->select('path')->order('path ASC')->fetch('array')->all()->pluck('path'));
+		$this->assertSame(['integer'], $log->table()->select('DISTINCT typeof(date) AS type')->fetch('array')->all()->pluck('type'));
+		$this->assertSame('2025-01-01 10:00:00', $log->first()['date']);
+		$this->assertSame('2025-01-02 10:00:00', $log->last()['date']);
+
+		// new records continue the ids
+		$log->add(['path' => 'baz']);
+		$this->assertSame(3, (int)$log->database()->lastId());
 
 		// nothing left to do
 		$this->assertTrue($migrations->run());
