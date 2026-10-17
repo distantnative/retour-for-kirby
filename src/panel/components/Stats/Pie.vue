@@ -1,10 +1,12 @@
 <template>
 	<figure class="k-retour-pie">
-		<div class="k-retour-pie-graph" :style="styles" />
-		<p>
-			<strong>{{ formatter.format(total) }}</strong>
-			{{ $t("retour.stats.requests") }}
-		</p>
+		<div class="k-retour-pie-chart">
+			<div class="k-retour-pie-graph" :style="styles" />
+			<p>
+				<strong>{{ formatter.format(total) }}</strong>
+				{{ $t("retour.stats.requests") }}
+			</p>
+		</div>
 
 		<figcaption>
 			<p v-for="segment in data" :key="segment.label">
@@ -50,13 +52,17 @@ export default {
 }
 
 .k-retour-pie {
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	container-type: inline-size;
 }
 
+/* the half ring with the total inside */
+.k-retour-pie-chart {
+	position: relative;
+	align-self: stretch;
+}
 /* a half ring, darker towards the inside
    like the timeline towards the bottom */
 .k-retour-pie-graph {
@@ -100,7 +106,7 @@ export default {
 }
 
 /* the total inside the half ring */
-.k-retour-pie > p {
+.k-retour-pie-chart > p {
 	position: absolute;
 	inset-inline: 0;
 	top: 0;
@@ -114,7 +120,7 @@ export default {
 	line-height: 1.1;
 	color: var(--color-gray-500);
 }
-.k-retour-pie > p strong {
+.k-retour-pie-chart > p strong {
 	font-size: var(--text-3xl);
 	font-weight: var(--font-bold);
 	color: var(--color-white);

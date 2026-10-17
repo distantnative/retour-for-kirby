@@ -68,31 +68,46 @@ export default {
 		var(--color-gray-950)
 	);
 
-	padding-block: var(--spacing-3) var(--spacing-8);
-	padding-inline: var(--spacing-6) var(--spacing-3);
 	color: var(--color-white);
-	background: var(--retour-stats-color-back);
-	border-radius: var(--rounded-lg);
 	margin-bottom: var(--spacing-6);
 }
 
+/* stacked in one box, the totals without the ring */
 @container main (max-width: 40rem) {
 	.k-retour-stats {
 		display: flex;
 		flex-direction: column;
-		padding-block: var(--spacing-6);
+		padding: var(--spacing-6) var(--spacing-3) var(--spacing-6) var(--spacing-6);
+		background: var(--retour-stats-color-back);
+		border-radius: var(--rounded-lg);
 	}
-	.k-retour-stats :is(.k-retour-pie-graph, .k-retour-pie > p) {
+	.k-retour-stats .k-retour-pie-chart {
 		display: none;
 	}
 }
 
+/* side by side, each in its own box */
 @container main (min-width: 40rem) {
 	.k-retour-stats {
 		display: grid;
-		align-items: center;
-		grid-template-columns: 16rem auto;
-		column-gap: var(--spacing-12);
+		grid-template-columns: calc(16rem + 2 * var(--spacing-6)) 1fr;
+		gap: var(--spacing-3);
+	}
+	.k-retour-stats > * {
+		background: var(--retour-stats-color-back);
+		border-radius: var(--rounded-lg);
+	}
+	.k-retour-stats > .k-retour-pie {
+		justify-content: center;
+		padding: var(--spacing-6);
+	}
+	/* evens out the space below the ring and below the legend */
+	.k-retour-stats .k-retour-pie figcaption {
+		translate: 0 var(--spacing-2);
+	}
+	.k-retour-stats > .k-retour-timeline {
+		padding-inline: var(--spacing-4) var(--spacing-3);
+		padding-bottom: var(--spacing-4);
 	}
 }
 </style>
