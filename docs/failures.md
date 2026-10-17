@@ -90,6 +90,6 @@ Depending on your use case, you might want to clear the logs from time to time. 
 
 ![Clear the log](/clear.webp)
 
-Or automatically via the [`deleteAfter` option](/options#config), which removes all entries older than the given number of months (by default 12). Retour checks for outdated entries from time to time when someone opens it in the Panel.
+Or automatically via the [`deleteAfter` option](/options#config), which removes all entries older than the given number of months (by default 12). Retour deletes outdated entries from time to time while logging requests and when someone opens it in the Panel.
 
 To remove a single failure from the log, choose `Remove` in the options of its table row.

@@ -81,7 +81,7 @@ class Log
 
 		// unlike the query builder, a plain statement doesn't need
 		// to look up the table schema first (on every request)
-		return $this->database->execute(
+		$added = $this->database->execute(
 			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
 			[
 				'date'     => static::timestamp($props['date'] ?? date('Y-m-d H:i:s')),
@@ -90,6 +90,15 @@ class Log
 				'redirect' => $redirect
 			]
 		);
+
+		// every 1,000th record also purges outdated ones, so the log
+		// doesn't grow even if nobody opens the Panel; up to 10 times
+		// as many as are added, which takes less than 0.1 s
+		if ($added === true && $this->database->lastId() % 1000 === 0) {
+			$this->purge(limit: 10000);
+		}
+
+		return $added;
 	}
 
 	/**
@@ -228,28 +237,37 @@ class Log
 	}
 
 	/**
-	 * Deletes entries older than the `deleteAfter` option (in months)
+	 * Deletes entries older than the `deleteAfter` option (in months);
+	 * with a limit, only that many of the oldest and without rebuilding
+	 * the file (new records reuse their space), e.g. while logging
 	 */
-	public function purge(): bool
+	public function purge(int|null $limit = null): bool
 	{
-		$limit = $this->retour->option('deleteAfter');
+		$months = $this->retour->option('deleteAfter');
 
-		if ($limit !== false) {
-			$time = strtotime('-' . $limit . ' month');
-
-			if ($time === false) {
-				return false;
-			}
-
-			$cutoff = static::timestamp(date('Y-m-d', $time));
-
-			/** @var Query $table */
-			$table = $this->table()->bindings(['cutoff' => $cutoff]);
-
-			return $table->delete('date < :cutoff') && $this->reclaim();
+		if ($months === false) {
+			return true;
 		}
 
-		return true;
+		$time = strtotime('-' . $months . ' month');
+
+		if ($time === false) {
+			return false;
+		}
+
+		$cutoff = static::timestamp(date('Y-m-d', $time));
+
+		if ($limit !== null) {
+			return $this->database->execute(
+				'DELETE FROM records WHERE id IN (SELECT id FROM records WHERE date < :cutoff LIMIT :limit)',
+				['cutoff' => $cutoff, 'limit' => $limit]
+			);
+		}
+
+		/** @var Query $table */
+		$table = $this->table()->bindings(['cutoff' => $cutoff]);
+
+		return $table->delete('date < :cutoff') && $this->reclaim();
 	}
 
 	/**
