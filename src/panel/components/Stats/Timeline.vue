@@ -111,6 +111,9 @@ export default {
 				to: date.endOf(this.subunit).format("YYYY-MM-DD"),
 			});
 
+			// another timespan starts on the first page
+			query.delete("page");
+
 			return `/${this.$panel.view.path}?${query}`;
 		},
 		now(label) {

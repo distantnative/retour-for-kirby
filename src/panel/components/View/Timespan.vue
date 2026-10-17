@@ -107,6 +107,9 @@ export default {
 					...timespan,
 				});
 
+				// another timespan starts on the first page
+				query.delete("page");
+
 				return `/${this.$panel.view.path}?${query}`;
 			}
 
