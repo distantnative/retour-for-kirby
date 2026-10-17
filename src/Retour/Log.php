@@ -154,7 +154,8 @@ class Log
 				'path'  => 'path ' . $direction . ', referrer ' . $direction,
 				default => $column . ' ' . $direction . ', path, referrer'
 			})
-			->fetch('array');
+			->fetch('array')
+			->fail();
 
 		if ($searchterm !== null) {
 			$query->andWhere(
@@ -268,6 +269,7 @@ class Log
 			->andWhere('redirect IS NOT NULL')
 			->group('redirect')
 			->fetch('array')
+			->fail()
 			->all();
 
 		$redirects = [];
@@ -303,6 +305,7 @@ class Log
 			->distinct()
 			->where('redirect IS NULL')
 			->fetch('array')
+			->fail()
 			->all()
 			->pluck('path');
 
