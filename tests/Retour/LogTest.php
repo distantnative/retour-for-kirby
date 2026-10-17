@@ -8,6 +8,7 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
 use Kirby\Retour\Log\Migrations;
 use Kirby\Retour\Log\MigrationsTest;
+use PDO;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(Log::class)]
@@ -54,6 +55,19 @@ class LogTest extends TestCase
 			'total' => (int)$connection->query('PRAGMA page_count')->fetchColumn(),
 			'free'  => (int)$connection->query('PRAGMA freelist_count')->fetchColumn()
 		];
+	}
+
+	/**
+	 * Returns how SQLite runs the last query of the log
+	 */
+	protected function plan(Log $log): string
+	{
+		$trace = $log->database()->trace();
+		$query = end($trace);
+		$plan  = $log->database()->connection()->prepare('EXPLAIN QUERY PLAN ' . $query['query']);
+		$plan->execute($query['bindings']);
+
+		return implode("\n", $plan->fetchAll(PDO::FETCH_COLUMN, 3));
 	}
 
 	public function testAdd(): void
@@ -242,9 +256,23 @@ class LogTest extends TestCase
 		);
 
 		$this->assertSame(
-			['idx_date', 'idx_redirect_date'],
+			['idx_date', 'idx_failures', 'idx_redirect_date'],
 			array_column($indices->toArray(), 'name')
 		);
+	}
+
+	public function testIndicesForFailures(): void
+	{
+		$log = $this->log();
+
+		$log->fails('2020-01-01', '2020-12-31');
+		$this->assertSame('SCAN records USING INDEX idx_failures', $this->plan($log));
+
+		$log->remove('foo');
+		$this->assertSame('SEARCH records USING INDEX idx_failures (path=?)', $this->plan($log));
+
+		$log->resolve('foo');
+		$this->assertSame('SEARCH records USING INDEX idx_failures (path=?)', $this->plan($log));
 	}
 
 	public function testMigrate(): void

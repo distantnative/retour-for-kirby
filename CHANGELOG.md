@@ -78,6 +78,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Stats count each hour, day or month with an indexed range query
 - Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time
 - Smaller log database: the index for redirect hits no longer includes failures
+- A new index for failures: removing, resolving or ignoring failures no longer scans the whole log (0.1 ms instead of 47 ms at 1M records), and the failures of long timespans load 2–4× faster
 - Filtering large tables in the Panel is much faster and lighter (40 ms instead of 530 ms at 100,000 failures)
 
 ### Housekeeping
