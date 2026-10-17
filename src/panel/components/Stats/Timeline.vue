@@ -136,7 +136,6 @@ export default {
 	direction: ltr;
 	padding-block-start: var(--spacing-8);
 	font-size: var(--text-xs);
-	line-height: 1;
 	color: var(--color-gray-500);
 }
 .k-retour-timeline > div {
@@ -162,7 +161,7 @@ export default {
 	align-self: start;
 	padding-inline-end: var(--spacing-3);
 	text-align: end;
-	transform: translateY(-50%);
+	translate: 0 -50%;
 	white-space: nowrap;
 }
 .k-retour-timeline li::after {
@@ -197,25 +196,23 @@ export default {
 		)
 		bottom / 1px 1px repeat-x;
 }
-.k-retour-timeline nav .k-link {
+.k-retour-timeline .k-link {
 	position: relative;
 	flex: 1 1 0;
-	/* keeps the labels from widening their columns */
-	width: 0;
 	background: linear-gradient(var(--color-gray-800) 33%, transparent 0%) left /
 		1px 3px repeat-y;
 	outline: 0;
 }
-.k-retour-timeline nav .k-link:is(:first-child, :last-child) {
+.k-retour-timeline .k-link:is(:first-child, :last-child) {
 	background: none;
 }
-.k-retour-timeline nav .k-link:last-child {
+.k-retour-timeline .k-link:last-child {
 	flex-grow: 0;
 }
 .k-retour-timeline .k-link > span {
 	position: absolute;
 	top: calc(100% + var(--spacing-2));
-	transform: translateX(-50%);
+	translate: -50%;
 	white-space: nowrap;
 }
 .k-retour-timeline .k-link:focus-visible > span {
