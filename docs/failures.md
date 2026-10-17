@@ -93,3 +93,7 @@ Depending on your use case, you might want to clear the logs from time to time. 
 Or automatically via the [`deleteAfter` option](/options#config), which removes all entries older than the given number of months (by default 12). Retour deletes outdated entries from time to time while logging requests and when someone opens it in the Panel.
 
 To remove a single failure from the log, choose `Remove` in the options of its table row.
+
+### Log size
+
+Retour only logs failed requests and redirects, each takes about 90 bytes. A site with 10,000 of them a day ends up with a log of about 320 MB after a year. On high-traffic sites, set a lower [`deleteAfter`](/options#config) or [ignore](#ignore-failures) the paths that bots scan to keep it smaller.
