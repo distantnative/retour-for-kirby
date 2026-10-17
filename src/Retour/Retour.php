@@ -25,7 +25,7 @@ class Retour
 
 		$this->redirects = Redirects::factory(
 			$this,
-			$this->config->data('redirects') ?? []
+			$this->config->get('redirects') ?? []
 		);
 	}
 
@@ -39,26 +39,9 @@ class Retour
 		return $this->option('logs') !== false;
 	}
 
-	/**
-	 * Returns if the path should not be logged as failure
-	 */
-	public function ignore(string $path): bool
-	{
-		return $this->ignores()->matches($path);
-	}
-
 	public function ignores(): Ignores
 	{
 		return $this->ignores ??= new Ignores($this);
-	}
-
-	/**
-	 * Returns if requests from the visitor's IP address
-	 * should not be logged, neither as failure nor as redirect hit
-	 */
-	public function ignoreVisitor(): bool
-	{
-		return $this->ignores()->matchesIp($this->kirby->visitor()->ip());
 	}
 
 	/**

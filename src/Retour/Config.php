@@ -22,15 +22,6 @@ class Config
 		$this->read();
 	}
 
-	public function data(string|null $key = null): mixed
-	{
-		if ($key === null) {
-			return $this->data;
-		}
-
-		return $this->data[$key] ?? null;
-	}
-
 	/**
 	 * @throws LogicException If the contents cannot be parsed
 	 */
@@ -58,15 +49,9 @@ class Config
 		return $this->error;
 	}
 
-	public function file(): string
+	public function get(string $key): mixed
 	{
-		$file = $this->retour->option('config');
-
-		if ($file instanceof Closure) {
-			$file = $file();
-		}
-
-		return $file;
+		return $this->data[$key] ?? null;
 	}
 
 	/**
@@ -140,7 +125,7 @@ class Config
 	 */
 	public function read(): array
 	{
-		$file        = $this->file();
+		$file        = $this->root();
 		$this->error = null;
 
 		if (F::exists($file) === false) {
@@ -155,30 +140,41 @@ class Config
 		}
 	}
 
+	public function root(): string
+	{
+		$root = $this->retour->option('config');
+
+		if ($root instanceof Closure) {
+			$root = $root();
+		}
+
+		return $root;
+	}
+
 	/**
-	 * Updates the config file under an exclusive lock, based on its
-	 * current contents: concurrent changes of other keys are kept and
-	 * a file that cannot be parsed (anymore) is never overwritten
+	 * Merges the keys into the config file, or replaces its data
+	 * with what the closure returns for the current data; under an
+	 * exclusive lock, so concurrent changes are kept, and a file that
+	 * cannot be parsed (anymore) is never overwritten
 	 *
+	 * @param array|Closure(array $data): array $data
 	 * @throws LogicException If the config file could not be read or written
 	 */
-	public function write(
-		string|array $key,
-		mixed $value = null
-	): array {
-		$file = $this->file();
-		$data = [];
+	public function update(array|Closure $data): array
+	{
+		$file = $this->root();
+		$new  = [];
 
-		$updated = F::update($file, function (string $contents) use ($file, $key, $value, &$data): string {
-			$data = static::decode($contents, $file);
+		$updated = F::update($file, function (string $contents) use ($file, $data, &$new): string {
+			$current = static::decode($contents, $file);
 
-			if (is_array($key) === true) {
-				$data = array_merge($data, $key);
+			if ($data instanceof Closure) {
+				$new = $data($current);
 			} else {
-				$data[$key] = $value;
+				$new = [...$current, ...$data];
 			}
 
-			return Data::encode($data, F::extension($file));
+			return Data::encode($new, F::extension($file));
 		});
 
 		if ($updated === false) {
@@ -190,6 +186,6 @@ class Config
 		}
 
 		$this->error = null;
-		return $this->data = $data;
+		return $this->data = $new;
 	}
 }

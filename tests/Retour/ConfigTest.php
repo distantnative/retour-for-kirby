@@ -38,7 +38,7 @@ class ConfigTest extends TestCase
 		$entry  = $this->entry($file);
 
 		$this->assertSame(hash('xxh128', static::VALID), $entry['hash']);
-		$this->assertSame($config->data(), $entry['data']);
+		$this->assertSame($config->get('redirects'), $entry['data']['redirects']);
 
 		// unchanged contents are not parsed again
 		$cache = Retour::instance()->kirby()->cache('distantnative.retour');
@@ -51,7 +51,7 @@ class ConfigTest extends TestCase
 		F::write($file = $this->tmp . '/retour.yml', static::VALID);
 		$config = $this->config($file, ['distantnative.retour.cache' => false]);
 
-		$this->assertSame('bar', $config->data('redirects')[0]['to']);
+		$this->assertSame('bar', $config->get('redirects')[0]['to']);
 		$this->assertNull($this->entry($file));
 	}
 
@@ -92,7 +92,7 @@ class ConfigTest extends TestCase
 	{
 		F::write($file = $this->tmp . '/retour.yml', static::VALID);
 		$config = $this->config($file);
-		$config->write('ignore', ['foo']);
+		$config->update(['ignore' => ['foo']]);
 
 		$data = $config->read();
 		$this->assertSame(['foo'], $data['ignore']);
@@ -100,48 +100,11 @@ class ConfigTest extends TestCase
 		$this->assertSame($data, $this->entry($file)['data']);
 	}
 
-	public function testData(): void
+	public function testGet(): void
 	{
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => $file = __DIR__ . '/fixtures/redirects.yml'
-			]
-		]);
-		$config = Retour::instance($app)->config();
-		$data   = $config->data();
-		$this->assertCount(3, $data['redirects']);
-		$this->assertCount(3, $config->data('redirects'));
-	}
-
-	public function testFile(): void
-	{
-		$config = Retour::instance()->config();
-		$this->assertSame($this->tmp . '/site/config/retour.yml', $config->file());
-
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => $file = $this->tmp . '/meow.json'
-			]
-		]);
-		$config = Retour::instance($app)->config();
-		$this->assertSame($file, $config->file());
-
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => fn () => $file
-			]
-		]);
-		$config = Retour::instance($app)->config();
-		$this->assertSame($file, $config->file());
-
-		// paths that happen to be function names are not called
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => 'phpversion'
-			]
-		]);
-		$config = Retour::instance($app)->config();
-		$this->assertSame('phpversion', $config->file());
+		$config = $this->config(__DIR__ . '/fixtures/redirects.yml');
+		$this->assertCount(3, $config->get('redirects'));
+		$this->assertNull($config->get('ignore'));
 	}
 
 	public function testReadInvalidFile(): void
@@ -158,13 +121,13 @@ class ConfigTest extends TestCase
 
 		// the site keeps running without redirects
 		$config = Retour::instance($app)->config();
-		$this->assertSame([], $config->data());
+		$this->assertNull($config->get('redirects'));
 		$this->assertInstanceOf(LogicException::class, $config->error());
 		$this->assertInstanceOf(ParseException::class, $config->error()->getPrevious());
 
 		// but the file must not be overwritten
 		try {
-			$config->write('ignore', ['foo']);
+			$config->update(['ignore' => ['foo']]);
 			$this->fail('Writing an unreadable config file must fail');
 		} catch (LogicException) {
 			$this->assertSame($content, F::read($file));
@@ -197,7 +160,7 @@ class ConfigTest extends TestCase
 
 		$config = Retour::instance($app)->config();
 		$this->assertSame([], $config->read());
-		$this->assertSame([], $config->data());
+		$this->assertNull($config->get('redirects'));
 	}
 
 	public function testReadUnreadableFile(): void
@@ -217,34 +180,62 @@ class ConfigTest extends TestCase
 
 		try {
 			$config = Retour::instance($app)->config();
-			$this->assertSame([], $config->data());
+			$this->assertNull($config->get('redirects'));
 			$this->assertInstanceOf(LogicException::class, $config->error());
 		} finally {
 			chmod($file, 0644);
 		}
 	}
 
-	public function testWrite(): void
+	public function testRoot(): void
 	{
+		$config = Retour::instance()->config();
+		$this->assertSame($this->tmp . '/site/config/retour.yml', $config->root());
+
 		$app = $this->kirby->clone([
 			'options' => [
-				'distantnative.retour.config' => $file = $this->tmp . '/test.yml'
+				'distantnative.retour.config' => $file = $this->tmp . '/meow.json'
 			]
 		]);
 		$config = Retour::instance($app)->config();
-		$data   = $config->data();
-		$this->assertSame([], $data);
+		$this->assertSame($file, $config->root());
 
-		$data = $config->write($new = ['foo' => 'bar']);
-		$this->assertSame($new, $data);
-		$this->assertSame($new, $config->data());
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => fn () => $file
+			]
+		]);
+		$config = Retour::instance($app)->config();
+		$this->assertSame($file, $config->root());
 
-		$data = $config->write('foo', 'new');
-		$this->assertSame(['foo' => 'new'], $data);
-		$this->assertSame(['foo' => 'new'], $config->data());
+		// paths that happen to be function names are not called
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.config' => 'phpversion'
+			]
+		]);
+		$config = Retour::instance($app)->config();
+		$this->assertSame('phpversion', $config->root());
 	}
 
-	public function testWriteEmptyFile(): void
+	public function testUpdate(): void
+	{
+		$config = $this->config($file = $this->tmp . '/test.yml');
+		$this->assertNull($config->get('foo'));
+
+		$this->assertSame(['foo' => 'bar'], $config->update(['foo' => 'bar']));
+		$this->assertSame('bar', $config->get('foo'));
+
+		// keys are merged into the current data
+		$this->assertSame(['foo' => 'new', 'baz' => 'qux'], $config->update(['foo' => 'new', 'baz' => 'qux']));
+
+		// a closure returns the new data from the current one
+		$data = $config->update(fn (array $data) => [...$data, 'foo' => strtoupper($data['foo'])]);
+		$this->assertSame(['foo' => 'NEW', 'baz' => 'qux'], $data);
+		$this->assertSame($data, Data::read($file));
+	}
+
+	public function testUpdateEmptyFile(): void
 	{
 		F::write($file = $this->tmp . '/test.yml', '');
 
@@ -255,11 +246,26 @@ class ConfigTest extends TestCase
 		]);
 
 		$config = Retour::instance($app)->config();
-		$this->assertSame(['foo' => 'bar'], $config->write('foo', 'bar'));
+		$this->assertSame(['foo' => 'bar'], $config->update(['foo' => 'bar']));
 		$this->assertSame(['foo' => 'bar'], Data::read($file));
 	}
 
-	public function testWriteFileBrokenAfterRead(): void
+	public function testUpdateFailing(): void
+	{
+		Data::write($file = $this->tmp . '/test.yml', ['foo' => 'bar']);
+
+		$config = $this->config($file);
+
+		try {
+			$config->update(fn () => throw new LogicException(message: 'Nope'));
+			$this->fail('The exception must be passed on');
+		} catch (LogicException $e) {
+			$this->assertSame('Nope', $e->getMessage());
+			$this->assertSame(['foo' => 'bar'], Data::read($file));
+		}
+	}
+
+	public function testUpdateFileBrokenAfterRead(): void
 	{
 		Data::write($file = $this->tmp . '/test.yml', ['redirects' => []]);
 
@@ -276,7 +282,7 @@ class ConfigTest extends TestCase
 		F::write($file, $content = "redirects:\n\t- from: foo\n");
 
 		try {
-			$config->write('ignore', ['foo']);
+			$config->update(['ignore' => ['foo']]);
 			$this->fail('Writing an unreadable config file must fail');
 		} catch (LogicException $e) {
 			$this->assertStringStartsWith('Retour: The config file could not be read', $e->getMessage());
@@ -284,7 +290,7 @@ class ConfigTest extends TestCase
 		}
 	}
 
-	public function testWriteKeepsConcurrentChanges(): void
+	public function testUpdateKeepsConcurrentChanges(): void
 	{
 		Data::write($file = $this->tmp . '/test.yml', ['redirects' => []]);
 
@@ -300,7 +306,7 @@ class ConfigTest extends TestCase
 		Data::write($file, ['redirects' => [], 'ignore' => ['foo']]);
 
 		$expected = ['redirects' => [['from' => 'bar']], 'ignore' => ['foo']];
-		$this->assertSame($expected, $config->write('redirects', [['from' => 'bar']]));
+		$this->assertSame($expected, $config->update(['redirects' => [['from' => 'bar']]]));
 		$this->assertSame($expected, Data::read($file));
 	}
 }

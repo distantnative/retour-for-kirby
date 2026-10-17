@@ -59,8 +59,7 @@ class Redirects extends Collection
 
 	public function save(): void
 	{
-		$config = $this->retour->config();
-		$config->write('redirects', $this->toArray());
+		$this->retour->config()->update(['redirects' => $this->toArray()]);
 	}
 
 	/**
