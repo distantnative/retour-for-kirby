@@ -41,11 +41,6 @@ class Ignores
 		return $this->set([...$this->custom(), $pattern]);
 	}
 
-	public function all(): array
-	{
-		return [...$this->config(), ...$this->custom()];
-	}
-
 	/**
 	 * Returns the IP address in binary form (IPv4 addresses
 	 * mapped to IPv6 like `::ffff:192.0.2.1` in their IPv4 form)
@@ -70,19 +65,11 @@ class Ignores
 	}
 
 	/**
-	 * Returns the patterns from the `ignore` option
-	 */
-	public function config(): array
-	{
-		return A::wrap($this->retour->option('ignore'));
-	}
-
-	/**
 	 * Returns the patterns managed in the Panel
 	 */
 	public function custom(): array
 	{
-		return $this->retour->config()->data('ignore') ?? [];
+		return $this->retour->config()->get('ignore') ?? [];
 	}
 
 	/**
@@ -138,7 +125,7 @@ class Ignores
 	 */
 	public function matches(string $path, array|null $patterns = null): bool
 	{
-		$patterns ??= $this->all();
+		$patterns ??= [...$this->option(), ...$this->custom()];
 
 		foreach ($patterns as $pattern) {
 			// skip invalid entries (e.g. from the `ignore` option
@@ -188,6 +175,23 @@ class Ignores
 	}
 
 	/**
+	 * Checks if requests from the current visitor's IP address
+	 * shouldn't be logged, neither as failure nor as redirect hit
+	 */
+	public function matchesVisitor(): bool
+	{
+		return $this->matchesIp($this->retour->kirby()->visitor()->ip());
+	}
+
+	/**
+	 * Returns the patterns from the `ignore` option
+	 */
+	public function option(): array
+	{
+		return A::wrap($this->retour->option('ignore'));
+	}
+
+	/**
 	 * Replaces the patterns managed in the Panel
 	 *
 	 * @throws InvalidArgumentException If a pattern is invalid
@@ -206,7 +210,7 @@ class Ignores
 			}
 		}
 
-		$this->retour->config()->write('ignore', $patterns);
+		$this->retour->config()->update(['ignore' => $patterns]);
 
 		return $patterns;
 	}

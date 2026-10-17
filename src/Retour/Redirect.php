@@ -200,7 +200,7 @@ class Redirect
 		// requests from ignored IP addresses aren't logged at all
 		if (
 			$kirby->request()->method() !== 'HEAD' &&
-			$retour->ignoreVisitor() === false
+			$retour->ignores()->matchesVisitor() === false
 		) {
 			$retour->log()?->add([
 				'path'     => Url::path(),

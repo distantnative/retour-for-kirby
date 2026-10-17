@@ -53,7 +53,7 @@ class IgnoresDialog extends DialogController
 		}
 
 		// patterns from the config can only be changed there
-		$config = $ignores->config();
+		$config = $ignores->option();
 
 		if ($config !== []) {
 			$fields['config'] = [

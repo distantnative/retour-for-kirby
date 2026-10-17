@@ -43,8 +43,8 @@ return [
 		if (
 			$log !== null &&
 			$method !== 'HEAD' &&
-			$retour->ignoreVisitor() === false &&
-			$retour->ignore($path) === false
+			$retour->ignores()->matchesVisitor() === false &&
+			$retour->ignores()->matches($path) === false
 		) {
 			$log->add(['path' => $path]);
 		}

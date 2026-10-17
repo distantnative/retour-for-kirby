@@ -161,7 +161,7 @@ class RedirectsTest extends TestCase
 		$redirects->save();
 		$this->assertTrue(F::exists($file));
 		$config->read();
-		$this->assertSame($expected, $config->data('redirects'));
+		$this->assertSame($expected, $config->get('redirects'));
 
 		F::remove($file);
 		$this->assertFalse(F::exists($file));
@@ -182,7 +182,7 @@ class RedirectsTest extends TestCase
 
 		$redirects->save();
 		$this->assertTrue(F::exists($file));
-		$this->assertSame($expected, $config->data('redirects'));
+		$this->assertSame($expected, $config->get('redirects'));
 	}
 
 	public function testToArray(): void

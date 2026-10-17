@@ -44,18 +44,6 @@ class IgnoresTest extends TestCase
 		}
 	}
 
-	public function testAll(): void
-	{
-		$ignores = $this->ignores([
-			'distantnative.retour.ignore' => ['foo']
-		]);
-		$ignores->add('bar');
-
-		$this->assertSame(['foo', 'bar'], $ignores->all());
-		$this->assertSame(['foo'], $ignores->config());
-		$this->assertSame(['bar'], $ignores->custom());
-	}
-
 	public function testCommon(): void
 	{
 		$ignores = $this->ignores();
@@ -87,16 +75,6 @@ class IgnoresTest extends TestCase
 		}
 	}
 
-	public function testConfigSinglePattern(): void
-	{
-		$ignores = $this->ignores([
-			'distantnative.retour.ignore' => 'wp-(:all)'
-		]);
-
-		$this->assertSame(['wp-(:all)'], $ignores->config());
-		$this->assertTrue($ignores->matches('wp-admin'));
-	}
-
 	public function testCustomInConfigFile(): void
 	{
 		$retour = Retour::instance($this->app([
@@ -118,7 +96,7 @@ class IgnoresTest extends TestCase
 			'distantnative.retour.config' => $file
 		]));
 		$this->assertSame(['foo', 'bar'], $retour->ignores()->custom());
-		$this->assertTrue($retour->ignore('bar'));
+		$this->assertTrue($retour->ignores()->matches('bar'));
 	}
 
 	public function testIps(): void
@@ -296,6 +274,45 @@ class IgnoresTest extends TestCase
 		$this->assertTrue($ignores->matches('bar', $patterns));
 		$this->assertFalse($ignores->matches('foobar', $patterns));
 		$this->assertFalse($ignores->matches('bar/baz', $patterns));
+	}
+
+	public function testMatchesVisitor(): void
+	{
+		$app     = $this->app();
+		$ignores = Retour::instance($app)->ignores();
+
+		$app->visitor()->ip('192.0.2.1');
+		$this->assertFalse($ignores->matchesVisitor());
+
+		$app     = $this->app(['distantnative.retour.ignoreIps' => ['192.0.2.1']]);
+		$ignores = Retour::instance($app)->ignores();
+
+		$app->visitor()->ip('192.0.2.1');
+		$this->assertTrue($ignores->matchesVisitor());
+
+		$app->visitor()->ip('192.0.2.2');
+		$this->assertFalse($ignores->matchesVisitor());
+	}
+
+	public function testOption(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignore' => ['foo']
+		]);
+		$ignores->add('bar');
+
+		$this->assertSame(['foo'], $ignores->option());
+		$this->assertSame(['bar'], $ignores->custom());
+	}
+
+	public function testOptionSinglePattern(): void
+	{
+		$ignores = $this->ignores([
+			'distantnative.retour.ignore' => 'wp-(:all)'
+		]);
+
+		$this->assertSame(['wp-(:all)'], $ignores->option());
+		$this->assertTrue($ignores->matches('wp-admin'));
 	}
 
 	public function testSet(): void

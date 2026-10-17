@@ -43,64 +43,6 @@ class RetourTest extends TestCase
 		$this->assertFalse($retour->hasLog());
 	}
 
-	public function testIgnore(): void
-	{
-		// no ignore
-		$path   = 'foo/bar';
-		$retour = Retour::instance();
-		$this->assertFalse($retour->ignore($path));
-
-		// no matching ignore
-		$app = $this->app([
-			'distantnative.retour.ignore' => [
-				'foo',
-				'bar'
-			]
-		]);
-		$retour = Retour::instance($app);
-		$this->assertFalse($retour->ignore($path));
-
-		// direct matching string ignore
-		$app = $this->app([
-			'distantnative.retour.ignore' => [
-				'foo/bar',
-				'bar'
-			]
-		]);
-		$retour = Retour::instance($app);
-		$this->assertTrue($retour->ignore($path));
-
-		// ignore with wildcard placeholder
-		$app = $this->app([
-			'distantnative.retour.ignore' => [
-				'foo/(:any)',
-				'bar'
-			]
-		]);
-		$retour = Retour::instance($app);
-		$this->assertTrue($retour->ignore($path));
-	}
-
-	public function testIgnoreVisitor(): void
-	{
-		$app    = $this->app();
-		$retour = Retour::instance($app);
-
-		$app->visitor()->ip('192.0.2.1');
-		$this->assertFalse($retour->ignoreVisitor());
-
-		$app = $this->app([
-			'distantnative.retour.ignoreIps' => ['192.0.2.1']
-		]);
-		$retour = Retour::instance($app);
-
-		$app->visitor()->ip('192.0.2.1');
-		$this->assertTrue($retour->ignoreVisitor());
-
-		$app->visitor()->ip('192.0.2.2');
-		$this->assertFalse($retour->ignoreVisitor());
-	}
-
 	public function testInstance(): void
 	{
 		$app    = App::instance();
