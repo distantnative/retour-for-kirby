@@ -389,12 +389,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkirby/kirby.git",
-                "reference": "185c5cbf4390c4035879c3ddf1998a74c8d3260d"
+                "reference": "fe566fd95c54b60235eb36423e4ce7c501770781"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkirby/kirby/zipball/185c5cbf4390c4035879c3ddf1998a74c8d3260d",
-                "reference": "185c5cbf4390c4035879c3ddf1998a74c8d3260d",
+                "url": "https://api.github.com/repos/getkirby/kirby/zipball/fe566fd95c54b60235eb36423e4ce7c501770781",
+                "reference": "fe566fd95c54b60235eb36423e4ce7c501770781",
                 "shasum": ""
             },
             "require": {
@@ -423,7 +423,7 @@
                 "phpmailer/phpmailer": "7.1.1",
                 "symfony/polyfill-intl-idn": "1.43.0",
                 "symfony/polyfill-mbstring": "1.43.0",
-                "symfony/yaml": "7.4.20"
+                "symfony/yaml": "7.4.21"
             },
             "suggest": {
                 "ext-apcu": "Support for the Apcu cache driver",
@@ -481,7 +481,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-10-14T11:25:26+00:00"
+            "time": "2026-10-17T12:59:16+00:00"
         },
         {
             "name": "getkirby/composer-installer",
@@ -1296,16 +1296,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.4.20",
+            "version": "v7.4.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0222bf4dfaa1e3ceb8fff579635d655f2950d5a7"
+                "reference": "044907929c7999814378be22da34722c7a86bad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/0222bf4dfaa1e3ceb8fff579635d655f2950d5a7",
-                "reference": "0222bf4dfaa1e3ceb8fff579635d655f2950d5a7",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/044907929c7999814378be22da34722c7a86bad4",
+                "reference": "044907929c7999814378be22da34722c7a86bad4",
                 "shasum": ""
             },
             "require": {
@@ -1348,7 +1348,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.4.20"
+                "source": "https://github.com/symfony/yaml/tree/v7.4.21"
             },
             "funding": [
                 {
@@ -1368,7 +1368,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-26T06:31:10+00:00"
+            "time": "2026-10-12T12:34:30+00:00"
         }
     ],
     "packages-dev": [],
