@@ -181,9 +181,7 @@ class Timespan
 
 		return [
 			...$data,
-			// the server's local time, like the dates in the log
 			'now'   => date('Y-m-d H:i:s'),
-			// targets of the prev/next buttons and the units dropdown
 			'prev'  => $data['hasPrev'] && $data['isAll'] === false ? static::step($data, -1) : null,
 			'next'  => $data['hasNext'] && $data['isAll'] === false ? static::step($data, 1) : null,
 			'units' => static::units($data)
@@ -261,7 +259,6 @@ class Timespan
 		$from = Date::optional($data['from']);
 		$to   = Date::optional($data['to']);
 
-		// full units
 		if ($from->format('Y-m-d') === $to->format('Y-m-d')) {
 			return 'day';
 		}
@@ -289,7 +286,6 @@ class Timespan
 			return 'year';
 		}
 
-		// custom ranges
 		if ($from->diff($to)->days > 50) {
 			return 'months';
 		}
@@ -315,7 +311,6 @@ class Timespan
 			$units[$unit] = static::around($unit === $data['unit'] ? $today : $data['from'], $unit);
 		}
 
-		// custom ranges go to today or its month
 		$units['today'] = static::around($today, match ($data['unit']) {
 			'days'   => 'day',
 			'months' => 'month',

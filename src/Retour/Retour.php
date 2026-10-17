@@ -39,9 +39,6 @@ class Retour
 		return $this->ignores ??= new Ignores($this);
 	}
 
-	/**
-	 * A new instance for a different app instance
-	 */
 	public static function instance(App|null $kirby = null): self
 	{
 		$kirby ??= App::instance();

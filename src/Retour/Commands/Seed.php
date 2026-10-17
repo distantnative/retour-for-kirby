@@ -71,7 +71,6 @@ class Seed extends Command
 		$progress = $cli->progress($total);
 
 		foreach ($dates as $i => $time) {
-			// redirect hits only store their redirect
 			if ($redirects !== [] && $random->nextFloat() < 0.4) {
 				$redirect = static::pick($random, $redirects);
 				$path     = null;
@@ -164,9 +163,6 @@ class Seed extends Command
 		return $items[(int)(count($items) * $random->nextFloat() ** 3)];
 	}
 
-	/**
-	 * Only active redirects can get hits
-	 */
 	protected static function redirects(Retour $retour): array
 	{
 		$redirects = $retour->redirects()->filter(

@@ -149,7 +149,6 @@ class Redirect
 			if ($page) {
 				$to = $page->url();
 
-				// support for content representations
 				if ($extension !== '') {
 					// the home page's representations are only reachable via its slug
 					if ($page->isHomePage() === true) {
@@ -177,8 +176,7 @@ class Redirect
 				'headers' => ['Location' => static::location($to)]
 			]);
 		} else {
-			// an empty 200 would look like a success, so it's a failure
-			// (other codes like `410` can be meant to answer without a page)
+			// an empty 200 would look like a success, unlike e.g. an empty `410`
 			if ($page === null && $code === 200) {
 				return null;
 			}
