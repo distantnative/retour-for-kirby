@@ -56,15 +56,9 @@ class Redirect
 		return $this->from;
 	}
 
-	/**
-	 * Returns the path pattern as id; webservers often don't handle encoded
-	 * slashes (https://github.com/distantnative/retour-for-kirby/issues/300),
-	 * so "/" is swapped for the invisible GROUP SEPARATOR (\x1D); reverted in
-	 * `Panel\Id::toPath()`, mirrored in src/panel/components/Views/CollectionView.vue
-	 */
 	public function id(): string
 	{
-		return str_replace('/', "\x1D", $this->from);
+		return $this->from;
 	}
 
 	/**

@@ -32,6 +32,36 @@ class View extends ViewController
 		return ViewButtons::view('retour.' . $this->tab)->defaults(...$defaults);
 	}
 
+	/**
+	 * Adds the options to a row of the failures table;
+	 * it has no `id`, as a path has a row per referrer
+	 */
+	protected function failure(array $failure): array
+	{
+		$id = Id::encode($failure['path']);
+
+		return [
+			...$failure,
+			'options' => [
+				[
+					'icon'   => 'add',
+					'text'   => $this->i18n('retour.failures.resolve'),
+					'drawer' => 'retour/failures/' . $id . '/resolve'
+				],
+				[
+					'icon'   => 'muted',
+					'text'   => $this->i18n('retour.failures.ignore'),
+					'dialog' => 'retour/failures/' . $id . '/ignore'
+				],
+				[
+					'icon'   => 'trash',
+					'text'   => $this->i18n('remove'),
+					'dialog' => 'retour/failures/' . $id . '/delete'
+				]
+			]
+		];
+	}
+
 	public function load(): ViewComponent
 	{
 		if ($error = Retour::instance()->config()->error()) {
@@ -105,8 +135,8 @@ class View extends ViewController
 		$page       = (int)$this->request->get('page', 1);
 
 		$rows = match ($this->tab) {
-			'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page),
-			'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)
+			'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page)->map($this->redirect(...)),
+			'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)->map($this->failure(...))
 		};
 
 		return [
@@ -126,6 +156,31 @@ class View extends ViewController
 	{
 		$value = trim($this->request->get($key, ''));
 		return $value !== '' ? $value : null;
+	}
+
+	/**
+	 * Adds the id and options to a row of the redirects table
+	 */
+	protected function redirect(array $redirect): array
+	{
+		$id = Id::encode($redirect['from']);
+
+		return [
+			...$redirect,
+			'id'      => $id,
+			'options' => [
+				[
+					'icon'   => 'edit',
+					'text'   => $this->i18n('edit'),
+					'drawer' => 'retour/redirects/' . $id . '/edit'
+				],
+				[
+					'icon'   => 'trash',
+					'text'   => $this->i18n('remove'),
+					'dialog' => 'retour/redirects/' . $id . '/delete'
+				]
+			]
+		];
 	}
 
 	/**

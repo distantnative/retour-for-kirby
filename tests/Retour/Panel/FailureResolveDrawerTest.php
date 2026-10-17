@@ -26,7 +26,7 @@ class FailureResolveDrawerTest extends TestCase
 		$log->add(['path' => 'foo/bar']);
 		$log->add(['path' => 'baz']);
 
-		return FailureResolveDrawer::factory(urlencode(str_replace('/', "\x1D", $path)));
+		return FailureResolveDrawer::factory(Id::encode($path));
 	}
 
 	public function testLoad(): void

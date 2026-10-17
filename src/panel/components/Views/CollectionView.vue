@@ -55,9 +55,6 @@
 					/>
 				</button>
 			</template>
-			<template #options="{ row }">
-				<k-options-dropdown :options="options(row)" />
-			</template>
 		</k-table>
 
 		<footer class="k-bar k-collection-footer">
@@ -109,10 +106,6 @@ export default {
 		);
 	},
 	methods: {
-		id(path) {
-			// see Redirect::id()
-			return encodeURIComponent(path.replace(/\//g, "\x1D"));
-		},
 		onCell() {},
 		onHeader({ columnIndex }) {
 			// ascending, descending, then back to the default order
@@ -127,9 +120,6 @@ export default {
 			const next = cycle[(current + 1) % cycle.length];
 
 			this.reload({ sortBy: next === this.defaultSortBy ? null : next });
-		},
-		options() {
-			return [];
 		},
 		async reload(query) {
 			// core scrolls to the top on every new URL,

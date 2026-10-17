@@ -7,24 +7,38 @@ use Kirby\Retour\Redirect;
 use Kirby\Retour\Retour;
 
 /**
- * Turns the ids used in dialog and drawer URLs
- * back into the paths or redirects they stand for
- * (see `Redirect::id()` and the `id()` method
- * of the collection view for the reasons)
+ * Turns paths into the ids of dialog and drawer URLs and back;
+ * base64url only uses characters that `(:any)` accepts and that
+ * web servers pass on unchanged, unlike encoded slashes
+ * (https://github.com/distantnative/retour-for-kirby/issues/300)
  */
 class Id
 {
-	public static function toPath(string $id): string
+	/**
+	 * @throws NotFoundException If the id isn't valid base64url
+	 */
+	public static function decode(string $id): string
 	{
-		return str_replace("\x1D", '/', urldecode($id));
+		$path = base64_decode(strtr($id, '-_', '+/'), true);
+
+		if ($path === false) {
+			throw new NotFoundException(message: 'Invalid id');
+		}
+
+		return $path;
+	}
+
+	public static function encode(string $path): string
+	{
+		return rtrim(strtr(base64_encode($path), '+/', '-_'), '=');
 	}
 
 	/**
 	 * @throws NotFoundException If the redirect doesn't exist
 	 */
-	public static function toRedirect(string $id): Redirect
+	public static function redirect(string $id): Redirect
 	{
-		return Retour::instance()->redirects()->get(urldecode($id)) ?? throw new NotFoundException(
+		return Retour::instance()->redirects()->get(static::decode($id)) ?? throw new NotFoundException(
 			message: 'Redirect not found'
 		);
 	}

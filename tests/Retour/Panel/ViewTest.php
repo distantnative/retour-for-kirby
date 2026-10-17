@@ -130,6 +130,14 @@ class ViewTest extends TestCase
 		$this->assertSame(25, $props['pagination']['total']);
 		$this->assertSame('wp-', $props['searchterm']);
 		$this->assertSame('path desc', $props['sortBy']);
+
+		// a path has a row per referrer, so it's no unique id
+		$id = Id::encode('wp-14');
+		$this->assertArrayNotHasKey('id', $props['data'][0]);
+		$this->assertSame(
+			['retour/failures/' . $id . '/resolve', 'retour/failures/' . $id . '/ignore', 'retour/failures/' . $id . '/delete'],
+			array_map(fn (array $option) => $option['drawer'] ?? $option['dialog'], $props['data'][0]['options'])
+		);
 	}
 
 	public function testPropsOutOfRange(): void
@@ -176,6 +184,13 @@ class ViewTest extends TestCase
 		$this->assertSame(4, $props['pagination']['total']);
 		$this->assertNull($props['searchterm']);
 		$this->assertNull($props['sortBy']);
+
+		$id = Id::encode('b');
+		$this->assertSame($id, $props['data'][0]['id']);
+		$this->assertSame(
+			['retour/redirects/' . $id . '/edit', 'retour/redirects/' . $id . '/delete'],
+			array_map(fn (array $option) => $option['drawer'] ?? $option['dialog'], $props['data'][0]['options'])
+		);
 
 		// path, target, status code and comment
 		$props = $this->view('redirects', query: ['searchterm' => 'BLOG', 'sortBy' => 'from desc'])->props();

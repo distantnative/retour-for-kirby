@@ -20,7 +20,7 @@ class FailureIgnoreDialog extends DialogController
 
 	public static function factory(string $id): static
 	{
-		return new static(path: Id::toPath($id));
+		return new static(path: Id::decode($id));
 	}
 
 	public function load(): FormDialog

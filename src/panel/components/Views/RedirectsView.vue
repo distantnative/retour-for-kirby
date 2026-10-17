@@ -51,25 +51,11 @@ export default {
 	},
 	methods: {
 		onCell({ row, columnIndex }) {
-			this.$panel.drawer.open(`retour/redirects/${this.id(row.from)}/edit`, {
+			this.$panel.drawer.open(`retour/redirects/${row.id}/edit`, {
 				query: {
 					column: columnIndex,
 				},
 			});
-		},
-		options(redirect) {
-			return [
-				{
-					text: this.$t("edit"),
-					icon: "edit",
-					drawer: `retour/redirects/${this.id(redirect.from)}/edit`,
-				},
-				{
-					text: this.$t("remove"),
-					icon: "trash",
-					dialog: `retour/redirects/${this.id(redirect.from)}/delete`,
-				},
-			];
 		},
 	},
 };

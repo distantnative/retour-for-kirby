@@ -37,7 +37,7 @@ class RedirectEditDrawerTest extends TestCase
 		$app->impersonate('marge@simpson.com');
 		Retour::instance($app);
 
-		return RedirectEditDrawer::factory(urlencode(str_replace('/', "\x1D", $id)));
+		return RedirectEditDrawer::factory(Id::encode($id));
 	}
 
 	protected function redirects(): array
@@ -59,7 +59,7 @@ class RedirectEditDrawerTest extends TestCase
 
 		$this->assertSame('homer/simpson', $drawer->title);
 		$this->assertArrayHasKey('modifier', $drawer->fields);
-		$this->assertSame('retour/redirects/homer%1Dsimpson/delete', $drawer->options[0]['dialog']);
+		$this->assertSame('retour/redirects/' . Id::encode('homer/simpson') . '/delete', $drawer->options[0]['dialog']);
 		$this->assertSame('marge', $drawer->value['to']);
 		$this->assertSame('marge@simpson.com', (string)$drawer->value['creator'][0]['text']);
 	}
@@ -81,7 +81,7 @@ class RedirectEditDrawerTest extends TestCase
 		$this->assertTrue($drawer->submit());
 
 		$redirects = Retour::instance()->redirects();
-		$this->assertSame(['foo', "homer\x1Djay\x1Dsimpson"], $redirects->keys());
+		$this->assertSame(['foo', 'homer/jay/simpson'], $redirects->keys());
 
 		$redirects = $this->redirects();
 		$this->assertCount(2, $redirects);

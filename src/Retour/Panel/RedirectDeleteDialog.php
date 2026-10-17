@@ -24,7 +24,7 @@ class RedirectDeleteDialog extends DialogController
 	 */
 	public static function factory(string $id): static
 	{
-		return new static(redirect: Id::toRedirect($id));
+		return new static(redirect: Id::redirect($id));
 	}
 
 	public function load(): RemoveDialog

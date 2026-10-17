@@ -47,7 +47,7 @@ class RedirectTest extends TestCase
 		$this->assertSame('foo', $redirect->id());
 
 		$redirect = new Redirect(['from' => 'foo/bar']);
-		$this->assertSame('foobar', $redirect->id());
+		$this->assertSame('foo/bar', $redirect->id());
 	}
 
 	public function testIsActive(): void
