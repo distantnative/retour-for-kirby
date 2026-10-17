@@ -32,21 +32,16 @@ return [
 			$result = null;
 		}
 
-		if ($result !== null) {
-			return $result;
-		}
-
-		$log = $retour->log();
-
 		if (
-			$log !== null &&
+			$result === null &&
 			$method !== 'HEAD' &&
+			$retour->hasLog() === true &&
 			$retour->ignores()->matchesVisitor() === false &&
 			$retour->ignores()->matches($path) === false
 		) {
-			$log->add(['path' => $path]);
+			$retour->log()->add(['path' => $path]);
 		}
 
-		return null;
+		return $result;
 	}
 ];
