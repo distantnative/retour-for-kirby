@@ -69,9 +69,8 @@ class Timespan
 			return null;
 		}
 
-		// no logs predate Retour, and with a stats entry per month,
-		// timespans like 0000–9999 would create ~120k of them
-		if ($date < '2019-01-01' || $date > '2099-12-31') {
+		// no logs predate Retour
+		if ($date < '2019-01-01') {
 			return null;
 		}
 
@@ -155,6 +154,12 @@ class Timespan
 		if ($from === null || $to === null) {
 			return null;
 		}
+
+		// with a stats entry per month, timespans only reach
+		// as far into the future as the current year needs
+		$max  = date('Y-m-d', strtotime('+1 year'));
+		$from = min($from, $max);
+		$to   = min($to, $max);
 
 		if ($to < $from) {
 			$to = $from;
