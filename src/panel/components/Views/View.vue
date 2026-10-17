@@ -12,9 +12,12 @@
 		<template v-if="stats">
 			<k-retour-stats :data="stats" :timespan="timespan" />
 
-			<k-retour-tabs :tab="tab" :tabs="tabs">
-				<slot name="buttons" />
-			</k-retour-tabs>
+			<div class="k-retour-tabs">
+				<k-tabs :tab="tab" :tabs="tabs" />
+				<k-button-group>
+					<slot name="buttons" />
+				</k-button-group>
+			</div>
 		</template>
 
 		<slot />
@@ -44,9 +47,33 @@ export default {
 	border-bottom-color: var(--panel-color-back);
 }
 
+.k-retour-tabs {
+	margin-bottom: var(--spacing-6);
+}
+.k-retour-tabs .k-tabs {
+	flex-grow: 1;
+	margin-bottom: 0;
+}
+.k-retour-tabs > .k-button-group {
+	flex-wrap: nowrap;
+	margin-inline-start: auto;
+}
+
 @container (max-width: 30rem) {
 	.k-retour-view .k-header {
 		flex-direction: column;
+	}
+	.k-retour-tabs .k-tabs {
+		margin-bottom: var(--spacing-6);
+	}
+	.k-retour-tabs > .k-button-group {
+		justify-content: end;
+	}
+}
+@container (min-width: 30rem) {
+	.k-retour-tabs {
+		display: flex;
+		align-items: center;
 	}
 }
 </style>

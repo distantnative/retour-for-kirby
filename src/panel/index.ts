@@ -3,7 +3,6 @@ import RedirectsView from "./components/Views/RedirectsView.vue";
 import FailuresView from "./components/Views/FailuresView.vue";
 
 import Stats from "./components/Stats/Stats.vue";
-import Tabs from "./components/View/Tabs.vue";
 import Timespan from "./components/View/Timespan.vue";
 
 import CountFieldPreview from "./components/Previews/CountFieldPreview.vue";
@@ -22,7 +21,6 @@ window.panel.plugin("distantnative/retour", {
 		"k-status-field-preview": StatusFieldPreview,
 
 		"k-retour-stats": Stats,
-		"k-retour-tabs": Tabs,
 		"k-retour-timespan": Timespan,
 
 		"k-retour-view": View,
