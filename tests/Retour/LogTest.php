@@ -141,7 +141,7 @@ class LogTest extends TestCase
 	public function testFails(): void
 	{
 		$log = $this->log();
-		$this->assertSame([], $log->fails('2020-01-01', '2020-12-31'));
+		$this->assertSame([], $log->fails('2020-01-01', '2020-12-31')->values());
 
 		$log->add([
 			'date' => '2020-01-01 07:30:00',
@@ -153,7 +153,7 @@ class LogTest extends TestCase
 			'path' => $path = 'foo'
 		]);
 
-		$fail = $log->fails('2020-01-01', '2020-12-31')[0];
+		$fail = $log->fails('2020-01-01', '2020-12-31')->values()[0];
 		$this->assertSame($path, $fail['path']);
 		$this->assertSame($date, $fail['last']);
 		$this->assertSame(2, $fail['hits']);
@@ -168,9 +168,85 @@ class LogTest extends TestCase
 		$log->add(['date' => '2020-12-31 23:59:59', 'path' => 'last']);
 		$log->add(['date' => '2021-01-01 00:00:00', 'path' => 'after']);
 
-		$paths = array_column($log->fails('2020-01-01', '2020-12-31'), 'path');
+		$paths = array_column($log->fails('2020-01-01', '2020-12-31')->values(), 'path');
 		sort($paths);
 		$this->assertSame(['first', 'last'], $paths);
+	}
+
+	public function testFailsPage(): void
+	{
+		$log = $this->log();
+
+		// grouped by path and referrer
+		for ($i = 1; $i <= 25; $i++) {
+			$log->add(['path' => 'foo/' . $i, 'referrer' => 'a']);
+			$log->add(['path' => 'foo/' . $i, 'referrer' => 'b']);
+		}
+
+		$fails = $log->fails('2000-01-01', '2099-12-31', 'path asc', page: 3);
+		$this->assertSame(50, $fails->pagination()->total());
+		$this->assertSame(3, $fails->pagination()->page());
+		$this->assertCount(10, $fails);
+		$this->assertSame(['foo/5', 'a'], [$fails->first()['path'], $fails->first()['referrer']]);
+
+		$fails = $log->fails('2000-01-01', '2099-12-31', limit: 30);
+		$this->assertCount(30, $fails);
+	}
+
+	public function testFailsSearchterm(): void
+	{
+		$log = $this->log();
+		$log->add(['path' => 'wp-login.php']);
+		$log->add(['path' => 'blog', 'referrer' => 'https://WP.example.com']);
+		$log->add(['path' => '100%']);
+		$log->add(['path' => 'foo_bar']);
+		$log->add(['path' => 'foobar']);
+
+		$search = fn (string $term) => $log->fails('2000-01-01', '2099-12-31', 'path asc', $term)->pluck('path');
+
+		// path and referrer, case-insensitive
+		$this->assertSame(['blog', 'wp-login.php'], $search('wp'));
+
+		// wildcards of LIKE are matched literally
+		$this->assertSame(['100%'], $search('%'));
+		$this->assertSame(['foo_bar'], $search('o_b'));
+		$this->assertSame([], $search('\\'));
+	}
+
+	public function testFailsSortBy(): void
+	{
+		$log = $this->log();
+		$log->add(['date' => '2020-01-01 10:00:00', 'path' => 'b', 'referrer' => 'y']);
+		$log->add(['date' => '2020-01-02 10:00:00', 'path' => 'b', 'referrer' => 'x']);
+		$log->add(['date' => '2020-01-03 10:00:00', 'path' => 'a']);
+		$log->add(['date' => '2020-01-04 10:00:00', 'path' => 'a']);
+		$log->add(['date' => '2020-01-05 10:00:00', 'path' => 'c', 'referrer' => 'z']);
+
+		$fails = fn (string|null $sortBy) => array_map(
+			fn (array $fail) => $fail['path'] . $fail['referrer'],
+			$log->fails('2020-01-01', '2020-12-31', $sortBy)->values()
+		);
+
+		// most hits first, the same hits by path and referrer
+		$this->assertSame(['a', 'bx', 'by', 'cz'], $fails(null));
+		$this->assertSame(['bx', 'by', 'cz', 'a'], $fails('hits asc'));
+		$this->assertSame(['cz', 'by', 'bx', 'a'], $fails('path DESC'));
+		$this->assertSame(['a', 'bx', 'by', 'cz'], $fails('referrer'));
+		$this->assertSame(['cz', 'a', 'bx', 'by'], $fails('last desc'));
+	}
+
+	public function testFailsSortByInvalid(): void
+	{
+		$log = $this->log();
+
+		foreach (['date', 'hits up', 'hits; DROP TABLE records'] as $sortBy) {
+			try {
+				$log->fails('2020-01-01', '2020-12-31', $sortBy);
+				$this->fail('Invalid sorting must be rejected: ' . $sortBy);
+			} catch (InvalidArgumentException $e) {
+				$this->assertSame('Invalid sorting: ' . $sortBy, $e->getMessage());
+			}
+		}
 	}
 
 	public function testFile(): void
@@ -266,6 +342,10 @@ class LogTest extends TestCase
 		$log = $this->log();
 
 		$log->fails('2020-01-01', '2020-12-31');
+		$this->assertSame("SCAN records USING INDEX idx_failures\nUSE TEMP B-TREE FOR ORDER BY", $this->plan($log));
+
+		// in the order of the index
+		$log->fails('2020-01-01', '2020-12-31', 'path desc');
 		$this->assertSame('SCAN records USING INDEX idx_failures', $this->plan($log));
 
 		$log->remove('foo');
@@ -458,7 +538,7 @@ class LogTest extends TestCase
 			fn (string $path) => str_starts_with($path, 'foo-')
 		));
 
-		$this->assertSame(['bar'], array_column($log->fails('2000-01-01', '2099-12-31'), 'path'));
+		$this->assertSame(['bar'], array_column($log->fails('2000-01-01', '2099-12-31')->values(), 'path'));
 	}
 
 	public function testResolve(): void
@@ -560,7 +640,7 @@ class LogTest extends TestCase
 		$this->assertSame([0, 0, 1, 0], array_column($stats, 'redirected'));
 
 		// same total as the failures table
-		$fails = $log->fails('2024-01-31', '2024-04-25');
+		$fails = $log->fails('2024-01-31', '2024-04-25')->values();
 		$this->assertSame(array_sum(array_column($fails, 'hits')), array_sum(array_column($stats, 'failed')));
 	}
 

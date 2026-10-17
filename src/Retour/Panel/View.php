@@ -8,6 +8,8 @@ use Kirby\Panel\Ui\Button\ViewButtons;
 use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
+use Kirby\Toolkit\Collection;
+use Kirby\Toolkit\Str;
 
 /**
  * Handles Panel view requests for the Retour tabs
@@ -98,13 +100,61 @@ class View extends ViewController
 			$props['stats'] = $log->stats($unit, $from, $to);
 		}
 
-		// add tab-specific data, e.g. for table rows
-		$props['data'] = match ($this->tab) {
-			'redirects' => $retour->redirects()->toData($from, $to),
-			'failures'  => $log?->fails($from, $to) ?? [],
-			default     => []
+		$sortBy     = $this->query('sortBy');
+		$searchterm = $this->query('searchterm');
+		$page       = (int)$this->request->get('page', 1);
+
+		$rows = match ($this->tab) {
+			'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page),
+			'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)
 		};
 
-		return $props;
+		return [
+			...$props,
+			'data'       => $rows->values(),
+			'pagination' => $rows->pagination()->toArray(),
+			'searchterm' => $searchterm,
+			'sortBy'     => $sortBy
+		];
+	}
+
+	/**
+	 * Returns a query parameter without surrounding
+	 * whitespace, `null` if it's missing or empty
+	 */
+	protected function query(string $key): string|null
+	{
+		$value = trim($this->request->get($key, ''));
+		return $value !== '' ? $value : null;
+	}
+
+	/**
+	 * Returns a page of the redirects with their hits;
+	 * unsorted, they keep their order of precedence
+	 */
+	protected function redirects(
+		string $from,
+		string $to,
+		string|null $sortBy,
+		string|null $searchterm,
+		int $page
+	): Collection {
+		$redirects = new Collection(Retour::instance()->redirects()->toData($from, $to));
+
+		if ($searchterm !== null) {
+			$redirects = $redirects->filter(
+				fn (array $redirect): bool => Str::contains(
+					implode("\n", [$redirect['from'], $redirect['to'], $redirect['status'], $redirect['comment']]),
+					$searchterm,
+					true
+				)
+			);
+		}
+
+		if ($sortBy !== null) {
+			$redirects = $redirects->sort(...Str::split($sortBy, ' '));
+		}
+
+		return $redirects->paginate(20, $page);
 	}
 }

@@ -41,10 +41,10 @@ class HooksTest extends TestCase
 		$retour = Retour::instance($app);
 
 		$this->assertNull($this->apply($app, 'missing', 'HEAD'));
-		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 
 		$this->assertNull($this->apply($app, 'missing'));
-		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 	}
 
 	public function testIgnoredIpIsNotLogged(): void
@@ -59,11 +59,11 @@ class HooksTest extends TestCase
 
 		$app->visitor()->ip('192.0.2.1');
 		$this->assertNull($this->apply($app, 'missing'));
-		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 
 		$app->visitor()->ip('198.51.100.1');
 		$this->assertNull($this->apply($app, 'missing'));
-		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertCount(1, $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 	}
 
 	public function testIgnoredPathIsNotLogged(): void
@@ -78,7 +78,7 @@ class HooksTest extends TestCase
 
 		$result = $this->apply($app, 'api/users');
 		$this->assertNull($result);
-		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 	}
 
 	public function testIgnoredPathIsRedirected(): void
@@ -109,7 +109,7 @@ class HooksTest extends TestCase
 
 		// logged as hit of the redirect, not as failure
 		$this->assertSame(1, $retour->log()->redirects('2000-01-01', '2099-12-31')['wp-content/(:all)']['hits']);
-		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 	}
 
 	public function testLogsFailedRouteAs404(): void
@@ -184,7 +184,7 @@ class HooksTest extends TestCase
 		$this->assertSame(301, $result->code());
 
 		// neither logged as failure nor as hit
-		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $retour->log()->fails('2000-01-01', '2099-12-31')->values());
 		$this->assertSame([], $retour->log()->redirects('2000-01-01', '2099-12-31'));
 	}
 

@@ -61,7 +61,7 @@ class RoutesTest extends TestCase
 
 		$log = Retour::instance($app)->log();
 		$this->assertSame([], $log->redirects('2000-01-01', '2099-12-31'));
-		$this->assertSame([], $log->fails('2000-01-01', '2099-12-31'));
+		$this->assertSame([], $log->fails('2000-01-01', '2099-12-31')->values());
 	}
 
 	public function testRenderRedirects(): void
@@ -129,7 +129,7 @@ class RoutesTest extends TestCase
 
 		// logged once as failure each, not as redirect hit
 		$log   = Retour::instance($app)->log();
-		$fails = array_column($log->fails('2000-01-01', '2099-12-31'), 'hits', 'path');
+		$fails = array_column($log->fails('2000-01-01', '2099-12-31')->values(), 'hits', 'path');
 		ksort($fails);
 
 		$this->assertSame(['fallback' => 1, 'priority' => 1], $fails);
@@ -160,7 +160,7 @@ class RoutesTest extends TestCase
 
 		// logged once as failure each, not as redirect hit
 		$log   = Retour::instance($app)->log();
-		$fails = array_column($log->fails('2000-01-01', '2099-12-31'), 'hits', 'path');
+		$fails = array_column($log->fails('2000-01-01', '2099-12-31')->values(), 'hits', 'path');
 		ksort($fails);
 
 		$this->assertSame(['fallback' => 1, 'priority' => 1], $fails);

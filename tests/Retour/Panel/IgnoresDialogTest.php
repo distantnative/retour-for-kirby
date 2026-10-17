@@ -83,7 +83,7 @@ class IgnoresDialogTest extends TestCase
 
 		// only the failures of newly added patterns are removed,
 		// the ones of saved patterns have been removed before
-		$paths = array_column($log->fails('2000-01-01', '2099-12-31'), 'path');
+		$paths = array_column($log->fails('2000-01-01', '2099-12-31')->values(), 'path');
 		sort($paths);
 		$this->assertSame(['baz', 'foo'], $paths);
 	}

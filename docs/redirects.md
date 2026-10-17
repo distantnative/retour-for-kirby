@@ -63,4 +63,6 @@ Retour automatically adds the current user as context information, e.g. when wor
 
 ## Sort and filter
 
-By clicking on the table headers you can change the sorting of the routes table, to get a better overview of your existing routes. Via a button above the table - next to the `Add` button - you can also toggle the search input which will allow you to filter the table rows by your search term.
+Click a table header to sort the redirects by that column, click it again to reverse the order and a third time to get back to their order of precedence. The filter button above the table, next to `Add`, opens a search field that finds redirects by their path, target, status code or comment.
+
+The page, sorting and filter are part of the URL, so you can bookmark them or share a link with others.

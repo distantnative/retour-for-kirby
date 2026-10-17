@@ -3,12 +3,6 @@ import CollectionView from "./CollectionView.vue";
 
 export default {
 	extends: CollectionView,
-	data() {
-		return {
-			sortBy: "hits",
-			sortDirection: "desc",
-		};
-	},
 	computed: {
 		columns() {
 			return {
@@ -36,6 +30,9 @@ export default {
 					align: "right",
 				},
 			};
+		},
+		defaultSortBy() {
+			return "hits desc";
 		},
 		empty() {
 			return {

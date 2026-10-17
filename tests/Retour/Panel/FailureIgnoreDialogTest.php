@@ -31,7 +31,7 @@ class FailureIgnoreDialogTest extends TestCase
 
 	protected function failures(): array
 	{
-		$failures = Retour::instance()->log()->fails('2000-01-01', '2099-12-31');
+		$failures = Retour::instance()->log()->fails('2000-01-01', '2099-12-31')->values();
 		$paths    = array_column($failures, 'path');
 		sort($paths);
 		return $paths;
