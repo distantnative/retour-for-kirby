@@ -7,15 +7,11 @@
 		</p>
 
 		<figcaption>
-			<template v-for="segment in data" :key="segment.label">
+			<p v-for="segment in data" :key="segment.label">
 				<k-icon :color="segment.color" :type="segment.icon" />
-				<span>
-					{{ formatter.format(segment.data) }}
-				</span>
-				<span>
-					{{ segment.label }}
-				</span>
-			</template>
+				<span>{{ formatter.format(segment.data) }}</span>
+				<span>{{ segment.label }}</span>
+			</p>
 		</figcaption>
 	</figure>
 </template>
@@ -124,23 +120,35 @@ export default {
 	color: var(--color-white);
 }
 
+/* stacked: icons, numbers and labels in aligned columns */
 .k-retour-pie figcaption {
 	display: grid;
 	grid-template-columns: auto auto auto;
 	column-gap: 0.4ch;
 	row-gap: var(--spacing-3);
 }
-.k-retour-pie figcaption :nth-child(3n + 2) {
+.k-retour-pie figcaption p {
+	display: grid;
+	grid-column: 1 / -1;
+	grid-template-columns: subgrid;
+	align-items: center;
+}
+.k-retour-pie figcaption span:first-of-type {
 	padding-inline-start: var(--spacing-2);
 	text-align: end;
 }
 
+/* in a row that wraps between the entries */
 @container (min-width: 18rem) {
 	.k-retour-pie figcaption {
-		grid-template-columns: repeat(9, auto);
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--spacing-3) var(--spacing-4);
 	}
-	.k-retour-pie figcaption .k-icon:not(:first-child) {
-		margin-inline-start: var(--spacing-4);
+	.k-retour-pie figcaption p {
+		display: flex;
+		gap: 0.4ch;
 	}
 }
 </style>
