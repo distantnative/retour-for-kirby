@@ -44,6 +44,18 @@ class IgnoresTest extends TestCase
 		}
 	}
 
+	public function testAddKeepsConcurrentChanges(): void
+	{
+		$ignores = $this->ignores();
+		$ignores->add('foo');
+
+		// another request adds a pattern in the meantime
+		Data::write($this->tmp . '/retour.yml', ['ignore' => ['foo', 'bar']]);
+
+		$this->assertSame(['foo', 'bar', 'baz'], $ignores->add('baz'));
+		$this->assertSame(['foo', 'bar', 'baz'], Data::read($this->tmp . '/retour.yml')['ignore']);
+	}
+
 	public function testCommon(): void
 	{
 		$ignores = $this->ignores();
@@ -82,7 +94,6 @@ class IgnoresTest extends TestCase
 		]));
 
 		$retour->redirects()->create(['from' => 'old', 'to' => 'new']);
-		$retour->redirects()->save();
 		$retour->ignores()->set(['foo', 'bar']);
 
 		// stored next to the redirects

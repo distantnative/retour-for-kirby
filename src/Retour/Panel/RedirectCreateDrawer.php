@@ -98,12 +98,11 @@ class RedirectCreateDrawer extends DrawerController
 
 	public function submit(): bool|array
 	{
-		$redirects = $this->redirects();
-		$redirects->create([
+		$this->redirects()->create([
 			...$this->data(),
 			'creator' => $this->kirby->user()?->email(),
 		]);
-		$redirects->save();
+
 		return true;
 	}
 

@@ -36,10 +36,6 @@ class RedirectDeleteDialog extends DialogController
 
 	public function submit(): bool
 	{
-		$redirects = Retour::instance()->redirects();
-		$redirects->remove($this->redirect->id());
-		$redirects->save();
-
-		return true;
+		return Retour::instance()->redirects()->delete($this->redirect->id());
 	}
 }

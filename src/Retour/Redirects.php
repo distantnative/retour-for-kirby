@@ -3,11 +3,12 @@
 namespace Kirby\Retour;
 
 use Closure;
-use Kirby\Cms\Collection;
 use Kirby\Exception\DuplicateException;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\LogicException;
 use Kirby\Exception\NotFoundException;
 use Kirby\Http\Header;
+use Kirby\Toolkit\Collection;
 
 /**
  * Collection of all configured redirects;
@@ -19,7 +20,23 @@ class Redirects extends Collection
 		protected Retour $retour,
 		array $redirects
 	) {
-		parent::__construct($redirects);
+		parent::__construct($redirects, caseSensitive: true);
+	}
+
+	/**
+	 * Applies the change to the redirects as currently stored
+	 * and saves them, so concurrent changes aren't lost
+	 *
+	 * @throws LogicException If the config file could not be read or written
+	 */
+	protected function commit(Closure $change): void
+	{
+		$this->retour->config()->update(function (array $data) use ($change): array {
+			$this->data = static::factory($this->retour, $data['redirects'] ?? [])->data;
+			$change();
+			$data['redirects'] = $this->toArray();
+			return $data;
+		});
 	}
 
 	/**
@@ -28,18 +45,29 @@ class Redirects extends Collection
 	 * @throws DuplicateException If a redirect with the same path exists
 	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */
-	public function create(array $data): self
+	public function create(array $data): Redirect
 	{
 		$redirect = new Redirect($data);
 
-		if ($this->has($redirect->id()) === true) {
-			throw new DuplicateException('Redirect with ID already exists');
-		}
-
 		static::validate($redirect);
 
-		$this->prepend($redirect->id(), $redirect);
-		return $this;
+		$this->commit(function () use ($redirect) {
+			if ($this->has($redirect->id()) === true) {
+				throw new DuplicateException(
+					message: 'Redirect with ID already exists'
+				);
+			}
+
+			$this->prepend($redirect->id(), $redirect);
+		});
+
+		return $redirect;
+	}
+
+	public function delete(string $id): bool
+	{
+		$this->commit(fn () => $this->remove($id));
+		return true;
 	}
 
 	/**
@@ -55,11 +83,6 @@ class Redirects extends Collection
 		}
 
 		return $redirects;
-	}
-
-	public function save(): void
-	{
-		$this->retour->config()->update(['redirects' => $this->toArray()]);
 	}
 
 	/**
@@ -112,51 +135,46 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Replaces a redirect while keeping its position
+	 * Updates a redirect with the data while keeping its position
 	 *
-	 * @param string|Redirect $key ID of the redirect to replace
-	 * @param array|Redirect $data
 	 * @throws NotFoundException If the redirect doesn't exist
-	 * @throws DuplicateException If another redirect already has the new ID
+	 * @throws DuplicateException If another redirect already has the new path
 	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */
-	public function update(string|object $key, mixed $data = null): static
+	public function update(string $id, array $data): Redirect
 	{
-		if (is_object($key) === true) {
-			return $this->update($key->id(), $key);
-		}
+		$redirect = null;
 
-		$redirect = $data instanceof Redirect ? $data : new Redirect($data);
-		$id       = $redirect->id();
-
-		if ($this->has($key) === false) {
-			throw new NotFoundException(
+		$this->commit(function () use ($id, $data, &$redirect) {
+			$current  = $this->get($id) ?? throw new NotFoundException(
 				message: 'Redirect not found'
 			);
-		}
+			$redirect = new Redirect([...$current->toArray(), ...$data]);
 
-		if ($id !== $key && $this->has($id) === true) {
-			throw new DuplicateException(
-				message: 'Redirect with ID already exists'
-			);
-		}
-
-		static::validate($redirect);
-
-		$data = [];
-
-		foreach ($this->data as $current => $item) {
-			// numeric IDs become integer array keys
-			if ((string)$current === $key) {
-				$current = $id;
-				$item    = $redirect;
+			if ($redirect->id() !== $id && $this->has($redirect->id()) === true) {
+				throw new DuplicateException(
+					message: 'Redirect with ID already exists'
+				);
 			}
 
-			$data[$current] = $item;
-		}
+			static::validate($redirect);
 
-		$this->data = $data;
-		return $this;
+			$redirects = [];
+
+			foreach ($this->data as $key => $item) {
+				// numeric IDs become integer array keys
+				if ((string)$key === $id) {
+					$key  = $redirect->id();
+					$item = $redirect;
+				}
+
+				$redirects[$key] = $item;
+			}
+
+			$this->data = $redirects;
+		});
+
+		return $redirect;
 	}
 
 	/**

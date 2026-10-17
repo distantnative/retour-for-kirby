@@ -2,10 +2,10 @@
 
 namespace Kirby\Retour;
 
+use Kirby\Data\Data;
 use Kirby\Exception\DuplicateException;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Exception\NotFoundException;
-use Kirby\Filesystem\F;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -54,25 +54,46 @@ class RedirectsTest extends TestCase
 		];
 	}
 
+	/**
+	 * Returns the redirects stored in a config file with the given data
+	 */
+	protected function redirects(array $redirects = []): Redirects
+	{
+		Data::write($file = $this->tmp . '/retour.yml', ['redirects' => $redirects]);
+
+		return Retour::instance($this->app([
+			'distantnative.retour.config' => $file
+		]))->redirects();
+	}
+
+	/**
+	 * Returns the paths of the redirects in the config file
+	 */
+	protected function stored(): array
+	{
+		return array_column(Data::read($this->tmp . '/retour.yml')['redirects'], 'from');
+	}
+
 	public function testCreate(): void
 	{
-		$redirects = Retour::instance()->redirects();
-		$this->assertSame(0, $redirects->count());
-		$redirects->create(['from' => 'foo']);
-		$this->assertSame(1, $redirects->count());
-		$this->assertSame('foo', $redirects->first()->from());
+		$redirects = $this->redirects($this->data());
+		$redirect  = $redirects->create(['from' => 'new']);
+
+		$this->assertSame('new', $redirect->from());
+		$this->assertSame(['new', 'foo', 'homer', 'berlin'], $redirects->keys());
+		$this->assertSame(['new', 'foo', 'homer', 'berlin'], $this->stored());
 	}
 
 	public function testCreateDuplicate(): void
 	{
-		$redirects = Retour::instance()->redirects();
+		$redirects = $this->redirects($this->data());
 
-		$this->assertSame(0, $redirects->count());
-		$redirects->create(['from' => 'foo']);
-		$this->assertSame(1, $redirects->count());
-
-		$this->expectException(DuplicateException::class);
-		$redirects->create(['from' => 'foo']);
+		try {
+			$redirects->create(['from' => 'foo']);
+			$this->fail('Creating an existing path must fail');
+		} catch (DuplicateException) {
+			$this->assertSame(['foo', 'homer', 'berlin'], $this->stored());
+		}
 	}
 
 	public static function invalidProvider(): array
@@ -89,33 +110,44 @@ class RedirectsTest extends TestCase
 	#[DataProvider('invalidProvider')]
 	public function testCreateInvalid(array $data, string $message): void
 	{
-		$redirects = Retour::instance()->redirects();
+		$redirects = $this->redirects();
 
 		try {
 			$redirects->create($data);
 			$this->fail('Invalid redirects must be rejected');
 		} catch (InvalidArgumentException $e) {
 			$this->assertSame($message, $e->getMessage());
-			$this->assertSame(0, $redirects->count());
+			$this->assertSame([], $this->stored());
 		}
+	}
+
+	public function testCreateKeepsConcurrentChanges(): void
+	{
+		$redirects = $this->redirects([$this->data()[0]]);
+
+		// another request adds a redirect in the meantime
+		Data::write($this->tmp . '/retour.yml', ['redirects' => [$this->data()[0], $this->data()[1]]]);
+
+		$redirects->create(['from' => 'new']);
+		$this->assertSame(['new', 'foo', 'homer'], $redirects->keys());
+		$this->assertSame(['new', 'foo', 'homer'], $this->stored());
 	}
 
 	public function testCreatePlainTextPattern(): void
 	{
-		$redirects = Retour::instance()->redirects();
+		$redirects = $this->redirects();
 
 		// matched as plain text by Kirby's router
 		foreach (['*.html', 'old/[draft', 'foo)'] as $from) {
-			$redirects->create(['from' => $from, 'status' => 301]);
-			$this->assertSame($from, $redirects->first()->from());
+			$this->assertSame($from, $redirects->create(['from' => $from, 'status' => 301])->from());
 		}
 
-		$this->assertSame(3, $redirects->count());
+		$this->assertSame(['foo)', 'old/[draft', '*.html'], $this->stored());
 	}
 
 	public function testCreateValidStatus(): void
 	{
-		$redirects = Retour::instance()->redirects();
+		$redirects = $this->redirects();
 
 		foreach (['301', 302, '', null, 'disabled', '410'] as $i => $status) {
 			$redirects->create(['from' => 'foo-' . $i, 'status' => $status]);
@@ -126,9 +158,17 @@ class RedirectsTest extends TestCase
 
 	public function testCreateWithoutValidParameters(): void
 	{
-		$redirects = Retour::instance()->redirects();
 		$this->expectException(InvalidArgumentException::class);
-		$redirects->create([]);
+		$this->redirects()->create([]);
+	}
+
+	public function testDelete(): void
+	{
+		$redirects = $this->redirects($this->data());
+
+		$this->assertTrue($redirects->delete('homer'));
+		$this->assertSame(['foo', 'berlin'], $redirects->keys());
+		$this->assertSame(['foo', 'berlin'], $this->stored());
 	}
 
 	public function testFactory(): void
@@ -138,51 +178,6 @@ class RedirectsTest extends TestCase
 
 		$this->assertSame(3, $redirects->count());
 		$this->assertInstanceOf(Redirect::class, $redirects->first());
-	}
-
-	public function testSave(): void
-	{
-		$file = $this->tmp . '/redirects.yml';
-		$this->assertFalse(F::exists($file));
-
-
-		$app = $this->kirby->clone([
-			'options' => [
-				'distantnative.retour.config' => $file
-			]
-		]);
-
-		$retour    = Retour::instance($app);
-		$data      = $this->data();
-		$expected  = $this->expected();
-		$redirects = Redirects::factory($retour, $data);
-		$config    = $retour->config();
-
-		$redirects->save();
-		$this->assertTrue(F::exists($file));
-		$config->read();
-		$this->assertSame($expected, $config->get('redirects'));
-
-		F::remove($file);
-		$this->assertFalse(F::exists($file));
-
-		$new = [
-			'from'     => 'auckland',
-			'to'       => 'squamish',
-			'status'   => null,
-			'priority' => false,
-			'comment'  => null,
-			'creator'  => null,
-			'modifier' => null,
-		];
-		$redirect = new Redirect($new);
-		$redirects = $redirects->prepend($redirect);
-
-		array_unshift($expected, $new);
-
-		$redirects->save();
-		$this->assertTrue(F::exists($file));
-		$this->assertSame($expected, $config->get('redirects'));
 	}
 
 	public function testToArray(): void
@@ -253,25 +248,22 @@ class RedirectsTest extends TestCase
 
 	public function testUpdate(): void
 	{
-		$redirects = Retour::instance()->redirects();
+		$redirects = $this->redirects([
+			['from' => 'foo', 'to' => 'bar', 'comment' => 'note']
+		]);
 
-		// creating new
-		$this->assertSame(0, $redirects->count());
-		$redirects->create(['from' => 'foo']);
-		$this->assertSame(1, $redirects->count());
-		$this->assertSame('foo', $redirects->first()->from());
-
-		// updating existing, re-keyed by the new path
-		$redirects->update('foo', ['from' => 'bar']);
-		$this->assertSame(1, $redirects->count());
-		$this->assertSame('bar', $redirects->first()->from());
-		$this->assertSame(['bar'], $redirects->keys());
-		$this->assertSame('bar', $redirects->get('bar')->from());
+		// merged into the current redirect, re-keyed by the new path
+		$redirect = $redirects->update('foo', ['from' => 'baz']);
+		$this->assertSame('baz', $redirect->from());
+		$this->assertSame('bar', $redirect->to());
+		$this->assertSame('note', $redirect->comment());
+		$this->assertSame(['baz'], $redirects->keys());
+		$this->assertSame(['baz'], $this->stored());
 	}
 
 	public function testUpdateDuplicate(): void
 	{
-		$redirects = Redirects::factory(Retour::instance(), $this->data());
+		$redirects = $this->redirects($this->data());
 
 		try {
 			$redirects->update('foo', ['from' => 'homer']);
@@ -279,60 +271,63 @@ class RedirectsTest extends TestCase
 		} catch (DuplicateException) {
 			$this->assertSame(['foo', 'homer', 'berlin'], $redirects->keys());
 			$this->assertSame('bar', $redirects->get('foo')->to());
-			$this->assertSame('simpson', $redirects->get('homer')->to());
+			$this->assertSame(['foo', 'homer', 'berlin'], $this->stored());
 		}
 	}
 
 	#[DataProvider('invalidProvider')]
 	public function testUpdateInvalid(array $data, string $message): void
 	{
-		$redirects = Redirects::factory(Retour::instance(), $this->data());
+		$redirects = $this->redirects($this->data());
 
 		try {
 			$redirects->update('foo', $data);
 			$this->fail('Invalid redirects must be rejected');
 		} catch (InvalidArgumentException $e) {
 			$this->assertSame($message, $e->getMessage());
-			$this->assertSame($this->expected(), $redirects->toArray());
+			$this->assertSame($this->data(), Data::read($this->tmp . '/retour.yml')['redirects']);
 		}
+	}
+
+	public function testUpdateKeepsConcurrentChanges(): void
+	{
+		$redirects = $this->redirects([$this->data()[0]]);
+
+		// another request adds a redirect in the meantime
+		Data::write($this->tmp . '/retour.yml', ['redirects' => [$this->data()[0], $this->data()[1]]]);
+
+		$redirects->update('foo', ['from' => 'baz']);
+		$this->assertSame(['baz', 'homer'], $redirects->keys());
+		$this->assertSame(['baz', 'homer'], $this->stored());
 	}
 
 	public function testUpdateKeepsPosition(): void
 	{
-		$redirects = Redirects::factory(Retour::instance(), $this->data());
+		$redirects = $this->redirects($this->data());
 
-		$redirects->update('homer', ['from' => 'marge', 'to' => 'simpson']);
+		$redirects->update('homer', ['from' => 'marge']);
 		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
 
-		// same path with a Redirect object
-		$redirects->update('marge', new Redirect(['from' => 'marge', 'to' => 'bouvier']));
-		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
+		$redirects->update('marge', ['to' => 'bouvier']);
+		$this->assertSame(['foo', 'marge', 'berlin'], $this->stored());
 		$this->assertSame('bouvier', $redirects->get('marge')->to());
-
-		// the Redirect object as key
-		$redirects->update(new Redirect(['from' => 'berlin', 'to' => 'tokyo']));
-		$this->assertSame(['foo', 'marge', 'berlin'], $redirects->keys());
-		$this->assertSame('tokyo', $redirects->get('berlin')->to());
 	}
 
 	public function testUpdateNotFound(): void
 	{
-		$redirects = Redirects::factory(Retour::instance(), $this->data());
-
 		$this->expectException(NotFoundException::class);
-		$redirects->update('missing', ['from' => 'missing']);
+		$this->redirects($this->data())->update('missing', ['from' => 'missing']);
 	}
 
 	public function testUpdateNumericId(): void
 	{
-		$redirects = Redirects::factory(Retour::instance(), [
+		$redirects = $this->redirects([
 			['from' => '404'],
 			['from' => 'foo']
 		]);
 
 		$redirects->update('404', ['from' => '410']);
-		$this->assertSame(2, $redirects->count());
 		$this->assertFalse($redirects->has('404'));
-		$this->assertSame('410', $redirects->first()->from());
+		$this->assertSame(['410', 'foo'], $this->stored());
 	}
 }
