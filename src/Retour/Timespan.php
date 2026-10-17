@@ -181,6 +181,8 @@ class Timespan
 
 		return [
 			...$data,
+			// the server's local time, like the dates in the log
+			'now'   => date('Y-m-d H:i:s'),
 			// targets of the prev/next buttons and the units dropdown
 			'prev'  => $data['hasPrev'] && $data['isAll'] === false ? static::step($data, -1) : null,
 			'next'  => $data['hasNext'] && $data['isAll'] === false ? static::step($data, 1) : null,
