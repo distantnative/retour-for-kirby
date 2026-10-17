@@ -19,6 +19,7 @@ class Redirect
 	public function __construct(
 		protected string $from,
 		protected string|null $to = null,
+		protected string|null $language = null,
 		protected int|null $status = null,
 		protected bool $priority = false,
 		protected string|null $comment = null,
@@ -44,7 +45,8 @@ class Redirect
 
 	/**
 	 * Config and form data can have numbers as strings
-	 * (or paths as numbers) and `"true"` for priority
+	 * (or paths as numbers), `"true"` for priority
+	 * and an empty string for no language
 	 *
 	 * @throws InvalidArgumentException If the path is missing
 	 */
@@ -53,6 +55,7 @@ class Redirect
 		return new static(
 			from: $data['from'] ?? '',
 			to: $data['to'] ?? null,
+			language: ($data['language'] ?? null) ?: null,
 			status: static::normalizeStatus($data['status'] ?? null),
 			priority: filter_var($data['priority'] ?? false, FILTER_VALIDATE_BOOLEAN),
 			comment: $data['comment'] ?? null,
@@ -74,6 +77,14 @@ class Redirect
 	public function isActive(): bool
 	{
 		return $this->status !== null;
+	}
+
+	/**
+	 * Language of the target page, `null` for the language of the path
+	 */
+	public function language(): string|null
+	{
+		return $this->language;
 	}
 
 	/**
@@ -129,8 +140,15 @@ class Redirect
 	 */
 	public function resolve(array $placeholders): Page|Response|null
 	{
-		$retour    = Retour::instance();
-		$kirby     = $retour->kirby();
+		$retour = Retour::instance();
+		$kirby  = $retour->kirby();
+
+		// a deleted language keeps the language of the path
+		if ($this->language !== null && $kirby->language($this->language) !== null) {
+			$kirby->setCurrentTranslation($this->language);
+			$kirby->setCurrentLanguage($this->language);
+		}
+
 		$to        = static::toPath($this->to ?? '/', $placeholders);
 		$extension = F::extension($to);
 		$path      = Str::beforeEnd($to, '.' . $extension);
@@ -215,6 +233,7 @@ class Redirect
 		return [
 			'from'     => $this->from,
 			'to'       => $this->to,
+			'language' => $this->language,
 			'status'   => $this->status,
 			'priority' => $this->priority,
 			'comment'  => $this->comment,

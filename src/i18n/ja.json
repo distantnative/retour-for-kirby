@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "動的なリダイレクトには<a href='{docs}' target='_blank'>プレースホルダー</a>を使用できます。",
 	"retour.redirects.to": "リダイレクト先",
 	"retour.redirects.to.help": "相対パスまたは絶対URL。空欄にすると、リクエストはステータスコードで終了します。",
+	"retour.redirects.language.placeholder": "パスの言語",
+	"retour.redirects.language.help": "リダイレクト先がページの場合のみ適用されます。",
 	"retour.redirects.status.help": "<a href='{docs}' target='_blank'>HTTPステータスコード</a>の種類と使い分けについて詳しく説明しています。",
 	"retour.redirects.priority": "優先する",
 	"retour.redirects.priority.abbr": "優先",

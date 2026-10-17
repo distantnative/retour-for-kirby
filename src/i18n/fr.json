@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Ajoutez <a href='{docs}' target='_blank'>des placeholders dynamiques</a> pour vos redirections.",
 	"retour.redirects.to": "Rediriger vers",
 	"retour.redirects.to.help": "Chemin relatif ou URL absolue. Laisser vide pour que la requête échoue avec un code de statut.",
+	"retour.redirects.language.placeholder": "Langue du chemin",
+	"retour.redirects.language.help": "Ne s'applique que si la cible est une page.",
 	"retour.redirects.status.help": "Découvrir <a href='{docs}' target='_blank'>les codes de statut HTTP</a> et quand les utiliser.",
 	"retour.redirects.priority": "Prioritaire?",
 	"retour.redirects.priority.abbr": "Prio",

@@ -17,6 +17,7 @@ Retour 6 is rebuilt for Kirby 6: less noise from bots and scanners, a faster and
 - The stats get a "Week" timespan, links in the timeline and the timespan navigation, arrow keys to step through timespans and a half ring chart with the total number of requests
 - The tables keep their page, sorting and filter in the URL, show 50 rows per page, and their buttons can be reordered or hidden with Kirby's `panel.viewButtons` option
 - New `cache` option: the parsed redirects config is cached until the file changes (on by default)
+- Multi-language sites: redirects to pages can have a language, otherwise visitors stay in the language of the path
 - New Czech, Danish, Italian, Japanese, Korean, Polish, Portuguese (Portugal) and Spanish (Latin America) translations, all others completed, and more fitting icons
 
 ### Fixes

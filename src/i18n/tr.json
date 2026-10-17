@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Dinamik yönlendirmeler için <a href='{docs}' target='_blank'>yer tutucular</a> ekleyin.",
 	"retour.redirects.to": "Adresine yönlendir",
 	"retour.redirects.to.help": "Site içi veya tam bir adres girin. İsteğin durum kodu ile tamamlanması için boş bırakın.",
+	"retour.redirects.language.placeholder": "Yolun dili",
+	"retour.redirects.language.help": "Yalnızca hedef bir sayfaysa geçerlidir.",
 	"retour.redirects.status.help": "<a href='{docs}' target='_blank'>HTTP durum kodları</a> ve hangisini ne zaman kullanılacağı hakkında bilgi edinin.",
 	"retour.redirects.priority": "Önceliği var mı?",
 	"retour.redirects.priority.abbr": "Öncelik",

@@ -27,6 +27,7 @@ class RedirectsTest extends TestCase
 			[
 				'from'     => 'foo',
 				'to'       => 'bar',
+				'language' => null,
 				'status'   => 307,
 				'priority' => false,
 				'comment'  => null,
@@ -36,6 +37,7 @@ class RedirectsTest extends TestCase
 			[
 				'from'     => 'homer',
 				'to'       => 'simpson',
+				'language' => null,
 				'status'   => null,
 				'priority' => true,
 				'comment'  => null,
@@ -45,6 +47,7 @@ class RedirectsTest extends TestCase
 			[
 				'from'     => 'berlin',
 				'to'       => 'caracas',
+				'language' => null,
 				'status'   => 200,
 				'priority' => false,
 				'comment'  => null,

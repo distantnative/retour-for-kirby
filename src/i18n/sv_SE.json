@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Lägg till <a href='{docs}' target='_blank'>platshållare</a> för dynamiska omdirigeringar.",
 	"retour.redirects.to": "Omdirigera till",
 	"retour.redirects.to.help": "Relativ sökväg eller absolut URL. Om du lämnar fältet tomt kommer förfrågan att avslutas med statuskod.",
+	"retour.redirects.language.placeholder": "Sökvägens språk",
+	"retour.redirects.language.help": "Gäller bara om målet är en sida.",
 	"retour.redirects.status.help": "Lär dig om <a href='{docs}' target='_blank'>HTTP-statuskoder</a> och hur de ska användas.",
 	"retour.redirects.priority": "Prioriterad?",
 	"retour.redirects.priority.abbr": "Prio",

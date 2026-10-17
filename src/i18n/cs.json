@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Přidejte <a href='{docs}' target='_blank'>zástupné symboly</a> pro dynamická přesměrování.",
 	"retour.redirects.to": "Přesměrovat na",
 	"retour.redirects.to.help": "Relativní cesta nebo absolutní URL. Ponechte prázdné, aby požadavek skončil se stavovým kódem.",
+	"retour.redirects.language.placeholder": "Jazyk cesty",
+	"retour.redirects.language.help": "Platí jen, pokud je cílem stránka.",
 	"retour.redirects.status.help": "Zjistěte více o <a href='{docs}' target='_blank'>stavových kódech HTTP</a> a kdy který použít.",
 	"retour.redirects.priority": "Má přednost?",
 	"retour.redirects.priority.abbr": "Prio",

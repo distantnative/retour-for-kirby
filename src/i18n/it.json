@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Aggiungi <a href='{docs}' target='_blank'>segnaposto</a> per reindirizzamenti dinamici.",
 	"retour.redirects.to": "Reindirizza a",
 	"retour.redirects.to.help": "Percorso relativo o URL assoluto. Lascia vuoto per terminare la richiesta con il codice di stato.",
+	"retour.redirects.language.placeholder": "Lingua del percorso",
+	"retour.redirects.language.help": "Si applica solo se la destinazione è una pagina.",
 	"retour.redirects.status.help": "Scopri di più sui <a href='{docs}' target='_blank'>codici di stato HTTP</a> e su quando usare ciascuno.",
 	"retour.redirects.priority": "Ha priorità?",
 	"retour.redirects.priority.abbr": "Prio",

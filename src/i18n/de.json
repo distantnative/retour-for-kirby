@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Nutze <a href='{docs}' target='_blank'>Platzhalter</a> für dynamische Weiterleitungen.",
 	"retour.redirects.to": "Weiterleiten zu",
 	"retour.redirects.to.help": "Relativer Pfad oder absolute URL. Freilassen, damit die Anfrage mit dem Statuscode endet.",
+	"retour.redirects.language.placeholder": "Sprache des Pfads",
+	"retour.redirects.language.help": "Gilt nur, wenn das Ziel eine Seite ist.",
 	"retour.redirects.status.help": "Erfahre mehr über <a href='{docs}' target='_blank'>HTTP-Statuscodes</a> und wann du welchen verwenden solltest.",
 	"retour.redirects.priority": "Hat Priorität?",
 	"retour.redirects.priority.abbr": "Prio",

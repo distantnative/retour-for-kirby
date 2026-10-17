@@ -24,6 +24,7 @@ class RedirectCreateDrawer extends DrawerController
 		return $this->request->get([
 			'from',
 			'to',
+			'language',
 			'status',
 			'priority',
 			'comment'
@@ -53,8 +54,23 @@ class RedirectCreateDrawer extends DrawerController
 				'type'     => 'link',
 				'label'    => $this->i18n('retour.redirects.to'),
 				'options'  => ['url', 'page', 'custom'],
+				'width'    => $this->kirby->multilang() === true ? '2/3' : '1/1',
 				'help'     => $this->i18n('retour.redirects.to.help')
 			],
+			...($this->kirby->multilang() === true ? [
+				'language' => [
+					'type'        => 'select',
+					'label'       => $this->i18n('language'),
+					'icon'        => 'translate',
+					'options'     => $this->kirby->languages()->values(fn ($language) => [
+						'text'  => $language->name(),
+						'value' => $language->code()
+					]),
+					'placeholder' => $this->i18n('retour.redirects.language.placeholder'),
+					'width'       => '1/3',
+					'help'        => $this->i18n('retour.redirects.language.help')
+				]
+			] : []),
 			'status' => [
 				'type'     => 'retour-status',
 				'label'    => $this->i18n('status'),

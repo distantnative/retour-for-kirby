@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "동적 리디렉션에는 <a href='{docs}' target='_blank'>플레이스홀더</a>를 사용할 수 있습니다.",
 	"retour.redirects.to": "리디렉션 대상",
 	"retour.redirects.to.help": "상대 경로 또는 절대 URL을 입력하세요. 비워 두면 요청이 상태 코드와 함께 종료됩니다.",
+	"retour.redirects.language.placeholder": "경로의 언어",
+	"retour.redirects.language.help": "리디렉션 대상이 페이지인 경우에만 적용됩니다.",
 	"retour.redirects.status.help": "<a href='{docs}' target='_blank'>HTTP 상태 코드</a>의 종류와 사용 시점을 알아보세요.",
 	"retour.redirects.priority": "우선 적용",
 	"retour.redirects.priority.abbr": "우선",

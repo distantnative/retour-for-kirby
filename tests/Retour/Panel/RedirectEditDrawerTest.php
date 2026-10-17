@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(RedirectEditDrawer::class)]
 class RedirectEditDrawerTest extends TestCase
 {
-	protected function drawer(string $id, array $body = []): RedirectEditDrawer
+	protected function drawer(string $id, array $body = [], array $languages = []): RedirectEditDrawer
 	{
 		Data::write($this->tmp . '/retour.yml', [
 			'redirects' => [
@@ -25,7 +25,8 @@ class RedirectEditDrawerTest extends TestCase
 			'distantnative.retour.config' => $this->tmp . '/retour.yml',
 			'distantnative.retour.logs'   => false
 		])->clone([
-			'request' => [
+			'languages' => $languages,
+			'request'   => [
 				'body' => $body
 			],
 			'users' => [
@@ -59,6 +60,8 @@ class RedirectEditDrawerTest extends TestCase
 
 		$this->assertSame('homer/simpson', $drawer->title);
 		$this->assertArrayHasKey('modifier', $drawer->fields);
+		$this->assertArrayNotHasKey('language', $drawer->fields);
+		$this->assertSame('1/1', $drawer->fields['to']['width']);
 		$this->assertSame('retour/redirects/' . Id::encode('homer/simpson') . '/delete', $drawer->options[0]['dialog']);
 		$this->assertSame('marge', $drawer->value['to']);
 		$this->assertSame('marge@simpson.com', (string)$drawer->value['creator'][0]['text']);
@@ -68,6 +71,22 @@ class RedirectEditDrawerTest extends TestCase
 	{
 		$drawer = $this->drawer('foo')->load();
 		$this->assertSame('homer@simpson.com', (string)$drawer->value['creator'][0]['text']);
+	}
+
+	public function testLoadLanguages(): void
+	{
+		$drawer = $this->drawer('foo', languages: [
+			['code' => 'de', 'name' => 'Deutsch', 'default' => true],
+			['code' => 'en', 'name' => 'English']
+		])->load();
+
+		$this->assertSame([
+			['text' => 'Deutsch', 'value' => 'de'],
+			['text' => 'English', 'value' => 'en']
+		], $drawer->fields['language']['options']);
+		$this->assertSame('2/3', $drawer->fields['to']['width']);
+		$this->assertSame('1/3', $drawer->fields['language']['width']);
+		$this->assertNull($drawer->value['language']);
 	}
 
 	public function testSubmit(): void
@@ -117,5 +136,19 @@ class RedirectEditDrawerTest extends TestCase
 		$this->assertSame('baz', $redirect['to']);
 		$this->assertSame('homer@simpson.com', $redirect['creator']);
 		$this->assertSame('user://marge', $redirect['modifier']);
+	}
+
+	public function testSubmitLanguage(): void
+	{
+		foreach (['en' => 'en', '' => null] as $language => $expected) {
+			$drawer = $this->drawer('foo', [
+				'from'     => 'foo',
+				'to'       => 'bar',
+				'language' => $language
+			]);
+
+			$drawer->submit();
+			$this->assertSame($expected, $this->redirects()[0]['language']);
+		}
 	}
 }
