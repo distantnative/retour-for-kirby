@@ -6,11 +6,10 @@ use DateTimeImmutable;
 use Kirby\Cms\App;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Date;
-use Kirby\Toolkit\I18n;
 
 /**
  * Manages the selected date range for log views,
- * including session persistence and label/unit resolution
+ * including session persistence and unit resolution
  */
 class Timespan
 {
@@ -116,69 +115,6 @@ class Timespan
 		return $from <= $today && $to >= $today;
 	}
 
-	public static function label(array $data): string
-	{
-		$unit = $data['unit'];
-		$from = Date::optional($data['from']);
-		$to   = Date::optional($data['to']);
-
-		if ($unit === 'day') {
-			return sprintf(
-				'%s %s %s',
-				$from->format('j'),
-				static::month($from),
-				$from->format('Y')
-			);
-		}
-
-		if ($unit === 'month') {
-			return sprintf(
-				'%s %s',
-				static::month($from),
-				$from->format('Y')
-			);
-		}
-
-		if ($unit === 'year') {
-			return $from->format('Y');
-		}
-
-		// weeks and custom ranges show their first and last day
-
-		// within same month
-		if ($from->format('Y-m') === $to->format('Y-m')) {
-			return sprintf(
-				'%s - %s %s %s',
-				$from->format('j'),
-				$to->format('j'),
-				static::month($from),
-				$from->format('Y')
-			);
-		}
-
-		// within same year
-		if ($from->format('Y') === $to->format('Y')) {
-			return sprintf(
-				'%s %s - %s %s %s',
-				$from->format('j'),
-				static::month($from),
-				$to->format('j'),
-				static::month($to),
-				$from->format('Y')
-			);
-		}
-
-		return sprintf(
-			'%s %s %s - %s %s %s',
-			$from->format('j'),
-			static::month($from),
-			$from->format('Y'),
-			$to->format('j'),
-			static::month($to),
-			$to->format('Y')
-		);
-	}
-
 	public static function limits(Retour|null $retour = null): array
 	{
 		$retour ??= Retour::instance();
@@ -188,13 +124,6 @@ class Timespan
 			$log?->first()['date'] ?? null,
 			$log?->last()['date'] ?? null
 		];
-	}
-
-	protected static function month(Date $date): string|null
-	{
-		$month = $date->format('F');
-		$month = lcfirst($month);
-		return I18n::translate('months.' . $month);
 	}
 
 	/**
@@ -229,8 +158,7 @@ class Timespan
 		$data = static::selection();
 		[$data['first'], $data['last']] = static::limits();
 
-		$data['unit']  = static::unit($data);
-		$data['label'] = static::label($data);
+		$data['unit'] = static::unit($data);
 
 		return $data + static::checks($data);
 	}
