@@ -74,6 +74,33 @@ With the `preserveQuery` option enabled, Retour forwards the query string unchan
 
 If the target already has a query string of its own, the forwarded parameters are added to it. The option applies to all redirects with a `3xx` status code. Other status codes don't send the visitor to a new URL, so their query string stays untouched anyway.
 
+## Multiple domains
+
+If your site is reachable under several domains via Kirby's [`url` option](https://getkirby.com/docs/reference/system/options/url), all domains share the same redirects. To give each domain its own redirects, ignored paths and log, include the current domain in the `config` and `database` options:
+
+```php
+// site/config/config.php
+
+'url' => [
+  'https://a.com',
+  'https://b.com'
+],
+
+'distantnative.retour' => [
+  'config'   => fn () => kirby()->root('config') . '/retour-' . kirby()->environment()->host() . '.yml',
+  'database' => fn () => kirby()->root('logs') . '/retour/' . kirby()->environment()->host() . '.sqlite'
+]
+```
+
+```
+a.com/old  =>  a.com/blog/post-a   (site/config/retour-a.com.yml)
+b.com/old  =>  b.com/blog/post-b   (site/config/retour-b.com.yml)
+```
+
+Kirby only accepts requests for the domains listed in the `url` option, so the file names can only contain one of them.
+
+The Panel shows the redirects of the domain you opened it on, e.g. `b.com/panel` for the ones of `b.com`. Targets without a domain stay on the domain of the request. Redirects that should apply to all domains have to be added on each of them.
+
 ## Buttons
 
 The buttons above the tables are Kirby view buttons: `create` on the redirects tab, `ignores` and `flush` on the failures tab. To reorder or hide them, list the ones you want in the [`panel.viewButtons` option](https://getkirby.com/docs/reference/system/options/panel):
