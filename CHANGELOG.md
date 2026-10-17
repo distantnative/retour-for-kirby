@@ -58,6 +58,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Previous and next on a custom timespan move by its own length, and clicking a month in the timeline zooms into the whole month
 - Invalid timespan dates no longer break the view, an end date before the start date is corrected, and timespans end a year from today at the latest
 - The timeline handles daylight saving time, keeps highlighting the current hour, day or month past midnight and is no longer mirrored in right-to-left languages
+- The timeline marks the current hour, day or month by the server's clock, like the log, instead of the browser's
 - The timeline labels are dimmed again and sit under their columns; the y-axis shows exact ticks, whole numbers for small counts and less empty space above the highest value
 - The timeline no longer shows thin dark lines between its columns on some screen widths
 - The timeline labels no longer overlap on narrow screens or long timespans

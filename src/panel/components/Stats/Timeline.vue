@@ -117,12 +117,8 @@ export default {
 			return `/${this.$panel.view.path}?${query}`;
 		},
 		now(label) {
-			// cut to the label's format to compare as strings; not cached, as the
-			// view stays mounted across reloads and can be open past midnight
-			return this.$library
-				.dayjs()
-				.format("YYYY-MM-DD HH")
-				.slice(0, label.length);
+			// the server's time, like the log's, cut to the label's format
+			return this.timespan.now.slice(0, label.length);
 		},
 		polygon(area) {
 			// the same number of points for up to 100 segments,

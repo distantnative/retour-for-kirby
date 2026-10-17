@@ -198,6 +198,7 @@ class TimespanTest extends TestCase
 		$log->add(['date' => '2023-08-30 10:00:00', 'path' => 'foo']);
 
 		$props = Timespan::props();
+		$this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $props['now']);
 		$this->assertSame($prev, $props['prev']);
 		$this->assertSame($next, $props['next']);
 		$this->assertSame(['from' => '2023-01-02', 'to' => '2023-08-30'], $props['units']['all']);
