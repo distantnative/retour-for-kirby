@@ -54,7 +54,7 @@ class Redirect
 			from: $data['from'] ?? '',
 			to: $data['to'] ?? null,
 			status: static::normalizeStatus($data['status'] ?? null),
-			priority: Str::toType($data['priority'] ?? 'false', 'bool') === true,
+			priority: filter_var($data['priority'] ?? false, FILTER_VALIDATE_BOOLEAN),
 			comment: $data['comment'] ?? null,
 			creator: $data['creator'] ?? null,
 			modifier: $data['modifier'] ?? null
