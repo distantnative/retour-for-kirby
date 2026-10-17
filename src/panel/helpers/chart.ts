@@ -1,9 +1,9 @@
-export type Area = {
+type Area = {
 	color: string;
 	data: number;
 };
 
-export type Bound = {
+type Bound = {
 	mask: number;
 	path: number;
 };
