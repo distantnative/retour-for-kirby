@@ -29,4 +29,10 @@ export default [
 			"vuejs-accessibility/no-autofocus": "off",
 		},
 	},
+	{
+		files: ["**/*.test.ts"],
+		rules: {
+			"vue/one-component-per-file": "off",
+		},
+	},
 ];
