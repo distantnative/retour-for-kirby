@@ -30,10 +30,11 @@ class Migrations
 			// earlier versions stored dates as text; new logs
 			// start with the same table to share the next steps
 			'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date TEXT NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
-			// dates as integers (see `Log::timestamp()`), which
-			// needs a new table as columns can't change their type
-			'CREATE TABLE records_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date INTEGER NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
-			"INSERT INTO records_new SELECT id, CAST(strftime('%s', date) AS INTEGER), path, referrer, redirect, wasResolved FROM records",
+			// dates as integers (see `Log::timestamp()`) and redirect hits
+			// without path and referrer, which needs a new table as
+			// columns can't change their type or constraints
+			'CREATE TABLE records_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date INTEGER NOT NULL, path TEXT, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
+			"INSERT INTO records_new SELECT id, CAST(strftime('%s', date) AS INTEGER), CASE WHEN redirect IS NULL THEN path END, CASE WHEN redirect IS NULL THEN referrer END, redirect, wasResolved FROM records",
 			// also drops all indices of earlier versions
 			'DROP TABLE records',
 			'ALTER TABLE records_new RENAME TO records',

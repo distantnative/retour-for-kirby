@@ -44,6 +44,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 
 - One invalid pattern in the `ignore` option no longer stops the others from working
 - Very long paths and referrers are cut off at 1024 characters
+- Redirect hits no longer store the requested path and referrer, only failures need them
 - Removing or resolving a failure works for paths with slashes
 - Removing a failure keeps the redirect hits of its path in the stats
 
@@ -79,7 +80,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Logging a request and ignoring a path each take a single database statement
 - Stats count each hour, day or month with an indexed range query
 - Clearing or purging the log only rebuilds the database file when at least a fifth of it is free, so large logs are locked for less time
-- Smaller log database: dates are stored as numbers and the index for redirect hits no longer includes failures (96 MB instead of 133 MB at 1M records, including the new index for failures)
+- Smaller log database: dates are stored as numbers and the index for redirect hits no longer includes failures (88 MB instead of 133 MB at 1M records, including the new index for failures)
 - A new index for failures: removing, resolving or ignoring failures no longer scans the whole log (0.1 ms instead of 47 ms at 1M records)
 - The tables are paginated, sorted and filtered on the server. With 1M log records, two years of failures load in 0.3 s instead of 0.7 s, with 4 KB instead of 30 MB of data, and no longer exceed PHP's memory limit (2 MB instead of 300 MB).
 

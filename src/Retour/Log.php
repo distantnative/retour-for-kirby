@@ -58,14 +58,25 @@ class Log
 	}
 
 	/**
-	 * Returns whether the record has been stored
+	 * Stores a failure with its `path` (and `referrer`)
+	 * or the hit of a `redirect`; returns whether
+	 * the record has been stored
 	 */
 	public function add(array $props): bool
 	{
-		$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
+		$redirect = $props['redirect'] ?? null;
+		$path     = null;
+		$referrer = null;
 
-		if ($referrer !== null) {
-			$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
+		// redirect hits only count for their redirect,
+		// their path and referrer aren't needed
+		if ($redirect === null) {
+			$path     = Str::substr($props['path'], 0, static::MAX_LENGTH);
+			$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
+
+			if ($referrer !== null) {
+				$referrer = Str::substr($referrer, 0, static::MAX_LENGTH);
+			}
 		}
 
 		// unlike the query builder, a plain statement doesn't need
@@ -74,9 +85,9 @@ class Log
 			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
 			[
 				'date'     => static::timestamp($props['date'] ?? date('Y-m-d H:i:s')),
-				'path'     => Str::substr($props['path'], 0, static::MAX_LENGTH),
+				'path'     => $path,
 				'referrer' => $referrer,
-				'redirect' => $props['redirect'] ?? null
+				'redirect' => $redirect
 			]
 		);
 	}

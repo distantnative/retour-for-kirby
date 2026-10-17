@@ -196,10 +196,7 @@ class Redirect
 			$kirby->request()->method() !== 'HEAD' &&
 			$retour->ignores()->matchesVisitor() === false
 		) {
-			$retour->log()?->add([
-				'path'     => Url::path(),
-				'redirect' => $this->from
-			]);
+			$retour->log()?->add(['redirect' => $this->from]);
 		}
 
 		return $response;
