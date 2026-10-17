@@ -12,11 +12,8 @@
 				:value="term"
 				class="k-retour-search"
 				type="search"
-				@input="
-					term = $event;
-					filter();
-				"
-				@keydown.esc.stop="toggleSearch(true)"
+				@input="search"
+				@keydown.esc.stop="term ? search(null) : toggleSearch()"
 			/>
 
 			<k-button
@@ -128,13 +125,11 @@ export default {
 
 			window.scrollTo(0, scroll);
 		},
-		async toggleSearch(forgiving = false) {
-			if (forgiving && this.term) {
-				this.term = null;
-				this.filter();
-				return;
-			}
-
+		search(term) {
+			this.term = term;
+			this.filter();
+		},
+		async toggleSearch() {
 			if (this.searchterm) {
 				this.reload({ searchterm: null });
 			}
