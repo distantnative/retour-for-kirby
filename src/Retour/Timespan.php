@@ -13,6 +13,34 @@ use Kirby\Toolkit\Date;
  */
 class Timespan
 {
+	/**
+	 * Returns the first and last day of the unit
+	 * (`day`, `week`, `month` or `year`) around the date
+	 */
+	public static function around(string $date, string $unit): array
+	{
+		$date = new DateTimeImmutable($date);
+
+		$from = match ($unit) {
+			'day'   => $date,
+			'week'  => $date->modify('-' . ((int)$date->format('w') - static::firstWeekday() + 7) % 7 . ' days'),
+			'month' => $date->modify('first day of this month'),
+			'year'  => $date->setDate((int)$date->format('Y'), 1, 1)
+		};
+
+		$to = match ($unit) {
+			'day'   => $from,
+			'week'  => $from->modify('+6 days'),
+			'month' => $from->modify('last day of this month'),
+			'year'  => $from->setDate((int)$from->format('Y'), 12, 31)
+		};
+
+		return [
+			'from' => $from->format('Y-m-d'),
+			'to'   => $to->format('Y-m-d')
+		];
+	}
+
 	protected static function checks(array $data): array
 	{
 		$today = Date::now();
@@ -159,8 +187,16 @@ class Timespan
 		[$data['first'], $data['last']] = static::limits();
 
 		$data['unit'] = static::unit($data);
+		$data        += static::checks($data);
 
-		return $data + static::checks($data);
+		return [
+			...$data,
+			// where the previous and next buttons
+			// and the units of the dropdown lead to
+			'prev'  => $data['hasPrev'] && $data['isAll'] === false ? static::step($data, -1) : null,
+			'next'  => $data['hasNext'] && $data['isAll'] === false ? static::step($data, 1) : null,
+			'units' => static::units($data)
+		];
 	}
 
 	public static function query(): array
@@ -200,6 +236,39 @@ class Timespan
 
 		App::instance()->session()->set('retour', $data);
 		return $data;
+	}
+
+	/**
+	 * Returns the timespan before (`-1`) or after (`1`) this one:
+	 * the previous or next unit, custom ranges move by their own length
+	 */
+	public static function step(array $data, int $direction): array
+	{
+		$from = new DateTimeImmutable($data['from']);
+		$to   = new DateTimeImmutable($data['to']);
+
+		if ($data['unit'] === 'days') {
+			$days = $direction * ($from->diff($to)->days + 1);
+
+			return [
+				'from' => $from->modify($days . ' days')->format('Y-m-d'),
+				'to'   => $to->modify($days . ' days')->format('Y-m-d')
+			];
+		}
+
+		// whole months, also when the range starts or ends within one
+		if ($data['unit'] === 'months') {
+			$from   = $from->modify('first day of this month');
+			$to     = $to->modify('first day of this month');
+			$months = $direction * ($from->diff($to)->y * 12 + $from->diff($to)->m + 1);
+
+			return [
+				'from' => $from->modify($months . ' months')->format('Y-m-d'),
+				'to'   => $to->modify($months . ' months')->modify('last day of this month')->format('Y-m-d')
+			];
+		}
+
+		return static::around($from->modify($direction . ' ' . $data['unit'])->format('Y-m-d'), $data['unit']);
 	}
 
 	/**
@@ -244,5 +313,34 @@ class Timespan
 		}
 
 		return 'days';
+	}
+
+	/**
+	 * Returns the timespans that the units of the dropdown lead to:
+	 * a unit around the start of the timespan, the current unit
+	 * again around today; `null` for all without logs
+	 */
+	protected static function units(array $data): array
+	{
+		$today = date('Y-m-d');
+		$units = [
+			'all' => $data['hasAll'] ? [
+				'from' => Date::optional($data['first'])->format('Y-m-d'),
+				'to'   => Date::optional($data['last'])->format('Y-m-d')
+			] : null
+		];
+
+		foreach (['year', 'month', 'week', 'day'] as $unit) {
+			$units[$unit] = static::around($unit === $data['unit'] ? $today : $data['from'], $unit);
+		}
+
+		// custom ranges go to today or its month
+		$units['today'] = static::around($today, match ($data['unit']) {
+			'days'   => 'day',
+			'months' => 'month',
+			default  => $data['unit']
+		});
+
+		return $units;
 	}
 }
