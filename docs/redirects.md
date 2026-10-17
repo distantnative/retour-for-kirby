@@ -41,6 +41,17 @@ project/(:any)/photos  =>  project/$1/gallery
 blog/(:any)/(:all)     =>  notes/$1/entries/$2
 ```
 
+### Language
+
+Only on multi-language sites. Visitors see the target page in the language of the path, e.g. the English version for `en/old` and the German one for `de/alt`. Paths without a language prefix lead to the default language. Choose a language to always show the page in that language instead:
+
+```
+en/old  =>  page://abc            =>  en/new
+en/old  =>  page://abc  (German)  =>  de/neu
+```
+
+URLs and paths that aren't pages keep the language they contain.
+
 ### Status
 
 The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) the redirect will respond with.

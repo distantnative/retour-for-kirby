@@ -19,6 +19,16 @@ class RedirectTest extends TestCase
 		new Redirect(from: '');
 	}
 
+	public function testFactoryLanguage(): void
+	{
+		$redirect = Redirect::factory(['from' => 'foo', 'language' => 'en']);
+		$this->assertSame('en', $redirect->language());
+
+		// the Panel sends an empty string for the language of the path
+		$redirect = Redirect::factory(['from' => 'foo', 'language' => '']);
+		$this->assertNull($redirect->language());
+	}
+
 	public function testFactoryNumericValues(): void
 	{
 		// e.g. unquoted numbers in hand-edited config files
@@ -170,6 +180,58 @@ class RedirectTest extends TestCase
 		foreach (['secret', 'secret/child', 'page://secret'] as $path) {
 			$this->assertNull($redirect->resolve([$path]), $path);
 		}
+	}
+
+	/**
+	 * Overrides the language of the path,
+	 * unless the language has been deleted
+	 */
+	public function testResolveLanguage(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'urls' => [
+				'index' => 'https://example.com'
+			],
+			'languages' => [
+				['code' => 'de', 'default' => true],
+				['code' => 'en']
+			],
+			'site' => [
+				'children' => [
+					[
+						'slug'         => 'target',
+						'translations' => [
+							['code' => 'de', 'content' => ['uuid' => 'target']],
+							['code' => 'en', 'slug' => 'target-en']
+						]
+					]
+				]
+			]
+		]);
+
+		Retour::instance($app);
+
+		$cases = [
+			['page://target', 'en', '/en/target-en'],
+			['target-en', 'en', '/en/target-en'],
+			['page://target', 'fr', '/de/target'],
+			['page://target', null, '/de/target'],
+		];
+
+		foreach ($cases as [$to, $language, $expected]) {
+			$app->setCurrentLanguage('de');
+
+			$redirect = new Redirect(from: 'foo', to: $to, language: $language, status: 301);
+			$this->assertSame('https://example.com' . $expected, $redirect->resolve([])->header('Location'), $to . ' in ' . $language);
+		}
+
+		// shows the page in the language
+		$redirect = new Redirect(from: 'foo', to: 'target', language: 'en', status: 200);
+		$this->assertInstanceOf(Page::class, $redirect->resolve([]));
+		$this->assertSame('en', $app->language()->code());
 	}
 
 	public function testResolvePreserveQueryUnaffectedForNonRedirectStatus(): void
@@ -494,6 +556,7 @@ class RedirectTest extends TestCase
 		$expected = [
 			'from'     => 'foo',
 			'to'       => 'bar',
+			'language' => 'en',
 			'status'   => 301,
 			'priority' => true,
 			'comment'  => 'Old blog',
@@ -508,6 +571,7 @@ class RedirectTest extends TestCase
 		$this->assertSame([
 			'from'     => 'foo',
 			'to'       => null,
+			'language' => null,
 			'status'   => null,
 			'priority' => false,
 			'comment'  => null,

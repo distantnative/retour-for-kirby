@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Dodaj <a href='{docs}' target='_blank'>symbole zastępcze</a> dla dynamicznych przekierowań.",
 	"retour.redirects.to": "Przekieruj do",
 	"retour.redirects.to.help": "Ścieżka względna lub bezwzględny URL. Pozostaw puste, aby żądanie zakończyło się kodem statusu.",
+	"retour.redirects.language.placeholder": "Język ścieżki",
+	"retour.redirects.language.help": "Dotyczy tylko przekierowań do strony.",
 	"retour.redirects.status.help": "Dowiedz się więcej o <a href='{docs}' target='_blank'>kodach statusu HTTP</a> i o tym, kiedy którego użyć.",
 	"retour.redirects.priority": "Ma priorytet?",
 	"retour.redirects.priority.abbr": "Prio",

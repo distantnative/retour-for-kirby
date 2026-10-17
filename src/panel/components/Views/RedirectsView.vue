@@ -6,18 +6,25 @@ export default {
 	class: "k-retour-redirects-view",
 	computed: {
 		columns() {
+			const multilang = this.$panel.multilang;
 			const columns = {
 				from: {
 					label: this.$t("retour.redirects.from"),
 					type: "path",
-					width: "7/20",
+					width: multilang ? "3/10" : "7/20",
 					mobile: true,
 				},
 				to: {
 					label: this.$t("retour.redirects.to"),
 					type: "link",
-					width: "7/20",
+					width: multilang ? "3/10" : "7/20",
 				},
+				...(multilang && {
+					language: {
+						label: this.$t("language"),
+						width: "1/10",
+					},
+				}),
 				status: {
 					label: this.$t("status"),
 					type: "status",

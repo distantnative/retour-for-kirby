@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Adicione <a href='{docs}' target='_blank'>marcadores de posição</a> para redirecionamentos dinâmicos.",
 	"retour.redirects.to": "Redirecionar para",
 	"retour.redirects.to.help": "Caminho relativo ou URL absoluto. Deixe em branco para que o pedido termine com o código de estado.",
+	"retour.redirects.language.placeholder": "Idioma do caminho",
+	"retour.redirects.language.help": "Só se aplica se o destino for uma página.",
 	"retour.redirects.status.help": "Saiba mais sobre os <a href='{docs}' target='_blank'>códigos de estado HTTP</a> e quando utilizar cada um.",
 	"retour.redirects.priority": "Tem prioridade?",
 	"retour.redirects.priority.abbr": "Prio",

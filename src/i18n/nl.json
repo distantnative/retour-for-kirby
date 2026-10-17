@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Voeg <a href='{docs}' target='_blank'>placeholders</a> toe voor dynamische omleidingen.",
 	"retour.redirects.to": "Omleiden naar",
 	"retour.redirects.to.help": "Relatief pad of absolute URL. Laat leeg om het verzoek te laten aflopen met een statuscode.",
+	"retour.redirects.language.placeholder": "Taal van het pad",
+	"retour.redirects.language.help": "Geldt alleen als het doel een pagina is.",
 	"retour.redirects.status.help": "Lees meer over <a href='{docs}' target='_blank'>HTTP-statuscodes</a> en wanneer welke te gebruiken.",
 	"retour.redirects.priority": "Heeft prioriteit?",
 	"retour.redirects.priority.abbr": "Prioriteit",

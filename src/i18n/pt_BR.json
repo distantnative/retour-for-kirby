@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Adicione <a href='{docs}' target='_blank'>curingas dinâmicos</a> em seu redirecionamento.",
 	"retour.redirects.to": "Redirecionar para",
 	"retour.redirects.to.help": "Caminho relativo ou URL absoluta. Deixe em branco para finalizar com código de estado HTTP.",
+	"retour.redirects.language.placeholder": "Idioma do caminho",
+	"retour.redirects.language.help": "Só se aplica se o destino for uma página.",
 	"retour.redirects.status.help": "Aprenda sobre os <a href='{docs}' target='_blank'>códigos de estado HTTP</a> e quando usar cada um.",
 	"retour.redirects.priority": "Tem prioridade?",
 	"retour.redirects.priority.abbr": "Prioridade",

@@ -8,6 +8,8 @@
 	"retour.redirects.from.help": "Tilføj <a href='{docs}' target='_blank'>pladsholdere</a> til dynamiske omdirigeringer.",
 	"retour.redirects.to": "Omdiriger til",
 	"retour.redirects.to.help": "Relativ sti eller absolut URL. Lad feltet stå tomt for at afslutte forespørgslen med statuskoden.",
+	"retour.redirects.language.placeholder": "Stiens sprog",
+	"retour.redirects.language.help": "Gælder kun, hvis målet er en side.",
 	"retour.redirects.status.help": "Lær mere om <a href='{docs}' target='_blank'>HTTP-statuskoder</a> og hvornår du skal bruge hvilken.",
 	"retour.redirects.priority": "Har prioritet?",
 	"retour.redirects.priority.abbr": "Prio",
