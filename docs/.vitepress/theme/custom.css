@@ -12,15 +12,31 @@
 	--vp-button-alt-hover-bg: #c5c9e1;
 }
 
-.VPHomeFeatures {
-	margin-bottom: 4.5rem;
+.home-screenshot {
+	max-width: 72rem;
+	margin: 0 auto 4rem;
+	padding: 0 1.5rem;
+	box-sizing: content-box;
+}
+
+@media (min-width: 40rem) {
+	.home-screenshot {
+		padding: 0 3rem;
+	}
+}
+
+@media (min-width: 60rem) {
+	.home-screenshot {
+		padding: 0 4rem;
+	}
 }
 
 .VPHomeHero .image-bg {
 	opacity: 0.5;
 }
 
-.vp-doc img {
+.vp-doc img,
+.home-screenshot img {
 	border-radius: 0.5rem;
 	box-shadow:
 		rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
