@@ -108,13 +108,18 @@ class Log
 	 */
 	public function fails(string $from, string $to): array
 	{
-		$fails = $this->between($from, $to)
+		// `+date` keeps SQLite on idx_failures, which has the failures
+		// grouped by path and referrer already, instead of looking up
+		// every record of the timespan found via idx_date
+		$fails = $this->table()
 			->select('
                 path,
                 referrer,
                 MAX(date) AS last,
                 COUNT(*) AS hits
             ')
+			->where('+date >= :start', ['start' => $from . ' 00:00:00'])
+			->andWhere('+date <= :end', ['end' => $to . ' 23:59:59'])
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')
@@ -309,10 +314,10 @@ class Log
 
 	public function resolve(string $path): bool
 	{
-		return $this->table()->update(
-			['wasResolved' => 1],
-			['path' => $path]
-		);
+		return $this->table()
+			->where(['path' => $path])
+			->andWhere('redirect IS NULL')
+			->update(['wasResolved' => 1]);
 	}
 
 	protected function single(string $sort): array

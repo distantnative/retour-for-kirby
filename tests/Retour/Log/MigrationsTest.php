@@ -74,7 +74,8 @@ class MigrationsTest extends TestCase
 		$this->assertSame([], $migrations->pending());
 
 		$schema = $this->schema($log);
-		$this->assertSame(['idx_date', 'idx_redirect_date'], array_keys($schema['indices']));
+		$this->assertSame(['idx_date', 'idx_failures', 'idx_redirect_date'], array_keys($schema['indices']));
+		$this->assertStringEndsWith('WHERE redirect IS NULL', $schema['indices']['idx_failures']);
 		$this->assertStringEndsWith('WHERE redirect IS NOT NULL', $schema['indices']['idx_redirect_date']);
 		$this->assertSame(['idx_date' => '1000000 1', 'idx_redirect_date' => '400000 8000 1'], $schema['statistics']);
 
@@ -93,7 +94,8 @@ class MigrationsTest extends TestCase
 		$schema = $this->schema($log);
 
 		$this->assertSame(static::latest(), $schema['version']);
-		$this->assertSame(['idx_date', 'idx_redirect_date'], array_keys($schema['indices']));
+		$this->assertSame(['idx_date', 'idx_failures', 'idx_redirect_date'], array_keys($schema['indices']));
+		$this->assertStringEndsWith('WHERE redirect IS NULL', $schema['indices']['idx_failures']);
 		$this->assertStringEndsWith('WHERE redirect IS NOT NULL', $schema['indices']['idx_redirect_date']);
 		$this->assertSame(['idx_date' => '1000000 1', 'idx_redirect_date' => '400000 8000 1'], $schema['statistics']);
 	}

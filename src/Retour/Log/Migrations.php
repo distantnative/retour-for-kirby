@@ -32,6 +32,8 @@ class Migrations
 			// only for redirect hits, failures don't need it
 			'DROP INDEX IF EXISTS idx_redirect_date',
 			'CREATE INDEX idx_redirect_date ON records (redirect, date) WHERE redirect IS NOT NULL',
+			// groups the failures and finds them by path
+			'CREATE INDEX IF NOT EXISTS idx_failures ON records (path, referrer, date, wasResolved) WHERE redirect IS NULL',
 			// unused indices of earlier versions
 			'DROP INDEX IF EXISTS idx_fails',
 			'DROP INDEX IF EXISTS idx_path',
