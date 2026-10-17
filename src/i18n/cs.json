@@ -22,7 +22,7 @@
 	"retour.failures.path": "Cesta",
 	"retour.failures.referrer": "Zdroj",
 	"retour.failures.resolve": "Přidat jako přesměrování",
-	"retour.failures.clear": "Vymazat protokol",
+	"retour.failures.clear": "Vymazat",
 	"retour.failures.clear.confirm": "Opravdu chcete protokol trvale smazat?",
 	"retour.failures.clear.help": "Pokud smažete pouze chyby, statistiky přístupů vašich přesměrování zůstanou zachovány.",
 	"retour.failures.clear.mode.all": "Vymazat celý protokol",

@@ -83,7 +83,7 @@ The buttons above the tables are Kirby view buttons: `create` on the redirects t
 
 'panel' => [
   'viewButtons' => [
-    // hide the "Clear log" button
+    // hide the "Clear" button
     'retour.failures' => ['ignores']
   ]
 ]

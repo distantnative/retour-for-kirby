@@ -22,7 +22,7 @@
 	"retour.failures.path": "경로",
 	"retour.failures.referrer": "리퍼러",
 	"retour.failures.resolve": "리디렉션으로 추가",
-	"retour.failures.clear": "로그 삭제",
+	"retour.failures.clear": "지우기",
 	"retour.failures.clear.confirm": "로그를 영구적으로 삭제할까요?",
 	"retour.failures.clear.help": "오류만 삭제하면 리디렉션의 조회수 통계는 유지됩니다.",
 	"retour.failures.clear.mode.all": "전체 로그 삭제",

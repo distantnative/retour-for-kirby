@@ -22,7 +22,7 @@
 	"retour.failures.path": "Caminho",
 	"retour.failures.referrer": "Referenciador",
 	"retour.failures.resolve": "Adicionar como redirecionamento",
-	"retour.failures.clear": "Limpar registo",
+	"retour.failures.clear": "Limpar",
 	"retour.failures.clear.confirm": "Tem a certeza que pretende eliminar o registo permanentemente?",
 	"retour.failures.clear.help": "Ao eliminar apenas as falhas, as estatísticas de acessos dos seus redirecionamentos são mantidas.",
 	"retour.failures.clear.mode.all": "Limpar todo o registo",

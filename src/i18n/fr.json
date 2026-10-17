@@ -22,7 +22,7 @@
 	"retour.failures.path": "Chemin",
 	"retour.failures.referrer": "Référent",
 	"retour.failures.resolve": "Ajouter comme redirection",
-	"retour.failures.clear": "Supprimer l'historique des redirections",
+	"retour.failures.clear": "Vider",
 	"retour.failures.clear.confirm": "Voulez-vous vraiment supprimer l'historique des redirections?",
 	"retour.failures.clear.help": "Supprimer uniquement les échecs conserve les statistiques de requêtes de vos redirections.",
 	"retour.failures.clear.mode.all": "Supprimer tout l'historique",

@@ -22,7 +22,7 @@
 	"retour.failures.path": "Sti",
 	"retour.failures.referrer": "Henviser",
 	"retour.failures.resolve": "Tilføj som omdirigering",
-	"retour.failures.clear": "Ryd log",
+	"retour.failures.clear": "Ryd",
 	"retour.failures.clear.confirm": "Vil du virkelig slette loggen permanent?",
 	"retour.failures.clear.help": "Hvis du kun sletter fejl, bevares hit-statistikken for dine omdirigeringer.",
 	"retour.failures.clear.mode.all": "Ryd hele loggen",

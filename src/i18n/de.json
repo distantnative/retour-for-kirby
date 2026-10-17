@@ -22,7 +22,7 @@
 	"retour.failures.path": "Pfad",
 	"retour.failures.referrer": "Ursprung",
 	"retour.failures.resolve": "Als Weiterleitung hinzufügen",
-	"retour.failures.clear": "Log leeren",
+	"retour.failures.clear": "Leeren",
 	"retour.failures.clear.confirm": "Willst du wirklich alle Logs endgültig löschen?",
 	"retour.failures.clear.help": "Wenn du das Log nur für Fehler löschst, bleiben die Statistiken für Weiterleitungen erhalten.",
 	"retour.failures.clear.mode.all": "Komplettes Log löschen",

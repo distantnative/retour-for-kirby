@@ -22,7 +22,7 @@
 	"retour.failures.path": "Ruta",
 	"retour.failures.referrer": "Referencia",
 	"retour.failures.resolve": "Agregar como redirección",
-	"retour.failures.clear": "Borrar registro",
+	"retour.failures.clear": "Borrar",
 	"retour.failures.clear.confirm": "¿Realmente deseas eliminar el registro de forma permanente?",
 	"retour.failures.clear.help": "Si solo borras las fallas, se conservarán las estadísticas de visitas de tus redirecciones.",
 	"retour.failures.clear.mode.all": "Borrar el registro completo",

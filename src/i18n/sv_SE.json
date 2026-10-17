@@ -22,7 +22,7 @@
 	"retour.failures.path": "Sökväg",
 	"retour.failures.referrer": "Refererare",
 	"retour.failures.resolve": "Lägg till som omdirigering",
-	"retour.failures.clear": "Rensa logg",
+	"retour.failures.clear": "Rensa",
 	"retour.failures.clear.confirm": "Vill du verkligen radera all loggad data permanent?",
 	"retour.failures.clear.help": "Om du bara rensar misslyckanden behålls träffstatistiken för dina omdirigeringar.",
 	"retour.failures.clear.mode.all": "Rensa hela loggen",
