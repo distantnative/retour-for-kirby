@@ -59,6 +59,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - The timeline no longer shows thin dark lines between its columns on some screen widths
 - The timeline labels no longer overlap on narrow screens or long timespans
 - On narrow screens, the stats show the totals without the ring chart
+- Long timespans wrap instead of pushing the previous and next buttons off narrow screens
 - The legend of the stats wraps on narrow screens instead of overlapping
 - Numbers in the stats and tables are formatted in the Panel's language, and so is the timespan, with short month names for ranges (e.g. "Sep 28 – Oct 4, 2026" or "28. Sept. – 4. Okt. 2026")
 

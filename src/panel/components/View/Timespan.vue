@@ -181,3 +181,22 @@ export default {
 	},
 };
 </script>
+
+<style>
+/* long labels wrap instead of pushing the buttons off narrow screens */
+.k-retour-timespan {
+	min-width: 0;
+}
+.k-retour-timespan > .k-button:first-child {
+	flex-shrink: 1;
+	min-width: 0;
+	height: auto;
+	min-height: var(--height-sm);
+	padding-block: var(--spacing-1);
+}
+.k-retour-timespan > .k-button:first-child .k-button-text {
+	white-space: normal;
+	text-wrap: balance;
+	line-height: 1.25;
+}
+</style>
