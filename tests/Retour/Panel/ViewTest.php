@@ -206,6 +206,22 @@ class ViewTest extends TestCase
 		$this->assertNull($props['searchterm']);
 	}
 
+	public function testPropsRedirectsDisabled(): void
+	{
+		Data::write($this->tmp . '/retour.yml', [
+			'redirects' => [
+				['from' => 'a', 'status' => 301],
+				['from' => 'b']
+			]
+		]);
+
+		$props = $this->view('redirects')->props();
+		$this->assertSame([301, 'disabled'], array_column($props['data'], 'status'));
+
+		$props = $this->view('redirects', query: ['searchterm' => 'disabled'])->props();
+		$this->assertSame(['b'], array_column($props['data'], 'from'));
+	}
+
 	protected function view(
 		string $tab,
 		array $options = [],

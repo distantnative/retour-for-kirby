@@ -9,6 +9,7 @@ describe("status.color()", () => {
 		{ status: undefined, expected: "var(--color-gray-400)" },
 		{ status: null, expected: "var(--color-gray-400)" },
 		{ status: "", expected: "var(--color-gray-400)" },
+		{ status: "disabled", expected: "var(--color-gray-400)" },
 		{ status: 200, expected: "var(--color-blue-500)" },
 		{ status: 301, expected: "var(--color-green-500)" },
 		{ status: "302", expected: "var(--color-green-500)" },

@@ -8,10 +8,6 @@
  * color("404") // => "var(--color-red-500)"
  */
 export function color(status?: number | string | null): string {
-	if (!status) {
-		return "var(--color-gray-400)";
-	}
-
 	const code = parseInt(String(status));
 
 	if (code >= 400) {
@@ -22,5 +18,9 @@ export function color(status?: number | string | null): string {
 		return "var(--color-green-500)";
 	}
 
-	return "var(--color-blue-500)";
+	if (code >= 100) {
+		return "var(--color-blue-500)";
+	}
+
+	return "var(--color-gray-400)";
 }
