@@ -122,8 +122,7 @@ export default {
 			this.reload({ sortBy: next === this.defaultSortBy ? null : next });
 		},
 		async reload(query) {
-			// core scrolls to the top on every new URL,
-			// but the table should stay where it is
+			// core scrolls to the top on every new URL, the table should stay put
 			const scroll = window.scrollY;
 
 			// a new filter or order starts on the first page
@@ -146,8 +145,7 @@ export default {
 			this.term = null;
 			this.searching = !this.searching;
 
-			// the input focuses itself, but when it's gone,
-			// the focus would fall back to the document
+			// without the input, the focus would fall back to the document
 			if (this.searching === false) {
 				await this.$nextTick();
 				this.$refs.filter.focus();

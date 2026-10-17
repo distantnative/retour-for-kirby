@@ -62,8 +62,7 @@ export default {
 		text() {
 			const { from, to, unit } = this.timespan;
 
-			// whole months and years only name those, other timespans
-			// their days; `formatRange()` merges what both dates share
+			// months and years without days; `formatRange()` merges what both dates share
 			const options = {
 				day: { day: "numeric", month: "long" },
 				month: { month: "long" },
