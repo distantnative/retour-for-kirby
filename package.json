@@ -12,17 +12,22 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@vitejs/plugin-vue": "^6.0.10",
+		"@vue/test-utils": "^2.5.1",
+		"dayjs": "^1.11.23",
 		"eslint": "^10.13.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-vue": "^10.11.1",
 		"eslint-plugin-vuejs-accessibility": "^2.6.2",
 		"globals": "^17.13.0",
+		"happy-dom": "^20.14.6",
 		"kirby-types": "2.0.0-beta.3",
 		"kirbyup": "next",
 		"prettier": "^3.9.10",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.71.2",
 		"vitest": "^5.0.5",
+		"vue": "^3.5.44",
 		"vue-tsc": "^3.3.13"
 	}
 }
