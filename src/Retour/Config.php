@@ -55,27 +55,22 @@ class Config
 	 */
 	protected static function load(string $file): string
 	{
-		$handle = @fopen($file, 'r');
+		$handle   = @fopen($file, 'r');
+		$contents = false;
 
-		if ($handle === false) {
-			throw new LogicException(
-				message: 'Retour: The config file could not be read: ' . $file
-			);
-		}
-
-		try {
-			flock($handle, LOCK_SH);
-			$contents = stream_get_contents($handle);
-		} finally {
-			fclose($handle);
+		if ($handle !== false) {
+			try {
+				flock($handle, LOCK_SH);
+				$contents = stream_get_contents($handle);
+			} finally {
+				fclose($handle);
+			}
 		}
 
 		if ($contents === false) {
-			// @codeCoverageIgnoreStart
 			throw new LogicException(
 				message: 'Retour: The config file could not be read: ' . $file
 			);
-			// @codeCoverageIgnoreEnd
 		}
 
 		return $contents;
@@ -116,18 +111,18 @@ class Config
 	public function read(): array
 	{
 		$file        = $this->root();
+		$this->data  = [];
 		$this->error = null;
 
-		if (F::exists($file) === false) {
-			return $this->data = [];
+		if (F::exists($file) === true) {
+			try {
+				$this->data = $this->parse(static::load($file), $file);
+			} catch (LogicException $error) {
+				$this->error = $error;
+			}
 		}
 
-		try {
-			return $this->data = $this->parse(static::load($file), $file);
-		} catch (LogicException $error) {
-			$this->error = $error;
-			return $this->data = [];
-		}
+		return $this->data;
 	}
 
 	public function root(): string
@@ -155,12 +150,7 @@ class Config
 
 		$updated = F::update($file, function (string $contents) use ($file, $data, &$new): string {
 			$current = static::decode($contents, $file);
-
-			if ($data instanceof Closure) {
-				$new = $data($current);
-			} else {
-				$new = [...$current, ...$data];
-			}
+			$new     = $data instanceof Closure ? $data($current) : [...$current, ...$data];
 
 			return Data::encode($new, F::extension($file));
 		});
