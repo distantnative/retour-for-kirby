@@ -1,51 +1,47 @@
 <template>
-	<div :data-subunit="subunit" class="k-retour-timeline">
-		<table aria-hidden="true">
-			<thead>
-				<tr>
-					<th v-for="tick in axisY" :key="tick">
-						{{ tick }}
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr
-					v-for="(segment, segmentIndex) in data"
-					:key="segmentIndex"
-					@click="zoom(segment)"
-				>
-					<td
-						v-for="(area, areaIndex) in segment.areas"
-						:key="areaIndex"
-						:style="`--color: ${color(segmentIndex, area)}; ${clip(
-							segmentIndex,
-							areaIndex,
-						)}`"
-					/>
-				</tr>
-			</tbody>
-			<tfoot :data-less="data.length > 31">
-				<tr
-					v-for="segment in data"
+	<div class="k-retour-timeline">
+		<div>
+			<ol aria-hidden="true">
+				<li v-for="tick in [...axisY].reverse()" :key="tick">
+					<span>{{ tick }}</span>
+				</li>
+			</ol>
+
+			<div
+				v-for="(area, index) in data[0]?.areas"
+				:key="index"
+				:style="{ background: area.color, clipPath: polygon(index) }"
+			/>
+
+			<nav ref="plot" @resize="width = $event.detail.width">
+				<k-link
+					v-for="(segment, index) in data"
 					:key="segment.label"
-					:data-current="isCurrent(segment)"
-					@click="zoom(segment)"
+					:aria-current="isCurrent(segment) ? 'date' : null"
+					:aria-label="title(segment)"
+					:tabindex="isLabeled(index) ? null : -1"
+					:to="link(segment)"
 				>
-					<td>{{ label(segment) }}</td>
-				</tr>
-			</tfoot>
-		</table>
+					<span v-show="isLabeled(index)">{{ label(segment) }}</span>
+				</k-link>
+			</nav>
+		</div>
 	</div>
 </template>
 
 <script>
-import { axis, bounds, clip, max } from "../../helpers/chart";
+import { axis, bounds, max, polygon } from "../../helpers/chart";
 import { format, subunit } from "../../helpers/unit";
 
 export default {
 	props: {
 		data: Array,
 		timespan: Object,
+	},
+	data() {
+		return {
+			width: 0,
+		};
 	},
 	computed: {
 		axisY() {
@@ -57,32 +53,43 @@ export default {
 		format() {
 			return format(this.timespan.unit);
 		},
+		last() {
+			// the areas end today, later segments lie in the future
+			const index = this.data.findLastIndex(
+				(segment) => segment.label <= this.now(segment.label),
+			);
+
+			return Math.max(index, 0);
+		},
 		max() {
 			return max(this.data);
+		},
+		step() {
+			// every nth label, so that they don't overlap (about 8px
+			// per character plus some space), counted from the last one
+			const chars = Math.max(
+				...this.data.map((segment) => this.label(segment).length),
+			);
+			const space = this.width / Math.max(this.data.length - 1, 1);
+
+			return Math.max(Math.ceil((chars * 8 + 6) / space), 1);
 		},
 		subunit() {
 			return subunit(this.timespan.unit);
 		},
 	},
+	mounted() {
+		this.$panel.observers.resize.observe(this.$refs.plot);
+	},
+	beforeUnmount() {
+		this.$panel.observers.resize.unobserve(this.$refs.plot);
+	},
 	methods: {
-		clip(segment, area) {
-			return clip(
-				this.bounds[segment][area],
-				this.bounds[segment + 1]?.[area],
-				this.max,
-			);
-		},
-		color(segment, area) {
-			const next = this.data[segment + 1];
-
-			if (next && next.label > this.now(next.label)) {
-				return "transparent";
-			}
-
-			return area.color;
-		},
 		isCurrent(segment) {
 			return segment.label === this.now(segment.label);
+		},
+		isLabeled(index) {
+			return (this.data.length - 1 - index) % this.step === 0;
 		},
 		label(segment) {
 			// parsing hours would skip or repeat one on DST changes
@@ -91,6 +98,21 @@ export default {
 			}
 
 			return this.$library.dayjs(segment.label).format(this.format);
+		},
+		link(segment) {
+			// hours are the smallest unit
+			if (this.subunit === "hour") {
+				return null;
+			}
+
+			const date = this.$library.dayjs(segment.label);
+			const query = new URLSearchParams({
+				...this.$panel.view.query,
+				from: date.startOf(this.subunit).format("YYYY-MM-DD"),
+				to: date.endOf(this.subunit).format("YYYY-MM-DD"),
+			});
+
+			return `/${this.$panel.view.path}?${query}`;
 		},
 		now(label) {
 			// in the format of the label (month, day or hour) to compare
@@ -101,19 +123,15 @@ export default {
 				.format("YYYY-MM-DD HH")
 				.slice(0, label.length);
 		},
-		zoom(segment) {
-			if (this.subunit === "hour") {
-				return;
-			}
-
-			const date = this.$library.dayjs(segment.label);
-
-			this.$panel.reload({
-				query: {
-					from: date.startOf(this.subunit).format("YYYY-MM-DD"),
-					to: date.endOf(this.subunit).format("YYYY-MM-DD"),
-				},
-			});
+		polygon(area) {
+			// the same number of points for all timespans of up to 100
+			// hours, days or months, so their shapes animate into each other
+			const points = Math.max(this.data.length, 100);
+			return polygon(this.bounds, area, this.max, this.last, points);
+		},
+		title(segment) {
+			const format = this.subunit === "month" ? "MMMM YYYY" : "D MMMM YYYY";
+			return this.$library.dayjs(segment.label).format(format);
 		},
 	},
 };
@@ -126,129 +144,100 @@ export default {
 	overflow-x: auto;
 	overflow-y: hidden;
 	padding-block-start: var(--spacing-8);
-	padding-inline: var(--spacing-12) var(--spacing-3);
-}
-
-.k-retour-timeline table {
-	--height: 250px;
-
-	position: relative;
-	width: calc(100% - 3rem);
-	height: var(--height);
-	margin-inline-start: 2rem;
-	margin-inline-end: 1rem;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-.k-retour-timeline thead {
-	position: absolute;
-	top: 0;
-	right: 100%;
-	height: var(--height);
-}
-.k-retour-timeline thead tr {
-	display: flex;
-	height: var(--height);
-	flex-direction: column-reverse;
-	padding-right: var(--spacing-3);
-}
-.k-retour-timeline th {
-	flex: 1;
-	transform: translateY(calc(-1 * var(--spacing-3) / 2));
 	font-size: var(--text-xs);
-	font-weight: normal;
-	text-align: right;
-	white-space: nowrap;
+	line-height: 1;
 	color: var(--color-gray-500);
 }
-.k-retour-timeline tbody {
-	--grid-x: linear-gradient(
-		to right,
-		var(--color-gray-800) 33%,
-		transparent 0%
-	);
+/* the ticks in a column as wide as the widest one, the plot next to it */
+.k-retour-timeline > div {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 250px;
+	margin-inline-end: var(--spacing-4);
+	margin-block-end: calc(var(--spacing-2) + 1em);
+}
 
-	height: var(--height);
-	background-image:
-		var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x), var(--grid-x),
-		var(--grid-x);
-	background-size:
-		1px 1px,
-		3px 1px,
-		3px 1px,
-		3px 1px,
-		3px 1px,
-		1px 1px;
-	background-repeat: repeat-x;
-	background-position:
-		center 0%,
-		center 20%,
-		center 40%,
-		center 60%,
-		center 80%,
-		center 100%;
+/* y-axis: a tick and its dotted line for each fifth */
+.k-retour-timeline ol {
+	grid-area: 1 / 1 / 2 / 3;
+	display: grid;
+	grid-template-columns: subgrid;
+	grid-template-rows: repeat(5, 1fr);
 }
-.k-retour-timeline :where(tbody, tfoot) {
-	width: 100%;
-	display: flex;
-	justify-content: stretch;
-	align-items: stretch;
-	flex-direction: row;
+.k-retour-timeline li {
+	grid-column: 1 / 3;
+	display: grid;
+	grid-template-columns: subgrid;
 }
-.k-retour-timeline tbody tr:not(:nth-last-child(2)) {
-	background-image: linear-gradient(var(--color-gray-800) 33%, transparent 0%);
-	background-size: 1px 3px;
-	background-repeat: repeat-y;
-	background-position: right;
+.k-retour-timeline li span {
+	align-self: start;
+	padding-inline-end: var(--spacing-3);
+	text-align: end;
+	transform: translateY(-50%);
+	white-space: nowrap;
 }
-.k-retour-timeline :where(tbody, tfoot) tr {
-	position: relative;
-	display: flex;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0;
-	/* keeps the labels from widening their columns */
-	width: 0;
+.k-retour-timeline li::after {
+	content: "";
+	background: linear-gradient(
+			to right,
+			var(--color-gray-800) 33%,
+			transparent 0%
+		)
+		top / 3px 1px repeat-x;
 }
-.k-retour-timeline:not([data-subunit="hour"]) :where(tbody, tfoot) tr {
-	cursor: pointer;
+.k-retour-timeline li:first-child::after {
+	background-size: 1px 1px;
 }
-.k-retour-timeline :where(tbody, tfoot) tr:last-child {
-	flex-grow: 0;
-}
-.k-retour-timeline tbody td {
-	background: var(--color);
+
+/* one shape per area across all segments, as adjacent
+   shapes would leave seams between them */
+.k-retour-timeline > div > div {
+	grid-area: 1 / 2;
+	z-index: 1;
 	opacity: 0.85;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	clip-path: polygon(
-		0% calc(100% * (1 - var(--p0))),
-		100% calc(100% * (1 - var(--p1))),
-		100% calc(100% * (1 - var(--m1))),
-		0% calc(100% * (1 - var(--m0)))
-	);
+	pointer-events: none;
 	transition: clip-path 0.3s ease-out;
 }
-.k-retour-timeline tfoot {
-	margin-top: var(--spacing-2);
-	font-size: var(--text-xs);
-	color: var(--color-gray-500);
-	text-align: center;
-}
 
-/* every third label, counted from the last one to not overlap it */
-.k-retour-timeline tfoot[data-less="true"] tr:not(:nth-last-child(3n + 1)) td {
-	visibility: hidden;
+/* x-axis: a column per segment, with a dotted line and its label */
+.k-retour-timeline nav {
+	grid-area: 1 / 2;
+	display: flex;
+	/* bottom line */
+	background: linear-gradient(
+			to right,
+			var(--color-gray-800) 33%,
+			transparent 0%
+		)
+		bottom / 1px 1px repeat-x;
 }
-
-.k-retour-timeline tfoot td {
+.k-retour-timeline nav .k-link {
+	position: relative;
+	flex: 1 1 0;
+	/* keeps the labels from widening their columns */
+	width: 0;
+	background: linear-gradient(var(--color-gray-800) 33%, transparent 0%) left /
+		1px 3px repeat-y;
+	outline: 0;
+}
+.k-retour-timeline nav .k-link:is(:first-child, :last-child) {
+	background: none;
+}
+.k-retour-timeline nav .k-link:last-child {
+	flex-grow: 0;
+}
+.k-retour-timeline .k-link > span {
+	position: absolute;
+	top: calc(100% + var(--spacing-2));
 	transform: translateX(-50%);
 	white-space: nowrap;
 }
-.k-retour-timeline tfoot [data-current="true"] {
+.k-retour-timeline .k-link:focus-visible > span {
+	outline: var(--outline);
+	outline-offset: 2px;
+	border-radius: var(--rounded-xs);
+}
+.k-retour-timeline [aria-current] > span {
 	color: var(--color-white);
 	font-weight: bold;
 }

@@ -21,6 +21,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - New and more fitting icons throughout the Panel
 - Clicking the empty redirects table opens the drawer to add a redirect
 - The buttons above the tables can be reordered or hidden with Kirby's `panel.viewButtons` option
+- The days and months of the timeline are links: open them in a new tab, reach them with the keyboard, and screen readers announce their dates
 
 ### Fixes
 
@@ -50,6 +51,9 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Invalid timespan dates no longer break the view, and an end date before the start date is corrected
 - The timeline handles daylight saving time, keeps highlighting the current hour, day or month past midnight and is no longer mirrored in right-to-left languages
 - The timeline labels are dimmed again and sit under their columns; the y-axis shows exact ticks and whole numbers for small counts
+- The timeline no longer shows thin dark lines between its columns on some screen widths
+- The timeline labels no longer overlap on narrow screens or long timespans
+- On narrow screens, the stats show the totals without the pie chart
 - Numbers in the stats and tables are formatted in the Panel's language
 
 #### Panel
@@ -60,7 +64,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - Without logging, the redirects table no longer shows an empty hits column
 - The tooltip of a hit count shows the date of the last hit in a readable format
 - Fixed the links of some logged paths and referrers in the tables
-- Table columns can be sorted with the keyboard; screen readers skip the timeline chart and announce the priority icon
+- Table columns can be sorted with the keyboard, and screen readers announce the priority icon
 - Unknown Retour tab URLs show the Panel's not-found view
 
 ### Performance

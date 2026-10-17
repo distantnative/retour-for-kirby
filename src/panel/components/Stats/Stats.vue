@@ -71,19 +71,23 @@ export default {
 	margin-bottom: var(--spacing-6);
 }
 
-@container (max-width: 40rem) {
+@container main (max-width: 40rem) {
 	.k-retour-stats {
 		display: flex;
 		flex-direction: column;
 		padding-block: var(--spacing-6);
 	}
+	.k-retour-stats .k-retour-pie-graph {
+		display: none;
+	}
 }
 
-@container (min-width: 40rem) {
+@container main (min-width: 40rem) {
 	.k-retour-stats {
 		display: grid;
 		align-items: center;
 		grid-template-columns: 16rem auto;
+		column-gap: var(--spacing-12);
 	}
 }
 </style>
