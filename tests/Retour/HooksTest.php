@@ -97,11 +97,11 @@ class HooksTest extends TestCase
 		]);
 
 		$retour = Retour::instance($app);
-		$retour->redirects()->prepend(new Redirect([
-			'from'   => 'wp-content/(:all)',
-			'to'     => 'target',
-			'status' => 200
-		]));
+		$retour->redirects()->prepend(new Redirect(
+			from: 'wp-content/(:all)',
+			to: 'target',
+			status: 200
+		));
 
 		$result = $this->apply($app, 'wp-content/uploads/foo.jpg');
 		$this->assertInstanceOf(Page::class, $result);
@@ -144,12 +144,12 @@ class HooksTest extends TestCase
 		]);
 
 		$retour = Retour::instance($app);
-		$retour->redirects()->prepend(new Redirect([
-			'from'     => 'old-path',
-			'to'       => 'target',
-			'status'   => 200,
-			'priority' => false,
-		]));
+		$retour->redirects()->prepend(new Redirect(
+			from: 'old-path',
+			to: 'target',
+			status: 200,
+			priority: false
+		));
 
 		$result = $this->apply($app, 'old-path');
 		$this->assertInstanceOf(Page::class, $result);
@@ -173,11 +173,11 @@ class HooksTest extends TestCase
 		]);
 
 		$retour = Retour::instance($app);
-		$retour->redirects()->prepend(new Redirect([
-			'from'   => 'old-path',
-			'to'     => 'target',
-			'status' => 301
-		]));
+		$retour->redirects()->prepend(new Redirect(
+			from: 'old-path',
+			to: 'target',
+			status: 301
+		));
 
 		$result = $this->apply($app, 'old-path', 'HEAD');
 		$this->assertInstanceOf(Response::class, $result);

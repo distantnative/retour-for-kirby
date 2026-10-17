@@ -12,77 +12,86 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Redirect::class)]
 class RedirectTest extends TestCase
 {
-	public function testConstructNumericValues(): void
+	public function testConstructWithoutPath(): void
+	{
+		$this->expectExceptionMessage('Route requires path');
+		$this->expectException(InvalidArgumentException::class);
+		new Redirect(from: '');
+	}
+
+	public function testFactoryNumericValues(): void
 	{
 		// e.g. unquoted numbers in hand-edited config files
-		$redirect = new Redirect(['from' => 404, 'to' => 410, 'status' => 301]);
+		$redirect = Redirect::factory(['from' => 404, 'to' => 410, 'status' => 301]);
 		$this->assertSame('404', $redirect->from());
 		$this->assertSame('410', $redirect->to());
 		$this->assertSame('404', $redirect->id());
 	}
 
-	public function testConstructPathZero(): void
+	public function testFactoryPathZero(): void
 	{
-		$this->assertSame('0', (new Redirect(['from' => '0']))->from());
-		$this->assertSame('0', (new Redirect(['from' => 0]))->from());
+		$this->assertSame('0', (new Redirect(from: '0'))->from());
+		$this->assertSame('0', Redirect::factory(['from' => 0])->from());
 	}
 
-	public function testConstructValidation(): void
+	public function testFactoryPriority(): void
+	{
+		// strings of config files and forms
+		$redirect = Redirect::factory(['from' => 'foo', 'priority' => 'true']);
+		$this->assertTrue($redirect->priority());
+
+		$redirect = Redirect::factory(['from' => 'foo', 'priority' => 'false']);
+		$this->assertFalse($redirect->priority());
+
+		$redirect = Redirect::factory(['from' => 'foo', 'priority' => null]);
+		$this->assertFalse($redirect->priority());
+	}
+
+	public function testFactoryStatus(): void
+	{
+		$redirect = Redirect::factory(['from' => 'foo', 'status' => '301']);
+		$this->assertSame(301, $redirect->status());
+
+		// empty values from the Panel and
+		// hand-edited config files disable it
+		foreach ([null, '', 'disabled', false, true, 0, '0'] as $status) {
+			$redirect = Redirect::factory(['from' => 'foo', 'status' => $status]);
+			$this->assertNull($redirect->status(), var_export($status, true));
+			$this->assertFalse($redirect->isActive());
+		}
+	}
+
+	public function testFactoryWithoutPath(): void
 	{
 		$this->expectExceptionMessage('Route requires path');
 		$this->expectException(InvalidArgumentException::class);
-		new Redirect([]);
-	}
-
-	public function testConstructValidationEmptyPath(): void
-	{
-		$this->expectExceptionMessage('Route requires path');
-		$this->expectException(InvalidArgumentException::class);
-		new Redirect(['from' => '']);
+		Redirect::factory([]);
 	}
 
 	public function testId(): void
 	{
-		$redirect = new Redirect(['from' => 'foo']);
+		$redirect = new Redirect(from: 'foo');
 		$this->assertSame('foo', $redirect->id());
 
-		$redirect = new Redirect(['from' => 'foo/bar']);
+		$redirect = new Redirect(from: 'foo/bar');
 		$this->assertSame('foo/bar', $redirect->id());
 	}
 
 	public function testIsActive(): void
 	{
-		$redirect = new Redirect(['from' => 'foo']);
+		$redirect = new Redirect(from: 'foo');
 		$this->assertFalse($redirect->isActive());
 
-		$redirect = new Redirect(['from' => 'foo', 'status' => null]);
-		$this->assertFalse($redirect->isActive());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => 'disabled']);
-		$this->assertFalse($redirect->isActive());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => '507']);
+		$redirect = new Redirect(from: 'foo', status: 507);
 		$this->assertTrue($redirect->isActive());
 	}
 
 	public function testPriority(): void
 	{
-		$redirect = new Redirect(['from' => 'foo']);
+		$redirect = new Redirect(from: 'foo');
 		$this->assertFalse($redirect->priority());
 
-		$redirect = new Redirect(['from' => 'foo', 'priority' => false]);
-		$this->assertFalse($redirect->priority());
-
-		$redirect = new Redirect(['from' => 'foo', 'priority' => 'false']);
-		$this->assertFalse($redirect->priority());
-
-		$redirect = new Redirect(['from' => 'foo', 'priority' => null]);
-		$this->assertFalse($redirect->priority());
-
-		$redirect = new Redirect(['from' => 'foo', 'priority' => true]);
-		$this->assertTrue($redirect->priority());
-
-		$redirect = new Redirect(['from' => 'foo', 'priority' => 'true']);
+		$redirect = new Redirect(from: 'foo', priority: true);
 		$this->assertTrue($redirect->priority());
 	}
 
@@ -107,20 +116,20 @@ class RedirectTest extends TestCase
 		Retour::instance($app);
 
 		// resolves to a page
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects/project-a',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'projects/project-a',
+			status: 200
+		);
 
 		$this->assertInstanceOf(Page::class, $redirect->resolve([]));
 
 		// resolves with placeholder substitution
-		$redirect = new Redirect([
-			'from'   => 'old/(:any)',
-			'to'     => 'projects/$1',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'old/(:any)',
+			to: 'projects/$1',
+			status: 200
+		);
 
 		$this->assertInstanceOf(Page::class, $redirect->resolve(['project-a']));
 	}
@@ -149,11 +158,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'old/(:all)',
-			'to'     => '$1',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'old/(:all)',
+			to: '$1',
+			status: 200
+		);
 
 		$this->assertInstanceOf(Page::class, $redirect->resolve(['public']));
 
@@ -189,11 +198,11 @@ class RedirectTest extends TestCase
 
 		// status 200 never reaches the redirect branch, so the
 		// preserveQuery option has no effect here
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects/project-a',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'projects/project-a',
+			status: 200
+		);
 
 		$this->assertInstanceOf(Page::class, $redirect->resolve([]));
 	}
@@ -222,11 +231,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects/project-a',
-			'status' => 301
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'projects/project-a',
+			status: 301
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertInstanceOf(Response::class, $response);
@@ -234,22 +243,22 @@ class RedirectTest extends TestCase
 		$this->assertSame('https://example.com/projects/project-a', $response->header('Location'));
 
 		// content representation of the page
-		$redirect = new Redirect([
-			'from'   => 'foo.json',
-			'to'     => 'projects/project-a.json',
-			'status' => 307
-		]);
+		$redirect = new Redirect(
+			from: 'foo.json',
+			to: 'projects/project-a.json',
+			status: 307
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame(307, $response->code());
 		$this->assertSame('https://example.com/projects/project-a.json', $response->header('Location'));
 
 		// content representation of the home page
-		$redirect = new Redirect([
-			'from'   => 'feed',
-			'to'     => 'home.rss',
-			'status' => 301
-		]);
+		$redirect = new Redirect(
+			from: 'feed',
+			to: 'home.rss',
+			status: 301
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame('https://example.com/home.rss', $response->header('Location'));
@@ -265,11 +274,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'contact',
-			'to'     => 'mailto:info@example.com',
-			'status' => 302
-		]);
+		$redirect = new Redirect(
+			from: 'contact',
+			to: 'mailto:info@example.com',
+			status: 302
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame('mailto:info@example.com', $response->header('Location'));
@@ -297,11 +306,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects',
-			'status' => 302
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'projects',
+			status: 302
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame(302, $response->code());
@@ -326,11 +335,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'https://exämple.com/target',
-			'status' => 301
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'https://exämple.com/target',
+			status: 301
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame('https://xn--exmple-cua.com/target?' . $query, $response->header('Location'));
@@ -357,11 +366,11 @@ class RedirectTest extends TestCase
 		];
 
 		foreach ($targets as $to => $expected) {
-			$redirect = new Redirect([
-				'from'   => 'foo',
-				'to'     => $to,
-				'status' => 301
-			]);
+			$redirect = new Redirect(
+				from: 'foo',
+				to: $to,
+				status: 301
+			);
 
 			$response = $redirect->resolve([]);
 			$this->assertSame(301, $response->code(), $to);
@@ -386,11 +395,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'downloads/file.pdf',
-			'status' => 302
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'downloads/file.pdf',
+			status: 302
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertSame('https://example.com/sub/downloads/file.pdf?gclid=abc', $response->header('Location'));
@@ -406,11 +415,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'does-not-exist',
-			'status' => 410
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'does-not-exist',
+			status: 410
+		);
 
 		$response = $redirect->resolve([]);
 		$this->assertInstanceOf(Response::class, $response);
@@ -429,11 +438,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'does-not-exist',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'does-not-exist',
+			status: 200
+		);
 
 		// handled as failure, which shows the error page
 		$this->assertNull($redirect->resolve([]));
@@ -461,11 +470,11 @@ class RedirectTest extends TestCase
 
 		Retour::instance($app);
 
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'projects/project-a',
-			'status' => 200
-		]);
+		$redirect = new Redirect(
+			from: 'foo',
+			to: 'projects/project-a',
+			status: 200
+		);
 
 		$route = $redirect->toRoute();
 		$this->assertInstanceOf(Page::class, $route['action']());
@@ -473,59 +482,38 @@ class RedirectTest extends TestCase
 
 	public function testStatus(): void
 	{
-		$redirect = new Redirect(['from' => 'foo']);
-		$this->assertSame(null, $redirect->status());
+		$redirect = new Redirect(from: 'foo');
+		$this->assertNull($redirect->status());
 
-		$redirect = new Redirect(['from' => 'foo', 'status' => null]);
-		$this->assertSame(null, $redirect->status());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => 'disabled']);
-		$this->assertSame(null, $redirect->status());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => 300]);
+		$redirect = new Redirect(from: 'foo', status: 300);
 		$this->assertSame(300, $redirect->status());
-
-		// empty value from the Panel
-		$redirect = new Redirect(['from' => 'foo', 'status' => '']);
-		$this->assertSame(null, $redirect->status());
-		$this->assertFalse($redirect->isActive());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => '301']);
-		$this->assertSame(301, $redirect->status());
-
-		// hand-edited config files
-		$redirect = new Redirect(['from' => 'foo', 'status' => false]);
-		$this->assertSame(null, $redirect->status());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => 0]);
-		$this->assertSame(null, $redirect->status());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => '0']);
-		$this->assertSame(null, $redirect->status());
-
-		$redirect = new Redirect(['from' => 'foo', 'status' => true]);
-		$this->assertSame(null, $redirect->status());
 	}
 
 	public function testToArray(): void
 	{
-		$redirect = new Redirect([
-			'from'   => 'foo',
-			'to'     => 'bar',
-			'status' => 'disabled'
-		]);
-
 		$expected = [
 			'from'     => 'foo',
 			'to'       => 'bar',
+			'status'   => 301,
+			'priority' => true,
+			'comment'  => 'Old blog',
+			'creator'  => 'user://homer',
+			'modifier' => 'user://marge',
+		];
+
+		$this->assertSame($expected, (new Redirect(...$expected))->toArray());
+		$this->assertSame($expected, Redirect::factory($expected)->toArray());
+
+		// defaults
+		$this->assertSame([
+			'from'     => 'foo',
+			'to'       => null,
 			'status'   => null,
 			'priority' => false,
 			'comment'  => null,
 			'creator'  => null,
 			'modifier' => null,
-		];
-
-		$this->assertSame($expected, $redirect->toArray());
+		], (new Redirect(from: 'foo'))->toArray());
 	}
 
 	public function testToPath(): void
@@ -548,11 +536,11 @@ class RedirectTest extends TestCase
 
 	public function testToRoute(): void
 	{
-		$redirect = new Redirect([
-			'from'   => 'foo/(:any)',
-			'to'     => 'bar',
-			'status' => 300
-		]);
+		$redirect = new Redirect(
+			from: 'foo/(:any)',
+			to: 'bar',
+			status: 300
+		);
 
 		$route = $redirect->toRoute();
 
