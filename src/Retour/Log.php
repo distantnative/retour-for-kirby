@@ -64,7 +64,6 @@ class Log
 		$path     = null;
 		$referrer = null;
 
-		// redirect hits don't need their path and referrer
 		if ($redirect === null) {
 			$path     = Str::substr($props['path'], 0, static::MAX_LENGTH);
 			$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
@@ -85,8 +84,7 @@ class Log
 			]
 		);
 
-		// every 1,000th record purges up to 10,000 outdated ones (< 0.1 s),
-		// so the log doesn't grow even if nobody opens the Panel
+		// keeps the log from growing if nobody opens the Panel; 10,000 records take < 0.1 s
 		if ($added === true && $this->database->lastId() % 1000 === 0) {
 			$this->purge(limit: 10000);
 		}

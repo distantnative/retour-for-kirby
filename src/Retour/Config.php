@@ -8,9 +8,6 @@ use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 use Throwable;
 
-/**
- * Handles reading from/writing to the config file
- */
 class Config
 {
 	protected array $data;
@@ -103,7 +100,6 @@ class Config
 			return $entry['data'];
 		}
 
-		// throws before anything gets cached
 		$data = static::decode($contents, $file);
 
 		$cache->set($key, [
