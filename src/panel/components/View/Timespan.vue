@@ -90,6 +90,14 @@ export default {
 			}).formatRange(new Date(from), new Date(to));
 		},
 	},
+	mounted() {
+		this.$events.on("keydown.left", this.toPrev);
+		this.$events.on("keydown.right", this.toNext);
+	},
+	beforeUnmount() {
+		this.$events.off("keydown.left", this.toPrev);
+		this.$events.off("keydown.right", this.toNext);
+	},
 	methods: {
 		icon(unit) {
 			if (this.isCurrentUnit(unit) === true) {
@@ -125,6 +133,16 @@ export default {
 			}
 
 			return null;
+		},
+		toNext(e) {
+			if (this.timespan.next && e.target.localName === "body") {
+				this.$go(this.link(this.timespan.next));
+			}
+		},
+		toPrev(e) {
+			if (this.timespan.prev && e.target.localName === "body") {
+				this.$go(this.link(this.timespan.prev));
+			}
 		},
 		unit(unit) {
 			return {
