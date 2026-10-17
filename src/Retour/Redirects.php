@@ -11,8 +11,7 @@ use Kirby\Http\Header;
 use Kirby\Toolkit\Collection;
 
 /**
- * Collection of all configured redirects;
- * their order defines the precedence of the routes
+ * The order of the redirects defines the precedence of their routes
  */
 class Redirects extends Collection
 {
@@ -24,8 +23,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Applies the change to the redirects as currently stored
-	 * and saves them, so concurrent changes aren't lost
+	 * Applies the change to the stored redirects, so concurrent changes aren't lost
 	 *
 	 * @throws LogicException If the config file could not be read or written
 	 */
@@ -70,9 +68,6 @@ class Redirects extends Collection
 		return true;
 	}
 
-	/**
-	 * Creates the collection from the config data
-	 */
 	public static function factory(Retour $retour, array $config): self
 	{
 		$redirects = new self($retour, []);
@@ -85,9 +80,6 @@ class Redirects extends Collection
 		return $redirects;
 	}
 
-	/**
-	 * Returns a list of the redirects as arrays (or mapped by `$map`)
-	 */
 	public function toArray(Closure|null $map = null): array
 	{
 		$map ??= fn (Redirect $redirect) => $redirect->toArray();
@@ -96,7 +88,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Returns redirects data combined with log data
+	 * Redirects with their hits from the log
 	 */
 	public function toData(string $from, string $to): array
 	{
@@ -106,7 +98,6 @@ class Redirects extends Collection
 			return $this->toArray();
 		}
 
-		// get hits of all redirects at once
 		$hits = $log->redirects($from, $to);
 
 		return $this->toArray(function (Redirect $redirect) use ($hits): array {
@@ -117,10 +108,6 @@ class Redirects extends Collection
 		});
 	}
 
-	/**
-	 * Returns the routes of all active redirects
-	 * with or without priority over pages
-	 */
 	public function toRoutes(bool $priority = false): array
 	{
 		$redirects = $this->filter(
@@ -135,7 +122,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Updates a redirect with the data while keeping its position
+	 * Keeps the position of the redirect
 	 *
 	 * @throws NotFoundException If the redirect doesn't exist
 	 * @throws DuplicateException If another redirect already has the new path
@@ -178,8 +165,7 @@ class Redirects extends Collection
 	}
 
 	/**
-	 * Ensures that the redirect can be routed when saving it;
-	 * an invalid path pattern would break routing for every request
+	 * An invalid path pattern would break routing for every request
 	 *
 	 * @throws InvalidArgumentException If the path pattern or status code is invalid
 	 */

@@ -4,10 +4,6 @@ namespace Kirby\Retour;
 
 use Kirby\Cms\App;
 
-/**
- * Main plugin class giving access to the
- * config, redirects, ignored paths and log
- */
 class Retour
 {
 	protected Config $config;
@@ -44,8 +40,7 @@ class Retour
 	}
 
 	/**
-	 * Returns the singleton instance,
-	 * a new one for a different app instance
+	 * A new instance for a different app instance
 	 */
 	public static function instance(App|null $kirby = null): self
 	{
@@ -63,9 +58,6 @@ class Retour
 		return $this->kirby;
 	}
 
-	/**
-	 * Returns the log or `null` if logging is disabled
-	 */
 	public function log(): Log|null
 	{
 		if ($this->hasLog() === false) {
@@ -91,8 +83,7 @@ class Retour
 	}
 
 	/**
-	 * Returns the prefix in front of paths in the Panel
-	 * or `false` if disabled
+	 * Prefix in front of paths in the Panel, `false` if disabled
 	 */
 	public function site(): string|false
 	{

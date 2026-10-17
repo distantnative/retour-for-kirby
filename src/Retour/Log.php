@@ -18,15 +18,13 @@ use PDO;
 use Throwable;
 
 /**
- * Reads and writes to the database log
- * for all 404 requests or successful redirects;
- * dates are stored as integers (see `timestamp()`)
+ * Stores failures and redirect hits with integer dates (see `timestamp()`);
+ * `$from` and `$to` params are `yyyy-mm-dd`
  */
 class Log
 {
 	/**
-	 * Maximum length of logged paths and referrers,
-	 * as bots can request arbitrarily long URLs
+	 * For paths and referrers, as bots can request arbitrarily long URLs
 	 */
 	protected const MAX_LENGTH = 1024;
 
@@ -58,9 +56,7 @@ class Log
 	}
 
 	/**
-	 * Stores a failure with its `path` (and `referrer`)
-	 * or the hit of a `redirect`; returns whether
-	 * the record has been stored
+	 * Stores a failure (`path`, `referrer`) or a `redirect` hit
 	 */
 	public function add(array $props): bool
 	{
@@ -68,8 +64,7 @@ class Log
 		$path     = null;
 		$referrer = null;
 
-		// redirect hits only count for their redirect,
-		// their path and referrer aren't needed
+		// redirect hits don't need their path and referrer
 		if ($redirect === null) {
 			$path     = Str::substr($props['path'], 0, static::MAX_LENGTH);
 			$referrer = $props['referrer'] ?? $this->retour->kirby()->request()->header('Referer');
@@ -79,8 +74,7 @@ class Log
 			}
 		}
 
-		// unlike the query builder, a plain statement doesn't need
-		// to look up the table schema first (on every request)
+		// a plain statement skips the query builder's schema lookup on every request
 		$added = $this->database->execute(
 			'INSERT INTO records (date, path, referrer, redirect) VALUES (:date, :path, :referrer, :redirect)',
 			[
@@ -91,9 +85,8 @@ class Log
 			]
 		);
 
-		// every 1,000th record also purges outdated ones, so the log
-		// doesn't grow even if nobody opens the Panel; up to 10 times
-		// as many as are added, which takes less than 0.1 s
+		// every 1,000th record purges up to 10,000 outdated ones (< 0.1 s),
+		// so the log doesn't grow even if nobody opens the Panel
 		if ($added === true && $this->database->lastId() % 1000 === 0) {
 			$this->purge(limit: 10000);
 		}
@@ -101,12 +94,6 @@ class Log
 		return $added;
 	}
 
-	/**
-	 * Returns a query for the records of full days from `$from` to `$to`
-	 *
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
-	 */
 	protected function between(string $from, string $to): Query
 	{
 		return $this->table()
@@ -123,14 +110,9 @@ class Log
 	}
 
 	/**
-	 * Returns a page of the unresolved failures,
-	 * grouped by path and referrer
+	 * Unresolved failures, grouped by path and referrer
 	 *
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
-	 * @param $sortBy `path`, `referrer`, `last` or `hits` with
-	 *               `asc` or `desc`; by default `hits desc`
-	 * @param $searchterm only failures whose path or referrer contain it
+	 * @param $sortBy `path`, `referrer`, `last` or `hits` with `asc` or `desc`
 	 * @throws InvalidArgumentException If the sorting is invalid
 	 */
 	public function fails(
@@ -154,9 +136,8 @@ class Log
 			);
 		}
 
-		// idx_date finds the few records of up to a month faster;
-		// for longer timespans, `+date` keeps SQLite on idx_failures,
-		// which has the failures grouped by path and referrer already
+		// idx_date is faster for up to a month; for longer timespans, `+date`
+		// keeps SQLite on idx_failures, which has the failures grouped already
 		$days = (new DateTimeImmutable($from))->diff(new DateTimeImmutable($to))->days;
 		$date = $days < 31 ? 'date' : '+date';
 
@@ -172,9 +153,8 @@ class Log
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')
-			// path and referrer as tie-breakers keep the order stable across
-			// pages, as many failures share their hits; sorted by path, both
-			// in the same direction let SQLite read idx_failures in order
+			// tie-breakers keep pages stable, as many failures share their hits;
+			// sorted by path, one direction for both lets SQLite read idx_failures in order
 			->order(match ($column) {
 				'path'  => 'path ' . $direction . ', referrer ' . $direction,
 				default => $column . ' ' . $direction . ', path, referrer'
@@ -200,9 +180,7 @@ class Log
 	}
 
 	/**
-	 * Deletes all records (and resets the ids) or only unresolved failures
-	 *
-	 * @param $mode `all` or `failures`
+	 * @param $mode `all` (also resets the ids) or `failures` (unresolved only)
 	 * @throws InvalidArgumentException If the mode is unknown
 	 */
 	public function flush(string $mode = 'all'): bool
@@ -227,19 +205,14 @@ class Log
 		return $this->single('date DESC');
 	}
 
-	/**
-	 * Creates the log database or brings
-	 * one of an earlier version up to date
-	 */
 	public function migrate(): bool
 	{
 		return (new Migrations($this))->run();
 	}
 
 	/**
-	 * Deletes entries older than the `deleteAfter` option (in months);
-	 * with a limit, only that many of the oldest and without rebuilding
-	 * the file (new records reuse their space), e.g. while logging
+	 * Deletes records older than `deleteAfter` months; with a limit, only
+	 * that many and without rebuilding the file, e.g. while logging
 	 */
 	public function purge(int|null $limit = null): bool
 	{
@@ -271,10 +244,8 @@ class Log
 	}
 
 	/**
-	 * Gives free space back to the file system by rebuilding the
-	 * database file, but only if it's a significant part of the file;
-	 * otherwise new records reuse the free space and the rebuild
-	 * (which locks the log and takes long for large logs) isn't worth it
+	 * Rebuilds the file only if a fifth is free, otherwise new records
+	 * reuse the space and the slow, locking rebuild isn't worth it
 	 */
 	public function reclaim(): bool
 	{
@@ -282,7 +253,6 @@ class Log
 		$pages      = (int)$connection->query('PRAGMA page_count')->fetchColumn();
 		$free       = (int)$connection->query('PRAGMA freelist_count')->fetchColumn();
 
-		// less than a fifth of the file is free
 		if ($free === 0 || $free < $pages / 5) {
 			return true;
 		}
@@ -291,11 +261,8 @@ class Log
 	}
 
 	/**
-	 * Returns hits and last hit of all redirects in one query,
-	 * keyed by redirect path; redirects without hits are missing
+	 * Redirects without hits are missing
 	 *
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
 	 * @return array<string, array{hits: int, last: string}>
 	 */
 	public function redirects(string $from, string $to): array
@@ -324,8 +291,7 @@ class Log
 	}
 
 	/**
-	 * Deletes the failures of the path
-	 * (its redirect hits stay for the stats)
+	 * Deletes only failures, redirect hits stay for the stats
 	 */
 	public function remove(string $path): bool
 	{
@@ -336,9 +302,6 @@ class Log
 	}
 
 	/**
-	 * Removes all failures whose path passes the filter,
-	 * e.g. when ignoring these paths from now on
-	 *
 	 * @param Closure(string $path): bool $filter
 	 */
 	public function removeFailures(Closure $filter): bool
@@ -357,8 +320,7 @@ class Log
 			return true;
 		}
 
-		// collect the paths in a temporary table to delete
-		// their records in a single pass over the log
+		// a temporary table lets one pass over the log delete all paths
 		$db = $this->database->connection();
 		$db->beginTransaction();
 
@@ -406,12 +368,7 @@ class Log
 	}
 
 	/**
-	 * Counts redirected, resolved and failed requests
-	 * per hour, day or month of the timespan
-	 *
 	 * @param $unit `day`, `days`, `week`, `month`, `months` or `year`
-	 * @param $from date string (yyyy-mm-dd)
-	 * @param $to date string (yyyy-mm-dd)
 	 */
 	public function stats(string $unit, string $from, string $to): array
 	{
@@ -421,8 +378,7 @@ class Log
 			default          => ['Y-m-d', new DateInterval('P1D')]
 		};
 
-		// counting each step with a range query on the date index
-		// is faster than grouping all records by a part of their date
+		// a range query per step beats grouping all records by a date part
 		$query = $this->database->connection()->prepare('
 			SELECT
 				COUNT(redirect) AS redirected,
@@ -432,8 +388,7 @@ class Log
 			WHERE date >= :start AND date < :end
 		');
 
-		// Iterate all steps (in UTC to not skip or repeat
-		// hours when daylight saving time begins or ends)
+		// UTC, to not skip or repeat hours when daylight saving time changes
 		$utc  = new DateTimeZone('UTC');
 		$date = new DateTimeImmutable($from, $utc);
 		$last = new DateTimeImmutable($to . ' 23:59:59', $utc);
@@ -441,8 +396,7 @@ class Log
 		$max  = $last->getTimestamp() + 1;
 		$last = $last->format($format);
 
-		// Start months on their first day, as adding
-		// a month to e.g. January 31 skips February
+		// adding a month to e.g. January 31 would skip February
 		if ($format === 'Y-m') {
 			$date = $date->modify('first day of this month');
 		}
@@ -479,9 +433,8 @@ class Log
 	}
 
 	/**
-	 * Returns the integer stored for a date: the seconds since
-	 * 1970 of its local time as if it was UTC, which keeps the
-	 * local time like the text of earlier versions in less space
+	 * Seconds since 1970 of the local time as if it was UTC, which keeps
+	 * the local time like the text of earlier versions in less space
 	 */
 	public static function timestamp(string $date): int
 	{

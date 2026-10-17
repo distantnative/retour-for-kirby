@@ -7,9 +7,7 @@ use Kirby\Retour\Redirect;
 use Kirby\Retour\Retour;
 
 /**
- * Turns paths into the ids of dialog and drawer URLs and back;
- * base64url only uses characters that `(:any)` accepts and that
- * web servers pass on unchanged, unlike encoded slashes
+ * base64url passes `(:any)` and web servers unchanged, unlike encoded slashes
  * (https://github.com/distantnative/retour-for-kirby/issues/300)
  */
 class Id

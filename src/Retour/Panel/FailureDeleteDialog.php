@@ -6,9 +6,6 @@ use Kirby\Panel\Controller\DialogController;
 use Kirby\Panel\Ui\Dialog\RemoveDialog;
 use Kirby\Retour\Retour;
 
-/**
- * Removes the failures of a path after confirmation
- */
 class FailureDeleteDialog extends DialogController
 {
 	public function __construct(

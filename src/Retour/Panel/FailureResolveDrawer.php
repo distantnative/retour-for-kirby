@@ -4,9 +4,6 @@ namespace Kirby\Retour\Panel;
 
 use Kirby\Retour\Retour;
 
-/**
- * Creates a redirect for a failure and marks the failure as resolved
- */
 class FailureResolveDrawer extends RedirectCreateDrawer
 {
 	public function __construct(

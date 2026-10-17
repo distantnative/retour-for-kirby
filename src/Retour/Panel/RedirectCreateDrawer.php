@@ -9,14 +9,10 @@ use Kirby\Panel\Ui\Item\UserItem;
 use Kirby\Retour\Redirects;
 use Kirby\Retour\Retour;
 
-/**
- * Drawer to create a redirect; base for the edit and resolve drawers
- */
 class RedirectCreateDrawer extends DrawerController
 {
 	/**
-	 * Returns the UUID (or ID) of the current user,
-	 * which unlike the email address never changes
+	 * UUID (or ID), which unlike the email address never changes
 	 */
 	protected function author(): string|null
 	{
@@ -122,8 +118,7 @@ class RedirectCreateDrawer extends DrawerController
 	}
 
 	/**
-	 * Returns the item props for the user
-	 * to be displayed in a `retour-users` field
+	 * Props for a `retour-users` field
 	 */
 	protected function user(string|null $id): array
 	{

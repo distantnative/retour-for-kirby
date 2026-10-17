@@ -23,8 +23,7 @@ return [
 		$retour = Retour::instance();
 
 		try {
-			// redirects without priority only
-			// apply if no page or route matched
+			// redirects without priority only apply if nothing else matched
 			$result = Router::execute(
 				$path,
 				$method,

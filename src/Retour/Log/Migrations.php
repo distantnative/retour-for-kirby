@@ -7,14 +7,12 @@ use PDO;
 use Throwable;
 
 /**
- * Creates the log database and brings logs of earlier
- * versions up to date, tracked by `PRAGMA user_version`
+ * Creates and upgrades the log database, tracked by `PRAGMA user_version`
  */
 class Migrations
 {
 	/**
-	 * Index statistics of a large log, so that the query planner
-	 * picks the right indices before the log has grown
+	 * Stats of a large log, so SQLite picks the right indices from the start
 	 */
 	protected const STATISTICS = [
 		'idx_date'          => '1000000 1',
@@ -22,24 +20,20 @@ class Migrations
 	];
 
 	/**
-	 * Schema changes by database version, applied
-	 * in order to new logs and logs of earlier versions
+	 * Applied in order to new logs and logs of earlier versions
 	 */
 	protected const VERSIONS = [
 		1 => [
-			// earlier versions stored dates as text; new logs
-			// start with the same table to share the next steps
+			// the text-date table of earlier versions, so new logs share the next steps
 			'CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date TEXT NOT NULL, path TEXT NOT NULL, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
-			// dates as integers (see `Log::timestamp()`) and redirect hits
-			// without path and referrer, which needs a new table as
-			// columns can't change their type or constraints
+			// integer dates (see `Log::timestamp()`), redirect hits without path and
+			// referrer; a new table, as columns can't change type or constraints
 			'CREATE TABLE records_new (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date INTEGER NOT NULL, path TEXT, referrer TEXT, redirect TEXT, wasResolved INTEGER)',
 			"INSERT INTO records_new SELECT id, CAST(strftime('%s', date) AS INTEGER), CASE WHEN redirect IS NULL THEN path END, CASE WHEN redirect IS NULL THEN referrer END, redirect, wasResolved FROM records",
 			// also drops all indices of earlier versions
 			'DROP TABLE records',
 			'ALTER TABLE records_new RENAME TO records',
 			'CREATE INDEX idx_date ON records (date)',
-			// only for redirect hits, failures don't need it
 			'CREATE INDEX idx_redirect_date ON records (redirect, date) WHERE redirect IS NOT NULL',
 			// groups the failures and finds them by path
 			'CREATE INDEX idx_failures ON records (path, referrer, date, wasResolved) WHERE redirect IS NULL',
@@ -56,9 +50,6 @@ class Migrations
 		return $this->log->database()->connection();
 	}
 
-	/**
-	 * Returns the schema changes of the versions not applied yet
-	 */
 	public function pending(): array
 	{
 		$current = $this->version();
@@ -71,8 +62,7 @@ class Migrations
 	}
 
 	/**
-	 * Applies all pending versions, each in its own transaction;
-	 * a failed one is rolled back and tried again the next time
+	 * Each version in its own transaction; a failed one is retried next time
 	 */
 	public function run(): bool
 	{
@@ -101,17 +91,13 @@ class Migrations
 			}
 		}
 
-		// load the new statistics and give the
-		// space of dropped indices back if significant
+		// load the new statistics and reclaim the space of dropped indices
 		$connection->exec('ANALYZE sqlite_schema');
 		$this->log->reclaim();
 
 		return true;
 	}
 
-	/**
-	 * Replaces the index statistics with the ones of a large log
-	 */
 	protected function statistics(): void
 	{
 		$connection = $this->connection();
@@ -127,9 +113,6 @@ class Migrations
 		}
 	}
 
-	/**
-	 * Returns the version of the log database
-	 */
 	public function version(): int
 	{
 		return (int)$this->connection()->query('PRAGMA user_version')->fetchColumn();

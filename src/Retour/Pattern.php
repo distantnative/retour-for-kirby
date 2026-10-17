@@ -5,8 +5,7 @@ namespace Kirby\Retour;
 use Kirby\Http\Route;
 
 /**
- * Route patterns with placeholders like `(:any)`
- * as used for redirects and ignored paths
+ * Route patterns like `(:any)` of redirects and ignored paths
  */
 class Pattern
 {
@@ -17,17 +16,11 @@ class Pattern
 		return str_contains($pattern, '(') === true;
 	}
 
-	/**
-	 * Checks if the pattern compiles to a valid regular expression
-	 */
 	public static function isValid(string $pattern): bool
 	{
 		return @preg_match(static::regex($pattern), '') !== false;
 	}
 
-	/**
-	 * Checks if the path matches the pattern
-	 */
 	public static function matches(
 		string $pattern,
 		string $path,
@@ -37,9 +30,6 @@ class Pattern
 		return @preg_match($regex, $path) === 1;
 	}
 
-	/**
-	 * Returns the anchored regular expression for the pattern
-	 */
 	public static function regex(
 		string $pattern,
 		string $flags = 'u'

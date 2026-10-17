@@ -6,17 +6,12 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\A;
 
 /**
- * Paths that should not be logged as failures,
- * from the `ignore` option as well as the ones
- * managed in the Panel and stored in the config file,
- * and IP addresses whose requests should not be logged
- * at all, from the `ignoreIps` option
+ * Paths not to log as failures and IP addresses not to log at all
  */
 class Ignores
 {
 	/**
-	 * Paths that bots commonly probe for vulnerabilities,
-	 * mostly of WordPress installations
+	 * Paths bots commonly probe, mostly of WordPress installations
 	 */
 	public const COMMON = [
 		'wp-(:all)',
@@ -34,8 +29,7 @@ class Ignores
 	}
 
 	/**
-	 * Adds a pattern to the ones managed in the Panel,
-	 * to the stored ones so concurrent additions aren't lost
+	 * Adds to the stored patterns, so concurrent additions aren't lost
 	 *
 	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
@@ -50,9 +44,8 @@ class Ignores
 	}
 
 	/**
-	 * Returns the IP address in binary form (IPv4 addresses
-	 * mapped to IPv6 like `::ffff:192.0.2.1` in their IPv4 form)
-	 * or `null` if it's not a valid address
+	 * IPv4-mapped IPv6 addresses (`::ffff:192.0.2.1`) in their IPv4 form,
+	 * `null` for invalid addresses
 	 */
 	protected static function binary(string $ip): string|null
 	{
@@ -73,7 +66,7 @@ class Ignores
 	}
 
 	/**
-	 * Returns the patterns managed in the Panel
+	 * Patterns managed in the Panel
 	 */
 	public function custom(): array
 	{
@@ -81,8 +74,7 @@ class Ignores
 	}
 
 	/**
-	 * Checks if the IP address (in binary form) is the address
-	 * or inside the CIDR range of the entry, e.g. `192.0.2.0/24`
+	 * `$ip` in binary form, `$entry` an address or a range like `192.0.2.0/24`
 	 */
 	protected static function inRange(string $ip, string $entry): bool
 	{
@@ -119,25 +111,17 @@ class Ignores
 		return ($ip[$bytes] & $mask) === ($address[$bytes] & $mask);
 	}
 
-	/**
-	 * Returns the IP addresses and ranges from the `ignoreIps` option
-	 */
 	public function ips(): array
 	{
 		return A::wrap($this->retour->option('ignoreIps'));
 	}
 
-	/**
-	 * Checks if the path matches any of the patterns
-	 * (by default all patterns)
-	 */
 	public function matches(string $path, array|null $patterns = null): bool
 	{
 		$patterns ??= [...$this->option(), ...$this->custom()];
 
 		foreach ($patterns as $pattern) {
-			// skip invalid entries (e.g. from the `ignore` option
-			// or empty list items in the config file)
+			// invalid entries from the `ignore` option or empty items in the config file
 			if (is_string($pattern) === false || $pattern === '') {
 				continue;
 			}
@@ -150,10 +134,6 @@ class Ignores
 		return false;
 	}
 
-	/**
-	 * Checks if the IP address is one of the addresses
-	 * or inside one of the ranges of the `ignoreIps` option
-	 */
 	public function matchesIp(string|null $ip): bool
 	{
 		$entries = $this->ips();
@@ -169,7 +149,6 @@ class Ignores
 		}
 
 		foreach ($entries as $entry) {
-			// skip invalid entries
 			if (is_string($entry) === false) {
 				continue;
 			}
@@ -182,18 +161,12 @@ class Ignores
 		return false;
 	}
 
-	/**
-	 * Checks if requests from the current visitor's IP address
-	 * shouldn't be logged, neither as failure nor as redirect hit
-	 */
 	public function matchesVisitor(): bool
 	{
 		return $this->matchesIp($this->retour->kirby()->visitor()->ip());
 	}
 
 	/**
-	 * Trims the patterns and removes empty and duplicate ones
-	 *
 	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
 	protected static function normalize(array $patterns): array
@@ -213,17 +186,12 @@ class Ignores
 		return $patterns;
 	}
 
-	/**
-	 * Returns the patterns from the `ignore` option
-	 */
 	public function option(): array
 	{
 		return A::wrap($this->retour->option('ignore'));
 	}
 
 	/**
-	 * Replaces the patterns managed in the Panel
-	 *
 	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
 	public function set(array $patterns): array

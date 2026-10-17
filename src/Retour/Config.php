@@ -41,9 +41,6 @@ class Config
 		}
 	}
 
-	/**
-	 * Returns the error if the config file could not be read
-	 */
 	public function error(): LogicException|null
 	{
 		return $this->error;
@@ -55,8 +52,7 @@ class Config
 	}
 
 	/**
-	 * Reads the file under a shared lock, as `F::update()`
-	 * empties the file before writing the new contents
+	 * Shared lock, as `F::update()` empties the file before writing
 	 *
 	 * @throws LogicException If the file cannot be read
 	 */
@@ -89,8 +85,7 @@ class Config
 	}
 
 	/**
-	 * Parses the contents, cached by their hash, as the config file
-	 * is read on every request and parsing many redirects is slow
+	 * Cached by hash, as parsing many redirects on every request is slow
 	 *
 	 * @throws LogicException If the contents cannot be parsed
 	 */
@@ -120,8 +115,7 @@ class Config
 	}
 
 	/**
-	 * Reads the config file; if it cannot be read, the site keeps
-	 * running without redirects, but the file won't be overwritten
+	 * An unreadable file means no redirects, but it is never overwritten
 	 */
 	public function read(): array
 	{
@@ -152,10 +146,8 @@ class Config
 	}
 
 	/**
-	 * Merges the keys into the config file, or replaces its data
-	 * with what the closure returns for the current data; under an
-	 * exclusive lock, so concurrent changes are kept, and a file that
-	 * cannot be parsed (anymore) is never overwritten
+	 * Merges the keys or replaces the data with the closure's result;
+	 * locked to keep concurrent changes, never overwrites unparsable files
 	 *
 	 * @param array|Closure(array $data): array $data
 	 * @throws LogicException If the config file could not be read or written
