@@ -99,7 +99,6 @@ export default {
 			return this.$library.dayjs(segment.label).format(this.format);
 		},
 		link(segment) {
-			// hours are the smallest unit
 			if (this.subunit === "hour") {
 				return null;
 			}
@@ -110,19 +109,16 @@ export default {
 				from: date.startOf(this.subunit).format("YYYY-MM-DD"),
 				to: date.endOf(this.subunit).format("YYYY-MM-DD"),
 			});
-
-			// another timespan starts on the first page
 			query.delete("page");
 
 			return `/${this.$panel.view.path}?${query}`;
 		},
 		now(label) {
-			// the server's time, like the log's, cut to the label's format
+			// the server's time, like the log's
 			return this.timespan.now.slice(0, label.length);
 		},
 		polygon(area) {
-			// the same number of points for up to 100 segments,
-			// so the shapes of all timespans animate into each other
+			// at least 100 points, so the shapes of all timespans animate into each other
 			const points = Math.max(this.data.length, 100);
 			return polygon(this.bounds, area, this.max, this.last, points);
 		},
@@ -143,7 +139,6 @@ export default {
 	line-height: 1;
 	color: var(--color-gray-500);
 }
-/* the ticks in a column as wide as the widest one, the plot next to it */
 .k-retour-timeline > div {
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -152,7 +147,6 @@ export default {
 	margin-block-end: calc(var(--spacing-2) + 1em);
 }
 
-/* y-axis: a tick and its dotted line for each fifth */
 .k-retour-timeline ol {
 	grid-area: 1 / 1 / 2 / 3;
 	display: grid;
@@ -188,13 +182,11 @@ export default {
 .k-retour-timeline > div > div {
 	grid-area: 1 / 2;
 	z-index: 1;
-	/* darker towards the bottom, like the ring towards the inside */
 	background-image: linear-gradient(transparent, rgb(0 0 0 / 0.3));
 	pointer-events: none;
 	transition: clip-path 0.3s ease-out;
 }
 
-/* x-axis: a column per segment, with a dotted line and its label */
 .k-retour-timeline nav {
 	grid-area: 1 / 2;
 	display: flex;

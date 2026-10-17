@@ -73,7 +73,6 @@ export default {
 		text() {
 			const { from, to, unit } = this.timespan;
 
-			// months and years without days; `formatRange()` merges what both dates share
 			const options = {
 				day: { day: "numeric", month: "long" },
 				month: { month: "long" },
@@ -125,8 +124,6 @@ export default {
 					...this.$panel.view.query,
 					...timespan,
 				});
-
-				// another timespan starts on the first page
 				query.delete("page");
 
 				return `/${this.$panel.view.path}?${query}`;

@@ -72,7 +72,6 @@ export default {
 	margin-bottom: var(--spacing-6);
 }
 
-/* stacked in one box, the totals without the ring */
 @container main (max-width: 40rem) {
 	.k-retour-stats {
 		display: flex;
@@ -86,7 +85,6 @@ export default {
 	}
 }
 
-/* side by side, each in its own box */
 @container main (min-width: 40rem) {
 	.k-retour-stats {
 		display: grid;
