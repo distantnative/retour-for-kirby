@@ -1,6 +1,6 @@
 # 404 tracking
 
-Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. You find them in the `Failures` tab of Retour's Panel view. This is valuable information for you to know where something might not be working correctly. You can see where your users fail.
+Retour allows you to track requests to your site that Kirby didn't serve, e.g. as the requested page does not exist. You find them in the `Failures` tab of Retour's Panel view. This shows you where visitors of your site end up nowhere, e.g. because of a broken link.
 
 ![Failures tab](/failures.webp)
 
@@ -48,7 +48,7 @@ Additionally, you can ignore paths with the [`ignore` option](/options#config) i
 
 ### Ignore by IP address
 
-Some visitors cause lots of failures on purpose, e.g. the security scanner of your hosting provider or your own office while you test the site. Add their IP addresses to the [`ignoreIps` option](/options#config) to keep all their requests out of the log:
+Some failures don't come from real visitors, e.g. from the security scanner of your hosting provider or your own office while you test the site. Add their IP addresses to the [`ignoreIps` option](/options#config) to keep all their requests out of the log:
 
 ```php
 // site/config/config.php

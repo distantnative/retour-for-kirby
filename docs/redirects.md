@@ -70,7 +70,7 @@ A simple text field to leave notes for yourself and others, e.g. why this redire
 
 ### Created by / Last modified by
 
-Retour automatically adds the current user as context information, e.g. when working in a team.
+Retour automatically records which Panel user created the redirect and who changed it last, e.g. when working in a team.
 
 ## Sort and filter
 
