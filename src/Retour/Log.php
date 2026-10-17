@@ -250,11 +250,15 @@ class Log
 	}
 
 	/**
-	 * Deletes all records of the path
+	 * Deletes the failures of the path
+	 * (its redirect hits stay for the stats)
 	 */
 	public function remove(string $path): bool
 	{
-		return $this->table()->delete(['path' => $path]);
+		return $this->table()
+			->where(['path' => $path])
+			->andWhere('redirect IS NULL')
+			->delete();
 	}
 
 	/**

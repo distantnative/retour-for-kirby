@@ -44,6 +44,7 @@ Retour 6 is the first version for Kirby 6. If you're on Kirby 4 or 5, keep using
 - One invalid pattern in the `ignore` option no longer stops the others from working
 - Very long paths and referrers are cut off at 1024 characters
 - Removing or resolving a failure works for paths with slashes
+- Removing a failure keeps the redirect hits of its path in the stats
 
 #### Stats
 
