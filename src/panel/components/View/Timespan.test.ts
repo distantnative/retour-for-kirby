@@ -33,12 +33,15 @@ function mount(props = {}) {
 		},
 	};
 
+	const $events = { off: vi.fn(), on: vi.fn() };
+	const $go = vi.fn();
+
 	const wrapper = vueMount(Timespan, {
 		props: { timespan: timespan(props) },
-		global: { mocks: { $panel } },
+		global: { mocks: { $events, $go, $panel } },
 	});
 
-	return Object.assign(wrapper, { $panel });
+	return Object.assign(wrapper, { $events, $go, $panel });
 }
 
 type Option = {
@@ -181,6 +184,60 @@ describe("Timespan.vue", () => {
 				icon: "merge",
 				link: "/retour/failures?searchterm=wp&from=2026-10-01&to=2026-10-31",
 			});
+		});
+	});
+
+	describe("arrow keys", () => {
+		const body = { target: { localName: "body" } };
+
+		it("listen while the menu is mounted", () => {
+			const wrapper = mount();
+			expect(wrapper.$events.on).toHaveBeenCalledWith(
+				"keydown.left",
+				wrapper.vm.toPrev,
+			);
+			expect(wrapper.$events.on).toHaveBeenCalledWith(
+				"keydown.right",
+				wrapper.vm.toNext,
+			);
+
+			wrapper.unmount();
+			expect(wrapper.$events.off).toHaveBeenCalledWith(
+				"keydown.left",
+				wrapper.vm.toPrev,
+			);
+			expect(wrapper.$events.off).toHaveBeenCalledWith(
+				"keydown.right",
+				wrapper.vm.toNext,
+			);
+		});
+
+		it("go to the previous timespan on the first page", () => {
+			const wrapper = mount();
+			wrapper.vm.toPrev(body);
+			expect(wrapper.$go).toHaveBeenCalledWith(
+				"/retour/failures?searchterm=wp&from=2026-09-01&to=2026-09-30",
+			);
+		});
+
+		it("go to the next timespan", () => {
+			const wrapper = mount({ next: { from: "2026-11-01", to: "2026-11-30" } });
+			wrapper.vm.toNext(body);
+			expect(wrapper.$go).toHaveBeenCalledWith(
+				"/retour/failures?searchterm=wp&from=2026-11-01&to=2026-11-30",
+			);
+		});
+
+		it("do nothing without a next timespan", () => {
+			const wrapper = mount();
+			wrapper.vm.toNext(body);
+			expect(wrapper.$go).not.toHaveBeenCalled();
+		});
+
+		it("do nothing while typing", () => {
+			const wrapper = mount();
+			wrapper.vm.toPrev({ target: { localName: "input" } });
+			expect(wrapper.$go).not.toHaveBeenCalled();
 		});
 	});
 });
