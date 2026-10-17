@@ -70,4 +70,4 @@ Or, if you installed the plugin via composer, run:
 composer update distantnative/retour-for-kirby
 ```
 
-Retour updates log databases of earlier versions automatically the first time you open its Panel view afterwards. With a large log, this can take a few seconds once.
+Retour updates log databases of earlier versions automatically the first time you open its Panel view afterwards. With a large log, this can take a few seconds once and needs about as much free disk space as the log itself.
