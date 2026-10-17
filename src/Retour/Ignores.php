@@ -34,11 +34,19 @@ class Ignores
 	}
 
 	/**
-	 * Adds a pattern to the ones managed in the Panel
+	 * Adds a pattern to the ones managed in the Panel,
+	 * to the stored ones so concurrent additions aren't lost
+	 *
+	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
 	public function add(string $pattern): array
 	{
-		return $this->set([...$this->custom(), $pattern]);
+		$data = $this->retour->config()->update(function (array $data) use ($pattern): array {
+			$data['ignore'] = static::normalize([...$data['ignore'] ?? [], $pattern]);
+			return $data;
+		});
+
+		return $data['ignore'];
 	}
 
 	/**
@@ -184,6 +192,28 @@ class Ignores
 	}
 
 	/**
+	 * Trims the patterns and removes empty and duplicate ones
+	 *
+	 * @throws InvalidArgumentException If a pattern is invalid
+	 */
+	protected static function normalize(array $patterns): array
+	{
+		$patterns = array_map(trim(...), $patterns);
+		$patterns = array_filter($patterns, fn ($pattern) => $pattern !== '');
+		$patterns = array_values(array_unique($patterns));
+
+		foreach ($patterns as $pattern) {
+			if (Pattern::isValid($pattern) === false) {
+				throw new InvalidArgumentException(
+					message: 'Invalid pattern: ' . $pattern
+				);
+			}
+		}
+
+		return $patterns;
+	}
+
+	/**
 	 * Returns the patterns from the `ignore` option
 	 */
 	public function option(): array
@@ -198,20 +228,8 @@ class Ignores
 	 */
 	public function set(array $patterns): array
 	{
-		$patterns = array_map(trim(...), $patterns);
-		$patterns = array_filter($patterns, fn ($pattern) => $pattern !== '');
-		$patterns = array_values(array_unique($patterns));
-
-		foreach ($patterns as $pattern) {
-			if (Pattern::isValid($pattern) === false) {
-				throw new InvalidArgumentException(
-					message: 'Invalid pattern: ' . $pattern
-				);
-			}
-		}
-
+		$patterns = static::normalize($patterns);
 		$this->retour->config()->update(['ignore' => $patterns]);
-
 		return $patterns;
 	}
 }
