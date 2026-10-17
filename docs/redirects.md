@@ -52,6 +52,8 @@ en/old  =>  page://abc  (German)  =>  de/neu
 
 URLs and paths that aren't pages keep the language they contain.
 
+![Language of a redirect](/language.webp)
+
 ### Status
 
 The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) the redirect will respond with.
@@ -75,5 +77,7 @@ Retour automatically records which Panel user created the redirect and who chang
 ## Sort and filter
 
 Click a table header to sort the redirects by that column, click it again to reverse the order and a third time to get back to their order of precedence. The filter button above the table, next to `Add`, opens a search field that finds redirects by their path, target, status code or comment.
+
+![Filter the redirects](/filter.webp)
 
 The page, sorting and filter are part of the URL, so you can bookmark them or share a link with others.
