@@ -10,15 +10,8 @@ use Kirby\Toolkit\Escape;
 use Kirby\Toolkit\HtmlString;
 use Kirby\Toolkit\Str;
 
-/**
- * Lists the paths ignored via the Panel to remove
- * (or add) some and shows the ones from the config
- */
 class IgnoresDialog extends DialogController
 {
-	/**
-	 * Renders the paths as a comma-separated list of code elements
-	 */
 	protected function code(array $paths): HtmlString
 	{
 		return new HtmlString(implode(', ', array_map(
@@ -40,8 +33,6 @@ class IgnoresDialog extends DialogController
 			]
 		];
 
-		// offer the common paths as long as
-		// not all of them have been added yet
 		if (array_diff(Ignores::COMMON, $ignores->custom()) !== []) {
 			$fields['common'] = [
 				'type'  => 'toggle',

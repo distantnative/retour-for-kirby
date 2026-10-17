@@ -7,9 +7,8 @@ use Kirby\Http\Router;
 
 return [
 	[
-		// one route for all redirects with priority over pages,
-		// so the redirects are only loaded for requests that reach it
-		// (not for the Panel, the API or media files)
+		// one route for all priority redirects, so they are only loaded
+		// for requests that reach it (not for the Panel, API or media)
 		'pattern' => '(:all)',
 		'method'  => 'GET|HEAD',
 		'action'  => function (string $path) {

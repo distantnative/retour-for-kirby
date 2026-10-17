@@ -11,9 +11,6 @@ use Kirby\Http\Idn;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
 
-/**
- * Single redirect with its properties
- */
 class Redirect
 {
 	/**
@@ -46,9 +43,8 @@ class Redirect
 	}
 
 	/**
-	 * Creates a redirect from config or form data, which can
-	 * have numbers as strings (or paths as numbers), `"true"`
-	 * for priority and `"disabled"` or `0` for no status code
+	 * Config and form data can have numbers as strings
+	 * (or paths as numbers) and `"true"` for priority
 	 *
 	 * @throws InvalidArgumentException If the path is missing
 	 */
@@ -75,18 +71,14 @@ class Redirect
 		return $this->from;
 	}
 
-	/**
-	 * Returns whether the redirect has an active status code
-	 */
 	public function isActive(): bool
 	{
 		return $this->status !== null;
 	}
 
 	/**
-	 * Encodes an internationalized domain of the URL without
-	 * rebuilding the whole URL like `Response::redirect()` does,
-	 * which would re-encode the query string
+	 * Encodes an IDN host without rebuilding the URL like
+	 * `Response::redirect()`, which would re-encode the query string
 	 */
 	protected static function location(string $url): string
 	{
@@ -124,8 +116,7 @@ class Redirect
 	}
 
 	/**
-	 * Returns whether the route takes priority
-	 * over actual pages
+	 * Whether the redirect takes priority over pages
 	 */
 	public function priority(): bool
 	{
@@ -133,8 +124,6 @@ class Redirect
 	}
 
 	/**
-	 * Resolves the redirect action for the router
-	 *
 	 * @param array<int, string> $placeholders
 	 * @return Page|Response|null `null` if the target page or file doesn't exist (anymore)
 	 */
@@ -148,8 +137,7 @@ class Redirect
 		$page      = $kirby->page($path);
 		$code      = $this->status;
 
-		// drafts (and pages inside drafts) must not be
-		// rendered for or redirected to by visitors
+		// visitors must not get drafts (or pages inside drafts)
 		if (
 			$page?->isDraft() === true ||
 			$page?->parents()->findBy('status', 'draft') !== null
@@ -163,8 +151,7 @@ class Redirect
 
 				// support for content representations
 				if ($extension !== '') {
-					// the home page's URL is the site URL, but its
-					// representations are only reachable via its slug
+					// the home page's representations are only reachable via its slug
 					if ($page->isHomePage() === true) {
 						$to .= '/' . $page->slug();
 					}
@@ -173,12 +160,10 @@ class Redirect
 				}
 			} else {
 				try {
-					// resolve paths (and UUIDs) against the site URL,
-					// e.g. for sites in a subfolder; absolute URLs are kept
+					// resolves paths and UUIDs against the site URL (e.g. in a subfolder)
 					$to = Url::to($to);
 				} catch (NotFoundException) {
-					// the target page or file has been deleted,
-					// so the request is handled as failure
+					// the target page or file has been deleted, handled as failure
 					return null;
 				}
 			}
@@ -192,9 +177,8 @@ class Redirect
 				'headers' => ['Location' => static::location($to)]
 			]);
 		} else {
-			// an empty page would look like a successful request,
-			// so it's handled as failure (other codes like `410`
-			// can be meant to answer without a page)
+			// an empty 200 would look like a success, so it's a failure
+			// (other codes like `410` can be meant to answer without a page)
 			if ($page === null && $code === 200) {
 				return null;
 			}
@@ -204,8 +188,7 @@ class Redirect
 		}
 
 		// only now, as redirects to deleted pages count as failures;
-		// HEAD requests (e.g. by uptime monitors) would inflate the stats,
-		// requests from ignored IP addresses aren't logged at all
+		// HEAD requests (e.g. by uptime monitors) would inflate the stats
 		if (
 			$kirby->request()->method() !== 'HEAD' &&
 			$retour->ignores()->matchesVisitor() === false
@@ -217,7 +200,7 @@ class Redirect
 	}
 
 	/**
-	 * Returns the HTTP status code or `null` if disabled
+	 * `null` if disabled
 	 */
 	public function status(): int|null
 	{
@@ -243,7 +226,7 @@ class Redirect
 	}
 
 	/**
-	 * Replaces placeholders in $path string
+	 * Replaces `$1`, `$2`, … in the path with the placeholders
 	 *
 	 * @param array<int, string> $placeholders
 	 */
@@ -251,7 +234,6 @@ class Redirect
 		string $path,
 		array $placeholders = []
 	): string {
-		// Replace alias for home
 		if ($path === '/') {
 			return 'home';
 		}
@@ -276,11 +258,8 @@ class Redirect
 	}
 
 	/**
-	 * Appends the query string of the current request to the
-	 * destination URL, merging it with an existing query string
-	 * if present. The query string is passed on as sent, as
-	 * re-encoding it would break tracking parameters like
-	 * Google's `_gl=1*abc*_ga*…`
+	 * Appends the request's query string as sent, as re-encoding it
+	 * would break tracking parameters like Google's `_gl=1*abc*_ga*…`
 	 */
 	public static function withQuery(string $to): string
 	{
@@ -292,8 +271,7 @@ class Redirect
 			return $to;
 		}
 
-		// keep the fragment at the end, otherwise
-		// the query string would become part of it
+		// keep the fragment last, or the query would become part of it
 		[$url, $fragment] = array_pad(explode('#', $to, 2), 2, null);
 
 		$url .= (str_contains($url, '?') ? '&' : '?') . $query;

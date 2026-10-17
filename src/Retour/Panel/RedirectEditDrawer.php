@@ -6,9 +6,6 @@ use Kirby\Exception\NotFoundException;
 use Kirby\Panel\Ui\Drawer\FormDrawer;
 use Kirby\Retour\Redirect;
 
-/**
- * Drawer to edit a redirect
- */
 class RedirectEditDrawer extends RedirectCreateDrawer
 {
 	public function __construct(
@@ -41,7 +38,7 @@ class RedirectEditDrawer extends RedirectCreateDrawer
 	{
 		$fields = $this->fields();
 
-		// set autofocus if specific column cell was passed
+		// focus the field of the clicked table cell
 		if ($column = $this->request->get('column')) {
 			foreach (array_keys($fields) as $name) {
 				$fields[$name]['autofocus'] = $name === $column;

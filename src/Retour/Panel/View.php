@@ -11,9 +11,6 @@ use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Collection;
 use Kirby\Toolkit\Str;
 
-/**
- * Handles Panel view requests for the Retour tabs
- */
 class View extends ViewController
 {
 	public function __construct(
@@ -33,8 +30,7 @@ class View extends ViewController
 	}
 
 	/**
-	 * Adds the options to a row of the failures table;
-	 * it has no `id`, as a path has a row per referrer
+	 * No `id`, as a path has a row per referrer
 	 */
 	protected function failure(array $failure): array
 	{
@@ -68,7 +64,6 @@ class View extends ViewController
 			throw $error;
 		}
 
-		// failures are only available with logging enabled
 		if (
 			$this->tab === 'failures' &&
 			Retour::instance()->hasLog() === false
@@ -95,7 +90,7 @@ class View extends ViewController
 		$retour = Retour::instance();
 		$log    = $retour->log();
 
-		// update logs created by earlier versions
+		// upgrade logs of earlier versions
 		$log?->migrate();
 
 		$timespan = Timespan::props();
@@ -115,7 +110,6 @@ class View extends ViewController
 		];
 
 		if ($log !== null) {
-			// purge outdated entries on every 10th view on average
 			if (random_int(1, 10) === 1) {
 				$log->purge();
 			}
@@ -148,19 +142,12 @@ class View extends ViewController
 		];
 	}
 
-	/**
-	 * Returns a query parameter without surrounding
-	 * whitespace, `null` if it's missing or empty
-	 */
 	protected function query(string $key): string|null
 	{
 		$value = trim($this->request->get($key, ''));
 		return $value !== '' ? $value : null;
 	}
 
-	/**
-	 * Adds the id and options to a row of the redirects table
-	 */
 	protected function redirect(array $redirect): array
 	{
 		$id = Id::encode($redirect['from']);
@@ -184,8 +171,7 @@ class View extends ViewController
 	}
 
 	/**
-	 * Returns a page of the redirects with their hits;
-	 * unsorted, they keep their order of precedence
+	 * Unsorted, they keep their order of precedence
 	 */
 	protected function redirects(
 		string $from,

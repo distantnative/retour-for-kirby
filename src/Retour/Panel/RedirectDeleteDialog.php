@@ -8,9 +8,6 @@ use Kirby\Panel\Ui\Dialog\RemoveDialog;
 use Kirby\Retour\Redirect;
 use Kirby\Retour\Retour;
 
-/**
- * Removes a redirect after confirmation
- */
 class RedirectDeleteDialog extends DialogController
 {
 	public function __construct(

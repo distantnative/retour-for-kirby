@@ -8,14 +8,12 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Date;
 
 /**
- * Manages the selected date range for log views,
- * including session persistence and unit resolution
+ * Date range of the log views, kept in the session
  */
 class Timespan
 {
 	/**
-	 * Returns the first and last day of the unit
-	 * (`day`, `week`, `month` or `year`) around the date
+	 * First and last day of the `day`, `week`, `month` or `year` around the date
 	 */
 	public static function around(string $date, string $unit): array
 	{
@@ -58,9 +56,6 @@ class Timespan
 		];
 	}
 
-	/**
-	 * Returns the date if it is a valid `YYYY-MM-DD` string
-	 */
 	protected static function date(mixed $date): string|null
 	{
 		if (is_string($date) === false) {
@@ -69,15 +64,13 @@ class Timespan
 
 		$parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $date);
 
-		// the round trip rejects overflowing dates (e.g. Feb 30)
-		// as well as years with more or less than four digits
+		// the round trip rejects overflows (e.g. Feb 30) and non-four-digit years
 		if ($parsed === false || $parsed->format('Y-m-d') !== $date) {
 			return null;
 		}
 
-		// there are no logs from before Retour existed, and as the
-		// stats have an entry per month, timespans like 0000–9999
-		// would create ~120k of them
+		// no logs predate Retour, and with a stats entry per month,
+		// timespans like 0000–9999 would create ~120k of them
 		if ($date < '2019-01-01' || $date > '2099-12-31') {
 			return null;
 		}
@@ -86,8 +79,7 @@ class Timespan
 	}
 
 	/**
-	 * Returns the first day of the week (0 = Sunday … 6 = Saturday)
-	 * for the Panel language, as used by the Panel's calendar
+	 * 0 = Sunday … 6 = Saturday, as in the Panel's calendar
 	 */
 	protected static function firstWeekday(): int
 	{
@@ -95,9 +87,6 @@ class Timespan
 		return Date::firstWeekday($locale);
 	}
 
-	/**
-	 * Whether the log has newer entries or today is after the timespan
-	 */
 	protected static function hasNext(
 		Date $to,
 		Date $today,
@@ -154,10 +143,6 @@ class Timespan
 		];
 	}
 
-	/**
-	 * Returns the timespan with valid dates (and `to` not
-	 * before `from`) or `null` if any of the dates is invalid
-	 */
 	protected static function normalize(mixed $data): array|null
 	{
 		if (is_array($data) === false) {
@@ -191,8 +176,7 @@ class Timespan
 
 		return [
 			...$data,
-			// where the previous and next buttons
-			// and the units of the dropdown lead to
+			// targets of the prev/next buttons and the units dropdown
 			'prev'  => $data['hasPrev'] && $data['isAll'] === false ? static::step($data, -1) : null,
 			'next'  => $data['hasNext'] && $data['isAll'] === false ? static::step($data, 1) : null,
 			'units' => static::units($data)
@@ -208,15 +192,12 @@ class Timespan
 	{
 		$query = static::normalize(static::query());
 
-		// get timespan from valid query parameters
 		if ($query !== null) {
 			return static::set($query);
 		}
 
-		// otherwise try to get from session
 		$session = App::instance()->session()->get('retour');
 
-		// if no valid data exists, use current month
 		return static::normalize($session) ?? [
 			'from' => date('Y-m-01'),
 			'to'   => date('Y-m-t')
@@ -224,8 +205,6 @@ class Timespan
 	}
 
 	/**
-	 * Stores the timespan in the session
-	 *
 	 * @throws InvalidArgumentException If a date is not a valid `YYYY-MM-DD` string
 	 */
 	public static function set(array $data): array
@@ -239,8 +218,7 @@ class Timespan
 	}
 
 	/**
-	 * Returns the timespan before (`-1`) or after (`1`) this one:
-	 * the previous or next unit, custom ranges move by their own length
+	 * Previous (`-1`) or next (`1`) timespan; custom ranges move by their own length
 	 */
 	public static function step(array $data, int $direction): array
 	{
@@ -271,9 +249,6 @@ class Timespan
 		return static::around($from->modify($direction . ' ' . $data['unit'])->format('Y-m-d'), $data['unit']);
 	}
 
-	/**
-	 * Returns the appropriate date unit for a given timespan
-	 */
 	public static function unit(array $data): string
 	{
 		$from = Date::optional($data['from']);
@@ -316,9 +291,8 @@ class Timespan
 	}
 
 	/**
-	 * Returns the timespans that the units of the dropdown lead to:
-	 * a unit around the start of the timespan, the current unit
-	 * again around today; `null` for all without logs
+	 * Dropdown targets: units around the start, the current unit
+	 * around today; `all` is `null` without logs
 	 */
 	protected static function units(array $data): array
 	{

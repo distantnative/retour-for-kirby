@@ -10,9 +10,6 @@ use Kirby\Retour\Retour;
 use Kirby\Toolkit\Str;
 use Random\Randomizer;
 
-/**
- * Replaces the log with dummy data for testing
- */
 class Seed extends Command
 {
 	public static function args(): array
@@ -60,7 +57,6 @@ class Seed extends Command
 		$redirects = static::redirects($retour);
 		$referrers = static::referrers();
 
-		// failure paths that will be marked as resolved
 		$resolved = array_flip(array_map(
 			fn (int $key): string => $failures[$key],
 			$random->pickArrayKeys($failures, intdiv(count($failures), 5))
@@ -110,8 +106,7 @@ class Seed extends Command
 	}
 
 	/**
-	 * Returns sorted timestamps; recent ones are
-	 * more likely, simulating growing traffic
+	 * Recent timestamps are more likely, simulating growing traffic
 	 */
 	protected static function dates(
 		Randomizer $random,
@@ -136,9 +131,6 @@ class Seed extends Command
 		return 'Replace the Retour log with dummy data for testing';
 	}
 
-	/**
-	 * Returns paths that don't exist and will be logged as failures
-	 */
 	protected static function failures(): array
 	{
 		$failures = [
@@ -165,8 +157,7 @@ class Seed extends Command
 	}
 
 	/**
-	 * Picks an item, favoring the first ones so that
-	 * some paths get a lot more hits than others
+	 * Favors the first items, so some paths get far more hits than others
 	 */
 	protected static function pick(Randomizer $random, array $items): mixed
 	{
@@ -174,8 +165,7 @@ class Seed extends Command
 	}
 
 	/**
-	 * Returns the patterns of all active redirects,
-	 * as only those can get hits
+	 * Only active redirects can get hits
 	 */
 	protected static function redirects(Retour $retour): array
 	{

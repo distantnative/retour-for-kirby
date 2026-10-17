@@ -7,8 +7,7 @@ use Kirby\Panel\Ui\Dialog\FormDialog;
 use Kirby\Retour\Retour;
 
 /**
- * Adds the path of a failure (or a pattern based on it)
- * to the ignored paths and removes all matching failures
+ * Also removes all failures matching the ignored pattern
  */
 class FailureIgnoreDialog extends DialogController
 {
