@@ -25,5 +25,3 @@ features:
     title: Beautiful Panel UI
     details: Allow your editors to handle this all themselves directly from the Panel in a familiar UI and without writing any code.
 ---
-
-![Retour view in the Panel](/retour.webp)
