@@ -1,9 +1,9 @@
 <template>
 	<figure class="k-retour-pie">
 		<div class="k-retour-pie-chart">
-			<div class="k-retour-pie-graph" :style="styles" />
+			<div class="k-retour-pie-graph" :style="pie(data)" />
 			<p>
-				<strong>{{ formatter.format(total) }}</strong>
+				<strong>{{ formatter.format(sum(data)) }}</strong>
 				{{ $t("retour.stats.requests") }}
 			</p>
 		</div>
@@ -29,12 +29,10 @@ export default {
 		formatter() {
 			return new Intl.NumberFormat(this.$library.dayjs.locale());
 		},
-		styles() {
-			return pie(this.data);
-		},
-		total() {
-			return sum(this.data);
-		},
+	},
+	methods: {
+		pie,
+		sum,
 	},
 };
 </script>

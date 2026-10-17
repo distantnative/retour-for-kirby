@@ -3,7 +3,7 @@
 		:title="`${column.label}: ${value}`"
 		class="k-text k-status-field-preview"
 	>
-		<k-icon :color="color" type="circle-filled" />
+		<k-icon :color="color(value)" type="circle-filled" />
 		<p v-if="value === 'disabled'">–</p>
 		<template v-else>{{ value }}</template>
 	</div>
@@ -18,10 +18,8 @@ export default {
 		value: [Number, String],
 		column: Object,
 	},
-	computed: {
-		color() {
-			return color(this.value);
-		},
+	methods: {
+		color,
 	},
 };
 </script>
