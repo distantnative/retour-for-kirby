@@ -510,6 +510,36 @@ class RedirectTest extends TestCase
 		$this->assertNull($redirect->resolve([]));
 	}
 
+	public function testResolveWithoutTarget(): void
+	{
+		$app = $this->kirby->clone([
+			'options' => [
+				'distantnative.retour.logs' => false
+			],
+			'site' => [
+				'children' => [
+					['slug' => 'home']
+				]
+			]
+		]);
+
+		Retour::instance($app);
+
+		// no `to` in hand-edited config files, an empty one from the Panel
+		foreach ([null, ''] as $to) {
+			$redirect = new Redirect(
+				from: 'foo',
+				to: $to,
+				status: 410
+			);
+
+			$response = $redirect->resolve([]);
+			$this->assertInstanceOf(Response::class, $response, var_export($to, true));
+			$this->assertSame(410, $response->code());
+			$this->assertSame('', $response->body());
+		}
+	}
+
 	public function testRouteResolve(): void
 	{
 		$app = $this->kirby->clone([
