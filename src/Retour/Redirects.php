@@ -82,9 +82,7 @@ class Redirects extends Collection
 
 	public function toArray(Closure|null $map = null): array
 	{
-		$map ??= fn (Redirect $redirect) => $redirect->toArray();
-		$array = parent::toArray($map);
-		return array_values($array);
+		return $this->values($map ?? fn (Redirect $redirect) => $redirect->toArray());
 	}
 
 	/**
@@ -92,20 +90,17 @@ class Redirects extends Collection
 	 */
 	public function toData(string $from, string $to): array
 	{
-		$log = $this->retour->log();
+		$hits = $this->retour->log()?->redirects($from, $to);
 
-		if ($log === null) {
-			return $this->toArray();
+		if ($hits !== null) {
+			return $this->toArray(fn (Redirect $redirect): array => [
+				...$redirect->toArray(),
+				'hits' => $hits[$redirect->from()]['hits'] ?? 0,
+				'last' => $hits[$redirect->from()]['last'] ?? null
+			]);
 		}
 
-		$hits = $log->redirects($from, $to);
-
-		return $this->toArray(function (Redirect $redirect) use ($hits): array {
-			$data         = $redirect->toArray();
-			$data['hits'] = $hits[$data['from']]['hits'] ?? 0;
-			$data['last'] = $hits[$data['from']]['last'] ?? null;
-			return $data;
-		});
+		return $this->toArray();
 	}
 
 	/**
