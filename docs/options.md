@@ -21,7 +21,8 @@ The following config options are available (shown with their default values):
   'ignoreIps' => [],
 
   // Number of months after which logs should be deleted automatically
-  // (checked from time to time when the Retour view is opened in the Panel;
+  // (checked from time to time while logging and when the Retour view
+  // is opened in the Panel;
   // `false` keeps them forever)
   'deleteAfter' => 12,
 
