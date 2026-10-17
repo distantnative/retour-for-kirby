@@ -12,7 +12,7 @@
 			@input="$emit('input', $event)"
 		>
 			<template #before>
-				<k-icon type="circle-filled" :color="color" />
+				<k-icon type="circle-filled" :color="color(value)" />
 			</template>
 		</k-input>
 	</k-field>
@@ -24,10 +24,8 @@ import { color } from "../../helpers/status";
 export default {
 	extends: "k-select-field",
 	emits: ["input"],
-	computed: {
-		color() {
-			return color(this.value);
-		},
+	methods: {
+		color,
 	},
 };
 </script>
