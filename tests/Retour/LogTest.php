@@ -374,13 +374,18 @@ class LogTest extends TestCase
 		$log->add(['path' => 'foo']);
 		$log->add(['path' => 'foo', 'referrer' => 'bar']);
 		$log->add(['path' => 'foo', 'referrer' => 'homer simpson']);
+		$log->add(['path' => 'foo', 'redirect' => 'foo']);
 		$log->add(['path' => 'bar']);
 
-		$this->assertSame(5, $log->table()->fetch('array')->all()->count());
+		$this->assertSame(6, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('foo'));
-		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+		$this->assertSame(2, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('bar'));
-		$this->assertSame(0, $log->table()->fetch('array')->all()->count());
+
+		// the redirect hit stays
+		$records = $log->table()->fetch('array')->all();
+		$this->assertSame(1, $records->count());
+		$this->assertSame('foo', $records->first()['redirect']);
 	}
 
 	public function testRemoveFailures(): void

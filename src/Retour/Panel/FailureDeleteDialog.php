@@ -7,7 +7,7 @@ use Kirby\Panel\Ui\Dialog\RemoveDialog;
 use Kirby\Retour\Retour;
 
 /**
- * Removes all log entries of a failure after confirmation
+ * Removes the failures of a path after confirmation
  */
 class FailureDeleteDialog extends DialogController
 {
