@@ -27,6 +27,10 @@
 		rgba(0, 0, 0, 0.05) 0px 10px 10px -5px;
 }
 
+.vp-doc tr {
+	background-color: var(--vp-c-white);
+}
+
 .vp-doc ul + .custom-block {
 	margin-top: 2rem;
 }
