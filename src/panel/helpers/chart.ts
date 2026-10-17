@@ -49,25 +49,6 @@ export function bounds(segments: Segment[]): Bound[][] {
 }
 
 /**
- * Returns the CSS variables to clip an area
- * between the current and the next segment
- */
-export function clip(
-	current: Bound,
-	next: Bound | undefined,
-	max: number,
-): string {
-	next ??= { path: 0, mask: 0 };
-
-	return [
-		`--p0: ${current.path / max}`,
-		`--p1: ${next.path / max}`,
-		`--m0: ${current.mask / max}`,
-		`--m1: ${next.mask / max}`,
-	].join("; ");
-}
-
-/**
  * Returns the top of the y-axis: the highest stack
  * plus some headroom, rounded to a quarter of its
  * order of magnitude, or at least to a multiple of 5
@@ -86,6 +67,37 @@ export function max(segments: Segment[]): number {
 	}
 
 	return 5;
+}
+
+/**
+ * Returns the clip path of a stacked area across all segments;
+ * it ends at the last segment, later ones (and any further
+ * points, up to `points`) collapse onto it
+ *
+ * @example
+ * polygon([[{ path: 5, mask: 0 }], [{ path: 10, mask: 0 }]], 0, 10)
+ * // => "polygon(0% 50%, 100% 0%, 100% 100%, 0% 100%)"
+ */
+export function polygon(
+	bounds: Bound[][],
+	area: number,
+	max: number,
+	last: number = bounds.length - 1,
+	points: number = bounds.length,
+): string {
+	const width = Math.max(bounds.length - 1, 1);
+	const point = (segment: number, key: keyof Bound): string => {
+		const x = Math.min(segment, last);
+		const bound = bounds[x][area];
+		const y = segment > last ? bound.mask : bound[key];
+		return `${(100 * x) / width}% ${100 - (100 * y) / max}%`;
+	};
+
+	const segments = [...Array(points).keys()];
+	const top = segments.map((segment) => point(segment, "path"));
+	const bottom = segments.reverse().map((segment) => point(segment, "mask"));
+
+	return `polygon(${[...top, ...bottom].join(", ")})`;
 }
 
 /**

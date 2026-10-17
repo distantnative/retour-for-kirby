@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { axis, bounds, clip, max, pie, sum } from "./chart";
+import { axis, bounds, max, pie, polygon, sum } from "./chart";
 import type { Segment } from "./chart";
 
 const segment = (...data: number[]): Segment => ({
@@ -62,20 +62,6 @@ describe("chart.bounds()", () => {
 	});
 });
 
-describe("chart.clip()", () => {
-	it("scales the bounds of both segments", () => {
-		expect(clip({ path: 5, mask: 2 }, { path: 10, mask: 0 }, 10)).toBe(
-			"--p0: 0.5; --p1: 1; --m0: 0.2; --m1: 0",
-		);
-	});
-
-	it("drops to zero without a next segment", () => {
-		expect(clip({ path: 5, mask: 2 }, undefined, 10)).toBe(
-			"--p0: 0.5; --p1: 0; --m0: 0.2; --m1: 0",
-		);
-	});
-});
-
 describe("chart.max()", () => {
 	const cases: { name: string; segments: Segment[]; expected: number }[] = [
 		{ name: "falls back without segments", segments: [], expected: 5 },
@@ -133,6 +119,31 @@ describe("chart.pie()", () => {
 			"--pie-a0": "90deg",
 			"--pie-a1": "135deg",
 		});
+	});
+});
+
+describe("chart.polygon()", () => {
+	const stack = bounds([segment(5, 2), segment(10, 0), segment(4, 4)]);
+
+	it("outlines an area across all segments", () => {
+		expect(polygon(stack, 0, 10)).toBe(
+			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 50% 100%, 0% 100%)",
+		);
+		expect(polygon(stack, 1, 10)).toBe(
+			"polygon(0% 30%, 50% 0%, 100% 20%, 100% 60%, 50% 0%, 0% 50%)",
+		);
+	});
+
+	it("collapses the segments after the last one onto it", () => {
+		expect(polygon(stack, 1, 10, 1)).toBe(
+			"polygon(0% 30%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 0% 50%)",
+		);
+	});
+
+	it("adds points on the last segment", () => {
+		expect(polygon(stack, 0, 10, 2, 4)).toBe(
+			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%)",
+		);
 	});
 });
 
