@@ -133,9 +133,12 @@ class Log
 			);
 		}
 
-		// `+date` keeps SQLite on idx_failures, which has the failures
-		// grouped by path and referrer already, instead of looking up
-		// every record of the timespan found via idx_date
+		// idx_date finds the few records of up to a month faster;
+		// for longer timespans, `+date` keeps SQLite on idx_failures,
+		// which has the failures grouped by path and referrer already
+		$days = (new DateTimeImmutable($from))->diff(new DateTimeImmutable($to))->days;
+		$date = $days < 31 ? 'date' : '+date';
+
 		$query = $this->table()
 			->select('
                 path,
@@ -143,8 +146,8 @@ class Log
                 MAX(date) AS last,
                 COUNT(*) AS hits
             ')
-			->where('+date >= :start', ['start' => $from . ' 00:00:00'])
-			->andWhere('+date <= :end', ['end' => $to . ' 23:59:59'])
+			->where($date . ' >= :start', ['start' => $from . ' 00:00:00'])
+			->andWhere($date . ' <= :end', ['end' => $to . ' 23:59:59'])
 			->andWhere('redirect IS NULL')
 			->andWhere('wasResolved IS NULL')
 			->group('path, referrer')

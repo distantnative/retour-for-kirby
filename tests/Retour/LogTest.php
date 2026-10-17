@@ -344,6 +344,13 @@ class LogTest extends TestCase
 		$log->fails('2020-01-01', '2020-12-31');
 		$this->assertSame("SCAN records USING INDEX idx_failures\nUSE TEMP B-TREE FOR ORDER BY", $this->plan($log));
 
+		// up to a month
+		$log->fails('2020-01-01', '2020-01-31');
+		$this->assertSame("SEARCH records USING INDEX idx_date (date>? AND date<?)\nUSE TEMP B-TREE FOR GROUP BY\nUSE TEMP B-TREE FOR ORDER BY", $this->plan($log));
+
+		$log->fails('2020-01-01', '2020-02-01');
+		$this->assertStringStartsWith('SCAN records USING INDEX idx_failures', $this->plan($log));
+
 		// in the order of the index
 		$log->fails('2020-01-01', '2020-12-31', 'path desc');
 		$this->assertSame('SCAN records USING INDEX idx_failures', $this->plan($log));
