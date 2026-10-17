@@ -70,6 +70,14 @@ describe("chart.max()", () => {
 		{ name: "rounds low single digits", segments: [segment(1)], expected: 5 },
 		{ name: "rounds high single digits", segments: [segment(5)], expected: 10 },
 		{ name: "rounds double digits", segments: [segment(50)], expected: 75 },
+		{ name: "rounds 89 to 100", segments: [segment(89)], expected: 100 },
+		{ name: "rounds 100 to 125", segments: [segment(100)], expected: 125 },
+		{ name: "rounds 1000 to 1250", segments: [segment(1000)], expected: 1250 },
+		{
+			name: "rounds 7000 to 10000",
+			segments: [segment(7000)],
+			expected: 10000,
+		},
 		{
 			name: "uses the highest stack",
 			segments: [segment(100, 200), segment(400, 500)],
@@ -82,8 +90,14 @@ describe("chart.max()", () => {
 	});
 
 	it("divides the axis into whole numbers", () => {
-		for (let highest = 1; highest <= 1000; highest++) {
-			expect(max([segment(highest)]) % 5).toBe(0);
+		for (let highest = 1; highest <= 10000; highest++) {
+			expect(Number.isInteger(max([segment(highest)]) / 5)).toBe(true);
+		}
+	});
+
+	it("leaves at most half of the axis empty", () => {
+		for (let highest = 1; highest <= 10000; highest++) {
+			expect(max([segment(highest)])).toBeLessThan(highest * 2 + 5);
 		}
 	});
 });
