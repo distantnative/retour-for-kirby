@@ -6,17 +6,19 @@ Retour allows you to track requests to your site that Kirby didn't serve, e.g. a
 
 ## Stats and timespan
 
-Above the tables in both tabs, Retour shows stats for all logged requests. The pie chart shows how they split up, the timeline how they are spread over time:
+Above the tables in both tabs, Retour shows stats for all logged requests. The half ring shows their total and how they split up, the timeline how they are spread over time:
 
 - **Redirected:** requests handled by one of your redirects
 - **Resolved:** failures that you later turned into a redirect via [`Add as redirect`](#add-as-redirect)
 - **Failed:** failures that are still open
 
+Retour doesn't log `HEAD` requests, e.g. from uptime monitors, so they don't inflate the stats.
+
 Depending on the timespan, the timeline shows hours, days or months. Click on a day or month to zoom in on it.
 
 When you open up Retour, you will be shown the data of the current month. The selected timespan not only applies to the stats graphs, but also the data displayed in the tables. This is particularly relevant for the failures as only those that occurred during the selected timespan are shown. But it also applies to the hits column in the `Routes` tab.
 
-You can change the selected timespan by using the navigation bar: moving between previous and next month or even changing the span to a full year, a week, a day or any custom interval:
+You can change the selected timespan in the header: step to the previous or next one, also with the arrow keys, or choose the whole log, a year, a month, a week, a day or any custom interval from the menu. `Today` jumps to the current year, month, week or day:
 
 ![Change timespan](/timespan.webp)
 
@@ -24,7 +26,7 @@ Weeks start on the same day as the calendar of Kirby's date fields: it depends o
 
 ## Sort and filter
 
-The failures with the most hits come first. Click a table header to sort by that column instead and click it again to reverse the order. The filter button above the table finds failures by their path or referrer.
+The failures with the most hits come first. Click a table header to sort by that column instead, click it again to reverse the order and a third time to get back to the most hits first. The filter button above the table finds failures by their path or referrer.
 
 ## Add as redirect
 
@@ -36,7 +38,7 @@ Once you save that new route, all failure entries for that path will also be mar
 
 ## Ignore failures
 
-Bots and scanners request lots of paths that will never exist on your site, like `wp-login.php` or `.env`. To keep them out of your log, choose `Ignore` in the options of the table row. Before confirming, you can turn the path into a pattern with [placeholders](/redirects#path), e.g. `wp-admin(:all)`, to ignore a whole group of paths at once. Requests to ignored paths won't be logged anymore and all existing failures matching the pattern get removed from the log.
+Bots and scanners request lots of paths that will never exist on your site, like `wp-login.php` or `.env`. To keep them out of your log, choose `Ignore` in the options of the table row. Before confirming, you can turn the path into a pattern with [placeholders](/redirects#path), e.g. `wp-admin(:all)`, to ignore a whole group of paths at once. Requests to ignored paths won't be logged anymore and all existing failures matching the pattern get removed from the log. Ignored paths match regardless of upper and lower case.
 
 ![Ignore a failure](/ignore.webp)
 
@@ -44,7 +46,7 @@ The `Ignored` button above the failures table lists all ignored paths, where you
 
 ![Ignored paths](/ignores.webp)
 
-Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`.
+Additionally, you can ignore paths with the [`ignore` option](/options#config) in your `config.php`. The `Ignored` dialog lists them as well, but they can only be changed in the config.
 
 ### Ignore by IP address
 
