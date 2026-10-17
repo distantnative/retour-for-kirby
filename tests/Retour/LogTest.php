@@ -436,6 +436,21 @@ class LogTest extends TestCase
 		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
 	}
 
+	public function testPurgeLimit(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 5, '-12 month');
+		$this->fill($log, 1, '-1 month');
+
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertSame(3, $log->table()->fetch('array')->all()->count());
+		$this->assertNotContains('VACUUM', array_column($log->database()->trace(), 'query'));
+
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertTrue($log->purge(limit: 3));
+		$this->assertSame(1, $log->table()->fetch('array')->all()->count());
+	}
+
 	public function testPurgeReclaimsSignificantFreeSpace(): void
 	{
 		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
@@ -448,6 +463,20 @@ class LogTest extends TestCase
 		$after = $this->pages($log);
 		$this->assertSame(0, $after['free']);
 		$this->assertLessThan($before['total'] / 2, $after['total']);
+	}
+
+	public function testPurgeWhileLogging(): void
+	{
+		$log = $this->log(null, ['distantnative.retour.deleteAfter' => 6]);
+		$this->fill($log, 998, '-12 month');
+
+		// the 999th record doesn't purge
+		$log->add(['path' => 'foo']);
+		$this->assertSame(999, $log->table()->fetch('array')->all()->count());
+
+		// the 1,000th does
+		$log->add(['path' => 'foo']);
+		$this->assertSame(['foo', 'foo'], $log->table()->select('path')->fetch('array')->all()->pluck('path'));
 	}
 
 	public function testPurgeWithoutOutdatedRecords(): void
