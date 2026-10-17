@@ -75,18 +75,21 @@ class Seed extends Command
 		$progress = $cli->progress($total);
 
 		foreach ($dates as $i => $time) {
+			// redirect hits only store their redirect
 			if ($redirects !== [] && $random->nextFloat() < 0.4) {
 				$redirect = static::pick($random, $redirects);
-				$path     = static::request($random, $redirect);
+				$path     = null;
+				$referrer = null;
 			} else {
 				$redirect = null;
 				$path     = static::pick($random, $failures);
+				$referrer = $random->nextFloat() < 0.3 ? static::pick($random, $referrers) : null;
 			}
 
 			$insert->execute([
 				Log::timestamp(date('Y-m-d H:i:s', $time)),
 				$path,
-				$random->nextFloat() < 0.3 ? static::pick($random, $referrers) : null,
+				$referrer,
 				$redirect,
 				$redirect === null && isset($resolved[$path]) ? 1 : null
 			]);
@@ -195,22 +198,5 @@ class Seed extends Command
 			'https://news.ycombinator.com/',
 			'https://example.com/links',
 		];
-	}
-
-	/**
-	 * Fills the placeholders of a redirect pattern
-	 * to get a request path that the redirect matches
-	 */
-	protected static function request(Randomizer $random, string $pattern): string
-	{
-		return preg_replace_callback(
-			'/\(:(\w+)\)/',
-			fn (array $match): string => match ($match[1]) {
-				'num'   => (string)$random->getInt(1, 999),
-				'all'   => Str::random(6, 'alphaLower') . '/' . Str::random(6, 'alphaLower'),
-				default => Str::random(8, 'alphaLower')
-			},
-			trim($pattern, '/')
-		);
 	}
 }

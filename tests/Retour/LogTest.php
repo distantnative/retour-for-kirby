@@ -77,22 +77,25 @@ class LogTest extends TestCase
 		// a single statement
 		$this->assertTrue($log->add([
 			'date'     => $date = '2020-01-01 07:30:00',
-			'path'     => $path = 'foo',
-			'redirect' => $redirect = 'foo'
+			'path'     => 'foo',
+			'referrer' => 'https://example.com'
 		]));
 		$this->assertCount(1, $log->database()->trace());
 
+		// redirect hits only count for their redirect
 		$log->add([
 			'date'     => '2020-01-31 16:30:00',
 			'path'     => 'homer/simpson',
+			'referrer' => 'https://example.com',
 			'redirect' => '(:any)/simpson'
 		]);
 
-		$results = $log->table()->fetch('array')->all();
-		$this->assertSame(2, $results->count());
+		$results = $log->table()->select('path, referrer, redirect')->fetch('array')->all();
 		$this->assertSame($date, $log->first()['date']);
-		$this->assertSame($path, $results->first()['path']);
-		$this->assertSame($redirect, $results->first()['redirect']);
+		$this->assertSame([
+			['path' => 'foo', 'referrer' => 'https://example.com', 'redirect' => null],
+			['path' => null, 'referrer' => null, 'redirect' => '(:any)/simpson']
+		], $results->values());
 	}
 
 	public function testAddTruncatesLongValues(): void
@@ -512,18 +515,18 @@ class LogTest extends TestCase
 		$log->add(['path' => 'wp-admin/setup.php']);
 		$log->add(['path' => 'wp-login.php']);
 		$log->add(['path' => 'foo']);
-		$log->add(['path' => 'wp-old', 'redirect' => 'wp-old']);
+		$log->add(['redirect' => 'wp-old']);
 
 		$this->assertTrue($log->removeFailures(
 			fn (string $path) => str_starts_with($path, 'wp-')
 		));
 
 		// keeps other failures and hits of redirects
-		$paths = $log->table()->select('path')->fetch('array')->all()->toArray(
-			fn (array $record) => $record['path']
-		);
-		sort($paths);
-		$this->assertSame(['foo', 'wp-old'], $paths);
+		$records = $log->table()->select('path, redirect')->fetch('array')->all();
+		$this->assertSame([
+			['path' => 'foo', 'redirect' => null],
+			['path' => null, 'redirect' => 'wp-old']
+		], $records->values());
 	}
 
 	public function testRemoveFailuresMany(): void
