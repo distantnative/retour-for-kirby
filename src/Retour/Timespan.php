@@ -82,8 +82,7 @@ class Timespan
 	 */
 	protected static function firstWeekday(): int
 	{
-		$locale = App::instance()->translation()->locale();
-		return Date::firstWeekday($locale);
+		return Date::firstWeekday(App::instance()->translation()->locale());
 	}
 
 	protected static function hasNext(
@@ -91,22 +90,14 @@ class Timespan
 		Date $today,
 		Date|null $last,
 	): bool {
-		if ($last === null) {
-			return false;
-		}
-
-		return $to < $last || $to < $today;
+		return $last !== null && ($to < $last || $to < $today);
 	}
 
 	protected static function hasPrev(
 		Date $from,
 		Date|null $first,
 	): bool {
-		if ($first === null) {
-			return false;
-		}
-
-		return $from > $first;
+		return $first !== null && $from > $first;
 	}
 
 	protected static function isAll(
@@ -115,12 +106,11 @@ class Timespan
 		Date|null $first,
 		Date|null $last,
 	): bool {
-		if ($first === null || $last === null) {
-			return false;
-		}
-
-		return $from->format('Y-m-d') === $first->format('Y-m-d') &&
-			   $to->format('Y-m-d') === $last->format('Y-m-d');
+		return
+			$first !== null &&
+			$last !== null &&
+			$from->format('Y-m-d') === $first->format('Y-m-d') &&
+			$to->format('Y-m-d') === $last->format('Y-m-d');
 	}
 
 	protected static function isCurrent(
@@ -158,15 +148,10 @@ class Timespan
 		// as far into the future as the current year needs
 		$max  = date('Y-m-d', strtotime('+1 year'));
 		$from = min($from, $max);
-		$to   = min($to, $max);
-
-		if ($to < $from) {
-			$to = $from;
-		}
 
 		return [
 			'from' => $from,
-			'to'   => $to
+			'to'   => max($from, min($to, $max))
 		];
 	}
 
