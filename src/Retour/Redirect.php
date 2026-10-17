@@ -149,7 +149,7 @@ class Redirect
 			$kirby->setCurrentLanguage($this->language);
 		}
 
-		$to        = static::toPath($this->to ?? '/', $placeholders);
+		$to        = static::toPath($this->to ?? '', $placeholders);
 		$extension = F::extension($to);
 		$path      = Str::beforeEnd($to, '.' . $extension);
 		$page      = $kirby->page($path);
