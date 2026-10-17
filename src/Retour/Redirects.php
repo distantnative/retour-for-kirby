@@ -74,7 +74,7 @@ class Redirects extends Collection
 
 		foreach ($config as $data) {
 			$redirect = Redirect::factory($data);
-			$redirects->append($redirect->id(), $redirect);
+			$redirects->data[$redirect->id()] = $redirect;
 		}
 
 		return $redirects;
