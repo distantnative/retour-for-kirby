@@ -57,11 +57,11 @@ class Retour
 
 	public function log(): Log|null
 	{
-		if ($this->hasLog() === false) {
-			return null;
+		if ($this->hasLog() === true) {
+			return $this->log ??= new Log($this);
 		}
 
-		return $this->log ??= new Log($this);
+		return null;
 	}
 
 	public function option(string $key): mixed
@@ -86,15 +86,10 @@ class Retour
 	{
 		$site = $this->option('site');
 
-		if (is_string($site) === true) {
-			return $site . '/';
-		}
-
-		if ($site === true) {
-			$url = (string)$this->kirby->url();
-			return preg_replace('!^https?://(www\.)?!', '', $url) . '/';
-		}
-
-		return false;
+		return match (true) {
+			is_string($site) => $site . '/',
+			$site === true   => preg_replace('!^https?://(www\.)?!', '', (string)$this->kirby->url()) . '/',
+			default          => false
+		};
 	}
 }
