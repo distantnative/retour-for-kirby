@@ -16,9 +16,6 @@
 		"getkirby/cms": "^6.0",
 		"getkirby/composer-installer": "^1.1"
 	},
-	"require-dev": {
-		"getkirby/cms": "dev-v6/develop as 6.0.0-beta.1"
-	},
 	"autoload-dev": {
 		"psr-4": {
 			"Kirby\\": "tests/"
