@@ -15,7 +15,7 @@ use Kirby\Retour\Log\Migrations;
 use Kirby\Toolkit\Collection;
 use Kirby\Toolkit\Str;
 use PDO;
-use Throwable;
+use Pdo\Sqlite;
 
 /**
  * Stores failures and redirect hits with integer dates (see `timestamp()`);
@@ -300,42 +300,14 @@ class Log
 	 */
 	public function removeFailures(Closure $filter): bool
 	{
-		$paths = $this->table()
-			->select('path')
-			->distinct()
-			->where('redirect IS NULL')
-			->fetch('array')
-			->fail()
-			->all()
-			->pluck('path');
-
-		$paths = array_filter($paths, $filter);
-
-		if ($paths === []) {
-			return true;
-		}
-
-		// a temporary table lets one pass over the log delete all paths
 		$db = $this->database->connection();
-		$db->beginTransaction();
 
-		try {
-			$db->exec('CREATE TEMP TABLE retour_remove (path TEXT PRIMARY KEY)');
-			$insert = $db->prepare('INSERT INTO temp.retour_remove (path) VALUES (?)');
+		// TODO: only use `createFunction()` once PHP 8.4 is required
+		$db instanceof Sqlite
+			? $db->createFunction('retour_filter', $filter, 1)
+			: $db->sqliteCreateFunction('retour_filter', $filter, 1);
 
-			foreach ($paths as $path) {
-				$insert->execute([$path]);
-			}
-
-			$db->exec('DELETE FROM records WHERE redirect IS NULL AND path IN (SELECT path FROM temp.retour_remove)');
-			$db->exec('DROP TABLE temp.retour_remove');
-			$db->commit();
-		} catch (Throwable) {
-			$db->rollBack();
-			return false;
-		}
-
-		return true;
+		return $db->exec('DELETE FROM records WHERE redirect IS NULL AND retour_filter(path)') !== false;
 	}
 
 	public function resolve(string $path): bool

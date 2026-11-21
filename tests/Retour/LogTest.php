@@ -590,7 +590,6 @@ class LogTest extends TestCase
 		$log = $this->log();
 		$db  = $log->database()->connection();
 
-		// more paths than SQLite allows bound parameters
 		$db->beginTransaction();
 
 		for ($i = 0; $i < 2000; $i++) {
