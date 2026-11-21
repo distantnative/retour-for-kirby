@@ -11,14 +11,14 @@ class TimespanDialog extends DialogController
 {
 	protected function date(string|null $date): string|null
 	{
-		return Date::optional($date)?->format('Y-m-d H:i:s');
+		return Date::optional($date)?->format('Y-m-d');
 	}
 
 	public function load(): FormDialog
 	{
 		$selection = Timespan::selection();
 		$min       = $this->date(Timespan::limits()[0]);
-		$max       = $this->date('+1 day');
+		$max       = $this->date('today');
 
 		return new FormDialog(
 			size: 'small',
@@ -41,8 +41,8 @@ class TimespanDialog extends DialogController
 				]
 			],
 			value: [
-				'from' => $this->date($selection['from']),
-				'to'   => $this->date($selection['to'])
+				'from' => max($this->date($selection['from']), $min),
+				'to'   => min($this->date($selection['to']), $max)
 			],
 			submitButton: [
 				'text' => $this->i18n('change')
