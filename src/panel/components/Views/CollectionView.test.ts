@@ -1,12 +1,16 @@
 import { describe, expect, it, vi } from "@test/panel";
-import { mount as vueMount } from "@vue/test-utils";
-import { defineComponent, h } from "vue";
+import { mount as vueMount, type VueWrapper } from "@vue/test-utils";
+import { defineComponent, h, renderSlot } from "vue";
 import CollectionView from "./CollectionView.vue";
 
 // renders the buttons slot with the filter, unlike an unresolved component
 const RetourView = defineComponent({
 	setup(props, { slots }) {
-		return () => h("k-retour-view", [slots.buttons?.(), slots.default?.()]);
+		return () =>
+			h("k-retour-view", [
+				renderSlot(slots, "buttons"),
+				renderSlot(slots, "default"),
+			]);
 	},
 });
 
@@ -18,13 +22,17 @@ const Input = defineComponent({
 	},
 });
 
-function mount(props = {}, defaultSortBy: string | null = null) {
+function mount(
+	props = {},
+	defaultSortBy: string | null = null,
+	batch: object[] = [],
+) {
 	const $panel = { reload: vi.fn(() => Promise.resolve()) };
 
 	const wrapper = vueMount(
 		defineComponent({
 			extends: CollectionView,
-			computed: { defaultSortBy: () => defaultSortBy },
+			computed: { batch: () => batch, defaultSortBy: () => defaultSortBy },
 		}),
 		{
 			props: {
@@ -125,6 +133,60 @@ describe("CollectionView.vue", () => {
 				query: { page: null, searchterm: "wp" },
 			});
 			expect(scrollTo).toHaveBeenCalledWith(0, window.scrollY);
+		});
+	});
+
+	describe("selection", () => {
+		const batch = [{ dialog: "remove", icon: "trash", text: "remove" }];
+
+		it("is not offered without batch buttons", () => {
+			expect(mount().find("k-button[icon='checklist']").exists()).toBe(false);
+		});
+
+		it("is not offered without rows", () => {
+			const wrapper = mount({ data: [] }, null, batch);
+			expect(wrapper.find("k-button[icon='checklist']").exists()).toBe(false);
+		});
+
+		it("shows the batch buttons instead of the others", async () => {
+			const wrapper = mount({}, null, batch);
+			await wrapper.find("k-button[icon='checklist']").trigger("click");
+
+			expect(wrapper.find("k-table").attributes("selecting")).toBe("true");
+			expect(wrapper.find("k-button[icon='filter']").exists()).toBe(false);
+			expect(wrapper.find("k-view-buttons").exists()).toBe(false);
+
+			const remove = wrapper.find("k-button[icon='trash']");
+			expect(remove.attributes()).toMatchObject({
+				dialog: "remove",
+				disabled: "true",
+				text: "remove (0)",
+			});
+
+			await wrapper.setData({ selected: ["a"] });
+
+			expect(remove.attributes("disabled")).toBe("false");
+			expect(remove.attributes("text")).toBe("remove (1)");
+		});
+
+		it("clears the selection when cancelled", async () => {
+			const wrapper = mount({}, null, batch);
+			wrapper.vm.toggleSelecting();
+			await wrapper.setData({ selected: ["a"] });
+
+			await wrapper.find("k-button[icon='cancel']").trigger("click");
+			expect(wrapper.vm.isSelecting).toBe(false);
+			expect(wrapper.vm.selected).toEqual([]);
+		});
+
+		it("clears the selection when the rows change", async () => {
+			const wrapper = mount({}, null, batch);
+			wrapper.vm.toggleSelecting();
+			await wrapper.setData({ selected: ["a"] });
+
+			await (wrapper as VueWrapper).setProps({ data: [{ path: "b" }] });
+			expect(wrapper.vm.isSelecting).toBe(true);
+			expect(wrapper.vm.selected).toEqual([]);
 		});
 	});
 

@@ -3,7 +3,27 @@
 		v-bind="$props"
 		:class="['k-retour-collection-view', $options.class]"
 	>
-		<template #buttons>
+		<template v-if="isSelecting" #buttons>
+			<k-button
+				v-for="button in batch"
+				:key="button.icon"
+				v-bind="button"
+				:disabled="selected.length === 0"
+				:responsive="true"
+				:text="`${button.text} (${selected.length})`"
+				size="sm"
+				variant="filled"
+			/>
+			<k-button
+				:responsive="true"
+				:text="$t('cancel')"
+				icon="cancel"
+				size="sm"
+				variant="filled"
+				@click="toggleSelecting()"
+			/>
+		</template>
+		<template v-else #buttons>
 			<k-input
 				v-if="searching"
 				:aria-label="$t('filter')"
@@ -24,6 +44,14 @@
 				variant="filled"
 				@click="toggleSearch()"
 			/>
+			<k-button
+				v-if="batch.length > 0 && data.length > 0"
+				:title="$t('select')"
+				icon="checklist"
+				size="sm"
+				variant="filled"
+				@click="toggleSelecting()"
+			/>
 			<k-view-buttons :buttons="buttons" />
 		</template>
 
@@ -40,8 +68,11 @@
 			:columns="columns"
 			:index="pagination.offset + 1"
 			:rows="data"
+			:selected="selected"
+			:selecting="isSelecting"
 			@cell="onCell"
 			@header="onHeader"
+			@select="selected = $event"
 		>
 			<template #header="{ columnIndex, label }">
 				<button type="button">
@@ -78,11 +109,19 @@ export default {
 	},
 	data() {
 		return {
+			isSelecting: false,
 			searching: Boolean(this.searchterm),
+			selected: [],
 			term: this.searchterm,
 		};
 	},
 	computed: {
+		/**
+		 * Buttons for the selected rows
+		 */
+		batch() {
+			return [];
+		},
 		columns() {
 			return {};
 		},
@@ -94,6 +133,12 @@ export default {
 		},
 		sorting() {
 			return (this.sortBy ?? this.defaultSortBy)?.split(" ") ?? [];
+		},
+	},
+	watch: {
+		// the rows of the selection may be gone, e.g. after removing them
+		data() {
+			this.selected = [];
 		},
 	},
 	created() {
@@ -128,6 +173,10 @@ export default {
 		search(term) {
 			this.term = term;
 			this.filter();
+		},
+		toggleSelecting() {
+			this.isSelecting = !this.isSelecting;
+			this.selected = [];
 		},
 		async toggleSearch() {
 			if (this.searchterm) {

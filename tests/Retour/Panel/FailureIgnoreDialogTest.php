@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(FailureIgnoreDialog::class)]
 class FailureIgnoreDialogTest extends TestCase
 {
-	protected function dialog(string $path, array $body): FailureIgnoreDialog
+	protected function dialog(array $paths, array $body = []): FailureIgnoreDialog
 	{
 		$app = $this->app([
 			'distantnative.retour.config'   => $this->tmp . '/retour.yml',
@@ -26,7 +26,7 @@ class FailureIgnoreDialogTest extends TestCase
 		$log->add(['path' => 'wp-admin']);
 		$log->add(['path' => 'foo(']);
 
-		return FailureIgnoreDialog::factory(Id::encode($path));
+		return FailureIgnoreDialog::factory(implode('.', array_map(Id::encode(...), $paths)));
 	}
 
 	protected function failures(): array
@@ -37,18 +37,37 @@ class FailureIgnoreDialogTest extends TestCase
 		return $paths;
 	}
 
+	public function testLoad(): void
+	{
+		$dialog = $this->dialog(['wp-login.php'])->load();
+		$this->assertSame('text', $dialog->fields['patterns']['type']);
+		$this->assertSame(['patterns' => 'wp-login.php'], $dialog->value);
+
+		$dialog = $this->dialog(['wp-login.php', 'wp-admin'])->load();
+		$this->assertSame('tags', $dialog->fields['patterns']['type']);
+		$this->assertSame(['patterns' => ['wp-login.php', 'wp-admin']], $dialog->value);
+	}
+
 	public function testSubmit(): void
 	{
-		$dialog = $this->dialog('wp-login.php', ['pattern' => 'wp-(:all)']);
+		$dialog = $this->dialog(['wp-login.php'], ['patterns' => 'wp-(:all)']);
 
 		$this->assertTrue($dialog->submit());
 		$this->assertSame(['wp-(:all)'], Retour::instance()->ignores()->custom());
 		$this->assertSame(['foo('], $this->failures());
 	}
 
+	public function testSubmitEmpty(): void
+	{
+		$dialog = $this->dialog(['wp-login.php'], ['patterns' => ' ']);
+
+		$this->assertFalse($dialog->submit());
+		$this->assertSame([], Retour::instance()->ignores()->custom());
+	}
+
 	public function testSubmitInvalid(): void
 	{
-		$dialog = $this->dialog('foo(', ['pattern' => 'foo(']);
+		$dialog = $this->dialog(['foo('], ['patterns' => 'foo(']);
 
 		try {
 			$dialog->submit();
@@ -57,5 +76,16 @@ class FailureIgnoreDialogTest extends TestCase
 			$this->assertSame([], Retour::instance()->ignores()->custom());
 			$this->assertSame(['foo(', 'wp-admin', 'wp-login.php'], $this->failures());
 		}
+	}
+
+	public function testSubmitSeveral(): void
+	{
+		$dialog = $this->dialog(['wp-login.php', 'wp-admin'], [
+			'patterns' => ['wp-login.php', ' wp-admin ']
+		]);
+
+		$this->assertTrue($dialog->submit());
+		$this->assertSame(['wp-login.php', 'wp-admin'], Retour::instance()->ignores()->custom());
+		$this->assertSame(['foo('], $this->failures());
 	}
 }

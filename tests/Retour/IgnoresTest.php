@@ -27,6 +27,8 @@ class IgnoresTest extends TestCase
 
 		// no duplicates
 		$this->assertSame(['foo', 'bar/(:all)'], $ignores->add('foo'));
+
+		$this->assertSame(['foo', 'bar/(:all)', 'baz', 'qux'], $ignores->add('baz', 'foo', 'qux'));
 	}
 
 	public function testAddInvalid(): void

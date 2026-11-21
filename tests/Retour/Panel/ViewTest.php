@@ -131,13 +131,27 @@ class ViewTest extends TestCase
 		$this->assertSame('wp-', $props['searchterm']);
 		$this->assertSame('path desc', $props['sortBy']);
 
-		// a path has a row per referrer, so it's no unique id
+		// a path has a row per referrer, which get selected together
 		$id = Id::encode('wp-14');
-		$this->assertArrayNotHasKey('id', $props['data'][0]);
+		$this->assertSame($id, $props['data'][0]['_id']);
+		$this->assertSame($id . ' ', $props['data'][0]['id']);
 		$this->assertSame(
 			['retour/failures/' . $id . '/resolve', 'retour/failures/' . $id . '/ignore', 'retour/failures/' . $id . '/delete'],
 			array_map(fn (array $option) => $option['drawer'] ?? $option['dialog'], $props['data'][0]['options'])
 		);
+	}
+
+	public function testPropsFailuresWithReferrers(): void
+	{
+		$view = $this->view('failures');
+
+		$log = Retour::instance()->log();
+		$log->add(['path' => 'foo', 'referrer' => 'https://example.com']);
+		$log->add(['path' => 'foo']);
+
+		$rows = $view->props()['data'];
+		$this->assertSame([Id::encode('foo'), Id::encode('foo')], array_column($rows, '_id'));
+		$this->assertCount(2, array_unique(array_column($rows, 'id')));
 	}
 
 	public function testPropsOutOfRange(): void

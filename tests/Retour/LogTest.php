@@ -554,7 +554,9 @@ class LogTest extends TestCase
 		$this->assertSame(6, $log->table()->fetch('array')->all()->count());
 		$this->assertTrue($log->remove('foo'));
 		$this->assertSame(2, $log->table()->fetch('array')->all()->count());
-		$this->assertTrue($log->remove('bar'));
+
+		$log->add(['path' => 'baz']);
+		$this->assertTrue($log->remove('bar', 'baz'));
 
 		// the redirect hit stays
 		$records = $log->table()->fetch('array')->all();

@@ -31,7 +31,7 @@ class View extends ViewController
 	}
 
 	/**
-	 * No `id`, as a path has a row per referrer
+	 * A path has a row per referrer, which share their `_id` to get selected together
 	 */
 	protected function failure(array $failure): array
 	{
@@ -39,6 +39,8 @@ class View extends ViewController
 
 		return [
 			...$failure,
+			'_id'     => $id,
+			'id'      => $id . ' ' . $failure['referrer'],
 			'options' => [
 				[
 					'icon'   => 'add',

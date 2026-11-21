@@ -9,25 +9,31 @@ use Kirby\Retour\Retour;
 class FailureDeleteDialog extends DialogController
 {
 	public function __construct(
-		protected string $path
+		protected array $paths
 	) {
 		parent::__construct();
 	}
 
-	public static function factory(string $id): static
+	/**
+	 * @param $ids One or more ids, separated by `.`
+	 */
+	public static function factory(string $ids): static
 	{
-		return new static(path: Id::decode($id));
+		return new static(paths: array_map(Id::decode(...), explode('.', $ids)));
 	}
 
 	public function load(): RemoveDialog
 	{
 		return new RemoveDialog(
-			text: $this->i18n('field.structure.delete.confirm')
+			text: $this->i18n(match (count($this->paths)) {
+				1       => 'field.structure.delete.confirm',
+				default => 'field.structure.delete.confirm.selected'
+			})
 		);
 	}
 
 	public function submit(): bool
 	{
-		return Retour::instance()->log()?->remove($this->path) === true;
+		return Retour::instance()->log()?->remove(...$this->paths) === true;
 	}
 }

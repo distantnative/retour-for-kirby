@@ -33,10 +33,10 @@ class Ignores
 	 *
 	 * @throws InvalidArgumentException If a pattern is invalid
 	 */
-	public function add(string $pattern): array
+	public function add(string ...$patterns): array
 	{
-		$data = $this->retour->config()->update(function (array $data) use ($pattern): array {
-			$data['ignore'] = static::normalize([...$data['ignore'] ?? [], $pattern]);
+		$data = $this->retour->config()->update(function (array $data) use ($patterns): array {
+			$data['ignore'] = static::normalize([...$data['ignore'] ?? [], ...$patterns]);
 			return $data;
 		});
 

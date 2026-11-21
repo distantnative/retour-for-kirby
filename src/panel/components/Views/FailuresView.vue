@@ -4,6 +4,23 @@ import CollectionView from "./CollectionView.vue";
 export default {
 	extends: CollectionView,
 	computed: {
+		batch() {
+			const ids = this.selected.join(".");
+
+			return [
+				{
+					dialog: `retour/failures/${ids}/ignore`,
+					icon: "muted",
+					text: this.$t("retour.failures.ignore"),
+				},
+				{
+					dialog: `retour/failures/${ids}/delete`,
+					icon: "trash",
+					text: this.$t("remove"),
+					theme: "negative",
+				},
+			];
+		},
 		columns() {
 			return {
 				path: {
