@@ -9,6 +9,7 @@ use Kirby\Panel\Ui\View as ViewComponent;
 use Kirby\Retour\Retour;
 use Kirby\Retour\Timespan;
 use Kirby\Toolkit\Collection;
+use Kirby\Toolkit\Pagination;
 use Kirby\Toolkit\Str;
 
 class View extends ViewController
@@ -127,10 +128,18 @@ class View extends ViewController
 		$searchterm = $this->query('searchterm');
 		$page       = (int)$this->request->get('page', 1);
 
-		$rows = match ($this->tab) {
-			'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page)->map($this->redirect(...)),
-			'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)->map($this->failure(...))
-		};
+		// clamps pages out of range like the API, e.g. after removing the last row
+		$validate = Pagination::$validate;
+		Pagination::$validate = false;
+
+		try {
+			$rows = match ($this->tab) {
+				'redirects' => $this->redirects($from, $to, $sortBy, $searchterm, $page)->map($this->redirect(...)),
+				'failures'  => $log->fails($from, $to, $sortBy, $searchterm, $page)->map($this->failure(...))
+			};
+		} finally {
+			Pagination::$validate = $validate;
+		}
 
 		return [
 			...$props,

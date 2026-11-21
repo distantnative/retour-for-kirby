@@ -146,25 +146,17 @@ class ViewTest extends TestCase
 			'redirects' => [['from' => 'foo', 'status' => 301]]
 		]);
 
-		// like the Panel router, which clamps pages
-		// instead of throwing, e.g. after deleting the last row
-		$validate = Pagination::$validate;
-		Pagination::$validate = false;
+		$props = $this->view('redirects', query: ['page' => '5'])->props();
+		$this->assertSame(1, $props['pagination']['page']);
+		$this->assertSame(['foo'], array_column($props['data'], 'from'));
 
-		try {
-			$props = $this->view('redirects', query: ['page' => '5'])->props();
-			$this->assertSame(1, $props['pagination']['page']);
-			$this->assertSame(['foo'], array_column($props['data'], 'from'));
+		$view = $this->view('failures', query: ['page' => '5']);
+		Retour::instance()->log()->add(['path' => 'bar']);
 
-			$view = $this->view('failures', query: ['page' => '5']);
-			Retour::instance()->log()->add(['path' => 'bar']);
-
-			$props = $view->props();
-			$this->assertSame(1, $props['pagination']['page']);
-			$this->assertSame(['bar'], array_column($props['data'], 'path'));
-		} finally {
-			Pagination::$validate = $validate;
-		}
+		$props = $view->props();
+		$this->assertSame(1, $props['pagination']['page']);
+		$this->assertSame(['bar'], array_column($props['data'], 'path'));
+		$this->assertTrue(Pagination::$validate);
 	}
 
 	public function testPropsRedirects(): void
