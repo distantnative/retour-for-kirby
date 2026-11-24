@@ -32,6 +32,7 @@ Run the tests and checks before opening a pull request. `composer fix` and `npm 
 ```bash
 composer test
 npm test
+npm run types
 npm run lint
 npm run format
 ```

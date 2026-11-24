@@ -8,9 +8,11 @@
 		"format": "oxfmt --check",
 		"format:fix": "oxfmt",
 		"lint": "eslint src/panel",
-		"test": "npm run test:unit && npm run test:types",
-		"test:unit": "vitest run",
-		"test:types": "vue-tsc --noEmit"
+		"test": "vitest run",
+		"types": "vue-tsc --noEmit"
+	},
+	"engines": {
+		"node": ">=24"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
