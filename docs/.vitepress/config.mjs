@@ -73,7 +73,7 @@ export default defineConfig({
 
 		editLink: {
 			pattern:
-				"https://github.com/distantnative/retour-for-kirby/edit/dev/docs/:path",
+				"https://github.com/distantnative/retour-for-kirby/edit/main/docs/:path",
 		},
 
 		socialLinks: [

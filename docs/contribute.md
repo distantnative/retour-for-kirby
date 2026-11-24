@@ -14,7 +14,7 @@ Help translating the Retour UI to more languages. Check out the [translations do
 
 ## Develop locally
 
-Clone the repository into `/site/plugins/retour` of a Kirby 6 test site and check out the `dev` branch, which is also where pull requests should go. Then install the dependencies:
+Clone the repository into `/site/plugins/retour` of a Kirby 6 test site, then install the dependencies:
 
 ```bash
 composer install
