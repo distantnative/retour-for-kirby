@@ -5,7 +5,7 @@ import Timeline from "./Timeline.vue";
 function segments(labels: string[]) {
 	return labels.map((label) => ({
 		areas: [{ color: "blue", data: 1 }],
-		label,
+		label
 	}));
 }
 
@@ -13,27 +13,27 @@ function mount(unit: string, labels: string[], now: string) {
 	return vueMount(Timeline, {
 		props: {
 			data: segments(labels),
-			timespan: { now, unit },
+			timespan: { now, unit }
 		},
 		global: {
 			mocks: {
 				$panel: {
 					observers: { resize: { observe: vi.fn(), unobserve: vi.fn() } },
-					view: { path: "retour/redirects", query: {} },
-				},
-			},
-		},
+					view: { path: "retour/redirects", query: {} }
+				}
+			}
+		}
 	});
 }
 
 const days = Array.from(
 	{ length: 31 },
-	(_, day) => `2026-10-${String(day + 1).padStart(2, "0")}`,
+	(_, day) => `2026-10-${String(day + 1).padStart(2, "0")}`
 );
 
 const hours = Array.from(
 	{ length: 24 },
-	(_, hour) => `2026-10-17 ${String(hour).padStart(2, "0")}`,
+	(_, hour) => `2026-10-17 ${String(hour).padStart(2, "0")}`
 );
 
 function current(wrapper: ReturnType<typeof mount>) {

@@ -11,9 +11,9 @@ function mount(attrs = {}, value = "blog/old") {
 		global: {
 			mocks: {
 				$helper: { url: { makeAbsolute } },
-				$panel: { urls: { site: "https://example.com/" } },
-			},
-		},
+				$panel: { urls: { site: "https://example.com/" } }
+			}
+		}
 	});
 
 	return Object.assign(wrapper, { makeAbsolute });
@@ -38,23 +38,23 @@ describe("PathFieldPreview.vue", () => {
 			const wrapper = mount();
 			expect(wrapper.makeAbsolute).toHaveBeenCalledWith(
 				"blog/old",
-				new URL("https://example.com/"),
+				new URL("https://example.com/")
 			);
 			expect(wrapper.find("k-link").attributes("to")).toBe(
-				"https://example.com/blog/old",
+				"https://example.com/blog/old"
 			);
 		});
 
 		it("links paths that look like a scheme on the site", () => {
 			const wrapper = mount({}, "mailto:info@example.com");
 			expect(wrapper.find("k-link").attributes("to")).toBe(
-				"https://example.com/mailto:info@example.com",
+				"https://example.com/mailto:info@example.com"
 			);
 		});
 
 		it.each([
 			"https://www.google.com/",
-			"android-app://com.google.android.gm/",
+			"android-app://com.google.android.gm/"
 		])("links the URL %s as it is", (url) => {
 			const wrapper = mount({}, url);
 			expect(wrapper.makeAbsolute).not.toHaveBeenCalled();

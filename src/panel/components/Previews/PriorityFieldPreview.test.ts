@@ -5,7 +5,7 @@ import PriorityFieldPreview from "./PriorityFieldPreview.vue";
 function mount(attrs = {}, value = true) {
 	return vueMount(PriorityFieldPreview, {
 		props: { column: { label: "Prio" }, value },
-		attrs,
+		attrs
 	});
 }
 
@@ -21,7 +21,7 @@ describe("PriorityFieldPreview.vue", () => {
 			expect(wrapper.attributes("title")).toBe("Prio");
 			expect(wrapper.find("k-icon").attributes()).toMatchObject({
 				alt: "Prio",
-				type: "bolt",
+				type: "bolt"
 			});
 		});
 

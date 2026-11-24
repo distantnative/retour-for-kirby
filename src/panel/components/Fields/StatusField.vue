@@ -25,7 +25,7 @@ export default {
 	extends: "k-select-field",
 	emits: ["input"],
 	methods: {
-		color,
-	},
+		color
+	}
 };
 </script>

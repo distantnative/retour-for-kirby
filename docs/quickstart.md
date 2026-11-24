@@ -4,9 +4,9 @@
 
 Each Kirby version needs a matching version of Retour. The versions for Kirby 5 and older don't get any further support or development.
 
-| Kirby | Retour |
-| ----- | ------ |
-| 6     | 6      |
+| Kirby | Retour                                                                        |
+| ----- | ----------------------------------------------------------------------------- |
+| 6     | 6                                                                             |
 | 4, 5  | [5.7.0](https://github.com/distantnative/retour-for-kirby/releases/tag/5.7.0) |
 | 3     | [4.5.0](https://github.com/distantnative/retour-for-kirby/releases/tag/4.5.0) |
 

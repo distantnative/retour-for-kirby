@@ -33,7 +33,7 @@
 <script>
 export default {
 	props: {
-		timespan: Object,
+		timespan: Object
 	},
 	computed: {
 		dropdown() {
@@ -56,18 +56,18 @@ export default {
 								submit: ({ from, to }) => {
 									this.$panel.dialog.close();
 									this.$panel.view.open(
-										this.link({ from: from.slice(0, 10), to: to.slice(0, 10) }),
+										this.link({ from: from.slice(0, 10), to: to.slice(0, 10) })
 									);
-								},
-							},
-						}),
+								}
+							}
+						})
 				},
 				"-",
 				{
 					text: this.$t("today"),
 					icon: "merge",
-					link: this.link(this.timespan.units.today),
-				},
+					link: this.link(this.timespan.units.today)
+				}
 			];
 		},
 		text() {
@@ -76,7 +76,7 @@ export default {
 			const options = {
 				day: { day: "numeric", month: "long" },
 				month: { month: "long" },
-				year: {},
+				year: {}
 			}[unit] ?? { day: "numeric", month: "short" };
 
 			return new Intl.DateTimeFormat(this.$library.dayjs.locale(), {
@@ -85,9 +85,9 @@ export default {
 				// like the Panel's dates, e.g. not Persian ones for `fa`
 				calendar: "gregory",
 				numberingSystem: "latn",
-				timeZone: "UTC",
+				timeZone: "UTC"
 			}).formatRange(new Date(from), new Date(to));
-		},
+		}
 	},
 	mounted() {
 		this.$events.on("keydown.left", this.toPrev);
@@ -102,7 +102,7 @@ export default {
 			if (timespan) {
 				const query = new URLSearchParams({
 					...this.$panel.view.query,
-					...timespan,
+					...timespan
 				});
 				query.delete("page");
 
@@ -132,14 +132,14 @@ export default {
 
 			return {
 				text: this.$t(
-					["all", "week"].includes(unit) ? `retour.stats.mode.${unit}` : unit,
+					["all", "week"].includes(unit) ? `retour.stats.mode.${unit}` : unit
 				),
 				icon,
 				current,
-				link: this.link(this.timespan.units[unit]),
+				link: this.link(this.timespan.units[unit])
 			};
-		},
-	},
+		}
+	}
 };
 </script>
 

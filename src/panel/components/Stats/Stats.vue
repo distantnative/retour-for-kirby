@@ -14,30 +14,30 @@ const series = [
 		key: "redirected",
 		color: "var(--color-blue-650)",
 		icon: "redirect",
-		label: "retour.stats.redirected",
+		label: "retour.stats.redirected"
 	},
 	{
 		key: "resolved",
 		color: "var(--color-gray-250)",
 		icon: "url",
-		label: "retour.stats.resolved",
+		label: "retour.stats.resolved"
 	},
 	{
 		key: "failed",
 		color: "var(--color-red-650)",
 		icon: "url-broken",
-		label: "retour.stats.failed",
-	},
+		label: "retour.stats.failed"
+	}
 ];
 
 export default {
 	components: {
 		Pie,
-		Timeline,
+		Timeline
 	},
 	props: {
 		data: Array,
-		timespan: Object,
+		timespan: Object
 	},
 	computed: {
 		areas() {
@@ -45,8 +45,8 @@ export default {
 				label: entry.date,
 				areas: series.map(({ key, color }) => ({
 					data: entry[key],
-					color,
-				})),
+					color
+				}))
 			}));
 		},
 		pie() {
@@ -54,10 +54,10 @@ export default {
 				data: this.data.reduce((total, entry) => total + entry[key], 0),
 				color,
 				icon,
-				label: this.$t(label),
+				label: this.$t(label)
 			}));
-		},
-	},
+		}
+	}
 };
 </script>
 

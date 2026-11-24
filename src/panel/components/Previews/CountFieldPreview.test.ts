@@ -5,11 +5,11 @@ import CountFieldPreview from "./CountFieldPreview.vue";
 function mount(
 	attrs = {},
 	value = 1234,
-	last: string | null = "2026-10-17 14:05:09",
+	last: string | null = "2026-10-17 14:05:09"
 ) {
 	return vueMount(CountFieldPreview, {
 		props: { row: { last }, value },
-		attrs,
+		attrs
 	});
 }
 
@@ -36,13 +36,13 @@ describe("CountFieldPreview.vue", () => {
 	describe("title", () => {
 		it("shows the date of the last hit", () => {
 			expect(mount().attributes("title")).toBe(
-				"retour.hits.last: 17 Oct 2026, 14:05:09",
+				"retour.hits.last: 17 Oct 2026, 14:05:09"
 			);
 		});
 
 		it("shows a dash without a last hit", () => {
 			expect(mount({}, 0, null).attributes("title")).toBe(
-				"retour.hits.last: –",
+				"retour.hits.last: –"
 			);
 		});
 	});

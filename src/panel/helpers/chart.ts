@@ -24,7 +24,7 @@ export function axis(max: number, locale?: string): string[] {
 	const formatter = new Intl.NumberFormat(locale, {
 		notation: "compact",
 		// would otherwise round to two significant digits (1.3K)
-		maximumFractionDigits: 2,
+		maximumFractionDigits: 2
 	});
 
 	return [1, 2, 3, 4, 5].map((x) => formatter.format(x * span));
@@ -40,9 +40,9 @@ export function bounds(segments: Segment[]): Bound[][] {
 
 			return {
 				path: stack + area.data,
-				mask: stack,
+				mask: stack
 			};
-		}),
+		})
 	);
 }
 
@@ -57,7 +57,7 @@ export function max(segments: Segment[]): number {
 	const factor =
 		[1, 1.5, 2, 2.5, 3, 4, 5, 6, 8].find(
 			(factor) =>
-				factor * magnitude >= step && Number.isInteger(factor * magnitude),
+				factor * magnitude >= step && Number.isInteger(factor * magnitude)
 		) ?? 10;
 
 	return factor * magnitude * 5;
@@ -72,7 +72,7 @@ export function polygon(
 	area: number,
 	max: number,
 	last: number = bounds.length - 1,
-	points: number = bounds.length,
+	points: number = bounds.length
 ): string {
 	const width = Math.max(bounds.length - 1, 1);
 	const point = (segment: number, key: keyof Bound): string => {
@@ -102,7 +102,7 @@ export function pie(slices: Area[]): Record<string, string> {
 			"--pie-c2": "transparent",
 			"--pie-a0": "0deg",
 			"--pie-a1": "0deg",
-			"background-color": "var(--color-gray-800)",
+			"background-color": "var(--color-gray-800)"
 		};
 	}
 
@@ -115,7 +115,7 @@ export function pie(slices: Area[]): Record<string, string> {
 		"--pie-c1": slices[1].color,
 		"--pie-c2": slices[2].color,
 		"--pie-a0": `${a0}deg`,
-		"--pie-a1": `${a1}deg`,
+		"--pie-a1": `${a1}deg`
 	};
 }
 

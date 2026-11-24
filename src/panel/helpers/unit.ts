@@ -6,7 +6,7 @@ export function format(unit: string): string {
 		week: "ddd",
 		month: "D",
 		year: "MMM",
-		months: "MMM YY",
+		months: "MMM YY"
 	};
 
 	return formats[unit] ?? "D MMM";
@@ -19,7 +19,7 @@ export function subunit(unit: string): "day" | "hour" | "month" {
 	const subunits: Record<string, "hour" | "month"> = {
 		day: "hour",
 		months: "month",
-		year: "month",
+		year: "month"
 	};
 
 	return subunits[unit] ?? "day";

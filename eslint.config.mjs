@@ -9,14 +9,14 @@ export default [
 	js.configs.recommended,
 	...tseslint.configs.recommended.map((config) => ({
 		...config,
-		files: ["**/*.ts"],
+		files: ["**/*.ts"]
 	})),
 	...vue.configs["flat/recommended"],
 	...a11y.configs["flat/recommended"],
 	prettier,
 	{
 		languageOptions: {
-			globals: globals.browser,
+			globals: globals.browser
 		},
 		rules: {
 			"vue/attributes-order": "error",
@@ -26,13 +26,13 @@ export default [
 			"vue/require-prop-types": "error",
 			// the filter input only appears, and then focuses
 			// itself, after a click on the filter button
-			"vuejs-accessibility/no-autofocus": "off",
-		},
+			"vuejs-accessibility/no-autofocus": "off"
+		}
 	},
 	{
 		files: ["**/*.test.ts"],
 		rules: {
-			"vue/one-component-per-file": "off",
-		},
-	},
+			"vue/one-component-per-file": "off"
+		}
+	}
 ];

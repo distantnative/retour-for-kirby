@@ -105,14 +105,14 @@ export default {
 	props: {
 		pagination: Object,
 		searchterm: String,
-		sortBy: String,
+		sortBy: String
 	},
 	data() {
 		return {
 			isSelecting: false,
 			searching: Boolean(this.searchterm),
 			selected: [],
-			term: this.searchterm,
+			term: this.searchterm
 		};
 	},
 	computed: {
@@ -133,18 +133,18 @@ export default {
 		},
 		sorting() {
 			return (this.sortBy ?? this.defaultSortBy)?.split(" ") ?? [];
-		},
+		}
 	},
 	watch: {
 		// the rows of the selection may be gone, e.g. after removing them
 		data() {
 			this.selected = [];
-		},
+		}
 	},
 	created() {
 		this.filter = this.$helper.debounce(
 			() => this.reload({ searchterm: this.term || null }),
-			200,
+			200
 		);
 	},
 	methods: {
@@ -154,8 +154,8 @@ export default {
 				...new Set([
 					`${columnIndex} asc`,
 					`${columnIndex} desc`,
-					this.defaultSortBy,
-				]),
+					this.defaultSortBy
+				])
 			];
 			const current = cycle.indexOf(this.sortBy ?? this.defaultSortBy);
 			const next = cycle[(current + 1) % cycle.length];
@@ -191,8 +191,8 @@ export default {
 				await this.$nextTick();
 				this.$refs.filter.focus();
 			}
-		},
-	},
+		}
+	}
 };
 </script>
 

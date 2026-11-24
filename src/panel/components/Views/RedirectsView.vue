@@ -12,29 +12,29 @@ export default {
 					label: this.$t("retour.redirects.from"),
 					type: "path",
 					width: multilang ? "3/10" : "7/20",
-					mobile: true,
+					mobile: true
 				},
 				to: {
 					label: this.$t("retour.redirects.to"),
 					type: "link",
-					width: multilang ? "3/10" : "7/20",
+					width: multilang ? "3/10" : "7/20"
 				},
 				...(multilang && {
 					language: {
 						label: this.$t("language"),
-						width: "1/10",
-					},
+						width: "1/10"
+					}
 				}),
 				status: {
 					label: this.$t("status"),
 					type: "status",
-					width: "1/10",
+					width: "1/10"
 				},
 				priority: {
 					label: this.$t("retour.redirects.priority.abbr"),
 					type: "priority",
-					width: "1/10",
-				},
+					width: "1/10"
+				}
 			};
 
 			// hits are only counted with logs enabled
@@ -42,7 +42,7 @@ export default {
 				columns.hits = {
 					label: this.$t("retour.hits"),
 					width: "1/10",
-					type: "count",
+					type: "count"
 				};
 			}
 
@@ -52,19 +52,19 @@ export default {
 			return {
 				icon: "redirect",
 				text: this.$t("retour.redirects.empty"),
-				onClick: () => this.$panel.drawer.open("retour/redirects/create"),
+				onClick: () => this.$panel.drawer.open("retour/redirects/create")
 			};
-		},
+		}
 	},
 	methods: {
 		onCell({ row, columnIndex }) {
 			this.$panel.drawer.open(`retour/redirects/${row.id}/edit`, {
 				query: {
-					column: columnIndex,
-				},
+					column: columnIndex
+				}
 			});
-		},
-	},
+		}
+	}
 };
 </script>
 

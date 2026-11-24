@@ -32,12 +32,12 @@ export const props = {
 		stats: Array,
 		tab: String,
 		tabs: Array,
-		timespan: Object,
-	},
+		timespan: Object
+	}
 };
 
 export default {
-	mixins: [props],
+	mixins: [props]
 };
 </script>
 

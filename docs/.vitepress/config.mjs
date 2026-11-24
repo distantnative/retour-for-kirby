@@ -10,20 +10,20 @@ export default defineConfig({
 	cleanUrls: true,
 	markdown: {
 		image: {
-			lazyLoad: true,
-		},
+			lazyLoad: true
+		}
 	},
 	sitemap: {
-		hostname: "https://distantnative.com/retour-for-kirby/",
+		hostname: "https://distantnative.com/retour-for-kirby/"
 	},
 	head: [
 		[
 			"meta",
 			{
 				property: "og:image",
-				content: "https://distantnative.com/retour-for-kirby/ogimage.png",
-			},
-		],
+				content: "https://distantnative.com/retour-for-kirby/ogimage.png"
+			}
+		]
 	],
 	themeConfig: {
 		nav: [
@@ -31,14 +31,14 @@ export default defineConfig({
 			{ text: "Docs", link: "/quickstart" },
 			{
 				text: "Changelog",
-				link: "https://github.com/distantnative/retour-for-kirby/releases",
-			},
+				link: "https://github.com/distantnative/retour-for-kirby/releases"
+			}
 		],
 
 		outline: [2, 3],
 
 		search: {
-			provider: "local",
+			provider: "local"
 		},
 
 		sidebar: [
@@ -48,8 +48,8 @@ export default defineConfig({
 					{ text: "Getting started", link: "/quickstart" },
 					{ text: "Redirects", link: "/redirects" },
 					{ text: "404 tracking", link: "/failures" },
-					{ text: "Options", link: "/options" },
-				],
+					{ text: "Options", link: "/options" }
+				]
 			},
 			{
 				text: "Help",
@@ -57,39 +57,39 @@ export default defineConfig({
 					{ text: "Troubleshooting", link: "/troubleshooting" },
 					{
 						text: "Report a bug",
-						link: "https://github.com/distantnative/retour-for-kirby/issues",
+						link: "https://github.com/distantnative/retour-for-kirby/issues"
 					},
-					{ text: "Report a vulnerability", link: "/security" },
-				],
+					{ text: "Report a vulnerability", link: "/security" }
+				]
 			},
 			{
 				text: "Support development",
 				items: [
 					{ text: "How to contribute", link: "/contribute" },
-					{ text: "Translations", link: "/i18n" },
-				],
-			},
+					{ text: "Translations", link: "/i18n" }
+				]
+			}
 		],
 
 		editLink: {
 			pattern:
-				"https://github.com/distantnative/retour-for-kirby/edit/main/docs/:path",
+				"https://github.com/distantnative/retour-for-kirby/edit/main/docs/:path"
 		},
 
 		socialLinks: [
 			{
 				icon: "github",
-				link: "https://github.com/distantnative/retour-for-kirby",
+				link: "https://github.com/distantnative/retour-for-kirby"
 			},
 			{
 				icon: "mastodon",
-				link: "https://mastodon.social/@distantnative",
-			},
+				link: "https://mastodon.social/@distantnative"
+			}
 		],
 
 		footer: {
 			message:
-				"Retour is made for <a href='https://getkirby.com'>Kirby CMS</a> with love 💛",
-		},
-	},
+				"Retour is made for <a href='https://getkirby.com'>Kirby CMS</a> with love 💛"
+		}
+	}
 });

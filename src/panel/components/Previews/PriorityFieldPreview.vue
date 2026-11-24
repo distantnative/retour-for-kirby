@@ -10,8 +10,8 @@ export default {
 	inheritAttrs: false,
 	props: {
 		value: Boolean,
-		column: Object,
-	},
+		column: Object
+	}
 };
 </script>
 

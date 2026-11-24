@@ -21,7 +21,7 @@ export const it = Object.assign(vitestIt, {
 				if (className) {
 					expect(wrapper.classes()).toContain(className);
 				}
-			},
+			}
 		);
-	},
+	}
 });

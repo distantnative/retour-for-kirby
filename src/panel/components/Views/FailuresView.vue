@@ -11,14 +11,14 @@ export default {
 				{
 					dialog: `retour/failures/${ids}/ignore`,
 					icon: "muted",
-					text: this.$t("retour.failures.ignore"),
+					text: this.$t("retour.failures.ignore")
 				},
 				{
 					dialog: `retour/failures/${ids}/delete`,
 					icon: "trash",
 					text: this.$t("remove"),
-					theme: "negative",
-				},
+					theme: "negative"
+				}
 			];
 		},
 		columns() {
@@ -27,25 +27,25 @@ export default {
 					label: this.$t("retour.failures.path"),
 					type: "path",
 					width: "1/3",
-					mobile: true,
+					mobile: true
 				},
 				referrer: {
 					label: this.$t("retour.failures.referrer"),
 					type: "path",
-					width: "1/3",
+					width: "1/3"
 				},
 				last: {
 					label: this.$t("retour.hits.last"),
 					type: "date",
 					display: "D MMM YYYY, HH:mm:ss",
-					width: "2/8",
+					width: "2/8"
 				},
 				hits: {
 					label: this.$t("retour.hits"),
 					type: "count",
 					width: "1/10",
-					align: "right",
-				},
+					align: "right"
+				}
 			};
 		},
 		defaultSortBy() {
@@ -54,9 +54,9 @@ export default {
 		empty() {
 			return {
 				icon: "url-broken",
-				text: this.$t("retour.failures.empty"),
+				text: this.$t("retour.failures.empty")
 			};
-		},
-	},
+		}
+	}
 };
 </script>

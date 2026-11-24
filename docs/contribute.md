@@ -27,12 +27,13 @@ To work on the Panel code, start the development server:
 npm run dev
 ```
 
-Run the tests and linter before opening a pull request:
+Run the tests and checks before opening a pull request. `composer fix` and `npm run format:fix` fix the code style:
 
 ```bash
 composer test
 npm test
 npm run lint
+npm run format
 ```
 
 To fill the log with dummy data for testing the stats and failures, use this [Kirby CLI](https://github.com/getkirby/cli) command. It replaces all existing log records:

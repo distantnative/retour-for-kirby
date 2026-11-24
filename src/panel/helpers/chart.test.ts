@@ -4,7 +4,7 @@ import type { Segment } from "./chart";
 
 const segment = (...data: number[]): Segment => ({
 	label: "2026-01-01",
-	areas: data.map((value) => ({ color: "red", data: value })),
+	areas: data.map((value) => ({ color: "red", data: value }))
 });
 
 describe("chart.axis()", () => {
@@ -15,7 +15,7 @@ describe("chart.axis()", () => {
 		{ max: 7500, expected: ["1.5K", "3K", "4.5K", "6K", "7.5K"] },
 		{ max: 1250, expected: ["250", "500", "750", "1K", "1.25K"] },
 		{ max: 2500000, expected: ["500K", "1M", "1.5M", "2M", "2.5M"] },
-		{ max: 1250000, expected: ["250K", "500K", "750K", "1M", "1.25M"] },
+		{ max: 1250000, expected: ["250K", "500K", "750K", "1M", "1.25M"] }
 	];
 
 	it.each(cases)("returns ticks for $max", ({ max, expected }) => {
@@ -29,14 +29,14 @@ describe("chart.axis()", () => {
 			"500",
 			"750",
 			"1000",
-			"1250",
+			"1250"
 		]);
 		expect(axis(1250000, "de")).toStrictEqual([
 			"250.000",
 			"500.000",
 			"750.000",
 			"1\u00a0Mio.",
-			"1,25\u00a0Mio.",
+			"1,25\u00a0Mio."
 		]);
 	});
 });
@@ -47,13 +47,13 @@ describe("chart.bounds()", () => {
 			[
 				{ path: 1, mask: 0 },
 				{ path: 3, mask: 1 },
-				{ path: 6, mask: 3 },
+				{ path: 6, mask: 3 }
 			],
 			[
 				{ path: 0, mask: 0 },
 				{ path: 5, mask: 0 },
-				{ path: 5, mask: 5 },
-			],
+				{ path: 5, mask: 5 }
+			]
 		]);
 	});
 
@@ -76,13 +76,13 @@ describe("chart.max()", () => {
 		{
 			name: "rounds 7000 to 10000",
 			segments: [segment(7000)],
-			expected: 10000,
+			expected: 10000
 		},
 		{
 			name: "uses the highest stack",
 			segments: [segment(100, 200), segment(400, 500)],
-			expected: 1000,
-		},
+			expected: 1000
+		}
 	];
 
 	it.each(cases)("$name", ({ segments, expected }) => {
@@ -108,15 +108,15 @@ describe("chart.pie()", () => {
 			pie([
 				{ color: "blue", data: 0 },
 				{ color: "gray", data: 0 },
-				{ color: "red", data: 0 },
-			]),
+				{ color: "red", data: 0 }
+			])
 		).toStrictEqual({
 			"--pie-c0": "transparent",
 			"--pie-c1": "transparent",
 			"--pie-c2": "transparent",
 			"--pie-a0": "0deg",
 			"--pie-a1": "0deg",
-			"background-color": "var(--color-gray-800)",
+			"background-color": "var(--color-gray-800)"
 		});
 	});
 
@@ -125,14 +125,14 @@ describe("chart.pie()", () => {
 			pie([
 				{ color: "blue", data: 90 },
 				{ color: "gray", data: 45 },
-				{ color: "red", data: 45 },
-			]),
+				{ color: "red", data: 45 }
+			])
 		).toStrictEqual({
 			"--pie-c0": "blue",
 			"--pie-c1": "gray",
 			"--pie-c2": "red",
 			"--pie-a0": "90deg",
-			"--pie-a1": "135deg",
+			"--pie-a1": "135deg"
 		});
 	});
 });
@@ -142,22 +142,22 @@ describe("chart.polygon()", () => {
 
 	it("outlines an area across all segments", () => {
 		expect(polygon(stack, 0, 10)).toBe(
-			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 50% 100%, 0% 100%)",
+			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 50% 100%, 0% 100%)"
 		);
 		expect(polygon(stack, 1, 10)).toBe(
-			"polygon(0% 30%, 50% 0%, 100% 20%, 100% 60%, 50% 0%, 0% 50%)",
+			"polygon(0% 30%, 50% 0%, 100% 20%, 100% 60%, 50% 0%, 0% 50%)"
 		);
 	});
 
 	it("collapses the segments after the last one onto it", () => {
 		expect(polygon(stack, 1, 10, 1)).toBe(
-			"polygon(0% 30%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 0% 50%)",
+			"polygon(0% 30%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 0% 50%)"
 		);
 	});
 
 	it("adds points on the last segment", () => {
 		expect(polygon(stack, 0, 10, 2, 4)).toBe(
-			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%)",
+			"polygon(0% 50%, 50% 0%, 100% 60%, 100% 100%, 100% 100%, 100% 100%, 50% 100%, 0% 100%)"
 		);
 	});
 });

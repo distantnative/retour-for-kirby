@@ -7,7 +7,7 @@ describe("unit.format()", () => {
 		{ unit: "month", expected: "D" },
 		{ unit: "year", expected: "MMM" },
 		{ unit: "months", expected: "MMM YY" },
-		{ unit: "days", expected: "D MMM" },
+		{ unit: "days", expected: "D MMM" }
 	];
 
 	it.each(cases)("returns the format for $unit", ({ unit, expected }) => {
@@ -21,7 +21,7 @@ describe("unit.subunit()", () => {
 		{ unit: "year", expected: "month" },
 		{ unit: "month", expected: "day" },
 		{ unit: "months", expected: "month" },
-		{ unit: "days", expected: "day" },
+		{ unit: "days", expected: "day" }
 	];
 
 	it.each(cases)("returns the subunit for $unit", ({ unit, expected }) => {

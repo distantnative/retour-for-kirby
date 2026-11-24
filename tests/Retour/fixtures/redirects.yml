@@ -1,18 +1,15 @@
 redirects:
-  - 
-    from: foo
+  - from: foo
     to: bar
     code: null
     priority: false
     comment: null
-  - 
-    from: homer
+  - from: homer
     to: simpson
     code: null
     priority: true
     comment: null
-  - 
-    from: berlin
+  - from: berlin
     to: caracas
     code: null
     priority: false

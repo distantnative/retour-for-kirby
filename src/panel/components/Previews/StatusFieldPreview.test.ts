@@ -5,7 +5,7 @@ import StatusFieldPreview from "./StatusFieldPreview.vue";
 function mount(attrs = {}, value: number | string = 301) {
 	return vueMount(StatusFieldPreview, {
 		props: { column: { label: "Status" }, value },
-		attrs,
+		attrs
 	});
 }
 
@@ -24,7 +24,7 @@ describe("StatusFieldPreview.vue", () => {
 			const wrapper = mount({}, 404);
 			expect(wrapper.text()).toBe("404");
 			expect(wrapper.find("k-icon").attributes("color")).toBe(
-				"var(--color-red-500)",
+				"var(--color-red-500)"
 			);
 		});
 
@@ -32,7 +32,7 @@ describe("StatusFieldPreview.vue", () => {
 			const wrapper = mount({}, "disabled");
 			expect(wrapper.find("p").text()).toBe("–");
 			expect(wrapper.find("k-icon").attributes("color")).toBe(
-				"var(--color-gray-400)",
+				"var(--color-gray-400)"
 			);
 			expect(wrapper.attributes("title")).toBe("Status: disabled");
 		});

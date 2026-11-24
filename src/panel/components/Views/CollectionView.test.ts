@@ -9,9 +9,9 @@ const RetourView = defineComponent({
 		return () =>
 			h("k-retour-view", [
 				renderSlot(slots, "buttons"),
-				renderSlot(slots, "default"),
+				renderSlot(slots, "default")
 			]);
-	},
+	}
 });
 
 // emits values like the real input
@@ -19,35 +19,35 @@ const Input = defineComponent({
 	emits: ["input"],
 	setup() {
 		return () => h("k-input");
-	},
+	}
 });
 
 function mount(
 	props = {},
 	defaultSortBy: string | null = null,
-	batch: object[] = [],
+	batch: object[] = []
 ) {
 	const $panel = { reload: vi.fn(() => Promise.resolve()) };
 
 	const wrapper = vueMount(
 		defineComponent({
 			extends: CollectionView,
-			computed: { batch: () => batch, defaultSortBy: () => defaultSortBy },
+			computed: { batch: () => batch, defaultSortBy: () => defaultSortBy }
 		}),
 		{
 			props: {
 				data: [{ path: "a" }, { path: "b" }],
 				pagination: { limit: 50, offset: 50, page: 2, total: 52 },
-				...props,
+				...props
 			},
 			global: {
 				mocks: {
 					$helper: { debounce: (fn: () => void) => fn },
-					$panel,
+					$panel
 				},
-				stubs: { "k-input": Input, "k-retour-view": RetourView },
-			},
-		},
+				stubs: { "k-input": Input, "k-retour-view": RetourView }
+			}
+		}
 	);
 
 	return Object.assign(wrapper, { $panel });
@@ -73,7 +73,7 @@ describe("CollectionView.vue", () => {
 			const wrapper = mount({ data: [], searchterm: "wp" });
 			expect(wrapper.find("k-empty").attributes()).toMatchObject({
 				icon: "search",
-				text: "search.results.none",
+				text: "search.results.none"
 			});
 		});
 	});
@@ -83,7 +83,7 @@ describe("CollectionView.vue", () => {
 			const wrapper = mount();
 			await wrapper.find("k-pagination").trigger("paginate", { page: 3 });
 			expect(wrapper.$panel.reload).toHaveBeenCalledWith({
-				query: { page: 3 },
+				query: { page: 3 }
 			});
 		});
 	});
@@ -93,30 +93,30 @@ describe("CollectionView.vue", () => {
 			[null, "path asc"],
 			["path asc", "path desc"],
 			["path desc", null],
-			["hits asc", "path asc"],
+			["hits asc", "path asc"]
 		])("goes from %s to %s without a default", (sortBy, next) => {
 			const wrapper = mount({ sortBy });
 			wrapper.vm.onHeader({ columnIndex: "path" });
 			expect(wrapper.$panel.reload).toHaveBeenCalledWith({
-				query: { page: null, sortBy: next },
+				query: { page: null, sortBy: next }
 			});
 		});
 
 		it.each([
 			[null, "hits asc"],
-			["hits asc", null],
+			["hits asc", null]
 		])("goes from %s to %s for the default column", (sortBy, next) => {
 			const wrapper = mount({ sortBy }, "hits desc");
 			wrapper.vm.onHeader({ columnIndex: "hits" });
 			expect(wrapper.$panel.reload).toHaveBeenCalledWith({
-				query: { page: null, sortBy: next },
+				query: { page: null, sortBy: next }
 			});
 		});
 
 		it("splits the order into column and direction", () => {
 			expect(mount({ sortBy: "path desc" }).vm.sorting).toEqual([
 				"path",
-				"desc",
+				"desc"
 			]);
 			expect(mount({}, "hits desc").vm.sorting).toEqual(["hits", "desc"]);
 		});
@@ -130,7 +130,7 @@ describe("CollectionView.vue", () => {
 			await wrapper.vm.reload({ searchterm: "wp" });
 
 			expect(wrapper.$panel.reload).toHaveBeenCalledWith({
-				query: { page: null, searchterm: "wp" },
+				query: { page: null, searchterm: "wp" }
 			});
 			expect(scrollTo).toHaveBeenCalledWith(0, window.scrollY);
 		});
@@ -160,7 +160,7 @@ describe("CollectionView.vue", () => {
 			expect(remove.attributes()).toMatchObject({
 				dialog: "remove",
 				disabled: "true",
-				text: "remove (0)",
+				text: "remove (0)"
 			});
 
 			await wrapper.setData({ selected: ["a"] });
@@ -205,7 +205,7 @@ describe("CollectionView.vue", () => {
 
 			wrapper.findComponent(Input).vm.$emit("input", "wp");
 			expect(wrapper.$panel.reload).toHaveBeenLastCalledWith({
-				query: { page: null, searchterm: "wp" },
+				query: { page: null, searchterm: "wp" }
 			});
 		});
 
@@ -214,7 +214,7 @@ describe("CollectionView.vue", () => {
 
 			wrapper.findComponent(Input).vm.$emit("input", "");
 			expect(wrapper.$panel.reload).toHaveBeenLastCalledWith({
-				query: { page: null, searchterm: null },
+				query: { page: null, searchterm: null }
 			});
 		});
 
@@ -224,7 +224,7 @@ describe("CollectionView.vue", () => {
 
 			expect(wrapper.vm.searching).toBe(false);
 			expect(wrapper.$panel.reload).toHaveBeenCalledWith({
-				query: { page: null, searchterm: null },
+				query: { page: null, searchterm: null }
 			});
 		});
 

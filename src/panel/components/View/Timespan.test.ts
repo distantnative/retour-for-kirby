@@ -17,9 +17,9 @@ function timespan(props = {}) {
 			month: { from: "2026-10-01", to: "2026-10-31" },
 			week: { from: "2026-10-12", to: "2026-10-18" },
 			day: { from: "2026-10-17", to: "2026-10-17" },
-			today: { from: "2026-10-01", to: "2026-10-31" },
+			today: { from: "2026-10-01", to: "2026-10-31" }
 		},
-		...props,
+		...props
 	};
 }
 
@@ -29,8 +29,8 @@ function mount(props = {}) {
 		view: {
 			path: "retour/failures",
 			open: vi.fn(),
-			query: { page: "3", searchterm: "wp" },
-		},
+			query: { page: "3", searchterm: "wp" }
+		}
 	};
 
 	const $events = { off: vi.fn(), on: vi.fn() };
@@ -38,7 +38,7 @@ function mount(props = {}) {
 
 	const wrapper = vueMount(Timespan, {
 		props: { timespan: timespan(props) },
-		global: { mocks: { $events, $go, $panel } },
+		global: { mocks: { $events, $go, $panel } }
 	});
 
 	return Object.assign(wrapper, { $events, $go, $panel });
@@ -71,18 +71,18 @@ describe("Timespan.vue", () => {
 		it.each([
 			[
 				{ unit: "day", from: "2026-10-17", to: "2026-10-17" },
-				"October 17, 2026",
+				"October 17, 2026"
 			],
 			[
 				{ unit: "week", from: "2026-10-12", to: "2026-10-18" },
-				"Oct 12 – 18, 2026",
+				"Oct 12 – 18, 2026"
 			],
 			[{ unit: "month" }, "October 2026"],
 			[{ unit: "year", from: "2026-01-01", to: "2026-12-31" }, "2026"],
 			[
 				{ unit: "days", from: "2025-12-28", to: "2026-01-03" },
-				"Dec 28, 2025 – Jan 3, 2026",
-			],
+				"Dec 28, 2025 – Jan 3, 2026"
+			]
 		])("names the %o as %s", (props, expected) => {
 			expect(text(mount(props))).toBe(expected);
 		});
@@ -92,7 +92,7 @@ describe("Timespan.vue", () => {
 		it("link to the steps on the first page and keep the filter", () => {
 			const [, prev, next] = mount().findAll("k-button");
 			expect(prev.attributes("link")).toBe(
-				"/retour/failures?searchterm=wp&from=2026-09-01&to=2026-09-30",
+				"/retour/failures?searchterm=wp&from=2026-09-01&to=2026-09-30"
 			);
 			expect(prev.attributes("disabled")).toBe("false");
 			expect(next.attributes("link")).toBeUndefined();
@@ -126,7 +126,7 @@ describe("Timespan.vue", () => {
 				"day",
 				"custom",
 				"-",
-				"today",
+				"today"
 			]);
 		});
 
@@ -135,7 +135,7 @@ describe("Timespan.vue", () => {
 			expect(options[3]).toMatchObject({
 				current: true,
 				icon: "circle-focus",
-				link: "/retour/failures?searchterm=wp&from=2026-10-01&to=2026-10-31",
+				link: "/retour/failures?searchterm=wp&from=2026-10-01&to=2026-10-31"
 			});
 			expect(options[2]).toMatchObject({ current: false, icon: "circle" });
 			expect(options[6].current).toBe(false);
@@ -143,7 +143,7 @@ describe("Timespan.vue", () => {
 
 		it("marks a past unit without today", () => {
 			expect(dropdown(mount({ isCurrent: false }))[3].icon).toBe(
-				"circle-nested",
+				"circle-nested"
 			);
 		});
 
@@ -162,7 +162,7 @@ describe("Timespan.vue", () => {
 			dropdown(wrapper)[6].click();
 			expect(wrapper.$panel.dialog.open).toHaveBeenCalledWith(
 				"retour/timespan",
-				{ on: { submit: expect.any(Function) } },
+				{ on: { submit: expect.any(Function) } }
 			);
 		});
 
@@ -175,14 +175,14 @@ describe("Timespan.vue", () => {
 
 			expect(wrapper.$panel.dialog.close).toHaveBeenCalled();
 			expect(wrapper.$panel.view.open).toHaveBeenCalledWith(
-				"/retour/failures?searchterm=wp&from=2026-09-28&to=2026-10-04",
+				"/retour/failures?searchterm=wp&from=2026-09-28&to=2026-10-04"
 			);
 		});
 
 		it("links today", () => {
 			expect(dropdown(mount())[8]).toMatchObject({
 				icon: "merge",
-				link: "/retour/failures?searchterm=wp&from=2026-10-01&to=2026-10-31",
+				link: "/retour/failures?searchterm=wp&from=2026-10-01&to=2026-10-31"
 			});
 		});
 	});
@@ -194,21 +194,21 @@ describe("Timespan.vue", () => {
 			const wrapper = mount();
 			expect(wrapper.$events.on).toHaveBeenCalledWith(
 				"keydown.left",
-				wrapper.vm.toPrev,
+				wrapper.vm.toPrev
 			);
 			expect(wrapper.$events.on).toHaveBeenCalledWith(
 				"keydown.right",
-				wrapper.vm.toNext,
+				wrapper.vm.toNext
 			);
 
 			wrapper.unmount();
 			expect(wrapper.$events.off).toHaveBeenCalledWith(
 				"keydown.left",
-				wrapper.vm.toPrev,
+				wrapper.vm.toPrev
 			);
 			expect(wrapper.$events.off).toHaveBeenCalledWith(
 				"keydown.right",
-				wrapper.vm.toNext,
+				wrapper.vm.toNext
 			);
 		});
 
@@ -216,7 +216,7 @@ describe("Timespan.vue", () => {
 			const wrapper = mount();
 			wrapper.vm.toPrev(body);
 			expect(wrapper.$go).toHaveBeenCalledWith(
-				"/retour/failures?searchterm=wp&from=2026-09-01&to=2026-09-30",
+				"/retour/failures?searchterm=wp&from=2026-09-01&to=2026-09-30"
 			);
 		});
 
@@ -224,7 +224,7 @@ describe("Timespan.vue", () => {
 			const wrapper = mount({ next: { from: "2026-11-01", to: "2026-11-30" } });
 			wrapper.vm.toNext(body);
 			expect(wrapper.$go).toHaveBeenCalledWith(
-				"/retour/failures?searchterm=wp&from=2026-11-01&to=2026-11-30",
+				"/retour/failures?searchterm=wp&from=2026-11-01&to=2026-11-30"
 			);
 		});
 

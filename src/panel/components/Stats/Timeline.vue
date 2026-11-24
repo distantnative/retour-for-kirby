@@ -36,11 +36,11 @@ import { format, subunit } from "../../helpers/unit";
 export default {
 	props: {
 		data: Array,
-		timespan: Object,
+		timespan: Object
 	},
 	data() {
 		return {
-			width: 0,
+			width: 0
 		};
 	},
 	computed: {
@@ -56,7 +56,7 @@ export default {
 		last() {
 			// the areas end today, later segments lie in the future
 			const index = this.data.findLastIndex(
-				(segment) => segment.label <= this.now(segment.label),
+				(segment) => segment.label <= this.now(segment.label)
 			);
 
 			return Math.max(index, 0);
@@ -67,7 +67,7 @@ export default {
 		step() {
 			// every nth label so they don't overlap (~8px per character plus some space)
 			const chars = Math.max(
-				...this.data.map((segment) => this.label(segment).length),
+				...this.data.map((segment) => this.label(segment).length)
 			);
 			const space = this.width / Math.max(this.data.length - 1, 1);
 
@@ -75,7 +75,7 @@ export default {
 		},
 		subunit() {
 			return subunit(this.timespan.unit);
-		},
+		}
 	},
 	mounted() {
 		this.$panel.observers.resize.observe(this.$refs.plot);
@@ -107,7 +107,7 @@ export default {
 			const query = new URLSearchParams({
 				...this.$panel.view.query,
 				from: date.startOf(this.subunit).format("YYYY-MM-DD"),
-				to: date.endOf(this.subunit).format("YYYY-MM-DD"),
+				to: date.endOf(this.subunit).format("YYYY-MM-DD")
 			});
 			query.delete("page");
 
@@ -125,8 +125,8 @@ export default {
 		title(segment) {
 			const format = this.subunit === "month" ? "MMMM YYYY" : "D MMMM YYYY";
 			return this.$library.dayjs(segment.label).format(format);
-		},
-	},
+		}
+	}
 };
 </script>
 

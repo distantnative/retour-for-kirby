@@ -16,11 +16,11 @@ export default {
 	inheritAttrs: false,
 	props: {
 		value: [Number, String],
-		column: Object,
+		column: Object
 	},
 	methods: {
-		color,
-	},
+		color
+	}
 };
 </script>
 

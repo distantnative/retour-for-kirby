@@ -23,17 +23,17 @@ import { pie, sum } from "../../helpers/chart";
 
 export default {
 	props: {
-		data: Array,
+		data: Array
 	},
 	computed: {
 		formatter() {
 			return new Intl.NumberFormat(this.$library.dayjs.locale());
-		},
+		}
 	},
 	methods: {
 		pie,
-		sum,
-	},
+		sum
+	}
 };
 </script>
 

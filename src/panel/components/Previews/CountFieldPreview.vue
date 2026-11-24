@@ -13,12 +13,12 @@ export default {
 	inheritAttrs: false,
 	props: {
 		row: Object,
-		value: Number,
+		value: Number
 	},
 	computed: {
 		hits() {
 			return new Intl.NumberFormat(this.$library.dayjs.locale()).format(
-				this.value,
+				this.value
 			);
 		},
 		title() {
@@ -27,8 +27,8 @@ export default {
 				: "–";
 
 			return `${this.$t("retour.hits.last")}: ${last}`;
-		},
-	},
+		}
+	}
 };
 </script>
 

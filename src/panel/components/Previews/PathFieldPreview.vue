@@ -17,9 +17,9 @@ export default {
 	props: {
 		column: {
 			type: Object,
-			default: () => ({}),
+			default: () => ({})
 		},
-		value: String,
+		value: String
 	},
 	computed: {
 		link() {
@@ -31,7 +31,7 @@ export default {
 			// an absolute site URL keeps every path on the site
 			const site = new URL(this.$panel.urls.site, window.location.origin);
 			return this.$helper.url.makeAbsolute(this.value, site);
-		},
-	},
+		}
+	}
 };
 </script>

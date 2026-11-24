@@ -24,8 +24,8 @@ export default {
 		type: String,
 		value: {
 			type: Array,
-			default: () => [],
-		},
-	},
+			default: () => []
+		}
+	}
 };
 </script>

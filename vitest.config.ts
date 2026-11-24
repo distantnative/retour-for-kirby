@@ -6,13 +6,13 @@ export default defineConfig({
 	plugins: [vue()],
 	resolve: {
 		alias: {
-			"@test": fileURLToPath(new URL("./tests", import.meta.url)),
-		},
+			"@test": fileURLToPath(new URL("./tests", import.meta.url))
+		}
 	},
 	test: {
 		css: false,
 		environment: "happy-dom",
 		include: ["src/panel/**/*.test.ts"],
-		setupFiles: ["tests/panel/setup.ts"],
-	},
+		setupFiles: ["tests/panel/setup.ts"]
+	}
 });
