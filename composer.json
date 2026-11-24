@@ -30,7 +30,7 @@
 	},
 	"scripts": {
 		"fix": "cpx getkirby/php-cs:0.3.0 fix",
-		"test": "cpx brianium/paratest:7.20.0"
+		"test": "cpx \"brianium/paratest:7.20.0||7.27.5\""
 	},
 	"config": {
 		"allow-plugins": {
