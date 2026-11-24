@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    uses: getkirby/actions/.github/workflows/php.yml@e27f4dff8102d3f51e08f0608f27decf59a90ce8 # 0.3.1
+
+  node:
+    uses: getkirby/actions/.github/workflows/node.yml@e27f4dff8102d3f51e08f0608f27decf59a90ce8 # 0.3.1
