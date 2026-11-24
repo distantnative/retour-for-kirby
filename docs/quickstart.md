@@ -10,7 +10,7 @@ Each Kirby version needs a matching version of Retour. The versions for Kirby 5 
 | 4, 5  | [5.7.0](https://github.com/distantnative/retour-for-kirby/releases/tag/5.7.0) |
 | 3     | [4.5.0](https://github.com/distantnative/retour-for-kirby/releases/tag/4.5.0) |
 
-Retour 6 requires PHP 8.3 or newer. Its 404 tracking stores the log in an SQLite database, so PHP also needs the `pdo_sqlite` extension. Without it, you can still use the redirects by disabling the [`logs` option](/options#config).
+Retour 6 requires PHP 8.3, 8.4, 8.5 or 8.6. Its 404 tracking stores the log in an SQLite database, so PHP also needs the `pdo_sqlite` extension. Without it, you can still use the redirects by disabling the [`logs` option](/options#config).
 
 ## Install
 
