@@ -6,12 +6,12 @@ use Kirby\Cms\App;
 
 class Retour
 {
+	protected static self|null $instance = null;
+
 	protected Config $config;
 	protected Ignores|null $ignores = null;
 	protected Log|null $log = null;
 	protected Redirects $redirects;
-
-	protected static self|null $instance = null;
 
 	public function __construct(
 		protected App $kirby

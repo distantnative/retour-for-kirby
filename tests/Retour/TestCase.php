@@ -11,13 +11,6 @@ class TestCase extends BaseTestCase
 	protected $kirby;
 	protected $tmp;
 
-	protected function app(array $options = []): App
-	{
-		return $this->kirby->clone([
-			'options' => $options
-		]);
-	}
-
 	public function setUp(): void
 	{
 		// separate folder for each ParaTest process
@@ -39,5 +32,12 @@ class TestCase extends BaseTestCase
 		// the session token is stored in the cookie global,
 		// the next test would try to resume the session
 		unset($_COOKIE['kirby_session']);
+	}
+
+	protected function app(array $options = []): App
+	{
+		return $this->kirby->clone([
+			'options' => $options
+		]);
 	}
 }

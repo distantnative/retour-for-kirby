@@ -177,7 +177,6 @@ class RetourTest extends TestCase
 		$site = Retour::instance($app)->site();
 		$this->assertSame('meow.com/', $site);
 
-
 		$app = $this->kirby->clone([
 			'options' => [
 				'distantnative.retour.site' => false
